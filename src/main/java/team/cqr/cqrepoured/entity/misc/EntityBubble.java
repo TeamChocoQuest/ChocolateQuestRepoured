@@ -109,10 +109,10 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 		return false;
 	}
 	
-	@Override
+	/*@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
-	}
+	} */
 
 	@Override
 	protected void defineSynchedData() {

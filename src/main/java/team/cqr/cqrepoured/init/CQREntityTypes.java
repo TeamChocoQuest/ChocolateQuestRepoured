@@ -7,8 +7,6 @@ import net.minecraft.entity.EntityType.IFactory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
@@ -27,16 +25,10 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamitySpawner;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.entity.misc.EntityElectricField;
-import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
-import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
-import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
-import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
-import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
-import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
+import team.cqr.cqrepoured.entity.misc.*;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 
-//@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, CQRMain.MODID);
@@ -44,7 +36,12 @@ public class CQREntityTypes {
 	//Default ticking rate is 3 => every 3 ticks it updates
 	//Misc mobs
 	public static final RegistryObject<EntityType<EntitySlimePart>> SMALL_SLIME = registerSized(EntitySlimePart::new, "slime_part", 0.25F, 0.25F, 1); 
-	
+
+	//Projectiles
+	public static final RegistryObject<EntityType<ProjectileBubble>> PROJECTILE_BUBBLE = ENTITY_TYPES.register("projectile_bubble",
+			() -> EntityType.Builder.<ProjectileBubble>of(ProjectileBubble::new, EntityClassification.MISC).clientTrackingRange(4).updateInterval(10) //.fireImmune() I guess it isn't though
+					.build(CQRMain.prefix("bubble").toString()));
+
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
 
@@ -86,6 +83,7 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityWalkerKingIllusion>> WALKER_KING_ILLUSION = registerSizedHumanoid(EntityWalkerKingIllusion::new, "walker_king_illusion", 1);
 	
 	//Musc
+	public static final RegistryObject<EntityType<EntityBubble>> BUBBLE = registerSized(EntityBubble::new, "bubble", 1.0F, 1.0F, 3);
 	public static final RegistryObject<EntityType<EntityTNTPrimedCQR>> TNT_CQR = registerSized(EntityTNTPrimedCQR::new, "tnt_cqr", 1.0F, 1.0F, 3);
 	public static final RegistryObject<EntityType<EntitySummoningCircle>> SUMMONING_CIRCLE = registerSized(EntitySummoningCircle::new, "summoning_circle", 2.0F, 0.005F, 3);
 	public static final RegistryObject<EntityType<EntitySpiderEgg>> SPIDER_EGG = registerSized(EntitySpiderEgg::new, "spider_egg", 1.0F, 1.0F, 3);
@@ -113,5 +111,4 @@ public class CQREntityTypes {
 		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
 		//TODO
 	}
-	
 }

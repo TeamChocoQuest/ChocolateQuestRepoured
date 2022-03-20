@@ -1,14 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public abstract class ProjectileBase extends ThrowableEntity {
 
-	public ProjectileBase(World worldIn) {
+	/*public ProjectileBase(World worldIn) {
 		super(worldIn);
 		this.isImmuneToFire = true;
 	}
@@ -22,6 +23,20 @@ public abstract class ProjectileBase extends ThrowableEntity {
 		super(worldIn, shooter);
 		this.thrower = shooter;
 		this.isImmuneToFire = true;
+	} */
+
+	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+		super(throwableEntity, world);
+	}
+
+	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, double pX, double pY, double pZ, World world) {
+		this(throwableEntity, world);
+		this.setPos(pX, pY, pZ);
+	}
+
+	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, LivingEntity shooter, World world) {
+		this(throwableEntity, shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ(), world);
+		this.setOwner(shooter);
 	}
 
 	@Override
@@ -43,7 +58,7 @@ public abstract class ProjectileBase extends ThrowableEntity {
 	protected void onHitBlock(BlockRayTraceResult result) {
 		BlockState state = this.level.getBlockState(result.getBlockPos());
 
-		if (!state.getBlock().isPassable(this.level, result.getBlockPos())) {
+		if (!state.getBlock().defaultBlockState().getMaterial().blocksMotion()) {
 			this.remove();
 		}
 	}

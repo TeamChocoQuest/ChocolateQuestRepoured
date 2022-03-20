@@ -103,7 +103,6 @@ import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
-import team.cqr.cqrepoured.entity.misc.EntityCQRWasp;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
@@ -138,7 +137,6 @@ import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishNormal;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishRed;
 import team.cqr.cqrepoured.entity.mount.EntityPollo;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
@@ -153,17 +151,16 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderHook;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
-public class CQREntityRenderers {
-
-	private CQREntityRenderers() {
-
-	}
+public class CQREntityRenderers
+{
+	private CQREntityRenderers() {}
 
 	public static void registerRenderers() {
 		registerTileRenderers();
@@ -200,7 +197,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, RenderProjectileVampiricSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, RenderProjectileFirewallPart::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, RenderProjectileBubble::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
