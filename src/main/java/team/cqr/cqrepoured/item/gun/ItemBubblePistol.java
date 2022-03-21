@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -22,61 +21,61 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 
 	private final Random rng = new Random();
 
-	public ItemBubblePistol(Properties props) {
-		super(props);
-		this.setMaxDamage(this.getMaxUses());
-		this.setMaxStackSize(1);
+	public ItemBubblePistol(Properties properties) {
+		super(properties.durability(200).stacksTo(1));
+		//this.setMaxDamage(this.getMaxUses());
+		//this.setMaxStackSize(1);
 	}
 
-	public int getMaxUses() {
-		return 200;
-	}
+	//public int getMaxUses() {
+	//	return 200;
+	//}
 
 	public double getInaccurary() {
 		return 0.5D;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 10;
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		if (entityLiving instanceof PlayerEntity) {
-			((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
+			((PlayerEntity) entityLiving).getCooldowns().addCooldown(this, this.getCooldown());
 		}
-		stack.damageItem(1, entityLiving);
-		return super.onItemUseFinish(stack, worldIn, entityLiving);
+		stack.hurtAndBreak(1, entityLiving, e -> e.broadcastBreakEvent(e.getUsedItemHand()));
+		return super.finishUsingItem(stack, worldIn, entityLiving);
 	}
 
 	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
-		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
-		stack.damageItem(1, entityLiving);
+	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+		super.releaseUsing(stack, worldIn, entityLiving, timeLeft);
+		stack.hurtAndBreak(1, entityLiving, e -> e.broadcastBreakEvent(e.getUsedItemHand()));
 		if (entityLiving instanceof PlayerEntity) {
-			((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(this, this.getCooldown());
+			((PlayerEntity) entityLiving).getCooldowns().addCooldown(this, this.getCooldown());
 		}
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).isHandActive() && ((LivingEntity) entityIn).getActiveItemStack() == stack) {
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (entityIn instanceof LivingEntity && ((LivingEntity) entityIn).isUsingItem() && ((LivingEntity) entityIn).getUseItem() == stack) {
 			this.shootBubbles((LivingEntity) entityIn);
 		}
 	}
 
 	private void shootBubbles(LivingEntity entity) {
-		double x = -Math.sin(Math.toRadians(entity.rotationYaw));
-		double z = Math.cos(Math.toRadians(entity.rotationYaw));
-		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
+		double x = -Math.sin(Math.toRadians(entity.yRot));
+		double z = Math.cos(Math.toRadians(entity.yRot));
+		double y = -Math.sin(Math.toRadians(entity.xRot));
 		this.shootBubbles(new Vector3d(x, y, z), entity);
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		playerIn.startUsingItem(handIn);
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 
 	private void shootBubbles(Vector3d velocity, LivingEntity shooter) {
@@ -84,18 +83,19 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 		v = v.normalize();
 		v = v.scale(1.4);
 
-		shooter.playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * shooter.getRNG().nextFloat()));
+		shooter.playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * shooter.getRandom().nextFloat()));
 
-		ProjectileBubble bubble = new ProjectileBubble(shooter.world, shooter);
-		bubble.motionX = v.x;
-		bubble.motionY = v.y;
-		bubble.motionZ = v.z;
-		bubble.velocityChanged = true;
-		shooter.world.spawnEntity(bubble);
+		ProjectileBubble bubble = new ProjectileBubble(shooter, shooter.level);
+		bubble.setDeltaMovement(v);
+		//bubble.motionX = v.x;
+		///bubble.motionY = v.y;
+		//bubble.motionZ = v.z;
+		//bubble.velocityChanged = true;
+		shooter.level.addFreshEntity(bubble);
 	}
 
 	@Override
-	public UseAction getItemUseAction(ItemStack stack) {
+	public UseAction getUseAnimation(ItemStack stack) {
 		return UseAction.BOW;
 	}
 
@@ -106,7 +106,7 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		return SoundEvents.ENTITY_BOBBER_THROW;
+		return SoundEvents.FISHING_BOBBER_THROW;
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -15,84 +14,82 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
+//#TODO tests modifiers
 public class ItemMusketKnife extends ItemMusket {
 
 	private final float attackDamage;
-	private final Item.ToolMaterial material;
+	private final IItemTier material;
 
-	public ItemMusketKnife(Item.ToolMaterial material) {
+	public ItemMusketKnife(IItemTier material, Properties properties)
+	{
+		super(properties);
 		this.material = material;
-		this.attackDamage = 3.0F + material.getAttackDamage();
+		this.attackDamage = 3.0F + material.getAttackDamageBonus();
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		this.replaceModifier(modifiers, Attributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, -0.8F);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+		this.replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, -0.8F);
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, double value) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+	protected void replaceModifier(Multimap<Attribute, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, double value) {
+		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
+		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
+			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
 		}
 	}
 
-	/** Copied from {@link SwordItem#getDestroySpeed(ItemStack, BlockState)} */
 	@Override
-	public float getDestroySpeed(ItemStack stack, BlockState state) {
-		Block block = state.getBlock();
-
-		if (block == Blocks.WEB) {
+	public float getDestroySpeed(ItemStack pStack, BlockState pState) {
+		if (pState.is(Blocks.COBWEB)) {
 			return 15.0F;
 		} else {
-			Material material1 = state.getMaterial();
-			return material1 != Material.PLANTS && material1 != Material.VINE && material1 != Material.CORAL && material1 != Material.LEAVES && material1 != Material.GOURD ? 1.0F : 1.5F;
+			Material material = pState.getMaterial();
+			return material != Material.PLANT && material != Material.REPLACEABLE_PLANT && material != Material.CORAL && !pState.is(BlockTags.LEAVES) && material != Material.VEGETABLE ? 1.0F : 1.5F;
 		}
 	}
 
-	/** Copied from {@link SwordItem#hitEntity(ItemStack, LivingEntity, LivingEntity)} */
 	@Override
-	public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-		stack.damageItem(1, attacker);
+	public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
+		pStack.hurtAndBreak(1, pAttacker, (p_220045_0_) -> {
+			p_220045_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+		});
 		return true;
 	}
 
-	/** Copied from {@link SwordItem#onBlockDestroyed(ItemStack, World, BlockState, BlockPos, LivingEntity)} */
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (state.getBlockHardness(worldIn, pos) != 0.0D) {
-			stack.damageItem(2, entityLiving);
+	public boolean mineBlock(ItemStack pStack, World pLevel, BlockState pState, BlockPos pPos, LivingEntity pEntityLiving) {
+		if (pState.getDestroySpeed(pLevel, pPos) != 0.0F) {
+			pStack.hurtAndBreak(2, pEntityLiving, (p_220044_0_) -> {
+				p_220044_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+			});
 		}
 
 		return true;
 	}
 
-	/** Copied from {@link SwordItem#canHarvestBlock(BlockState)} */
 	@Override
-	public boolean canHarvestBlock(BlockState blockIn) {
-		return blockIn.getBlock() == Blocks.WEB;
+	public boolean isCorrectToolForDrops(BlockState pBlock) {
+		return pBlock.is(Blocks.COBWEB);
 	}
 
-	/** Copied from {@link SwordItem#getItemEnchantability()} */
-	@Override
+	/*@Override
 	public int getItemEnchantability() {
 		return this.material.getEnchantability();
 	}
 
-	/** Copied from {@link SwordItem#getIsRepairable(ItemStack, ItemStack)} */
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		ItemStack mat = this.material.getRepairItemStack();
@@ -100,12 +97,24 @@ public class ItemMusketKnife extends ItemMusket {
 			return true;
 		}
 		return super.getIsRepairable(toRepair, repair);
-	}
+	} */
 
-	/** Copied from {@link SwordItem#getItemAttributeModifiers(EquipmentSlotType)} */
 	@SuppressWarnings("deprecation")
 	@Override
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EquipmentSlotType equipmentSlot) {
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot)
+	{
+		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
+
+		if(equipmentSlot == EquipmentSlotType.MAINHAND)
+		{
+			multimap.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
+			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4000000953674316D, AttributeModifier.Operation.ADDITION));
+		}
+
+		return multimap;
+	}
+
+	/*public Multimap<String, AttributeModifier> getItemAttributeModifiers(EquipmentSlotType equipmentSlot) {
 		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
 
 		if (equipmentSlot == EquipmentSlotType.MAINHAND) {
@@ -114,6 +123,6 @@ public class ItemMusketKnife extends ItemMusket {
 		}
 
 		return multimap;
-	}
+	} */
 
 }

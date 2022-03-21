@@ -6,16 +6,7 @@ import net.minecraft.util.Direction;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
-<<<<<<< HEAD
-=======
-import net.minecraft.block.BlockHorizontal;
-<<<<<<< HEAD
-import net.minecraft.block.properties.PropertyDirection;
->>>>>>> af436f9cc... check if state has property
-=======
->>>>>>> a6ae3bbc4... correct previous commit (method not existant yet)
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

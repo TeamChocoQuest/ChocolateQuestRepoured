@@ -7,6 +7,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 
 public class ContainerBadge extends Container {
@@ -14,7 +15,7 @@ public class ContainerBadge extends Container {
 	private final IInventory inventory;
 
 	/** Client **/
-	public ContainerBadge(final int containerID, PlayerInventory playerInv) {
+	public ContainerBadge(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
 		this(containerID, playerInv, new Inventory(9));
 	}
 

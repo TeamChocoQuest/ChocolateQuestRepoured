@@ -14,6 +14,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -25,9 +26,12 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemBadge;
 import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.gun.ItemBullet;
+
+import java.util.Objects;
 
 public class ContainerCQREntity extends Container {
 
@@ -39,8 +43,27 @@ public class ContainerCQREntity extends Container {
 	public static final ResourceLocation EMPTY_SLOT_BADGE = CQRMain.prefix("items/empty_slot_badge");
 	public static final ResourceLocation EMPTY_SLOT_ARROW = CQRMain.prefix("items/empty_slot_arrow");
 
-	public ContainerCQREntity(ContainerType<?> containerType, final int containerID, PlayerInventory playerInv, AbstractEntityCQR entity) {
-		super(containerType, containerID);
+	public ContainerCQREntity(final int containerID, PlayerInventory playerInv, PacketBuffer data)
+	{
+		this(containerID, playerInv, getEntity(playerInv, data));
+	}
+
+	private static AbstractEntityCQR getEntity(final PlayerInventory playerInventory, final PacketBuffer data)
+	{
+		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
+		Objects.requireNonNull(data, "data cannot be null");
+
+		int entityID = data.readInt();
+
+		if(playerInventory.player.level.getEntity(entityID) != null && playerInventory.player.level.getEntity(entityID) instanceof AbstractEntityCQR)
+		{
+			return (AbstractEntityCQR)playerInventory.player.level.getEntity(entityID);
+		}
+		throw new IllegalStateException("EntityID is not correct! " + entityID);
+	}
+
+	public ContainerCQREntity(final int containerID, PlayerInventory playerInv, AbstractEntityCQR entity) {
+		super(CQRContainerTypes.CQR_ENTITY_EDITOR.get(), containerID);
 		this.entity = entity;
 		LazyOptional<IItemHandler> lOpCap = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		IItemHandler inventory = null;

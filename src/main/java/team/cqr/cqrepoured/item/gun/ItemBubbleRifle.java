@@ -4,14 +4,14 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBubbleRifle extends ItemBubblePistol {
 
-	public ItemBubbleRifle() {
-		super();
+	public ItemBubbleRifle(Properties properties) {
+		super(properties.durability(400));
 	}
 
-	@Override
-	public int getMaxUses() {
-		return 2 * super.getMaxUses();
-	}
+	//@Override
+	//public int getMaxUses() {
+	//	return 2 * super.getMaxUses();
+	//}
 
 	@Override
 	public int getCooldown() {
@@ -24,8 +24,8 @@ public class ItemBubbleRifle extends ItemBubblePistol {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 10 * super.getMaxItemUseDuration(stack);
+	public int getUseDuration(ItemStack stack) {
+		return 10 * super.getUseDuration(stack);
 	}
 
 }

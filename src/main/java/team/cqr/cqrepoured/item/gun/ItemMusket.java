@@ -6,11 +6,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
-import org.lwjgl.input.Keyboard;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -22,25 +23,25 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemMusket extends ItemRevolver {
 
-	public ItemMusket() {
-		this.setMaxDamage(300);
-		this.setMaxStackSize(1);
+	public ItemMusket(Properties properties)
+	{
+		super(properties.durability(300).stacksTo(1));
+		//this.setMaxDamage(300);
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.BLUE + "7.5 " + I18n.format("description.bullet_damage.name"));
-		tooltip.add(TextFormatting.RED + "-60 " + I18n.format("description.fire_rate.name"));
-		tooltip.add(TextFormatting.RED + "-10" + "% " + I18n.format("description.accuracy.name"));
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.gun.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new StringTextComponent("7.5 " + new TranslationTextComponent("description.bullet_damage.name")).withStyle(TextFormatting.BLUE));
+		tooltip.add(new StringTextComponent("-60 " + new TranslationTextComponent("description.fire_rate.name")).withStyle(TextFormatting.RED));
+		tooltip.add(new StringTextComponent("-10" + "% " + new TranslationTextComponent("description.accuracy.name")).withStyle(TextFormatting.RED));
+
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}
 
 	@Override
@@ -50,33 +51,33 @@ public class ItemMusket extends ItemRevolver {
 
 	@Override
 	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
-		boolean flag = player.capabilities.isCreativeMode;
+		boolean flag = player.abilities.instabuild;
 		ItemStack itemstack = this.findAmmo(player);
 
 		if (!itemstack.isEmpty() || flag) {
-			if (!worldIn.isRemote) {
+			if (!worldIn.isClientSide) {
 				if (flag && itemstack.isEmpty()) {
-					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
-					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
-					worldIn.spawnEntity(bulletE);
+					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, 1);
+					bulletE.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 2F);
+					player.getCooldowns().addCooldown(stack.getItem(), 30);
+					worldIn.addFreshEntity(bulletE);
 				} else {
-					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, this.getBulletType(itemstack));
-					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
-					worldIn.spawnEntity(bulletE);
-					stack.damageItem(1, player);
+					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, this.getBulletType(itemstack));
+					bulletE.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 2F);
+					player.getCooldowns().addCooldown(stack.getItem(), 30);
+					worldIn.addFreshEntity(bulletE);
+					stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(p.getUsedItemHand()));
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, this.getShootSound(), SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
-			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
+			worldIn.playLocalSound(player.position().x, player.position().y + player.getEyeHeight(), player.position().z, this.getShootSound(), SoundCategory.MASTER, 1.0F, 0.9F + random.nextFloat() * 0.2F, false);
+			player.xRot -= worldIn.random.nextFloat() * 10;
 
 			if (!flag) {
 				itemstack.shrink(1);
 
 				if (itemstack.isEmpty()) {
-					player.inventory.deleteStack(itemstack);
+					player.inventory.removeItem(itemstack);
 				}
 			}
 		}
@@ -88,7 +89,7 @@ public class ItemMusket extends ItemRevolver {
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!(entityIn instanceof LivingEntity)) {
 			return;
 		}
@@ -98,7 +99,7 @@ public class ItemMusket extends ItemRevolver {
 		LivingEntity entityLiving = (LivingEntity) entityIn;
 		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
-			entityLiving.addPotionEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
+			entityLiving.addEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}
 	}
 

@@ -27,13 +27,13 @@ public class ProjectileBubble extends ProjectileBase {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileBubble(EntityType<? extends ThrowableEntity> throwableEntity, double pX, double pY, double pZ, World world) {
-		super(throwableEntity, world);
+	public ProjectileBubble(double pX, double pY, double pZ, World world) {
+		super(CQREntityTypes.PROJECTILE_BUBBLE.get(), world);
 	}
 
-	public ProjectileBubble(EntityType<? extends ThrowableEntity> throwableEntity, LivingEntity shooter, World world)
+	public ProjectileBubble(LivingEntity shooter, World world)
 	{
-		super(throwableEntity, shooter, world);
+		super(CQREntityTypes.PROJECTILE_BUBBLE.get(), shooter, world);
 		this.shooter = shooter;
 		this.damage = 1F;
 		//this.fireImmune() FireImmune in entity constructor
