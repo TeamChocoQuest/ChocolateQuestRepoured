@@ -1,0 +1,7 @@
+{
+	"name": "cqrepoured:wall/tower/decoration/lighting",
+	"fallback": "minecraft:empty",
+	"elements": [
+	
+    ]
+}

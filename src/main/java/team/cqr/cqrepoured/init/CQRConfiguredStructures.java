@@ -10,13 +10,14 @@ import team.cqr.cqrepoured.CQRMain;
 
 public class CQRConfiguredStructures {
 	
-	public static StructureFeature<?, ?> CONFIGURED_LAND_BATTLE_TOWER = CQRStructures.WALL_IN_THE_NORTH.get().configured(IFeatureConfig.NONE);
+	public static StructureFeature<?, ?> CONFIGURED_WALL_IN_THE_NORTH = CQRStructures.WALL_IN_THE_NORTH.get().configured(IFeatureConfig.NONE);
     /* public static StructureFeature<?, ?> CONFIGURED_SKY_BATTLE_TOWER = BTStructures
             .SKY_BATTLE_TOWER.get().configured(IFeatureConfig.NONE); */
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
-        Registry.register(registry, new ResourceLocation(CQRMain.MODID, "wall_in_the_north"), CONFIGURED_LAND_BATTLE_TOWER);
+        
+        Registry.register(registry, new ResourceLocation(CQRMain.MODID, "wall_in_the_north"), CONFIGURED_WALL_IN_THE_NORTH);
 
         /* Ok so, this part may be hard to grasp but basically, just add your structure to this to
          * prevent any sort of crash or issue with other mod's custom ChunkGenerators. If they use
@@ -33,7 +34,7 @@ public class CQRConfiguredStructures {
          *
          * Requires AccessTransformer ( see resources/META-INF/accesstransformer.cfg )
          */
-        FlatGenerationSettings.STRUCTURE_FEATURES.put(CQRStructures.WALL_IN_THE_NORTH.get(), CONFIGURED_LAND_BATTLE_TOWER);
+        FlatGenerationSettings.STRUCTURE_FEATURES.put(CQRStructures.WALL_IN_THE_NORTH.get(), CONFIGURED_WALL_IN_THE_NORTH);
         // FlatGenerationSettings.STRUCTURE_FEATURES.put(BTStructures.SKY_BATTLE_TOWER.get(), CONFIGURED_SKY_BATTLE_TOWER);
     }
 

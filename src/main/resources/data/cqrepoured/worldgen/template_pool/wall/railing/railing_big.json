@@ -1,0 +1,15 @@
+{
+	"name": "cqrepoured:wall/railing/railing_big",
+	"fallback": "minecraft:empty",
+	"elements": [
+		{
+			"weight": 100,
+			"element": {
+				"location": "cqrepoured:wall_railing_big",
+				"processors": "minecraft:empty",
+				"projection": "rigid",
+				"element_type": "minecraft:single_pool_element"
+			}
+		}
+	]
+}

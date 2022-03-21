@@ -1,0 +1,10 @@
+{
+	"processors": [
+		{
+			"processor_type": "cqrepoured:processor_wall_inner"
+		},
+		{
+			"processor_type": "cqrepoured:processor_wall_outer"
+		}
+	]
+}

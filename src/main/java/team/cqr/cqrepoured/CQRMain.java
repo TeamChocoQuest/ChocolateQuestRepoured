@@ -24,9 +24,9 @@ import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -42,10 +42,12 @@ import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRConfiguredStructures;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMessages;
+import team.cqr.cqrepoured.init.CQRStructureProcessors;
 import team.cqr.cqrepoured.init.CQRStructures;
 
 @Mod(CQRMain.MODID)
@@ -148,17 +150,20 @@ public class CQRMain {
 	public CQRMain() {
 		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
 
+		final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		
 		GeckoLib.initialize();
 
-		CQRStructures.registerStructures();
 		CQRBlocks.registerBlocks();
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
-		CQRMessages.registerMessages();
+		CQRStructures.registerStructures();
+		CQRStructureProcessors.registerStructureProcessors();
 
 		MinecraftForge.EVENT_BUS.register(this);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRepouredClient::setupClient);
+		bus.<FMLCommonSetupEvent>addListener(this::init);
+		bus.addListener(CQRepouredClient::setupClient);
 	}
 
 	/*
@@ -226,13 +231,10 @@ public class CQRMain {
 	public void biomeModification(final BiomeLoadingEvent event) {
 		RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
 
-		if (BiomeDictionary.hasType(key, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(key, BiomeDictionary.Type.END) || BiomeDictionary.hasType(key, BiomeDictionary.Type.MOUNTAIN)) {
+		if (BiomeDictionary.hasType(key, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(key, BiomeDictionary.Type.END)) {
 
 		} else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD)) {
-			if (BiomeDictionary.hasType(key, BiomeDictionary.Type.SWAMP) || BiomeDictionary.hasType(key, BiomeDictionary.Type.FOREST) || BiomeDictionary.hasType(key, BiomeDictionary.Type.SAVANNA) || BiomeDictionary.hasType(key,
-					BiomeDictionary.Type.PLAINS) || BiomeDictionary.hasType(key, BiomeDictionary.Type.SANDY) || BiomeDictionary.hasType(key, BiomeDictionary.Type.JUNGLE)) {
-				event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_LAND_BATTLE_TOWER);
-			}
+			event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_WALL_IN_THE_NORTH);
 		}
 	}
 
@@ -256,8 +258,9 @@ public class CQRMain {
 		}
 	}
 
-	@SubscribeEvent
-	protected void setup(final FMLCommonSetupEvent event) {
+	public void init(final FMLCommonSetupEvent event) {
+		CQRCapabilities.registerCapabilities();
+		CQRMessages.registerMessages();
 		event.enqueueWork(() -> {
 			CQRStructures.setupStructures();
 			CQRConfiguredStructures.registerConfiguredStructures();

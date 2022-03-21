@@ -20,24 +20,25 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
+import team.cqr.cqrepoured.world.structure.generation.thewall.wallparts.WallPieceTower;
+import team.cqr.cqrepoured.world.structure.generation.thewall.wallparts.WallPieceWall;
 
 public class CQRStructures {
 	
 	public static final DeferredRegister<Structure<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
 	
-	public static final RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
-
+	public static RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
+	public static IStructurePieceType WALL_PIECE_WALL = IStructurePieceType.setPieceId(WallPieceWall::new, "wall_piece_wall");
+	//public static IStructurePieceType WALL_PIECE_GATE = IStructurePieceType.setPieceId(WallPieceGate::new, "wall_piece_gate");
+	public static IStructurePieceType WALL_PIECE_TOWER = IStructurePieceType.setPieceId(WallPieceTower::new, "wall_piece_tower");
+	
+	
+	
 	public static void setupStructures() {
-		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 0), false);
+		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
 		
     }
 
-    private static void registerPieces() {
-		registerStructurePiece(CQRStructurePieces.WALL_PIECE_WALL, CQRMain.prefix("cqr-wall-part-wall"));
-		registerStructurePiece(CQRStructurePieces.WALL_PIECE_TOWER, CQRMain.prefix("cqr-wall-part-tower"));
-		//registerStructurePiece(CQRStructurePieces.WALL_PIECE_GATE, CQRMain.prefix("cqr-wall-part-gate"));
-	}
-    
     static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {
         Registry.register(Registry.STRUCTURE_PIECE, rl, structurePiece);
     }
@@ -45,8 +46,6 @@ public class CQRStructures {
 
 	public static void registerStructures() {
 		DEFERRED_REGISTRY_STRUCTURE.register(FMLJavaModLoadingContext.get().getModEventBus());
-
-		registerPieces();
 	}
 	
 	public static <F extends Structure<?>> void setupMapSpacingAndLand(
@@ -87,5 +86,9 @@ public class CQRStructures {
             }
         });
     }
+	
+	protected static IStructurePieceType register(IStructurePieceType type, String id) {
+		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id );
+	}
 	
 }

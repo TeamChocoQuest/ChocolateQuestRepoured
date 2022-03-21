@@ -2,21 +2,25 @@ package team.cqr.cqrepoured.world.structure.generation.thewall;
 
 import com.mojang.serialization.Codec;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedSeedRandom;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
+import net.minecraft.world.gen.feature.structure.AbstractVillagePiece;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
+import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.world.structure.generation.thewall.wallparts.WallPieceTower;
-import team.cqr.cqrepoured.world.structure.generation.thewall.wallparts.WallPieceWall;
+import team.cqr.cqrepoured.CQRMain;
 
 public class WallStructure extends Structure<NoFeatureConfig> {
 
@@ -36,14 +40,14 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 	
 	@Override
 	protected boolean isFeatureChunk(ChunkGenerator cg, BiomeProvider bp, long seed, SharedSeedRandom ssr, int p_230363_6_, int p_230363_7_, Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
-		if (!CQRConfig.wall.enabled) {
+		/*if (!CQRConfig.wall.enabled) {
 			return false;
-		}
+		}*/
 		
 		//int chunkX = chunkPos.x;
 		int chunkZ = chunkPos.z;
 		
-		return chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance);
+		return chunkZ < 0 && Math.abs(chunkZ) == Math.abs(500/*CQRConfig.wall.distance*/);
 	}
 	
 	public static class Start extends StructureStart<NoFeatureConfig> {
@@ -52,14 +56,33 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 			super(p_i225876_1_, p_i225876_2_, p_i225876_3_, p_i225876_4_, p_i225876_5_, p_i225876_6_);
 		}
 
+		final ResourceLocation START_POOL_WALL = CQRMain.prefix("wall/start_wall");
+		final ResourceLocation START_POOL_TOWER = CQRMain.prefix("wall/start_tower");
+		
 		@Override
-		public void generatePieces(DynamicRegistries p_230364_1_, ChunkGenerator p_230364_2_, TemplateManager p_230364_3_, int chunkX, int chunkZ, Biome p_230364_6_, NoFeatureConfig p_230364_7_) {
-			boolean tower = chunkX % CQRConfig.wall.towerDistance == 0;
+		public void generatePieces(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
+			boolean tower = (chunkX % 3/*CQRConfig.wall.towerDistance*/) == 0;
+			BlockPos centered = new BlockPos((chunkX * 16) -16, 140, (chunkZ * 16) -16);
+			ResourceLocation startPool;
 			if(tower) {
-				this.pieces.add(new WallPieceTower());
+				startPool = START_POOL_TOWER;
 			} else {
-				this.pieces.add(new WallPieceWall());
+				startPool = START_POOL_WALL;
 			}
+			
+			JigsawManager.addPieces(
+					dynamicRegistryManager, 
+					new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).get(startPool), 10),
+					AbstractVillagePiece::new,
+					chunkGenerator,
+					templateManagerIn,
+					centered,
+					pieces,
+					random,
+					false, 
+					false
+			);
+			
 			this.calculateBoundingBox();
 		}
 		
