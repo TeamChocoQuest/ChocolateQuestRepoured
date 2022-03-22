@@ -41,15 +41,30 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemTeleportStone extends Item {
 
-	private String X = "x";
-	private String Y = "y";
-	private String Z = "z";
-	private String Dimension = "dimension";
+	private static final String X = "x";
+	private static final String Y = "y";
+	private static final String Z = "z";
+	private static final String DIMENSION = "dimension";
 
 	public ItemTeleportStone() {
 		this.setMaxDamage(100);
 
 		this.setMaxStackSize(1);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+
+		if (isSelected && entityIn instanceof EntityPlayer && worldIn.isRemote && worldIn.getTotalWorldTime() % 4 == 0) {
+			NBTTagCompound tag = stack.getTagCompound();
+			if (tag != null && tag.hasKey(X) && tag.hasKey(Y) && tag.hasKey(Z) && tag.hasKey(DIMENSION) && worldIn.provider.getDimension() == tag.getInteger(DIMENSION)) {
+				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.1D, -0.1D, 0.1D);
+				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				worldIn.spawnParticle(EnumParticleTypes.DRAGON_BREATH, x + 0.5D, y + 0.1D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+			}
+		}
 	}
 
 	@Override
@@ -131,9 +146,9 @@ public class ItemTeleportStone extends Item {
 			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
 
 			if (player.isSneaking() && stack.hasTagCompound()) {
-				stack.getTagCompound().removeTag(this.X);
-				stack.getTagCompound().removeTag(this.Y);
-				stack.getTagCompound().removeTag(this.Z);
+				stack.getTagCompound().removeTag(X);
+				stack.getTagCompound().removeTag(Y);
+				stack.getTagCompound().removeTag(Z);
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 				for (int i = 0; i < 10; i++) {
 					worldIn.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
@@ -151,8 +166,8 @@ public class ItemTeleportStone extends Item {
 			}
 
 			else if (stack.hasTagCompound() && !player.isSneaking()) {
-				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
-					int dimension = stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0;
+				if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
+					int dimension = stack.getTagCompound().hasKey(DIMENSION, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(DIMENSION) : 0;
 					BlockPos pos = this.getPoint(stack);
 
 					if (player.isBeingRidden()) {
@@ -215,12 +230,12 @@ public class ItemTeleportStone extends Item {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone.name"));
 
 			if (stack.hasTagCompound()) {
-				if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
+				if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
 					tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone_position.name"));
-					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int) stack.getTagCompound().getDouble(this.X)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int) stack.getTagCompound().getDouble(this.Y)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int) stack.getTagCompound().getDouble(this.Z)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: " + (stack.getTagCompound().hasKey(this.Dimension, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(this.Dimension) : 0)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int) stack.getTagCompound().getDouble(X)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int) stack.getTagCompound().getDouble(Y)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int) stack.getTagCompound().getDouble(Z)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: " + (stack.getTagCompound().hasKey(DIMENSION, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(DIMENSION) : 0)));
 				}
 			}
 		} else {
@@ -236,21 +251,21 @@ public class ItemTeleportStone extends Item {
 			stack.setTagCompound(stone);
 		}
 
-		if (!stone.hasKey(this.X)) {
-			stone.setDouble(this.X, player.posX);
+		if (!stone.hasKey(X)) {
+			stone.setDouble(X, player.posX);
 		}
 
-		if (!stone.hasKey(this.Y)) {
-			stone.setDouble(this.Y, player.posY);
+		if (!stone.hasKey(Y)) {
+			stone.setDouble(Y, player.posY);
 		}
 
-		if (!stone.hasKey(this.Z)) {
-			stone.setDouble(this.Z, player.posZ);
+		if (!stone.hasKey(Z)) {
+			stone.setDouble(Z, player.posZ);
 		}
 
 		// Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
 		// if (!stone.hasKey(this.Dimension)) {
-		stone.setInteger(this.Dimension, player.dimension);
+		stone.setInteger(DIMENSION, player.dimension);
 		// }
 	}
 
@@ -262,12 +277,12 @@ public class ItemTeleportStone extends Item {
 	@Nullable
 	private BlockPos getPoint(ItemStack stack) {
 		if (stack.hasTagCompound()) {
-			if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {
+			if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
 				NBTTagCompound stone = stack.getTagCompound();
 
-				double x = stone.getDouble(this.X);
-				double y = stone.getDouble(this.Y);
-				double z = stone.getDouble(this.Z);
+				double x = stone.getDouble(X);
+				double y = stone.getDouble(Y);
+				double z = stone.getDouble(Z);
 
 				return new BlockPos(x, y, z);
 			}
