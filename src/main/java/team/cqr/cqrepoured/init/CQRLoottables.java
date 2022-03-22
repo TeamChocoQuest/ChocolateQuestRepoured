@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.loot.LootTables;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CQRLoottables {
 

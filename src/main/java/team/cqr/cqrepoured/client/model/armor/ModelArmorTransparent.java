@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.client.model.armor;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.entity.LivingEntity;
 
 public class ModelArmorTransparent<T extends LivingEntity> extends ModelCustomArmorBase<T> {

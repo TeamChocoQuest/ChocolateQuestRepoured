@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.faction;
 
-import java.util.Optional;
-
 import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.Optional;
 
 public class DummyFaction extends Faction {
 

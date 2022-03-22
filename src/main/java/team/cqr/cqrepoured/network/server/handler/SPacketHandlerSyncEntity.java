@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -10,6 +8,8 @@ import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
+
+import java.util.function.Supplier;
 
 public class SPacketHandlerSyncEntity extends AbstractPacketHandler<CPacketSyncEntity> {
 

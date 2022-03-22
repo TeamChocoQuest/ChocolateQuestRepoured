@@ -1,16 +1,15 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
 public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable> {

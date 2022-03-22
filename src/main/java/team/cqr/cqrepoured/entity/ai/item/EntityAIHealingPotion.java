@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import java.util.EnumSet;
-import java.util.List;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -18,6 +15,9 @@ import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import java.util.EnumSet;
+import java.util.List;
 
 public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR> {
 

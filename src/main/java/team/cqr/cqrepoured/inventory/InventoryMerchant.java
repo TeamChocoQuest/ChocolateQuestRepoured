@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.inventory;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -12,6 +10,8 @@ import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
+
+import javax.annotation.Nullable;
 
 public class InventoryMerchant implements IInventory {
 

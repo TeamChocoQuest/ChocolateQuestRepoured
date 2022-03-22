@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -14,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 
 public class RenderProjectileSpiderHook extends RenderProjectileHookShotHook {

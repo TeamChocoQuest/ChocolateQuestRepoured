@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
-import java.util.function.Supplier;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.HorizontalBlock;
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.ChestTileEntity;
@@ -31,6 +29,8 @@ import team.cqr.cqrepoured.world.structure.generation.generation.generatable.Gen
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
+
+import java.util.function.Supplier;
 
 public class PreparableLootChestInfo extends PreparablePosInfo {
 

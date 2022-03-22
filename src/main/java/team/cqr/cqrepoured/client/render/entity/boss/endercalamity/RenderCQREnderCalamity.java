@@ -1,24 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.BlockState;
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.base.Optional;
-
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -29,6 +23,9 @@ import team.cqr.cqrepoured.client.util.SphereRenderer.Vertex;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.util.ArrayUtil;
+
+import javax.annotation.Nullable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {
 

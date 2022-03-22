@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,6 +25,8 @@ import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemLore;
+
+import java.util.List;
 
 public class ItemArmorTurtle extends ArmorItem {
 

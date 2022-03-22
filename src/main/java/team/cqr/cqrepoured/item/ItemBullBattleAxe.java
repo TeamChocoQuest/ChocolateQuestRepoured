@@ -1,14 +1,6 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Multimap;
-
 import net.java.games.input.Keyboard;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -29,6 +21,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class ItemBullBattleAxe extends SwordItem {
 

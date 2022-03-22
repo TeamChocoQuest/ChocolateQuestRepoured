@@ -5,9 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQREnchantments;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)

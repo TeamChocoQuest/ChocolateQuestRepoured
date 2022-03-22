@@ -1,14 +1,5 @@
 package team.cqr.cqrepoured.event.world.structure.generation;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import org.apache.commons.lang3.tuple.Triple;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,8 +13,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import org.apache.commons.lang3.tuple.Triple;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.util.*;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationHelper {

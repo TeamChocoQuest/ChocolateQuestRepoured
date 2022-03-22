@@ -1,16 +1,6 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -31,6 +21,9 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class EntityElectricField extends Entity implements IDontRenderFire, IEntityOwnable {
 

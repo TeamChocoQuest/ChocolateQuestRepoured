@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.capability.armor.kingarmor;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import javax.annotation.Nullable;
 
 public class CapabilityDynamicCrown {
 

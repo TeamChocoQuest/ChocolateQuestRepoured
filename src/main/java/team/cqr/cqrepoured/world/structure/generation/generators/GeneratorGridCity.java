@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +12,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDunge
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.io.File;
+import java.util.*;
 
 public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity> {
 

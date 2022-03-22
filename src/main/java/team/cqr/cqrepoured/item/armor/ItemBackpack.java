@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -24,6 +22,8 @@ import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItem
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.GuiHandler;
+
+import java.util.List;
 
 public class ItemBackpack extends ArmorItem {
 

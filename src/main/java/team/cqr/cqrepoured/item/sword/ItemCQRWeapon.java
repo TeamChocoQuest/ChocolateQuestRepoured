@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.item.sword;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -16,6 +13,8 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.ItemUtil;
+
+import java.util.List;
 
 public class ItemCQRWeapon extends SwordItem {
 

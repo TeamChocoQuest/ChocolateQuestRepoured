@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
@@ -25,6 +21,10 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.util.math.BoundingBox;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public abstract class AbstractEntityLaser extends Entity implements IEntityAdditionalSpawnData {
 

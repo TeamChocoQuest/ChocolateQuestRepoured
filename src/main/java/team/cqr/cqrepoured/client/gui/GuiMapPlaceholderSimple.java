@@ -1,20 +1,20 @@
 package team.cqr.cqrepoured.client.gui;
 
-import java.io.IOException;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
-import net.minecraftforge.api.distmarker.Dist;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiMapPlaceholder.GuiButtonOrientation;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMapPlaceholderSimple extends Screen {

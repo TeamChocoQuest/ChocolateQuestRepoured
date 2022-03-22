@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +23,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
+
+import java.util.List;
 
 public class ItemArmorBull extends ArmorItem {
 

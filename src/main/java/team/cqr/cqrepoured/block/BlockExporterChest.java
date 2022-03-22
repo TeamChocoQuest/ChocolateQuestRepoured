@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.block;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -21,6 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class BlockExporterChest extends ChestBlock {
 

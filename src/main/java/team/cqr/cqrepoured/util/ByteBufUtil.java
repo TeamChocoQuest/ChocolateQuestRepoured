@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.UUID;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.UUID;
 
 public class ByteBufUtil {
 

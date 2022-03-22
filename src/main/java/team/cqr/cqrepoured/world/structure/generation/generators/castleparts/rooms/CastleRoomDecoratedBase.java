@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -22,6 +17,11 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.roo
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorChest;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorNone;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 	protected static final int MAX_DECO_ATTEMPTS = 3;

@@ -2,14 +2,7 @@ package team.cqr.cqrepoured.client.init;
 
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorBull;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorHeavy;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorInquisition;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorSpider;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorTransparent;
-import team.cqr.cqrepoured.client.model.armor.ModelArmorTurtle;
-import team.cqr.cqrepoured.client.model.armor.ModelBackpack;
-import team.cqr.cqrepoured.client.model.armor.ModelCrown;
+import team.cqr.cqrepoured.client.model.armor.*;
 
 public class CQRArmorModels {
 

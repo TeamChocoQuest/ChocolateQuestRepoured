@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.HorizontalBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.Direction;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockExporterChestCustom;

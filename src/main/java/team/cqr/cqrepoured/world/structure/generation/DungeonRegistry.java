@@ -1,22 +1,15 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.annotation.Nullable;
-
-import org.apache.commons.io.FileUtils;
-
 import net.minecraft.world.World;
+import org.apache.commons.io.FileUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 /**
  * Copyright (c) 29.04.2019<br>

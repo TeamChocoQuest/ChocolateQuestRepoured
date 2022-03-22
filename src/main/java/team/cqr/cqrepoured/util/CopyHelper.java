@@ -1,21 +1,14 @@
 package team.cqr.cqrepoured.util;
 
+import team.cqr.cqrepoured.CQRMain;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-
-import team.cqr.cqrepoured.CQRMain;
 
 public class CopyHelper {
 

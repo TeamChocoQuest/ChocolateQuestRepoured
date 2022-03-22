@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
+import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import javax.annotation.Nullable;
-
-import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR> {
 

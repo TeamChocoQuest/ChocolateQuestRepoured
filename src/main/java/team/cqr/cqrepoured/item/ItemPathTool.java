@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -23,6 +21,8 @@ import team.cqr.cqrepoured.capability.pathtool.CapabilityPathProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.util.GuiHandler;
+
+import javax.annotation.Nullable;
 
 public class ItemPathTool extends ItemLore {
 

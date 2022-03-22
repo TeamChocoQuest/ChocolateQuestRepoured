@@ -1,11 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import java.io.File;
-import java.util.Properties;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -15,6 +9,11 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

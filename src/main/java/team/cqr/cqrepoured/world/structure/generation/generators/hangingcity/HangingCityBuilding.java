@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.hangingcity;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Tuple;
@@ -23,6 +18,11 @@ import team.cqr.cqrepoured.world.structure.generation.generators.SuspensionBridg
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class HangingCityBuilding extends AbstractDungeonGenerationComponent<GeneratorHangingCity> {
 

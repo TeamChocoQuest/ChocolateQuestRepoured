@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.client.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.OpenGlHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelPentagram;
 

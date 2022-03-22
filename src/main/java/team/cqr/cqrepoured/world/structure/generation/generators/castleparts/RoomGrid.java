@@ -1,16 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.CQRMain;
@@ -19,6 +8,11 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.roo
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomWalkableRoof;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.EnumRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.CastleMainStructWall;
+
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class RoomGrid {
 	public static class Area2D {

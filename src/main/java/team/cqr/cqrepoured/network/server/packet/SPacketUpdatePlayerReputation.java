@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.UUID;
-
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.UUID;
 
 public class SPacketUpdatePlayerReputation extends AbstractPacket<SPacketUpdatePlayerReputation> {
 

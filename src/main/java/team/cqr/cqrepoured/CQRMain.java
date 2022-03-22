@@ -1,13 +1,5 @@
 package team.cqr.cqrepoured;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -37,18 +29,17 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
-import team.cqr.cqrepoured.init.CQRBlockEntities;
-import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.init.CQRConfiguredStructures;
-import team.cqr.cqrepoured.init.CQRContainerTypes;
-import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRMessages;
-import team.cqr.cqrepoured.init.CQRStructureProcessors;
-import team.cqr.cqrepoured.init.CQRStructures;
+import team.cqr.cqrepoured.init.*;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Mod(CQRMain.MODID)
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)

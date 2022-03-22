@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.util.EntityPredicates;
@@ -13,6 +10,9 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 

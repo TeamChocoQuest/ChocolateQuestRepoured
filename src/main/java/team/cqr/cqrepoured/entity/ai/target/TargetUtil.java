@@ -1,12 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.Comparator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -32,6 +26,10 @@ import team.cqr.cqrepoured.entity.bases.EntityCQRMountBase;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.List;
 
 public class TargetUtil {
 

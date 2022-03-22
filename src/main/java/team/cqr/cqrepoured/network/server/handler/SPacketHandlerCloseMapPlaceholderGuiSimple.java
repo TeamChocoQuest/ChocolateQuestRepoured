@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -13,6 +11,8 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
+
+import java.util.function.Supplier;
 
 public class SPacketHandlerCloseMapPlaceholderGuiSimple extends AbstractPacketHandler<CPacketCloseMapPlaceholderGuiSimple> {
 

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -13,6 +11,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.awt.*;
 
 public class ItemArmorDyable extends DyeableArmorItem {
 

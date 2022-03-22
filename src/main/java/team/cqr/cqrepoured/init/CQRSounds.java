@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.init;
 
-import static team.cqr.cqrepoured.util.InjectionUtil.Null;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 import team.cqr.cqrepoured.CQRMain;
+
+import static team.cqr.cqrepoured.util.InjectionUtil.Null;
 
 @ObjectHolder(CQRMain.MODID)
 public class CQRSounds {

@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.inventory;
 
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
@@ -22,6 +18,9 @@ import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.util.GuiHandler;
+
+import javax.annotation.Nullable;
+import java.util.stream.IntStream;
 
 public class ContainerMerchantEditTrade extends Container implements IInteractable {
 

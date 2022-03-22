@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PotionEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
+import net.minecraft.item.SplashPotionItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.SplashPotionItem;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.ItemAlchemyBag;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQR> {
 

@@ -1,10 +1,6 @@
 package team.cqr.cqrepoured.item.sword;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -26,6 +22,9 @@ import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.ItemUtil;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ItemDagger extends ItemCQRWeapon {
 

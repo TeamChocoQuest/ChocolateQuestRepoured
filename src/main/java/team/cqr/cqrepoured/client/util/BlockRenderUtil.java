@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.client.util;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;

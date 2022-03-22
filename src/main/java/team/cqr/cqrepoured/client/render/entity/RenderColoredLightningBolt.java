@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,6 +8,9 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLightningBolt> {
 

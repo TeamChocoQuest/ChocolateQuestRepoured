@@ -1,16 +1,11 @@
 package team.cqr.cqrepoured.client.resources.data;
 
-import java.lang.reflect.Type;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
+import com.google.gson.*;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.Tuple;
+
+import java.lang.reflect.Type;
 
 // TODO: Change to be completely json based, not some weird string monsters
 public class GlowingMetadataSectionSerializer implements JsonSerializer<GlowingMetadataSection>, IMetadataSectionSerializer<GlowingMetadataSection> {

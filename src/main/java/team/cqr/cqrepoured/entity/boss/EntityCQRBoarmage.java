@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,6 +20,9 @@ import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
 

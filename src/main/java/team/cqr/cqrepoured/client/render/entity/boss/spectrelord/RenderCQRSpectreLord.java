@@ -1,9 +1,8 @@
 package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.renderer.GlStateManager;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;

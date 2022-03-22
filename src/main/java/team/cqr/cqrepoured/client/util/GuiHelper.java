@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.client.util;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.gui.FontRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class GuiHelper {
 

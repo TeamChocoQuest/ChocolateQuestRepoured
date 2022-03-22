@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.inventory.EquipmentSlotType;
 import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRMandril;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;

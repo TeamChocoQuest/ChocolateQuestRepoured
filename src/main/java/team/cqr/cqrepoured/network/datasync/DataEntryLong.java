@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import javax.annotation.Nonnull;
-
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.LongNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.nbt.INBT;
+
+import javax.annotation.Nonnull;
 
 public class DataEntryLong extends DataEntry<Long> {
 

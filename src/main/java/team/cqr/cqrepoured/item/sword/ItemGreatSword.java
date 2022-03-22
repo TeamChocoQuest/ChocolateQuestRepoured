@@ -1,33 +1,27 @@
 package team.cqr.cqrepoured.item.sword;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.UseAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.UseAction;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
-import team.cqr.cqrepoured.config.CQRConfig;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemGreatSword extends ItemCQRWeapon {
 

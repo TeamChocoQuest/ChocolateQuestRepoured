@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.command;
 
-import java.util.Collections;
-import java.util.List;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,6 +10,9 @@ import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+
+import java.util.Collections;
+import java.util.List;
 
 public class CommandGetProtectedRegion extends CommandBase {
 

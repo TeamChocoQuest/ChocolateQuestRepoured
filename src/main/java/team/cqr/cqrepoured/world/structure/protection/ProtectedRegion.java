@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
@@ -22,6 +15,12 @@ import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class ProtectedRegion {
 

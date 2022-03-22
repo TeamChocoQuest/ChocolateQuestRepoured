@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.Random;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
+
+import java.util.Random;
 
 public class CastleRoomLibrary extends CastleRoomDecoratedBase {
 	private enum ShelfPattern {

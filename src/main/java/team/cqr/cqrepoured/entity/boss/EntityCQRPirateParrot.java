@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -37,6 +32,10 @@ import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot.BossAIPirateParro
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotThrowPotions;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIPetNearestAttackTarget;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.UUID;
 
 public class EntityCQRPirateParrot extends ParrotEntity {
 

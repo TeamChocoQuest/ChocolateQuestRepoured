@@ -1,18 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import net.minecraft.block.BlockColored;
-import net.minecraft.block.TorchBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.item.DyeColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -26,6 +14,8 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
+
+import java.util.*;
 
 public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vector3i bossBuildOffset = new Vector3i(0, 0, 0);

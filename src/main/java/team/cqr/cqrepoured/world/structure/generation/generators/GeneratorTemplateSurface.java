@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import java.io.File;
-import java.util.Random;
-
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +12,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.part.CoverDunge
 import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.io.File;
+import java.util.Random;
 
 public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTemplateSurface> {
 

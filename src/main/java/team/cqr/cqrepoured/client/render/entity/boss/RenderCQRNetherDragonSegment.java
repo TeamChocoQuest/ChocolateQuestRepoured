@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;

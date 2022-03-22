@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldownSync> {
 

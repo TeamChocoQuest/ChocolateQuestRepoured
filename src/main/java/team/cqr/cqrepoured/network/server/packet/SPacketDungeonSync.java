@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.item.ItemDungeonPlacer.ClientDungeon;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {
 

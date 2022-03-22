@@ -1,19 +1,13 @@
 package team.cqr.cqrepoured.customtextures;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 public class TextureSet {
 

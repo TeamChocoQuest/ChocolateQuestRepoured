@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.util;
 
-import java.util.Arrays;
-
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import it.unimi.dsi.fastutil.ints.IntPriorityQueue;
 import net.minecraft.block.BlockState;
@@ -14,6 +12,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo;
+
+import java.util.Arrays;
 
 public class BlockLightUtil {
 

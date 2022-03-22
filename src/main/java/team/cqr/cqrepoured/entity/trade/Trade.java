@@ -1,13 +1,5 @@
 package team.cqr.cqrepoured.entity.trade;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +14,13 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.util.CraftingHelper;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Trade {
 

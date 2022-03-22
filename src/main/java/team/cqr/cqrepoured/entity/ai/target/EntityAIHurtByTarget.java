@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.List;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -17,6 +15,8 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
+
+import java.util.List;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 

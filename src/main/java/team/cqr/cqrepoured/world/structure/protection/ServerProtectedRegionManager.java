@@ -1,18 +1,5 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,6 +14,10 @@ import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegion
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 

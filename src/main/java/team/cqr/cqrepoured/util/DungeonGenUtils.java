@@ -1,15 +1,8 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.Random;
-import java.util.UUID;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.LongNBT;
+import net.minecraft.nbt.*;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
@@ -31,6 +24,9 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Copyright (c) 29.04.2019<br>

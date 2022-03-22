@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall;
 
 import com.mojang.serialization.Codec;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;

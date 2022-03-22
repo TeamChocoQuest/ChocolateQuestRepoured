@@ -1,14 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +8,8 @@ import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.CastleMainStructWall;
+
+import java.util.*;
 
 public abstract class CastleRoomBase {
 	protected BlockPos roomOrigin;

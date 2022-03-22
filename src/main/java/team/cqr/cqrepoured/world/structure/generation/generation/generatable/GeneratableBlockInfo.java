@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -10,6 +8,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+
+import javax.annotation.Nullable;
 
 public class GeneratableBlockInfo extends GeneratablePosInfo {
 

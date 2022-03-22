@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,6 +17,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.generatable.Gen
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class PreparableBannerInfo extends PreparableBlockInfo {
 

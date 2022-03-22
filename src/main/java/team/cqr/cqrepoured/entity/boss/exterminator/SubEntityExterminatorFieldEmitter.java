@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
@@ -13,6 +8,10 @@ import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 

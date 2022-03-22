@@ -1,12 +1,9 @@
 package team.cqr.cqrepoured.client.gui;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.StringTextComponent;
@@ -19,6 +16,9 @@ import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.client.config.GuiEditArray;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiExporter extends Screen {

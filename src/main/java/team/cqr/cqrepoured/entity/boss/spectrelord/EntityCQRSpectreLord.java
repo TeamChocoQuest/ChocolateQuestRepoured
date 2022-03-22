@@ -1,35 +1,31 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordDash;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordLaser;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordSummonIllusions;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordSwordShield;
+import net.minecraft.world.server.ServerWorld;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.*;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
-import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRLoottables;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISummoner {
 

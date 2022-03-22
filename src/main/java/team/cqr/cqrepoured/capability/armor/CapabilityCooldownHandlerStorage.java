@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.capability.armor;
 
-import java.util.Map;
-
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -11,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Map;
 
 public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCooldownHandler> {
 

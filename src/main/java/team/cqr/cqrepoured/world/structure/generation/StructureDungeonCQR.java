@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
 import com.mojang.serialization.Codec;
-
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;

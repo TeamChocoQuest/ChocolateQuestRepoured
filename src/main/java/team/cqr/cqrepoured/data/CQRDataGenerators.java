@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.data;
 
-import java.util.stream.Stream;
-
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelProvider;
@@ -14,6 +12,8 @@ import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.util.stream.Stream;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRDataGenerators {

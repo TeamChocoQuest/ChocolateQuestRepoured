@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ITradeRestockOverTime {
 	

@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.config;
 
-import java.time.Month;
-import java.time.MonthDay;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
@@ -14,6 +11,9 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
+
+import java.time.Month;
+import java.time.MonthDay;
 
 @Config(modid = CQRMain.MODID, name = "CQR/" + CQRMain.MODID)
 public class CQRConfig {

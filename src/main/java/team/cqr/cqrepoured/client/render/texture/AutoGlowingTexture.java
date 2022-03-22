@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.client.render.texture;
 
-import java.io.IOException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.NativeImage;
@@ -16,8 +11,12 @@ import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
 import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSectionSerializer;
+
+import java.io.IOException;
 
 public class AutoGlowingTexture extends Texture {
 

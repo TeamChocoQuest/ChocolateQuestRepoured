@@ -1,15 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-
 import net.minecraft.block.*;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -17,6 +8,11 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.RandomCastleConfigOptions;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.RoomGridCell;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBossLandingMain;
+
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 
 public class CastleMainStructWall {
 	public enum WallOrientation {

@@ -1,16 +1,10 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.CQRMain;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class ClientProtectedRegionManager implements IProtectedRegionManager {
 

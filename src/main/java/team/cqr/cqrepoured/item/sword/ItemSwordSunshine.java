@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.item.sword;
 
-import java.util.List;
-import java.util.UUID;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -23,6 +20,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.IEquipListener;
 import team.cqr.cqrepoured.item.ItemLore;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 

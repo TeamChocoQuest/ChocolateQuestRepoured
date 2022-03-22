@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.DamageSource;
@@ -15,6 +13,8 @@ import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.init.CQRSounds;
+
+import java.util.EnumSet;
 
 public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 

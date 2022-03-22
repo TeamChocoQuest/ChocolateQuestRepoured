@@ -1,10 +1,8 @@
 package team.cqr.cqrepoured.client.gui;
 
-import java.io.IOException;
-
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
@@ -13,6 +11,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiSpawner extends ContainerScreen {

@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +22,9 @@ import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.item.ItemLore;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemCrown extends ArmorItem {
 

@@ -1,12 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import java.util.function.Function;
-
-import javax.annotation.Nullable;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -27,6 +22,9 @@ import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends GeoEntityRenderer<T> {

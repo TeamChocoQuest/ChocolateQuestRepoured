@@ -1,13 +1,11 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -21,6 +19,8 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import java.util.UUID;
 
 public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 

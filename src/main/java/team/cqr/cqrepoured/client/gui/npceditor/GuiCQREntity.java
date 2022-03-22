@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
@@ -19,6 +17,8 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiCQREntity extends ContainerScreen {

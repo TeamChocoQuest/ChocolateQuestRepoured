@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.Random;
-
-import net.minecraft.block.StairsBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
+
+import java.util.Random;
 
 public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private static final int PLATFORM_LENGTH = 2;

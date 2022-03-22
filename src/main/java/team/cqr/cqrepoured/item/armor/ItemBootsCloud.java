@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -23,6 +20,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.ItemLore;
+
+import java.util.List;
 
 public class ItemBootsCloud extends ArmorItem {
 

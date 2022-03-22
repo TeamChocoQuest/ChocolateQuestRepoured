@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 public class ChunkInfo {
 

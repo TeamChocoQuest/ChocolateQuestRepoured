@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.Iterator;
-
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.entity.ai.goal.Goal;
@@ -9,6 +7,8 @@ import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.util.Iterator;
 
 public class EntityAITasksProfiled extends GoalSelector {
 

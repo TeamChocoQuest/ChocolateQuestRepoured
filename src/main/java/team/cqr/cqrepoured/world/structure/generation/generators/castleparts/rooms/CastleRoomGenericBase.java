@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.Random;
-
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
+
+import java.util.Random;
 
 public abstract class CastleRoomGenericBase extends CastleRoomDecoratedBase {
 	public CastleRoomGenericBase(int sideLength, int height, int floor, Random rand) {

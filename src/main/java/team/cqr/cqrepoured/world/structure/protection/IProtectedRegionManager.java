@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.List;
-import java.util.UUID;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.util.math.BlockPos;
+import java.util.List;
+import java.util.UUID;
 
 public interface IProtectedRegionManager {
 

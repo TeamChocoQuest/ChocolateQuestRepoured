@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;

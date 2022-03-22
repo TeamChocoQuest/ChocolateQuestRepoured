@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.volcano;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class StairCaseHelper {
 

@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.client.render.tileentity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.animation.FastTESR;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.animation.FastTESR;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 

@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
@@ -10,6 +7,9 @@ import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.faction.Faction;
+
+import java.util.List;
+import java.util.Random;
 
 public interface ISummoner {
 

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.UUID;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ISizable;
+
+import java.util.UUID;
 
 public class EntityElectricFieldSizable extends EntityElectricField implements ISizable {
 

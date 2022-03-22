@@ -1,15 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import net.minecraft.network.play.server.SChunkDataPacket;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.Mirror;
@@ -35,6 +25,10 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class GeneratableDungeon {
 

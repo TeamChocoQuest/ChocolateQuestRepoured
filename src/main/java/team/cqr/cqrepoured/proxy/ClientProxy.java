@@ -1,24 +1,23 @@
 package team.cqr.cqrepoured.proxy;
 
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.lwjgl.input.Keyboard;
 import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FurnaceBlock;
 import net.minecraft.util.Direction;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 

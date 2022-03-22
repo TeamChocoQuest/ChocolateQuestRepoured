@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;

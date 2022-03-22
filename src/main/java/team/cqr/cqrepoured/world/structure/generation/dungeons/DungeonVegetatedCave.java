@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import java.io.File;
-import java.util.Properties;
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
@@ -17,6 +13,10 @@ import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorVegetatedCave;
+
+import java.io.File;
+import java.util.Properties;
+import java.util.Random;
 
 public class DungeonVegetatedCave extends DungeonBase {
 

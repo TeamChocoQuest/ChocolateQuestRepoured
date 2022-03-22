@@ -1,22 +1,13 @@
 package team.cqr.cqrepoured.world.structure.generation.grid;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import org.apache.commons.io.FileUtils;
-
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class GridRegistry {
 

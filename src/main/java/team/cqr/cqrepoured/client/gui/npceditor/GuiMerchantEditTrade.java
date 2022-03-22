@@ -1,16 +1,9 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import javax.annotation.Nullable;
-
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +18,12 @@ import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchantEditTrade extends ContainerScreen {

@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -24,6 +20,10 @@ import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.util.BlockPosUtil;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 

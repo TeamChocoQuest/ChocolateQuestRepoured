@@ -1,16 +1,8 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WebBlock;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -54,6 +46,9 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRBlockTags;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
 

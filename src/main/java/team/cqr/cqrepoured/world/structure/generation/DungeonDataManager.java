@@ -1,14 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import java.io.File;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -21,6 +12,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+
+import javax.annotation.Nullable;
+import java.io.File;
+import java.util.*;
 
 public class DungeonDataManager {
 

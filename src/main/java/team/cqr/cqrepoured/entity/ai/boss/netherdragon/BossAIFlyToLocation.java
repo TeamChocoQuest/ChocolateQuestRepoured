@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import java.util.EnumSet;
-
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+
+import java.util.EnumSet;
 
 public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 

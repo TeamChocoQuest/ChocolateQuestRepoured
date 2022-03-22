@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.resources.data;
 
+import net.minecraft.util.Tuple;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.Tuple;
 
 public class GlowingMetadataSection /*implements IMetadataSection*/ {
 

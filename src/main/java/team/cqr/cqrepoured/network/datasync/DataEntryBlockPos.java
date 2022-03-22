@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import javax.annotation.Nonnull;
 
 public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 

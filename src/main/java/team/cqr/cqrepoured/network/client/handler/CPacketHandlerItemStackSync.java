@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
@@ -11,6 +9,8 @@ import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandle
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
+
+import java.util.function.Supplier;
 
 public class CPacketHandlerItemStackSync extends AbstractPacketHandler<SPacketItemStackSync> {
 

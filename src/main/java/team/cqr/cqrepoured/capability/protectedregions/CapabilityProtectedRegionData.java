@@ -1,15 +1,11 @@
 package team.cqr.cqrepoured.capability.protectedregions;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Predicate;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.world.chunk.Chunk;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 public class CapabilityProtectedRegionData {
 

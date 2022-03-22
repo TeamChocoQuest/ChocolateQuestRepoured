@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.item.DyeColor;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.RoomDecorTypes;
+
+import java.util.Random;
 
 public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 	private DyeColor carpetColor;

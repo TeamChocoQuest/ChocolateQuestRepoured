@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EntityDungeonPart implements IDungeonPart {
 

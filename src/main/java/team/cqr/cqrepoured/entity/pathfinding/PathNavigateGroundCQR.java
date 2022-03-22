@@ -1,34 +1,22 @@
 package team.cqr.cqrepoured.entity.pathfinding;
 
-import java.util.EnumSet;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.*;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.WallBlock;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.FenceBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.pathfinding.*;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Region;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 /**
  * Copied from {@link GroundPathNavigator}

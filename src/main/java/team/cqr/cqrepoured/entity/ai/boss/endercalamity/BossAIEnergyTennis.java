@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import javax.annotation.Nullable;
-
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.init.CQRSounds;
+
+import javax.annotation.Nullable;
 
 public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	/*

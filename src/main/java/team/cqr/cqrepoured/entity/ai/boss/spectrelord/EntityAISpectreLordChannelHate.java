@@ -1,15 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
@@ -17,6 +14,9 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordCurse;
 import team.cqr.cqrepoured.faction.Faction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
 

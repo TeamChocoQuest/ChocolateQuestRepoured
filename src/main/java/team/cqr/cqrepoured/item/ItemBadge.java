@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.java.games.input.Keyboard;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,6 +27,9 @@ import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItem
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.GuiHandler;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemBadge extends Item {
 

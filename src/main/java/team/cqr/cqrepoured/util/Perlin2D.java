@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.Random;
-
 import net.minecraft.util.math.MathHelper;
+
+import java.util.Random;
 
 public class Perlin2D {
 

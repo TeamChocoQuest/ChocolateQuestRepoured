@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.client.model.entity.mobs;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.HandSide;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;

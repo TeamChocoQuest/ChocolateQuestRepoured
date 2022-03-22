@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.util;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.FluidState;
@@ -13,6 +11,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.integration.cubicchunks.CubicChunks;
+
+import javax.annotation.Nullable;
 
 public class CachedBlockAccess implements IBlockReader {
 

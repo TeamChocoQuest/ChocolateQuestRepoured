@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.List;
-
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -21,6 +19,8 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import java.util.List;
 
 public class EntityColoredLightningBolt extends LightningBoltEntity implements IEntityAdditionalSpawnData {
 

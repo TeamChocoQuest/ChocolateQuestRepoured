@@ -1,15 +1,8 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.List;
-
 import net.minecraft.block.*;
-import net.minecraft.block.DoorBlock;
 import net.minecraft.block.DoorBlock.EnumDoorHalf;
-import net.minecraft.block.LeverBlock;
-import net.minecraft.block.PressurePlateBlock;
-import net.minecraft.block.DirectionalBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.Direction;
@@ -17,10 +10,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.IBlockReader;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.List;
 
 public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR> {
 

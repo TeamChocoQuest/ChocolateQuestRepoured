@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold;
 
-import java.util.Random;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -16,6 +14,8 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.util.Random;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

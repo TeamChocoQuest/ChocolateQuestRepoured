@@ -1,21 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.Direction;
@@ -32,31 +16,14 @@ import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.addons.CastleAddonRoofBase;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.addons.CastleRoofFactory;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBase;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBossLandingEmpty;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBossLandingMain;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBossStairEmpty;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBossStairMain;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBridgeTop;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomHallway;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomJailCell;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomLandingDirected;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomLandingDirectedBoss;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomLandingSpiral;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomReplacedRoof;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomRoofBossEmpty;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomRoofBossMain;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomStaircaseDirected;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomStaircaseSpiral;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomTowerSquare;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomWalkableRoof;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomWalkableRoofTower;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.EnumRoomType;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.RoomFactoryCastle;
+import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.*;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.CastleMainStructWall;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash

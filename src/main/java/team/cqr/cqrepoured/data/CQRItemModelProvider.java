@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.data;
 
-import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.data.DataGenerator;
@@ -12,6 +10,8 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockTable;
 import team.cqr.cqrepoured.init.CQRBlocks;
+
+import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
 
 public class CQRItemModelProvider extends ItemModelProvider {
 

@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +16,10 @@ import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class ItemMagicBell extends ItemLore {
 

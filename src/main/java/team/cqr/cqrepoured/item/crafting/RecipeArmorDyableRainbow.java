@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.item.crafting;
 
-import java.util.Optional;
-
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.DyeColor;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.DyeUtils;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
+
+import java.util.Optional;
 
 public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 

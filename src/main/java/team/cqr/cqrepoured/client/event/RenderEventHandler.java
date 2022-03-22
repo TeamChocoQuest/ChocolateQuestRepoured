@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.client.event;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,8 +17,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.EnumSet;
 
 public class BossAISpiderLeapAttack extends Goal {
 	/** The entity that is leaping. */

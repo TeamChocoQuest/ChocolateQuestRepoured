@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
@@ -23,6 +21,8 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
+
+import java.util.UUID;
 
 public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire {
 
