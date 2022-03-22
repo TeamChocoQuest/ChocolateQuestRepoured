@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -38,9 +39,12 @@ public class SpiralStrongholdBuilder {
 		this.dungeon = dungeon;
 		this.random = rand;
 
-		this.floorCount = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdFloors(), dungeon.getMaxStrongholdFloors(), this.random);
-		this.roomCount = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdRooms(), dungeon.getMaxStrongholdRooms(), this.random);
 		this.floorSideLength = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdRadius(), dungeon.getMaxStrongholdRadius(), this.random) * 2 + 1;
+		this.roomCount = DungeonGenUtils.randomBetween(dungeon.getMinStrongholdRooms(), dungeon.getMaxStrongholdRooms(), this.random);
+		if (this.roomCount % ((this.floorSideLength - 1) * 4) < 2) {
+			this.roomCount++;
+		}
+		this.floorCount = MathHelper.ceil((double) this.roomCount / ((this.floorSideLength - 1) * 4));
 		this.floors = new SpiralStrongholdFloor[this.floorCount];
 	}
 
@@ -116,19 +120,7 @@ public class SpiralStrongholdBuilder {
 
 		EStrongholdRoomType firstRoomOverride = entranceType;
 		for (int i = 0; i < this.floors.length; i++) {
-			if (posTuple == null || roomCounter <= 0) {
-				this.floorCount--;
-				continue;
-			}
-			int floorRoomCount = maxRoomsPerFloor;
-			if (roomCounter >= maxRoomsPerFloor) {
-				roomCounter -= maxRoomsPerFloor;
-				/* We add one cause the room above the stair does not count as room */
-				roomCounter++;
-			} else {
-				floorRoomCount = roomCounter;
-				roomCounter = 0;
-			}
+			int floorRoomCount = i < this.floors.length - 1 ? maxRoomsPerFloor : this.roomCount % maxRoomsPerFloor;
 			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonBuilder, posTuple, entranceX, entranceZ, roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount, this.random);
 			floor.calculateRoomGrid(entranceType, (i + 1) % 2 == 0);
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
