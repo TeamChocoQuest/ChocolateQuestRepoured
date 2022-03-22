@@ -40,17 +40,14 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		}
 		Minecraft mc = Minecraft.getMinecraft();
 		double x1 = entity.caster.lastTickPosX + (entity.caster.posX - entity.caster.lastTickPosX) * partialTicks;
-		x1 += entity.getOffsetVector().x;
-		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks + entity.caster.height * 0.6D;
-		y1 += entity.getOffsetVector().y;
+		double y1 = entity.caster.lastTickPosY + (entity.caster.posY - entity.caster.lastTickPosY) * partialTicks;
 		double z1 = entity.caster.lastTickPosZ + (entity.caster.posZ - entity.caster.lastTickPosZ) * partialTicks;
-		z1 += entity.getOffsetVector().z;
+		Vec3d offset = entity.getOffsetVector();
+		x1 += offset.x;
+		y1 += offset.y;
+		z1 += offset.z;
 		float yaw = this.getYaw(entity, partialTicks);
 		float pitch = this.getPitch(entity, partialTicks);
-		Vector3d vec = Vector3d.fromPitchYaw(pitch, yaw).scale(0.25D);
-		x1 += vec.x;
-		y1 += vec.y;
-		z1 += vec.z;
 		Entity renderViewEntity = mc.getRenderViewEntity();
 		double x2 = renderViewEntity.lastTickPosX + (renderViewEntity.posX - renderViewEntity.lastTickPosX) * partialTicks;
 		double y2 = renderViewEntity.lastTickPosY + (renderViewEntity.posY - renderViewEntity.lastTickPosY) * partialTicks;

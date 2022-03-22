@@ -947,11 +947,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		final float scale = this.getSizeVariation();
 
-		result = result.add(0, 2.0D, 0);
+		result = result.add(0, 1.88, 0);
 
-		final Vector3d facing = this.getLookAngle().normalize();
-		result = result.add(facing.scale(0.75));
-		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.65));
+		final Vector3d facing = this.getVectorForRotation(this.rotationPitch, this.renderYawOffset);
+		result = result.add(facing.scale(1.25));
+		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.68));
 
 		result = result.scale(scale);
 
