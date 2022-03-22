@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.Arrays;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -80,6 +84,10 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 						summon.motionY = this.velForSummon.y;
 						summon.motionZ = this.velForSummon.z;
 						summon.velocityChanged = true;
+					}
+
+					if (this.summonerLiving instanceof EntityPlayer && summon instanceof AbstractEntityCQR) {
+						Arrays.stream(EntityEquipmentSlot.values()).forEach(slot -> ((AbstractEntityCQR) summon).setDropChance(slot, 1.01F));
 					}
 
 					this.world.spawnEntity(summon);
