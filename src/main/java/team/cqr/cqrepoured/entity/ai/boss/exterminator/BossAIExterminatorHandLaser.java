@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
@@ -75,7 +74,8 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		} else {
 			// System.out.println("Cannon is ready and cannon is raised");
 			// System.out.println("Laser does not exist, cannon is raised, so create the laser...");
-			this.activeLaser = new EntityExterminatorHandLaser(this.entity, this.target, Vec3d.ZERO);
+			this.activeLaser = new EntityExterminatorHandLaser(this.entity, this.target);
+			this.activeLaser.setupPositionAndRotation();
 			this.world.spawnEntity(this.activeLaser);
 			this.entity.switchCannonArmState(true);
 			return true;
