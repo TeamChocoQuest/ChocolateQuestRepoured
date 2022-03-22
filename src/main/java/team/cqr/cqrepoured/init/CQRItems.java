@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.init;
 
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -7,6 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRArmorMaterial;
 import team.cqr.cqrepoured.item.*;
 import team.cqr.cqrepoured.item.armor.*;
 import team.cqr.cqrepoured.item.gun.*;
@@ -113,7 +115,7 @@ public class CQRItems {
 	// Single Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = null; // #TODO Make model centered on head // Abandon for now
 	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = null;
-	public static final RegistryObject<ItemBackpack> BACKPACK = null;
+	public static final RegistryObject<Item> BACKPACK = registerItem("backpack", () -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, props()));
 	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = null;
 	public static final RegistryObject<ItemCrown> KING_CROWN = null;
 
