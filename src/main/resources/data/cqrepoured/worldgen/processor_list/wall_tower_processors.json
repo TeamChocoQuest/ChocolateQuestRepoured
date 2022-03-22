@@ -5,6 +5,9 @@
 		},
 		{
 			"processor_type": "cqrepoured:processor_wall_outer_tower"
+		},
+		{
+			"processor_type": "cqrepoured:processor_wall_outer"
 		}
 	]
 }

@@ -1,15 +1,15 @@
 {
-	"name": "cqrepoured:wall/tower/decoration/lighting",
+	"name": "cqrepoured:wall/tower",
 	"fallback": "minecraft:empty",
 	"elements": [
 		{
 			"weight": 100,
 			"element": {
-				"location": "cqrepoured:wall_tower_lantern",
-				"processors": "minecraft:empty",
+				"location": "cqrepoured:wall_tower_roofed",
+				"processors": "cqrepoured:wall_tower_processors",
 				"projection": "rigid",
 				"element_type": "minecraft:single_pool_element"
 			}
 		}
-    ]
+	]
 }
