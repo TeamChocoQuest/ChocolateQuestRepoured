@@ -3,7 +3,7 @@
 	"fallback": "minecraft:empty",
 	"elements": [
 		{
-			"weight": 100,
+			"weight": 1,
 			"element": {
 				"location": "cqrepoured:wall_railing_big",
 				"processors": "minecraft:empty",
