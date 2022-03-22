@@ -9,7 +9,8 @@ public class GuiNumberTextField extends TextFieldWidget {
 	private final boolean allowNegative;
 	private final boolean allowDouble;
 
-	public GuiNumberTextField(int componentId, FontRenderer fontrendererIn, int x, int y, int widthIn, int heightIn, boolean allowNegative, boolean allowDouble) {
+	public GuiNumberTextField(int componentId, FontRenderer fontrendererIn, int x, int y, int widthIn, int heightIn,
+			boolean allowNegative, boolean allowDouble) {
 		super(componentId, fontrendererIn, x, y, widthIn, heightIn);
 		this.allowNegative = allowNegative;
 		this.allowDouble = allowDouble;
@@ -17,10 +18,28 @@ public class GuiNumberTextField extends TextFieldWidget {
 
 	@Override
 	public boolean textboxKeyTyped(char typedChar, int keyCode) {
-		if (!GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, this.allowNegative, this.allowDouble)) {
+		String oldText = this.getText();
+		int oldPos = this.getCursorPosition();
+		boolean flag = super.textboxKeyTyped(typedChar, keyCode);
+		if (this.getText().isEmpty() || this.getText().equals("-")) {
+			this.setText("0");
+			return true;
+		}
+		try {
+			if (!allowNegative && typedChar == '-') {
+				throw new NumberFormatException();
+			}
+			if (allowDouble) {
+				Double.parseDouble(this.getText());
+			} else {
+				Integer.parseInt(this.getText());
+			}
+		} catch (NumberFormatException e) {
+			this.setText(oldText);
+			this.setCursorPosition(oldPos);
 			return false;
 		}
-		return super.textboxKeyTyped(typedChar, keyCode);
+		return flag;
 	}
 
 	public int getInt() throws NumberFormatException {
