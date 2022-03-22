@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -44,7 +49,12 @@ import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
-import team.cqr.cqrepoured.entity.ai.*;
+import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
+import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
+import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
+import team.cqr.cqrepoured.entity.ai.EntityAIMoveToHome;
+import team.cqr.cqrepoured.entity.ai.EntityAIMoveToLeader;
+import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttack;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIBackstab;
@@ -74,10 +84,6 @@ import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitt
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDontSpreadElectrocution, IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
 	// Entity parts
@@ -949,7 +955,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		result = result.add(0, 1.88, 0);
 
-		final Vector3d facing = this.getVectorForRotation(this.rotationPitch, this.renderYawOffset);
+		final Vector3d facing = Vector3d.directionFromRotation(this.xRot, this.yRot);
 		result = result.add(facing.scale(1.25));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.68));
 
@@ -1026,7 +1032,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL, 1));
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL.get(), 1));
 	}
 
 	@Override
