@@ -78,7 +78,7 @@ public class GuiDungeonMapTool extends GuiScreen {
 			}
 		};
 		this.textFieldRadius.setText(Integer.toString(lastRadius));
-		this.textFieldSeed = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 60, 150, 20, false, false) {
+		this.textFieldSeed = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 60, 150, 20, true, false) {
 			@Override
 			public boolean textboxKeyTyped(char typedChar, int keyCode) {
 				if (!super.textboxKeyTyped(typedChar, keyCode)) {
