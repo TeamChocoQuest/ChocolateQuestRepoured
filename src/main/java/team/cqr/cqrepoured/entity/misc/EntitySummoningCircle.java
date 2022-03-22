@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.Arrays;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityType;
@@ -98,6 +100,10 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 						summon.velocityChanged = true;*/
 						summon.setDeltaMovement(this.velForSummon);
 						summon.hasImpulse = true;
+					}
+
+					if (this.summonerLiving instanceof PlayerEntity && summon instanceof AbstractEntityCQR) {
+						Arrays.stream(EntityEquipmentSlot.values()).forEach(slot -> ((AbstractEntityCQR) summon).setDropChance(slot, 1.01F));
 					}
 
 					this.level.addFreshEntity(summon);
