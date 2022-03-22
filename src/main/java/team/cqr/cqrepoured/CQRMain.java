@@ -149,6 +149,7 @@ public class CQRMain {
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
+		CQREntityTypes.registerEntityTypes();
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
 

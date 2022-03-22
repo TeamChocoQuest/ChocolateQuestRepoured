@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType.IFactory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
@@ -110,5 +111,10 @@ public class CQREntityTypes {
 	public static void initializeAttributes(EntityAttributeCreationEvent event) {
 		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
 		//TODO
+	}
+
+	public static void registerEntityTypes()
+	{
+		ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 }

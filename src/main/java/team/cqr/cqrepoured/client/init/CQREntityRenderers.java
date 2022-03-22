@@ -40,7 +40,8 @@ public class CQREntityRenderers
 	private CQREntityRenderers() {}
 
 	public static void registerRenderers() {
-		registerTileRenderers();
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
+	/*	registerTileRenderers();
 		registerProjectileAndMiscRenderers();
 		if (CQRConfig.isAprilFoolsEnabled()) {
 			registerAprilFoolsRenderer();
@@ -48,7 +49,7 @@ public class CQREntityRenderers
 			registerEntityRenderers();
 		}
 		registerBossRenderers();
-		registerMountRenderers();
+		registerMountRenderers(); */
 	}
 
 	// Registers a big chungus renderer that renders on april the first
