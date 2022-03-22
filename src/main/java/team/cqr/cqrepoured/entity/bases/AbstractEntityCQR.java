@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.NameTagItem;
@@ -498,11 +499,24 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	@Override
+<<<<<<< HEAD
 	protected void dropEquipment() {
 		//NOPE
 	}
 	
 	protected void dropEquipmentCQR(int lootingModifier, boolean wasRecentlyHit) {
+		ItemStack stack = this.getHeldItemMainhand();
+		if (!stack.isEmpty() && stack.getItem() instanceof ItemBow) {
+			ItemStack stack1 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
+			if (stack1.isEmpty()) {
+				stack1 = new ItemStack(Items.ARROW, this.getRNG().nextInt(3));
+			} else {
+				stack1 = stack1.copy();
+				stack1.setCount(this.getRNG().nextInt(3));
+			}
+			this.spawnAtLocation(stack1, 0.0F);
+		}
+
 		double modalValue = CQRConfig.mobs.dropDurabilityModalValue;
 		double standardDeviation = CQRConfig.mobs.dropDurabilityStandardDeviation;
 		double min = Math.min(CQRConfig.mobs.dropDurabilityMinimum, modalValue);
