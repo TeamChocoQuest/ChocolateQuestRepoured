@@ -22,11 +22,13 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemNameTag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -495,6 +497,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
+		// drop arrows if holding a bow
+		ItemStack stack = this.getHeldItemMainhand();
+		if (!stack.isEmpty() && stack.getItem() instanceof ItemBow) {
+			ItemStack stack1 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
+			if (stack1.isEmpty()) {
+				stack1 = new ItemStack(Items.ARROW, this.getRNG().nextInt(3));
+			} else {
+				stack1 = stack1.copy();
+				stack1.setCount(this.getRNG().nextInt(3));
+			}
+			this.entityDropItem(stack1, 0.0F);
+		}
+
 		double modalValue = CQRConfig.mobs.dropDurabilityModalValue;
 		double standardDeviation = CQRConfig.mobs.dropDurabilityStandardDeviation;
 		double min = Math.min(CQRConfig.mobs.dropDurabilityMinimum, modalValue);
