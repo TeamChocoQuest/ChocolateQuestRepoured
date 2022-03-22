@@ -29,15 +29,12 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1.75, 1);
 
-	public BlockForceFieldNexus(Material materialIn) {
-		super(materialIn);
-
-		this.setSoundType(SoundType.METAL);
-		this.setHardness(45.0F);
-		this.setResistance(10.0F);
-		this.setLightLevel(1F);
-		this.setLightOpacity(10);
-		this.setHarvestLevel("pickaxe", 3);
+	public BlockForceFieldNexus() {
+		super(Material.ROCK);
+		this.setSoundType(SoundType.STONE);
+		this.setHardness(4.0F);
+		this.setResistance(15.0F);
+		this.setLightLevel(1.0F);
 	}
 
 	@Nullable

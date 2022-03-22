@@ -244,7 +244,7 @@ public class CQRBlocks {
 					setBlockNameAndTab(new BlockNull(), "null_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockSpawner(), "spawner", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockBossBlock(), "boss_block", CQRMain.CQR_CREATIVE_TOOL_TAB),
-					setBlockNameAndTab(new BlockForceFieldNexus(Material.IRON), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
+					setBlockNameAndTab(new BlockForceFieldNexus(), "force_field_nexus", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockMapPlaceholder(), "map_placeholder", CQRMain.CQR_CREATIVE_TOOL_TAB),
 					setBlockNameAndTab(new BlockTNTCQR(), "tnt", CQRMain.CQR_CREATIVE_TOOL_TAB),
 
