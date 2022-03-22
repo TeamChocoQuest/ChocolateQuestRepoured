@@ -5,6 +5,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.*;
 import team.cqr.cqrepoured.item.armor.*;
@@ -14,6 +15,8 @@ import team.cqr.cqrepoured.item.shield.ItemShieldWalkerKing;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.staff.*;
 import team.cqr.cqrepoured.item.sword.*;
+
+import java.util.function.Supplier;
 
 public class CQRItems {
 
@@ -87,16 +90,16 @@ public class CQRItems {
 	public static final RegistryObject<ItemStaffGun> STAFF_GUN = null; // #TODO TEXTURES
 
 	// Guns
-	public static final RegistryObject<ItemRevolver> REVOLVER = null;
+	public static final RegistryObject<Item> REVOLVER = registerItem("revolver", () -> new ItemRevolver(props()));
 	public static final RegistryObject<Item> CAPTAIN_REVOLVER = null;
 	public static final RegistryObject<ItemMusket> MUSKET = null;
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = null; // #TODO TEXTURES
-	public static final RegistryObject<ItemBullet> BULLET_IRON = null;
-	public static final RegistryObject<ItemBullet> BULLET_GOLD = null;
-	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = null;
-	public static final RegistryObject<ItemBullet> BULLET_FIRE = null;
+	public static final RegistryObject<Item> BULLET_IRON = registerItem("bullet_iron", () -> new ItemBullet(props()));
+	public static final RegistryObject<Item> BULLET_GOLD = registerItem("bullet_gold", () -> new ItemBullet(props()));;
+	public static final RegistryObject<Item> BULLET_DIAMOND = registerItem("bullet_diamond", () -> new ItemBullet(props()));;
+	public static final RegistryObject<Item> BULLET_FIRE = registerItem("bullet_fire", () -> new ItemBullet(props()));;
 	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
 	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = null;
@@ -195,7 +198,18 @@ public class CQRItems {
 	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = null;
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = null;
 
-	public static void registerItems() {
+	public static RegistryObject<Item> registerItem(String name, Supplier<Item> item)
+	{
+		return ITEMS.register(name, item);
+	}
+
+	public static Item.Properties props()
+	{
+		return new Item.Properties();
+	}
+
+	public static void registerItems()
+	{
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
