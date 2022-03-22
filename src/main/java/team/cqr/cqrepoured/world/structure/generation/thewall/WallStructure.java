@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.thewall;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -14,13 +15,13 @@ import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.structure.AbstractVillagePiece;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.CQRJigsawManager;
 
 public class WallStructure extends Structure<NoFeatureConfig> {
 
@@ -70,7 +71,7 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 				startPool = START_POOL_WALL;
 			}
 			
-			JigsawManager.addPieces(
+			CQRJigsawManager.addPieces(
 					dynamicRegistryManager, 
 					new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).get(startPool), 10),
 					AbstractVillagePiece::new,
@@ -80,7 +81,8 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 					pieces,
 					random,
 					false, 
-					false
+					false,
+					Rotation.NONE
 			);
 			
 			this.calculateBoundingBox();
