@@ -37,7 +37,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = null;
 
 	// Battle Axes
-	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = null;
+	public static final RegistryObject<Item> BATTLE_AXE_BULL = registerItem("battle_axe_bull", () -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, props())); //TODO tweak stats
 
 	// Walker RegistryObject<Item>s
 	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = null;
