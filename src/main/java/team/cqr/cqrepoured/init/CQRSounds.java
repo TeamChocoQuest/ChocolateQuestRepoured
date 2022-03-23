@@ -1,14 +1,16 @@
 package team.cqr.cqrepoured.init;
 
+import static team.cqr.cqrepoured.util.InjectionUtil.Null;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import team.cqr.cqrepoured.CQRMain;
-
-import static team.cqr.cqrepoured.util.InjectionUtil.Null;
 
 @ObjectHolder(CQRMain.MODID)
 public class CQRSounds {
@@ -97,7 +99,7 @@ public class CQRSounds {
 	@ObjectHolder("entity.bubble.bubble")
 	public static final SoundEvent BUBBLE_BUBBLE = Null();
 
-	//@EventBusSubscriber(modid = CQRMain.MODID)
+	@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 	public static class EventHandler {
 
 		@SubscribeEvent
