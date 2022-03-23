@@ -4,8 +4,6 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.StructureBlock;
-import net.minecraft.state.properties.StructureMode;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -31,32 +29,25 @@ public class ProcessorWallOuterTower extends StructureProcessor {
 	
 	@Override
 	public BlockInfo process(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
-		if (blockInfoGlobal.state.is(Blocks.STRUCTURE_BLOCK)) {
-			if (blockInfoGlobal.state.getValue(StructureBlock.MODE) == StructureMode.DATA) {
-				String dataEntry = blockInfoGlobal.nbt.getString("metadata");
-				if (dataEntry != null && !dataEntry.isEmpty()) {
-					if (dataEntry.equalsIgnoreCase("cqrepoured:wall_outer")) {
-						ChunkPos currentChunkPos = new ChunkPos(blockInfoGlobal.pos);
-						IChunk currentChunk = worldReader.getChunk(currentChunkPos.x, currentChunkPos.z);
-						BlockState randomBlock;
+		if (blockInfoGlobal.state.is(Blocks.GRAY_STAINED_GLASS) && blockInfoLocal.pos.getY() == 0) {
+			ChunkPos currentChunkPos = new ChunkPos(blockInfoGlobal.pos);
+			IChunk currentChunk = worldReader.getChunk(currentChunkPos.x, currentChunkPos.z);
+			BlockState randomBlock;
 
-						// Always replace the glass itself with stone bricks
-						randomBlock = Blocks.POLISHED_ANDESITE.defaultBlockState();
-						currentChunk.setBlockState(blockInfoGlobal.pos, randomBlock, false);
-						blockInfoGlobal = new Template.BlockInfo(blockInfoGlobal.pos, randomBlock, blockInfoGlobal.nbt);
+			// Always replace the glass itself with stone bricks
+			randomBlock = Blocks.POLISHED_ANDESITE.defaultBlockState();
+			currentChunk.setBlockState(blockInfoGlobal.pos, randomBlock, false);
+			blockInfoGlobal = new Template.BlockInfo(blockInfoGlobal.pos, randomBlock, blockInfoGlobal.nbt);
 
-						// Straight line down
-						BlockPos.Mutable mutable = blockInfoGlobal.pos.below().mutable();
-						BlockState currBlock = worldReader.getBlockState(mutable);
+			// Straight line down
+			BlockPos.Mutable mutable = blockInfoGlobal.pos.below().mutable();
+			BlockState currBlock = worldReader.getBlockState(mutable);
 
-						while (mutable.getY() > 0 && (!currBlock.is(BlockTags.BASE_STONE_OVERWORLD))) {
-							worldReader.getChunk(mutable).setBlockState(mutable, randomBlock, false);
+			while (mutable.getY() > 0 && (!currBlock.is(BlockTags.BASE_STONE_OVERWORLD))) {
+				worldReader.getChunk(mutable).setBlockState(mutable, randomBlock, false);
 
-							mutable.move(Direction.DOWN);
-							currBlock = worldReader.getBlockState(mutable);
-						}
-					}
-				}
+				mutable.move(Direction.DOWN);
+				currBlock = worldReader.getBlockState(mutable);
 			}
 		}
 
