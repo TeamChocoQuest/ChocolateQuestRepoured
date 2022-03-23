@@ -56,36 +56,36 @@ public class CQREntityRenderers
 
 	// Registers a big chungus renderer that renders on april the first
 	protected static void registerAprilFoolsRenderer() {
-		RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
+		//RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
 	}
 
 	protected static void registerTileRenderers() {
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMap.class, new TileEntityMapPlaceHolderRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMap.class, new TileEntityMapPlaceHolderRenderer());
 	}
 
 	protected static void registerProjectileAndMiscRenderers() {
 		// Projectiles
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, RenderProjectileCannonBall::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, RenderProjectileCannonBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, RenderProjectileEarthQuake::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderBall.class, RenderProjectileSpiderBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, RenderProjectileVampiricSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, RenderProjectileFirewallPart::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);*/
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileThrownBlock.class, RenderProjectileThrownBlock::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHomingEnderEye.class, RenderProjectileHomingEnderEye::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHomingEnderEye.class, RenderProjectileHomingEnderEye::new);*/
 
 		// Miscs
-		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, RenderCQRWalkerKingIllusion::new);
@@ -101,12 +101,12 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 
 		// Multipart parts
-		RenderingRegistry.registerEntityRenderingHandler(PartEntity.class, RenderMultiPartPart::new);
+		RenderingRegistry.registerEntityRenderingHandler(PartEntity.class, RenderMultiPartPart::new);*/
 	}
 
 	protected static void registerEntityRenderers() {
 		// Mobs
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, RenderCQRBoarman::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, RenderCQRBoarman::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, RenderCQRDummy::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, RenderCQRDwarf::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, RenderCQREnderman::new);
@@ -126,21 +126,21 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class, RenderCQRTriton::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);*/
 	}
 
 	protected static void registerMountRenderers() {
 		// Mounts
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, RenderGiantSilverfish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishGreen.class, RenderGiantSilverfishGreen::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishRed.class, RenderGiantSilverfishRed::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityPollo.class, RenderPollo::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPollo.class, RenderPollo::new);*/
 	}
 
 	protected static void registerBossRenderers() {
 		// Nether Dragon
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, RenderCQRNetherDragon::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, RenderCQRNetherDragon::new);
 		RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
 
 		// Giant Tortoise
@@ -184,7 +184,7 @@ public class CQREntityRenderers
 		// GeckoLib
 		// Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRExterminator.class, RenderCQRExterminator::new);
-		RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);
+		RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);*/
 	}
 
 }
