@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
+import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.DamageSource;
@@ -12,9 +14,8 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRSounds;
-
-import java.util.EnumSet;
 
 public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
@@ -183,7 +184,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			v = v.normalize();
 			v = v.scale(1.4);
 			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 30, 30);
-			ProjectileBubble bubble = new ProjectileBubble(this.entity.getWorld(), this.entity);
+			ProjectileBubble bubble = new ProjectileBubble(this.entity, this.entity.getWorld());
 			/*bubble.motionX = v.x;
 			bubble.motionY = v.y;
 			bubble.motionZ = v.z;

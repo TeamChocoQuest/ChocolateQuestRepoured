@@ -16,7 +16,7 @@ public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
-		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getAttackTarget());
+		AbstractEntityLaser laser = new EntityEndLaserTargeting(this.entity, this.entity.getTarget());
 		laser.setupPositionAndRotation();
 		this.world.addFreshEntity(laser);
 		this.projectile = laser;

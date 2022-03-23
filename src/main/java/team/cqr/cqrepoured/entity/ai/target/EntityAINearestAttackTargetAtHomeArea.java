@@ -65,7 +65,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			return false;
 		}
 		Faction faction = this.entity.getFaction();
-		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING) {
+		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING.get()) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
@@ -104,7 +104,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			return false;
 		}
 		Faction faction = this.entity.getFaction();
-		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING) {
+		if (this.entity.getMainHandItem().getItem() == CQRItems.STAFF_HEALING.get()) {
 			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
