@@ -136,7 +136,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
-		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK, 1));
+		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SPIDERHOOK.get(), 1));
 	}
 	
 	@Override
