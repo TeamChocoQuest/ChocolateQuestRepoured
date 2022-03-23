@@ -1,5 +1,11 @@
 package team.cqr.cqrepoured.util;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.nbt.ByteArrayNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -9,12 +15,6 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 
 public class NBTCollectors {
 

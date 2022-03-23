@@ -1,13 +1,6 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Streams;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -23,6 +16,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
+
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 public class ItemUnprotectedPositionTool extends ItemLore {
 

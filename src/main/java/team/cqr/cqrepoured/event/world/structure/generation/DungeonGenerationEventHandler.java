@@ -5,8 +5,6 @@ import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)

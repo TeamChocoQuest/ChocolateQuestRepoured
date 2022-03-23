@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.Random;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
+
+import java.util.Random;
 
 public class CastleRoomBossStairEmpty extends CastleRoomDecoratedBase {
 	private Direction doorSide;

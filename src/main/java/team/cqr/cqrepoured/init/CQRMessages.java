@@ -1,71 +1,21 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.Optional;
-
 import net.minecraftforge.fml.network.NetworkDirection;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.IMessage;
 import team.cqr.cqrepoured.network.IMessageHandler;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateOfEntity;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDungeonSync;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerHookShotPlayerStop;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerInitialFactionInformation;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerItemStackSync;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSpawnParticles;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncLaserRotation;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectedRegions;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectionConfig;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTextureSets;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTrades;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUnloadProtectedRegion;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateElectrocuteCapability;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateEntityPrevPos;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateProtectedRegion;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateReputation;
+import team.cqr.cqrepoured.network.client.handler.*;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityHandUpdateHand;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerSyncCalamityRotation;
 import team.cqr.cqrepoured.network.client.handler.exterminator.CPacketHandlerUpdateEmitterTarget;
-import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
-import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
-import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
-import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
-import team.cqr.cqrepoured.network.client.packet.CPacketStructureSelector;
-import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
-import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAddPathNode;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerCloseMapPlaceholderGuiSimple;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerContainerClickButton;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerOpenMerchantGui;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSaveStructureRequest;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerStructureSelector;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSyncEntity;
-import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSyncTileEntity;
-import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
-import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
-import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
-import team.cqr.cqrepoured.network.server.packet.SPacketDungeonSync;
-import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
-import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
-import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
-import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
-import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
+import team.cqr.cqrepoured.network.client.packet.*;
+import team.cqr.cqrepoured.network.server.handler.*;
+import team.cqr.cqrepoured.network.server.packet.*;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
+
+import java.util.Optional;
 
 public class CQRMessages {
 

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
-import java.util.Objects;
-
 import net.minecraft.util.Direction;
+
+import java.util.Objects;
 
 public class RoomGridPosition {
 	private int floor;

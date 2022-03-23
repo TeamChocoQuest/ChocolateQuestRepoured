@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 import net.minecraft.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 
 public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR> {
 

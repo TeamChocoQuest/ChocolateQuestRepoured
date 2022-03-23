@@ -1,19 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Predicate;
-
 import net.minecraft.block.*;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.LeverBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +16,9 @@ import team.cqr.cqrepoured.util.GenerationTemplate;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
+
+import java.util.*;
+import java.util.function.Predicate;
 
 public class CastleRoomJailCell extends CastleRoomDecoratedBase {
 	private Direction doorSide;

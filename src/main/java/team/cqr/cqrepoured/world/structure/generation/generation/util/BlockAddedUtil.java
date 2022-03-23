@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.util;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -11,6 +9,8 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo;
+
+import javax.annotation.Nullable;
 
 public class BlockAddedUtil {
 

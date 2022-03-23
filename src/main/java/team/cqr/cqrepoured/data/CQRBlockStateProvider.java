@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.data;
 
-import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -22,12 +17,13 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.BlockExporterChest;
-import team.cqr.cqrepoured.block.BlockNull;
-import team.cqr.cqrepoured.block.BlockTNTCQR;
-import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.block.BlockPoisonousWeb;
+import team.cqr.cqrepoured.block.*;
 import team.cqr.cqrepoured.init.CQRBlocks;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
 
 public class CQRBlockStateProvider extends BlockStateProvider {
 

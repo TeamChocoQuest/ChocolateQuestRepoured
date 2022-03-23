@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.enchantment;
 
 import net.minecraft.enchantment.DamageEnchantment;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 

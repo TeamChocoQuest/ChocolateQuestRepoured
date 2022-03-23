@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.integration.jei.gui;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
-
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchantEditTrade;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIHandlerMerchantEditTrade<T extends GuiMerchantEditTrade> implements IAdvancedGuiHandler<T> {
 

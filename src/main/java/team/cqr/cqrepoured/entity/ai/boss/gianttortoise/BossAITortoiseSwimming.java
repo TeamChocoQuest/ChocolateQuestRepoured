@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.ai.goal.SwimGoal;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
+
+import java.util.EnumSet;
 
 public class BossAITortoiseSwimming extends SwimGoal {
 

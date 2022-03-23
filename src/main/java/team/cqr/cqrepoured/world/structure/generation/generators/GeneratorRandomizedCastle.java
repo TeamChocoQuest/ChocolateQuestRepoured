@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -16,6 +12,10 @@ import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.Cas
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.CastleRoomSelector.SupportArea;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Copyright (c) 25.05.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash

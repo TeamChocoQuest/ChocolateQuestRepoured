@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import java.util.Properties;
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +13,9 @@ import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeon
 import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.RandomCastleConfigOptions;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.EnumRoomType;
+
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * Copyright (c) 20.04.2020 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash

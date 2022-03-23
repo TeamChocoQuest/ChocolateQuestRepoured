@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.network;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.network.play.ClientPlayNetHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.play.ServerPlayNetHandler;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
+
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public abstract class AbstractPacketHandler<P extends Object> implements IMessageHandler<P> {
 

@@ -1,16 +1,6 @@
 package team.cqr.cqrepoured.client.util;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
-import java.util.Random;
-import java.util.stream.IntStream;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -18,7 +8,15 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import team.cqr.cqrepoured.util.VectorUtil;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 public class ElectricFieldRenderUtil {
 

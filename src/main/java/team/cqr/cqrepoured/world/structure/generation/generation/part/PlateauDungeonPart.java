@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +12,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEmptyInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class PlateauDungeonPart implements IDungeonPart {
 

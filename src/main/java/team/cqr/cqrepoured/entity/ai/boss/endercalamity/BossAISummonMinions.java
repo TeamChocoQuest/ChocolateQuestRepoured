@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -19,6 +17,8 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import java.util.EnumSet;
 
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 

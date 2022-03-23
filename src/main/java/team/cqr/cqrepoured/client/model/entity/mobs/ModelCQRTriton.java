@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.client.model.entity.mobs;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-
 import net.minecraft.client.renderer.model.ModelRenderer;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;

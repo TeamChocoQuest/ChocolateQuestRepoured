@@ -2,9 +2,7 @@ package team.cqr.cqrepoured.event.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import team.cqr.cqrepoured.entity.EntitySlimePart;
 import team.cqr.cqrepoured.init.CQRItems;

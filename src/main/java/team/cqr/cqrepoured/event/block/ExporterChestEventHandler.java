@@ -2,10 +2,8 @@ package team.cqr.cqrepoured.event.block;
 
 import net.minecraft.block.Blocks;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)

@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -31,6 +26,10 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public class EntityCalamityCrystal extends Entity {
 

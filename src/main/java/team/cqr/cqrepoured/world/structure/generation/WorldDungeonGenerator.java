@@ -1,14 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicates;
-
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.AbstractChunkProvider;
@@ -20,6 +12,12 @@ import team.cqr.cqrepoured.event.world.structure.generation.DungeonGenerationHel
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * Copyright (c) 29.04.2019<br>

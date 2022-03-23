@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import java.util.List;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
@@ -9,6 +7,8 @@ import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordIllusion;
 import team.cqr.cqrepoured.faction.Faction;
+
+import java.util.List;
 
 public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<EntitySpectreLordIllusion> implements IEntityAISpellAnimatedVanilla {
 

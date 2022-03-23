@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.world.World;
@@ -10,6 +7,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public enum CQRParticleType {
 

@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.Optional;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -15,6 +13,8 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
+
+import java.util.Optional;
 
 public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 

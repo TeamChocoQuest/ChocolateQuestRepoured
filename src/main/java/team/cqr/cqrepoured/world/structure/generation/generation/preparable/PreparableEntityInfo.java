@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.entity.item.PaintingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.DoubleNBT;

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.block;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -21,6 +19,8 @@ import net.minecraft.world.World;
 import team.cqr.cqrepoured.inventory.ContainerBossBlock;
 import team.cqr.cqrepoured.tileentity.BlockEntityContainer;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
+
+import javax.annotation.Nullable;
 
 public class BlockBossBlock extends Block {
 

@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.world.structure.generation.structurefile;
 
-import java.util.Iterator;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ObjectIntIdentityMap;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public class BlockStatePalette implements Iterable<BlockState> {
 

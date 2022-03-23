@@ -1,11 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.glfw.GLFW;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -16,6 +10,10 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.glfw.GLFW;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemLore extends Item {
 

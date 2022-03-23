@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.layer.equipment;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelParrot;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,6 +15,9 @@ import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class LayerShoulderEntity extends AbstractLayerCQR {
 

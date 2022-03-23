@@ -1,36 +1,29 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import net.minecraft.block.Block;
 import net.minecraft.block.BannerBlock;
-import net.minecraft.block.StructureVoidBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.StructureVoidBlock;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.block.BlockBossBlock;
-import team.cqr.cqrepoured.block.BlockExporterChest;
-import team.cqr.cqrepoured.block.BlockForceFieldNexus;
-import team.cqr.cqrepoured.block.BlockMapPlaceholder;
-import team.cqr.cqrepoured.block.BlockNull;
-import team.cqr.cqrepoured.block.BlockSpawner;
-import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.block.*;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
+
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInfo> {
 

@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.item.gun;
 
-import java.util.List;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
-import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -17,6 +15,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.item.ItemMagazineBased;
+
+import java.util.List;
 
 public class ItemFlamethrower extends ItemMagazineBased {
 

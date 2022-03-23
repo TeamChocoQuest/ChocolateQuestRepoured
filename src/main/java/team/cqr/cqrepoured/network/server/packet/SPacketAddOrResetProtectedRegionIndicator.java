@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.UUID;
-
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.UUID;
 
 public class SPacketAddOrResetProtectedRegionIndicator extends AbstractPacket<SPacketAddOrResetProtectedRegionIndicator> {
 

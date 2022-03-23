@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.capability.electric;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,6 +11,9 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class CapabilityElectricShock {
 

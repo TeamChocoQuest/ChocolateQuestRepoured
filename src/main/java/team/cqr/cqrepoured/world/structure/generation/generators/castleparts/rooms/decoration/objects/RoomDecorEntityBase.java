@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
@@ -13,6 +9,10 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBase;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.IRoomDecor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public abstract class RoomDecorEntityBase implements IRoomDecor {
 	protected List<Vector3i> footprint; // Array of blockstates and their offsets

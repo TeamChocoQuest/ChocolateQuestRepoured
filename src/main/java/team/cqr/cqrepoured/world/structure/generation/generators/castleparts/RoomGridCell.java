@@ -1,16 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
@@ -18,6 +7,9 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomized
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomBase;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.CastleMainStructWall;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.segments.EnumCastleDoorType;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RoomGridCell {
 	private enum CellState {

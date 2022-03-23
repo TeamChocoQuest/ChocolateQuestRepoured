@@ -1,17 +1,16 @@
 package team.cqr.cqrepoured.world.structure.generation.inhabitants;
 
-import java.util.Properties;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.item.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
+
+import javax.annotation.Nullable;
+import java.util.Properties;
+import java.util.Random;
 
 public class DungeonInhabitant {
 

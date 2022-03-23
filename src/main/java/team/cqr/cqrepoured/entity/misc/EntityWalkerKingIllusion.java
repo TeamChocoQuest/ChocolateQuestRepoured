@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.UUID;
-
 import com.google.common.base.Predicates;
-
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -26,6 +23,8 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+
+import java.util.UUID;
 
 public class EntityWalkerKingIllusion extends EntityCQRWalker {
 

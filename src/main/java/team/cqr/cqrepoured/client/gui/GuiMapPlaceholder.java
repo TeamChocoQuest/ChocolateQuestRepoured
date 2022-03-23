@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.client.gui;
 
-import java.io.IOException;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -12,6 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMapPlaceholder extends Screen {

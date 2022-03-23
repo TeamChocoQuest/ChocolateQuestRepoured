@@ -1,11 +1,7 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
@@ -20,6 +16,9 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CQRStructures {
 	

@@ -1,14 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
@@ -43,18 +36,16 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseMoveToLeader;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseSpinAttack;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseStun;
-import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.BossAITortoiseSwimming;
+import team.cqr.cqrepoured.entity.ai.boss.gianttortoise.*;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.VectorUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRGiantTortoise>, IRangedAttackMob, IAnimatable, IAnimationTickable {
 

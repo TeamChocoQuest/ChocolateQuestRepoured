@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
+
+import java.util.EnumSet;
 
 public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQRExterminator> {
 

@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.item.crafting;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -11,6 +8,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.DyeUtils;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipesArmorDyes extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 

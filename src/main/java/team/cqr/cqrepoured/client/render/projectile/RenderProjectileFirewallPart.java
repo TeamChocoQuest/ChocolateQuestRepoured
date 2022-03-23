@@ -1,17 +1,16 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 
 public class RenderProjectileFirewallPart extends EntityRenderer<ProjectileFireWallPart> {

@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,6 +26,10 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ItemDungeonPlacer extends Item {
 

@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.gui;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
+
+import javax.annotation.Nullable;
 
 public class GuiButtonTextured extends Button {
 

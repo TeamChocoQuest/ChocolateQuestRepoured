@@ -1,17 +1,14 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
-
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.inventory.container.Container;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.input.Mouse;
-
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.input.Mouse;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
@@ -21,6 +18,8 @@ import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
+
+import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchant extends ContainerScreen implements IUpdatableGui {

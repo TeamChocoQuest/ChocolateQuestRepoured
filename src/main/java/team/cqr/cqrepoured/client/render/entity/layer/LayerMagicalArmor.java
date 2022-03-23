@@ -1,10 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -13,6 +10,7 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class LayerMagicalArmor<T extends AbstractEntityCQR, M extends EntityModel<T>> extends LayerRenderer<T, M> {

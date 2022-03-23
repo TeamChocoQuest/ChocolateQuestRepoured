@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.List;
-
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.item.LeadItem;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.List;
 
 public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityCQR> {
 

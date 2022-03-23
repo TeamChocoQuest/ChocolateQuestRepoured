@@ -1,68 +1,24 @@
 package team.cqr.cqrepoured.init;
 
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.item.ItemAlchemyBag;
-import team.cqr.cqrepoured.item.ItemBadge;
-import team.cqr.cqrepoured.item.ItemBullBattleAxe;
-import team.cqr.cqrepoured.item.ItemCursedBone;
-import team.cqr.cqrepoured.item.ItemHookshot;
-import team.cqr.cqrepoured.item.ItemLongshot;
-import team.cqr.cqrepoured.item.ItemLore;
-import team.cqr.cqrepoured.item.ItemMobToSpawner;
-import team.cqr.cqrepoured.item.ItemPathTool;
-import team.cqr.cqrepoured.item.ItemPotionHealing;
-import team.cqr.cqrepoured.item.ItemShieldDummy;
-import team.cqr.cqrepoured.item.ItemSoulBottle;
-import team.cqr.cqrepoured.item.ItemSpawnerConverter;
-import team.cqr.cqrepoured.item.ItemSpiderHook;
-import team.cqr.cqrepoured.item.ItemSpikedGlove;
-import team.cqr.cqrepoured.item.ItemStructureSelector;
-import team.cqr.cqrepoured.item.ItemSuperTool;
-import team.cqr.cqrepoured.item.ItemTeleportStone;
-import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
-import team.cqr.cqrepoured.item.armor.ItemArmorBull;
-import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
-import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
-import team.cqr.cqrepoured.item.armor.ItemArmorInquisition;
-import team.cqr.cqrepoured.item.armor.ItemArmorSlime;
-import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
-import team.cqr.cqrepoured.item.armor.ItemBackpack;
-import team.cqr.cqrepoured.item.armor.ItemBootsCloud;
-import team.cqr.cqrepoured.item.armor.ItemCrown;
-import team.cqr.cqrepoured.item.armor.ItemHelmetDragon;
-import team.cqr.cqrepoured.item.gun.ItemBubblePistol;
-import team.cqr.cqrepoured.item.gun.ItemBubbleRifle;
-import team.cqr.cqrepoured.item.gun.ItemBullet;
-import team.cqr.cqrepoured.item.gun.ItemCannonBall;
-import team.cqr.cqrepoured.item.gun.ItemFlamethrower;
-import team.cqr.cqrepoured.item.gun.ItemMusket;
-import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
-import team.cqr.cqrepoured.item.gun.ItemRevolver;
+import team.cqr.cqrepoured.config.CQRArmorMaterial;
+import team.cqr.cqrepoured.item.*;
+import team.cqr.cqrepoured.item.armor.*;
+import team.cqr.cqrepoured.item.gun.*;
 import team.cqr.cqrepoured.item.shield.ItemShieldCQR;
 import team.cqr.cqrepoured.item.shield.ItemShieldWalkerKing;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
-import team.cqr.cqrepoured.item.staff.ItemStaff;
-import team.cqr.cqrepoured.item.staff.ItemStaffFire;
-import team.cqr.cqrepoured.item.staff.ItemStaffGun;
-import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
-import team.cqr.cqrepoured.item.staff.ItemStaffPoison;
-import team.cqr.cqrepoured.item.staff.ItemStaffSpider;
-import team.cqr.cqrepoured.item.staff.ItemStaffThunder;
-import team.cqr.cqrepoured.item.staff.ItemStaffVampiric;
-import team.cqr.cqrepoured.item.staff.ItemStaffWind;
-import team.cqr.cqrepoured.item.sword.ItemDagger;
-import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
-import team.cqr.cqrepoured.item.sword.ItemGreatSword;
-import team.cqr.cqrepoured.item.sword.ItemSwordMoonlight;
-import team.cqr.cqrepoured.item.sword.ItemSwordSpider;
-import team.cqr.cqrepoured.item.sword.ItemSwordSunshine;
-import team.cqr.cqrepoured.item.sword.ItemSwordTurtle;
-import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
+import team.cqr.cqrepoured.item.staff.*;
+import team.cqr.cqrepoured.item.sword.*;
+
+import java.util.function.Supplier;
 
 public class CQRItems {
 
@@ -81,7 +37,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = null;
 
 	// Battle Axes
-	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = null;
+	public static final RegistryObject<Item> BATTLE_AXE_BULL = registerItem("battle_axe_bull", () -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, props())); //TODO tweak stats
 
 	// Walker RegistryObject<Item>s
 	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = null;
@@ -136,16 +92,16 @@ public class CQRItems {
 	public static final RegistryObject<ItemStaffGun> STAFF_GUN = null; // #TODO TEXTURES
 
 	// Guns
-	public static final RegistryObject<ItemRevolver> REVOLVER = null;
+	public static final RegistryObject<Item> REVOLVER = registerItem("revolver", () -> new ItemRevolver(props()));
 	public static final RegistryObject<Item> CAPTAIN_REVOLVER = null;
 	public static final RegistryObject<ItemMusket> MUSKET = null;
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = null; // #TODO TEXTURES
-	public static final RegistryObject<ItemBullet> BULLET_IRON = null;
-	public static final RegistryObject<ItemBullet> BULLET_GOLD = null;
-	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = null;
-	public static final RegistryObject<ItemBullet> BULLET_FIRE = null;
+	public static final RegistryObject<Item> BULLET_IRON = registerItem("bullet_iron", () -> new ItemBullet(props()));
+	public static final RegistryObject<Item> BULLET_GOLD = registerItem("bullet_gold", () -> new ItemBullet(props()));;
+	public static final RegistryObject<Item> BULLET_DIAMOND = registerItem("bullet_diamond", () -> new ItemBullet(props()));;
+	public static final RegistryObject<Item> BULLET_FIRE = registerItem("bullet_fire", () -> new ItemBullet(props()));;
 	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
 	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = null;
@@ -159,7 +115,7 @@ public class CQRItems {
 	// Single Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = null; // #TODO Make model centered on head // Abandon for now
 	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = null;
-	public static final RegistryObject<ItemBackpack> BACKPACK = null;
+	public static final RegistryObject<Item> BACKPACK = registerItem("backpack", () -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, props()));
 	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = null;
 	public static final RegistryObject<ItemCrown> KING_CROWN = null;
 
@@ -244,7 +200,18 @@ public class CQRItems {
 	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = null;
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = null;
 
-	public static void registerItems() {
+	public static RegistryObject<Item> registerItem(String name, Supplier<Item> item)
+	{
+		return ITEMS.register(name, item);
+	}
+
+	public static Item.Properties props()
+	{
+		return new Item.Properties();
+	}
+
+	public static void registerItems()
+	{
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
@@ -12,6 +10,8 @@ import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.tileentity.ITileEntitySyncable;
+
+import java.util.function.Supplier;
 
 public class SPacketHandlerSyncTileEntity extends AbstractPacketHandler<CPacketSyncTileEntity> {
 

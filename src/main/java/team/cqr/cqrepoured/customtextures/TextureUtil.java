@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.customtextures;
 
-import java.io.File;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.resource.VanillaResourceType;
+
+import java.io.File;
 
 public class TextureUtil {
 

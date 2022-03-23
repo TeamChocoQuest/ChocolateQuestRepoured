@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.EnumSet;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
+
+import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalamity {
 

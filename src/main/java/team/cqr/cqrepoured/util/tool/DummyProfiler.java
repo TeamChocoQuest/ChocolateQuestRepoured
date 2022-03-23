@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.util.tool;
 
+import net.minecraft.profiler.Profiler;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
-
-import net.minecraft.profiler.Profiler;
 
 public final class DummyProfiler extends Profiler {
 

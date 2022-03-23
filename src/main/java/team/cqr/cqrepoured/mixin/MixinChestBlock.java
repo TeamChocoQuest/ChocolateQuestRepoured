@@ -1,9 +1,8 @@
 package team.cqr.cqrepoured.mixin;
 
-import org.spongepowered.asm.mixin.Mixin;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ChestBlock;
+import org.spongepowered.asm.mixin.Mixin;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 
 @Mixin(ChestBlock.class)

@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Supplier;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
 
 public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements Supplier<GeneratableDungeon> {
 

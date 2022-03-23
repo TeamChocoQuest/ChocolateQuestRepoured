@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.tileentity;
 
-import java.io.File;
-import java.util.Arrays;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -20,12 +17,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
-import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
-import team.cqr.cqrepoured.network.datasync.DataEntryInt;
-import team.cqr.cqrepoured.network.datasync.DataEntryObject;
-import team.cqr.cqrepoured.network.datasync.DataEntryString;
-import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
+import team.cqr.cqrepoured.network.datasync.*;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+
+import java.io.File;
+import java.util.Arrays;
 
 public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
 

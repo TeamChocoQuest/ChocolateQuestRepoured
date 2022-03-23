@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.MoverType;
@@ -25,6 +21,10 @@ import team.cqr.cqrepoured.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.entity.particle.ParticleWalkerTornado;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDontRenderFire {
 

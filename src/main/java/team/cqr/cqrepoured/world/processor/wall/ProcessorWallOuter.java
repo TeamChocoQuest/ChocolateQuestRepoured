@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.processor.wall;
 
 import com.mojang.serialization.Codec;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.BlockTags;

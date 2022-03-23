@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import java.util.Optional;
-
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public interface IEnderCalamityPhase {
 

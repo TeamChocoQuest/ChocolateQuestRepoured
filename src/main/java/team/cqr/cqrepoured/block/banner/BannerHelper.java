@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.block.banner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.BannerTileEntity;
 import team.cqr.cqrepoured.init.CQRBannerPatterns;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BannerHelper {
 

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
+
+import javax.annotation.Nonnull;
 
 public class DataEntryByte extends DataEntry<Byte> {
 

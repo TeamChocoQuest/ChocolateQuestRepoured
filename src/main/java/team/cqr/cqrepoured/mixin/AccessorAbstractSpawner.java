@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.mixin;
 
-import java.util.List;
-
+import net.minecraft.util.WeightedSpawnerEntity;
+import net.minecraft.world.spawner.AbstractSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.world.spawner.AbstractSpawner;
+import java.util.List;
 
 @Mixin(AbstractSpawner.class)
 public interface AccessorAbstractSpawner {

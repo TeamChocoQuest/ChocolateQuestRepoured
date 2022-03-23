@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import java.util.Map;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
+
+import java.util.Map;
 
 public class SuspensionBridgeHelper {
 

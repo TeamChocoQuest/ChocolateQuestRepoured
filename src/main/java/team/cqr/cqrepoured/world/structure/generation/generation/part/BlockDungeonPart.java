@@ -1,13 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
@@ -16,6 +8,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.IGeneratable;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BlockDungeonPart implements IDungeonPart, IProtectable {
 

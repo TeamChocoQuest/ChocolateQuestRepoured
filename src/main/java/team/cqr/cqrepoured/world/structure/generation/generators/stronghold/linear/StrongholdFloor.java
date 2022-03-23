@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.linear;
 
-import java.io.File;
-import java.util.Random;
-
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,6 +12,9 @@ import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.Gene
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import java.io.File;
+import java.util.Random;
 
 public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold> {
 

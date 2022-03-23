@@ -1,12 +1,12 @@
 package net.minecraft.entity;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
+
+import javax.annotation.Nullable;
 
 public class EntityList {
 

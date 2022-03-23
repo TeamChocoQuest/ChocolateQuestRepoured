@@ -7,14 +7,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
-import team.cqr.cqrepoured.inventory.ContainerBackpack;
-import team.cqr.cqrepoured.inventory.ContainerBadge;
-import team.cqr.cqrepoured.inventory.ContainerBossBlock;
-import team.cqr.cqrepoured.inventory.ContainerCQREntity;
-import team.cqr.cqrepoured.inventory.ContainerMerchant;
-import team.cqr.cqrepoured.inventory.ContainerMerchantEditTrade;
-import team.cqr.cqrepoured.inventory.ContainerSpawner;
+import team.cqr.cqrepoured.inventory.*;
 
 public class CQRContainerTypes {
 	

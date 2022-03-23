@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.item.crafting;
 
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;

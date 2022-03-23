@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.UUID;
-
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.UUID;
 
 public class SPacketUnloadProtectedRegion extends AbstractPacket<SPacketUnloadProtectedRegion> {
 

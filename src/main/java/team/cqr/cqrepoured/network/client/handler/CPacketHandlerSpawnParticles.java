@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.init.CQRParticleType;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
+
+import java.util.function.Supplier;
 
 public class CPacketHandlerSpawnParticles extends AbstractPacketHandler<SPacketSpawnParticles> {
 

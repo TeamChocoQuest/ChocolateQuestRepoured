@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.EnumSet;
-
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
+
+import java.util.EnumSet;
 
 public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 

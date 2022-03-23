@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.World;
@@ -10,6 +8,8 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
+
+import java.util.function.Supplier;
 
 public class CPacketHandlerInitialFactionInformation extends AbstractPacketHandler<SPacketInitialFactionInformation> {
 

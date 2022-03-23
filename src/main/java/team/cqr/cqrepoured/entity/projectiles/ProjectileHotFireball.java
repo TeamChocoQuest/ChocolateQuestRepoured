@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.config.CQRConfig;
 
 public class ProjectileHotFireball extends ThrowableEntity {

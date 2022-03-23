@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
@@ -32,6 +25,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.client.world.structure.protection.ProtectionIndicatorHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class ProtectedRegionHelper {
 

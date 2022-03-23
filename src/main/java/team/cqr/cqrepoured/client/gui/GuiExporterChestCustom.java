@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.client.gui;
 
-import java.io.IOException;
-
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
+
+import java.io.IOException;
 
 public class GuiExporterChestCustom extends Screen {
 

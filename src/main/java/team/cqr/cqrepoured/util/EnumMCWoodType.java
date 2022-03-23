@@ -1,12 +1,8 @@
 package team.cqr.cqrepoured.util;
 
-import javax.annotation.Nullable;
+import net.minecraft.block.*;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.Blocks;
+import javax.annotation.Nullable;
 
 public enum EnumMCWoodType {
 	OAK(BlockPlanks.EnumType.OAK, Blocks.OAK_STAIRS, Blocks.OAK_FENCE, Blocks.OAK_DOOR),

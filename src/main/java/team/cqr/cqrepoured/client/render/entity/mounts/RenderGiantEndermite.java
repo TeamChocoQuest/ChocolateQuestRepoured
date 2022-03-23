@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity.mounts;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelEnderMite;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 

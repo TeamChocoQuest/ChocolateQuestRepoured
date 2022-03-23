@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -26,6 +21,10 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.mixin.AccessorAbstractSpawner;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A static utility class for generating CQR/vanilla spawners and converting them to/from the other

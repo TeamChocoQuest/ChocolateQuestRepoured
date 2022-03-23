@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
@@ -13,6 +10,9 @@ import net.minecraft.entity.passive.horse.HorseEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Partly copied from AW2

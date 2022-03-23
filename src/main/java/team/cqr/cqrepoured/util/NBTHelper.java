@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.util;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.zip.GZIPInputStream;
-
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.common.util.Constants;
+
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.zip.GZIPInputStream;
 
 public class NBTHelper {
 

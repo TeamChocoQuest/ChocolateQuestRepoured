@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.item.sword;
 
 import com.google.common.collect.Multimap;
-
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;

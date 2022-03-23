@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.volcano;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -27,6 +22,11 @@ import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeon
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.EntranceBuilderHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.StrongholdBuilder;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper.EStairSection;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
 
 public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 

@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
 import com.google.common.collect.Multimap;
-
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;

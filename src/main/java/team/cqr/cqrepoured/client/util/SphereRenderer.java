@@ -1,5 +1,20 @@
 package team.cqr.cqrepoured.client.util;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
+import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
+import team.cqr.cqrepoured.client.render.texture.CubemapTexture;
+
+import javax.annotation.Nullable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -11,23 +26,6 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
-import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
-import team.cqr.cqrepoured.client.render.texture.CubemapTexture;
 
 public class SphereRenderer {
 

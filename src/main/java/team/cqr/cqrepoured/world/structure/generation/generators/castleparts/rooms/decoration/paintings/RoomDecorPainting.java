@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.paintings;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.minecraft.entity.item.PaintingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +7,8 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import java.util.*;
 
 public class RoomDecorPainting {
 	private Map<PaintingEntity.EnumArt, List<Vector3i>> artFootprints = new EnumMap<>(PaintingEntity.EnumArt.class);

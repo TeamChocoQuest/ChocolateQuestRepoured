@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.config;
 
-import net.minecraft.inventory.EquipmentSlotType;
-
 public class ArmorMaterialConfig
 {
     public int durability;

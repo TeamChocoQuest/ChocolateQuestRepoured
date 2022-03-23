@@ -1,9 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -15,6 +12,8 @@ import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRItems;
+
+import java.util.List;
 
 public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR & ICirclingEntity> extends AbstractCQREntityAI<T> {
 

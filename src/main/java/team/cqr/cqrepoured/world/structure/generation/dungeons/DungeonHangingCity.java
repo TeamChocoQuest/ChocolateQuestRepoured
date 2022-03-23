@@ -1,9 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import java.io.File;
-import java.util.Properties;
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -14,6 +10,10 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.SuspensionBridgeHelper.IBridgeDataSupplier;
 import team.cqr.cqrepoured.world.structure.generation.generators.hangingcity.GeneratorHangingCity;
+
+import java.io.File;
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

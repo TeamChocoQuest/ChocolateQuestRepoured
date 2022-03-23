@@ -1,24 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration;
 
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorAnvil;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorArmorStand;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorBed;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorBrewingStand;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorCauldron;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorChest;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorCraftingTable;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorFireplace;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorFurnace;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorJukebox;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorNone;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorPillar;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorPlanks;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorShelf;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorTableMedium;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorTableSmall;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorTorch;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorUnlitTorch;
-import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.RoomDecorWaterBasin;
+import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects.*;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.paintings.RoomDecorPainting;
 
 public class RoomDecorTypes {

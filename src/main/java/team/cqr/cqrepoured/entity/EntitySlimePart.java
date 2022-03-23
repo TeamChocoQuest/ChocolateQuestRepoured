@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,6 +10,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+
+import java.util.UUID;
 
 public class EntitySlimePart extends SlimeEntity {
 

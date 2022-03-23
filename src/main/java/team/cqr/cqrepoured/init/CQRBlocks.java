@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,21 +24,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.BlockBossBlock;
-import team.cqr.cqrepoured.block.BlockExporter;
-import team.cqr.cqrepoured.block.BlockExporterChest;
-import team.cqr.cqrepoured.block.BlockExporterChestCQR;
-import team.cqr.cqrepoured.block.BlockExporterChestCustom;
-import team.cqr.cqrepoured.block.BlockForceFieldNexus;
-import team.cqr.cqrepoured.block.BlockMapPlaceholder;
-import team.cqr.cqrepoured.block.BlockNull;
-import team.cqr.cqrepoured.block.BlockPhylactery;
-import team.cqr.cqrepoured.block.BlockSpawner;
-import team.cqr.cqrepoured.block.BlockTNTCQR;
-import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.block.BlockPoisonousWeb;
-import team.cqr.cqrepoured.block.BlockUnlitTorch;
-import team.cqr.cqrepoured.block.BlockUnlitTorchWall;
+import team.cqr.cqrepoured.block.*;
+
+import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRBlocks {

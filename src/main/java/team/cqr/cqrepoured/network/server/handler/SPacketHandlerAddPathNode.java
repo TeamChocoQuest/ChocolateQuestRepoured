@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.network.server.handler;
 
-import java.util.function.Supplier;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +10,8 @@ import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
+
+import java.util.function.Supplier;
 
 public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddPathNode> {
 

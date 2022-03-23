@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.TorchBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.TorchBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;

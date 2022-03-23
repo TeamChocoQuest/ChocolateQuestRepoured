@@ -6,7 +6,6 @@ import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.DataSerializerEntry;
 import team.cqr.cqrepoured.CQRMain;
 

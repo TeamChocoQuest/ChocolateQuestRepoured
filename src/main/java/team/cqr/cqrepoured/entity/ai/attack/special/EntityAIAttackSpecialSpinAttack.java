@@ -1,21 +1,20 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import java.util.List;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraftforge.entity.PartEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.*;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.sword.ItemDagger;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
+
+import java.util.List;
 
 public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpecial {
 

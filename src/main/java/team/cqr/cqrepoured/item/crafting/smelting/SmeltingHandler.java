@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.item.crafting.smelting;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import team.cqr.cqrepoured.init.CQRItems;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import team.cqr.cqrepoured.init.CQRItems;
 
 /**
  * Copyright (c) 30.06.2019 Developed by MrMarnic GitHub: https://github.com/MrMarnic

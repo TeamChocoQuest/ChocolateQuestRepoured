@@ -1,12 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nonnull;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +13,12 @@ import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.Gene
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
+
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<GeneratorStrongholdOpen> {
 

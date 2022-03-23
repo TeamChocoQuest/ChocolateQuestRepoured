@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.layer.equipment;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.Items;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 import team.cqr.cqrepoured.client.render.entity.layer.AbstractLayerCQR;

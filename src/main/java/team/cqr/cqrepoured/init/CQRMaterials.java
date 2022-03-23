@@ -1,11 +1,9 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.item.*;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.*;
 
 import java.util.function.Supplier;

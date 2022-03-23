@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +18,8 @@ import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import java.util.List;
 
 public class ItemStructureSelector extends Item {
 

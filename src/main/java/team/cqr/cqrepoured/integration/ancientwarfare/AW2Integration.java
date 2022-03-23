@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.integration.ancientwarfare;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.shadowmage.ancientwarfare.core.gamedata.AWGameData;
 import net.shadowmage.ancientwarfare.structure.gamedata.StructureEntry;
 import net.shadowmage.ancientwarfare.structure.gamedata.StructureMap;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class AW2Integration {
 

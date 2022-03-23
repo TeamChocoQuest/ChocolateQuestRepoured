@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import java.util.Collection;
-
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
-import team.cqr.cqrepoured.util.ByteBufUtil;
+
+import java.util.Collection;
 
 public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity> {
 

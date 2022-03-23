@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.lootchests;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.Item;
 import net.minecraft.loot.ItemLootEntry;
 import net.minecraft.loot.LootPool;
@@ -17,6 +14,9 @@ import net.minecraft.loot.functions.SetDamage;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

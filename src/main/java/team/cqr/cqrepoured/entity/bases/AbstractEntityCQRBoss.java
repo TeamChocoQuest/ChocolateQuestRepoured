@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.bases;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,17 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import java.util.Properties;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.*;
 
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGridCity;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGuardedCastle;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonTemplateSurface;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVegetatedCave;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
+import java.util.Properties;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

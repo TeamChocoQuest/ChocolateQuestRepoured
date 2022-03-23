@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -17,6 +14,9 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiButtonTrade extends Button {
 

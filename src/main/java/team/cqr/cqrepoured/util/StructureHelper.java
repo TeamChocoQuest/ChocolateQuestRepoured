@@ -1,23 +1,16 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.*;
-import net.minecraft.world.gen.NetherChunkGenerator;
-import net.minecraft.world.gen.OverworldChunkGenerator;
-import net.minecraft.world.gen.ChunkGeneratorSettings;
-import net.minecraft.world.gen.EndChunkGenerator;
-import net.minecraft.world.gen.FlatChunkGenerator;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.integration.ancientwarfare.AW2Integration;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class StructureHelper {
 
