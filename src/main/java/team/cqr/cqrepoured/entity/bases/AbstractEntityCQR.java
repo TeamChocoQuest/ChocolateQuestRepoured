@@ -17,6 +17,7 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.NameTagItem;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
@@ -487,7 +488,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
 		this.setHealingPotions(1);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(CQRItems.BADGE));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(CQRItems.BADGE.get()));
 		for (EquipmentSlotType slot : EquipmentSlotType.values()) {
 			this.setDropChance(slot, 0.04F);
 		}
@@ -499,20 +500,19 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	@Override
-<<<<<<< HEAD
 	protected void dropEquipment() {
-		//NOPE
+		//Nope
 	}
 	
 	protected void dropEquipmentCQR(int lootingModifier, boolean wasRecentlyHit) {
-		ItemStack stack = this.getHeldItemMainhand();
-		if (!stack.isEmpty() && stack.getItem() instanceof ItemBow) {
+		ItemStack stack = this.getMainHandItem();
+		if (!stack.isEmpty() && stack.getItem() instanceof BowItem) {
 			ItemStack stack1 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
 			if (stack1.isEmpty()) {
-				stack1 = new ItemStack(Items.ARROW, this.getRNG().nextInt(3));
+				stack1 = new ItemStack(Items.ARROW, this.getRandom().nextInt(3));
 			} else {
 				stack1 = stack1.copy();
-				stack1.setCount(this.getRNG().nextInt(3));
+				stack1.setCount(this.getRandom().nextInt(3));
 			}
 			this.spawnAtLocation(stack1, 0.0F);
 		}
@@ -1171,7 +1171,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	public void setHealingPotions(int amount) {
-		ItemStack stack = new ItemStack(CQRItems.POTION_HEALING, amount);
+		ItemStack stack = new ItemStack(CQRItems.POTION_HEALING.get(), amount);
 		if (this.holdingPotion) {
 			this.setItemSlot(EquipmentSlotType.MAINHAND, stack);
 		} else {
