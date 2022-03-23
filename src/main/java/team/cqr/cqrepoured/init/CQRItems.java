@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -254,7 +255,12 @@ public class CQRItems {
 
 	public static Item.Properties props()
 	{
-		return new Item.Properties();
+		return props(CQRMain.CQR_ITEMS_TAB);
+	}
+	
+	public static Item.Properties props(ItemGroup group)
+	{
+		return new Item.Properties().tab(group);
 	}
 
 	public static void registerItems()
