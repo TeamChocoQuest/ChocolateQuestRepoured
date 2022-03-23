@@ -101,15 +101,17 @@ public class ItemBullBattleAxe extends SwordItem {
 		return modifiers;
 	}
 
+	//Note1: modifiers is immutable
+	//Note2: modifierMultimap is also immutable!
 	protected void replaceModifier(Multimap<Attribute, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, double multiplier) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
+		/*Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute);
 		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			final AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
 			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), modifier.getAmount() - multiplier, modifier.getOperation()));
-		}
+		}*/
 	}
 
 	@Override
