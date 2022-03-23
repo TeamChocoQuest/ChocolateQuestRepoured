@@ -48,12 +48,12 @@ public class TileEntitySpawner extends TileEntity implements ITileEntitySyncable
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
 	private final DataEntryBoolean vanillaSpawner = new DataEntryBoolean("vanillaSpawner", false, true);
-	private final DataEntryInt minSpawnDelay = new DataEntryInt("minSpawnDelay", 200, true);
-	private final DataEntryInt maxSpawnDelay = new DataEntryInt("maxSpawnDelay", 800, true);
-	private final DataEntryInt spawnCount = new DataEntryInt("spawnCount", 4, true);
-	private final DataEntryInt maxNearbyEntities = new DataEntryInt("maxNearbyEntities", 6, true);
-	private final DataEntryInt activatingRangeFromPlayer = new DataEntryInt("activatingRangeFromPlayer", 16, true);
-	private final DataEntryInt spawnRange = new DataEntryInt("spawnRange", 4, true);
+	private final DataEntryInt minSpawnDelay = new DataEntryInt("MinSpawnDelay", 200, true);
+	private final DataEntryInt maxSpawnDelay = new DataEntryInt("MaxSpawnDelay", 800, true);
+	private final DataEntryInt spawnCount = new DataEntryInt("SpawnCount", 4, true);
+	private final DataEntryInt maxNearbyEntities = new DataEntryInt("MaxNearbyEntities", 6, true);
+	private final DataEntryInt activatingRangeFromPlayer = new DataEntryInt("RequiredPlayerRange", 16, true);
+	private final DataEntryInt spawnRange = new DataEntryInt("SpawnRange", 4, true);
 
 	public TileEntitySpawner() {
 		this.dataManager.register(this.vanillaSpawner);
