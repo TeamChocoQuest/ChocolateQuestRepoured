@@ -14,7 +14,7 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 	}
 
 	public EntityExterminatorHandLaser(LivingEntity caster, LivingEntity target) {
-		this(caster.world, caster, 48, target);
+		this(caster.level, caster, 48, target);
 	}
 
 	public EntityExterminatorHandLaser(World worldIn, LivingEntity caster, float length, LivingEntity target) {
