@@ -251,10 +251,10 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND));
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 3));
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND.get()));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING.get(), 3));
 
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN.get(), 1));
 
 		// Give him some armor...
 		CompoundNBT nbttagcompound = new CompoundNBT();
@@ -265,8 +265,8 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		}
 
 		nbttagcompound1.putInt("color", 0x9000FF);
-		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, nbttagcompound);
-		((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 0x9000FF);
+		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get(), 1, nbttagcompound);
+		((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE.get()).setColor(chest, 0x9000FF);
 		this.setItemSlot(EquipmentSlotType.CHEST, chest);
 	}
 
