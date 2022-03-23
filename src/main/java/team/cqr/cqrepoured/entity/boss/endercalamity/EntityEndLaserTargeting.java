@@ -13,7 +13,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	}
 
 	public EntityEndLaserTargeting(LivingEntity caster, LivingEntity target) {
-		this(caster.world, caster, 48, target);
+		this(caster.level, caster, 48, target);
 	}
 
 	public EntityEndLaserTargeting(World worldIn, LivingEntity caster, float length, LivingEntity target) {
