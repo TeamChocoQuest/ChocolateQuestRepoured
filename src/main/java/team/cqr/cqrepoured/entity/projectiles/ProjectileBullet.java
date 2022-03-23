@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
@@ -148,5 +150,10 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	@Override
 	protected void defineSynchedData() {
 
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

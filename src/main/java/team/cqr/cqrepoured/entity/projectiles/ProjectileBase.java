@@ -4,8 +4,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public abstract class ProjectileBase extends ThrowableEntity {
 
@@ -65,6 +67,11 @@ public abstract class ProjectileBase extends ThrowableEntity {
 
 	protected void onUpdateInAir() {
 
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -14,6 +15,7 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -127,5 +129,10 @@ public class ProjectileBubble extends ProjectileBase {
 	@Override
 	protected void defineSynchedData() {
 
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }
