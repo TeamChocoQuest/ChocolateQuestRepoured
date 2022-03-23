@@ -7,12 +7,13 @@ import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 
 public class RenderProjectileEarthQuake extends EntityRenderer<ProjectileEarthQuake> {
+
 	public RenderProjectileEarthQuake(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileEarthQuake entity) {
-		return AtlasTexture.LOCATION_BLOCKS_TEXTURE;
+	public ResourceLocation getTextureLocation(ProjectileEarthQuake pEntity) {
+		return AtlasTexture.LOCATION_BLOCKS;
 	}
 }

@@ -24,6 +24,7 @@ import team.cqr.cqrepoured.entity.misc.*;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 
 public class CQREntityTypes {
 
@@ -42,6 +43,9 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileBullet>of(ProjectileBullet::new, EntityClassification.MISC).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_bullet").toString()));
 
+	public static final RegistryObject<EntityType<ProjectileEarthQuake>> PROJECTILE_EARTH_QUAKE = ENTITY_TYPES.register("projectile_earth_quake",
+			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, EntityClassification.MISC).clientTrackingRange(4).updateInterval(10).fireImmune()
+					.build(CQRMain.prefix("projectile_earth_quake").toString()));
 
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);

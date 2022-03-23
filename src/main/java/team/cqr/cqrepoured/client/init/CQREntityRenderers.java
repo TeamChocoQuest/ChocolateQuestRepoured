@@ -40,7 +40,9 @@ public class CQREntityRenderers
 	private CQREntityRenderers() {}
 
 	public static void registerRenderers() {
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), RenderProjectileEarthQuake::new);
 	/*	registerTileRenderers();
 		registerProjectileAndMiscRenderers();
 		if (CQRConfig.isAprilFoolsEnabled()) {
