@@ -54,36 +54,36 @@ public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 		//}
 
 		//bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		bufferBuilder.vertex(-0.5D, -0.25D, 0.0D)
+		bufferBuilder.vertex(matrix4f, -0.5F, -0.25F, 0.0F)
 				.color(255, 255, 255, 255)
 				.uv(0.0F, 1.0F)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(packedLight)
-				.normal(0.0F, 1.0F, 0.0F)
+				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();
 
-		bufferBuilder.vertex(0.5D, -0.25D, 0.0D)
+		bufferBuilder.vertex(matrix4f, 0.5F, -0.25F, 0.0F)
 				.color(255, 255, 255, 255)
 				.uv(1.0F, 1.0F)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(packedLight)
-				.normal(0.0F, 1.0F, 0.0F)
+				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();
 
-		bufferBuilder.vertex(0.5D, 0.75D, 0.0D)
+		bufferBuilder.vertex(matrix4f, 0.5F, 0.75F, 0.0F)
 				.color(255, 255, 255, 255)
 				.uv(1.0F, 0.0F)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(packedLight)
-				.normal(0.0F, 1.0F, 0.0F)
+				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();
 
-		bufferBuilder.vertex(-0.5D, 0.75D, 0.0D)
+		bufferBuilder.vertex(matrix4f, -0.5F, 0.75F, 0.0F)
 				.color(255, 255, 255, 255)
 				.uv(0.0F, 0.0F)
 				.overlayCoords(OverlayTexture.NO_OVERLAY)
 				.uv2(packedLight)
-				.normal(0.0F, 1.0F, 0.0F)
+				.normal(matrix3f, 0.0F, 1.0F, 0.0F)
 				.endVertex();
 
 		//tessellator.draw();
