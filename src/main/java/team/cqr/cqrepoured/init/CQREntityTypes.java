@@ -22,10 +22,7 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.misc.*;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.entity.projectiles.*;
 
 public class CQREntityTypes {
 
@@ -51,6 +48,10 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<ProjectileCannonBall>> PROJECTILE_CANNON_BALL = ENTITY_TYPES.register("projectile_cannon_ball",
 			() -> EntityType.Builder.<ProjectileCannonBall>of(ProjectileCannonBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_cannon_ball").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileWeb>> PROJECTILE_WEB = ENTITY_TYPES.register("projectile_web",
+			() -> EntityType.Builder.<ProjectileWeb>of(ProjectileWeb::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_web").toString()));
 
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);

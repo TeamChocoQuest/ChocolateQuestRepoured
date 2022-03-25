@@ -8,7 +8,8 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
 public class RenderProjectileWeb extends RenderSpriteBase<ProjectileWeb> {
 
-	public RenderProjectileWeb(EntityRendererManager renderManager) {
+	public RenderProjectileWeb(EntityRendererManager renderManager)
+	{
 		super(renderManager, new ResourceLocation(CQRMain.MODID, "textures/blocks/temporary_web/web_poison_00.png"));
 	}
 }

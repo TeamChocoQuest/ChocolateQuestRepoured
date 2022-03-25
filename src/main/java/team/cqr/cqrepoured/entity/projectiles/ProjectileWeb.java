@@ -1,12 +1,18 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.block.AirBlock;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.GeneratorVolcano;
 
@@ -14,21 +20,23 @@ public class ProjectileWeb extends ProjectileBase {
 
 	private LivingEntity shooter;
 
-	public ProjectileWeb(World worldIn) {
-		super(worldIn);
+	public ProjectileWeb(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+		super(throwableEntity, world);
 	}
 
-	public ProjectileWeb(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
+	public ProjectileWeb(double pX, double pY, double pZ, World world)
+	{
+		super(CQREntityTypes.PROJECTILE_WEB.get(), world);
 	}
 
-	public ProjectileWeb(World worldIn, LivingEntity shooter) {
-		super(worldIn, shooter);
+	public ProjectileWeb(LivingEntity shooter, World world)
+	{
+		super(CQREntityTypes.PROJECTILE_WEB.get(), shooter, world);
 		this.shooter = shooter;
-		this.isImmuneToFire = false;
+		//this.isImmuneToFire = false;
 	}
 
-	@Override
+/*	@Override
 	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
@@ -53,11 +61,54 @@ public class ProjectileWeb extends ProjectileBase {
 			}
 			super.onHit(result);
 		}
+	} */
+
+	@Override
+	protected void onHitBlock(BlockRayTraceResult result)
+	{
+		if(DungeonGenUtils.percentageRandom(75))
+		{
+			GeneratorVolcano.forEachSpherePosition(blockPosition(), DungeonGenUtils.randomBetween(1, 3), t ->
+			{
+				if(ProjectileWeb.this.level.getBlockState(t).getBlock() instanceof AirBlock)
+				{
+					//ProjectileWeb.this.level.setBlockAndUpdate(t, CQRBlocks) //#TODO temporary web?
+				}
+			});
+		}
+		super.onHitBlock(result);
+	}
+
+	@Override
+	protected void onHitEntity(EntityRayTraceResult result)
+	{
+		if(result.getEntity() instanceof LivingEntity)
+		{
+			LivingEntity entity = (LivingEntity)result.getEntity();
+
+			if(entity == this.shooter) return;
+
+			entity.addEffect(new EffectInstance(Effects.POISON, 60, 0));
+			//entity.makeStuckInBlock(); //Dont now what about this #TODO
+			this.level.setBlockAndUpdate(entity.blockPosition(), CQRBlocks.POISONOUS_WEB.get().defaultBlockState());
+			this.remove();
+		}
+		super.onHitEntity(result);
+	}
+
+	@Override
+	protected void defineSynchedData() {
+
 	}
 
 	@Override
 	public boolean isNoGravity() {
 		return false;
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
