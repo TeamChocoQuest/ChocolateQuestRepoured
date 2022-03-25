@@ -152,7 +152,7 @@ public class CQRItems {
 	public static final RegistryObject<Item> BULLET_FIRE = registerItem("bullet_fire", () -> new ItemBullet(props()));;
 	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
 	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
-	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = null;
+	public static final RegistryObject<Item> BUBBLE_PISTOL = registerItem("bubble_pistol", () -> new ItemBubblePistol(props()));
 	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = null;
 
 	// Hookers
