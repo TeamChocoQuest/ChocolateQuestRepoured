@@ -1,48 +1,15 @@
 package team.cqr.cqrepoured.client.init;
 
-import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import team.cqr.cqrepoured.client.model.entity.boss.ModelLich;
-import team.cqr.cqrepoured.client.model.entity.boss.ModelNecromancer;
-import team.cqr.cqrepoured.client.model.entity.boss.ModelPigMage;
-import team.cqr.cqrepoured.client.render.entity.*;
-import team.cqr.cqrepoured.client.render.entity.boss.*;
-import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderCalamity;
-import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
-import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
-import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
-import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
-import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
-import team.cqr.cqrepoured.client.render.entity.mobs.*;
-import team.cqr.cqrepoured.client.render.entity.mounts.*;
 import team.cqr.cqrepoured.client.render.projectile.*;
-import team.cqr.cqrepoured.client.render.tileentity.*;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.entity.boss.*;
-import team.cqr.cqrepoured.entity.boss.endercalamity.*;
-import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
-import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
-import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
-import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
-import team.cqr.cqrepoured.entity.misc.*;
-import team.cqr.cqrepoured.entity.mobs.*;
-import team.cqr.cqrepoured.entity.mount.*;
-import team.cqr.cqrepoured.entity.projectiles.*;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-import team.cqr.cqrepoured.tileentity.*;
 
 public class CQREntityRenderers
 {
 	private CQREntityRenderers() {}
 
 	public static void registerRenderers() {
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), RenderProjectileEarthQuake::new);
+		registerProjectileAndMiscRenderers();
 	/*	registerTileRenderers();
 		registerProjectileAndMiscRenderers();
 		if (CQRConfig.isAprilFoolsEnabled()) {
@@ -70,9 +37,9 @@ public class CQREntityRenderers
 	protected static void registerProjectileAndMiscRenderers() {
 		// Projectiles
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, RenderProjectileCannonBall::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, RenderProjectileEarthQuake::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), RenderProjectileCannonBall::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), RenderProjectileEarthQuake::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderBall.class, RenderProjectileSpiderBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, RenderProjectileVampiricSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, RenderProjectileFirewallPart::new);
