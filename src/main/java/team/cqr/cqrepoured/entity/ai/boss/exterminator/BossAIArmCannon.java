@@ -84,7 +84,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 
 					this.entity.getLookControl().setLookAt(attackTarget, 180, 180);
 
-					ProjectileCannonBall cannonBall = new ProjectileCannonBall(this.world, this.entity, this.isCurrentSequenceFast);
+					ProjectileCannonBall cannonBall = new ProjectileCannonBall(this.entity, this.world, this.isCurrentSequenceFast);
 					final Vector3d armPos = this.entity.getCannonFiringLocation();
 
 					this.spawnParticles(armPos);

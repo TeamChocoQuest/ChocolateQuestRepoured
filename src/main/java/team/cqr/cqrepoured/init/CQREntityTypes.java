@@ -24,6 +24,7 @@ import team.cqr.cqrepoured.entity.misc.*;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 
 public class CQREntityTypes {
@@ -34,7 +35,7 @@ public class CQREntityTypes {
 	//Misc mobs
 	public static final RegistryObject<EntityType<EntitySlimePart>> SMALL_SLIME = registerSized(EntitySlimePart::new, "slime_part", 0.25F, 0.25F, 1); 
 
-	//Projectiles
+	//Projectiles //#TODO probably will be changed to registerSized, tweak values
 	public static final RegistryObject<EntityType<ProjectileBubble>> PROJECTILE_BUBBLE = ENTITY_TYPES.register("projectile_bubble",
 			() -> EntityType.Builder.<ProjectileBubble>of(ProjectileBubble::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10) //.fireImmune() I guess it isn't though
 					.build(CQRMain.prefix("projectile_bubble").toString()));
@@ -46,6 +47,10 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<ProjectileEarthQuake>> PROJECTILE_EARTH_QUAKE = ENTITY_TYPES.register("projectile_earth_quake",
 			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_earth_quake").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileCannonBall>> PROJECTILE_CANNON_BALL = ENTITY_TYPES.register("projectile_cannon_ball",
+			() -> EntityType.Builder.<ProjectileCannonBall>of(ProjectileCannonBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
+					.build(CQRMain.prefix("projectile_cannon_ball").toString()));
 
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);

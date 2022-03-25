@@ -34,7 +34,8 @@ public class ModelCannonBall<T extends ProjectileCannonBall> extends EntityModel
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	{
 		bb_main.render(matrixStack, buffer, packedLight, packedOverlay);
 	}
 

@@ -1,9 +1,13 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelCannonBall;
@@ -13,15 +17,27 @@ public class RenderProjectileCannonBall extends EntityRenderer<ProjectileCannonB
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/ball_cannon.png");
 
-	private final ModelBase model = new ModelCannonBall();
+	private final EntityModel model = new ModelCannonBall();
 
-	public RenderProjectileCannonBall(EntityRendererManager renderManager) {
+	public RenderProjectileCannonBall(EntityRendererManager renderManager)
+	{
 		super(renderManager);
 	}
 
 	@Override
-	public void doRender(ProjectileCannonBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
+	public void render(ProjectileCannonBall cannonBall, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+		matrixStack.pushPose();
+		RenderSystem.disableCull();
+		matrixStack.scale(0.875F, 0.875F, 0.875F);
+		matrixStack.scale(-1, -1, -1);
+
+		IVertexBuilder builder = buffer.getBuffer(RenderType.entityCutout(TEXTURE));
+		this.model.renderToBuffer(matrixStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
+		RenderSystem.enableCull();
+		matrixStack.popPose();
+		super.render(cannonBall, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+		/*GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.disableCull();
 		GlStateManager.scale(0.875F, 0.875F, 0.875F);
@@ -42,12 +58,12 @@ public class RenderProjectileCannonBall extends EntityRenderer<ProjectileCannonB
 
 		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		super.doRender(entity, x, y, z, entityYaw, partialTicks); */
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileCannonBall entity) {
+	public ResourceLocation getTextureLocation(ProjectileCannonBall entity)
+	{
 		return TEXTURE;
 	}
-
 }

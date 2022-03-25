@@ -35,7 +35,7 @@ public class ItemStaffGun extends ItemLore implements IRangedWeapon {
 		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, CQRSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isClientSide) {
-			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player, false);
+			ProjectileCannonBall ball = new ProjectileCannonBall(player, worldIn, false);
 			ball.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 0F);
 			worldIn.addFreshEntity(ball);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
@@ -46,7 +46,7 @@ public class ItemStaffGun extends ItemLore implements IRangedWeapon {
 	@Override
 	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
 		if (!worldIn.isClientSide) {
-			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter, false);
+			ProjectileCannonBall ball = new ProjectileCannonBall(shooter, worldIn, false);
 			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(3.5D);
