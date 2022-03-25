@@ -32,7 +32,7 @@ public class ItemStaffVampiric extends ItemLore implements IRangedWeapon {
 		player.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, player);
+			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(player, worldIn);
 			spell.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 2.0F, 0F);
 			worldIn.addFreshEntity(spell);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
@@ -45,7 +45,7 @@ public class ItemStaffVampiric extends ItemLore implements IRangedWeapon {
 		shooter.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, shooter);
+			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(shooter, worldIn);
 			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(0.75D);

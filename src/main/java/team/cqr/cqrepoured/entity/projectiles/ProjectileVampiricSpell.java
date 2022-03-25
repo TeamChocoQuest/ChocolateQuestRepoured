@@ -1,29 +1,35 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
-public class ProjectileVampiricSpell extends ProjectileBase {
+public class ProjectileVampiricSpell extends ProjectileBase
+{
 	private LivingEntity shooter;
 
-	public ProjectileVampiricSpell(World worldIn) {
-		super(worldIn);
+	public ProjectileVampiricSpell(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+		super(throwableEntity, world);
 	}
 
-	public ProjectileVampiricSpell(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
+	public ProjectileVampiricSpell(double pX, double pY, double pZ, World world) {
+		super(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), world);
 	}
 
-	public ProjectileVampiricSpell(World worldIn, LivingEntity shooter) {
-		super(worldIn, shooter);
+	public ProjectileVampiricSpell(LivingEntity shooter, World world) {
+		super(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), shooter, world);
 		this.shooter = shooter;
-		this.isImmuneToFire = false;
+		//this.isImmuneToFire = false;
 	}
 
-	@Override
+/*	@Override
 	protected void onHit(RayTraceResult result) {
 		if (!this.world.isRemote) {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
@@ -51,14 +57,51 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 
 			super.onHit(result);
 		}
+	} */
+
+	@Override
+	protected void onHitEntity(EntityRayTraceResult result)
+	{
+		if(result.getEntity() instanceof LivingEntity)
+		{
+			LivingEntity entity = (LivingEntity)result.getEntity();
+			if(entity.isBlocking())
+			{
+				this.remove();
+				return;
+			}
+			float damage = 4.0F;
+
+			if(entity == this.shooter) return;
+
+			entity.hurt(DamageSource.MAGIC, damage);
+
+			if(this.shooter != null && this.shooter.getHealth() < this.shooter.getMaxHealth())
+			{
+				this.shooter.heal(damage / 2);
+			}
+
+			this.remove();
+		}
+		super.onHitEntity(result);
 	}
 
 	@Override
 	protected void onUpdateInAir() {
-		if (this.world.isRemote) {
-			if (this.ticksExisted < 30) {
-				this.world.spawnParticle(ParticleTypes.PORTAL, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);
+		if (this.level.isClientSide) {
+			if (this.tickCount < 30) {
+				this.level.addParticle(ParticleTypes.PORTAL, this.position().x, this.position().y + 0.1D, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
+	}
+
+	@Override
+	protected void defineSynchedData() {
+
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }
