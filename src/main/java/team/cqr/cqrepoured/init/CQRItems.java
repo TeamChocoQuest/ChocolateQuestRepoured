@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
@@ -85,7 +85,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = null;
 
 	// Battle Axes
-	public static final RegistryObject<Item> BATTLE_AXE_BULL = registerItem("battle_axe_bull", () -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, props())); //TODO tweak stats
+	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = register("battle_axe_bull", prop -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, prop)); //TODO tweak stats
 
 	// Walker RegistryObject<Item>s
 	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = null;
@@ -140,19 +140,19 @@ public class CQRItems {
 	public static final RegistryObject<ItemStaffGun> STAFF_GUN = null; // #TODO TEXTURES
 
 	// Guns
-	public static final RegistryObject<Item> REVOLVER = registerItem("revolver", () -> new ItemRevolver(props()));
-	public static final RegistryObject<Item> CAPTAIN_REVOLVER = null;
+	public static final RegistryObject<ItemRevolver> REVOLVER = register("revolver", ItemRevolver::new);
+	public static final RegistryObject<ItemRevolver> CAPTAIN_REVOLVER = null;
 	public static final RegistryObject<ItemMusket> MUSKET = null;
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = null; // #TODO TEXTURES
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = null; // #TODO TEXTURES
-	public static final RegistryObject<Item> BULLET_IRON = registerItem("bullet_iron", () -> new ItemBullet(props()));
-	public static final RegistryObject<Item> BULLET_GOLD = registerItem("bullet_gold", () -> new ItemBullet(props()));;
-	public static final RegistryObject<Item> BULLET_DIAMOND = registerItem("bullet_diamond", () -> new ItemBullet(props()));;
-	public static final RegistryObject<Item> BULLET_FIRE = registerItem("bullet_fire", () -> new ItemBullet(props()));;
+	public static final RegistryObject<ItemBullet> BULLET_IRON = register("bullet_iron", ItemBullet::new);
+	public static final RegistryObject<ItemBullet> BULLET_GOLD = register("bullet_gold", ItemBullet::new);
+	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = register("bullet_diamond", ItemBullet::new);
+	public static final RegistryObject<ItemBullet> BULLET_FIRE = register("bullet_fire", ItemBullet::new);
 	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
 	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
-	public static final RegistryObject<Item> BUBBLE_PISTOL = registerItem("bubble_pistol", () -> new ItemBubblePistol(props()));
+	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = register("bubble_pistol", ItemBubblePistol::new);
 	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = null;
 
 	// Hookers
@@ -163,7 +163,7 @@ public class CQRItems {
 	// Single Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = null; // #TODO Make model centered on head // Abandon for now
 	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = null;
-	public static final RegistryObject<Item> BACKPACK = registerItem("backpack", () -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, props()));
+	public static final RegistryObject<ItemBackpack> BACKPACK = register("backpack", prop -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, prop));
 	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = null;
 	public static final RegistryObject<ItemCrown> KING_CROWN = null;
 
@@ -248,23 +248,16 @@ public class CQRItems {
 	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = null;
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = null;
 
-	public static RegistryObject<Item> registerItem(String name, Supplier<Item> item)
-	{
-		return ITEMS.register(name, item);
+	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier) {
+		return register(name, itemSupplier, CQRMain.CQR_ITEMS_TAB);
 	}
 
-	public static Item.Properties props()
-	{
-		return props(CQRMain.CQR_ITEMS_TAB);
-	}
-	
-	public static Item.Properties props(ItemGroup group)
-	{
-		return new Item.Properties().tab(group);
+	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier,
+			ItemGroup tab) {
+		return ITEMS.register(name, () -> itemSupplier.apply(new Item.Properties().tab(tab)));
 	}
 
-	public static void registerItems()
-	{
+	public static void registerItems() {
 		ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
