@@ -8,14 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
+import team.cqr.cqrepoured.inventory.AlchemyBagContainer;
 
 @OnlyIn(Dist.CLIENT)
-public class ScreenAlchemyBag extends ContainerScreen<ContainerAlchemyBag> {
+public class ScreenAlchemyBag extends ContainerScreen<AlchemyBagContainer> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/hopper.png");
 
-	public ScreenAlchemyBag(ContainerAlchemyBag container, PlayerInventory playerInv, ITextComponent title) {
+	public ScreenAlchemyBag(AlchemyBagContainer container, PlayerInventory playerInv, ITextComponent title) {
 		super(container, playerInv, title);
 		// TODO set titleLabelX and titleLabelY
 	}
