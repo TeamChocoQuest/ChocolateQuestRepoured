@@ -4,6 +4,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -24,7 +26,7 @@ public class BackpackInventory extends Inventory implements INamedContainerProvi
         super(size);
         this.stack = stack;
 
-        this.loadItems(getTagCompound(stack));
+        this.loadItems();
     }
 
     @Override
@@ -35,17 +37,19 @@ public class BackpackInventory extends Inventory implements INamedContainerProvi
         super.setChanged();
     }
 
-    public void loadItems(CompoundNBT compoundNBT)
+    public void loadItems()
     {
-        if(compoundNBT.hasUUID("Items"))
-        {
-            this.fromTag((ListNBT)compoundNBT.get("Items"));
-        }
+        //if(compoundNBT.hasUUID("Items"))
+        //{
+        //    this.fromTag((ListNBT)compoundNBT.get("Items"));
+        //}
+        ItemStackHelper.loadAllItems(getTagCompound(stack), this.items);
     }
 
     public void saveItems()
     {
-        getTagCompound(stack).put("Items", this.createTag());
+        //getTagCompound(stack).put("Items", this.createTag());
+        ItemStackHelper.saveAllItems(getTagCompound(stack), this.items);
     }
 
     public CompoundNBT getTagCompound(ItemStack stack)
