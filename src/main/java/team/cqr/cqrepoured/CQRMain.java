@@ -65,7 +65,7 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
-	public static final String VERSION = "2.6.7B";
+	public static final String VERSION = "2.6.8B";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
 	@Instance
