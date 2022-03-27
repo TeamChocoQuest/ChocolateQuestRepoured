@@ -14,17 +14,19 @@ import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 
+import java.util.Objects;
+
 public class ContainerBackpack extends Container {
 
 	private final IInventory inventory;
 
-	/** Client **/
-	public ContainerBackpack(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
-		this(containerID, playerInv, new Inventory(27));
+	public ContainerBackpack(final int containerID, PlayerInventory playerInv, PacketBuffer data)
+	{
+		this(containerID, playerInv, new BackpackInventory(27, playerInv.player.getMainHandItem()));
 	}
 
-	/** Server **/
-	public ContainerBackpack(final int containerID, PlayerInventory playerInv, IInventory inventory) {
+	public ContainerBackpack(final int containerID, PlayerInventory playerInv, IInventory inventory)
+	{
 		super(CQRContainerTypes.BACKPACK.get(), containerID);
 		this.inventory = inventory;
 

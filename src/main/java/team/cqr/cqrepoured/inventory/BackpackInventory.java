@@ -8,6 +8,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -22,17 +23,32 @@ public class BackpackInventory extends Inventory implements INamedContainerProvi
     {
         super(size);
         this.stack = stack;
-        //this.fromTag((ListNBT)getTagCompound(stack).get("Items"));
+
+        this.loadItems(getTagCompound(stack));
     }
 
     @Override
     public void setChanged()
     {
         //this.stack.getTag().put("Items", this.createTag());
+        saveItems();
         super.setChanged();
     }
 
-  /*  public CompoundNBT getTagCompound(ItemStack stack)
+    public void loadItems(CompoundNBT compoundNBT)
+    {
+        if(compoundNBT.hasUUID("Items"))
+        {
+            this.fromTag((ListNBT)compoundNBT.get("Items"));
+        }
+    }
+
+    public void saveItems()
+    {
+        getTagCompound(stack).put("Items", this.createTag());
+    }
+
+    public CompoundNBT getTagCompound(ItemStack stack)
     {
         if(stack.getTag() == null)
         {
@@ -41,7 +57,7 @@ public class BackpackInventory extends Inventory implements INamedContainerProvi
         }
 
         return stack.getTag();
-    } */
+    }
 
     @Override
     public ITextComponent getDisplayName()

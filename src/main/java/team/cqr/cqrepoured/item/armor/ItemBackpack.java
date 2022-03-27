@@ -35,9 +35,12 @@ public class ItemBackpack extends ArmorItem {
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if(!worldIn.isClientSide)
 		{
-			BackpackInventory.openGUI((ServerPlayerEntity)playerIn, playerIn.getUseItem());
-			//playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BACKPACK_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
-			return ActionResult.success(playerIn.getItemInHand(handIn));
+			if(handIn == Hand.MAIN_HAND)
+			{
+				BackpackInventory.openGUI((ServerPlayerEntity)playerIn, playerIn.getMainHandItem());
+				//playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BACKPACK_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
+				return ActionResult.success(playerIn.getItemInHand(handIn));
+			}
 		}
 		return ActionResult.fail(playerIn.getItemInHand(handIn));
 	}
