@@ -10,7 +10,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -26,7 +25,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
-import team.cqr.cqrepoured.inventory.BackpackInventory;
 import team.cqr.cqrepoured.item.ItemLore;
 
 import java.util.List;
@@ -45,12 +43,10 @@ public class ItemBackpack extends ArmorItem {
 		{
 			if(handIn == Hand.MAIN_HAND)
 			{
-				//BackpackInventory.openGUI((ServerPlayerEntity)playerIn, playerIn.getMainHandItem());
-				//NetworkHooks.openGui((ServerPlayerEntity)playerIn, new INamedContainerProvider());
 				NetworkHooks.openGui((ServerPlayerEntity) playerIn, new INamedContainerProvider() {
 					@Override
 					public ITextComponent getDisplayName() {
-						return new TranslationTextComponent("backpack");
+						return new TranslationTextComponent("backpack.container"); //#TODO name
 					}
 
 					@Nullable
@@ -59,7 +55,6 @@ public class ItemBackpack extends ArmorItem {
 						return CQRContainerTypes.BACKPACK.get().create(windowId, inventory);
 					}
 				});
-				//playerIn.openGui(CQRMain.INSTANCE, GuiHandler.BACKPACK_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
 				return ActionResult.success(playerIn.getItemInHand(handIn));
 			}
 		}

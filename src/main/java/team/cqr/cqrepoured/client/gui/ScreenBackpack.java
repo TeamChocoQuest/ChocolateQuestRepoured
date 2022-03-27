@@ -8,14 +8,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.inventory.ContainerBackpack;
+import team.cqr.cqrepoured.inventory.BackpackContainer;
 
 @OnlyIn(Dist.CLIENT)
-public class ScreenBackpack extends ContainerScreen<ContainerBackpack> {
+public class ScreenBackpack extends ContainerScreen<BackpackContainer> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/shulker_box.png");
 
-	public ScreenBackpack(ContainerBackpack container, PlayerInventory playerInv, ITextComponent title) {
+	public ScreenBackpack(BackpackContainer container, PlayerInventory playerInv, ITextComponent title) {
 		super(container, playerInv, title);
 		// TODO set titleLabelX and titleLabelY
 	}
