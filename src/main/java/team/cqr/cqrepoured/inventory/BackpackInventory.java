@@ -73,7 +73,8 @@ public class BackpackInventory extends Inventory implements INamedContainerProvi
     @Override
     public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new ContainerBackpack(windowId, playerInventory, this);
+        //return new ContainerBackpack(windowId, playerInventory, this);
+    	return null;
     }
 
     public static void openGUI(ServerPlayerEntity serverPlayerEntity, ItemStack stack)
