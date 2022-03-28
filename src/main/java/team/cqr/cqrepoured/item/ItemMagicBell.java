@@ -6,7 +6,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,37 +22,41 @@ import java.util.Objects;
 
 public class ItemMagicBell extends ItemLore {
 
+	public ItemMagicBell(Properties properties)
+	{
+		super(properties);
+	}
 	@Override
-	public UseAction getItemUseAction(ItemStack stack) {
+	public UseAction getUseAnimation(ItemStack stack) {
 		return UseAction.BOW;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 20;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		playerIn.startUsingItem(handIn);
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (!worldIn.isRemote) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+		if (!worldIn.isClientSide) {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
-			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(new BlockPos(entityLiving));
+			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(entityLiving.blockPosition());
 
 			protectedRegions.stream().map(ProtectedRegion::getEntityDependencies).flatMap(Collection::stream).map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid)).filter(Objects::nonNull)
-					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000, entity.getEntityId()));
+					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000, entity.getId()));
 
 			protectedRegions.stream().map(ProtectedRegion::getBlockDependencies).flatMap(Collection::stream)
-					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0, pos.getX(), pos.getY(), pos.getZ()));
+					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0, pos.getX(), pos.getY(), pos.getZ()));
 
 			protectedRegions.forEach(pr -> {
 				BlockPos start = pr.getStartPos();
-				BlockPos size = pr.getEndPos().subtract(pr.getStartPos()).add(1, 1, 1);
+				BlockPos size = pr.getEndPos().subtract(pr.getStartPos()).offset(1, 1, 1);
 				byte[] protectionStates = pr.getProtectionStates();
 				for (int i = 0; i < protectionStates.length; i++) {
 					byte protectionState = protectionStates[i];
@@ -62,17 +65,17 @@ public class ItemMagicBell extends ItemLore {
 						int x = i / size.getZ() / size.getY();
 						int y = i / size.getZ() % size.getY();
 						int z = i % size.getZ();
-						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, color, start.getX() + x, start.getY() + y, start.getZ() + z);
+						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0, 1, 0, 0, 0, 200, color, start.getX() + x, start.getY() + y, start.getZ() + z);
 					}
 				}
 			});
 
-			worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, CQRSounds.BELL_USE, entityLiving.getSoundSource(), 1.0F, 1.0F);
+			worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CQRSounds.BELL_USE, entityLiving.getSoundSource(), 1.0F, 1.0F);
 			if (entityLiving instanceof PlayerEntity) {
 				if (protectedRegions.isEmpty()) {
-					((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
+					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 60);
 				} else {
-					((PlayerEntity) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 200);
+					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 200);
 				}
 			}
 		}
