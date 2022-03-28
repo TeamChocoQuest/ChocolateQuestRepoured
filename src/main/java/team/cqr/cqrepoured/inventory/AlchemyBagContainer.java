@@ -46,11 +46,9 @@ public class AlchemyBagContainer extends Container {
 		{
 			if(k != currentItem)
 			{
-				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
-			}
-			else
-			{
-				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142)
+				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 109));
+			} else {
+				this.addSlot(new Slot(playerInv, k, 8 + k * 18, 109)
 				{
 					@Override
 					public boolean mayPickup(PlayerEntity playerIn) {
