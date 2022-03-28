@@ -9,12 +9,12 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class ItemLongshot extends ItemHookshotBase {
-	public ItemLongshot() {
-		super("longshot");
+	public ItemLongshot(Properties properties) {
+		super("longshot", properties);
 	}
 
 	@Override
-	public String getTranslationKey() {
+	public String getDescriptionId() {
 		return "description.longshot.name";
 	}
 
