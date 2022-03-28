@@ -338,51 +338,6 @@
 				}
 			}
 		},
-		"animation.exterminator.punch": {
-			"animation_length": 0.76,
-			"bones": {
-				"bodyandwaist": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.32": {
-							"vector": [0, 20, 0]
-						},
-						"0.64": {
-							"vector": [0, 0, 0]
-						}
-					}
-				},
-				"arm_left": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.24": {
-							"vector": [-22.5, -30, 0]
-						},
-						"0.48": {
-							"vector": [-45, 20, 0]
-						},
-						"0.68": {
-							"vector": [0, 0, 0]
-						}
-					},
-					"scale": {
-						"0.0": {
-							"vector": [1, 1, 1]
-						},
-						"0.44": {
-							"vector": [1, 1.3, 1]
-						},
-						"0.68": {
-							"vector": [1, 1, 1]
-						}
-					}
-				}
-			}
-		},
 		"animation.exterminator.death": {
 			"animation_length": 4.72,
 			"bones": {
@@ -504,6 +459,197 @@
 						},
 						"1.04": {
 							"vector": [0, 0, 140]
+						}
+					}
+				}
+			}
+		},
+		"animation.exterminator.punch": {
+			"animation_length": 0.76,
+			"bones": {
+				"bodyandwaist": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [0, 20, 0]
+						},
+						"0.64": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"arm_left": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [-22.5, -30, 0]
+						},
+						"0.48": {
+							"vector": [-45, 20, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.44": {
+							"vector": [1, 1.3, 1]
+						},
+						"0.68": {
+							"vector": [1, 1, 1]
+						}
+					}
+				}
+			}
+		},
+		"animation.exterminator.walk": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"leg_left": {
+					"rotation": {
+						"0.0": {
+							"vector": [22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-22.5, 0, 0]
+						},
+						"2.08": {
+							"vector": [22.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [0, 1, 0]
+						},
+						"1.04": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"leg_right": {
+					"rotation": {
+						"0.0": {
+							"vector": [-22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [22.5, 0, 0]
+						},
+						"2.08": {
+							"vector": [-22.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.04": {
+							"vector": [0, 0, 0]
+						},
+						"1.56": {
+							"vector": [0, 1, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"body": {
+					"rotation": {
+						"0.04": {
+							"vector": [0, 0, 12.5]
+						},
+						"1.04": {
+							"vector": [0, 0, -12.5]
+						},
+						"2.08": {
+							"vector": [0, 0, 12.5]
+						}
+					}
+				},
+				"head": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -12.5]
+						},
+						"1.04": {
+							"vector": [0, 0, 12.5]
+						},
+						"2.08": {
+							"vector": [0, 0, -12.5]
+						}
+					}
+				}
+			}
+		},
+		"animation.exterminator.walk_legs_only": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"leg_left": {
+					"rotation": {
+						"0.0": {
+							"vector": [22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-22.5, 0, 0]
+						},
+						"2.08": {
+							"vector": [22.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [0, 1, 0]
+						},
+						"1.04": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"leg_right": {
+					"rotation": {
+						"0.0": {
+							"vector": [-22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [22.5, 0, 0]
+						},
+						"2.08": {
+							"vector": [-22.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.04": {
+							"vector": [0, 0, 0]
+						},
+						"1.56": {
+							"vector": [0, 1, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 0]
 						}
 					}
 				}
