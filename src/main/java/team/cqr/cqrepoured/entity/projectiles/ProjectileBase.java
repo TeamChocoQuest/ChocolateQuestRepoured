@@ -27,16 +27,16 @@ public abstract class ProjectileBase extends ThrowableEntity {
 		this.isImmuneToFire = true;
 	} */
 
-	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+	protected ProjectileBase(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
 	}
 
-	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, double pX, double pY, double pZ, World world) {
+	protected ProjectileBase(EntityType<? extends ProjectileBase> throwableEntity, double pX, double pY, double pZ, World world) {
 		this(throwableEntity, world);
 		this.setPos(pX, pY, pZ);
 	}
 
-	protected ProjectileBase(EntityType<? extends ThrowableEntity> throwableEntity, LivingEntity shooter, World world) {
+	protected ProjectileBase(EntityType<? extends ProjectileBase> throwableEntity, LivingEntity shooter, World world) {
 		this(throwableEntity, shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ(), world);
 		this.setOwner(shooter);
 	}
@@ -59,10 +59,17 @@ public abstract class ProjectileBase extends ThrowableEntity {
 	@Override
 	protected void onHitBlock(BlockRayTraceResult result) {
 		BlockState state = this.level.getBlockState(result.getBlockPos());
-
-		if (!state.getBlock().defaultBlockState().getMaterial().blocksMotion()) {
+		state.onProjectileHit(this.level, state, result, this);
+		if (state.getMaterial().blocksMotion()) {
+			this.onDestroyedByBlockImpact();
 			this.remove();
 		}
+		
+		super.onHitBlock(result);
+	}
+
+	protected void onDestroyedByBlockImpact() {
+		
 	}
 
 	protected void onUpdateInAir() {

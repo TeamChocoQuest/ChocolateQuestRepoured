@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
@@ -19,7 +18,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	private boolean isFast = false;
 	protected LivingEntity shooter;
 
-	public ProjectileCannonBall(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+	public ProjectileCannonBall(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
 	}
 

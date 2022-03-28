@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
@@ -22,7 +21,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	private int bulletType;
 	private LivingEntity shooter;
 
-	public ProjectileBullet(EntityType<? extends ThrowableEntity> throwableEntity, World world)
+	public ProjectileBullet(EntityType<? extends ProjectileBase> throwableEntity, World world)
 	{
 		super(throwableEntity, world);
 	}

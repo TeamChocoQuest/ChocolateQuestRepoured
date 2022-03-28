@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -7,8 +9,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class ProjectileFireWallPart extends ProjectileBase {
 

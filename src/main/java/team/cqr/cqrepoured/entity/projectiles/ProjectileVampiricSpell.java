@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
@@ -15,7 +14,7 @@ public class ProjectileVampiricSpell extends ProjectileBase
 {
 	private LivingEntity shooter;
 
-	public ProjectileVampiricSpell(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+	public ProjectileVampiricSpell(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
 	}
 

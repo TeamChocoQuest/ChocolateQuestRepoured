@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.entity.projectiles;
 import net.minecraft.block.AirBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -20,7 +19,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 	private LivingEntity shooter;
 
-	public ProjectileWeb(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+	public ProjectileWeb(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
 	}
 

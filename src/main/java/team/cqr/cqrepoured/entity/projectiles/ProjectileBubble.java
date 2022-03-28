@@ -4,13 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -24,7 +24,7 @@ public class ProjectileBubble extends ProjectileBase {
 	private LivingEntity shooter;
 	protected float damage;
 
-	public ProjectileBubble(EntityType<? extends ThrowableEntity> throwableEntity, World world) {
+	public ProjectileBubble(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
 	}
 
@@ -56,6 +56,32 @@ public class ProjectileBubble extends ProjectileBase {
 	} */
 
 	@Override
+	protected void onDestroyedByBlockImpact() {
+		super.onDestroyedByBlockImpact();
+		
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, -0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, -0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, -0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, -0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, 0);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, -0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0.05);
+		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, -0.05);
+	}
+	
+	@Override
 	protected void onHit(RayTraceResult pResult)
 	{
 		RayTraceResult.Type raytraceresult$type = pResult.getType();
@@ -66,6 +92,8 @@ public class ProjectileBubble extends ProjectileBase {
 			{
 				this.onHitEntity((EntityRayTraceResult)pResult);
 			}
+		} else if (raytraceresult$type == RayTraceResult.Type.BLOCK) {
+			super.onHitBlock((BlockRayTraceResult) pResult);
 		}
 		super.onHit(pResult);
 	}

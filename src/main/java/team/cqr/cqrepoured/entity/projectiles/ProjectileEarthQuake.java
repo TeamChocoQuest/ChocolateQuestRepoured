@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import java.util.List;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
@@ -7,7 +9,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.particles.BlockParticleData;
@@ -15,29 +16,23 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
-import java.util.List;
-
-public class ProjectileEarthQuake extends ProjectileEntity {
+public class ProjectileEarthQuake extends ThrowableEntity {
 	private int lifeTime = 60;
-	@SuppressWarnings("unused")
-	private LivingEntity thrower;
 	private double throwY = 0.3D;
 
 	public void setThrowHeight(double amount) {
 		this.throwY = amount;
 	}
 
-	public ProjectileEarthQuake(EntityType<? extends ProjectileEntity> throwableEntity, World worldIn) {
-		super(throwableEntity, worldIn);
+	public ProjectileEarthQuake(EntityType<? extends ProjectileEarthQuake> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	public ProjectileEarthQuake(World worldIn, double x, double y, double z) 
@@ -49,7 +44,7 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 	public ProjectileEarthQuake(World worldIn, LivingEntity throwerIn) {
 		this(worldIn, throwerIn.getX(), throwerIn.getEyeY() - (double)0.1F, throwerIn.getZ());
 	    this.setOwner(throwerIn);
-		this.thrower = throwerIn;
+		this.setOwner(throwerIn);
 
 		//this.posY -= 1.2D;
 		//this.setPos(this.getX(), this.getY() - 1.2D, this.getZ());
@@ -60,11 +55,6 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 		//this.motionZ = 0.1D;
 	}
 
-	public LivingEntity getThrower()
-	{
-		return this.thrower;
-	}
-	
 	/*@Override
 	protected void onHit(RayTraceResult pResult) {
 	      RayTraceResult.Type raytraceresult$type = pResult.getType();
@@ -78,7 +68,6 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 	public void shoot(double pX, double pY, double pZ, float pVelocity, float pInaccuracy) {
 	      Vector3d vector3d = (new Vector3d(pX, pY, pZ)).normalize().add(this.random.nextGaussian() * (double)0.0075F * (double)pInaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)pInaccuracy, this.random.nextGaussian() * (double)0.0075F * (double)pInaccuracy).scale((double)pVelocity);
 	      this.setDeltaMovement(vector3d);
-	      float f = MathHelper.sqrt(getHorizontalDistanceSqr(vector3d));
 	      this.yRot = (float)(MathHelper.atan2(vector3d.x, vector3d.z) * (double)(180F / (float)Math.PI));
 	      //this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
 	      this.yRotO = this.yRot;
@@ -104,6 +93,7 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 				//setDeltaMovement(getDeltaMovement().x, 0, getDeltaMovement().z);
 			}
 		}
+		super.onHitEntity(entityResult);
 	}
 	
 	//@Override
@@ -130,7 +120,7 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 		//this.motionY *= 1.01D;
 		//this.motionZ *= 1.01D;
 
-		if (this.getThrower() != null && this.getThrower().isDeadOrDying()) {
+		if (this.getOwner() != null && !this.getOwner().isAlive()) {
 			this.remove();
 		}
 
@@ -142,8 +132,8 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 			//this.updateMovement();
 			this.move(MoverType.SELF, getDeltaMovement());
 			this.onUpdateInAir();
-			super.tick();
 		}
+		super.tick();
 	}
 	
  /*   public void updateMovement()
@@ -194,10 +184,10 @@ public class ProjectileEarthQuake extends ProjectileEntity {
 		List<Entity> list = this.level.getEntitiesOfClass(LivingEntity.class, var3);
 
 		for (Entity entity : list) {
-			if (entity instanceof LivingEntity && entity != this.getThrower() && !this.level.isClientSide && entity.isOnGround()) {
+			if (entity instanceof LivingEntity && entity != this.getOwner() && !this.level.isClientSide && entity.isOnGround()) {
 				entity.setDeltaMovement(entity.getDeltaMovement().x, entity.getDeltaMovement().y + this.getEntityThrowDistance(), entity.getDeltaMovement().z);
 				//entity.motionY += this.getEntityThrowDistance();
-				entity.hurt(DamageSource.indirectMagic(this, this.getThrower()), 1.0F);
+				entity.hurt(DamageSource.indirectMagic(this, this.getOwner()), 1.0F);
 			}
 		}
 
