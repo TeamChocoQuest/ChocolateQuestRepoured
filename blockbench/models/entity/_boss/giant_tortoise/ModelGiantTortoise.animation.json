@@ -730,6 +730,76 @@
 					}
 				}
 			}
+		},
+		"animation.ModelGiantTortoise.walk": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"legJointFR": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -22.5, 0]
+						},
+						"0.52": {
+							"vector": [-11.25, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"2.0": {
+							"vector": [0, -22.5, 0]
+						}
+					}
+				},
+				"legJointFL": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -22.5, 0]
+						},
+						"1.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"1.52": {
+							"vector": [-11.25, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, -22.5, 0]
+						}
+					}
+				},
+				"legJointBR": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"1.0": {
+							"vector": [0, -22.5, 0]
+						},
+						"1.52": {
+							"vector": [-11.25, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 22.5, 0]
+						}
+					}
+				},
+				"legJointBL": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 22.5, 0]
+						},
+						"0.52": {
+							"vector": [-11.25, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -22.5, 0]
+						},
+						"2.0": {
+							"vector": [0, 22.5, 0]
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2
