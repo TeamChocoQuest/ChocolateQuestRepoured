@@ -1,19 +1,15 @@
 package team.cqr.cqrepoured.item;
 
-import net.java.games.input.Keyboard;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,36 +17,36 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemPotionHealing extends Item {
+public class ItemPotionHealing extends ItemLore {
 
-	public ItemPotionHealing() {
-		this.setMaxStackSize(16);
+	public ItemPotionHealing(Properties properties) {
+		super(properties.stacksTo(16));
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 24;
 	}
 
 	@Override
-	public UseAction getItemUseAction(ItemStack stack) {
+	public UseAction getUseAnimation(ItemStack stack) {
 		return UseAction.DRINK;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		if (playerIn.getHealth() < playerIn.getMaxHealth()) {
-			playerIn.setActiveHand(handIn);
-			return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+			playerIn.startUsingItem(handIn);
+			return ActionResult.success(playerIn.getItemInHand(handIn));
 		}
-		return new ActionResult<>(ActionResultType.FAIL, playerIn.getHeldItem(handIn));
+		return ActionResult.fail(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		stack.shrink(1);
 
-		if (!worldIn.isRemote) {
+		if (!worldIn.isClientSide) {
 			if (entityLiving instanceof PlayerEntity) {
 				PlayerEntity player = (PlayerEntity) entityLiving;
 				player.heal(4.0F);
@@ -60,8 +56,8 @@ public class ItemPotionHealing extends Item {
 
 					if (stack.isEmpty()) {
 						return bottle;
-					} else if (!player.addItemStackToInventory(bottle)) {
-						worldIn.spawnEntity(new ItemEntity(worldIn, player.posX, player.posY, player.posZ, bottle));
+					} else if (!player.addItem(bottle)) {
+						worldIn.addFreshEntity(new ItemEntity(worldIn, player.getX(), player.getY(), player.getZ(), bottle));
 					}
 				}
 			} else {
@@ -74,12 +70,13 @@ public class ItemPotionHealing extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	/*	if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.healing_potion.name"));
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		}
+		} */
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 	}
 
 }
