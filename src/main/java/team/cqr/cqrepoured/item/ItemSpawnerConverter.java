@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.item;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
@@ -16,31 +15,33 @@ import team.cqr.cqrepoured.util.SpawnerFactory;
 
 public class ItemSpawnerConverter extends Item {
 
-	public ItemSpawnerConverter() {
-		this.setMaxStackSize(1);
+	public ItemSpawnerConverter(Properties properties)
+	{
+		super(properties.stacksTo(1));
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
-	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
-		Block block = world.getBlockState(pos).getBlock();
-		return block != CQRBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
+	public boolean canAttackBlock(BlockState state, World level, BlockPos pos, PlayerEntity player) {
+		Block block = level.getBlockState(pos).getBlock();
+		return block != CQRBlocks.SPAWNER.get() && block != Blocks.SPAWNER;
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
-		if (player.isCreative()) {
-			Block block = world.getBlockState(pos).getBlock();
-			if (block == CQRBlocks.SPAWNER || block == Blocks.MOB_SPAWNER) {
-				if (!world.isRemote) {
-					if (block == CQRBlocks.SPAWNER) {
+	public ActionResultType useOn(ItemUseContext context) {
+		if (context.getPlayer().isCreative()) {
+			Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
+			if (block == CQRBlocks.SPAWNER.get() || block == Blocks.SPAWNER) {
+				if (!context.getLevel().isClientSide) {
+					if (block == CQRBlocks.SPAWNER.get()) {
 						CQRMain.logger.info("Converting: CQR -> Vanilla");
-						SpawnerFactory.convertCQSpawnerToVanillaSpawner(world, pos, null);
+						SpawnerFactory.convertCQSpawnerToVanillaSpawner(context.getLevel(), context.getClickedPos(), null);
 					}
-					if (block == Blocks.MOB_SPAWNER) {
+					if (block == Blocks.SPAWNER) {
 						CQRMain.logger.info("Converting: Vanilla -> CQR");
-						SpawnerFactory.convertVanillaSpawnerToCQSpawner(world, pos);
+						SpawnerFactory.convertVanillaSpawnerToCQSpawner(context.getLevel(), context.getClickedPos());
 					}
-					player.getCooldownTracker().setCooldown(this, 10);
+					context.getPlayer().getCooldowns().addCooldown(this, 10);
 				}
 				return ActionResultType.SUCCESS;
 			}
