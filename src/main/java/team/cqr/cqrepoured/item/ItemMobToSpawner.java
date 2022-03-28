@@ -19,8 +19,8 @@ import team.cqr.cqrepoured.util.SpawnerFactory;
 
 public class ItemMobToSpawner extends Item {
 
-	public ItemMobToSpawner() {
-		this.setMaxStackSize(1);
+	public ItemMobToSpawner(Properties properties) {
+		super(properties.stacksTo(1));
 	}
 
 	/*
@@ -32,13 +32,13 @@ public class ItemMobToSpawner extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
 		if (player.isCreative()) {
-			if (!player.world.isRemote && !(entity instanceof PartEntity)) {
-				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
-				entity.setDead();
+			if (!player.level.isClientSide && !(entity instanceof PartEntity)) {
+				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.level, entity.blockPosition());
+				entity.remove();
 				for (Entity passenger : entity.getPassengers()) {
-					passenger.setDead();
+					passenger.remove();
 				}
-				this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
+				this.spawnAdditions(entity.level, entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ());
 			}
 			return true;
 		}
@@ -46,19 +46,19 @@ public class ItemMobToSpawner extends Item {
 	}
 
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-		if (state.getBlock() == CQRBlocks.SPAWNER && !worldIn.isRemote) {
-			TileEntitySpawner spawner = (TileEntitySpawner) worldIn.getTileEntity(pos);
+	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+		if (state.getBlock() == CQRBlocks.SPAWNER.get() && !worldIn.isClientSide) {
+			TileEntitySpawner spawner = (TileEntitySpawner) worldIn.getBlockEntity(pos);
 			spawner.forceTurnBackIntoEntity();
 		}
-		return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+		return super.mineBlock(stack, worldIn, state, pos, entityLiving);
 	}
 
 	private void spawnAdditions(World world, double x, double y, double z) {
-		if (!world.isRemote) {
-			((ServerWorld) world).spawnParticle(ParticleTypes.SMOKE_NORMAL, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-			((ServerWorld) world).spawnParticle(ParticleTypes.LAVA, x, y, z, 8, 0.25D, 0.25D, 0.25D, 0.0D);
-			world.playSound(null, x, y, z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.8F, 0.6F + itemRand.nextFloat() * 0.2F);
+		if (!world.isClientSide) {
+			((ServerWorld) world).sendParticles(ParticleTypes.SMOKE, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			((ServerWorld) world).sendParticles(ParticleTypes.LAVA, x, y, z, 8, 0.25D, 0.25D, 0.25D, 0.0D);
+			world.playSound(null, x, y, z, SoundEvents.ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.8F, 0.6F + random.nextFloat() * 0.2F);
 		}
 	}
 
