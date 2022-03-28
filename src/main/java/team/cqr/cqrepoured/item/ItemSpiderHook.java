@@ -8,12 +8,12 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderHook;
 
 public class ItemSpiderHook extends ItemHookshotBase {
 
-	public ItemSpiderHook() {
-		super("spiderhook");
+	public ItemSpiderHook(Properties properties) {
+		super("spiderhook", properties);
 	}
 
 	@Override
-	public String getTranslationKey() {
+	public String getDescriptionId() {
 		return "description.spiderhook.name";
 	}
 
