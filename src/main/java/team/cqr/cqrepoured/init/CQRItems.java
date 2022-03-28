@@ -245,7 +245,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemBadge> BADGE = null;
 	public static final RegistryObject<ItemPathTool> PATH_TOOL = null;
 	public static final RegistryObject<ItemShieldDummy> DUMMY_SHIELD = null;
-	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = null;
+	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = register("alchemy_bag", ItemAlchemyBag::new);
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = null;
 
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier) {
