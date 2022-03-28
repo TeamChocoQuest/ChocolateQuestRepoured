@@ -1,15 +1,22 @@
 package team.cqr.cqrepoured.item.gun;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -22,9 +29,6 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.ItemLore;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemRevolver extends ItemLore implements IRangedWeapon {
 
@@ -39,9 +43,9 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		tooltip.add(new StringTextComponent("5.0 " + new TranslationTextComponent("description.bullet_damage.name")).withStyle(TextFormatting.BLUE));
-		tooltip.add(new StringTextComponent("-30 " + new TranslationTextComponent("description.fire_rate.name")).withStyle(TextFormatting.RED));
-		tooltip.add(new StringTextComponent("-50" + "% " + new TranslationTextComponent("description.accuracy.name")).withStyle(TextFormatting.RED));
+		tooltip.add((new TranslationTextComponent("description.bullet_damage.name", 5)).withStyle(TextFormatting.BLUE));
+		tooltip.add((new TranslationTextComponent("description.fire_rate.name", -30)).withStyle(TextFormatting.RED));
+		tooltip.add((new TranslationTextComponent("description.accuracy.name", -50)).withStyle(TextFormatting.RED));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}
