@@ -21,8 +21,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
-import team.cqr.cqrepoured.init.CQRContainerTypes;
-import team.cqr.cqrepoured.inventory.AlchemyBagContainer;
+import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
 
 import javax.annotation.Nullable;
 
@@ -50,7 +49,7 @@ public class ItemAlchemyBag extends ItemLore {
 					@Override
 					public Container createMenu(int windowId, PlayerInventory inventory, PlayerEntity player) {
 						//return CQRContainerTypes.ALCHEMY_BAG.get().create(windowId, inventory);
-						return new AlchemyBagContainer(windowId, inventory, handIn);
+						return new ContainerAlchemyBag(windowId, inventory, handIn);
 					}
 				}, b -> b.writeInt(handIn == Hand.MAIN_HAND ? 0 : 1));
 				return ActionResult.success(playerIn.getItemInHand(handIn));
