@@ -461,7 +461,7 @@
 				}
 			}
 		},
-		"triton.idle.beard": {
+		"animation.triton.idle.beard": {
 			"loop": true,
 			"animation_length": 2.08,
 			"bones": {
@@ -573,6 +573,90 @@
 						"2.08": {
 							"vector": [0, 0, 0],
 							"easing": "linear"
+						}
+					}
+				}
+			}
+		},
+		"animation.triton.walk": {
+			"loop": true,
+			"animation_length": 1.04,
+			"bones": {
+				"tritonBodyLower": {
+					"position": {
+						"0.0": {
+							"vector": [-0.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [0.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-0.5, 0, 0]
+						}
+					}
+				},
+				"trionBodyLowerMiddle": {
+					"position": {
+						"0.0": {
+							"vector": [-1.5, 0, 0]
+						},
+						"0.52": {
+							"vector": [1.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-1.5, 0, 0]
+						}
+					}
+				},
+				"tritonBodyLowerBottom": {
+					"position": {
+						"0.0": {
+							"vector": [-1, 0, 0]
+						},
+						"0.52": {
+							"vector": [1, 0, 0]
+						},
+						"1.04": {
+							"vector": [-1, 0, 0]
+						}
+					}
+				},
+				"tritonTail": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -25, 0]
+						},
+						"0.52": {
+							"vector": [0, 25, 0]
+						},
+						"1.04": {
+							"vector": [0, -25, 0]
+						}
+					}
+				},
+				"tritonTailMiddle": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -17.5, 0]
+						},
+						"0.52": {
+							"vector": [0, 17.5, 0]
+						},
+						"1.04": {
+							"vector": [0, -17.5, 0]
+						}
+					}
+				},
+				"tritonTailTip": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -12.5, 0]
+						},
+						"0.52": {
+							"vector": [0, 12.5, 0]
+						},
+						"1.04": {
+							"vector": [0, -12.5, 0]
 						}
 					}
 				}
