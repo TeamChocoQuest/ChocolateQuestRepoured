@@ -10,12 +10,12 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
  */
 public class ItemHookshot extends ItemHookshotBase {
 
-	public ItemHookshot() {
-		super("hookshot");
+	public ItemHookshot(Properties properties) {
+		super("hookshot", properties);
 	}
 
 	@Override
-	public String getTranslationKey() {
+	public String getDescriptionId() {
 		return "description.hookshot.name";
 	}
 
