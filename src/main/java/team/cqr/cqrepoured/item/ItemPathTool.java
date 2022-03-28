@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResult;
@@ -20,14 +21,14 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.pathtool.CapabilityPathProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
-import team.cqr.cqrepoured.util.GuiHandler;
 
 import javax.annotation.Nullable;
 
 public class ItemPathTool extends ItemLore {
 
-	public ItemPathTool() {
-		this.setMaxStackSize(1);
+	public ItemPathTool(Properties properties) {
+		super(properties.stacksTo(1));
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -36,16 +37,16 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	public static CQRNPCPath getPath(ItemStack stack) {
-		return stack.getCapability(CapabilityPathProvider.PATH, null).getPath();
+		return stack.getCapability(CapabilityPathProvider.PATH).resolve().get().getPath();
 	}
 
 	public static void setSelectedNode(ItemStack stack, CQRNPCPath.PathNode node) {
-		stack.getCapability(CapabilityPathProvider.PATH, null).setSelectedNode(node);
+		stack.getCapability(CapabilityPathProvider.PATH).resolve().get().setSelectedNode(node);
 	}
 
 	@Nullable
 	public static CQRNPCPath.PathNode getSelectedNode(ItemStack stack) {
-		return stack.getCapability(CapabilityPathProvider.PATH, null).getSelectedNode();
+		return stack.getCapability(CapabilityPathProvider.PATH).resolve().get().getSelectedNode();
 	}
 
 	@Override
@@ -53,16 +54,16 @@ public class ItemPathTool extends ItemLore {
 		/*
 		 * sneak + left click -> apply path points to entity left click -> get path points from entity
 		 */
-		if (!player.world.isRemote && entity instanceof AbstractEntityCQR) {
-			if (player.isSneaking()) {
+		if (!player.level.isClientSide && entity instanceof AbstractEntityCQR) {
+			if (player.isCrouching()) {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
-				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack), pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ORIGIN);
-				((ServerWorld) player.world).spawnParticle((ServerPlayerEntity) player, ParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
-				player.sendMessage(new StringTextComponent("Applied path!"));
+				((AbstractEntityCQR) entity).getPath().copyFrom(getPath(stack), pos != null ? new BlockPos(-pos.getX(), -pos.getY(), -pos.getZ()) : BlockPos.ZERO);
+				((ServerWorld) player.level).sendParticles((ServerPlayerEntity) player, ParticleTypes.HAPPY_VILLAGER, false, entity.getX(), entity.getY() + 0.5D, entity.getZ(), 8, 0.5D, 0.5D, 0.5D, 0.1D);
+				player.sendMessage(new StringTextComponent("Applied path!"), player.getUUID());
 			} else {
 				BlockPos pos = ((AbstractEntityCQR) entity).getHomePositionCQR();
-				getPath(stack).copyFrom(((AbstractEntityCQR) entity).getPath(), pos != null ? pos : BlockPos.ORIGIN);
-				player.sendMessage(new StringTextComponent("Copied path!"));
+				getPath(stack).copyFrom(((AbstractEntityCQR) entity).getPath(), pos != null ? pos : BlockPos.ZERO);
+				player.sendMessage(new StringTextComponent("Copied path!"), player.getUUID());
 			}
 		}
 
@@ -70,29 +71,34 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
+	public ActionResultType useOn(ItemUseContext context) {
 		/*
 		 * sneak + right click -> edit existing position right click -> select existing position or add new position
 		 */
-		ItemStack stack = player.getHeldItem(hand);
-		BlockPos position = pos.offset(side);
+		PlayerEntity player = context.getPlayer();
+		Hand hand = context.getHand();
+		BlockPos pos = context.getClickedPos();
+		Direction side = context.getClickedFace();
+
+		ItemStack stack = player.getItemInHand(hand);
+		BlockPos position = pos.relative(side);
 		CQRNPCPath path = getPath(stack);
 		CQRNPCPath.PathNode node = path.getNode(position);
 		CQRNPCPath.PathNode selectedNode = getSelectedNode(stack);
 
-		if (world.isRemote) {
+		if (context.getLevel().isClientSide) {
 			if (node == null) {
 				CQRMain.proxy.openGui(GuiHandler.ADD_PATH_NODE_GUI_ID, player, world, hand.ordinal(), selectedNode != null ? selectedNode.getIndex() : -1, position.getX(), position.getY(), position.getZ());
 			}
 		} else if (node != null) {
-			if (selectedNode != null && player.isSneaking()) {
+			if (selectedNode != null && player.isCrouching()) {
 				if (selectedNode.addConnectedNode(node, false)) {
 					setSelectedNode(stack, node);
-					player.sendMessage(new StringTextComponent("Added connection!"));
+					player.sendMessage(new StringTextComponent("Added connection!"), player.getUUID());
 				}
 			} else {
 				setSelectedNode(stack, node);
-				player.sendMessage(new StringTextComponent("Selected node!"));
+				player.sendMessage(new StringTextComponent("Selected node!"), player.getUUID());
 			}
 		}
 
@@ -100,25 +106,25 @@ public class ItemPathTool extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		/*
 		 * sneak + right click -> delete path
 		 */
-		if (!worldIn.isRemote && playerIn.isSneaking()) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
+		if (!worldIn.isClientSide && playerIn.isCrouching()) {
+			ItemStack stack = playerIn.getItemInHand(handIn);
 			getPath(stack).clear();
-			playerIn.sendMessage(new StringTextComponent("Cleared Path!"));
+			playerIn.sendMessage(new StringTextComponent("Cleared Path!"), playerIn.getUUID());
 			return new ActionResult<>(ActionResultType.SUCCESS, stack);
 		}
 
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (isSelected && entityIn instanceof PlayerEntity && !worldIn.isRemote) {
+		if (isSelected && entityIn instanceof PlayerEntity && !worldIn.isClientSide) {
 			CQRNPCPath path = getPath(stack);
 			CQRNPCPath.PathNode selectedNode = getSelectedNode(stack);
 
@@ -127,7 +133,7 @@ public class ItemPathTool extends ItemLore {
 				Vector3d vec = new Vector3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
 				// Draw start point
-				((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, node != selectedNode ? ParticleTypes.VILLAGER_HAPPY : ParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
+				((ServerWorld) worldIn).sendParticles((ServerPlayerEntity) entityIn, node != selectedNode ? ParticleTypes.HAPPY_VILLAGER : ParticleTypes.FLAME, true, vec.x, vec.y, vec.z, 0, 0.0D, 0.025D, 0.0D, 1.0D);
 
 				// Draw connection lines
 				for (int index : node.getConnectedNodes()) {
@@ -138,7 +144,7 @@ public class ItemPathTool extends ItemLore {
 					vec1 = vec1.normalize();
 
 					for (double d = 0.25D; d < dist; d += 0.5D) {
-						((ServerWorld) worldIn).spawnParticle((ServerPlayerEntity) entityIn, ParticleTypes.CRIT_MAGIC, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
+						((ServerWorld) worldIn).sendParticles((ServerPlayerEntity) entityIn, ParticleTypes.CRIT, true, vec.x + d * vec1.x, vec.y + d * vec1.y, vec.z + d * vec1.z, 0, vec1.x * 0.1D, vec1.y * 0.1D, vec1.z * 0.1D, 1.0D);
 					}
 				}
 			}
