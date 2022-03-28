@@ -2,10 +2,7 @@ package team.cqr.cqrepoured.client;
 
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import team.cqr.cqrepoured.client.gui.GuiSpawner;
-import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
-import team.cqr.cqrepoured.client.gui.ScreenBackpack;
-import team.cqr.cqrepoured.client.gui.ScreenBossBlock;
+import team.cqr.cqrepoured.client.gui.*;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 
@@ -17,6 +14,7 @@ public class CQRepouredClient {
 		ScreenManager.register(CQRContainerTypes.BOSS_BLOCK.get(), ScreenBossBlock::new);
 		ScreenManager.register(CQRContainerTypes.BACKPACK.get(), ScreenBackpack::new);
 		ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
+		ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
 
 		CQREntityRenderers.registerRenderers();
 	}

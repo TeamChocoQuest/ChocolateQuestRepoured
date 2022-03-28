@@ -232,7 +232,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemLore> FEATHER_GOLDEN = null;
 
 	// Other
-	public static final RegistryObject<ItemPotionHealing> POTION_HEALING = null;
+	public static final RegistryObject<ItemPotionHealing> POTION_HEALING = register("potion_healing", ItemPotionHealing::new);
 	public static final RegistryObject<ItemTeleportStone> TELEPORT_STONE = null;
 	public static final RegistryObject<ItemCursedBone> CURSED_BONE = null;
 
@@ -242,7 +242,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemSoulBottle> SOUL_BOTTLE = null;
 	public static final RegistryObject<ItemMobToSpawner> MOB_TO_SPAWNER_TOOL = null;
 	public static final RegistryObject<ItemSpawnerConverter> SPAWNER_CONVERTER = null;
-	public static final RegistryObject<ItemBadge> BADGE = null;
+	public static final RegistryObject<ItemBadge> BADGE = register("badge", ItemBadge::new);
 	public static final RegistryObject<ItemPathTool> PATH_TOOL = null;
 	public static final RegistryObject<ItemShieldDummy> DUMMY_SHIELD = null;
 	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = register("alchemy_bag", ItemAlchemyBag::new);
