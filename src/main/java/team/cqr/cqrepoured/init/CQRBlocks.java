@@ -46,6 +46,9 @@ import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.block.BlockTable;
 import team.cqr.cqrepoured.block.BlockUnlitTorch;
 import team.cqr.cqrepoured.block.BlockUnlitTorchWall;
+import team.cqr.cqrepoured.client.render.tileentity.ItemStackExporterChestRenderer;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRBlocks {
@@ -143,24 +146,24 @@ public class CQRBlocks {
 	// Loot Chests
 	// CQR
 	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_VALUABLE = register("exporter_chest_valuable", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_TREASURE), b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 	});
 	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_FOOD = register("exporter_chest_food", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_FOOD), b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 	});
 	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_EQUIPMENT = register("exporter_chest_equipment", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_EQUIPMENT), b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 	});
 	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_UTILITY = register("exporter_chest_utility", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_MATERIAL), b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 	});
 	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_CLUTTER = register("exporter_chest_clutter", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_CLUTTER), b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 	});
 
 	// Custom
 	public static final RegistryObject<BlockExporterChest> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", BlockExporterChestCustom::new, b -> {
-		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestCustom::new)));
 	});
 
 	// Vanilla
@@ -171,7 +174,7 @@ public class CQRBlocks {
 				String p = lootTable.getPath();
 				String n = "exporter_chest_vanilla_" + p.substring(p.lastIndexOf('/') + 1);
 				return register(n, () -> new BlockExporterChestFixed(lootTable), b -> {
-					return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+					return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB).setISTER(() -> () -> new ItemStackExporterChestRenderer(TileEntityExporterChestFixed::new)));
 				});
 			})
 			.collect(Collectors.toSet());
