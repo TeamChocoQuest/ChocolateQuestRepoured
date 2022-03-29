@@ -33,7 +33,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		}
 
 		for (Vector3d v : velocities) {
-			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.level, this.entity);
+			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity, this.entity.level);
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
 
 			if (this.entity.getMobType() == CreatureAttribute.ARTHROPOD) {

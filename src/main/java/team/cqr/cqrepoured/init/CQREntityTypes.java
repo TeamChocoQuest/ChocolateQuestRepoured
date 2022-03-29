@@ -57,6 +57,15 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileVampiricSpell>of(ProjectileVampiricSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_vampiric_spell").toString()));
 
+	public static final RegistryObject<EntityType<ProjectileSpiderBall>> PROJECTILE_SPIDER_BALL = ENTITY_TYPES.register("projectile_spider_ball",
+			() -> EntityType.Builder.<ProjectileSpiderBall>of(ProjectileSpiderBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_spider_ball").toString()));
+
+	public static final RegistryObject<EntityType<ProjectilePoisonSpell>> PROJECTILE_POISON_SPELL = ENTITY_TYPES.register("projectile_poison_spell",
+			() -> EntityType.Builder.<ProjectilePoisonSpell>of(ProjectilePoisonSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_poison_spell").toString()));
+
+
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
 

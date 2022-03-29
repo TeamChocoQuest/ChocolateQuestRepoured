@@ -32,7 +32,7 @@ public class ItemStaffSpider extends ItemLore implements IRangedWeapon {
 		playerIn.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, playerIn);
+			ProjectileSpiderBall ball = new ProjectileSpiderBall(playerIn, worldIn);
 			ball.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, 1.5F, 0F);
 			worldIn.addFreshEntity(ball);
 			stack.hurtAndBreak(1, playerIn, p -> p.broadcastBreakEvent(handIn));
@@ -45,7 +45,7 @@ public class ItemStaffSpider extends ItemLore implements IRangedWeapon {
 		shooter.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, shooter);
+			ProjectileSpiderBall ball = new ProjectileSpiderBall(shooter, worldIn);
 			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(0.5D);
