@@ -1,6 +1,7 @@
-package team.cqr.cqrepoured.world.processor.wall;
+package team.cqr.cqrepoured.world.processor;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.tags.BlockTags;
@@ -14,36 +15,36 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRStructureProcessors;
 
-public class ProcessorWallOuter extends StructureProcessor {
-
-	public static final ProcessorWallOuter INSTANCE = new ProcessorWallOuter();
-	public static final Codec<ProcessorWallOuter> CODEC = Codec.unit(() -> INSTANCE);
+public class ProcessorExtendLowestBlocksToFloor extends StructureProcessor {
+	
+	public static final ProcessorExtendLowestBlocksToFloor INSTANCE = new ProcessorExtendLowestBlocksToFloor();
+	public static final Codec<ProcessorExtendLowestBlocksToFloor> CODEC = Codec.unit(() -> INSTANCE);
 
 	@Override
 	protected IStructureProcessorType<?> getType() {
-		return CQRStructureProcessors.PROCESSOR_WALL_OUTER;
+		return CQRStructureProcessors.PROCESSOR_EXTEND_LOWEST_TO_FLOOR;
 	}
 
 	@Override
 	public BlockInfo process(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
-		if (blockInfoGlobal.state.is(Blocks.LIGHT_GRAY_STAINED_GLASS) && blockInfoLocal.pos.getY() == 0) {
+		if (!(blockInfoGlobal.state.is(Blocks.AIR) || blockInfoGlobal.state.is(Blocks.CAVE_AIR) || blockInfoGlobal.state.is(Blocks.STRUCTURE_VOID) || blockInfoGlobal.state.is(CQRBlocks.NULL_BLOCK.get())) && blockInfoLocal.pos.getY() == 0) {
 			ChunkPos currentChunkPos = new ChunkPos(blockInfoGlobal.pos);
 			IChunk currentChunk = worldReader.getChunk(currentChunkPos.x, currentChunkPos.z);
-			BlockState randomBlock;
 
 			// Always replace the glass itself with stone bricks
-			randomBlock = Blocks.STONE_BRICKS.defaultBlockState();
-			currentChunk.setBlockState(blockInfoGlobal.pos, randomBlock, false);
-			blockInfoGlobal = new Template.BlockInfo(blockInfoGlobal.pos, randomBlock, blockInfoGlobal.nbt);
+			final BlockState stateForExtension = blockInfoGlobal.state;
+			currentChunk.setBlockState(blockInfoGlobal.pos, stateForExtension, false);
+			blockInfoGlobal = new Template.BlockInfo(blockInfoGlobal.pos, stateForExtension, blockInfoGlobal.nbt);
 
 			// Straight line down
 			BlockPos.Mutable mutable = blockInfoGlobal.pos.below().mutable();
 			BlockState currBlock = worldReader.getBlockState(mutable);
 
 			while (mutable.getY() > 0 && (!currBlock.is(BlockTags.BASE_STONE_OVERWORLD))) {
-				worldReader.getChunk(mutable).setBlockState(mutable, randomBlock, false);
+				worldReader.getChunk(mutable).setBlockState(mutable, stateForExtension, false);
 
 				mutable.move(Direction.DOWN);
 				currBlock = worldReader.getBlockState(mutable);
@@ -52,5 +53,5 @@ public class ProcessorWallOuter extends StructureProcessor {
 
 		return blockInfoGlobal;
 	}
-
+	
 }
