@@ -44,7 +44,6 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 	public ProjectileEarthQuake(World worldIn, LivingEntity throwerIn) {
 		this(worldIn, throwerIn.getX(), throwerIn.getEyeY() - (double)0.1F, throwerIn.getZ());
 	    this.setOwner(throwerIn);
-		this.setOwner(throwerIn);
 
 		//this.posY -= 1.2D;
 		//this.setPos(this.getX(), this.getY() - 1.2D, this.getZ());

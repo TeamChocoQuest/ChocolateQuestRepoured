@@ -343,7 +343,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 			Vector3d velocity = target.position().subtract(this.position());
 			velocity = velocity.normalize().scale(1.5);
-			ProjectileHotFireball proj = new ProjectileHotFireball(this.level, this, this.getX() + velocity.x, this.getY() + velocity.y, this.getZ() + velocity.z);
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.getX() + velocity.x, this.getY() + velocity.y, this.getZ() + velocity.z, this.level, this);
 			// proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.setDeltaMovement(velocity);
 			this.level.addFreshEntity(proj);
@@ -480,7 +480,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			}
 
 			v = v.normalize();
-			ProjectileHotFireball proj = new ProjectileHotFireball(this.level, this, this.dragonBodyParts[indx].getX() + v.x, this.dragonBodyParts[indx].getY() + v.y, this.dragonBodyParts[indx].getZ() + v.z);
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.dragonBodyParts[indx].getX() + v.x, this.dragonBodyParts[indx].getY() + v.y, this.dragonBodyParts[indx].getZ() + v.z, this.level, this);
 			v = v.scale(1.5);
 			proj.setDeltaMovement(v);
 			this.level.addFreshEntity(proj);
