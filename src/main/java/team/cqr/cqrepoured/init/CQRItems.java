@@ -239,7 +239,7 @@ public class CQRItems {
 	// Creative
 	public static final RegistryObject<ItemSuperTool> SUPER_TOOL = null;
 	public static final RegistryObject<ItemStructureSelector> STRUCTURE_SELECTOR = null;
-	public static final RegistryObject<ItemSoulBottle> SOUL_BOTTLE = null;
+	public static final RegistryObject<ItemSoulBottle> SOUL_BOTTLE = register("soul_bottle", ItemSoulBottle::new);
 	public static final RegistryObject<ItemMobToSpawner> MOB_TO_SPAWNER_TOOL = null;
 	public static final RegistryObject<ItemSpawnerConverter> SPAWNER_CONVERTER = null;
 	public static final RegistryObject<ItemBadge> BADGE = register("badge", ItemBadge::new);
