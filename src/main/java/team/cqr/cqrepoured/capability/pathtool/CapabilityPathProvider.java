@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.BasicCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -16,8 +17,8 @@ public class CapabilityPathProvider extends BasicCapabilityProvider<CapabilityPa
 	@CapabilityInject(CapabilityPath.class)
 	public static final Capability<CapabilityPath> PATH = null;
 
-	public CapabilityPathProvider(Capability<CapabilityPath> capability, CapabilityPath instance) {
-		super(capability, instance);
+	public CapabilityPathProvider(Capability<CapabilityPath> capability, NonNullSupplier<CapabilityPath> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static void register() {
@@ -25,7 +26,7 @@ public class CapabilityPathProvider extends BasicCapabilityProvider<CapabilityPa
 	}
 
 	public static CapabilityPathProvider createProvider(ItemStack stack) {
-		return new CapabilityPathProvider(CapabilityPathProvider.PATH, new CapabilityPath(stack));
+		return new CapabilityPathProvider(CapabilityPathProvider.PATH, () -> new CapabilityPath(stack));
 	}
 
 }

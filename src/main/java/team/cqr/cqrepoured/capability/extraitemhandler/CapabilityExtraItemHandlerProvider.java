@@ -4,6 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
@@ -14,8 +15,8 @@ public class CapabilityExtraItemHandlerProvider extends SerializableCapabilityPr
 	@CapabilityInject(CapabilityExtraItemHandler.class)
 	public static final Capability<CapabilityExtraItemHandler> EXTRA_ITEM_HANDLER = null;
 
-	public CapabilityExtraItemHandlerProvider(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance) {
-		super(capability, instance);
+	public CapabilityExtraItemHandlerProvider(Capability<CapabilityExtraItemHandler> capability, NonNullSupplier<CapabilityExtraItemHandler> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static void register() {
@@ -23,7 +24,7 @@ public class CapabilityExtraItemHandlerProvider extends SerializableCapabilityPr
 	}
 
 	public static CapabilityExtraItemHandlerProvider createProvider(int slots) {
-		return new CapabilityExtraItemHandlerProvider(EXTRA_ITEM_HANDLER, new CapabilityExtraItemHandler(slots));
+		return new CapabilityExtraItemHandlerProvider(EXTRA_ITEM_HANDLER, () -> new CapabilityExtraItemHandler(slots));
 	}
 
 }

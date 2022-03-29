@@ -4,29 +4,21 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullSupplier;
 
-public class BasicCapabilityProvider<C> implements ICapabilityProvider {
+public abstract class BasicCapabilityProvider<C> implements ICapabilityProvider {
 
 	public final Capability<C> capability;
-	public final C instance;
+	public final LazyOptional<C> instance;
 
-	public BasicCapabilityProvider(Capability<C> capability, C instance) {
+	public BasicCapabilityProvider(Capability<C> capability, NonNullSupplier<C> instanceSupplier) {
 		this.capability = capability;
-		this.instance = instance;
-	}
-
-	//@Override
-	public boolean hasCapability(Capability<?> capability, Direction facing) {
-		return capability == this.capability;
+		this.instance = LazyOptional.of(instanceSupplier);
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction facing) {
-		if(capability == this.capability) {
-			return LazyOptional.of(() -> (T)this.instance);
-		}
-		return null;
-		//Old 1.12.2: return capability == this.capability ? this.capability.<T>cast(this.instance) : null;
+	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
+		return cap == this.capability ? this.instance.cast() : LazyOptional.empty();
 	}
 
 }

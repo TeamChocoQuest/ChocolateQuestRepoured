@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.capability.armor.kingarmor;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
 public class CapabilityDynamicCrownProvider extends SerializableCapabilityProvider<CapabilityDynamicCrown> {
@@ -10,8 +11,8 @@ public class CapabilityDynamicCrownProvider extends SerializableCapabilityProvid
 	@CapabilityInject(CapabilityDynamicCrown.class)
 	public static final Capability<CapabilityDynamicCrown> DYNAMIC_CROWN = null;
 
-	public CapabilityDynamicCrownProvider(Capability<CapabilityDynamicCrown> capability, CapabilityDynamicCrown instance) {
-		super(capability, instance);
+	public CapabilityDynamicCrownProvider(Capability<CapabilityDynamicCrown> capability, NonNullSupplier<CapabilityDynamicCrown> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static void register() {
@@ -19,7 +20,7 @@ public class CapabilityDynamicCrownProvider extends SerializableCapabilityProvid
 	}
 
 	public static CapabilityDynamicCrownProvider createProvider() {
-		return new CapabilityDynamicCrownProvider(DYNAMIC_CROWN, new CapabilityDynamicCrown());
+		return new CapabilityDynamicCrownProvider(DYNAMIC_CROWN, CapabilityDynamicCrown::new);
 	}
 
 }

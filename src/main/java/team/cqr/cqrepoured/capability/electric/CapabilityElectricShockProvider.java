@@ -5,6 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
@@ -15,8 +16,8 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	@CapabilityInject(CapabilityElectricShock.class)
 	public static final Capability<CapabilityElectricShock> ELECTROCUTE_HANDLER_CQR = null;
 
-	public CapabilityElectricShockProvider(Capability<CapabilityElectricShock> capability, CapabilityElectricShock instance) {
-		super(capability, instance);
+	public CapabilityElectricShockProvider(Capability<CapabilityElectricShock> capability, NonNullSupplier<CapabilityElectricShock> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static void register() {
@@ -24,7 +25,7 @@ public class CapabilityElectricShockProvider extends SerializableCapabilityProvi
 	}
 
 	public static CapabilityElectricShockProvider createProvider(LivingEntity entity) {
-		return new CapabilityElectricShockProvider(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, new CapabilityElectricShock(entity));
+		return new CapabilityElectricShockProvider(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, () -> new CapabilityElectricShock(entity));
 	}
 
 }

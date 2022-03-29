@@ -2,22 +2,23 @@ package team.cqr.cqrepoured.capability;
 
 import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.NonNullSupplier;
 
-public class SerializableCapabilityProvider<C> extends BasicCapabilityProvider<C> implements INBTSerializable<INBT> {
+public class SerializableCapabilityProvider<C> extends BasicCapabilityProvider<C> implements ICapabilitySerializable<INBT> {
 
-	public SerializableCapabilityProvider(Capability<C> capability, C instance) {
-		super(capability, instance);
+	public SerializableCapabilityProvider(Capability<C> capability, NonNullSupplier<C> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	@Override
 	public INBT serializeNBT() {
-		return this.capability.getStorage().writeNBT(this.capability, this.instance, null);
+		return this.capability.writeNBT(this.instance.orElseThrow(NullPointerException::new), null);
 	}
 
 	@Override
 	public void deserializeNBT(INBT nbt) {
-		this.capability.getStorage().readNBT(this.capability, this.instance, null, nbt);
+		this.capability.readNBT(this.instance.orElseThrow(NullPointerException::new), null, nbt);
 	}
 
 }

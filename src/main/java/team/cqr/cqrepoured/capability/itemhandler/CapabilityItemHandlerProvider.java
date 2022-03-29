@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.capability.itemhandler;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -12,12 +13,12 @@ public class CapabilityItemHandlerProvider extends SerializableCapabilityProvide
 
 	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(CQRMain.MODID, "item_stack_handler");
 
-	public CapabilityItemHandlerProvider(Capability<IItemHandler> capability, IItemHandler instance) {
-		super(capability, instance);
+	public CapabilityItemHandlerProvider(Capability<IItemHandler> capability, NonNullSupplier<IItemHandler> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static CapabilityItemHandlerProvider createProvider(int slots) {
-		return new CapabilityItemHandlerProvider(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, new ItemStackHandler(slots));
+		return new CapabilityItemHandlerProvider(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, () -> new ItemStackHandler(slots));
 	}
 
 }

@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.capability.armor;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -10,19 +11,17 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Map;
-
 public class CapabilityCooldownHandlerStorage implements IStorage<CapabilityCooldownHandler> {
 
 	@Override
 	public INBT writeNBT(Capability<CapabilityCooldownHandler> capability, CapabilityCooldownHandler instance, Direction side) {
 		ListNBT nbtTagList = new ListNBT();
 
-		for (Map.Entry<Item, Integer> entry : instance.getItemCooldownMap().entrySet()) {
+		for (Object2IntMap.Entry<Item> entry : instance.getItemCooldownMap().object2IntEntrySet()) {
 			CompoundNBT compound = new CompoundNBT();
 
 			compound.putString("item", entry.getKey().getRegistryName().toString());
-			compound.putInt("cooldown", entry.getValue());
+			compound.putInt("cooldown", entry.getIntValue());
 			nbtTagList.add(compound);
 		}
 

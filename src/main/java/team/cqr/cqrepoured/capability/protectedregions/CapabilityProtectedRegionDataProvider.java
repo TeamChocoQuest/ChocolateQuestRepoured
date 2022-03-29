@@ -5,6 +5,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
@@ -15,8 +16,8 @@ public class CapabilityProtectedRegionDataProvider extends SerializableCapabilit
 	@CapabilityInject(CapabilityProtectedRegionData.class)
 	public static final Capability<CapabilityProtectedRegionData> PROTECTED_REGION_DATA = null;
 
-	public CapabilityProtectedRegionDataProvider(Capability<CapabilityProtectedRegionData> capability, CapabilityProtectedRegionData instance) {
-		super(capability, instance);
+	public CapabilityProtectedRegionDataProvider(Capability<CapabilityProtectedRegionData> capability, NonNullSupplier<CapabilityProtectedRegionData> instanceSupplier) {
+		super(capability, instanceSupplier);
 	}
 
 	public static void register() {
@@ -24,7 +25,7 @@ public class CapabilityProtectedRegionDataProvider extends SerializableCapabilit
 	}
 
 	public static CapabilityProtectedRegionDataProvider createProvider(Chunk chunk) {
-		return new CapabilityProtectedRegionDataProvider(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, new CapabilityProtectedRegionData(chunk));
+		return new CapabilityProtectedRegionDataProvider(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, () -> new CapabilityProtectedRegionData(chunk));
 	}
 
 }
