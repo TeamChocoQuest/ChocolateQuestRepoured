@@ -17,7 +17,7 @@ import net.minecraft.world.storage.loot.LootTables;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
-import team.cqr.cqrepoured.block.BlockExporterChestCQR;
+import team.cqr.cqrepoured.block.BlockExporterChestFixed;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
@@ -63,7 +63,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		BlockExporterChest block = BlockExporterChest.getExporterChests().stream().filter(BlockExporterChestCQR.class::isInstance).filter(b -> ((BlockExporterChestCQR) b).getLootTable().equals(this.lootTable)).findFirst().orElse(CQRBlocks.EXPORTER_CHEST_CUSTOM);
+		BlockExporterChest block = BlockExporterChest.getExporterChests().stream().filter(BlockExporterChestFixed.class::isInstance).filter(b -> ((BlockExporterChestFixed) b).getLootTable().equals(this.lootTable)).findFirst().orElse(CQRBlocks.EXPORTER_CHEST_CUSTOM);
 		BlockState state = block.getDefaultState().withProperty(HorizontalBlock.FACING, this.facing);
 		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 

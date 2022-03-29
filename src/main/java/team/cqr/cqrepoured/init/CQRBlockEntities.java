@@ -10,7 +10,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.BlockExporterChestCQR;
+import team.cqr.cqrepoured.block.BlockExporterChestFixed;
 import team.cqr.cqrepoured.block.BlockTable;
 import team.cqr.cqrepoured.tileentity.*;
 
@@ -26,7 +26,7 @@ public class CQRBlockEntities {
 	public static final RegistryObject<TileEntityType<TileEntityTable>> TABLE = register("table", TileEntityTable::new, blocks(BlockTable.class));
 	public static final RegistryObject<TileEntityType<TileEntitySpawner>> SPAWNER = register("spawner", TileEntitySpawner::new, CQRBlocks.SPAWNER);
 	public static final RegistryObject<TileEntityType<TileEntityForceFieldNexus>> FORCE_FIELD_NEXUS = register("force_field_nexus", TileEntityForceFieldNexus::new, CQRBlocks.FORCE_FIELD_NEXUS);
-	public static final RegistryObject<TileEntityType<TileEntityExporterChestCQR>> EXPORTER_CHEST_CQR = register("exporter_chest_cqr", TileEntityExporterChestCQR::new, blocks(BlockExporterChestCQR.class));
+	public static final RegistryObject<TileEntityType<TileEntityExporterChestFixed>> EXPORTER_CHEST_CQR = register("exporter_chest_cqr", TileEntityExporterChestFixed::new, blocks(BlockExporterChestFixed.class));
 	public static final RegistryObject<TileEntityType<TileEntityExporterChestCustom>> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", TileEntityExporterChestCustom::new, CQRBlocks.EXPORTER_CHEST_CUSTOM);
 	public static final RegistryObject<TileEntityType<TileEntityBoss>> BOSS = register("boss", TileEntityBoss::new, CQRBlocks.BOSS_BLOCK);
 	public static final RegistryObject<TileEntityType<TileEntityMap>> MAP = register("map", TileEntityMap::new, CQRBlocks.MAP_PLACEHOLDER);

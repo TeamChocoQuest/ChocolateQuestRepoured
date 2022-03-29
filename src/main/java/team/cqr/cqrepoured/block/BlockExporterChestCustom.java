@@ -5,7 +5,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
@@ -16,25 +15,14 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 
 public class BlockExporterChestCustom extends BlockExporterChest {
 
-	public BlockExporterChestCustom(String resourceName) {
-		super(resourceName);
-	}
-
-	public BlockExporterChestCustom(String resourceDomain, String resourcePath) {
-		super(resourceDomain, resourcePath);
-	}
-
-	public BlockExporterChestCustom(ResourceLocation overlayTexture) {
-		super(overlayTexture);
-	}
-
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
 		return new TileEntityExporterChestCustom();
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand,
+			BlockRayTraceResult result) {
 		if (!player.isCreative()) {
 			return ActionResultType.PASS;
 		}

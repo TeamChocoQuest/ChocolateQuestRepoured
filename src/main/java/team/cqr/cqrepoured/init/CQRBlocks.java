@@ -1,5 +1,12 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.AbstractBlock.Properties;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -24,13 +31,21 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.*;
-
-import javax.annotation.Nullable;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import team.cqr.cqrepoured.block.BlockBossBlock;
+import team.cqr.cqrepoured.block.BlockExporter;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.BlockExporterChestCustom;
+import team.cqr.cqrepoured.block.BlockExporterChestFixed;
+import team.cqr.cqrepoured.block.BlockForceFieldNexus;
+import team.cqr.cqrepoured.block.BlockMapPlaceholder;
+import team.cqr.cqrepoured.block.BlockNull;
+import team.cqr.cqrepoured.block.BlockPhylactery;
+import team.cqr.cqrepoured.block.BlockPoisonousWeb;
+import team.cqr.cqrepoured.block.BlockSpawner;
+import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.block.BlockTable;
+import team.cqr.cqrepoured.block.BlockUnlitTorch;
+import team.cqr.cqrepoured.block.BlockUnlitTorchWall;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRBlocks {
@@ -127,14 +142,26 @@ public class CQRBlocks {
 
 	// Loot Chests
 	// CQR
-	public static final RegistryObject<BlockExporterChestCQR> EXPORTER_CHEST_VALUABLE = register("exporter_chest_valuable", () -> new BlockExporterChestCQR(CQRLoottables.CHESTS_TREASURE, "textures/items/diamond.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
-	public static final RegistryObject<BlockExporterChestCQR> EXPORTER_CHEST_FOOD = register("exporter_chest_food", () -> new BlockExporterChestCQR(CQRLoottables.CHESTS_FOOD, "textures/items/porkchop_raw.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
-	public static final RegistryObject<BlockExporterChestCQR> EXPORTER_CHEST_EQUIPMENT = register("exporter_chest_equipment", () -> new BlockExporterChestCQR(CQRLoottables.CHESTS_EQUIPMENT, "textures/items/iron_pickaxe.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
-	public static final RegistryObject<BlockExporterChestCQR> EXPORTER_CHEST_UTILITY = register("exporter_chest_utility", () -> new BlockExporterChestCQR(CQRLoottables.CHESTS_MATERIAL, "textures/items/iron_ingot.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
-	public static final RegistryObject<BlockExporterChestCQR> EXPORTER_CHEST_CLUTTER = register("exporter_chest_clutter", () -> new BlockExporterChestCQR(CQRLoottables.CHESTS_CLUTTER, "textures/items/gunpowder.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
+	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_VALUABLE = register("exporter_chest_valuable", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_TREASURE), b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
+	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_FOOD = register("exporter_chest_food", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_FOOD), b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
+	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_EQUIPMENT = register("exporter_chest_equipment", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_EQUIPMENT), b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
+	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_UTILITY = register("exporter_chest_utility", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_MATERIAL), b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
+	public static final RegistryObject<BlockExporterChestFixed> EXPORTER_CHEST_CLUTTER = register("exporter_chest_clutter", () -> new BlockExporterChestFixed(CQRLoottables.CHESTS_CLUTTER), b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
 
 	// Custom
-	public static final RegistryObject<BlockExporterChestCustom> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", () -> new BlockExporterChestCustom("textures/items/blaze_rod.png"), CQRMain.CQR_EXPORTER_CHEST_TAB);
+	public static final RegistryObject<BlockExporterChest> EXPORTER_CHEST_CUSTOM = register("exporter_chest_custom", BlockExporterChestCustom::new, b -> {
+		return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+	});
 
 	// Vanilla
 	public static final Set<RegistryObject<? extends BlockExporterChest>> VANILLA_LOOT_CHESTS = LootTables.all().stream()
@@ -143,7 +170,9 @@ public class CQRBlocks {
 			.map(lootTable -> {
 				String p = lootTable.getPath();
 				String n = "exporter_chest_vanilla_" + p.substring(p.lastIndexOf('/') + 1);
-				return register(n, () -> new BlockExporterChestCQR(lootTable), CQRMain.CQR_EXPORTER_CHEST_TAB);
+				return register(n, () -> new BlockExporterChestFixed(lootTable), b -> {
+					return new BlockItem(b, new Item.Properties().tab(CQRMain.CQR_EXPORTER_CHEST_TAB));
+				});
 			})
 			.collect(Collectors.toSet());
 

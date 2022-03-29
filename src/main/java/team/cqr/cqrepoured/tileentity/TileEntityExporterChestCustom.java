@@ -54,12 +54,6 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 		this.dataManager.read(pkt.getTag());
 	}
 
-	/* Gone?
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, BlockState oldState, BlockState newSate) {
-		return oldState.getBlock() != newSate.getBlock();
-	}*/
-
 	public void setLootTable(ResourceLocation lootTable) {
 		this.lootTable.set(lootTable);
 	}
@@ -68,13 +62,5 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 	public ResourceLocation getLootTable() {
 		return this.lootTable.get();
 	}
-
-	/*Gone?
-	@Override
-	@Nullable
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent("Loottable: " + this.lootTable.get().toString());
-	}
-	*/
 
 }
