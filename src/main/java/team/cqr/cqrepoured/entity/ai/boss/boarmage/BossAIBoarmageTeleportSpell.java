@@ -99,7 +99,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 
 			for (Vector3d p : positions) {
 				if (p != null) {
-					ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity.level, this.entity);
+					ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level);
 					wallPart.setPos(p.x, p.y, p.z);
 					// wallPart.setVelocity(v.x / 2, 0, v.z / 2);
 					/*wallPart.motionX = v.x / 2D;

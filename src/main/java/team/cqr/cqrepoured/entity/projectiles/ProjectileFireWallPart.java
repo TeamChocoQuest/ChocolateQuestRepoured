@@ -1,56 +1,49 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileFireWallPart extends ProjectileBase {
 
-	private Random rdm = new Random();
-
-	public ProjectileFireWallPart(World worldIn) {
-		super(worldIn);
-		this.setSize(1F, 2.5F);
+	public ProjectileFireWallPart(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+		super(throwableEntity, world);
 	}
 
-	public ProjectileFireWallPart(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
-		this.setSize(1F, 2.5F);
+	public ProjectileFireWallPart(double pX, double pY, double pZ, World world) {
+		super(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), world);
 	}
 
-	public ProjectileFireWallPart(World worldIn, LivingEntity shooter) {
-		super(worldIn, shooter);
-		this.setSize(1F, 2.5F);
+	public ProjectileFireWallPart(LivingEntity shooter, World world) {
+		super(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), shooter, world);
 	}
 
 	@Override
-	public void applyEntityCollision(Entity entityIn) {
-		super.applyEntityCollision(entityIn);
-		if ((!(entityIn instanceof LivingEntity) || !((LivingEntity) entityIn).isActiveItemStackBlocking())) {
-			entityIn.setFire(4);
+	public void push(Entity entityIn) {
+		super.push(entityIn);
+		if ((!(entityIn instanceof LivingEntity) || !((LivingEntity) entityIn).isBlocking())) {
+			entityIn.setSecondsOnFire(4);
 		}
-	}
-
-	@Override
-	public boolean isNoGravity() {
-		return true;
 	}
 
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (!this.world.isRemote && this.world.getBlockState(this.getPosition().offset(Direction.DOWN)).isFullBlock() && this.rdm.nextInt(15) == 8) {
-			this.world.setBlockState(this.getPosition(), Blocks.FIRE.getDefaultState());
+		if (!this.level.isClientSide && this.level.getBlockState(this.blockPosition().relative(Direction.DOWN)).isCollisionShapeFullBlock(this.level, this.blockPosition().relative(Direction.DOWN)) && this.random.nextInt(15) == 8) {
+			this.level.setBlockAndUpdate(this.blockPosition(), Blocks.FIRE.defaultBlockState());
 		}
 	}
 
-	@Override
+/*	@Override
 	protected void onHit(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockState state = this.world.getBlockState(result.getBlockPos());
@@ -62,6 +55,28 @@ public class ProjectileFireWallPart extends ProjectileBase {
 				this.setDead();
 			}
 		}
+	} */
+
+	@Override
+	protected void onHitBlock(BlockRayTraceResult result)
+	{
+		BlockState state = this.level.getBlockState(result.getBlockPos());
+
+		if(!state.getMaterial().blocksMotion())
+		{
+			this.level.explode(this.getOwner(), result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, Explosion.Mode.NONE);
+			this.remove();
+		}
+	}
+
+	@Override
+	protected void defineSynchedData() {
+
+	}
+
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
