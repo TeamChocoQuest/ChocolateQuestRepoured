@@ -18,7 +18,7 @@ public class ScreenBadge extends ContainerScreen<ContainerBadge> {
     public ScreenBadge(ContainerBadge container, PlayerInventory playerInv, ITextComponent title) {
         super(container, playerInv, title);
         // TODO set titleLabelX and titleLabelY
-        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        //this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 
     @Override
