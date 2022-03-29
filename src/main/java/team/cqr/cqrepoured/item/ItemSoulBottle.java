@@ -49,13 +49,11 @@ public class ItemSoulBottle extends ItemLore {
 				if (!bottle.contains(ENTITY_IN_TAG)) {
 					CompoundNBT entityTag = new CompoundNBT();
 					entity.save(entityTag);
-					entityTag.remove("UUIDLeast");
-					entityTag.remove("UUIDMost");
+					entityTag.remove("UUID");
 					entityTag.remove("Pos");
 					ListNBT passengers = entityTag.getList("Passengers", 10);
 					for (INBT passenger : passengers) {
-						((CompoundNBT) passenger).remove("UUIDLeast");
-						((CompoundNBT) passenger).remove("UUIDMost");
+						((CompoundNBT) passenger).remove("UUID");
 						((CompoundNBT) passenger).remove("Pos");
 					}
 					entity.remove();
@@ -65,6 +63,8 @@ public class ItemSoulBottle extends ItemLore {
 					bottle.put(ENTITY_IN_TAG, entityTag);
 					this.spawnAdditions(entity.level, entity.getX(), entity.getY() + entity.getBbHeight() * 0.5D, entity.getZ());
 				}
+				
+				stack.setTag(bottle);
 			}
 			return true;
 		}
@@ -78,9 +78,6 @@ public class ItemSoulBottle extends ItemLore {
 		World worldIn = pContext.getLevel();
 		BlockPos pos = pContext.getClickedPos();
 		Hand hand = pContext.getHand();
-		double hitX = pContext.getClickLocation().x;
-		double hitY = pContext.getClickLocation().y;
-		double hitZ = pContext.getClickLocation().z;
 		
 		if (!player.isSpectator()) {
 			ItemStack stack = player.getItemInHand(hand);
@@ -91,7 +88,7 @@ public class ItemSoulBottle extends ItemLore {
 				if (bottle.contains(ENTITY_IN_TAG)) {
 					if (!worldIn.isClientSide) {
 						CompoundNBT entityTag = (CompoundNBT) bottle.get(ENTITY_IN_TAG);
-						this.createEntityFromNBT(entityTag, worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
+						this.createEntityFromNBT(entityTag, worldIn, pos.getX() + pContext.getClickedFace().getNormal().getX(), pos.getY() + pContext.getClickedFace().getNormal().getY(), pos.getZ() +  + pContext.getClickedFace().getNormal().getZ());
 
 						if (player.isCrouching()) {
 							bottle.remove(ENTITY_IN_TAG);
@@ -113,13 +110,11 @@ public class ItemSoulBottle extends ItemLore {
 			{
 				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an
 				// entity
-				tag.remove("UUIDLeast");
-				tag.remove("UUIDMost");
+				tag.remove("UUID");
 				tag.remove("Pos");
 				ListNBT passengers = tag.getList("Passengers", 10);
 				for (INBT passenger : passengers) {
-					((CompoundNBT) passenger).remove("UUIDLeast");
-					((CompoundNBT) passenger).remove("UUIDMost");
+					((CompoundNBT) passenger).remove("UUID");
 					((CompoundNBT) passenger).remove("Pos");
 				}
 			}
@@ -166,7 +161,7 @@ public class ItemSoulBottle extends ItemLore {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		if (stack.hasTag() && stack.getTag().contains(ENTITY_IN_TAG)) {
 			CompoundNBT tag = (CompoundNBT) stack.getTag().get(ENTITY_IN_TAG);
-			tooltip.add((new TranslationTextComponent("description.contains.name", this.getEntityName(tag.getString("id")))).withStyle(TextFormatting.BLUE));
+			tooltip.add((new TranslationTextComponent("description.contains.name", new TranslationTextComponent(this.getEntityName(tag.getString("id"))))).withStyle(TextFormatting.BLUE));
 		} else {
 			tooltip.add((new TranslationTextComponent("description.contains_nothing.name")).withStyle(TextFormatting.BLUE));
 		}
