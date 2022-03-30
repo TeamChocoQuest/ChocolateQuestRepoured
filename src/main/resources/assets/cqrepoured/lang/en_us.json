@@ -510,6 +510,7 @@
     "block.cqrepoured.poisonous_web": "Poisonous Web",
 
     "_comment": "Descriptions",
+	"item.cqrepoured.tooltip.hold_shift": "\u00A79Hold \u00A7f[\u00A7eSHIFT\u00A7f]\u00A79 to view description",
     "description.spider_armor": "Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.",
     "description.spider_sword": "Flowing forth from the fangs that made this simple sword a toxic blade, Shelob's poison can't be stayed once your foe is stuck by this blade.",
     "description.bull_armor": "Wear the bull to become the bull. A full set allows you to charge forward at great speed, destroying everything in your path.",

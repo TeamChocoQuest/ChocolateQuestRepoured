@@ -1,19 +1,21 @@
 package team.cqr.cqrepoured.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.glfw.GLFW;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.glfw.GLFW;
-
-import javax.annotation.Nullable;
-import java.util.List;
+import team.cqr.cqrepoured.CQRMain;
 
 public class ItemLore extends Item {
 
@@ -43,9 +45,9 @@ public class ItemLore extends Item {
 	
 	public static void addHoverTextLogic(List<ITextComponent> tooltip, ITooltipFlag flagIn, String registryNamePath) {
 		if (isLShiftPressed() || isRShiftPressed()) {
-			tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description." + registryNamePath + ".name"));
+			tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + "." + registryNamePath + ".tooltip"));
 		} else {
-			tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description.click_shift.name"));
+			tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + ".tooltip.click_shift"));
 		}
 	}
 	
