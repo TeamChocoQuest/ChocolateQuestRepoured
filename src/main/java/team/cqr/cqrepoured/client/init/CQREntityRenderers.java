@@ -39,17 +39,17 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), RenderProjectileCannonBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), RenderProjectileEarthQuake::new);
-		//RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
-		//RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderBall.class, RenderProjectileSpiderBall::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_POISON_SPELL.get(), RenderProjectilePoisonSpell::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_SPIDER_BALL.get(), RenderProjectileSpiderBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), RenderProjectileVampiricSpell::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, RenderProjectileFirewallPart::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), RenderProjectileFirewallPart::new);
+		//RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);*/
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILES_HOT_FIREBALL.get(), RenderProjectileHotFireball::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_WEB.get(), RenderProjectileWeb::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderHook.class, RenderProjectileSpiderHook::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileThrownBlock.class, RenderProjectileThrownBlock::new);
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHomingEnderEye.class, RenderProjectileHomingEnderEye::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileThrownBlock.class, RenderProjectileThrownBlock::new); */
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOMING_ENDER_EYE.get(), RenderProjectileHomingEnderEye::new);
 
 		// Miscs
 		/*RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);

@@ -39,13 +39,13 @@ public class ProjectileHotFireball extends ProjectileBase {
 	}
 
 	public ProjectileHotFireball(double pX, double pY, double pZ, World world, LivingEntity shooter) {
-		super(CQREntityTypes.PROJECTILES_HOT_FIREBALL.get(), world);
+		super(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), world);
 		this.shooter = shooter;
 	}
 
 	public ProjectileHotFireball(LivingEntity shooter, World world)
 	{
-		super(CQREntityTypes.PROJECTILES_HOT_FIREBALL.get(), shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ(), world);
+		super(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ(), world);
 	}
 
 /*	@Override

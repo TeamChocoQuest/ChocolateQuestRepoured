@@ -73,6 +73,10 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileFireWallPart>of(ProjectileFireWallPart::new, EntityClassification.MISC).sized(1.0F, 2.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_fire_wall_part").toString()));
 
+	public static final RegistryObject<EntityType<ProjectileHomingEnderEye>> PROJECTILE_HOMING_ENDER_EYE = ENTITY_TYPES.register("projectile_homing_ender_eye",
+			() -> EntityType.Builder.<ProjectileHomingEnderEye>of(ProjectileHomingEnderEye::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_homing_ender_eye").toString()));
+
 
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
