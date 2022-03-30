@@ -56,7 +56,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	@Override
 	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.STAFF_VAMPIRIC, 1));
+		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.STAFF_VAMPIRIC.get(), 1));
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
