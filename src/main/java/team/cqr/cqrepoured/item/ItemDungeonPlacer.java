@@ -16,8 +16,11 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,35 +34,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ItemDungeonPlacer extends Item {
+public class ItemDungeonPlacer extends ItemLore {
 
 	private static final List<ClientDungeon> CLIENT_DUNGEON_LIST = new ArrayList<>();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
 
-	public ItemDungeonPlacer(int iconID) {
-		this.setMaxStackSize(1);
+	public ItemDungeonPlacer(int iconID, Properties properties)
+	{
+		super(properties.stacksTo(1));
 		this.iconID = iconID;
 	}
 
 	@Override
-	public void getSubItems(ItemGroup tab, NonNullList<ItemStack> items) {
-		if (this.isInCreativeTab(tab)) {
+	public void fillItemCategory(ItemGroup tab, NonNullList<ItemStack> items) {
+		if (this.allowdedIn(tab)) {
 			for (ClientDungeon fakeDungeon : CLIENT_DUNGEON_LIST) {
 				int iconID = fakeDungeon.getIconID() <= HIGHEST_ICON_NUMBER ? fakeDungeon.getIconID() : 0;
 				if (iconID == this.iconID) {
 					ItemStack stack = new ItemStack(this);
 
 					CompoundNBT compound = new CompoundNBT();
-					compound.setString("dungeonName", fakeDungeon.getDungeonName());
-					compound.setInteger("iconID", iconID);
+					compound.putString("dungeonName", fakeDungeon.getDungeonName());
+					compound.putInt("iconID", iconID);
 					ListNBT dependencies = new ListNBT();
 					for (String dependency : fakeDungeon.getDependencies()) {
-						dependencies.appendTag(new StringNBT(dependency));
+						dependencies.appendTag(StringNBT.valueOf(dependency));
 					}
-					compound.setTag("dependencies", dependencies);
-					stack.setTagCompound(compound);
+					compound.put("dependencies", dependencies);
+					stack.setTag(compound);
 
 					items.add(stack);
 				}
@@ -78,11 +82,11 @@ public class ItemDungeonPlacer extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		super.addInformation(stack, worldIn, tooltip, flagIn);
-		if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("dependencies")) {
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		if (stack.getTag() != null && stack.getTag().contains("dependencies")) {
 			tooltip.add("Mod Dependencies: ");
-			for (INBT nbtTag : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
+			for (INBT nbtTag : stack.getTag().getList("dependencies", Constants.NBT.TAG_STRING)) {
 				String dependency = nbtTag.toString().replace("\"", "");
 				if (Loader.isModLoaded(dependency)) {
 					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency);
@@ -94,34 +98,34 @@ public class ItemDungeonPlacer extends Item {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		if (stack.hasTagCompound()) {
-			CompoundNBT compound = stack.getTagCompound();
+	public ITextComponent getName(ItemStack stack) {
+		if (stack.hasTag()) {
+			CompoundNBT compound = stack.getTag();
 			return "Dungeon Placer - " + compound.getString("dungeonName");
 		}
 		return "Dungeon Placer";
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (!worldIn.isRemote) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (!worldIn.isClientSide) {
+			ItemStack stack = playerIn.getItemInHand(handIn);
 
-			if (stack.hasTagCompound()) {
-				String dungeonName = stack.getTagCompound().getString("dungeonName");
+			if (stack.hasTag()) {
+				String dungeonName = stack.getTag().getString("dungeonName");
 				DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
 
 				if (dungeon != null) {
-					Vector3d vec = playerIn.getPositionEyes(1.0F);
-					Vector3d look = playerIn.getLookVec();
+					Vector3d vec = playerIn.getEyePosition(1.0F);
+					Vector3d look = playerIn.getLookAngle();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(256.0D)));
+					BlockRayTraceResult result = worldIn.clip(new RayTraceContext(vec, vec.add(look.scale(256.0D)), RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, playerIn));
 
 					if (result != null) {
-						BlockPos pos = result.getBlockPos().offset(result.sideHit);
+						BlockPos pos = result.getBlockPos().relative(result.getDirection());
 						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ(), new Random(), DungeonDataManager.DungeonSpawnType.DUNGEON_PLACER_ITEM, false);
 
-						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+						playerIn.getCooldowns().addCooldown(stack.getItem(), 30);
 						if ((!playerIn.isCreative() && !playerIn.isSpectator())) {
 							stack.shrink(1);
 						}
@@ -129,7 +133,7 @@ public class ItemDungeonPlacer extends Item {
 				}
 			}
 		}
-		return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+		return ActionResult.success(playerIn.getItemInHand(handIn));
 	}
 
 	public static void updateClientDungeonList(List<ClientDungeon> list) {
