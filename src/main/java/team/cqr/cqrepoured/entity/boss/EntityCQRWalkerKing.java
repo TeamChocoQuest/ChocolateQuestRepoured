@@ -521,10 +521,10 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		super.populateDefaultEquipmentSlots(difficulty);
 
 		this.setItemSlot(EquipmentSlotType.MAINHAND, this.getSword());
-		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_WALKER_KING, 1));
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING, 3));
+		this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_WALKER_KING.get(), 1));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING.get(), 3));
 
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN, 1));
+		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN.get(), 1));
 
 		// Give him some armor...
 		if (CQRConfig.bosses.armorForTheWalkerKing) {
@@ -536,22 +536,22 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 
 			nbttagcompound1.putInt("color", 0x9000FF);
-			ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE, 1, nbttagcompound);
-			((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 0x9000FF);
+			ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get(), 1, nbttagcompound);
+			((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE.get()).setColor(chest, 0x9000FF);
 			this.setItemSlot(EquipmentSlotType.CHEST, chest);
 
-			ItemStack legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE, 1, nbttagcompound);
-			((ItemArmorDyable) CQRItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 0x9000FF);
+			ItemStack legs = new ItemStack(CQRItems.LEGGINGS_DIAMOND_DYABLE.get(), 1, nbttagcompound);
+			((ItemArmorDyable) CQRItems.LEGGINGS_DIAMOND_DYABLE.get()).setColor(legs, 0x9000FF);
 			this.setItemSlot(EquipmentSlotType.LEGS, legs);
 
-			ItemStack boobs = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE, 1, nbttagcompound);
-			((ItemArmorDyable) CQRItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 0x9000FF);
+			ItemStack boobs = new ItemStack(CQRItems.BOOTS_DIAMOND_DYABLE.get(), 1, nbttagcompound);
+			((ItemArmorDyable) CQRItems.BOOTS_DIAMOND_DYABLE.get()).setColor(boobs, 0x9000FF);
 			this.setItemSlot(EquipmentSlotType.FEET, boobs);
 		}
 	}
 
 	private ItemStack getSword() {
-		ItemStack sword = new ItemStack(CQRItems.SWORD_WALKER, 1);
+		ItemStack sword = new ItemStack(CQRItems.SWORD_WALKER.get(), 1);
 
 		/*
 		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword =
