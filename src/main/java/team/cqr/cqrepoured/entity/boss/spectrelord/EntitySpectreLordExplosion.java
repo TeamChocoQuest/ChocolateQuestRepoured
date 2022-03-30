@@ -1,43 +1,39 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntitySpectreLordExplosion extends Entity {
 
-	public EntitySpectreLordExplosion(World worldIn) {
-		super(worldIn);
+	public EntitySpectreLordExplosion(EntityType<? extends EntitySpectreLordExplosion> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override
-	protected void entityInit() {
-
+	protected void defineSynchedData() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-
+	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-
+	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public boolean writeToNBTAtomically(CompoundNBT compound) {
-		return false;
-	}
-
-	@Override
-	public boolean writeToNBTOptional(CompoundNBT compound) {
-		return false;
-	}
-
-	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		return compound;
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 	// TODO implement

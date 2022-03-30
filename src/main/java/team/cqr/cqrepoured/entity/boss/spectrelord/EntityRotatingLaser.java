@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -12,12 +14,12 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 	private float deltaRotationYawPerTick;
 	private float deltaRotationPitchPerTick;
 
-	public EntityRotatingLaser(World worldIn) {
-		this(worldIn, null, 4.0F, 1.0F, 0.0F);
+	public EntityRotatingLaser(EntityType<? extends EntityRotatingLaser> type, World worldIn) {
+		this(type, worldIn, null, 4.0F, 1.0F, 0.0F);
 	}
 
-	public EntityRotatingLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
-		super(worldIn, caster, length);
+	public EntityRotatingLaser(EntityType<? extends EntityRotatingLaser> type, World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
+		super(type, worldIn, caster, length);
 		this.deltaRotationYawPerTick = deltaRotationYawPerTick;
 		this.deltaRotationPitchPerTick = deltaRotationPitchPerTick;
 	}
@@ -25,9 +27,9 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 	@Override
 	public void setupPositionAndRotation() {
 		// TODO reduce unnecessary vec3d creation
-		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY, this.caster.posZ);
+		Vector3d vec1 =  this.caster.position();
 		vec1 = vec1.add(this.getOffsetVector());
-		this.setPosition(vec1.x, vec1.y, vec1.z);
+		this.setPos(vec1.x, vec1.y, vec1.z);
 	}
 
 	@Override
@@ -35,23 +37,38 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 		this.rotationYawCQR = MathHelper.wrapDegrees(this.rotationYawCQR + this.deltaRotationYawPerTick);
 		this.rotationPitchCQR = MathHelper.wrapDegrees(this.rotationPitchCQR + this.deltaRotationPitchPerTick);
 		// TODO reduce unnecessary vec3d creation
-		Vector3d vec1 = new Vector3d(this.caster.posX, this.caster.posY, this.caster.posZ);
+		Vector3d vec1 = this.caster.position();
 		vec1 = vec1.add(this.getOffsetVector());
-		this.setPosition(vec1.x, vec1.y, vec1.z);
+		this.setPos(vec1.x, vec1.y, vec1.z);
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+	public void writeSpawnData(PacketBuffer buffer) {
 		super.writeSpawnData(buffer);
 		buffer.writeFloat(this.deltaRotationYawPerTick);
 		buffer.writeFloat(this.deltaRotationPitchPerTick);
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+	public void readSpawnData(PacketBuffer additionalData) {
 		super.readSpawnData(additionalData);
 		this.deltaRotationYawPerTick = additionalData.readFloat();
 		this.deltaRotationPitchPerTick = additionalData.readFloat();
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		
+	}
+
+	@Override
+	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+		
+	}
+
+	@Override
+	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+		
 	}
 
 }

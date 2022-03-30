@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -15,35 +16,35 @@ public class EntityTargetingLaser extends AbstractEntityLaser {
 	protected LivingEntity target;
 	protected float maxRotationPerTick = 2.0F;
 
-	public EntityTargetingLaser(World worldIn) {
-		this(worldIn, null, 4.0F, null);
+	public EntityTargetingLaser(EntityType<? extends EntityTargetingLaser> type, World worldIn) {
+		this(type, worldIn, null, 4.0F, null);
 	}
 
-	public EntityTargetingLaser(World worldIn, LivingEntity caster, float length, LivingEntity target) {
-		super(worldIn, caster, length);
+	public EntityTargetingLaser(EntityType<? extends EntityTargetingLaser> type, World worldIn, LivingEntity caster, float length, LivingEntity target) {
+		super(type, worldIn, caster, length);
 		this.target = target;
 	}
 
 	@Override
 	public void setupPositionAndRotation() {
 		// TODO reduce unnecessary vec3d creation
-		Vec3d vec1 = new Vec3d(this.caster.posX, this.caster.posY, this.caster.posZ);
+		Vector3d vec1 = this.caster.position();
 		vec1 = vec1.add(this.getOffsetVector());
-		Vec3d vec2 = new Vec3d(this.target.posX, this.target.posY + this.target.height * 0.6D, this.target.posZ);
-		Vec3d vec3 = vec2.subtract(vec1);
+		Vector3d vec2 = this.target.position().add(0, this.target.getBbHeight() * 0.6D, 0);
+		Vector3d vec3 = vec2.subtract(vec1);
 		double dist = Math.sqrt(vec3.x * vec3.x + vec3.z * vec3.z);
 		float yaw = (float) Math.toDegrees(Math.atan2(-vec3.x, vec3.z));
 		float pitch = (float) Math.toDegrees(Math.atan2(-vec3.y, dist));
 		this.rotationYawCQR = yaw;
 		this.rotationPitchCQR = pitch;
-		this.setPosition(vec1.x, vec1.y, vec1.z);
+		this.setPos(vec1.x, vec1.y, vec1.z);
 	}
 
 	@Override
 	public void updatePositionAndRotation() {
 		// TODO reduce unnecessary vec3d creation
 
-		Vector3d vec1 = new Vector3d(this.caster.posX, this.caster.posY, this.caster.posZ);
+		Vector3d vec1 = this.caster.position();
 
 		vec1 = vec1.add(this.getOffsetVector());
 		Vector3d vec2 = this.target.position().add(0, this.target.getBbHeight() * 0.6D, 0);

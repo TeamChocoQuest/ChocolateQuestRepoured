@@ -1,17 +1,25 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionExplosion;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionHeal;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
@@ -20,8 +28,6 @@ import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.EntityUtil;
 
-import java.util.UUID;
-
 public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 
 	private LivingEntity caster;
@@ -29,12 +35,12 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	private boolean canCastHeal;
 	private boolean canCastExplosion;
 
-	public EntitySpectreLordIllusion(World worldIn) {
-		this(worldIn, null, 200, false, false);
+	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, World worldIn) {
+		this(type, worldIn, null, 200, false, false);
 	}
 
-	public EntitySpectreLordIllusion(World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
-		super(worldIn);
+	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
+		super(type, worldIn);
 		if (caster != null) {
 			this.caster = caster;
 			Faction faction = FactionRegistry.instance(this).getFactionOf(caster);
@@ -54,42 +60,44 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public ILivingEntityData onInitialSpawn(DifficultyInstance difficulty, ILivingEntityData livingdata) {
-		super.onInitialSpawn(difficulty, livingdata);
-		if (this.rand.nextDouble() < 0.3D) {
-			switch (this.rand.nextInt(3)) {
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData livingdata, CompoundNBT p_213386_5_) {
+		ILivingEntityData ld = super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, livingdata, p_213386_5_);
+		
+		if (this.random.nextDouble() < 0.3D) {
+			switch (this.random.nextInt(3)) {
 			case 0:
-				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON));
+				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON.get()));
 				break;
 			case 1:
-				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON));
+				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON.get()));
 				break;
 			case 2:
-				this.setHeldItem(Hand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON));
+				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON.get()));
 				break;
 			}
 		} else {
-			this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+			this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
 		}
 		this.setHealingPotions(0);
-		return livingdata;
+		return ld;
 	}
-
+	
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.225D);
-		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(this.canCastHeal || this.canCastExplosion ? 8.0D : 12.0D);
-		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(this.canCastHeal || this.canCastExplosion ? 4.0D : 6.0D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		
+		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.225D);
+		this.getAttribute(Attributes.ARMOR).setBaseValue(this.canCastHeal || this.canCastExplosion ? 8.0D : 12.0D);
+		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(this.canCastHeal || this.canCastExplosion ? 4.0D : 6.0D);
 	}
-
+	
 	@Override
-	public void onEntityUpdate() {
-		if (!this.world.isRemote && this.lifeTime-- <= 0) {
-			this.setDead();
+	public void aiStep() {
+		if (!this.level.isClientSide && this.lifeTime-- <= 0) {
+			this.remove();
 		}
-
-		super.onEntityUpdate();
+		
+		super.aiStep();
 	}
 
 	@Override
@@ -123,33 +131,42 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public void save(CompoundNBT compound) {
-		super.save(compound);
-		if (this.caster != null && this.caster.isEntityAlive()) {
-			compound.setUniqueId("Summoner", this.caster.getPersistentID());
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		
+		if (this.caster != null && this.caster.isAlive()) {
+			
+			compound.put("Summoner", NBTUtil.createUUID(this.caster.getUUID()));
 		}
-		compound.setInteger("lifeTime", this.lifeTime);
+		compound.putInt("lifeTime", this.lifeTime);
 	}
-
+	
 	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
-		super.readEntityFromNBT(compound);
-		if (compound.hasKey("SummonerMost", Constants.NBT.TAG_LONG)) {
-			UUID uuid = compound.getUniqueId("Summoner");
-			Entity e = EntityUtil.getEntityByUUID(this.world, uuid);
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
+		
+		if (compound.contains("SummonerMost", Constants.NBT.TAG_LONG)) {
+			UUID uuid = NBTUtil.loadUUID(compound.get("Summoner"));
+			Entity e = EntityUtil.getEntityByUUID(this.level, uuid);
 			if (e instanceof EntityCQRSpectreLord) {
 				this.caster = (EntityCQRSpectreLord) e;
 			}
 		}
-		this.lifeTime = compound.getInteger("lifeTime");
+		this.lifeTime = compound.getInt("lifeTime");
 	}
-
+	
 	@Override
-	public void onDeath(DamageSource cause) {
+	public void die(DamageSource cause) {
 		super.die(cause);
+		
 		if (this.caster != null) {
-			this.caster.attackEntityFrom(DamageSource.causeMobDamage(this).setDamageBypassesArmor(), this.caster.getMaxHealth() * 0.025F);
+			this.caster.hurt(DamageSource.mobAttack(this).bypassArmor(), this.caster.getMaxHealth() * 0.025F);
 		}
 	}
-
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+	
 }

@@ -1,51 +1,51 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import team.cqr.cqrepoured.entity.ai.boss.spectrelord.*;
+import net.minecraftforge.fml.network.NetworkHooks;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordDash;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordLaser;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordSummonIllusions;
+import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordSwordShield;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.init.CQRLoottables;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISummoner {
 
-	private static final DataParameter<Integer> SWORD_SHIELD_ACTIVE = EntityDataManager.<Integer>createKey(EntityCQRSpectreLord.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> CHANNELING_LASER = EntityDataManager.<Boolean>createKey(EntityCQRSpectreLord.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> SWORD_SHIELD_ACTIVE = EntityDataManager.<Integer>defineId(EntityCQRSpectreLord.class, DataSerializers.INT);
+	private static final DataParameter<Boolean> CHANNELING_LASER = EntityDataManager.<Boolean>defineId(EntityCQRSpectreLord.class, DataSerializers.BOOLEAN);
 
 	private final List<Entity> summonedEntities = new ArrayList<>();
 
-	public EntityCQRSpectreLord(World world) {
-		super(world);
+	public EntityCQRSpectreLord(EntityType<? extends EntityCQRSpectreLord> type, World world) {
+		super(type, world);
 	}
 
 	@Override
-	public CreatureAttribute getCreatureAttribute() {
+	public CreatureAttribute getMobType() {
 		return CreatureAttribute.UNDEAD;
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_SPECTRE_LORD;
 	}
 
 	@Override
@@ -62,16 +62,17 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 		// this.dataManager.register(INVISIBILITY, 0.0F);
-		this.dataManager.register(SWORD_SHIELD_ACTIVE, 0);
-		this.dataManager.register(CHANNELING_LASER, false);
+		this.entityData.define(SWORD_SHIELD_ACTIVE, 0);
+		this.entityData.define(CHANNELING_LASER, false);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(Attributes.ARMOR).setBaseValue(16.0D);
-		this.getEntityAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(8.0D);
-		this.getEntityAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+	protected void applyAttributeValues() {
+		super.applyAttributeValues();
+		
+		this.getAttribute(Attributes.ARMOR).setBaseValue(16.0D);
+		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(8.0D);
+		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
 	@Override
@@ -86,10 +87,10 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 
 	@Override
 	public void baseTick() {
-		if (!this.world.isRemote && this.fallDistance > 3.0F) {
+		if (!this.level.isClientSide && this.fallDistance > 3.0F) {
 			this.fallDistance = 0.0F;
 			if (this.hasAttackTarget()) {
-				Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this, this.getAttackTarget(), 2.0D, 8.0D, 2.0D);
+				Vector3d vec = TargetUtil.getPositionNearTarget(this.level, this, this.getTarget(), 2.0D, 8.0D, 2.0D);
 				if (vec != null) {
 					this.teleport(vec.x, vec.y, vec.z);
 				}
@@ -97,7 +98,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 				BlockPos pos = this.getHomePositionCQR();
 				this.teleport(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 			} else {
-				Vector3d vec = TargetUtil.getPositionNearTarget(this.world, this, this, 0.0D, 16.0D, 8.0D);
+				Vector3d vec = TargetUtil.getPositionNearTarget(this.level, this, this, 0.0D, 16.0D, 8.0D);
 				if (vec != null) {
 					this.teleport(vec.x, vec.y, vec.z);
 				}
@@ -108,20 +109,20 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 
 		for (Iterator<Entity> iterator = this.summonedEntities.iterator(); iterator.hasNext();) {
 			Entity e = iterator.next();
-			if (!e.isEntityAlive()) {
+			if (!e.isAlive()) {
 				iterator.remove();
 			}
 		}
 
-		if (!this.world.isRemote) {
-			if (this.dataManager.get(SWORD_SHIELD_ACTIVE) > 0) {
-				this.dataManager.set(SWORD_SHIELD_ACTIVE, this.dataManager.get(SWORD_SHIELD_ACTIVE) - 1);
+		if (!this.level.isClientSide) {
+			if (this.entityData.get(SWORD_SHIELD_ACTIVE) > 0) {
+				this.entityData.set(SWORD_SHIELD_ACTIVE, this.entityData.get(SWORD_SHIELD_ACTIVE) - 1);
 			}
 		}
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
+	public boolean hurt(DamageSource source, float amount) {
 		if (this.getInvisibility() == 1.0F) {
 			return false;
 		}
@@ -132,47 +133,47 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 			if (source.isProjectile()) {
 				return false;
 			}
-			if (source.getImmediateSource() != null) {
-				boolean flag = super.attackEntityFrom(source, amount);
+			if (source.getDirectEntity() != null) {
+				boolean flag = super.hurt(source, amount);
 				if (flag) {
-					source.getImmediateSource().attackEntityFrom(new DamageSource("thorns").setDamageBypassesArmor(), amount * 0.25F);
+					source.getDirectEntity().hurt(new DamageSource("thorns").bypassArmor(), amount * 0.25F);
 				}
 				return flag;
 			}
 		}
-		return super.attackEntityFrom(source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override
 	public float getInvisibility() {
-		return this.dataManager.get(INVISIBILITY);
+		return this.entityData.get(INVISIBILITY);
 	}
 
 	public void setSwordShieldActive(int ticks) {
-		this.dataManager.set(SWORD_SHIELD_ACTIVE, ticks);
+		this.entityData.set(SWORD_SHIELD_ACTIVE, ticks);
 	}
 
 	public boolean isSwordShieldActive() {
-		return this.dataManager.get(SWORD_SHIELD_ACTIVE) > 0;
+		return this.entityData.get(SWORD_SHIELD_ACTIVE) > 0;
 	}
 
 	public void setChannelingLaser(boolean channelingLaser) {
-		this.dataManager.set(CHANNELING_LASER, channelingLaser);
+		this.entityData.set(CHANNELING_LASER, channelingLaser);
 	}
 
 	public boolean isChannelingLaser() {
-		return this.dataManager.get(CHANNELING_LASER);
+		return this.entityData.get(CHANNELING_LASER);
 	}
 
 	@Override
 	public void teleport(double x, double y, double z) {
-		double oldX = this.posX;
-		double oldY = this.posY;
-		double oldZ = this.posZ;
+		double oldX = this.getX();
+		double oldY = this.getY();
+		double oldZ = this.getZ();
 		super.teleport(x, y, z);
-		this.playSound(SoundEvents.ENTITY_SHULKER_TELEPORT, 1.0F, 0.9F + this.rand.nextFloat() * 0.2F);
-		((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, oldX, oldY + this.height * 0.5D, oldZ, 4, 0.2D, 0.2D, 0.2D, 0.0D);
-		((ServerWorld) this.world).spawnParticle(ParticleTypes.PORTAL, x, y + this.height * 0.5D, z, 4, 0.2D, 0.2D, 0.2D, 0.0D);
+		this.playSound(SoundEvents.SHULKER_TELEPORT, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
+		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, /*4,*/ 0.2D, 0.2D, 0.2D/*, 0.0D*/);
+		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, x, y + this.getBbHeight() * 0.5D, z, /*4,*/ 0.2D, 0.2D, 0.2D/*, 0.0D*/);
 	}
 
 	@Override
@@ -193,6 +194,11 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

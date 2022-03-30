@@ -50,15 +50,15 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	}
 
-	protected AbstractEntityLaser(World worldIn) {
-		this(CQREntityTypes.LASER_BASE.get(), worldIn, null, 4.0F);
+	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, World worldIn) {
+		this(type, worldIn, null, 4.0F);
 	}
 
 	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, World worldIn, LivingEntity caster, float length) {
 		super(type, worldIn);
 		this.caster = caster;
 		this.length = length;
-		this.ignoreFrustumCheck = true;
+		this.noCulling = true;
 		this.noPhysics = true;
 		this.setSize(0.1F, 0.1F);
 	}
