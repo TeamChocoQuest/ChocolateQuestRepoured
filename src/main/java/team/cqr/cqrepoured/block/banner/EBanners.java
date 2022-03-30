@@ -111,7 +111,7 @@ public enum EBanners {
 		nbt.put("Patterns", builder.toListTag());
 		
 		bannerItem.hideTooltipPart(ItemStack.TooltipDisplayFlags.ADDITIONAL);
-		bannerItem.setHoverName(new TranslationTextComponent("item." + CQRMain.MODID + ".banner." + this.name().toLowerCase() + ".name"));
+		bannerItem.setHoverName(new TranslationTextComponent("item." + CQRMain.MODID + ".banner." + this.name().toLowerCase()));
 		
 		return bannerItem;
 	}
