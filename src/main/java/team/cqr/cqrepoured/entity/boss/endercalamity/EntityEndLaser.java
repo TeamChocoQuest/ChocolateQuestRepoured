@@ -1,21 +1,27 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityEndLaser extends EntityRotatingLaser {
 
 	public EntityEndLaser(World worldIn) {
-		super(worldIn);
+		this(CQREntityTypes.END_LASER.get(), worldIn);
+	}
+	
+	public EntityEndLaser(EntityType<? extends EntityEndLaser> type, World world) {
+		super(type, world);
 	}
 
 	public EntityEndLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
-		super(worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
+		super(CQREntityTypes.END_LASER.get(), worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
 	}
 
 	@Override

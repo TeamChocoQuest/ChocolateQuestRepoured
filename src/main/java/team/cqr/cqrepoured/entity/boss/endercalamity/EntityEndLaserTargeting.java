@@ -1,15 +1,21 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityTargetingLaser;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityEndLaserTargeting extends EntityTargetingLaser {
 
 	public EntityEndLaserTargeting(World worldIn) {
-		super(worldIn);
+		this(CQREntityTypes.END_LASER_TARGETING.get(), worldIn);
+	}
+	
+	public EntityEndLaserTargeting(EntityType<? extends EntityEndLaserTargeting> type, World world) {
+		super(type, world);
 	}
 
 	public EntityEndLaserTargeting(LivingEntity caster, LivingEntity target) {
@@ -17,7 +23,7 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 	}
 
 	public EntityEndLaserTargeting(World worldIn, LivingEntity caster, float length, LivingEntity target) {
-		super(worldIn, caster, length, target);
+		super(CQREntityTypes.END_LASER_TARGETING.get(), worldIn, caster, length, target);
 		this.maxRotationPerTick = 0.5F;
 	}
 

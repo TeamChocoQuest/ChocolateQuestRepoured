@@ -1,24 +1,30 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityTargetingLaser;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 
 	public EntityExterminatorHandLaser(World worldIn) {
-		super(worldIn);
+		this(CQREntityTypes.LASER_EXTERMINATOR.get(), worldIn);
+	}
+	
+	public EntityExterminatorHandLaser(EntityType<? extends EntityExterminatorHandLaser> type, World worldIn) {
+		super(CQREntityTypes.LASER_EXTERMINATOR.get(), worldIn);
 	}
 
 	public EntityExterminatorHandLaser(LivingEntity caster, LivingEntity target) {
-		this(caster.level, caster, 48, target);
+		this(CQREntityTypes.LASER_EXTERMINATOR.get(), caster.level, caster, 48, target);
 	}
 
-	public EntityExterminatorHandLaser(World worldIn, LivingEntity caster, float length, LivingEntity target) {
-		super(worldIn, caster, length, target);
+	public EntityExterminatorHandLaser(EntityType<? extends EntityExterminatorHandLaser> type, World worldIn, LivingEntity caster, float length, LivingEntity target) {
+		super(type, worldIn, caster, length, target);
 		this.maxRotationPerTick = 1.25F;
 	}
 
