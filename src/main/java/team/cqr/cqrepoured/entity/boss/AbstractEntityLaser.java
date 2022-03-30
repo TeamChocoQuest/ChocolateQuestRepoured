@@ -16,6 +16,9 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceContext.BlockMode;
+import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -60,7 +63,6 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.length = length;
 		this.noCulling = true;
 		this.noPhysics = true;
-		this.setSize(0.1F, 0.1F);
 	}
 
 	public Vector3d getOffsetVector() {
@@ -71,34 +73,28 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public boolean isInRangeToRenderDist(double distance) {
+	public boolean shouldRenderAtSqrDistance(double distance) {
 		return distance < 64.0D * 64.0D;
 	}
 	
-
+	
 	@Override
-	protected void readEntityFromNBT(CompoundNBT compound) {
-
+	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+		
 	}
-
+	
 	@Override
-	protected void writeEntityToNBT(CompoundNBT compound) {
-
+	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+		
 	}
-
+	
 	@Override
-	public boolean writeToNBTAtomically(CompoundNBT compound) {
+	public void load(CompoundNBT pCompound) {
+	}
+	
+	@Override
+	public boolean save(CompoundNBT pCompound) {
 		return false;
-	}
-
-	@Override
-	public boolean writeToNBTOptional(CompoundNBT compound) {
-		return false;
-	}
-
-	@Override
-	public CompoundNBT writeToNBT(CompoundNBT compound) {
-		return compound;
 	}
 
 	public double laserEffectRadius() {
@@ -127,7 +123,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		if (!this.level.isClientSide) {
 			Vector3d start = this.position();
 			Vector3d end = start.add(Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
-			RayTraceResult result = this.level.rayTraceBlocks(start, end, false, false, false);
+			RayTraceContext rtc = new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
+			RayTraceResult result = this.level.clip(rtc);//this.level.rayTraceBlocks(start, end, false, false, false);
 			double d = result != null ? (float) result.getLocation().subtract(this.position()).length() : this.length;
 
 			if (result != null) {
