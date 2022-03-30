@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.item;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.java.games.input.Keyboard;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,19 +21,20 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemTeleportStone extends ItemLore {
 
@@ -56,7 +61,7 @@ public class ItemTeleportStone extends ItemLore {
 
 		if (isSelected && entityIn instanceof PlayerEntity && worldIn.isClientSide && worldIn.getGameTime() % 4 == 0) {
 			CompoundNBT tag = stack.getTag();
-			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.getDimension() == tag.getInteger(DIMENSION)) {
+			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.dimensionType().toString().equals(tag.get(DIMENSION))) {
 				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
 				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.1D, -0.1D, 0.1D);
 				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
@@ -160,7 +165,7 @@ public class ItemTeleportStone extends ItemLore {
 
 			else if (stack.hasTag() && !player.isCrouching()) {
 				if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z)) {
-					int dimension = stack.getTagCompound().hasKey(DIMENSION, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(DIMENSION) : 0;
+					String dimension = stack.getTag().contains(DIMENSION, Constants.NBT.TAG_STRING) ? stack.getTag().getString(DIMENSION) : DimensionType.OVERWORLD_EFFECTS.toString();
 					BlockPos pos = this.getPoint(stack);
 
 					if (player.isVehicle()) {
@@ -170,7 +175,7 @@ public class ItemTeleportStone extends ItemLore {
 						player.stopRiding();
 					}
 
-					if (dimension != player.getEntityWorld().provider.getDimension()) {
+					if (!dimension.equals(player.getLevel().dimensionType().effectsLocation())) {
 						MinecraftServer server = player.level.getServer();
 						if (server != null) {
 							transferPlayerToDimension(player, dimension, server.getPlayerList());
@@ -258,7 +263,7 @@ public class ItemTeleportStone extends ItemLore {
 
 		// Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
 		// if (!stone.hasKey(this.Dimension)) {
-		stone.setInteger(DIMENSION, player.dimension);
+		stone.putString(DIMENSION, player.level.dimensionType().toString());
 		// }
 	}
 
