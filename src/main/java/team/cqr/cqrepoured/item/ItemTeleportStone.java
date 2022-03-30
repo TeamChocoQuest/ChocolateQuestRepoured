@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,59 +20,61 @@ import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemTeleportStone extends Item {
+public class ItemTeleportStone extends ItemLore {
 
 	private static final String X = "x";
 	private static final String Y = "y";
 	private static final String Z = "z";
 	private static final String DIMENSION = "dimension";
 
-	public ItemTeleportStone() {
-		this.setMaxDamage(100);
-
-		this.setMaxStackSize(1);
+	public ItemTeleportStone(Properties properties)
+	{
+		super(properties.durability(100));
+		//this.setMaxDamage(100);
+		//this.setMaxStackSize(1);
 	}
 
 	@Override
-	public UseAction getItemUseAction(ItemStack stack) {
+	public UseAction getUseAnimation(ItemStack stack) {
 		return UseAction.BOW;
 	}
-	
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (isSelected && entityIn instanceof EntityPlayer && worldIn.isRemote && worldIn.getTotalWorldTime() % 4 == 0) {
-			NBTTagCompound tag = stack.getTagCompound();
-			if (tag != null && tag.hasKey(X) && tag.hasKey(Y) && tag.hasKey(Z) && tag.hasKey(DIMENSION) && worldIn.provider.getDimension() == tag.getInteger(DIMENSION)) {
-				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.3D, -0.5D, 0.5D);
-				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.1D, -0.1D, 0.1D);
-				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.rand.nextGaussian() * 0.3D, -0.5D, 0.5D);
-				worldIn.spawnParticle(EnumParticleTypes.DRAGON_BREATH, x + 0.5D, y + 0.1D, z + 0.5D, 0.0D, 0.0D, 0.0D);
+	@Override
+	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+
+		if (isSelected && entityIn instanceof PlayerEntity && worldIn.isClientSide && worldIn.getGameTime() % 4 == 0) {
+			CompoundNBT tag = stack.getTag();
+			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.getDimension() == tag.getInteger(DIMENSION)) {
+				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.1D, -0.1D, 0.1D);
+				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				worldIn.addParticle(ParticleTypes.DRAGON_BREATH, x + 0.5D, y + 0.1D, z + 0.5D, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 40;
 	}
 
 	@Override
 	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		ItemStack stack = playerIn.getHeldItem(handIn);
-		playerIn.setActiveHand(handIn);
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		ItemStack stack = playerIn.getItemInHand(handIn);
+		playerIn.startUsingItem(handIn);
+		return ActionResult.success(stack);
 	}
 
 	/**
@@ -132,50 +133,50 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		if (entityLiving instanceof ServerPlayerEntity) {
 			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
-			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
+			player.getCooldowns().addCooldown(stack.getItem(), 60);
 
-			if (player.isSneaking() && stack.hasTagCompound()) {
-				stack.getTagCompound().removeTag(X);
-				stack.getTagCompound().removeTag(Y);
-				stack.getTagCompound().removeTag(Z);
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+			if (player.isCrouching() && stack.hasTag()) {
+				stack.getTag().remove(X);
+				stack.getTag().remove(Y);
+				stack.getTag().remove(Z);
+				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 				for (int i = 0; i < 10; i++) {
-					worldIn.spawnParticle(ParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+					worldIn.addParticle(ParticleTypes.LARGE_SMOKE, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
 			}
 
-			else if (this.getPoint(stack) == null || !stack.hasTagCompound()) {
+			else if (this.getPoint(stack) == null || !stack.hasTag()) {
 				this.setPoint(stack, player);
 				for (int i = 0; i < 10; i++) {
-					worldIn.spawnParticle(ParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+					worldIn.addParticle(ParticleTypes.FLAME, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 
-				return super.onItemUseFinish(stack, worldIn, entityLiving);
+				return super.finishUsingItem(stack, worldIn, entityLiving);
 			}
 
-			else if (stack.hasTagCompound() && !player.isSneaking()) {
-				if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
+			else if (stack.hasTag() && !player.isCrouching()) {
+				if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z)) {
 					int dimension = stack.getTagCompound().hasKey(DIMENSION, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(DIMENSION) : 0;
 					BlockPos pos = this.getPoint(stack);
 
-					if (player.isBeingRidden()) {
-						player.removePassengers();
+					if (player.isVehicle()) {
+						player.ejectPassengers();
 					}
-					if (player.isRiding()) {
-						player.dismountRidingEntity();
+					if (player.isPassenger()) {
+						player.stopRiding();
 					}
 
 					if (dimension != player.getEntityWorld().provider.getDimension()) {
-						MinecraftServer server = player.world.getMinecraftServer();
+						MinecraftServer server = player.level.getServer();
 						if (server != null) {
 							transferPlayerToDimension(player, dimension, server.getPlayerList());
 						}
 					}
-					player.setPositionAndUpdate(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+					player.teleportTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
 					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
 					// stack.getTagCompound().getDouble(this.Z));
 					/*
@@ -199,25 +200,25 @@ public class ItemTeleportStone extends Item {
 					// stack.getTagCompound().getDouble(this.Y),
 					// stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
 					for (int i = 0; i < 30; i++) {
-						worldIn.spawnParticle(ParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+						worldIn.addParticle(ParticleTypes.PORTAL, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
-					worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+					worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 
-					if (!player.capabilities.isCreativeMode) {
-						stack.damageItem(1, entityLiving);
+					if (!player.abilities.instabuild) {
+						stack.hurtAndBreak(1, entityLiving, e -> e.broadcastBreakEvent(entityLiving.getUsedItemHand()));
 					}
 
-					return super.onItemUseFinish(stack, worldIn, entityLiving);
+					return super.finishUsingItem(stack, worldIn, entityLiving);
 				}
 			}
 
 		}
-		return super.onItemUseFinish(stack, worldIn, entityLiving);
+		return super.finishUsingItem(stack, worldIn, entityLiving);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone.name"));
 
@@ -236,23 +237,23 @@ public class ItemTeleportStone extends Item {
 	}
 
 	private void setPoint(ItemStack stack, ServerPlayerEntity player) {
-		CompoundNBT stone = stack.getTagCompound();
+		CompoundNBT stone = stack.getTag();
 
 		if (stone == null) {
 			stone = new CompoundNBT();
-			stack.setTagCompound(stone);
+			stack.setTag(stone);
 		}
 
-		if (!stone.hasKey(X)) {
-			stone.setDouble(X, player.posX);
+		if (!stone.contains(X)) {
+			stone.putDouble(X, player.getX());
 		}
 
-		if (!stone.hasKey(Y)) {
-			stone.setDouble(Y, player.posY);
+		if (!stone.contains(Y)) {
+			stone.putDouble(Y, player.getY());
 		}
 
-		if (!stone.hasKey(Z)) {
-			stone.setDouble(Z, player.posZ);
+		if (!stone.contains(Z)) {
+			stone.putDouble(Z, player.getZ());
 		}
 
 		// Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
@@ -262,15 +263,15 @@ public class ItemTeleportStone extends Item {
 	}
 
 	@Override
-	public boolean hasEffect(ItemStack stack) {
+	public boolean isFoil(ItemStack stack) {
 		return this.getPoint(stack) != null;
 	}
 
 	@Nullable
 	private BlockPos getPoint(ItemStack stack) {
-		if (stack.hasTagCompound()) {
-			if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
-				CompoundNBT stone = stack.getTagCompound();
+		if (stack.hasTag()) {
+			if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z)) {
+				CompoundNBT stone = stack.getTag();
 
 				double x = stone.getDouble(X);
 				double y = stone.getDouble(Y);
