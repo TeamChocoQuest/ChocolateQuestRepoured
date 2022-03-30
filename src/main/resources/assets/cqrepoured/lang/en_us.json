@@ -563,7 +563,7 @@
     "description.staff_spider": "Right-click to shoot your goo, my dude.",
     "description.staff_gun": "It's a gun. On a stick. Man, those dwarves are geniuses.",
     "description.staff_healing": "A magical implement used to apply potion effects by touching the tip to a target. Though historically usually used for healing effects, some generals have made great use of other potions as well. How the staff's potion effect is changed is a closely guarded secret.",
-    "description.contains": "Contains:",
+    "description.contains": "Contains: %s",
 	"description.contains_nothing": "<Empty>",
     "description.empty": "Empty",
     "item.cqrepoured.soul_bottle.tooltip": "Left-click a mob to store it, right-click to summon that mob. Sneak and right-click to summon the mob and empty the bottle. Place inside a single-use spawner to set the mobs that spawner will spawn.",
