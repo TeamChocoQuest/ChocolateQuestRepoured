@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
@@ -103,7 +105,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 					}
 
 					if (this.summonerLiving instanceof PlayerEntity && summon instanceof AbstractEntityCQR) {
-						Arrays.stream(EntityEquipmentSlot.values()).forEach(slot -> ((AbstractEntityCQR) summon).setDropChance(slot, 1.01F));
+						Arrays.stream(EquipmentSlotType.values()).forEach(slot -> ((AbstractEntityCQR) summon).setDropChance(slot, 1.01F));
 					}
 
 					this.level.addFreshEntity(summon);
