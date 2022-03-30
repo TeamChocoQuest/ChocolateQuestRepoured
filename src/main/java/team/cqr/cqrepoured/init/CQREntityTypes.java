@@ -31,6 +31,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
+import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.entity.misc.EntityElectricField;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
@@ -105,6 +106,15 @@ public class CQREntityTypes {
 					.build(CQRMain.prefix("projectile_homing_ender_eye").toString()));
 
 
+	public static final RegistryObject<EntityType<EntityColoredLightningBolt>> COLORED_LIGHTNING = ENTITY_TYPES.register("colored_lightning_bolt",
+			() -> EntityType.Builder.<EntityColoredLightningBolt>of(EntityColoredLightningBolt::new, EntityClassification.MISC)
+			.noSave()
+			.sized(0.0F, 0.0F)
+			.clientTrackingRange(32)
+			.updateInterval(Integer.MAX_VALUE)
+			.build(CQRMain.prefix("colored_lightning_bolt").toString())
+		);
+	
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
 
