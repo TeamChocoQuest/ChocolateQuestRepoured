@@ -11,8 +11,11 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
@@ -51,6 +54,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -84,6 +88,7 @@ import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -680,23 +685,62 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		boolean flag = false;
 
-		if (!player.isCrouching()) {
-			if (player.isCreative() || this.getLeader() == player) {
-				if (!this.level.isClientSide) {
-					player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getId(), 0, 0);
+		if(player instanceof ServerPlayerEntity) {
+			ServerPlayerEntity spe = (ServerPlayerEntity) player;
+			if (!player.isCrouching()) {
+				if (player.isCreative() || this.getLeader() == player) {
+					if (!this.level.isClientSide) {
+						//player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getId(), 0, 0);
+						NetworkHooks.openGui(spe, new INamedContainerProvider() {
+							
+							@Override
+							public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
+								return CQRContainerTypes.CQR_ENTITY_EDITOR.get().create(windowId, invPlayer);
+							}
+							
+							@Override
+							public ITextComponent getDisplayName() {
+								return AbstractEntityCQR.this.getDisplayName();
+							}
+						});
+					}
+					flag = true;
+				} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
+					if (!this.level.isClientSide) {
+						//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
+						NetworkHooks.openGui(spe, new INamedContainerProvider() {
+							
+							@Override
+							public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
+								return CQRContainerTypes.MERCHANT.get().create(windowId, invPlayer);
+							}
+							
+							@Override
+							public ITextComponent getDisplayName() {
+								return AbstractEntityCQR.this.getDisplayName();
+							}
+						});
+					}
+					flag = true;
 				}
-				flag = true;
-			} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
+			} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
 				if (!this.level.isClientSide) {
-					player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
+					//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
+					NetworkHooks.openGui(spe, new INamedContainerProvider() {
+						
+						@Override
+						public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
+							return CQRContainerTypes.MERCHANT.get().create(windowId, invPlayer);
+						}
+						
+						@Override
+						public ITextComponent getDisplayName() {
+							return AbstractEntityCQR.this.getDisplayName();
+						}
+					});
 				}
 				flag = true;
 			}
-		} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
-			if (!this.level.isClientSide) {
-				player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
-			}
-			flag = true;
 		}
 
 		if (flag && !this.getLookControl().isHasWanted() && !this.isPathFinding()) {

@@ -14,6 +14,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.util.CraftingHelper;
 import team.cqr.cqrepoured.util.GuiHandler;
 
@@ -22,6 +23,10 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
 
+	public ContainerMerchant(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
+		//TODO
+	}
+	
 	public static ContainerMerchant fromNetwork(int id, PlayerInventory playerInv) {
 		return new ContainerMerchant(id, null, playerInv);
 	}
