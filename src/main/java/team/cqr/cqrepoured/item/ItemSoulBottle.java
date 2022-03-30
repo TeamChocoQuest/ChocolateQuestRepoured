@@ -161,9 +161,9 @@ public class ItemSoulBottle extends ItemLore {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		if (stack.hasTag() && stack.getTag().contains(ENTITY_IN_TAG)) {
 			CompoundNBT tag = (CompoundNBT) stack.getTag().get(ENTITY_IN_TAG);
-			tooltip.add((new TranslationTextComponent("description.contains.name", new TranslationTextComponent(this.getEntityName(tag.getString("id"))))).withStyle(TextFormatting.BLUE));
+			tooltip.add((new TranslationTextComponent("description.contains", new TranslationTextComponent(this.getEntityName(tag.getString("id"))))).withStyle(TextFormatting.BLUE));
 		} else {
-			tooltip.add((new TranslationTextComponent("description.contains_nothing.name")).withStyle(TextFormatting.BLUE));
+			tooltip.add((new TranslationTextComponent("description.contains_nothing")).withStyle(TextFormatting.BLUE));
 		}
 	}
 
