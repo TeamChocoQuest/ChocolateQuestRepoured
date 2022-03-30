@@ -25,12 +25,12 @@ public class ItemLore extends Item {
 	
 	@OnlyIn(Dist.CLIENT)
 	public static boolean isLShiftPressed() {
-		return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) != GLFW.GLFW_PRESS;
+		return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT) == GLFW.GLFW_PRESS;
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	public static boolean isRShiftPressed() {
-		return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT) != GLFW.GLFW_PRESS;
+		return GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_RIGHT_SHIFT) == GLFW.GLFW_PRESS;
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class ItemLore extends Item {
 		if (isLShiftPressed() || isRShiftPressed()) {
 			tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + "." + registryNamePath + ".tooltip"));
 		} else {
-			tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + ".tooltip.click_shift"));
+			tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + ".tooltip.hold_shift"));
 		}
 	}
 	
