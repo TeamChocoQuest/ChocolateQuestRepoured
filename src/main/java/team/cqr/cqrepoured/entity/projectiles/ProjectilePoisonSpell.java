@@ -1,34 +1,46 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potions;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
-public class ProjectilePoisonSpell extends ProjectileSpiderBall {
+public class ProjectilePoisonSpell extends ProjectileBase {
 
 	private LivingEntity shooter;
 	private boolean canPlaceAura = false;
+	protected float damage;
 
-	public ProjectilePoisonSpell(World worldIn) {
-		super(worldIn);
+	public ProjectilePoisonSpell(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+		super(throwableEntity, world);
 	}
 
-	public ProjectilePoisonSpell(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
+	public ProjectilePoisonSpell(double pX, double pY, double pZ, World world) {
+		super(CQREntityTypes.PROJECTILE_POISON_SPELL.get(), pX, pY, pZ, world);
 	}
 
-	public ProjectilePoisonSpell(World worldIn, LivingEntity shooter) {
-		super(worldIn, shooter);
+	public ProjectilePoisonSpell(LivingEntity shooter, World world)
+	{
+		super(CQREntityTypes.PROJECTILE_POISON_SPELL.get(), shooter, world);
 		this.shooter = shooter;
-		this.isImmuneToFire = false;
 		this.damage = 1.0F;
 	}
 
 	public void enableAuraPlacement() {
 		this.canPlaceAura = true;
+	}
+
+	@Override
+	protected void defineSynchedData() {
+
 	}
 
 	@Override
@@ -45,13 +57,28 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 	}
 
 	@Override
+	public void onHitEntity(EntityRayTraceResult entityResult)
+	{
+		if(entityResult.getEntity() instanceof LivingEntity)
+		{
+			LivingEntity entity = (LivingEntity)entityResult.getEntity();
+
+			if(entity == this.shooter) return;
+
+			entity.addEffect(new EffectInstance(Effects.POISON, 100, 0));
+			entity.hurt(DamageSource.MAGIC, this.damage);
+			this.remove();
+		}
+	}
+
+	@Override
 	protected void onHit(RayTraceResult result) {
-		if (this.world.isRemote) {
+		if (this.level.isClientSide) {
 			return;
 		}
 
 		if (this.canPlaceAura && DungeonGenUtils.percentageRandom(0.6)) {
-			AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(this.world, this.posX, this.posY, this.posZ);
+			AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
 
 			cloud.setOwner(this.shooter);
 			cloud.setRadius(DungeonGenUtils.randomBetween(1, 3));
@@ -60,10 +87,10 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 			cloud.setDuration(300);
 			cloud.setRadiusPerTick(-cloud.getRadius() / cloud.getDuration());
 			cloud.setPotion(Potions.STRONG_POISON);
-			cloud.setColor(35849);
+			cloud.setFixedColor(35849);
 			cloud.setNoGravity(false);
 
-			this.world.spawnEntity(cloud);
+			this.level.addFreshEntity(cloud);
 		}
 
 		super.onHit(result);

@@ -32,7 +32,7 @@ public class ItemStaffPoison extends ItemLore implements IRangedWeapon {
 		player.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(worldIn, player);
+			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(player, worldIn);
 			spell.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 2.0F, 0F);
 			worldIn.addFreshEntity(spell);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
@@ -45,7 +45,7 @@ public class ItemStaffPoison extends ItemLore implements IRangedWeapon {
 		shooter.swing(handIn);
 
 		if (!worldIn.isClientSide) {
-			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(worldIn, shooter);
+			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(shooter, worldIn);
 			Vector3d v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(2D);

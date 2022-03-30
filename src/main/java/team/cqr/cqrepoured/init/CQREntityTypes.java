@@ -57,6 +57,27 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileVampiricSpell>of(ProjectileVampiricSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_vampiric_spell").toString()));
 
+	public static final RegistryObject<EntityType<ProjectileSpiderBall>> PROJECTILE_SPIDER_BALL = ENTITY_TYPES.register("projectile_spider_ball",
+			() -> EntityType.Builder.<ProjectileSpiderBall>of(ProjectileSpiderBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_spider_ball").toString()));
+
+	public static final RegistryObject<EntityType<ProjectilePoisonSpell>> PROJECTILE_POISON_SPELL = ENTITY_TYPES.register("projectile_poison_spell",
+			() -> EntityType.Builder.<ProjectilePoisonSpell>of(ProjectilePoisonSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_poison_spell").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileHotFireball>> PROJECTILE_HOT_FIREBALL = ENTITY_TYPES.register("projectile_hot_fireball",
+			() -> EntityType.Builder.<ProjectileHotFireball>of(ProjectileHotFireball::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_hot_fireball").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileFireWallPart>> PROJECTILE_FIRE_WALL_PART = ENTITY_TYPES.register("projectile_fire_wall_part",
+			() -> EntityType.Builder.<ProjectileFireWallPart>of(ProjectileFireWallPart::new, EntityClassification.MISC).sized(1.0F, 2.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_fire_wall_part").toString()));
+
+	public static final RegistryObject<EntityType<ProjectileHomingEnderEye>> PROJECTILE_HOMING_ENDER_EYE = ENTITY_TYPES.register("projectile_homing_ender_eye",
+			() -> EntityType.Builder.<ProjectileHomingEnderEye>of(ProjectileHomingEnderEye::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+					.build(CQRMain.prefix("projectile_homing_ender_eye").toString()));
+
+
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
 
