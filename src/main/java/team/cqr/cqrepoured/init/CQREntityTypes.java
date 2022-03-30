@@ -12,17 +12,44 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.EntitySlimePart;
-import team.cqr.cqrepoured.entity.boss.*;
+import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
+import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
+import team.cqr.cqrepoured.entity.boss.EntityCQRLich;
+import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
+import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
+import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
+import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamitySpawner;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
+import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
-import team.cqr.cqrepoured.entity.misc.*;
+import team.cqr.cqrepoured.entity.misc.EntityBubble;
+import team.cqr.cqrepoured.entity.misc.EntityElectricField;
+import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
+import team.cqr.cqrepoured.entity.misc.EntityIceSpike;
+import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
+import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
+import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
+import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.entity.projectiles.*;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
+import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
 public class CQREntityTypes {
 
@@ -86,9 +113,12 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityCalamitySpawner>> CALAMITY_SPAWNER = registerSized(EntityCalamitySpawner::new, "calamity_spawner", 1, 1, 1);
 	public static final RegistryObject<EntityType<EntityCQREnderCalamity>> ENDER_CALAMITY = registerSized(EntityCQREnderCalamity::new, "ender_calamity", 2, 2, 1);
 	public static final RegistryObject<EntityType<EntityCQREnderKing>> ENDER_KING = registerSized(EntityCQREnderKing::new, "ender_king", 0.6F, 2.9F, 1);
+	public static final RegistryObject<EntityType<EntityEndLaser>> END_LASER = registerLaser(EntityEndLaser::new, "end_laser");
+	public static final RegistryObject<EntityType<EntityEndLaserTargeting>> END_LASER_TARGETING = registerLaser(EntityEndLaserTargeting::new, "end_laser");
 	
 	//Exterminator
 	public static final RegistryObject<EntityType<EntityCQRExterminator>> EXTERMINATOR = registerSized(EntityCQRExterminator::new, "exterminator", 2, 2.75F, 1);
+	public static final RegistryObject<EntityType<EntityExterminatorHandLaser>> LASER_EXTERMINATOR = registerLaser(EntityExterminatorHandLaser::new, "exterminator_laser");
 	public static final RegistryObject<EntityType<EntityElectricField>> ELECTRIC_FIELD = registerSized(EntityElectricField::new, "electric_field", 1.125F, 1.125F, 3);
 	
 	
@@ -131,6 +161,10 @@ public class CQREntityTypes {
 		return registerSized(factory, entityName, 0.6F, 1.875F, updateInterval);
 	}
 	
+	protected static <T extends AbstractEntityLaser>  RegistryObject<EntityType<T>> registerLaser(IFactory<T> factory, String entityName) {
+		return registerSized(factory, entityName, 0.1F, 0.1F, 1);
+	}
+
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(IFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
 		return ENTITY_TYPES.register(entityName, () -> EntityType.Builder
 				.<T>of(factory, EntityClassification.MISC)
