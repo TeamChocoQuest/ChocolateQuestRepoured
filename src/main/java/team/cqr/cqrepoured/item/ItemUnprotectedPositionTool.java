@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.item;
 import com.google.common.collect.Streams;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
@@ -10,7 +11,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,38 +26,43 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 
 	private static final String POSITIONS_NBT_KEY = "positions";
 
-	@Override
-	public int getItemStackLimit(ItemStack stack) {
-		return 1;
+	public ItemUnprotectedPositionTool(Properties properties)
+	{
+		super(properties.stacksTo(1));
 	}
 
+/*	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return 1;
+	} */
+
 	@Override
-	public ActionResultType onItemUseFirst(PlayerEntity player, World world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, Hand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if (!this.removePosition(stack, pos)) {
-			this.addPosition(stack, pos);
+	public ActionResultType useOn(ItemUseContext context) {
+		ItemStack stack = context.getPlayer().getItemInHand(context.getHand());
+		if (!this.removePosition(stack, context.getClickedPos())) {
+			this.addPosition(stack, context.getClickedPos());
 		}
 		return ActionResultType.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-		if (playerIn.isSneaking()) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+		if (playerIn.isCrouching()) {
+			ItemStack stack = playerIn.getItemInHand(handIn);
 			this.clearPositions(stack);
-			return new ActionResult<>(ActionResultType.SUCCESS, stack);
+			return ActionResult.success(stack);
 		}
-		return super.onItemRightClick(worldIn, playerIn, handIn);
+		return super.use(worldIn, playerIn, handIn);
 	}
 
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, PlayerEntity player) {
-		TileEntity tileEntity = player.world.getTileEntity(pos);
+		TileEntity tileEntity = player.level.getBlockEntity(pos);
 		if (!(tileEntity instanceof TileEntityExporter)) {
 			return super.onBlockStartBreak(itemstack, pos, player);
 		}
 		TileEntityExporter exporter = (TileEntityExporter) tileEntity;
-		if (!player.isSneaking()) {
+		if (!player.isCrouching()) {
 			exporter.setUnprotectedBlocks(this.getPositions(itemstack).toArray(BlockPos[]::new));
 		} else {
 			BlockPos[] exporterPositions = exporter.getUnprotectedBlocks();
@@ -73,7 +78,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 
 	public void addPosition(ItemStack stack, BlockPos pos) {
 		int[] data = new int[] { pos.getX(), pos.getY(), pos.getZ() };
-		this.getOrCreatePositionTagList(stack).appendTag(new IntArrayNBT(data));
+		this.getOrCreatePositionTagList(stack).appendTag(new IntArrayNBT(data)); //#TODO not sure what should be there, dont want to break things ;]
 	}
 
 	public boolean removePosition(ItemStack stack, BlockPos pos) {
@@ -84,7 +89,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 		Iterator<INBT> iterator = tagList.iterator();
 		while (iterator.hasNext()) {
 			INBT tag = iterator.next();
-			int[] data = ((IntArrayNBT) tag).getIntArray();
+			int[] data = ((IntArrayNBT) tag).getAsIntArray();
 			if (data[0] == pos.getX() && data[1] == pos.getY() && data[2] == pos.getZ()) {
 				iterator.remove();
 				return true;
@@ -94,11 +99,11 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 	}
 
 	public void clearPositions(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
+		if (!stack.hasTag()) {
 			return;
 		}
-		CompoundNBT nbt = stack.getTagCompound();
-		nbt.removeTag(POSITIONS_NBT_KEY);
+		CompoundNBT nbt = stack.getTag();
+		nbt.remove(POSITIONS_NBT_KEY);
 	}
 
 	public Stream<BlockPos> getPositions(ItemStack stack) {
@@ -107,32 +112,32 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 			return Stream.empty();
 		}
 		return Streams.stream(tagList).map(tag -> {
-			int[] data = ((IntArrayNBT) tag).getIntArray();
+			int[] data = ((IntArrayNBT) tag).getAsIntArray();
 			return new BlockPos(data[0], data[1], data[2]);
 		});
 	}
 
 	@Nullable
 	private ListNBT getPositionTagList(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
+		if (!stack.hasTag()) {
 			return null;
 		}
-		CompoundNBT nbt = stack.getTagCompound();
-		if (!nbt.hasKey(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
+		CompoundNBT nbt = stack.getTag();
+		if (!nbt.contains(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
 			return null;
 		}
-		return nbt.getTagList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
+		return nbt.getList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
 	}
 
 	private ListNBT getOrCreatePositionTagList(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new CompoundNBT());
+		if (!stack.hasTag()) {
+			stack.setTag(new CompoundNBT());
 		}
-		CompoundNBT nbt = stack.getTagCompound();
-		if (!nbt.hasKey(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
-			nbt.setTag(POSITIONS_NBT_KEY, new ListNBT());
+		CompoundNBT nbt = stack.getTag();
+		if (!nbt.contains(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
+			nbt.put(POSITIONS_NBT_KEY, new ListNBT());
 		}
-		return nbt.getTagList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
+		return nbt.getList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
 	}
 
 }
