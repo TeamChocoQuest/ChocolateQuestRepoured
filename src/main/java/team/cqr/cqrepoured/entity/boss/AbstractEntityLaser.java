@@ -1,9 +1,14 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -19,12 +24,9 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.util.math.BoundingBox;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public abstract class AbstractEntityLaser extends Entity implements IEntityAdditionalSpawnData {
 
@@ -49,22 +51,22 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	protected AbstractEntityLaser(World worldIn) {
-		this(worldIn, null, 4.0F);
+		this(CQREntityTypes.LASER_BASE.get(), worldIn, null, 4.0F);
 	}
 
-	protected AbstractEntityLaser(World worldIn, LivingEntity caster, float length) {
-		super(worldIn);
+	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, World worldIn, LivingEntity caster, float length) {
+		super(type, worldIn);
 		this.caster = caster;
 		this.length = length;
 		this.ignoreFrustumCheck = true;
-		this.noClip = true;
+		this.noPhysics = true;
 		this.setSize(0.1F, 0.1F);
 	}
 
 	public Vector3d getOffsetVector() {
 		if (this.caster == null) return Vector3d.ZERO;
-		Vector3d v = new Vector3d(0.0D, this.caster.height * 0.6D, 0.0D);
-		v = v.add(this.caster.getLookVec().scale(0.25D));
+		Vector3d v = new Vector3d(0.0D, this.caster.getBbHeight() * 0.6D, 0.0D);
+		v = v.add(this.caster.getLookAngle().scale(0.25D));
 		return v;
 	}
 
@@ -72,11 +74,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	public boolean isInRangeToRenderDist(double distance) {
 		return distance < 64.0D * 64.0D;
 	}
-
-	@Override
-	protected void entityInit() {
-
-	}
+	
 
 	@Override
 	protected void readEntityFromNBT(CompoundNBT compound) {
@@ -127,10 +125,10 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 
 		if (!this.level.isClientSide) {
-			Vector3d start = this.getPositionVector();
+			Vector3d start = this.position();
 			Vector3d end = start.add(Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
 			RayTraceResult result = this.level.rayTraceBlocks(start, end, false, false, false);
-			double d = result != null ? (float) result.getLocation().subtract(this.getPositionVector()).length() : this.length;
+			double d = result != null ? (float) result.getLocation().subtract(this.position()).length() : this.length;
 
 			if (result != null) {
 				BlockPos pos = new BlockPos(result.getLocation());
@@ -149,7 +147,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 								// destroy block
 								this.level.destroyBlock(pos, true);
 								this.blockBreakMap.remove(pos);
-								int i = 0x1000000 + this.getEntity() * 256 + breakingInfo.id;
+								int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
 								this.level.sendBlockBreakProgress(i, pos, -1);
 							}
 						}
