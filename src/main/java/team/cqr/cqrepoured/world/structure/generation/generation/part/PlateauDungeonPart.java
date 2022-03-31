@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -187,15 +189,18 @@ public class PlateauDungeonPart implements IDungeonPart {
 			return this;
 		}
 
-		public void markGround(CQStructure structure, BlockPos pos) {
+		public void markGround(CQStructure structure, BlockPos pos, Mirror mirror, Rotation rotation) {
 			List<PreparablePosInfo> blocks = structure.getBlockInfoList();
 			BlockPos size = structure.getSize();
 			for (int x = 0; x < structure.getSize().getX(); x++) {
-				if (x + pos.getX() < this.startX || x + pos.getX() > this.endX) {
-					continue;
-				}
 				for (int z = 0; z < structure.getSize().getZ(); z++) {
-					if (z + pos.getZ() < this.startZ || z + pos.getZ() > this.endZ) {
+					MutableBlockPos transformed = DungeonPlacement.transform(x, 0, z, mirror, rotation);
+					int x1 = transformed.getX();
+					int z1 = transformed.getZ();
+					if (x1 + pos.getX() < this.startX || x1 + pos.getX() > this.endX) {
+						continue;
+					}
+					if (z1 + pos.getZ() < this.startZ || z1 + pos.getZ() > this.endZ) {
 						continue;
 					}
 					int y = Math.min(this.endY + 1 - pos.getY(), size.getY() - 1);
@@ -203,9 +208,9 @@ public class PlateauDungeonPart implements IDungeonPart {
 						y--;
 					}
 					if (y < 0) {
-						this.ground[x][z] = -1;
+						this.ground[x1][z1] = -1;
 					} else {
-						this.ground[x][z] = Math.min(pos.getY() + y + 2, this.endY + 1);
+						this.ground[x1][z1] = Math.min(pos.getY() + y + 2, this.endY + 1);
 					}
 				}
 			}
