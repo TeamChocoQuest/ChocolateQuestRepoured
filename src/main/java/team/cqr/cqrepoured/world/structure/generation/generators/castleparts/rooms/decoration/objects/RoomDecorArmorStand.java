@@ -18,7 +18,7 @@ public class RoomDecorArmorStand extends RoomDecorEntityBase {
 	protected void createEntityDecoration(World world, BlockPos pos, BlockStateGenArray genArray, EnumFacing side) {
 		// Need to add 0.5 to each position amount so it spawns in the middle of the tile
 		EntityArmorStand stand = new EntityArmorStand(world);
-		float rotation = side.getHorizontalAngle();
+		float rotation = side.getHorizontalAngle() + 180;
 		stand.setPosition((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5));
 		stand.rotationYaw = rotation;
 		genArray.addEntity(BlockPos.ORIGIN, stand);
