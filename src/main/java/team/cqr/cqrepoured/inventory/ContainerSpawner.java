@@ -3,27 +3,29 @@ package team.cqr.cqrepoured.inventory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
+import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
 public class ContainerSpawner extends Container {
 
+	private final TileEntitySpawner tileEntity;
 	private final IInventory inventory;
 
 	/** Client **/
 	public ContainerSpawner(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
-		this(containerID, playerInv, new Inventory(9));
+		this(containerID, playerInv, (TileEntitySpawner) playerInv.player.level.getBlockEntity(data.readBlockPos()));
 	}
 
 	/** Server **/
-	public ContainerSpawner(final int containerID, PlayerInventory playerInv, IInventory inventory) {
+	public ContainerSpawner(final int containerID, PlayerInventory playerInv, TileEntitySpawner tileEntity) {
 		super(CQRContainerTypes.SPAWNER.get(), containerID);
-		this.inventory = inventory;
+		this.tileEntity = tileEntity;
+		this.inventory = tileEntity.getInventory();
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -40,7 +42,8 @@ public class ContainerSpawner extends Container {
 				this.addSlot(new Slot(inventory, m + l * 3, 62 + m * 18, 17 + l * 18) {
 					@Override
 					public boolean mayPlace(ItemStack stack) {
-						return stack.getItem() instanceof ItemSoulBottle && stack.hasTag() && stack.getTag().contains("EntityIn");
+						return stack.getItem() instanceof ItemSoulBottle && stack.hasTag()
+								&& stack.getTag().contains("EntityIn");
 					}
 				});
 			}
@@ -72,6 +75,10 @@ public class ContainerSpawner extends Container {
 		}
 
 		return ItemStack.EMPTY;
+	}
+
+	public TileEntitySpawner getTileEntity() {
+		return tileEntity;
 	}
 
 }

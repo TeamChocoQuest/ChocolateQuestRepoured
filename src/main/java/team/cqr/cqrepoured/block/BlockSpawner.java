@@ -1,10 +1,13 @@
 package team.cqr.cqrepoured.block;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.tileentity.TileEntity;
@@ -16,11 +19,9 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.inventory.ContainerSpawner;
-import team.cqr.cqrepoured.tileentity.BlockEntityContainer;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
-
-import javax.annotation.Nullable;
 
 public class BlockSpawner extends Block {
 
@@ -50,7 +51,7 @@ public class BlockSpawner extends Block {
 			return ActionResultType.PASS;
 		}
 		if (!pLevel.isClientSide) {
-			pPlayer.openMenu(this.getMenuProvider(pState, pLevel, pPos));
+			NetworkHooks.openGui((ServerPlayerEntity) pPlayer, this.getMenuProvider(pState, pLevel, pPos), pPos);
 		}
 		return ActionResultType.SUCCESS;
 	}
@@ -59,11 +60,11 @@ public class BlockSpawner extends Block {
 	@Nullable
 	public INamedContainerProvider getMenuProvider(BlockState pState, World pLevel, BlockPos pPos) {
 		TileEntity tileEntity = pLevel.getBlockEntity(pPos);
-		if (!(tileEntity instanceof BlockEntityContainer)) {
+		if (!(tileEntity instanceof TileEntitySpawner)) {
 			return null;
 		}
 		return new SimpleNamedContainerProvider((id, playerInv, player) -> {
-			return new ContainerSpawner(id, playerInv, ((BlockEntityContainer) tileEntity).getInventory());
+			return new ContainerSpawner(id, playerInv, ((TileEntitySpawner) tileEntity));
 		}, CONTAINER_TITLE);
 	}
 
