@@ -172,7 +172,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 			this.ground = new int[this.endX - this.startX + 1][this.endZ - this.startZ + 1];
 			for (int i = 0; i < this.ground.length; i++) {
 				for (int j = 0; j < this.ground[i].length; j++) {
-					this.ground[i][j] = endY;
+					this.ground[i][j] = endY + 1;
 				}
 			}
 		}
