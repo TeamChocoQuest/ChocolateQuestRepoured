@@ -8,6 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.BlockTags;
@@ -23,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
+import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 
@@ -50,7 +52,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 		this.loadPropertiesFromFile(hookshotName);
 
-		this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
+	/*	this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
 			public float call(ItemStack stack, @Nullable ClientWorld worldIn, @Nullable LivingEntity entityIn) {
@@ -63,7 +65,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 				return 0.0f;
 			}
-		});
+		}); */
 	}
 
 	private void loadPropertiesFromFile(String hookshotName) {
@@ -174,4 +176,17 @@ public abstract class ItemHookshotBase extends ItemLore {
 		return false;
 	}
 
+	//#TODO add call in client setup
+	public static void registerItemModelProperty()
+	{
+		ItemModelsProperties.register(CQRItems.HOOKSHOT.get(), new ResourceLocation("hook_out"), (stack, world, entity) -> {
+			if (entity != null && stack.getItem() instanceof ItemHookshotBase) {
+				CompoundNBT stackTag = stack.getTag();
+				if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
+					return 1.0F;
+				}
+			}
+			return 0.0F;
+		});
+	}
 }
