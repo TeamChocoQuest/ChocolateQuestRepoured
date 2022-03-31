@@ -24,7 +24,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		if (!super.shouldExecute()) {
 			return false;
 		}
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
 		Faction faction = this.entity.getFaction();
 		List<LivingEntity> alliesToHeal = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
@@ -36,7 +36,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 			if (faction == null || !faction.isAlly(e)) {
 				return false;
 			}
-			return this.entity.canEntityBeSeen(e);
+			return this.entity.canSee(e);
 		});
 		return !alliesToHeal.isEmpty();
 	}
@@ -50,9 +50,9 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 	@Override
 	public void startChargingSpell() {
 		super.startChargingSpell();
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 24.0D, this.entity.posY - 2.0D, this.entity.posZ - 24.0D, this.entity.posX + 24.0D, this.entity.posY + this.entity.height + 2.0D, this.entity.posZ + 24.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
 		Faction faction = this.entity.getFaction();
-		List<LivingEntity> alliesToHeal = this.world.getEntities(LivingEntity.class, aabb, e -> {
+		List<LivingEntity> alliesToHeal = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
 				return false;
 			}
@@ -62,7 +62,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 			if (!faction.isAlly(e)) {
 				return false;
 			}
-			return this.entity.canEntityBeSeen(e);
+			return this.entity.canSee(e);
 		});
 		this.target = TargetUtil.getNearestEntity(this.entity, alliesToHeal);
 	}
