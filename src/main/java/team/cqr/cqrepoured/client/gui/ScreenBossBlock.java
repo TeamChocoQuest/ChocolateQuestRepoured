@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +19,6 @@ public class ScreenBossBlock extends ContainerScreen<ContainerBossBlock> {
 
 	public ScreenBossBlock(ContainerBossBlock container, PlayerInventory playerInv, ITextComponent title) {
 		super(container, playerInv, title);
-		this.imageWidth = 176;
 		this.imageHeight = 132;
 		this.inventoryLabelY = this.imageHeight - 94;
 	}
