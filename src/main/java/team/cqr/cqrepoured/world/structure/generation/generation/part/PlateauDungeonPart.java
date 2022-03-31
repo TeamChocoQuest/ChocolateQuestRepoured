@@ -91,7 +91,11 @@ public class PlateauDungeonPart implements IDungeonPart {
 				if (z + z1 < this.startZ || z + z1 > this.endZ) {
 					continue;
 				}
-				double dist = Math.sqrt(x1 * x1 + z1 * z1);
+				int x2 = Math.abs(x1);
+				if (x2 > 0) x2--;
+				int z2 = Math.abs(z1);
+				if (z2 > 0) z2--;
+				double dist = Math.sqrt(x2 * x2 + z2 * z2);
 				int y1 = (int) Math.round(y + (this.ground[x + x1 - this.startX][z + z1 - this.startZ] - y) * Math.max((1 - dist / this.wallSize), 0));
 				if (y1 > max) {
 					max = y1;
