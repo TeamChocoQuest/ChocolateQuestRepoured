@@ -534,6 +534,8 @@
 
     "_comment": "Descriptions",
 	"item.cqrepoured.tooltip.hold_shift": "\u00A79Hold \u00A7f[\u00A7eSHIFT\u00A7f]\u00A79 to view description",
+	"item.cqrepoured.teleport_stone.tooltip": "\u00A79A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.",
+	"item.cqrepoured.teleport_stone.tooltip.position": "\u00A79Bound Position:",
     "description.spider_armor": "Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.",
     "description.spider_sword": "Flowing forth from the fangs that made this simple sword a toxic blade, Shelob's poison can't be stayed once your foe is stuck by this blade.",
     "description.bull_armor": "Wear the bull to become the bull. A full set allows you to charge forward at great speed, destroying everything in your path.",
@@ -557,8 +559,6 @@
     "description.charging": "Charging...",
     "description.turtle_armor_charging": "Ability on cooldown, Remaining time:",
     "description.healing_potion": "Drink to restore 2 hearts.",
-    "description.teleport_stone": "A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.",
-    "description.teleport_stone_position": "Current Position:",
     "description.staff_fire": "The flames consume those who cross your path, a simple right-click and they'll feel your wrath. Also lights torches.",
     "description.staff_spider": "Right-click to shoot your goo, my dude.",
     "description.staff_gun": "It's a gun. On a stick. Man, those dwarves are geniuses.",

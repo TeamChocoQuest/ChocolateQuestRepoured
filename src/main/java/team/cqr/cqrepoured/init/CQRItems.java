@@ -233,7 +233,7 @@ public class CQRItems {
 
 	// Other
 	public static final RegistryObject<ItemPotionHealing> POTION_HEALING = register("potion_healing", ItemPotionHealing::new);
-	public static final RegistryObject<ItemTeleportStone> TELEPORT_STONE = null;
+	public static final RegistryObject<ItemTeleportStone> TELEPORT_STONE = register("teleport_stone", ItemTeleportStone::new);
 	public static final RegistryObject<ItemCursedBone> CURSED_BONE = null;
 
 	// Creative
