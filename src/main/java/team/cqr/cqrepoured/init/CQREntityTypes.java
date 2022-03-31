@@ -124,7 +124,7 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityCQREnderCalamity>> ENDER_CALAMITY = registerSized(EntityCQREnderCalamity::new, "ender_calamity", 2, 2, 1);
 	public static final RegistryObject<EntityType<EntityCQREnderKing>> ENDER_KING = registerSized(EntityCQREnderKing::new, "ender_king", 0.6F, 2.9F, 1);
 	public static final RegistryObject<EntityType<EntityEndLaser>> END_LASER = registerLaser(EntityEndLaser::new, "end_laser");
-	public static final RegistryObject<EntityType<EntityEndLaserTargeting>> END_LASER_TARGETING = registerLaser(EntityEndLaserTargeting::new, "end_laser");
+	public static final RegistryObject<EntityType<EntityEndLaserTargeting>> END_LASER_TARGETING = registerLaser(EntityEndLaserTargeting::new, "end_targeting_laser");
 	
 	//Exterminator
 	public static final RegistryObject<EntityType<EntityCQRExterminator>> EXTERMINATOR = registerSized(EntityCQRExterminator::new, "exterminator", 2, 2.75F, 1);
