@@ -20,7 +20,7 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 	}
 
 	public EntityRotatingLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
-		this(CQREntityTypes.LASER_ROTATING.get(), caster, length, deltaRotationYawPerTick, deltaRotationPtichPerTick);
+		this(CQREntityTypes.LASER_ROTATING.get(), worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
 	}
 	
 	public EntityRotatingLaser(EntityType<? extends EntityRotatingLaser> type, World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
