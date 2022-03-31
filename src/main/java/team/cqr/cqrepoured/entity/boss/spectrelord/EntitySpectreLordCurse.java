@@ -10,6 +10,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntitySpectreLordCurse extends Entity {
 
@@ -19,6 +20,10 @@ public class EntitySpectreLordCurse extends Entity {
 
 	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, World worldIn) {
 		this(type, worldIn, null, null);
+	}
+	
+	public EntitySpectreLordCurse(World worldIn, LivingEntity caster, LivingEntity target) {
+		this(CQREntityTypes.SPECTRE_LORD_CURSE.get(), worldIn, caster, target);
 	}
 
 	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, World worldIn, LivingEntity caster, LivingEntity target) {

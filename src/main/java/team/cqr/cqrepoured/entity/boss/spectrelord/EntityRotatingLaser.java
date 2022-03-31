@@ -8,6 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityRotatingLaser extends AbstractEntityLaser {
 
@@ -18,6 +19,10 @@ public class EntityRotatingLaser extends AbstractEntityLaser {
 		this(type, worldIn, null, 4.0F, 1.0F, 0.0F);
 	}
 
+	public EntityRotatingLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
+		this(CQREntityTypes.LASER_ROTATING.get(), caster, length, deltaRotationYawPerTick, deltaRotationPtichPerTick);
+	}
+	
 	public EntityRotatingLaser(EntityType<? extends EntityRotatingLaser> type, World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
 		super(type, worldIn, caster, length);
 		this.deltaRotationYawPerTick = deltaRotationYawPerTick;
