@@ -27,6 +27,7 @@ public class ScreenBackpack extends ContainerScreen<ContainerBackpack> {
         this.renderTooltip(pMatrixStack, pMouseX, pMouseY);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
