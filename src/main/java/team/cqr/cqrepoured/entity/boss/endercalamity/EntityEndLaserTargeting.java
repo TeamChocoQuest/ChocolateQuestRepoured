@@ -27,10 +27,10 @@ public class EntityEndLaserTargeting extends EntityTargetingLaser {
 		this.maxRotationPerTick = 0.5F;
 	}
 
-	@Override
+	/*@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1 || pass == 0;
-	}
+	}*/
 
 	@Override
 	public float getColorR() {
