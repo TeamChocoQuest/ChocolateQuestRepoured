@@ -1,26 +1,38 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.math.vector.Vector3f;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
 public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable> {
+	public TileEntityTableRenderer(TileEntityRendererDispatcher p_i226006_1_) {
+		super(p_i226006_1_);
+	}
+
 	@Override
-	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-		ItemStack stack = te.getInventory().getStackInSlot(0);
+	public void render(TileEntityTable te, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+		ItemStack stack = te.getInventory().getItem(0);
 		float rotation = te.getRotationInDegree();
 
 		if (!stack.isEmpty()) {
-			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
+			pMatrixStack.pushPose();
+			
+			pMatrixStack.translate(0, 1.25, 0);
+			pMatrixStack.scale(0.75F, 0.75F, 0.75F);
+			pMatrixStack.mulPose(Vector3f.YN.rotationDegrees(rotation));
+			
+			Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.NONE, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
+			
+			pMatrixStack.popPose();
+		}
+			/*IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
 			model = ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false);
 
 			if (model.isGui3d()) {
@@ -60,7 +72,6 @@ public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable>
 				GlStateManager.popMatrix();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.disableBlend();
-			}
-		}
+			}*/
 	}
 }
