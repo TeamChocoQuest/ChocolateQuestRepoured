@@ -24,7 +24,7 @@ public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable>
 		if (!stack.isEmpty()) {
 			pMatrixStack.pushPose();
 			
-			pMatrixStack.translate(0, 1.25, 0);
+			pMatrixStack.translate(0.5, 1.25, 0.5);
 			pMatrixStack.scale(0.75F, 0.75F, 0.75F);
 			pMatrixStack.mulPose(Vector3f.YN.rotationDegrees(rotation));
 			
