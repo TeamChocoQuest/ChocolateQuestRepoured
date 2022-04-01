@@ -42,17 +42,19 @@ public class CQRepouredClient {
 
 	public static void setupClient(FMLClientSetupEvent event)
 	{
-		ScreenManager.register(CQRContainerTypes.SPAWNER.get(), ScreenSpawner::new);
-		ScreenManager.register(CQRContainerTypes.BOSS_BLOCK.get(), ScreenBossBlock::new);
-		ScreenManager.register(CQRContainerTypes.BACKPACK.get(), ScreenBackpack::new);
-		ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
-		ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
+		event.enqueueWork(() -> {
+			ScreenManager.register(CQRContainerTypes.SPAWNER.get(), ScreenSpawner::new);
+			ScreenManager.register(CQRContainerTypes.BOSS_BLOCK.get(), ScreenBossBlock::new);
+			ScreenManager.register(CQRContainerTypes.BACKPACK.get(), ScreenBackpack::new);
+			ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
+			ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
 
-		CQREntityRenderers.registerRenderers();
-		CQRItemProperties.register();
+			CQREntityRenderers.registerRenderers();
+			CQRItemProperties.register();
 
-		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CQR.get(), TileEntityExporterChestRenderer::new);
-		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
+			ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CQR.get(), TileEntityExporterChestRenderer::new);
+			ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
+		});
 	}
 
 }
