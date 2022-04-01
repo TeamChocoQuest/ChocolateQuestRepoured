@@ -25,7 +25,7 @@ public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable>
 			pMatrixStack.pushPose();
 			
 			pMatrixStack.translate(0.5, 1.25, 0.5);
-			pMatrixStack.scale(0.75F, 0.75F, 0.75F);
+			pMatrixStack.scale(0.5F, 0.5F, 0.5F);
 			pMatrixStack.mulPose(Vector3f.YN.rotationDegrees(rotation));
 			
 			Minecraft.getInstance().getItemRenderer().renderStatic(stack, TransformType.NONE, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
