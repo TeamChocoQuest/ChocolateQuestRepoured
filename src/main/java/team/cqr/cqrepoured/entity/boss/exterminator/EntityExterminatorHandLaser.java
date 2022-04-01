@@ -28,10 +28,10 @@ public class EntityExterminatorHandLaser extends EntityTargetingLaser {
 		this.maxRotationPerTick = 1.25F;
 	}
 
-	@Override
+	/*@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1 || pass == 0;
-	}
+	}*/
 
 	@Override
 	public Vector3d getOffsetVector() {

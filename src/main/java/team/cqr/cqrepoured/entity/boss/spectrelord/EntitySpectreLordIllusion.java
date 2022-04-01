@@ -25,6 +25,7 @@ import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusio
 import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.EntityUtil;
 
@@ -39,6 +40,10 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 		this(type, worldIn, null, 200, false, false);
 	}
 
+	public EntitySpectreLordIllusion(World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
+		this(CQREntityTypes.SPECTRE_LORD_ILLUSION.get(), worldIn, caster, lifeTime, canCastHeal, canCastExplosion);
+	}
+	
 	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
 		super(type, worldIn);
 		if (caster != null) {

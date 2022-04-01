@@ -27,7 +27,7 @@ public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpe
 	public void resetTask() {
 		super.resetTask();
 		for (AbstractEntityLaser laser : this.lasers) {
-			laser.setDead();
+			laser.remove();
 		}
 		this.lasers.clear();
 	}
@@ -35,30 +35,30 @@ public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpe
 	@Override
 	public void startChargingSpell() {
 		super.startChargingSpell();
-		this.target = this.entity.getAttackTarget();
+		this.target = this.entity.getTarget();
 	}
 
 	@Override
 	public void startCastingSpell() {
 		super.startCastingSpell();
-		float yaw = (float) Math.toDegrees(Math.atan2(-(this.target.posX - this.entity.posX), this.target.posZ - this.entity.posZ));
+		float yaw = (float) Math.toDegrees(Math.atan2(-(this.target.getX() - this.entity.getX()), this.target.getZ() - this.entity.getZ()));
 		AbstractEntityLaser laser1 = new EntityRotatingLaser(this.world, this.entity, 32.0F, 1.0F, 0.0F);
 		laser1.rotationYawCQR = yaw - 90.0F;
-		Vector3d vec1 = Vector3d.fromPitchYaw(0.0F, laser1.rotationYawCQR);
-		laser1.setPosition(this.entity.posX + vec1.x * 0.25D, this.entity.posY + this.entity.height * 0.6D + vec1.y * 0.25D, this.entity.posZ + vec1.z * 0.25D);
-		this.world.spawnEntity(laser1);
+		Vector3d vec1 = Vector3d.directionFromRotation(0.0F, laser1.rotationYawCQR);
+		laser1.setPos(this.entity.getX() + vec1.x * 0.25D, this.entity.getY() + this.entity.getBbHeight() * 0.6D + vec1.y * 0.25D, this.entity.getZ() + vec1.z * 0.25D);
+		this.world.addFreshEntity(laser1);
 		this.lasers.add(laser1);
 		AbstractEntityLaser laser2 = new EntityRotatingLaser(this.world, this.entity, 32.0F, -2.0F, 0.0F);
 		laser2.rotationYawCQR = yaw + 90.0F;
-		Vector3d vec2 = Vector3d.fromPitchYaw(0.0F, laser2.rotationYawCQR);
-		laser2.setPosition(this.entity.posX + vec2.x * 0.25D, this.entity.posY + this.entity.height * 0.6D + vec2.y * 0.25D, this.entity.posZ + vec2.z * 0.25D);
-		this.world.spawnEntity(laser2);
+		Vector3d vec2 = Vector3d.directionFromRotation(0.0F, laser2.rotationYawCQR);
+		laser2.setPos(this.entity.getX() + vec2.x * 0.25D, this.entity.getY() + this.entity.getBbHeight() * 0.6D + vec2.y * 0.25D, this.entity.getZ() + vec2.z * 0.25D);
+		this.world.addFreshEntity(laser2);
 		this.lasers.add(laser2);
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override

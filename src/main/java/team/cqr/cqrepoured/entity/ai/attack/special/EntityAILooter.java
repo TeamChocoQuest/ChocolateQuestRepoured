@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -10,6 +14,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceContext.BlockMode;
+import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.util.LazyOptional;
@@ -20,10 +27,6 @@ import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.util.BlockPosUtil;
-
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
 
 public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -70,7 +73,8 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
 					return false;
 				}
-				RayTraceResult result = this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				RayTraceContext rtc = new RayTraceContext(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), BlockMode.COLLIDER, FluidMode.ANY, null);
+				RayTraceResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				BlockPos.Mutable bp = new BlockPos(result.getLocation()).mutable();
 				return result == null || bp.equals(mutablePos);
 			});

@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.java.games.input.Keyboard;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -15,26 +13,28 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.play.server.SPlayEntityEffectPacket;
-import net.minecraft.network.play.server.SRespawnPacket;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRMain;
 
 public class ItemTeleportStone extends ItemLore {
 
@@ -46,8 +46,6 @@ public class ItemTeleportStone extends ItemLore {
 	public ItemTeleportStone(Properties properties)
 	{
 		super(properties.durability(100));
-		//this.setMaxDamage(100);
-		//this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -61,7 +59,8 @@ public class ItemTeleportStone extends ItemLore {
 
 		if (isSelected && entityIn instanceof PlayerEntity && worldIn.isClientSide && worldIn.getGameTime() % 4 == 0) {
 			CompoundNBT tag = stack.getTag();
-			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.dimensionType().toString().equals(tag.getString(DIMENSION))) {
+			//Marker particles for the stored location
+			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.dimensionType().effectsLocation().toString().equals(tag.getString(DIMENSION))) {
 				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
 				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.1D, -0.1D, 0.1D);
 				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
@@ -82,64 +81,10 @@ public class ItemTeleportStone extends ItemLore {
 		return ActionResult.success(stack);
 	}
 
-	/**
-	 * Taken from CoFHCore's EntityHelper
-	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
-	 */
-	private static void transferPlayerToDimension(ServerPlayerEntity player, int dimension, PlayerList manager) {
-		int oldDim = player.dimension;
-		ServerWorld oldWorld = manager.getServerInstance().getWorld(player.dimension);
-		player.dimension = dimension;
-		ServerWorld newWorld = manager.getServerInstance().getWorld(player.dimension);
-		player.connection.sendPacket(new SRespawnPacket(player.dimension, newWorld.getDifficulty(), newWorld.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
-		oldWorld.removeEntityDangerously(player);
-		if (player.isBeingRidden()) {
-			player.removePassengers();
-		}
-		if (player.isRiding()) {
-			player.dismountRidingEntity();
-		}
-		player.isDead = false;
-		transferEntityToWorld(player, oldWorld, newWorld);
-		manager.preparePlayer(player, oldWorld);
-		player.connection.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
-		player.interactionManager.setWorld(newWorld);
-		manager.updateTimeAndWeatherForPlayer(player, newWorld);
-		manager.syncPlayerInventory(player);
-
-		for (EffectInstance potioneffect : player.getActivePotionEffects()) {
-			player.connection.sendPacket(new SPlayEntityEffectPacket(player.getEntityId(), potioneffect));
-		}
-		FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
-	}
-
-	/**
-	 * Taken from CoFHCore's EntityHelper
-	 * (https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/util/helpers/EntityHelper.java)
-	 */
-	private static void transferEntityToWorld(Entity entity, ServerWorld oldWorld, ServerWorld newWorld) {
-		net.minecraft.world.dimension.Dimension oldWorldProvider = oldWorld.provider;
-		net.minecraft.world.dimension.Dimension newWorldProvider = newWorld.provider;
-		double moveFactor = oldWorldProvider.getMovementFactor() / newWorldProvider.getMovementFactor();
-		double x = entity.posX * moveFactor;
-		double z = entity.posZ * moveFactor;
-
-		oldWorld.profiler.startSection("placing");
-		x = MathHelper.clamp(x, -29_999_872, 29_999_872);
-		z = MathHelper.clamp(z, -29_999_872, 29_999_872);
-		if (entity.isEntityAlive()) {
-			entity.setLocationAndAngles(x, entity.posY, z, entity.rotationYaw, entity.rotationPitch);
-			newWorld.spawnEntity(entity);
-			newWorld.updateEntityWithOptionalForce(entity, false);
-		}
-		oldWorld.profiler.endSection();
-
-		entity.setWorld(newWorld);
-	}
-
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (entityLiving instanceof ServerPlayerEntity) {
+		if (entityLiving instanceof ServerPlayerEntity && worldIn instanceof ServerWorld) {
+			ServerWorld sw = (ServerWorld) worldIn;
 			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
 			player.getCooldowns().addCooldown(stack.getItem(), 60);
 
@@ -175,35 +120,20 @@ public class ItemTeleportStone extends ItemLore {
 						player.stopRiding();
 					}
 
-					if (!dimension.equals(player.getLevel().dimensionType().effectsLocation())) {
+					ServerWorld targetDimension = sw;
+					if (!dimension.equals(player.getLevel().dimensionType().effectsLocation().toString())) {
 						MinecraftServer server = player.level.getServer();
 						if (server != null) {
-							transferPlayerToDimension(player, dimension, server.getPlayerList());
+							//transferPlayerToDimension(player, dimension, pos);
+							RegistryKey<World> rk = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dimension));
+							
+							targetDimension = server.getLevel(rk);
+							if(targetDimension == null) {
+								targetDimension = sw;
+							}
 						}
 					}
-					player.teleportTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-					// player.attemptTeleport(stack.getTagCompound().getDouble(this.X), stack.getTagCompound().getDouble(this.Y),
-					// stack.getTagCompound().getDouble(this.Z));
-					/*
-					 * if(worldIn.provider.getDimension() != dimension) {
-					 * 
-					 * WorldServer worldServer = player.getServer().getWorld(dimension);
-					 * WorldServer worldServerOld = player.getServerWorld();
-					 * player.moveToBlockPosAndAngles(new BlockPos(stack.getTagCompound().getDouble(this.X),
-					 * stack.getTagCompound().getDouble(this.Y),
-					 * stack.getTagCompound().getDouble(this.Z)), player.rotationYaw, player.rotationPitch);
-					 * worldServerOld.removeEntity(player);
-					 * boolean flag = player.forceSpawn;
-					 * player.forceSpawn = true;
-					 * worldServer.spawnEntity(player);
-					 * player.forceSpawn = flag;
-					 * worldServer.updateEntityWithOptionalForce(player, false);
-					 * 
-					 * }
-					 */
-					// player.connection.setPlayerLocation(stack.getTagCompound().getDouble(this.X),
-					// stack.getTagCompound().getDouble(this.Y),
-					// stack.getTagCompound().getDouble(this.Z), player.rotationYaw, player.rotationPitch);
+					player.teleportTo(targetDimension, pos.getX(), pos.getY(), pos.getZ(), player.yRot, player.xRot);
 					for (int i = 0; i < 30; i++) {
 						worldIn.addParticle(ParticleTypes.PORTAL, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
@@ -223,21 +153,17 @@ public class ItemTeleportStone extends ItemLore {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone.name"));
-
-			if (stack.hasTagCompound()) {
-				if (stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z)) {
-					tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone_position.name"));
-					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int) stack.getTagCompound().getDouble(X)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int) stack.getTagCompound().getDouble(Y)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int) stack.getTagCompound().getDouble(Z)));
-					tooltip.add(TextFormatting.BLUE + I18n.format("Dimension: " + (stack.getTagCompound().hasKey(DIMENSION, Constants.NBT.TAG_INT) ? stack.getTagCompound().getInteger(DIMENSION) : 0)));
+	protected void appendAdditionalTooltipEntries(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, boolean holdingShift) {
+		if(holdingShift) {
+			if (stack.hasTag()) {
+				if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z) && stack.getTag().contains(DIMENSION)) {
+					tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + "." + getRegistryName().getPath() + ".tooltip.position"));
+					tooltip.add((new StringTextComponent("X: " + (int) stack.getTag().getDouble(X))).withStyle(TextFormatting.BLUE));
+					tooltip.add((new StringTextComponent("Y: " + (int) stack.getTag().getDouble(Y))).withStyle(TextFormatting.BLUE));
+					tooltip.add((new StringTextComponent("Z: " + (int) stack.getTag().getDouble(Z))).withStyle(TextFormatting.BLUE));
+					tooltip.add((new StringTextComponent("Dimension: " + stack.getTag().getString(DIMENSION))).withStyle(TextFormatting.BLUE));
 				}
 			}
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
 
@@ -263,7 +189,7 @@ public class ItemTeleportStone extends ItemLore {
 
 		// Don't re-enable this check, if it is enabled it will never trigger correctly for whatever reason
 		// if (!stone.hasKey(this.Dimension)) {
-		stone.putString(DIMENSION, player.level.dimensionType().toString());
+		stone.putString(DIMENSION, player.level.dimensionType().effectsLocation().toString());
 		// }
 	}
 

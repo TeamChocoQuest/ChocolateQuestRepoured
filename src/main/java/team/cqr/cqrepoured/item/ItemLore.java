@@ -38,9 +38,15 @@ public class ItemLore extends Item {
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if(this.hasLore(stack)) {
 			addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+			appendAdditionalTooltipEntries(stack, worldIn, tooltip, flagIn, isLShiftPressed() || isRShiftPressed());
 		} else {
 			super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		}
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	protected void appendAdditionalTooltipEntries(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, boolean holdingShift) {
+		
 	}
 	
 	public static void addHoverTextLogic(List<ITextComponent> tooltip, ITooltipFlag flagIn, String registryNamePath) {

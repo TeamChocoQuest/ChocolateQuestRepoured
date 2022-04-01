@@ -40,7 +40,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		if (!this.curses.isEmpty()) {
 			boolean flag = false;
 			for (EntitySpectreLordCurse curse : this.curses) {
-				if (curse.isEntityAlive()) {
+				if (curse.isAlive()) {
 					flag = true;
 					break;
 				}
@@ -56,7 +56,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 	public void resetTask() {
 		super.resetTask();
 		for (EntitySpectreLordCurse curse : this.curses) {
-			curse.setDead();
+			curse.remove();
 		}
 		this.curses.clear();
 		this.healthLost = 0.0F;
@@ -68,9 +68,9 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		super.startCastingSpell();
 		this.lastHealth = this.entity.getHealth() / this.entity.getMaxHealth();
 
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
 		Faction faction = this.entity.getFaction();
-		List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
+		List<LivingEntity> list = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
 		list.sort((e1, e2) -> {
 			if (faction != null) {
 				boolean flag1 = faction.isEnemy(e1);
@@ -90,8 +90,8 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 			if (!flag1 && flag2) {
 				return 1;
 			}
-			double d1 = this.entity.getDistanceSq(e1);
-			double d2 = this.entity.getDistanceSq(e2);
+			double d1 = this.entity.distanceToSqr(e1);
+			double d2 = this.entity.distanceToSqr(e2);
 			if (d1 < d2) {
 				return -1;
 			}
@@ -103,8 +103,8 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		for (int i = 0; i < 8 && i < list.size(); i++) {
 			LivingEntity e = list.get(i);
 			EntitySpectreLordCurse curse = new EntitySpectreLordCurse(this.world, this.entity, e);
-			curse.setPosition(this.entity.posX, this.entity.posY, this.entity.posZ);
-			this.world.spawnEntity(curse);
+			curse.setPos(this.entity.getX(), this.entity.getY(), this.entity.getZ());
+			this.world.addFreshEntity(curse);
 			this.curses.add(curse);
 		}
 	}
@@ -117,21 +117,21 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		this.lastHealth = f;
 
 		if (this.tick == this.chargingTicks + this.castingTicks - 1) {
-			this.entity.addPotionEffect(new EffectInstance(Effects.SPEED, 200, 1, false, true));
-			this.entity.addPotionEffect(new EffectInstance(Effects.STRENGTH, 200, 1, false, true));
-			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.posX - 32.0D, this.entity.posY - 8.0D, this.entity.posZ - 32.0D, this.entity.posX + 32.0D, this.entity.posY + this.entity.height + 8.0D, this.entity.posZ + 32.0D);
+			this.entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 200, 1, false, true));
+			this.entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 200, 1, false, true));
+			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
 			Faction faction = this.entity.getFaction();
-			for (LivingEntity e : this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
-				e.attackEntityFrom(DamageSource.causeMobDamage(this.entity).setDamageBypassesArmor(), 4.0F);
-				e.addPotionEffect(new EffectInstance(Effects.WEAKNESS, 200, 1, false, true));
+			for (LivingEntity e : this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
+				e.hurt(DamageSource.mobAttack(this.entity).bypassArmor(), 4.0F);
+				e.addEffect(new EffectInstance(Effects.WEAKNESS, 200, 1, false, true));
 			}
-			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_CAST_SPELL, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
+			this.entity.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
 		}
 	}
 
 	@Override
 	protected SoundEvent getStartChargingSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+		return SoundEvents.EVOKER_PREPARE_ATTACK;
 	}
 
 	@Override

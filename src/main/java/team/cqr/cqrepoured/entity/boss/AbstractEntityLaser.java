@@ -27,7 +27,6 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.util.math.BoundingBox;
 
@@ -145,7 +144,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 								this.level.destroyBlock(pos, true);
 								this.blockBreakMap.remove(pos);
 								int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
-								this.level.sendBlockBreakProgress(i, pos, -1);
+								this.level.destroyBlockProgress(i, pos, -1);
 							}
 						}
 					}
@@ -161,9 +160,9 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
 				if (breakingInfo.progress <= 0.0F) {
 					iterator.remove();
-					this.level.sendBlockBreakProgress(i, entry.getKey(), -1);
+					this.level.destroyBlockProgress(i, entry.getKey(), -1);
 				} else {
-					this.level.sendBlockBreakProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
+					this.level.destroyBlockProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
 				}
 			}
 
@@ -184,7 +183,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	public float onHitBlock(BlockPos pos, BlockState state) {
-		float hardness = state.getBlockHardness(this.level, pos);
+		float hardness = state.getDestroySpeed(this.level, pos);
 		if (hardness < 0.0F) {
 			return 0.0F;
 		}
@@ -240,7 +239,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 			while (iterator.hasNext()) {
 				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
 				int i = 0x1000000 + this.getId() * 256 + entry.getValue().id;
-				this.level.sendBlockBreakProgress(i, entry.getKey(), -1);
+				this.level.destroyBlockProgress(i, entry.getKey(), -1);
 			}
 		}
 	}
@@ -249,10 +248,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	public abstract void updatePositionAndRotation();
 
-	@Override
+	//Part of the renderer now
+	/*@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
-	}
+	}*/
 
 	@Override
 	public void writeSpawnData(PacketBuffer buffer) {

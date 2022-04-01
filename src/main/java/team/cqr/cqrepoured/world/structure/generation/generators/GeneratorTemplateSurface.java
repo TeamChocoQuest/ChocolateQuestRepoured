@@ -50,7 +50,7 @@ public class GeneratorTemplateSurface extends AbstractDungeonGenerator<DungeonTe
 			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
-			partBuilder.markGround(structure, structurePos);
+			partBuilder.markGround(structure, structurePos, mirror, rotation);
 			this.dungeonBuilder.add(partBuilder);
 		}
 	}

@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.world.structure.generation.generation.part;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -87,7 +89,11 @@ public class PlateauDungeonPart implements IDungeonPart {
 				if (z + z1 < this.startZ || z + z1 > this.endZ) {
 					continue;
 				}
-				double dist = Math.sqrt(x1 * x1 + z1 * z1);
+				int x2 = Math.abs(x1);
+				if (x2 > 0) x2--;
+				int z2 = Math.abs(z1);
+				if (z2 > 0) z2--;
+				double dist = Math.sqrt(x2 * x2 + z2 * z2);
 				int y1 = (int) Math.round(y + (this.ground[x + x1 - this.startX][z + z1 - this.startZ] - y) * Math.max((1 - dist / this.wallSize), 0));
 				if (y1 > max) {
 					max = y1;
@@ -167,7 +173,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 			this.ground = new int[this.endX - this.startX + 1][this.endZ - this.startZ + 1];
 			for (int i = 0; i < this.ground.length; i++) {
 				for (int j = 0; j < this.ground[i].length; j++) {
-					this.ground[i][j] = endY;
+					this.ground[i][j] = endY + 1;
 				}
 			}
 		}
@@ -182,15 +188,18 @@ public class PlateauDungeonPart implements IDungeonPart {
 			return this;
 		}
 
-		public void markGround(CQStructure structure, BlockPos pos) {
+		public void markGround(CQStructure structure, BlockPos pos, Mirror mirror, Rotation rotation) {
 			List<PreparablePosInfo> blocks = structure.getBlockInfoList();
 			BlockPos size = structure.getSize();
 			for (int x = 0; x < structure.getSize().getX(); x++) {
-				if (x + pos.getX() < this.startX || x + pos.getX() > this.endX) {
-					continue;
-				}
 				for (int z = 0; z < structure.getSize().getZ(); z++) {
-					if (z + pos.getZ() < this.startZ || z + pos.getZ() > this.endZ) {
+					MutableBlockPos transformed = DungeonPlacement.transform(x, 0, z, mirror, rotation);
+					int x1 = transformed.getX();
+					int z1 = transformed.getZ();
+					if (x1 + pos.getX() < this.startX || x1 + pos.getX() > this.endX) {
+						continue;
+					}
+					if (z1 + pos.getZ() < this.startZ || z1 + pos.getZ() > this.endZ) {
 						continue;
 					}
 					int y = Math.min(this.endY + 1 - pos.getY(), size.getY() - 1);
@@ -198,9 +207,9 @@ public class PlateauDungeonPart implements IDungeonPart {
 						y--;
 					}
 					if (y < 0) {
-						this.ground[x][z] = -1;
+						this.ground[x1][z1] = -1;
 					} else {
-						this.ground[x][z] = Math.min(pos.getY() + y + 2, this.endY + 1);
+						this.ground[x1][z1] = Math.min(pos.getY() + y + 2, this.endY + 1);
 					}
 				}
 			}
