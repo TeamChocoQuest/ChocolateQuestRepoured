@@ -15,6 +15,7 @@ import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.ScreenBadge;
 import team.cqr.cqrepoured.client.gui.ScreenBossBlock;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
+import team.cqr.cqrepoured.client.init.CQRItemProperties;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
@@ -48,6 +49,7 @@ public class CQRepouredClient {
 		ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
 
 		CQREntityRenderers.registerRenderers();
+		CQRItemProperties.register();
 
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CQR.get(), TileEntityExporterChestRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
