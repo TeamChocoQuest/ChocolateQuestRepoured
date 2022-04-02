@@ -42,6 +42,11 @@ public class ProjectileFireWallPart extends ProjectileBase {
 			this.level.setBlockAndUpdate(this.blockPosition(), Blocks.FIRE.defaultBlockState());
 		}
 	}
+	
+	@Override
+	public boolean displayFireAnimation() {
+		return true;
+	}
 
 /*	@Override
 	protected void onHit(RayTraceResult result) {

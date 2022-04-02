@@ -1,16 +1,12 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.container.PlayerContainer;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 
 public class RenderProjectileFirewallPart extends EntityRenderer<ProjectileFireWallPart> {
@@ -27,7 +23,7 @@ public class RenderProjectileFirewallPart extends EntityRenderer<ProjectileFireW
 	@Override
 	public void render(ProjectileFireWallPart entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
 		super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
-		//GlStateManager.disableLighting();
+		/*//GlStateManager.disableLighting();
 		RenderSystem.disableLighting();
 		TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(PlayerContainer.BLOCK_ATLAS).apply(new ResourceLocation("blocks/fire_layer_0"));
 		//TextureAtlasSprite textureatlassprite = texturemap.getAtlasSprite("minecraft:blocks/fire_layer_0");
@@ -68,6 +64,6 @@ public class RenderProjectileFirewallPart extends EntityRenderer<ProjectileFireW
 		//GlStateManager.popMatrix();
 		//GlStateManager.enableLighting();
 		matrixStack.popPose();
-		RenderSystem.enableLighting();
+		RenderSystem.enableLighting();*/
 	}
 }
