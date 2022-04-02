@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.network.IPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.Explosion;
@@ -56,6 +57,13 @@ public class ProjectileHotFireball extends ProjectileBase {
 
 	@Override
 	public void tick() {
+		if(this.level.isClientSide) {
+			double dx = this.getX() + (-0.5 + (this.level.random.nextDouble()));
+			double dy = 0.25 + this.getY() + (-0.5 + (this.level.random.nextDouble()));
+			double dz = this.getZ() + (-0.5 + (this.level.random.nextDouble()));
+			this.level.addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+		}
+		
 		if (this.tickCount > 400) {
 			this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 1.5F, Explosion.Mode.NONE);
 			this.remove();
@@ -100,7 +108,7 @@ public class ProjectileHotFireball extends ProjectileBase {
 
 		if(entity == this.shooter) return;
 
-		if(entity instanceof PartEntity && ((PartEntity)entity).getParent() == this.shooter) return;
+		if(entity instanceof PartEntity && ((PartEntity<?>)entity).getParent() == this.shooter) return;
 
 		if(entity instanceof LivingEntity)
 		{
