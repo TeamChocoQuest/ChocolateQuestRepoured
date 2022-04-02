@@ -50,6 +50,16 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		this.shooter = shooter;
 		this.target = target;
 	}
+	
+	@Override
+	public void tick() {
+		double dx = this.getX() + (-0.25 + (0.5 * this.level.random.nextDouble()));
+		double dy = 0.125 + this.getY() + (-0.25 + (0.5 * this.level.random.nextDouble()));
+		double dz = this.getZ() + (-0.25 + (0.5 * this.level.random.nextDouble()));
+		this.level.addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		
+		super.tick();
+	}
 
 	@Override
 	protected void onHit(RayTraceResult result)
