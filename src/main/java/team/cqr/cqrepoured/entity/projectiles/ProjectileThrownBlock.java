@@ -1,52 +1,54 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileThrownBlock extends ProjectileBase implements IEntityAdditionalSpawnData {
 
 	private ResourceLocation block = Blocks.END_STONE.getRegistryName();
 	private BlockState state = null;
 	private boolean placeOnImpact = false;
+	private LivingEntity shooter;
 
-	public ProjectileThrownBlock(World worldIn) {
-		super(worldIn);
-		this.setSize(1, 1);
+	public ProjectileThrownBlock(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+		super(throwableEntity, world);
 	}
 
-	private ProjectileThrownBlock(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
-		this.setSize(1, 1);
+	public ProjectileThrownBlock(double pX, double pY, double pZ, World world) {
+		super(CQREntityTypes.PROJECTILE_THROWN_BLOCK.get(), pX, pY, pZ, world);
 	}
 
-	public ProjectileThrownBlock(World worldIn, LivingEntity shooter, BlockState block, boolean placeOnImpact) {
-		super(worldIn, shooter);
+	public ProjectileThrownBlock(LivingEntity shooter, World world, BlockState block, boolean placeOnImpact)
+	{
+		super(CQREntityTypes.PROJECTILE_THROWN_BLOCK.get(), shooter, world);
 		this.block = block.getBlock().getRegistryName();
 		this.placeOnImpact = placeOnImpact;
 		this.state = block;
-		this.setSize(1, 1);
+		this.shooter = shooter;
 	}
 
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+/*	@Override
+	public void writeSpawnData(ByteBuf buffer)
+	{
 		ByteBufUtils.writeUTF8String(buffer, this.block.toString());
 	}
 
@@ -54,10 +56,15 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	public void readSpawnData(ByteBuf additionalData) {
 		this.block = new ResourceLocation(ByteBufUtils.readUTF8String(additionalData));
 		this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
-	}
+	} */
 
 	public BlockState getBlock() {
-		return this.state != null ? this.state : Blocks.BEDROCK.getDefaultState();
+		return this.state != null ? this.state : Blocks.BEDROCK.defaultBlockState();
+	}
+
+	@Override
+	protected void defineSynchedData() {
+
 	}
 
 	@Override
@@ -66,6 +73,50 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
+	public void onHitEntity(EntityRayTraceResult entityResult)
+	{
+		super.onHitEntity(entityResult);
+
+		Entity entity = entityResult.getEntity();
+
+		if(entity == this.shooter) return;
+
+		if(entity instanceof PartEntity && ((PartEntity)entity).getParent() == this.shooter) return;
+
+		entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), 10);
+		this.remove();
+	}
+
+	@Override
+	protected void onHitBlock(BlockRayTraceResult result)
+	{
+		super.onHitBlock(result);
+
+		if(CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
+			// TODO: Add placed block to whitelist of protected region
+			this.level.setBlockAndUpdate(new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ()), this.state);
+			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
+			if (this.level instanceof ServerWorld) {
+				ServerWorld ws = (ServerWorld) this.level;
+				//Vector3d pos = result.getLocation();
+				BlockPos pos = result.getBlockPos();
+				double particleSpeed = 0.2D;
+				for (int i = 0; i < 50; i++) {
+					double dx = -0.5 + this.random.nextDouble();
+					dx *= particleSpeed;
+					double dy = -0.5 + this.random.nextDouble();
+					dy *= particleSpeed;
+					double dz = -0.5 + this.random.nextDouble();
+					dz *= particleSpeed;
+					ws.addParticle(new BlockParticleData(ParticleTypes.BLOCK, this.state), pos.getX(), pos.getY(), pos.getZ(), dx, dy, dz);
+					this.playSound(this.state.getBlock().getSoundType(this.state, this.level, this.blockPosition(), this).getPlaceSound(), 1.5F, 1.25F);
+				}
+			}
+		}
+		this.remove();
+	}
+
+/*	@Override
 	protected void onHit(RayTraceResult result) {
 		if (this.world.isRemote) {
 			return;
@@ -106,26 +157,40 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		}
 
 		this.setDead();
-	}
+	} */
 
 	@Override
-	public void writeEntityToNBT(CompoundNBT compound) {
-		CompoundNBT blockstate = new CompoundNBT();
-		NBTUtil.writeBlockState(blockstate, this.state);
-		compound.setTag("blockdata", blockstate);
-		super.save(compound);
-	}
-
-	@Override
-	public void readEntityFromNBT(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundNBT compound)
+	{
 		try {
-			CompoundNBT blockstate = compound.getCompoundTag("blockdata");
+			CompoundNBT blockstate = compound.getCompound("blockdata");
 			this.state = NBTUtil.readBlockState(blockstate);
 		} catch (Exception ex) {
 			// Ignore
-			this.state = Blocks.END_STONE.getDefaultState();
+			this.state = Blocks.END_STONE.defaultBlockState();
 		}
-		super.readEntityFromNBT(compound);
+		super.readAdditionalSaveData(compound);
 	}
 
+	@Override
+	protected void addAdditionalSaveData(CompoundNBT compound)
+	{
+		CompoundNBT tag = NBTUtil.writeBlockState(this.state);
+		tag.put("blockdata", tag);
+		super.addAdditionalSaveData(compound);
+	}
+
+	@Override
+	public void writeSpawnData(PacketBuffer buffer)
+	{
+		//ByteBufUtil.writeUtf8(buffer, this.block.toString());
+		buffer.writeUtf(this.block.toString());
+	}
+
+	@Override
+	public void readSpawnData(PacketBuffer additionalData)
+	{
+		this.block = new ResourceLocation(additionalData.readUtf());
+		//this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
+	}
 }
