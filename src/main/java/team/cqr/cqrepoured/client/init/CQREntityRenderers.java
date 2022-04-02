@@ -1,7 +1,20 @@
 package team.cqr.cqrepoured.client.init;
 
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import team.cqr.cqrepoured.client.render.projectile.*;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileEarthQuake;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileFirewallPart;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderEye;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
+import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class CQREntityRenderers
@@ -10,8 +23,8 @@ public class CQREntityRenderers
 
 	public static void registerRenderers() {
 		registerProjectileAndMiscRenderers();
-	/*	registerTileRenderers();
-		registerProjectileAndMiscRenderers();
+		registerTileRenderers();
+		/*registerProjectileAndMiscRenderers();
 		if (CQRConfig.isAprilFoolsEnabled()) {
 			registerAprilFoolsRenderer();
 		} else {
@@ -27,7 +40,7 @@ public class CQREntityRenderers
 	}
 
 	protected static void registerTileRenderers() {
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
+		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.TABLE.get(), TileEntityTableRenderer::new);
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
