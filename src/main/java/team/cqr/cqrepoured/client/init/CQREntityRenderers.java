@@ -11,6 +11,7 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderE
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileThrownBlock;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
