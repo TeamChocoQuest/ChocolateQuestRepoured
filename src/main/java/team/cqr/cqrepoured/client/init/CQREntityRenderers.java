@@ -25,7 +25,7 @@ public class CQREntityRenderers
 	public static void registerRenderers() {
 		registerProjectileAndMiscRenderers();
 		registerTileRenderers();
-		/*registerProjectileAndMiscRenderers();
+		/*
 		if (CQRConfig.isAprilFoolsEnabled()) {
 			registerAprilFoolsRenderer();
 		} else {
@@ -40,7 +40,7 @@ public class CQREntityRenderers
 		//RenderingRegistry.registerEntityRenderingHandler(AbstractEntityCQR.class, RenderChungus::new);
 	}
 
-	protected static void registerTileRenderers() {
+	public static void registerTileRenderers() {
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.TABLE.get(), TileEntityTableRenderer::new);
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
@@ -48,7 +48,7 @@ public class CQREntityRenderers
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMap.class, new TileEntityMapPlaceHolderRenderer());
 	}
 
-	protected static void registerProjectileAndMiscRenderers() {
+	public static void registerProjectileAndMiscRenderers() {
 		// Projectiles
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BULLET.get(), RenderProjectileBullet::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), RenderProjectileCannonBall::new);
