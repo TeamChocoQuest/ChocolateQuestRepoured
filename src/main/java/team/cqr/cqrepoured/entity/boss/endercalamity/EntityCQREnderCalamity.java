@@ -588,7 +588,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	protected void applyAttributeValues() {
 		super.applyAttributeValues();
 		this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(16.0D);
+		this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(12.0D);
+		this.getAttribute(Attributes.ARMOR).setBaseValue(10.0D);
 	}
 
 	public boolean isShieldActive() {
@@ -613,7 +614,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (source.isBypassInvul()) {
 			return super.hurt(source, amount, sentFromPart);
 		}
-		amount /= 2;
+		//amount /= 2;
 		// Projectile attack
 		if (source.getDirectEntity() instanceof ProjectileEnergyOrb) {
 			// TODO: Hit by energy ball
@@ -640,7 +641,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return false;
 		}
 
-		if (source instanceof IndirectEntityDamageSource) {
+		if (source instanceof IndirectEntityDamageSource && !isDowned()) {
 			// DONE: Switch attack target to the shooter
 			// DONE: Teleport
 			// DONE: Spawn homing ender eyes => Handled by AI

@@ -23,7 +23,7 @@ import java.util.EnumSet;
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private int minionSpawnTick = 0;
-	private int borderMinion = 20;
+	private int borderMinion = 80;
 	private float borderHPForMinions = 0.75F;
 
 	public BossAISummonMinions(EntityCQREnderCalamity entity) {
@@ -65,13 +65,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 		this.minionSpawnTick = 0;
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
-			this.borderMinion = 30;
+			this.borderMinion = 100;
 			// Check list
+			//Returns true if there were (dead) entities removed from the list
 			if (this.entity.filterSummonLists()) {
-				this.borderMinion = 10;
+				this.borderMinion = 50;
 			}
 		} else {
-			this.borderMinion = 60;
+			this.borderMinion = 80;
 
 			double seed = 1 - this.entity.getHealth() / this.entity.getMaxHealth();
 			seed *= 4;
@@ -81,8 +82,13 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			pos = pos.offset(-2 + this.entity.getRandom().nextInt(3), 0, -2 + this.entity.getRandom().nextInt(3));
 			minion.setPos(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
+			
 			//minion.onInitialSpawn(this.world.getCurrentDifficultyAt(minion.blockPosition()), null);
 			minion.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(minion.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
+			if(minion instanceof EntityCQREnderman) {
+				((EntityCQREnderman)minion).setMayTeleport(false);
+			}
+
 			this.entity.addSummonedEntityToList(minion);
 			this.entity.tryEquipSummon(minion, this.world.random);
 			this.world.addFreshEntity(minion);
@@ -90,7 +96,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	}
 
 	private int getMaxMinionsPerTime() {
-		int absoluteMax = 5;
+		int absoluteMax = 3;
 		absoluteMax += this.world.getDifficulty().getId();
 
 		float hpPercentage = this.entity.getHealth() / this.entity.getMaxHealth();
@@ -130,6 +136,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		if (DungeonGenUtils.percentageRandom(0.33, world.random)) {
 			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
 		}
+		//TODO: Disable teleport for minions
 
 		return entity;
 	}

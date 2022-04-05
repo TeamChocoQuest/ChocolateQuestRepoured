@@ -20,6 +20,8 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
+	
+	protected boolean mayTeleport = true;
 
 	public EntityCQREnderman(World world) {
 		this(CQREntityTypes.ENDERMAN.get(), world);
@@ -35,7 +37,16 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected void registerGoals() {
 		super.registerGoals();
 
-		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<>(this));
+		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<>(this) {
+			@Override
+			public boolean canUse() {
+				return EntityCQREnderman.this.mayTeleport && super.canUse(); 
+			}
+		});
+	}
+	
+	public void setMayTeleport(boolean value) {
+		this.mayTeleport = value;
 	}
 
 	@Override
@@ -150,5 +161,20 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	@Override
 	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("mayTeleport", mayTeleport);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.mayTeleport = true;
+		if(compound.hasKey("mayTeleport")) {
+			this.mayTeleport = compound.getBoolean("mayTeleport");
+		}
 	}
 }
