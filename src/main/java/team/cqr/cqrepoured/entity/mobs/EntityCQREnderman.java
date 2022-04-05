@@ -5,6 +5,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -22,6 +23,8 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
+	
+	protected boolean mayTeleport = true;
 
 	public EntityCQREnderman(World worldIn) {
 		super(worldIn);
@@ -33,7 +36,16 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected void initEntityAI() {
 		super.initEntityAI();
 
-		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<>(this));
+		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this) {
+			@Override
+			public boolean shouldExecute() {
+				return EntityCQREnderman.this.mayTeleport && super.shouldExecute(); 
+			}
+		});
+	}
+	
+	public void setMayTeleport(boolean value) {
+		this.mayTeleport = value;
 	}
 
 	@Override
@@ -160,5 +172,20 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("mayTeleport", mayTeleport);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.mayTeleport = true;
+		if(compound.hasKey("mayTeleport")) {
+			this.mayTeleport = compound.getBoolean("mayTeleport");
+		}
 	}
 }

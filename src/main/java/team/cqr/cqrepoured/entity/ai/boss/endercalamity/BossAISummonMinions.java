@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private int minionSpawnTick = 0;
-	private int borderMinion = 20;
+	private int borderMinion = 80;
 	private float borderHPForMinions = 0.75F;
 
 	public BossAISummonMinions(EntityCQREnderCalamity entity) {
@@ -59,13 +59,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 		this.minionSpawnTick = 0;
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
-			this.borderMinion = 30;
+			this.borderMinion = 100;
 			// Check list
+			//Returns true if there were (dead) entities removed from the list
 			if (this.entity.filterSummonLists()) {
-				this.borderMinion = 10;
+				this.borderMinion = 50;
 			}
 		} else {
-			this.borderMinion = 60;
+			this.borderMinion = 80;
 
 			double seed = 1 - this.entity.getHealth() / this.entity.getMaxHealth();
 			seed *= 4;
@@ -76,6 +77,9 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			minion.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
 			minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
+			if(minion instanceof EntityCQREnderman) {
+				((EntityCQREnderman)minion).setMayTeleport(false);
+			}
 			this.entity.addSummonedEntityToList(minion);
 			this.entity.tryEquipSummon(minion, this.world.rand);
 			this.world.spawnEntity(minion);
@@ -83,7 +87,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	}
 
 	private int getMaxMinionsPerTime() {
-		int absoluteMax = 5;
+		int absoluteMax = 3;
 		absoluteMax += this.world.getDifficulty().getId();
 
 		float hpPercentage = this.entity.getHealth() / this.entity.getMaxHealth();
@@ -123,6 +127,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		if (DungeonGenUtils.percentageRandom(0.33, world.rand)) {
 			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
 		}
+		//TODO: Disable teleport for minions
 
 		return entity;
 	}

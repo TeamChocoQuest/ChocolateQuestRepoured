@@ -87,7 +87,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (!this.world.isRemote && this.target != null) {
 			Vec3d v = this.target.getPositionVector().subtract(this.getPositionVector());
 			v = v.normalize();
-			v = v.scale(0.4);
+			v = v.scale(0.2);
 
 			this.motionX = v.x;
 			this.motionY = v.y;
