@@ -45,7 +45,7 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 		}
 		// strike lightning
 		this.lightningTick = 0;
-		this.borderLightning = 20;
+		this.borderLightning = 80;
 		switch (this.world.getDifficulty()) {
 		case EASY:
 		case PEACEFUL:
