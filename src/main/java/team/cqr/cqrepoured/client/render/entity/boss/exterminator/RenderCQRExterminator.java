@@ -1,23 +1,24 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.item.gun.ItemFlamethrower;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/exterminator.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/exterminator.geo.json");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/exterminator.geo.json");
 
 	public RenderCQRExterminator(EntityRendererManager renderManager) {
 		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
@@ -30,7 +31,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected ItemStack getHeldItemForBone(String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			return currentEntity.getHeldItem(Hand.MAIN_HAND);
+			return currentEntity.getItemInHand(Hand.MAIN_HAND);
 		}
 		return null;
 	}
@@ -48,8 +49,9 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
+			//TODO: Figure out values
 			//move left or right (from the entity's POV, positive: Right), move up or down the arm, move above (negative) or under the arm (positive)
-			GlStateManager.translate(0.0, 0.0, -0.25);
+			/*GlStateManager.translate(0.0, 0.0, -0.25);
 			//Since the golem is massive we need to scale it up a bit
 			
 			//Standard code from LayerHeldItem
@@ -62,7 +64,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 			} else {
 				//Different scale cause flamethrower is very small
 				GlStateManager.scale(1.5, 1.5, 1.5);
-			}
+			}*/
 		}
 	}
 
@@ -90,9 +92,21 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			return TransformType.THIRD_PERSON_LEFT_HAND;
+			return TransformType.THIRD_PERSON_RIGHT_HAND;
 		}
 		return TransformType.NONE;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

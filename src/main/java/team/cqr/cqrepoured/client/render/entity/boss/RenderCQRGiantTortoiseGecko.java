@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -12,9 +13,11 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/giant_tortoise.geo.json");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/bossgiant_tortoise.geo.json");
 
 	public RenderCQRGiantTortoiseGecko(EntityRendererManager renderManager) {
 		super(renderManager, new ModelGiantTortoiseGecko(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
@@ -65,6 +68,16 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		return TransformType.NONE;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
+		
 	}
 
 }

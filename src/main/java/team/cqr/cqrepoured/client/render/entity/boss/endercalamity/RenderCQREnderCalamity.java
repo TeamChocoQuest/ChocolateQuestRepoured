@@ -1,9 +1,20 @@
 package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -12,7 +23,7 @@ import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.GL11;
+import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -24,14 +35,11 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.util.ArrayUtil;
 
-import javax.annotation.Nullable;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {
 
 	private static final VertexBuffer SPHERE_VBO = new VertexBuffer(DefaultVertexFormats.POSITION);
 	static {
-		BufferBuilder buffer = Tessellator.getInstance().getBuffer();
+		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
 		buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION);
 
 		AtomicInteger index = new AtomicInteger();
@@ -49,30 +57,30 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 			if (ind % 16 < 12) {
 				if (ind % 4 == 0) {
-					buffer.pos(inner[0].x, inner[0].y, inner[0].z).endVertex();
-					buffer.pos(outer[0].x, outer[0].y, outer[0].z).endVertex();
-					buffer.pos(outer[1].x, outer[1].y, outer[1].z).endVertex();
+					buffer.vertex(inner[0].x, inner[0].y, inner[0].z).endVertex();
+					buffer.vertex(outer[0].x, outer[0].y, outer[0].z).endVertex();
+					buffer.vertex(outer[1].x, outer[1].y, outer[1].z).endVertex();
 				}
 				if (ind % 4 == 2) {
-					buffer.pos(inner[0].x, inner[0].y, inner[0].z).endVertex();
-					buffer.pos(outer[1].x, outer[1].y, outer[1].z).endVertex();
-					buffer.pos(inner[1].x, inner[1].y, inner[1].z).endVertex();
+					buffer.vertex(inner[0].x, inner[0].y, inner[0].z).endVertex();
+					buffer.vertex(outer[1].x, outer[1].y, outer[1].z).endVertex();
+					buffer.vertex(inner[1].x, inner[1].y, inner[1].z).endVertex();
 				}
 				if (ind % 4 == 3) {
-					buffer.pos(outer[0].x, outer[0].y, outer[0].z).endVertex();
-					buffer.pos(outer[1].x, outer[1].y, outer[1].z).endVertex();
-					buffer.pos(inner[1].x, inner[1].y, inner[1].z).endVertex();
+					buffer.vertex(outer[0].x, outer[0].y, outer[0].z).endVertex();
+					buffer.vertex(outer[1].x, outer[1].y, outer[1].z).endVertex();
+					buffer.vertex(inner[1].x, inner[1].y, inner[1].z).endVertex();
 				}
 			}
 		});
 
-		buffer.finishDrawing();
-		SPHERE_VBO.bufferData(buffer.getByteBuffer());
-		buffer.reset();
+		buffer.end();
+		SPHERE_VBO.upload(buffer/*.getByteBuffer()*/);
+		buffer.clear();//Correct replacement for reset?
 	}
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/ender_calamity.geo.json");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/ender_calamity.geo.json");
 
 	public RenderCQREnderCalamity(EntityRendererManager renderManager) {
 		super(renderManager, new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
@@ -84,7 +92,8 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	public boolean isMultipass() {
 		return true;
 	}
-
+	
+	//TODO: Move to render layer?
 	@Override
 	public void renderMultipass(EntityCQREnderCalamity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
@@ -161,6 +170,16 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		return TransformType.NONE;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
+		
 	}
 
 }
