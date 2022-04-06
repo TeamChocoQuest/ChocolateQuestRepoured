@@ -1,0 +1,218 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.biped_triton",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 2, 0]
+				},
+				{
+					"name": "bipedBody",
+					"parent": "root",
+					"pivot": [0, 14, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "uv": [0, 16]},
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "inflate": 0.5, "uv": [20, 32]}
+					]
+				},
+				{
+					"name": "bipedArms",
+					"parent": "bipedBody",
+					"pivot": [0, 22, 0]
+				},
+				{
+					"name": "bipedArmLeft",
+					"parent": "bipedArms",
+					"pivot": [5, 22, 0],
+					"cubes": [
+						{"origin": [4, 12, -2], "size": [4, 12, 4], "uv": [24, 16]},
+						{"origin": [4, 12, -2], "size": [4, 12, 4], "inflate": 0.5, "uv": [40, 0]}
+					]
+				},
+				{
+					"name": "bipedHandLeft",
+					"parent": "bipedArmLeft",
+					"pivot": [6, 11, 0],
+					"cubes": [
+						{"origin": [6, 11, 0], "size": [0, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "armorBipedLeftArm",
+					"parent": "bipedArmLeft",
+					"pivot": [5, 22, 0],
+					"cubes": [
+						{"origin": [4, 12, -2], "size": [4, 12, 4], "uv": [32, 48]}
+					]
+				},
+				{
+					"name": "bipedArmRight",
+					"parent": "bipedArms",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]},
+						{"origin": [-8, 12, -2], "size": [4, 12, 4], "inflate": 0.5, "uv": [40, 32]}
+					]
+				},
+				{
+					"name": "bipedHandRight",
+					"parent": "bipedArmRight",
+					"pivot": [-6, 11, 0],
+					"cubes": [
+						{"origin": [-6, 11, 0], "size": [0, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "armorBipedRightArm",
+					"parent": "bipedArmRight",
+					"pivot": [-5, 22, 0],
+					"cubes": [
+						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
+					]
+				},
+				{
+					"name": "bipedCape",
+					"parent": "bipedBody",
+					"pivot": [0, 24, 2],
+					"rotation": [7.5, 0, 0],
+					"cubes": [
+						{"origin": [-5, 8, 2], "size": [10, 16, 1], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "bipedPotionSlot",
+					"parent": "bipedBody",
+					"pivot": [4, 13, 0],
+					"cubes": [
+						{"origin": [4.5, 13, 0], "size": [0, 0, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "armorBipedBody",
+					"parent": "bipedBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 12, -2], "size": [8, 12, 4], "uv": [16, 16]}
+					]
+				},
+				{
+					"name": "bipedHeadBaseRotator",
+					"parent": "bipedBody",
+					"pivot": [0, 24, 0]
+				},
+				{
+					"name": "bipedHead",
+					"parent": "bipedHeadBaseRotator",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]},
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "inflate": 0.5, "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "armorBipedHead",
+					"parent": "bipedHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "tritonBeard",
+					"parent": "bipedHead",
+					"pivot": [0, 27, -4],
+					"rotation": [-22.5, 0, 0]
+				},
+				{
+					"name": "tritonBeardFarRight",
+					"parent": "tritonBeard",
+					"pivot": [-1.5, 27, -4],
+					"cubes": [
+						{"origin": [-2, 23, -4], "size": [1, 4, 1], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "tritonBeardRight",
+					"parent": "tritonBeard",
+					"pivot": [-0.5, 27, -4],
+					"cubes": [
+						{"origin": [-1, 23, -4], "size": [1, 4, 1], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "tritonBeardLeft",
+					"parent": "tritonBeard",
+					"pivot": [0.5, 27, -4],
+					"cubes": [
+						{"origin": [0, 23, -4], "size": [1, 4, 1], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "tritonBeardFarLeft",
+					"parent": "tritonBeard",
+					"pivot": [1.5, 27, -4],
+					"cubes": [
+						{"origin": [1, 23, -4], "size": [1, 4, 1], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "tritonBodyLower",
+					"parent": "root",
+					"pivot": [0, 12, -1.5],
+					"cubes": [
+						{"origin": [-4, 8, -1.5], "size": [8, 4, 4], "uv": [0, 56]}
+					]
+				},
+				{
+					"name": "trionBodyLowerMiddle",
+					"parent": "tritonBodyLower",
+					"pivot": [0, 8, -0.5],
+					"cubes": [
+						{"origin": [-3, 4, -0.5], "size": [6, 4, 4], "uv": [0, 48]}
+					]
+				},
+				{
+					"name": "tritonBodyLowerBottom",
+					"parent": "trionBodyLowerMiddle",
+					"pivot": [0, 4, 1.5],
+					"cubes": [
+						{"origin": [-2.5, 0, 1.5], "size": [5, 4, 4], "uv": [24, 56]}
+					]
+				},
+				{
+					"name": "tritonTail",
+					"parent": "tritonBodyLowerBottom",
+					"pivot": [0, 1.5, 5.5],
+					"cubes": [
+						{"origin": [-1.5, 0, 5.5], "size": [3, 3, 4], "uv": [42, 57]}
+					]
+				},
+				{
+					"name": "tritonTailMiddle",
+					"parent": "tritonTail",
+					"pivot": [0, 1.5, 9.5],
+					"cubes": [
+						{"origin": [-1.5, 0, 9.5], "size": [3, 3, 4], "uv": [42, 57]}
+					]
+				},
+				{
+					"name": "tritonTailTip",
+					"parent": "tritonTailMiddle",
+					"pivot": [0, 1.5, 13.5],
+					"cubes": [
+						{"origin": [-1.5, 0, 13.5], "size": [3, 3, 4], "uv": [42, 57]}
+					]
+				}
+			]
+		}
+	]
+}
