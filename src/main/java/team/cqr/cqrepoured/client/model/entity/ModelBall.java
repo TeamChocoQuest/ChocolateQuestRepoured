@@ -9,6 +9,12 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 public class ModelBall extends Model {
 
 	private final ModelRenderer bone;
+	private final ModelRenderer bone1;
+	private final ModelRenderer bone2;
+	private final ModelRenderer bone3;
+	private final ModelRenderer bone4;
+	private final ModelRenderer bone5;
+	private final ModelRenderer bone6;
 	private final ModelRenderer faceTop;
 	private final ModelRenderer faceBottom;
 	private final ModelRenderer faceNorth;
@@ -27,6 +33,30 @@ public class ModelBall extends Model {
 		this.bone = new ModelRenderer(this, 0, 0);
 		this.bone.setPos(0.0F, 0.0F, 0.0F);
 		this.bone.addBox(-7.0F, -13.0F, -7.0F, 14, 12, 14);
+		
+		this.bone1 = new ModelRenderer(this, 0, 26);
+		this.bone1.setPos(0.0F, 0.0F, 0.0F);
+		this.bone1.addBox(-6.0F, -14.0F, -7.0F, 12, 1, 14);
+		
+		this.bone2 = new ModelRenderer(this, 0, 41);
+		this.bone2.setPos(0.0F, 0.0F, 0.0F);
+		this.bone2.addBox(-7.0F, -14.0F, -6.0F, 1, 1, 12);
+		
+		this.bone3 = new ModelRenderer(this, 26, 41);
+		this.bone3.setPos(0.0F, 0.0F, 0.0F);
+		this.bone3.addBox(6.0F, -14.0F, -6.0F, 1, 1, 12);
+		
+		this.bone4 = new ModelRenderer(this, 0, 54);
+		this.bone4.setPos(0.0F, 0.0F, 0.0F);
+		this.bone4.addBox(-6.0F, -1.0F, -7.0F, 12, 1, 14);
+		
+		this.bone5 = new ModelRenderer(this, 0, 69);
+		this.bone5.setPos(0.0F, 0.0F, 0.0F);
+		this.bone5.addBox(-7.0F, -1.0F, -6.0F, 1, 1, 12);
+		
+		this.bone6 = new ModelRenderer(this, 26, 69);
+		this.bone6.setPos(0.0F, 0.0F, 0.0F);
+		this.bone6.addBox(6.0F, -1.0F, -6.0F, 1, 1, 12);
 		//this.bone.cubeList.add(new ModelBox(this.bone, 0, 0, -7.0F, -13.0F, -7.0F, 14, 12, 14, 0.0F, false));
 
 		/*this.bone.cubeList.add(new ModelBox(this.bone, 0, 26, -6.0F, -14.0F, -7.0F, 12, 1, 14, 0.0F, false));
@@ -82,6 +112,12 @@ public class ModelBall extends Model {
 	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha)
 	{
 		this.bone.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone1.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone2.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone3.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone4.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone5.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		this.bone6.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		this.faceTop.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		this.faceBottom.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
 		this.faceNorth.render(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);

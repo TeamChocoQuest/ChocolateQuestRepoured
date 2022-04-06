@@ -37,7 +37,9 @@ public class RenderBubble extends EntityRenderer<EntityBubble> {
 	@Override
 	public void render(EntityBubble entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
 		matrixStack.pushPose();
-		RenderSystem.enableBlend();
+		//RenderSystem.enableBlend();
+		//RenderSystem.disableCull();
+		//RenderSystem.enableAlphaTest(); //#TODO entity inside not reneerign 
 		float scale = entity.getBbHeight() / 0.9F;
 		matrixStack.scale(scale, -scale, scale);
 		this.model.renderToBuffer(matrixStack, buffer.getBuffer(RenderType.entityTranslucent(TEXTURE, true)), packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 0.5F);
