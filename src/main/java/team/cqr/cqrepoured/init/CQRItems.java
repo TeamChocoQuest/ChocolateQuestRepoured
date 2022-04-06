@@ -5,30 +5,13 @@ import java.util.function.Function;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemTier;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.item.ItemAlchemyBag;
-import team.cqr.cqrepoured.item.ItemBadge;
-import team.cqr.cqrepoured.item.ItemBullBattleAxe;
-import team.cqr.cqrepoured.item.ItemCursedBone;
-import team.cqr.cqrepoured.item.ItemHookshot;
-import team.cqr.cqrepoured.item.ItemLongshot;
-import team.cqr.cqrepoured.item.ItemLore;
-import team.cqr.cqrepoured.item.ItemMobToSpawner;
-import team.cqr.cqrepoured.item.ItemPathTool;
-import team.cqr.cqrepoured.item.ItemPotionHealing;
-import team.cqr.cqrepoured.item.ItemShieldDummy;
-import team.cqr.cqrepoured.item.ItemSoulBottle;
-import team.cqr.cqrepoured.item.ItemSpawnerConverter;
-import team.cqr.cqrepoured.item.ItemSpiderHook;
-import team.cqr.cqrepoured.item.ItemSpikedGlove;
-import team.cqr.cqrepoured.item.ItemStructureSelector;
-import team.cqr.cqrepoured.item.ItemSuperTool;
-import team.cqr.cqrepoured.item.ItemTeleportStone;
-import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
+import team.cqr.cqrepoured.item.*;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
@@ -79,17 +62,17 @@ public class CQRItems {
 	public static final RegistryObject<ItemDagger> DAGGER_MONKING = null;
 
 	// Swords
-	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = null;
-	public static final RegistryObject<ItemSwordSpider> SWORD_SPIDER = null;
-	public static final RegistryObject<ItemSwordMoonlight> SWORD_MOONLIGHT = null;
-	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = null;
+	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = register("sword_turtle", prop -> new ItemSwordTurtle(CQRMaterials.CQRItemTiers.TOOL_TURTLE, 5, prop)); //#TODO tweak stats
+	public static final RegistryObject<ItemSwordSpider> SWORD_SPIDER = register("sword_spider", prop -> new ItemSwordSpider(CQRMaterials.CQRItemTiers.TOOL_SPIDER, 5, prop)); //TODO tweak stats
+	public static final RegistryObject<ItemSwordMoonlight> SWORD_MOONLIGHT = register("sword_moonlight", prop -> new ItemSwordMoonlight(CQRMaterials.CQRItemTiers.TOOL_MOONLIGHT, 5, prop)); //TODO
+	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = register("sword_sunshine", prop -> new ItemSwordSunshine(CQRMaterials.CQRItemTiers.TOOL_SUNSHINE, 5, prop)); //TODO Tweak
 
 	// Battle Axes
 	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = register("battle_axe_bull", prop -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, prop)); //TODO tweak stats
 
 	// Walker RegistryObject<Item>s
-	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = null;
-	public static final RegistryObject<ItemShieldWalkerKing> SHIELD_WALKER_KING = null;
+	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = register("sword_walker", prop -> new ItemSwordWalker(CQRMaterials.CQRItemTiers.TOOL_WALKER, 5, prop)); //#TODO TWEAK STATS
+	public static final RegistryObject<ItemShieldWalkerKing> SHIELD_WALKER_KING = register("shield_walker_king", ItemShieldWalkerKing::new);
 
 	// Shields
 	public static final RegistryObject<ItemShieldCQR> SHIELD_BULL = null;
@@ -128,32 +111,32 @@ public class CQRItems {
 	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = null;
 
 	// Staves
-	public static final RegistryObject<ItemStaff> STAFF = null;
-	public static final RegistryObject<ItemStaffFire> STAFF_FIRE = null;
-	public static final RegistryObject<ItemStaffVampiric> STAFF_VAMPIRIC = null; // #TODO DESCRIPTION
-	public static final RegistryObject<ItemStaffWind> STAFF_WIND = null; // #TODO DESCRIPTION
-	public static final RegistryObject<ItemStaffPoison> STAFF_POISON = null; // #TODO DESCRIPTION
-	public static final RegistryObject<ItemStaffHealing> STAFF_HEALING = null;
-	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = null;
-	public static final RegistryObject<ItemStaffThunder> STAFF_THUNDER = null;
-	public static final RegistryObject<ItemStaffSpider> STAFF_SPIDER = null;
-	public static final RegistryObject<ItemStaffGun> STAFF_GUN = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemStaff> STAFF = register("staff", ItemStaff::new);
+	public static final RegistryObject<ItemStaffFire> STAFF_FIRE = register("staff_fire", ItemStaffFire::new);
+	public static final RegistryObject<ItemStaffVampiric> STAFF_VAMPIRIC = register("staff_vampiric", ItemStaffVampiric::new); // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffWind> STAFF_WIND = register("staff_wind", ItemStaffWind::new); // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffPoison> STAFF_POISON = register("staff_poison", ItemStaffPoison::new); // #TODO DESCRIPTION
+	public static final RegistryObject<ItemStaffHealing> STAFF_HEALING = register("staff_healing", ItemStaffHealing::new);
+	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = register("diamond_sword_fake_healing_staff", props -> new ItemFakeSwordHealingStaff(ItemTier.DIAMOND, 0, 0.0F, props)); //#TODO tweak values
+	public static final RegistryObject<ItemStaffThunder> STAFF_THUNDER = register("staff_thunder", ItemStaffThunder::new);
+	public static final RegistryObject<ItemStaffSpider> STAFF_SPIDER = register("staff_spider", ItemStaffSpider::new);
+	public static final RegistryObject<ItemStaffGun> STAFF_GUN = register("staff_gun", ItemStaffGun::new); // #TODO TEXTURES
 
 	// Guns
 	public static final RegistryObject<ItemRevolver> REVOLVER = register("revolver", ItemRevolver::new);
-	public static final RegistryObject<ItemRevolver> CAPTAIN_REVOLVER = null;
-	public static final RegistryObject<ItemMusket> MUSKET = null;
-	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = null; // #TODO TEXTURES
-	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = null; // #TODO TEXTURES
-	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemRevolver> CAPTAIN_REVOLVER = register("captain_revolver", ItemRevolver::new);
+	public static final RegistryObject<ItemMusket> MUSKET = register("musket", ItemMusket::new);
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = register("musket_dagger_iron", prop -> new ItemMusketKnife(ItemTier.IRON, prop)); // #TODO TEXTURES, tweak stats?
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = register("musket_dagger_diamond", prop -> new ItemMusketKnife(ItemTier.DIAMOND, prop)); // #TODO TEXTURES, tweak stats
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = register("musket_dagger_monking", prop -> new ItemMusketKnife(CQRMaterials.CQRItemTiers.TOOL_MONKING, prop)); // #TODO TEXTURES, tweak
 	public static final RegistryObject<ItemBullet> BULLET_IRON = register("bullet_iron", ItemBullet::new);
 	public static final RegistryObject<ItemBullet> BULLET_GOLD = register("bullet_gold", ItemBullet::new);
 	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = register("bullet_diamond", ItemBullet::new);
 	public static final RegistryObject<ItemBullet> BULLET_FIRE = register("bullet_fire", ItemBullet::new);
-	public static final RegistryObject<ItemCannonBall> CANNON_BALL = null;
-	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = null; // #TODO TEXTURES
+	public static final RegistryObject<ItemCannonBall> CANNON_BALL = register("cannon_ball", ItemCannonBall::new);
+	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = register("flamethrower", ItemFlamethrower::new); // #TODO TEXTURES
 	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = register("bubble_pistol", ItemBubblePistol::new);
-	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = null;
+	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = register("bubble_rifle", ItemBubbleRifle::new);
 
 	// Hookers
 	public static final RegistryObject<ItemHookshot> HOOKSHOT = null;
@@ -161,11 +144,11 @@ public class CQRItems {
 	public static final RegistryObject<ItemSpiderHook> SPIDERHOOK = null;
 
 	// Single Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = null; // #TODO Make model centered on head // Abandon for now
-	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = null;
+	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = register("helmet_dragon", prop -> new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, EquipmentSlotType.HEAD, prop)); // #TODO Make model centered on head // Abandon for now
+	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = register("boots_cloud", prop -> new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, EquipmentSlotType.FEET, prop));
 	public static final RegistryObject<ItemBackpack> BACKPACK = register("backpack", prop -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = null;
-	public static final RegistryObject<ItemCrown> KING_CROWN = null;
+	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = register("spiked_glove", ItemSpikedGlove::new);
+	public static final RegistryObject<ItemCrown> KING_CROWN = register("king_crown", prop -> new ItemCrown(CQRMaterials.ArmorMaterials.ARMOR_CROWN, prop));
 
 	// Slime Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemArmorSlime> HELMET_SLIME = null;
@@ -222,14 +205,14 @@ public class CQRItems {
 	public static final RegistryObject<ItemArmorDyable> BOOTS_DIAMOND_DYABLE = null;
 
 	// Ingridients
-	public static final RegistryObject<ItemLore> SCALE_TURTLE = null;
-	public static final RegistryObject<ItemLore> LEATHER_BULL = null;
-	public static final RegistryObject<ItemLore> HORN_BULL = null;
-	public static final RegistryObject<ItemLore> BALL_SLIME = null;
-	public static final RegistryObject<ItemLore> LEATHER_SPIDER = null;
-	public static final RegistryObject<ItemLore> BONE_MONKING = null;
-	public static final RegistryObject<ItemLore> GIANT_SPIDER_POISON = null;
-	public static final RegistryObject<ItemLore> FEATHER_GOLDEN = null;
+	public static final RegistryObject<ItemLore> SCALE_TURTLE = register("scale_turtle", ItemLore::new);
+	public static final RegistryObject<ItemLore> LEATHER_BULL = register("leather_bull", ItemLore::new);
+	public static final RegistryObject<ItemLore> HORN_BULL = register("horn_bull", ItemLore::new);
+	public static final RegistryObject<ItemLore> BALL_SLIME = register("ball_slime", ItemLore::new);
+	public static final RegistryObject<ItemLore> LEATHER_SPIDER = register("leather_spider", ItemLore::new);
+	public static final RegistryObject<ItemLore> BONE_MONKING = register("bone_monking", ItemLore::new);
+	public static final RegistryObject<ItemLore> GIANT_SPIDER_POISON = register("giant_spider_poison", ItemLore::new);
+	public static final RegistryObject<ItemLore> FEATHER_GOLDEN = register("feather_golden", ItemGoldenFeather::new);
 
 	// Other
 	public static final RegistryObject<ItemPotionHealing> POTION_HEALING = register("potion_healing", ItemPotionHealing::new);

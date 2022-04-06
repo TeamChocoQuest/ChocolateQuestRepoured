@@ -34,7 +34,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 
 	public ItemRevolver(Properties properties)
 	{
-		super(properties.stacksTo(1).durability(300));
+		super(properties.durability(300));
 		//this.setMaxDamage(300);
 		//this.setMaxStackSize(1);
 	}
