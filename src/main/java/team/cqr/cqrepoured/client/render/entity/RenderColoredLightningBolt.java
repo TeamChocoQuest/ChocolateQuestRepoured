@@ -1,127 +1,98 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import java.util.Random;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLightningBolt> {
 
 	public RenderColoredLightningBolt(EntityRendererManager renderManagerIn) {
 		super(renderManagerIn);
 	}
-
+	
 	@Override
-	public void doRender(EntityColoredLightningBolt entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		double[] adouble = new double[8];
-		double[] adouble1 = new double[8];
-		double d0 = 0.0D;
-		double d1 = 0.0D;
-		Random random = new Random(entity.boltVertex);
+	public void render(EntityColoredLightningBolt pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
+		float[] afloat = new float[8];
+	      float[] afloat1 = new float[8];
+	      float f = 0.0F;
+	      float f1 = 0.0F;
+	      Random random = new Random(pEntity.seed);
 
-		for (int i = 7; i >= 0; --i) {
-			adouble[i] = d0;
-			adouble1[i] = d1;
-			d0 += random.nextInt(11) - 5;
-			d1 += random.nextInt(11) - 5;
-		}
+	      for(int i = 7; i >= 0; --i) {
+	         afloat[i] = f;
+	         afloat1[i] = f1;
+	         f += (float)(random.nextInt(11) - 5);
+	         f1 += (float)(random.nextInt(11) - 5);
+	      }
 
-		for (int k1 = 0; k1 < 4; ++k1) {
-			Random random1 = new Random(entity.boltVertex);
+	      IVertexBuilder ivertexbuilder = pBuffer.getBuffer(RenderType.lightning());
+	      Matrix4f matrix4f = pMatrixStack.last().pose();
 
-			for (int j = 0; j < 3; ++j) {
-				int k = 7;
-				int l = 0;
+	      for(int j = 0; j < 4; ++j) {
+	         Random random1 = new Random(pEntity.seed);
 
-				if (j > 0) {
-					k = 7 - j;
-				}
+	         for(int k = 0; k < 3; ++k) {
+	            int l = 7;
+	            int i1 = 0;
+	            if (k > 0) {
+	               l = 7 - k;
+	            }
 
-				if (j > 0) {
-					l = k - 2;
-				}
+	            if (k > 0) {
+	               i1 = l - 2;
+	            }
 
-				double d2 = adouble[k] - d0;
-				double d3 = adouble1[k] - d1;
+	            float f2 = afloat[l] - f;
+	            float f3 = afloat1[l] - f1;
 
-				for (int i1 = k; i1 >= l; --i1) {
-					double d4 = d2;
-					double d5 = d3;
+	            for(int j1 = l; j1 >= i1; --j1) {
+	               float f4 = f2;
+	               float f5 = f3;
+	               if (k == 0) {
+	                  f2 += (float)(random1.nextInt(11) - 5);
+	                  f3 += (float)(random1.nextInt(11) - 5);
+	               } else {
+	                  f2 += (float)(random1.nextInt(31) - 15);
+	                  f3 += (float)(random1.nextInt(31) - 15);
+	               }
 
-					if (j == 0) {
-						d2 += random1.nextInt(11) - 5;
-						d3 += random1.nextInt(11) - 5;
-					} else {
-						d2 += random1.nextInt(31) - 15;
-						d3 += random1.nextInt(31) - 15;
-					}
+	               float f10 = 0.1F + (float)j * 0.2F;
+	               if (k == 0) {
+	                  f10 = (float)((double)f10 * ((double)j1 * 0.1D + 1.0D));
+	               }
 
-					bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
-					double d6 = 0.1D + k1 * 0.2D;
+	               float f11 = 0.1F + (float)j * 0.2F;
+	               if (k == 0) {
+	                  f11 *= (float)(j1 - 1) * 0.1F + 1.0F;
+	               }
 
-					if (j == 0) {
-						d6 *= i1 * 0.1D + 1.0D;
-					}
+	               quad(matrix4f, ivertexbuilder, f2, f3, j1, f4, f5, pEntity.red, pEntity.green, pEntity.blue, pEntity.alpha, f10, f11, false, false, true, false);
+	               quad(matrix4f, ivertexbuilder, f2, f3, j1, f4, f5, pEntity.red, pEntity.green, pEntity.blue, pEntity.alpha, f10, f11, true, false, true, true);
+	               quad(matrix4f, ivertexbuilder, f2, f3, j1, f4, f5, pEntity.red, pEntity.green, pEntity.blue, pEntity.alpha, f10, f11, true, true, false, true);
+	               quad(matrix4f, ivertexbuilder, f2, f3, j1, f4, f5, pEntity.red, pEntity.green, pEntity.blue, pEntity.alpha, f10, f11, false, true, false, false);
+	            }
+	         }
+	      }
 
-					double d7 = 0.1D + k1 * 0.2D;
+	   }
 
-					if (j == 0) {
-						d7 *= (i1 - 1) * 0.1D + 1.0D;
-					}
-
-					for (int j1 = 0; j1 < 5; ++j1) {
-						double d8 = x + 0.5D - d6;
-						double d9 = z + 0.5D - d6;
-
-						if (j1 == 1 || j1 == 2) {
-							d8 += d6 * 2.0D;
-						}
-
-						if (j1 == 2 || j1 == 3) {
-							d9 += d6 * 2.0D;
-						}
-
-						double d10 = x + 0.5D - d7;
-						double d11 = z + 0.5D - d7;
-
-						if (j1 == 1 || j1 == 2) {
-							d10 += d7 * 2.0D;
-						}
-
-						if (j1 == 2 || j1 == 3) {
-							d11 += d7 * 2.0D;
-						}
-
-						bufferbuilder.pos(d10 + d2, y + i1 * 16, d11 + d3).color(entity.red, entity.green, entity.blue, entity.alpha).endVertex();
-						bufferbuilder.pos(d8 + d4, y + (i1 + 1) * 16, d9 + d5).color(entity.red, entity.green, entity.blue, entity.alpha).endVertex();
-					}
-
-					tessellator.draw();
-				}
-			}
-		}
-
-		GlStateManager.disableBlend();
-		GlStateManager.enableLighting();
-		GlStateManager.enableTexture2D();
-	}
-
+	   private static void quad(Matrix4f matrix, IVertexBuilder builder, float x, float z, int yOffset, float x2, float z2, float cRed, float cGreen, float cBlue, float cAlpha, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
+	      builder.vertex(matrix, x + (p_229116_12_ ? p_229116_11_ : -p_229116_11_), (float)(yOffset * 16), z + (p_229116_13_ ? p_229116_11_ : -p_229116_11_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
+	      builder.vertex(matrix, x2 + (p_229116_12_ ? p_229116_10_ : -p_229116_10_), (float)((yOffset + 1) * 16), z2 + (p_229116_13_ ? p_229116_10_ : -p_229116_10_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
+	      builder.vertex(matrix, x2 + (p_229116_14_ ? p_229116_10_ : -p_229116_10_), (float)((yOffset + 1) * 16), z2 + (p_229116_15_ ? p_229116_10_ : -p_229116_10_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
+	      builder.vertex(matrix, x + (p_229116_14_ ? p_229116_11_ : -p_229116_11_), (float)(yOffset * 16), z + (p_229116_15_ ? p_229116_11_ : -p_229116_11_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
+	   }
 	@Override
-	@Nullable
-	protected ResourceLocation getEntityTexture(EntityColoredLightningBolt entity) {
+	public ResourceLocation getTextureLocation(EntityColoredLightningBolt pEntity) {
 		return null;
 	}
 
