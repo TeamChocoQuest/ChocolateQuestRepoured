@@ -30,13 +30,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
-	protected float widthScale;
-	protected float heightScale;
-
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;
 
-	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
 	

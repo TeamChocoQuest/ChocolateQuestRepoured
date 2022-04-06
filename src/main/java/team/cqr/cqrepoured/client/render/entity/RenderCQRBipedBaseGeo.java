@@ -19,8 +19,12 @@ import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.*;
 
 public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnimatable> extends RenderCQREntityGeo<T> {
 
-	protected RenderCQRBipedBaseGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
-		super(renderManager, modelProvider);
+	public RenderCQRBipedBaseGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+		this(renderManager, modelProvider, 1.0F, 1.0F);
+	}
+	
+	protected RenderCQRBipedBaseGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, final float widthScale, final float heightScale) {
+		super(renderManager, modelProvider, widthScale, heightScale, widthScale / 2);
 	}
 
 	protected ItemStack currentItemAtBone = null;
