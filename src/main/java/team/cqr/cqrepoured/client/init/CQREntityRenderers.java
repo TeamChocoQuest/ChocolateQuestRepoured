@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.init;
 
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -66,6 +67,7 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOMING_ENDER_EYE.get(), RenderProjectileHomingEnderEye::new);
 
 		// Miscs
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BUBBLE.get(), RenderBubble::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);
