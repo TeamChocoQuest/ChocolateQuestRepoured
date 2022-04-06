@@ -27,7 +27,7 @@ public class ItemMusket extends ItemRevolver {
 
 	public ItemMusket(Properties properties)
 	{
-		super(properties.durability(300).stacksTo(1));
+		super(properties.durability(300));
 		//this.setMaxDamage(300);
 		//this.setMaxStackSize(1);
 	}

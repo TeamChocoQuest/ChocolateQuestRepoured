@@ -21,7 +21,7 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffThunder(Properties properties)
 	{
-		super(properties.durability(2048).stacksTo(1));
+		super(properties.durability(2048));
 		//this.setMaxDamage(2048);
 		//this.setMaxStackSize(1);
 	}

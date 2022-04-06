@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 
 public class ItemHelmetDragon extends ArmorItem {
@@ -16,7 +17,7 @@ public class ItemHelmetDragon extends ArmorItem {
 	private AttributeModifier attackDamage;
 	private AttributeModifier health;
 
-	public ItemHelmetDragon(ArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties props) {
+	public ItemHelmetDragon(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties props) {
 		super(materialIn, equipmentSlotIn, props);
 
 		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);

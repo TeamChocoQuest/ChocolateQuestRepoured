@@ -15,7 +15,7 @@ public class ItemStaffSpider extends ItemLore implements IRangedWeapon {
 
 	public ItemStaffSpider(Properties properties)
 	{
-		super(properties.durability(2048).stacksTo(1));
+		super(properties.durability(2048));
 		//this.setMaxDamage(2048);
 		//this.setMaxStackSize(1);
 	}

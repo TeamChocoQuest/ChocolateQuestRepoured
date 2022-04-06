@@ -24,7 +24,7 @@ public class ItemStaffHealing extends ItemLore implements ISupportWeapon<ItemFak
 
 	public ItemStaffHealing(Properties properties)
 	{
-		super(properties.durability(128).stacksTo(1));
+		super(properties.durability(128));
 		//this.setMaxDamage(128);
 		//this.setMaxStackSize(1);
 	}

@@ -20,7 +20,7 @@ public class ItemSpikedGlove extends ItemLore
 {
 	public ItemSpikedGlove(Properties properties)
 	{
-		super(properties.durability(6000).stacksTo(1));
+		super(properties.durability(6000));
 		//this.setMaxStackSize(1);
 		// With this durability you should be able to climb 1200m in total
 		//this.setMaxDamage(6000);
