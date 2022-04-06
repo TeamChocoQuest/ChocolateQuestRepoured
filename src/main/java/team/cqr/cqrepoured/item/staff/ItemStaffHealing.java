@@ -1,11 +1,13 @@
 package team.cqr.cqrepoured.item.staff;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -21,12 +23,19 @@ import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
 public class ItemStaffHealing extends ItemLore implements ISupportWeapon<ItemFakeSwordHealingStaff> {
 
 	public static final float HEAL_AMOUNT_ENTITIES = 4.0F;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemStaffHealing(Properties properties)
 	{
 		super(properties.durability(128));
 		//this.setMaxDamage(128);
 		//this.setMaxStackSize(1);
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -3.0D, AttributeModifier.Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
@@ -44,13 +53,14 @@ public class ItemStaffHealing extends ItemLore implements ISupportWeapon<ItemFak
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+		return slot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
+	/*	Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EquipmentSlotType.MAINHAND) {
 			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -3.0D, AttributeModifier.Operation.ADDITION));
 		}
 
-		return multimap;
+		return multimap; */
 	}
 
 	@Override

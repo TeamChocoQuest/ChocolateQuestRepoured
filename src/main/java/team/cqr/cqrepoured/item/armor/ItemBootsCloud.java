@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
@@ -25,23 +26,31 @@ import java.util.List;
 
 public class ItemBootsCloud extends ArmorItem {
 
-	private AttributeModifier movementSpeed;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
+	
+	//private AttributeModifier movementSpeed;
 
 	public ItemBootsCloud(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 
-		this.movementSpeed = new AttributeModifier("CloudBootsSpeedModifier", 0.15D, Operation.MULTIPLY_TOTAL);
+		//this.movementSpeed = new AttributeModifier("CloudBootsSpeedModifier", 0.15D, Operation.MULTIPLY_TOTAL);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier("CloudBootsSpeedModifier", 0.15D, Operation.MULTIPLY_TOTAL));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+		return slot == MobEntity.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
+	/*	Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
 		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
 			multimap.put(Attributes.MOVEMENT_SPEED, this.movementSpeed);
 		}
 
-		return multimap;
+		return multimap; */
 	}
 
 	@Override

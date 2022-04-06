@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.gun;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,15 +25,23 @@ public class ItemMusketKnife extends ItemMusket {
 
 	private final float attackDamage;
 	private final IItemTier material;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemMusketKnife(IItemTier material, Properties properties)
 	{
 		super(properties);
 		this.material = material;
 		this.attackDamage = 3.0F + material.getAttackDamageBonus();
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
+		modifierBuilder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4000000953674316D + (-0.8), AttributeModifier.Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
-	@Override
+	/*@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 		this.replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, -0.8F);
@@ -48,7 +57,7 @@ public class ItemMusketKnife extends ItemMusket {
 			modifiers.remove(modifier);
 			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
 		}
-	}
+	} */
 
 	@Override
 	public float getDestroySpeed(ItemStack pStack, BlockState pState) {
@@ -100,9 +109,10 @@ public class ItemMusketKnife extends ItemMusket {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType equipmentSlot)
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack)
 	{
-		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
+		return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(equipmentSlot, stack);
+	/*	Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
 
 		if(equipmentSlot == EquipmentSlotType.MAINHAND)
 		{
@@ -110,7 +120,7 @@ public class ItemMusketKnife extends ItemMusket {
 			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4000000953674316D, AttributeModifier.Operation.ADDITION));
 		}
 
-		return multimap;
+		return multimap; */
 	}
 
 	/*public Multimap<String, AttributeModifier> getItemAttributeModifiers(EquipmentSlotType equipmentSlot) {

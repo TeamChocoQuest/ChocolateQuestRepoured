@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -14,17 +15,25 @@ import net.minecraft.item.ItemStack;
 
 public class ItemHelmetDragon extends ArmorItem {
 
-	private AttributeModifier attackDamage;
-	private AttributeModifier health;
+	//private AttributeModifier attackDamage;
+	//private AttributeModifier health;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemHelmetDragon(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties props) {
 		super(materialIn, equipmentSlotIn, props);
 
-		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);
-		this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, Operation.MULTIPLY_TOTAL);
+		//this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);
+		//this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, Operation.MULTIPLY_TOTAL);
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.MAX_HEALTH, new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION));
+		modifierBuilder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier("DragonHelmetDamageModifier", 1D, Operation.MULTIPLY_TOTAL));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
-	@Override
+/*	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
 		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
 
@@ -34,6 +43,10 @@ public class ItemHelmetDragon extends ArmorItem {
 		}
 
 		return multimap;
+	} */
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		return slot == MobEntity.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
 	}
 
 	/*
