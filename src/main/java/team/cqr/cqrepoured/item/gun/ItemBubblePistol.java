@@ -24,7 +24,7 @@ public class ItemBubblePistol extends ItemLore implements IRangedWeapon {
 	private final Random rng = new Random();
 
 	public ItemBubblePistol(Properties properties) {
-		super(properties.stacksTo(1).durability(200));
+		super(properties.durability(200));
 		//this.setMaxDamage(this.getMaxUses());
 		//this.setMaxStackSize(1);
 	}
