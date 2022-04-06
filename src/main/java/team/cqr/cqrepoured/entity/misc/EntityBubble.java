@@ -29,7 +29,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 		return super.getDimensions(p_213305_1_).scale(this.size);
 	}
 
-	protected static final Vector3d MOVEMENT_DIRECTION = new Vector3d(0, 0.5, 0);
+	protected static final Vector3d MOVEMENT_DIRECTION = new Vector3d(0, 0.05, 0);
 
 	@Override
 	public void tick() {
@@ -42,7 +42,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 			}
 			if (!this.getPassengers().isEmpty()) {
 				Entity entity = this.getPassengers().get(0);
-				entity.unRide();
+				//entity.unRide();
 				Vector3d newPos = this.position().add(0, 0.5D * (this.getBbHeight() - entity.getBbHeight()), 0);
 				entity.setPos(newPos.x, newPos.y, newPos.z);
 				if (entity instanceof LivingEntity) {
@@ -83,7 +83,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	@Override
 	protected void addPassenger(Entity passenger) {
 		super.addPassenger(passenger);
-		float size = Math.max(passenger.getBbWidth(), passenger.getBbHeight()) + 0.1F;
+		float size = Math.max(passenger.getBbWidth(), passenger.getBbHeight()) * 1.05F;
 		this.setSize(size);
 	}
 
