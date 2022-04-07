@@ -5,6 +5,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
+import team.cqr.cqrepoured.CQRMain;
 
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ public class CQRArmorMaterial implements IArmorMaterial
 
 	public CQRArmorMaterial(String name, int durability, int[] defense, int enchantmentValue, SoundEvent equipSound, Supplier<Ingredient> repairIngredient, float toughness, float knockbackResistance)
 	{
-		this.name = name;
+		this.name = CQRMain.MODID + ":" + name;
 		this.durability = durability;
 		this.defense = defense;
 		this.enchantmentValue = enchantmentValue;
