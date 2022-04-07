@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.proxy;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -7,7 +9,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -15,9 +16,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import org.lwjgl.input.Keyboard;
 import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
@@ -33,11 +31,11 @@ public class ClientProxy implements IProxy {
 
 	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
 
-	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
+	//public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
 	@Override
 	public void preInit() {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		mc.defaultResourcePacks.add(CTResourcepack.getInstance());
 		CQREntityRenderers.registerRenderers();
@@ -49,13 +47,13 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void init() {
-		ClientRegistry.registerKeyBinding(keybindReputationGUI);
+		//ClientRegistry.registerKeyBinding(keybindReputationGUI);
 	}
 
 	@Override
 	public void postInit() {
 		// Add electrocute layer to all entities
-		for (EntityRenderer<? extends Entity> renderer : Minecraft.getMinecraft().getRenderManager().entityRenderMap.values()) {
+		for (EntityRenderer<? extends Entity> renderer : Minecraft.getInstance().getRenderManager().entityRenderMap.values()) {
 			try {
 				@SuppressWarnings("unchecked")
                 EntityRenderer<Entity> render = (EntityRenderer<Entity>) renderer;
@@ -68,7 +66,7 @@ public class ClientProxy implements IProxy {
 			}
 		}
 		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
-		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(t -> {
+		Minecraft.getInstance().getRenderManager().getSkinMap().values().forEach(t -> {
 			t.addLayer(new LayerElectrocute());
 			t.addLayer(new LayerCrownRenderer(t));
 			}
@@ -78,7 +76,7 @@ public class ClientProxy implements IProxy {
 	@Override
 	public PlayerEntity getPlayer(MessageContext context) {
 		if (context.side.isClient()) {
-			return Minecraft.getMinecraft().player;
+			return Minecraft.getInstance().player;
 		} else {
 			return context.getServerHandler().player;
 		}
@@ -87,7 +85,7 @@ public class ClientProxy implements IProxy {
 	@Override
 	public World getWorld(MessageContext context) {
 		if (context.side.isClient()) {
-			return Minecraft.getMinecraft().world;
+			return Minecraft.getInstance().level;
 		} else {
 			return context.getServerHandler().player.world;
 		}
@@ -96,8 +94,8 @@ public class ClientProxy implements IProxy {
 	@Override
 	public Advancement getAdvancement(PlayerEntity player, ResourceLocation id) {
 		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancementManager();
-			return manager.getAdvancementList().getAdvancement(id);
+			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+			return manager.getAdvancements().get(id);
 		}
 		return null;
 	}
@@ -105,10 +103,10 @@ public class ClientProxy implements IProxy {
 	@Override
 	public boolean hasAdvancement(PlayerEntity player, ResourceLocation id) {
 		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancementManager();
-			Advancement advancement = manager.getAdvancementList().getAdvancement(id);
+			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+			Advancement advancement = manager.getAdvancements().get(id);
 			if (advancement != null) {
-				return manager.advancementToProgress.get(advancement).isDone();
+				return manager.progress.get(advancement).isDone();
 			}
 		}
 		return false;
@@ -116,7 +114,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void updateGui() {
-		Screen gui = Minecraft.getMinecraft().currentScreen;
+		Screen gui = Minecraft.getInstance().screen;
 		if (gui instanceof IUpdatableGui) {
 			((IUpdatableGui) gui).update();
 		}
@@ -124,31 +122,23 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public boolean isOwnerOfIntegratedServer(PlayerEntity player) {
-		IntegratedServer integratedServer = Minecraft.getMinecraft().getIntegratedServer();
-		return integratedServer != null && player.getName().equals(integratedServer.getServerOwner());
+		IntegratedServer integratedServer = Minecraft.getInstance().getSingleplayerServer();
+		return integratedServer != null && player.getName().equals(integratedServer.getSingleplayerName()) && integratedServer.isSingleplayerOwner(player.getGameProfile());
 	}
 
 	@Override
 	public void openGui(int id, PlayerEntity player, World world, int... args) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		if (id == GuiHandler.ADD_PATH_NODE_GUI_ID) {
-			mc.displayGuiScreen(new GuiAddPathNode(Hand.values()[args[0]], args[1], new BlockPos(args[2], args[3], args[4])));
+			mc.setScreen(new GuiAddPathNode(Hand.values()[args[0]], args[1], new BlockPos(args[2], args[3], args[4])));
 		}
 	}
 
 	@Override
-	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
+	public boolean isPlayerCurrentClientPlayer(PlayerEntity player) {
 		if(player != null) {
-			return ((EntityPlayer)Minecraft.getMinecraft().player).equals(player);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
-		if(player != null) {
-			return ((EntityPlayer)Minecraft.getMinecraft().player).equals(player);
+			return ((PlayerEntity)Minecraft.getInstance().player).equals(player);
 		}
 		return false;
 	}
