@@ -254,7 +254,7 @@ public class TargetUtil {
 		}
 
 		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
-		if (faction.isAlly(target)) {
+		if (faction != null && faction.isAlly(target)) {
 			return true;
 		}
 
