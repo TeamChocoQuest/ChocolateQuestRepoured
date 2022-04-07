@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -37,7 +38,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected void registerGoals() {
 		super.registerGoals();
 
-		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<>(this) {
+		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this) {
 			@Override
 			public boolean canUse() {
 				return EntityCQREnderman.this.mayTeleport && super.canUse(); 
@@ -164,17 +165,17 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 	
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
-		compound.setBoolean("mayTeleport", mayTeleport);
+	public void addAdditionalSaveData(CompoundNBT compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putBoolean("mayTeleport", mayTeleport);
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
-		this.mayTeleport = true;
-		if(compound.hasKey("mayTeleport")) {
+	public void readAdditionalSaveData(CompoundNBT compound) {
+		super.readAdditionalSaveData(compound);
+		if(compound.contains("mayTeleport")) {
 			this.mayTeleport = compound.getBoolean("mayTeleport");
 		}
 	}
+	
 }
