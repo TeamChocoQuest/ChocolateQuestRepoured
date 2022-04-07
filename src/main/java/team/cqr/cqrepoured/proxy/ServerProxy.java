@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.proxy;
 
-import javax.xml.ws.handler.MessageContext;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public class ServerProxy implements IProxy {
 
@@ -25,20 +24,21 @@ public class ServerProxy implements IProxy {
 
 	}
 
+	//Correct?
 	@Override
-	public PlayerEntity getPlayer(MessageContext context) {
-		return context.getServerHandler().player;
+	public PlayerEntity getPlayer(Context context) {
+		return context.getSender();
 	}
 
 	@Override
-	public World getWorld(MessageContext context) {
-		return context.getServerHandler().player.world;
+	public World getWorld(Context context) {
+		return context.getSender().level;
 	}
 
 	@Override
 	public Advancement getAdvancement(PlayerEntity player, ResourceLocation id) {
 		if (player instanceof ServerPlayerEntity) {
-			return ((ServerPlayerEntity) player).level.getAdvancementManager().getAdvancement(id);
+			return ((ServerPlayerEntity) player).getLevel().getAdvancementManager().getAdvancement(id);
 		}
 		return null;
 	}

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.proxy;
 
-import javax.xml.ws.handler.MessageContext;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -16,6 +14,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
@@ -74,7 +73,7 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public PlayerEntity getPlayer(MessageContext context) {
+	public PlayerEntity getPlayer(Context context) {
 		if (context.side.isClient()) {
 			return Minecraft.getInstance().player;
 		} else {
@@ -83,7 +82,7 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public World getWorld(MessageContext context) {
+	public World getWorld(Context context) {
 		if (context.side.isClient()) {
 			return Minecraft.getInstance().level;
 		} else {

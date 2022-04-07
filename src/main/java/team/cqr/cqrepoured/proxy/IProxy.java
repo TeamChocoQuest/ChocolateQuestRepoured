@@ -4,7 +4,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 
 public interface IProxy {
 
@@ -14,9 +14,9 @@ public interface IProxy {
 
 	void postInit();
 
-	PlayerEntity getPlayer(MessageContext ctx);
+	PlayerEntity getPlayer(Context ctx);
 
-	World getWorld(MessageContext ctx);
+	World getWorld(Context ctx);
 
 	/**
 	 * Only works when called on server side or when the passed player is the user.
