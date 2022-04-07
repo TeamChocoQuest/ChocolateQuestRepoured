@@ -77,6 +77,9 @@ public class EntityUtil {
 	}
 
 	public static boolean isEntityFlying(Entity entity) {
+		if(entity == null) {
+			return false;
+		}
 		if (entity.isOnGround()) {
 			return false;
 		}
