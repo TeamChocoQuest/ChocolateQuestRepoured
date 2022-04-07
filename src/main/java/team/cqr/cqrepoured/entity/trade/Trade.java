@@ -442,7 +442,7 @@ public class Trade {
 	}
 	
 	public boolean canRestock() {
-		return this.hasLimitedStock && this.restockRate > 0 && this.inStock < this.maxStock;
+		return this.hasLimitedStock && this.restockRate > 0 && this.inStock <= (this.maxStock - this.restockRate);
 	}
 
 }
