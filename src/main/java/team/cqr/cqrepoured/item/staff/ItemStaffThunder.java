@@ -51,7 +51,7 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 			RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, player));
 
 			if (result != null) {
-				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.getLocation().x, result.getLocation().y, result.getLocation().z, true, false);
+				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.getLocation().x, result.getLocation().y, result.getLocation().z, true, false, 0.0F, 0.0F, 0.75F, 0.25F);
 				worldIn.addFreshEntity(entity);
 			}
 		}
