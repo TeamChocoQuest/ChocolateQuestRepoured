@@ -376,7 +376,7 @@ public class Trade {
 			return false;
 		}
 
-		if (this.requiredAdvancement != null && !CQRMain.proxy.hasAdvancement(player, this.requiredAdvancement)) {
+		if (this.requiredAdvancement != null && !CQRMain.PROXY.hasAdvancement(player, this.requiredAdvancement)) {
 			return false;
 		}
 
