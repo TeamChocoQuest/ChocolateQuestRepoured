@@ -403,6 +403,9 @@ public class Trade {
 
 		List<Trade> trades = this.holder.getTrades().stream().filter(Trade::canRestock).collect(Collectors.toList());
 		if (!trades.isEmpty()) {
+			if (trades.contains(this)) {
+				trades.remove(this);
+			}
 			trades.get(rdm.nextInt(trades.size())).incStock();
 		}
 	}
