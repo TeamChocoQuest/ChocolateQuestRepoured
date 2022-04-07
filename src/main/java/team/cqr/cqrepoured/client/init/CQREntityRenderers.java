@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.client.init;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
+import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -79,12 +80,12 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiderEgg.class, RenderSpiderEgg::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCalamityCrystal.class, RenderCalamityCrystal::new);
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEnergyOrb.class, RenderEnergyOrb::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityElectricField.class, RenderElectricFieldEntity::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityElectricField.class, RenderElectricFieldEntity::new);*/
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.COLORED_LIGHTNING.get(), RenderColoredLightningBolt::new);
 
 		// Multipart parts
-		RenderingRegistry.registerEntityRenderingHandler(PartEntity.class, RenderMultiPartPart::new);*/
+		/*RenderingRegistry.registerEntityRenderingHandler(PartEntity.class, RenderMultiPartPart::new);*/
 	}
 
 	protected static void registerEntityRenderers() {

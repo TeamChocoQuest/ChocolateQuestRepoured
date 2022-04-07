@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -183,6 +185,11 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 		this.green = additionalData.readFloat();
 		this.blue = additionalData.readFloat();
 		this.alpha = additionalData.readFloat();
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
