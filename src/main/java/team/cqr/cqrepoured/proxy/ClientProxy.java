@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.proxy;
 
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,21 +11,16 @@ import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerElectrocute;
-import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSection;
-import team.cqr.cqrepoured.client.resources.data.GlowingMetadataSectionSerializer;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
-import team.cqr.cqrepoured.util.GuiHandler;
 
 public class ClientProxy implements IProxy {
 
@@ -36,12 +32,13 @@ public class ClientProxy implements IProxy {
 	public void preInit() {
 		Minecraft mc = Minecraft.getInstance();
 
-		mc.defaultResourcePacks.add(CTResourcepack.getInstance());
+		mc.getResourcePackRepository().addPackFinder(CTResourcepack.PACK_FINDER);
 		CQREntityRenderers.registerRenderers();
 		CQRParticleManager.init();
 
 		// Add custom metadataserializers
-		mc.metadataSerializer.registerMetadataSectionType(new GlowingMetadataSectionSerializer(), GlowingMetadataSection.class);
+		//Now longer needed?
+		//mc.registerMetadataSectionType(new GlowingMetadataSectionSerializer(), GlowingMetadataSection.class);
 	}
 
 	@Override
@@ -49,45 +46,37 @@ public class ClientProxy implements IProxy {
 		//ClientRegistry.registerKeyBinding(keybindReputationGUI);
 	}
 
+	@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 	@Override
 	public void postInit() {
 		// Add electrocute layer to all entities
-		for (EntityRenderer<? extends Entity> renderer : Minecraft.getInstance().getRenderManager().entityRenderMap.values()) {
+		for (EntityRenderer<? extends Entity> renderer : Minecraft.getInstance().getEntityRenderDispatcher().renderers.values()) {
 			try {
-				@SuppressWarnings("unchecked")
                 EntityRenderer<Entity> render = (EntityRenderer<Entity>) renderer;
 				if (render instanceof LivingRenderer) {
-					((LivingRenderer<?>) render).addLayer(new LayerElectrocute());
-					((LivingRenderer<?>) render).addLayer(new LayerCrownRenderer((LivingRenderer<?>) render));
+					((LivingRenderer<?, ?>) render).addLayer(new LayerElectrocute((LivingRenderer<?,?>) render));
+					((LivingRenderer<?, ?>) render).addLayer(new LayerCrownRenderer((LivingRenderer<?,?>) render));
 				}
 			} catch (ClassCastException ccex) {
 				// Ignore
 			}
 		}
 		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
-		Minecraft.getInstance().getRenderManager().getSkinMap().values().forEach(t -> {
-			t.addLayer(new LayerElectrocute());
-			t.addLayer(new LayerCrownRenderer(t));
+		Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach(t -> {
+			t.addLayer(new LayerElectrocute<>(t));
+			t.addLayer(new LayerCrownRenderer<>(t));
 			}
 		);
 	}
 
 	@Override
 	public PlayerEntity getPlayer(Context context) {
-		if (context.side.isClient()) {
-			return Minecraft.getInstance().player;
-		} else {
-			return context.getServerHandler().player;
-		}
+		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().player, () -> () -> context.getSender());
 	}
 
 	@Override
 	public World getWorld(Context context) {
-		if (context.side.isClient()) {
-			return Minecraft.getInstance().level;
-		} else {
-			return context.getServerHandler().player.world;
-		}
+		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> context.getSender().level);
 	}
 
 	@Override
@@ -105,12 +94,14 @@ public class ClientProxy implements IProxy {
 			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
 			Advancement advancement = manager.getAdvancements().get(id);
 			if (advancement != null) {
-				return manager.progress.get(advancement).isDone();
+				AdvancementProgress prog = manager.progress.get(advancement);
+				return prog != null && prog.isDone();
 			}
 		}
 		return false;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void updateGui() {
 		Screen gui = Minecraft.getInstance().screen;
@@ -127,13 +118,15 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void openGui(int id, PlayerEntity player, World world, int... args) {
-		Minecraft mc = Minecraft.getInstance();
+		/*Minecraft mc = Minecraft.getInstance();
 
 		if (id == GuiHandler.ADD_PATH_NODE_GUI_ID) {
 			mc.setScreen(new GuiAddPathNode(Hand.values()[args[0]], args[1], new BlockPos(args[2], args[3], args[4])));
-		}
+		}*/
+		//TODO: Re-implement
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean isPlayerCurrentClientPlayer(PlayerEntity player) {
 		if(player != null) {
