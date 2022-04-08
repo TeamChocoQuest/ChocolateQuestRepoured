@@ -70,18 +70,18 @@ public class GearedMobFactory {
 			}
 			break;
 		case HEALING_STAFF:
-			mainHand = new ItemStack(CQRItems.STAFF_HEALING);
+			mainHand = new ItemStack(CQRItems.STAFF_HEALING.get());
 			break;
 		case MAGIC_STAFF:
 			switch (this.random.nextInt(3)) {
 			case 0:
-				mainHand = new ItemStack(CQRItems.STAFF_POISON);
+				mainHand = new ItemStack(CQRItems.STAFF_POISON.get());
 				break;
 			case 1:
-				mainHand = new ItemStack(CQRItems.STAFF_FIRE);
+				mainHand = new ItemStack(CQRItems.STAFF_FIRE.get());
 				break;
 			case 2:
-				mainHand = new ItemStack(CQRItems.STAFF_VAMPIRIC);
+				mainHand = new ItemStack(CQRItems.STAFF_VAMPIRIC.get());
 				break;
 			}
 			break;
@@ -102,13 +102,13 @@ public class GearedMobFactory {
 				} else {
 					switch (this.random.nextInt(3)) {
 					case 0:
-						mainHand = new ItemStack(CQRItems.GREAT_SWORD_IRON);
+						mainHand = new ItemStack(CQRItems.GREAT_SWORD_IRON.get());
 						break;
 					case 1:
-						mainHand = new ItemStack(CQRItems.SPEAR_IRON);
+						mainHand = new ItemStack(CQRItems.SPEAR_IRON.get());
 						break;
 					case 2:
-						mainHand = new ItemStack(CQRItems.DAGGER_IRON);
+						mainHand = new ItemStack(CQRItems.DAGGER_IRON.get());
 						break;
 					}
 				}
@@ -119,13 +119,13 @@ public class GearedMobFactory {
 				} else {
 					switch (this.random.nextInt(3)) {
 					case 0:
-						mainHand = new ItemStack(CQRItems.GREAT_SWORD_DIAMOND);
+						mainHand = new ItemStack(CQRItems.GREAT_SWORD_DIAMOND.get());
 						break;
 					case 1:
-						mainHand = new ItemStack(CQRItems.SPEAR_DIAMOND);
+						mainHand = new ItemStack(CQRItems.SPEAR_DIAMOND.get());
 						break;
 					case 2:
-						mainHand = new ItemStack(CQRItems.DAGGER_DIAMOND);
+						mainHand = new ItemStack(CQRItems.DAGGER_DIAMOND.get());
 						break;
 					}
 				}
@@ -158,10 +158,10 @@ public class GearedMobFactory {
 			break;
 		case IRON:
 			if (this.random.nextDouble() < 0.1D) {
-				head = new ItemStack(CQRItems.HELMET_HEAVY_IRON);
-				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_IRON);
-				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_IRON);
-				feet = new ItemStack(CQRItems.BOOTS_HEAVY_IRON);
+				head = new ItemStack(CQRItems.HELMET_HEAVY_IRON.get());
+				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_IRON.get());
+				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_IRON.get());
+				feet = new ItemStack(CQRItems.BOOTS_HEAVY_IRON.get());
 			} else {
 				head = new ItemStack(Items.IRON_HELMET);
 				chest = new ItemStack(Items.IRON_CHESTPLATE);
@@ -171,10 +171,10 @@ public class GearedMobFactory {
 			break;
 		case DIAMOND:
 			if (this.random.nextDouble() < 0.1D) {
-				head = new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND);
-				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND);
-				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND);
-				feet = new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND);
+				head = new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND.get());
+				chest = new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND.get());
+				legs = new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND.get());
+				feet = new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND.get());
 			} else {
 				head = new ItemStack(Items.DIAMOND_HELMET);
 				chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
