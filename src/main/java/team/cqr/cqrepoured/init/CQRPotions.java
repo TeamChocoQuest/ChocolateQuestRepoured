@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.init;
 
+import static team.cqr.cqrepoured.util.InjectionUtil.Null;
+
 import net.minecraft.potion.Effect;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.potion.PotionTwohanded;
-
-import static team.cqr.cqrepoured.util.InjectionUtil.Null;
 
 @ObjectHolder(CQRMain.MODID)
 public class CQRPotions {
