@@ -1,12 +1,9 @@
 package team.cqr.cqrepoured.client.model.entity.boss;
 
 import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 
@@ -20,7 +17,7 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 	public ResourceLocation getAnimationFileLocation(EntityCQRExterminator animatable) {
 		return ANIMATION_RESLOC;
 	}
-
+	/* No longer needed, handled by animation now!
 	private static final String BONE_IDENT_LEFT_LEG = "leg_left";
 	private static final String BONE_IDENT_RIGHT_LEG = "leg_right";
 	private static final String BONE_IDENT_TORSO = "body";
@@ -34,7 +31,7 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 	public void setLivingAnimations(EntityCQRExterminator entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 
-		if (entity.getHealth() < 0.01 || entity.removed || !entity.isAlive()) {
+		if (entity.getHealth() < 0.01 || entity.isDeadOrDying() || !entity.isAlive()) {
 			return;
 		}
 
@@ -66,6 +63,6 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 		} catch (NullPointerException npe) {
 			// Ignore, happens when model doesn't feature those bones
 		}
-	}
+	}*/
 
 }
