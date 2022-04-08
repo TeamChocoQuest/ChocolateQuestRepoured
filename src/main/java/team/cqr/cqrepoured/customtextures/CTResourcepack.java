@@ -3,19 +3,34 @@ package team.cqr.cqrepoured.customtextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.IPackFinder;
+import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.IResourcePack;
+import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.resources.ResourcePackType;
+import net.minecraft.resources.ResourcePackInfo.IFactory;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class CTResourcepack implements IResourcePack {
+	
+	public static final IPackFinder PACK_FINDER = new IPackFinder() {
+		
+		@Override
+		public void loadPacks(Consumer<ResourcePackInfo> pInfoConsumer, IFactory pInfoFactory) {
+			pInfoConsumer.accept(ResourcePackInfo.create(CQRMain.MODID + ":CQR-ResourcePack", true, CTResourcepack::getInstance, pInfoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.BUILT_IN));
+			
+		}
+	};
 
 	private Set<ResourceLocation> VALID_TEXTURES = new HashSet<>();
 	private Map<ResourceLocation, File> FILES = new HashMap<>();
