@@ -71,7 +71,7 @@ public final class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(CompoundNBT[] entities, boolean multiUseSpawner, @Nullable CompoundNBT spawnerSettingsOverrides, World world, BlockPos pos) {
-		BlockState blockState =  multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.defaultBlockState(); 
+		BlockState blockState =  multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.get().defaultBlockState(); 
 		world.setBlockAndUpdate(pos,blockState);
 
 		TileEntity tileEntity = world.getBlockEntity(pos);
@@ -86,14 +86,12 @@ public final class SpawnerFactory {
 					{
 						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an
 						// entity
-						entities[i].remove("UUIDLeast");
-						entities[i].remove("UUIDMost");
+						entities[i].remove("UUID");
 
 						entities[i].remove("Pos");
 						ListNBT passengers = entities[i].getList("Passengers", 10);
 						for (INBT passenger : passengers) {
-							((CompoundNBT) passenger).remove("UUIDLeast");
-							((CompoundNBT) passenger).remove("UUIDMost");
+							((CompoundNBT) passenger).remove("UUID");
 							((CompoundNBT) passenger).remove("Pos");
 						}
 					}
@@ -125,7 +123,7 @@ public final class SpawnerFactory {
 
 			for (int i = 0; i < entities.length && i < 9; i++) {
 				if (entities[i] != null) {
-					tileEntitySpawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
+					tileEntitySpawner.getInventory().setItem(i, getSoulBottleItemStackForEntity(entities[i]));
 				}
 			}
 
@@ -179,11 +177,11 @@ public final class SpawnerFactory {
 			TileEntitySpawner spawner = (TileEntitySpawner) tile;
 
 			// Entity[] entities = new Entity[spawner.inventory.getSlots()];
-			CompoundNBT[] entities = new CompoundNBT[spawner.inventory.getSlots()];
+			CompoundNBT[] entities = new CompoundNBT[spawner.getInventory().getContainerSize()];
 			// Random rand = new Random();
 
 			for (int i = 0; i < entities.length; i++) {
-				ItemStack stack = spawner.inventory.extractItem(i, spawner.inventory.getStackInSlot(i).getCount(), false);// getStackInSlot(i);
+				ItemStack stack = spawner.getInventory().removeItem(i, spawner.getInventory().getItem(i).getCount()/*, false*/);// getStackInSlot(i);
 				if (!stack.isEmpty()) {
 					try {
 						CompoundNBT tag = stack.getOrCreateTag();
@@ -265,15 +263,13 @@ public final class SpawnerFactory {
 		}
 		entity.save(entityCompound);
 		if (removeUUID) {
-			entityCompound.remove("UUIDLeast");
-			entityCompound.remove("UUIDMost");
+			entityCompound.remove("UUID");
 		}
 		entityCompound.remove("Pos");
 		ListNBT passengerList = entityCompound.getList("Passengers", 10);
 		for (INBT passengerTag : passengerList) {
 			if (removeUUID) {
-				((CompoundNBT) passengerTag).remove("UUIDLeast");
-				((CompoundNBT) passengerTag).remove("UUIDMost");
+				((CompoundNBT) passengerTag).remove("UUID");
 			}
 			((CompoundNBT) passengerTag).remove("Pos");
 		}
@@ -297,7 +293,7 @@ public final class SpawnerFactory {
 	}
 
 	public static ItemStack getSoulBottleItemStackForEntity(CompoundNBT entityTag) {
-		ItemStack bottle = new ItemStack(CQRItems.SOUL_BOTTLE);
+		ItemStack bottle = new ItemStack(CQRItems.SOUL_BOTTLE.get());
 		bottle.setCount(1);
 		CompoundNBT mobToSpawnerItem = new CompoundNBT();
 
