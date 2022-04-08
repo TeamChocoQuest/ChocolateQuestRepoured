@@ -42,8 +42,20 @@ import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
+import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.entity.projectiles.*;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
+import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
 public class CQREntityTypes {
 
@@ -110,6 +122,13 @@ public class CQREntityTypes {
 			.clientTrackingRange(32)
 			.updateInterval(Integer.MAX_VALUE)
 			.build(CQRMain.prefix("colored_lightning_bolt").toString())
+		);
+	public static final RegistryObject<EntityType<EntityWalkerTornado>> WALKER_TORNADO = ENTITY_TYPES.register("walker_tornado",
+			() -> EntityType.Builder.<EntityWalkerTornado>of(EntityWalkerTornado::new, EntityClassification.MISC)
+			.sized(0.5F, 0.5F)
+			.clientTrackingRange(64)
+			.updateInterval(1)
+			.build(CQRMain.prefix("walker_tornado").toString())
 		);
 	
 	//Standard mobs
