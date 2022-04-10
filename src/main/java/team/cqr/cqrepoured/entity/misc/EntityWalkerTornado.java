@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.particle.EntityParticle;
@@ -98,7 +97,8 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			final double d3 = (float) this.getZ() + this.random.nextFloat() * 0.25f;
 			final float f = this.random.nextFloat() * 360.0f;
 			final EntityParticle particle = new ParticleWalkerTornado((ClientWorld) this.level, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
+			//Still needed?
+			//FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			this.particles.add(particle);
 			particle.setColor(((color >> 16) & 0xFF) / 255.0f, ((color >> 8) & 0xFF) / 255.0f, (color & 0xFF) / 255.0f);
 			particle.setPos(this.getX(), this.getY(), this.getZ());
