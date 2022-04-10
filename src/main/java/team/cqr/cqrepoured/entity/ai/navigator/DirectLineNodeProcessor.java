@@ -31,7 +31,8 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 		for (Direction enumfacing : Direction.values()) {
 			PathPoint pathpoint = new PathPoint(currentPoint.x + enumfacing.getStepX(), currentPoint.y + enumfacing.getStepY(), currentPoint.z + enumfacing.getStepZ());
 
-			if (pathpoint != null && pathpoint.closed && pathpoint.distanceTo(targetPoint) < maxDistance) {
+			//Is the last check truly necessary???
+			if (pathpoint != null && pathpoint.closed /*&& pathpoint.distanceTo(targetPoint) < maxDistance*/) {
 				pathOptions[i++] = pathpoint;
 			}
 		}
