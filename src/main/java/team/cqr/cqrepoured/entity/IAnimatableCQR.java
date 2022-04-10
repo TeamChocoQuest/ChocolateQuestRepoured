@@ -96,7 +96,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	default <E extends IAnimatable> PlayState predicateBodyPose(AnimationEvent<E> event) {
 		if (this.isTwoHandedAnimationRunning()) {
 
-		} else if (this.isPassenger()) {
+		} else if (this.isPassenger() || this.isSitting()) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SITTING, true));
 			return PlayState.CONTINUE;
 		} else if (this.isCrouching()) {
@@ -244,6 +244,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	}
 
 	//Access to entity stuff
+	public boolean isSitting();
+	
 	public boolean isLeftHanded();
 	
 	public boolean isSwinging();
