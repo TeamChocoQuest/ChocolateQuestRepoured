@@ -7,11 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQREnchantments;
 
-@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = CQRMain.MODID)
 public class LightningProtectionEventHandler {
 
 	@SubscribeEvent
