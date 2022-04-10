@@ -7,12 +7,10 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.enchantment.EnchantmentLightningProtection;
 import team.cqr.cqrepoured.enchantment.EnchantmentSpectral;
 
-@ObjectHolder(CQRMain.MODID)
 public class CQREnchantments {
 	
 	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, CQRMain.MODID);
