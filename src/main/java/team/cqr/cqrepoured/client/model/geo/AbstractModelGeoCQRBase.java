@@ -16,6 +16,8 @@ public abstract class AbstractModelGeoCQRBase<T extends LivingEntity & IAnimatab
 	protected final String ENTITY_REGISTRY_PATH_NAME;
 
 	protected ResourceLocation[] textureVariantCache = null;
+	
+	protected final ResourceLocation STANDARD_BIPED_ANIMATIONS = CQRMain.prefix("animations/biped_standard.animation.json");
 
 	public AbstractModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
 		super();
