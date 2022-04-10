@@ -33,9 +33,9 @@ public class ItemBullet extends Item
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add((new TranslationTextComponent("description.bullet_damage", (double) this.getType().getAdditionalDamage())).withStyle(TextFormatting.BLUE));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", (double) this.getType().getAdditionalDamage()).withStyle(TextFormatting.BLUE)));
 		if(this.getType().fireDamage()) {
-            tooltip.add(new TranslationTextComponent("description.bullet_fire").withStyle(TextFormatting.DARK_RED));
+            tooltip.add(new TranslationTextComponent("item.cqrepoured.bullet_fire.tooltip").withStyle(TextFormatting.DARK_RED));
 		}
 	}
 

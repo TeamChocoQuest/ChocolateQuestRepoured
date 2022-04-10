@@ -44,9 +44,9 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
 	{
-		tooltip.add((new TranslationTextComponent("description.bullet_damage", 5)).withStyle(TextFormatting.BLUE));
-		tooltip.add((new TranslationTextComponent("description.fire_rate", -30)).withStyle(TextFormatting.RED));
-		tooltip.add((new TranslationTextComponent("description.accuracy", -50)).withStyle(TextFormatting.RED));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 5.0).withStyle(TextFormatting.BLUE)));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -30)).withStyle(TextFormatting.RED));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -50)).withStyle(TextFormatting.RED));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}

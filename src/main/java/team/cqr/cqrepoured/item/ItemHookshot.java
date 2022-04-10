@@ -33,5 +33,4 @@ public class ItemHookshot extends ItemHookshotBase {
 	public ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity player, ItemStack stack) {
 		return new ProjectileHookShotHook(worldIn, player, this, stack);
 	}
-
 }

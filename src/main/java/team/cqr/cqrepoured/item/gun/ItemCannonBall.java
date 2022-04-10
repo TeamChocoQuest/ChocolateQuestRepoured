@@ -25,7 +25,7 @@ public class ItemCannonBall extends Item {
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		if (stack.getItem() == CQRItems.CANNON_BALL.get()) {
-			tooltip.add(new TranslationTextComponent("description.bullet_damage", +5).withStyle(TextFormatting.BLUE));
+			tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 5.0).withStyle(TextFormatting.BLUE));
 		}
 	}
 }

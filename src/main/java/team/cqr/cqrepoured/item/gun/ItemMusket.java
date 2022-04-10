@@ -38,9 +38,9 @@ public class ItemMusket extends ItemRevolver {
 		//tooltip.add(new StringTextComponent("7.5 " + new TranslationTextComponent("description.bullet_damage.name")).withStyle(TextFormatting.BLUE));
 		//tooltip.add(new StringTextComponent("-60 " + new TranslationTextComponent("description.fire_rate.name")).withStyle(TextFormatting.RED));
 		//tooltip.add(new StringTextComponent("-10" + "% " + new TranslationTextComponent("description.accuracy.name")).withStyle(TextFormatting.RED));
-		tooltip.add(new TranslationTextComponent("description.bullet_damage", 7.5).withStyle(TextFormatting.BLUE));
-		tooltip.add(new TranslationTextComponent("description.fire_rate", -60).withStyle(TextFormatting.RED));
-		tooltip.add(new TranslationTextComponent("description.accuracy", -10 + "%").withStyle(TextFormatting.RED));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 7.5).withStyle(TextFormatting.BLUE));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -60).withStyle(TextFormatting.RED));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -10 + "%").withStyle(TextFormatting.RED));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}
