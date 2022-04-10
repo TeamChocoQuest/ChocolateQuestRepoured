@@ -22,7 +22,7 @@ public class ItemFlamethrower extends ItemMagazineBased {
 
 	public ItemFlamethrower(Properties properties)
 	{
-		super(properties, t -> t != null && t.getItem() == Items.SLIME_BALL);
+		super(properties.stacksTo(1), t -> t != null && t.getItem() == Items.SLIME_BALL);
 	}
 
 	@Override

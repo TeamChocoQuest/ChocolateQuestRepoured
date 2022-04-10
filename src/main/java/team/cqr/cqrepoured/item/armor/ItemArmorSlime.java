@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,26 +25,24 @@ import java.util.List;
 
 public class ItemArmorSlime extends ArmorItem {
 
-	private AttributeModifier health;
-	private AttributeModifier knockBack;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
-	public ItemArmorSlime(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
+	public ItemArmorSlime(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) 
+	{
 		super(materialIn, equipmentSlotIn, prop);
-
-		this.health = new AttributeModifier("SlimeHealthModifier", 2D, Operation.ADDITION);
-		this.knockBack = new AttributeModifier("SlimeKnockbackModifier", -0.25D, Operation.ADDITION);
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.MAX_HEALTH, new AttributeModifier("SlimeHealthModifier", 2.0D, Operation.ADDITION));
+		modifierBuilder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("SlimeKnockbackModifier", -0.25D, Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-
-		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
-			multimap.put(Attributes.MAX_HEALTH, this.health);
-			multimap.put(Attributes.KNOCKBACK_RESISTANCE, this.knockBack);
-		}
-
-		return multimap;
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack)
+	{
+		return equipmentSlot == MobEntity.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(equipmentSlot, stack);
 	}
 
 	@Override

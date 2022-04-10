@@ -16,21 +16,15 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
-
 //#TODO tests modifiers
 public class ItemMusketKnife extends ItemMusket {
 
 	private final float attackDamage;
-	private final IItemTier material;
 	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemMusketKnife(IItemTier material, Properties properties)
 	{
 		super(properties);
-		this.material = material;
 		this.attackDamage = 3.0F + material.getAttackDamageBonus();
 		
 		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
