@@ -1,31 +1,31 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.function.Supplier;
+
 import net.minecraft.enchantment.Enchantment;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ObjectHolder;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.enchantment.EnchantmentLightningProtection;
 import team.cqr.cqrepoured.enchantment.EnchantmentSpectral;
 
 @ObjectHolder(CQRMain.MODID)
 public class CQREnchantments {
+	
+	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, CQRMain.MODID);
 
-	public static final Enchantment LIGHTNING_PROTECTION = new EnchantmentLightningProtection();
-	public static final Enchantment SPECTRAL = new EnchantmentSpectral();
+	public static final RegistryObject<Enchantment> LIGHTNING_PROTECTION = register("lightning_protection", EnchantmentLightningProtection::new);
+	public static final RegistryObject<Enchantment> SPECTRAL = register("spectral", EnchantmentSpectral::new);
 
-	//@EventBusSubscriber(modid = CQRMain.MODID)
-	public static class EventHandler {
-
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Enchantment> event) {
-			final IForgeRegistry<Enchantment> registry = event.getRegistry();
-
-			registry.register(LIGHTNING_PROTECTION);
-			registry.register(SPECTRAL);
-		}
-
+	protected static RegistryObject<Enchantment> register(final String name, Supplier<? extends Enchantment> supplier) {
+		return ENCHANTMENTS.register(name, supplier);
+	}
+	
+	public static void registerEnchantments() {
+		ENCHANTMENTS.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 
 }

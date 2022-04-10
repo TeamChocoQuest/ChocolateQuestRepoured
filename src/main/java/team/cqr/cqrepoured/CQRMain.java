@@ -46,6 +46,7 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRConfiguredStructures;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
+import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMessages;
@@ -168,6 +169,7 @@ public class CQRMain {
 		CQREntityTypes.registerEntityTypes();
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
+		CQREnchantments.registerEnchantments();
 
 		MinecraftForge.EVENT_BUS.register(this);
 		bus.<FMLCommonSetupEvent>addListener(this::init);

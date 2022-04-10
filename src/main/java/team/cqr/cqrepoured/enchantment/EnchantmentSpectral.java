@@ -7,14 +7,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class EnchantmentSpectral extends DamageEnchantment {
 
 	public EnchantmentSpectral() {
 		super(Rarity.VERY_RARE, 0, EquipmentSlotType.MAINHAND, EquipmentSlotType.OFFHAND);
-		this.setRegistryName(CQRMain.MODID, "spectral");
 	}
 
 	@Override

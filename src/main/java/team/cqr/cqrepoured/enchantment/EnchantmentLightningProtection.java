@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.enchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
-import team.cqr.cqrepoured.CQRMain;
 
 public class EnchantmentLightningProtection extends Enchantment {
 
@@ -13,7 +12,6 @@ public class EnchantmentLightningProtection extends Enchantment {
 
 	private EnchantmentLightningProtection(Rarity rarityIn, EnchantmentType typeIn, EquipmentSlotType[] slots) {
 		super(rarityIn, typeIn, slots);
-		this.setRegistryName(CQRMain.MODID, "lightning_protection");
 	}
 
 	@Override
