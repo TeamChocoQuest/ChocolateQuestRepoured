@@ -13,37 +13,29 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
 
 public class ItemBullet extends Item
 {
-	public ItemBullet(Properties properties)
+	
+	protected final EBulletType type;
+	
+	public ItemBullet(Properties properties, final EBulletType type)
 	{
 		super(properties);
+		this.type = type;
+	}
+	
+	public EBulletType getType() {
+		return this.type;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		if (stack.getItem() == CQRItems.BULLET_IRON.get())
-		{
-			tooltip.add((new TranslationTextComponent("description.bullet_damage.name", 2.5)).withStyle(TextFormatting.BLUE));
-			//tooltip.add(TextFormatting.BLUE + "+2.5 " + I18n.exists("description.bullet_damage.name"));
-		}
-
-		if (stack.getItem() == CQRItems.BULLET_GOLD.get())
-		{
-			tooltip.add((new TranslationTextComponent("description.bullet_damage.name", 3.75)).withStyle(TextFormatting.BLUE));
-		}
-
-		if (stack.getItem() == CQRItems.BULLET_DIAMOND.get()) {
-			tooltip.add((new TranslationTextComponent("description.bullet_damage.name", 5)).withStyle(TextFormatting.BLUE));
-		}
-
-		if (stack.getItem() == CQRItems.BULLET_FIRE.get())
-		{
-			tooltip.add((new TranslationTextComponent("description.bullet_damage.name", 5)).withStyle(TextFormatting.RED));
-			tooltip.add(new TranslationTextComponent("description.bullet_fire.name").withStyle(TextFormatting.DARK_RED));
+		tooltip.add((new TranslationTextComponent("description.bullet_damage.name", (double) this.getType().getAdditionalDamage())).withStyle(TextFormatting.BLUE));
+		if(this.getType().fireDamage()) {
+            tooltip.add(new TranslationTextComponent("description.bullet_fire.name").withStyle(TextFormatting.DARK_RED));
 		}
 	}
 

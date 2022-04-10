@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import net.minecraft.inventory.EquipmentSlotType;
@@ -11,7 +12,27 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.item.*;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
+import team.cqr.cqrepoured.item.ItemAlchemyBag;
+import team.cqr.cqrepoured.item.ItemBadge;
+import team.cqr.cqrepoured.item.ItemBullBattleAxe;
+import team.cqr.cqrepoured.item.ItemCursedBone;
+import team.cqr.cqrepoured.item.ItemGoldenFeather;
+import team.cqr.cqrepoured.item.ItemHookshot;
+import team.cqr.cqrepoured.item.ItemLongshot;
+import team.cqr.cqrepoured.item.ItemLore;
+import team.cqr.cqrepoured.item.ItemMobToSpawner;
+import team.cqr.cqrepoured.item.ItemPathTool;
+import team.cqr.cqrepoured.item.ItemPotionHealing;
+import team.cqr.cqrepoured.item.ItemShieldDummy;
+import team.cqr.cqrepoured.item.ItemSoulBottle;
+import team.cqr.cqrepoured.item.ItemSpawnerConverter;
+import team.cqr.cqrepoured.item.ItemSpiderHook;
+import team.cqr.cqrepoured.item.ItemSpikedGlove;
+import team.cqr.cqrepoured.item.ItemStructureSelector;
+import team.cqr.cqrepoured.item.ItemSuperTool;
+import team.cqr.cqrepoured.item.ItemTeleportStone;
+import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
@@ -129,10 +150,10 @@ public class CQRItems {
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = register("musket_dagger_iron", prop -> new ItemMusketKnife(ItemTier.IRON, prop)); // #TODO TEXTURES, tweak stats?
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = register("musket_dagger_diamond", prop -> new ItemMusketKnife(ItemTier.DIAMOND, prop)); // #TODO TEXTURES, tweak stats
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = register("musket_dagger_monking", prop -> new ItemMusketKnife(CQRMaterials.CQRItemTiers.TOOL_MONKING, prop)); // #TODO TEXTURES, tweak
-	public static final RegistryObject<ItemBullet> BULLET_IRON = register("bullet_iron", ItemBullet::new);
-	public static final RegistryObject<ItemBullet> BULLET_GOLD = register("bullet_gold", ItemBullet::new);
-	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = register("bullet_diamond", ItemBullet::new);
-	public static final RegistryObject<ItemBullet> BULLET_FIRE = register("bullet_fire", ItemBullet::new);
+	public static final RegistryObject<ItemBullet> BULLET_IRON = registerBullet("bullet_iron", ItemBullet::new, EBulletType.IRON);
+	public static final RegistryObject<ItemBullet> BULLET_GOLD = registerBullet("bullet_gold", ItemBullet::new, EBulletType.GOLD);
+	public static final RegistryObject<ItemBullet> BULLET_DIAMOND = registerBullet("bullet_diamond", ItemBullet::new, EBulletType.DIAMOND);
+	public static final RegistryObject<ItemBullet> BULLET_FIRE = registerBullet("bullet_fire", ItemBullet::new, EBulletType.FIRE);
 	public static final RegistryObject<ItemCannonBall> CANNON_BALL = register("cannon_ball", ItemCannonBall::new);
 	public static final RegistryObject<ItemFlamethrower> FLAMETHROWER = register("flamethrower", ItemFlamethrower::new); // #TODO TEXTURES
 	public static final RegistryObject<ItemBubblePistol> BUBBLE_PISTOL = register("bubble_pistol", ItemBubblePistol::new);
@@ -238,6 +259,15 @@ public class CQRItems {
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier,
 			ItemGroup tab) {
 		return ITEMS.register(name, () -> itemSupplier.apply(new Item.Properties().tab(tab)));
+	}
+	
+	public static <T extends Item> RegistryObject<T> registerBullet(String name, BiFunction<Item.Properties, EBulletType, T> itemSupplier, final EBulletType type) {
+		return registerBullet(name, itemSupplier, CQRMain.CQR_ITEMS_TAB, type);
+	}
+
+	public static <T extends Item> RegistryObject<T> registerBullet(String name, BiFunction<Item.Properties, EBulletType, T> itemSupplier,
+			ItemGroup tab, final EBulletType type) {
+		return ITEMS.register(name, () -> itemSupplier.apply(new Item.Properties().tab(tab), type));
 	}
 
 	public static void registerItems() {

@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.ItemLore;
@@ -55,7 +56,7 @@ public class ItemMusket extends ItemRevolver {
 		if (!itemstack.isEmpty() || flag) {
 			if (!worldIn.isClientSide) {
 				if (flag && itemstack.isEmpty()) {
-					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, 1);
+					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, EBulletType.IRON);
 					bulletE.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 2F);
 					player.getCooldowns().addCooldown(stack.getItem(), 30);
 					worldIn.addFreshEntity(bulletE);

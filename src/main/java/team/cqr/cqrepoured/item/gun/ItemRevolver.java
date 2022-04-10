@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -77,7 +78,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 		if (!itemstack.isEmpty() || flag) {
 			if (!worldIn.isClientSide) {
 				if (flag && itemstack.isEmpty()) {
-					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, 1);
+					ProjectileBullet bulletE = new ProjectileBullet(player, worldIn, EBulletType.IRON);
 					//ProjectileBullet bulletE = CQREntityTypes.PROJECTILE_BULLET.get().create(worldIn);
 					//bulletE.setBulletType(1);
 					bulletE.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 5F);
@@ -155,28 +156,11 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 		}
 	}
 
-	protected int getBulletType(ItemStack stack) {
-		if (stack.getItem() == CQRItems.BULLET_IRON.get()) {
-			return 1;
+	protected EBulletType getBulletType(ItemStack stack) {
+		if(stack.getItem() instanceof ItemBullet) {
+			return ((ItemBullet)stack.getItem()).getType();
 		}
-
-		if (stack.getItem() == CQRItems.BULLET_GOLD.get()) {
-			return 2;
-		}
-
-		if (stack.getItem() == CQRItems.BULLET_DIAMOND.get()) {
-			return 3;
-		}
-
-		if (stack.getItem() == CQRItems.BULLET_FIRE.get()) {
-			return 4;
-		}
-
-		else {
-			// System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			// return 0; // #SHOULD NEVER HAPPEN
-			return 1;
-		}
+		return EBulletType.IRON;
 	}
 
 	@Override
