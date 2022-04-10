@@ -43,7 +43,7 @@ public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 		matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
 		//GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
-		IVertexBuilder bufferBuilder = buffer.getBuffer(RenderType.entityTranslucent(TEXTURE));
+		IVertexBuilder bufferBuilder = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity)));
 		MatrixStack.Entry entry = matrixStack.last();
 		Matrix4f matrix4f = entry.pose();
 		Matrix3f matrix3f = entry.normal();
