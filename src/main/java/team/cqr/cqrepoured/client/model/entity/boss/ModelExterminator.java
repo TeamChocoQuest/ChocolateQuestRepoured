@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.model.entity.boss;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
+import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
-public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
+public class ModelExterminator extends AbstractModelGeoCQRBase<EntityCQRExterminator> {
 
 	public ModelExterminator(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);

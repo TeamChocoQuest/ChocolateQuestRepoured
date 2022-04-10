@@ -5,11 +5,11 @@ import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
+import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
-public class ModelEnderCalamity extends ModelGeoCQRBase<EntityCQREnderCalamity> {
+public class ModelEnderCalamity extends AbstractModelGeoCQRBase<EntityCQREnderCalamity> {
 
 	public ModelEnderCalamity(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);

@@ -4,10 +4,10 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
+import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
-public class ModelGiantTortoiseGecko extends ModelGeoCQRBase<EntityCQRGiantTortoise> {
+public class ModelGiantTortoiseGecko extends AbstractModelGeoCQRBase<EntityCQRGiantTortoise> {
 
 	public ModelGiantTortoiseGecko(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
