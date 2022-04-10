@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
+import team.cqr.cqrepoured.client.model.geo.entity.ModelCQRDwarfGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
 
@@ -19,7 +19,7 @@ public class RenderCQRDwarf extends RenderCQRBipedBaseGeo<EntityCQRDwarf> {
 	private static final ResourceLocation MODEL_RESLOC = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
 	public RenderCQRDwarf(EntityRendererManager renderManager, AnimatedGeoModel<EntityCQRDwarf> modelProvider) {
-		super(renderManager, new ModelGeoCQRBase<EntityCQRDwarf>(TEXTURE, MODEL_RESLOC, "dwarf"), 0.9F, 0.65F);
+		super(renderManager, new ModelCQRDwarfGeo(TEXTURE, MODEL_RESLOC, "dwarf"), 0.9F, 0.65F);
 	}
 
 	@Override
