@@ -16,10 +16,9 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
 public class RenderCQRDwarf extends RenderCQRBipedBaseGeo<EntityCQRDwarf> {
 	
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/dwarf_0.png");
-	private static final ResourceLocation MODEL_RESLOC = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
 	public RenderCQRDwarf(EntityRendererManager renderManager, AnimatedGeoModel<EntityCQRDwarf> modelProvider) {
-		super(renderManager, new ModelCQRDwarfGeo(TEXTURE, MODEL_RESLOC, "dwarf"), 0.9F, 0.65F);
+		super(renderManager, new ModelCQRDwarfGeo(TEXTURE, STANDARD_BIPED_GEO_MODEL, "dwarf"), 0.9F, 0.65F);
 	}
 
 	@Override
