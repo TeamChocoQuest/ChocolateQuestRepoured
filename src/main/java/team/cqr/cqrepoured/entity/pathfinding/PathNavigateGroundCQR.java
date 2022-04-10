@@ -1,22 +1,38 @@
 package team.cqr.cqrepoured.entity.pathfinding;
 
-import net.minecraft.block.*;
+import java.util.EnumSet;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.AbstractRailBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.*;
+import net.minecraft.pathfinding.GroundPathNavigator;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.pathfinding.WalkNodeProcessor;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.Region;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
+import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath.PathNode;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
 
 /**
  * Copied from {@link GroundPathNavigator}
@@ -39,18 +55,18 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	}
 
 	@Override
-	protected PathFinder getPathFinder() {
-		this.nodeProcessor = new WalkNodeProcessor() {
+	protected PathFinder createPathFinder(int pMaxVisitedNodes) {
+		this.nodeEvaluator = new WalkNodeProcessor() {
 
 			@Override
-			public PathNodeType getPathNodeType(IBlockAccess p_193577_1_, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> p_193577_10_, PathNodeType p_193577_11_, BlockPos p_193577_12_) {
+			public PathNodeType getBlockPathTypes(IBlockReader level, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> pNodeTypeEnum, PathNodeType pNodeType, BlockPos pPos) {
 				for (int i = 0; i < xSize; ++i) {
 					for (int j = 0; j < ySize; ++j) {
 						for (int k = 0; k < zSize; ++k) {
 							int l = i + x;
 							int i1 = j + y;
 							int j1 = k + z;
-							PathNodeType pathnodetype = this.getPathNodeType(p_193577_1_, l, i1, j1);
+							PathNodeType pathnodetype = this.getBlockPathType(level, l, i1, j1);
 
 							if (pathnodetype == PathNodeType.DOOR_WOOD_CLOSED && canOpenDoorsIn && canEnterDoorsIn) {
 								pathnodetype = PathNodeType.WALKABLE;
@@ -58,7 +74,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 							// TODO better method for calculating the facing from which the door will be entered
 							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
-									&& EntityAIOpenCloseDoor.canMoveThroughDoor(p_193577_1_, new BlockPos(l, i1, j1), Direction.getFacingFromVector(l - p_193577_12_.getX(), i1 - p_193577_12_.getY(), j1 - p_193577_12_.getZ()).getOpposite(), true)) {
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(level, new BlockPos(l, i1, j1), Direction.fromNormal/*Correct replacement???*/(l - pPos.getX(), i1 - pPos.getY(), j1 - pPos.getZ()).getOpposite(), true)) {
 								pathnodetype = PathNodeType.WALKABLE;
 							}
 
@@ -66,46 +82,46 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 								pathnodetype = PathNodeType.BLOCKED;
 							}
 
-							if (pathnodetype == PathNodeType.RAIL && !(p_193577_1_.getBlockState(p_193577_12_).getBlock() instanceof AbstractRailBlock) && !(p_193577_1_.getBlockState(p_193577_12_.down()).getBlock() instanceof AbstractRailBlock)) {
+							if (pathnodetype == PathNodeType.RAIL && !(level.getBlockState(pPos).getBlock() instanceof AbstractRailBlock) && !(level.getBlockState(pPos.below()).getBlock() instanceof AbstractRailBlock)) {
 								pathnodetype = PathNodeType.FENCE;
 							}
 
 							if (i == 0 && j == 0 && k == 0) {
-								p_193577_11_ = pathnodetype;
+								pNodeType = pathnodetype;
 							}
 
-							p_193577_10_.add(pathnodetype);
+							pNodeTypeEnum.add(pathnodetype);
 						}
 					}
 				}
 
-				return p_193577_11_;
+				return pNodeType;
 			}
-
+			
 			@Override
-			protected PathNodeType getPathNodeTypeRaw(IBlockAccess p_189553_1_, int p_189553_2_, int p_189553_3_, int p_189553_4_) {
-				BlockPos blockpos = new BlockPos(p_189553_2_, p_189553_3_, p_189553_4_);
-				BlockState iblockstate = p_189553_1_.getBlockState(blockpos);
+			public PathNodeType getBlockPathType(IBlockReader pLevel, int pX, int pY, int pZ) {
+				BlockPos blockpos = new BlockPos(pX, pY, pZ);
+				BlockState iblockstate = pLevel.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 				Material material = iblockstate.getMaterial();
 
-				PathNodeType type = block.getAiPathNodeType(iblockstate, p_189553_1_, blockpos, this.currentEntity);
+				PathNodeType type = block.getAiPathNodeType(iblockstate, pLevel, blockpos, this.mob);
 				if (type != null) {
 					return type;
 				}
 
 				if (material == Material.AIR) {
 					return PathNodeType.OPEN;
-				} else if (block != Blocks.TRAPDOOR && block != Blocks.IRON_TRAPDOOR && block != Blocks.WATERLILY) {
+				} else if (!block.is(BlockTags.TRAPDOORS) && !block.is(Blocks.LILY_PAD)) {
 					if (block == Blocks.FIRE) {
 						return PathNodeType.DAMAGE_FIRE;
 					} else if (block == Blocks.CACTUS) {
 						return PathNodeType.DAMAGE_CACTUS;
-					} else if (block instanceof DoorBlock && material == Material.WOOD && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
+					} else if (block instanceof DoorBlock && material == Material.WOOD && !iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_WOOD_CLOSED;
-					} else if (block instanceof DoorBlock && material == Material.IRON && !iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
+					} else if (block instanceof DoorBlock && material == Material.METAL && !iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_IRON_CLOSED;
-					} else if (block instanceof DoorBlock && iblockstate.getActualState(p_189553_1_, blockpos).getValue(DoorBlock.OPEN)) {
+					} else if (block instanceof DoorBlock && iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
 						return PathNodeType.DOOR_OPEN;
 					} else if (block instanceof AbstractRailBlock) {
 						return PathNodeType.RAIL;
@@ -115,7 +131,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 						} else if (material == Material.LAVA) {
 							return PathNodeType.LAVA;
 						} else {
-							return block.isPassable(p_189553_1_, blockpos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
+							return iblockstate.isPathfindable(pLevel, blockpos, PathType.LAND) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
 						}
 					} else {
 						return PathNodeType.FENCE;
@@ -126,30 +142,30 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 			}
 
 		};
-		this.nodeProcessor.setCanEnterDoors(true);
-		this.pathFinder = new PathFinder(this.nodeProcessor);
+		this.nodeEvaluator.setCanPassDoors(true);
+		this.pathFinder = new PathFinder(this.nodeEvaluator, pMaxVisitedNodes);
 		return this.pathFinder;
 	}
 
-	@Override
+	/*@Override
 	public float getPathSearchRange() {
 		return 256.0F;
-	}
+	}*/
 
 	@Override
-	public void updatePath() {
+	public void tick() {
 		if (this.hasMount()) {
-			this.getMount().getNavigator().updatePath();
+			this.getMount().getNavigation().tick();
 		}
-		if (this.world.getTotalWorldTime() - this.lastTimeUpdated > 20L) {
+		if (this.level.getGameTime() - this.lastTimeUpdated > 20L) {
 			if (this.targetPos != null) {
-				this.currentPath = null;
-				this.currentPath = this.getPathToPos(this.targetPos);
-				this.lastTimeUpdated = this.world.getTotalWorldTime();
-				this.tryUpdatePath = false;
+				this.path = null;
+				this.path = this.getPathToPos(this.targetPos);
+				this.lastTimeUpdated = this.level.getGameTime();
+				this.hasDelayedRecomputation = false;
 			}
 		} else {
-			this.tryUpdatePath = true;
+			this.hasDelayedRecomputation = true;
 		}
 	}
 
@@ -157,40 +173,40 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	public void onUpdateNavigation() {
 		super.onUpdateNavigation();
 		if (!this.noPath() && this.hasMount()) {
-			this.getMount().getNavigator().onUpdateNavigation();
+			this.getMount().getNavigation().onUpdateNavigation();
 		}
 	}
 
 	private boolean hasMount() {
-		return this.entity.getRidingEntity() instanceof MobEntity;
+		return this.mob.getVehicle() instanceof MobEntity;
 	}
-
+	
 	@Override
-	public Path getPathToPos(BlockPos pos) {
-		if (this.world.getBlockState(pos).getMaterial() == Material.AIR) {
+	public Path createPath(BlockPos pos, int pAccuracy) {
+		if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
 			BlockPos blockpos;
 
-			for (blockpos = pos.down(); blockpos.getY() > 0 && this.world.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.down()) {
+			for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.below()) {
 
 			}
 
 			if (blockpos.getY() > 0) {
-				return this.getPathToPosCQR(blockpos.up());
+				return this.getPathToPosCQR(blockpos.above());
 			}
 
-			while (blockpos.getY() < this.world.getHeight() && this.world.getBlockState(blockpos).getMaterial() == Material.AIR) {
-				blockpos = blockpos.up();
+			while (blockpos.getY() < this.level.getHeight() && this.level.getBlockState(blockpos).getMaterial() == Material.AIR) {
+				blockpos = blockpos.above();
 			}
 
 			pos = blockpos;
 		}
 
-		if (!this.world.getBlockState(pos).getMaterial().isSolid()) {
+		if (!this.level.getBlockState(pos).getMaterial().isSolid()) {
 			return this.getPathToPosCQR(pos);
 		} else {
 			BlockPos blockpos1;
 
-			for (blockpos1 = pos.up(); blockpos1.getY() < this.world.getHeight() && this.world.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.up()) {
+			for (blockpos1 = pos.above(); blockpos1.getY() < this.level.getHeight() && this.level.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.above()) {
 
 			}
 
@@ -200,86 +216,87 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 	@Nullable
 	private Path getPathToPosCQR(BlockPos pos) {
-		if (!this.canNavigate()) {
+		if (!this.canUpdatePath()) {
 			return null;
-		} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
-			return this.currentPath;
+		} else if (this.path != null && !this.path.isDone() && pos.equals(this.targetPos)) {
+			return this.path;
 		} else {
-			Entity ent = this.hasMount() ? this.getMount() : this.entity;
-			float distance = MathHelper.sqrt(ent.getDistanceSqToCenter(pos));
+			Entity ent = this.hasMount() ? this.getMount() : this.mob;
+			float distance = (float) Math.sqrt(ent.blockPosition().distSqr(pos));
 			if (distance > this.getPathSearchRange()) {
 				return null;
 			}
 
-			this.world.profiler.startSection("pathfind");
-			BlockPos entityPos = new BlockPos(this.hasMount() ? this.getMount() : this.entity);
-			Region chunkcache = new ChunkCacheCQR(this.world, entityPos, pos, entityPos, 32, false);
-			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.entity, pos, MathHelper.ceil(distance + 32.0F));
-			this.world.profiler.endSection();
+			this.level.profiler.startSection("pathfind");
+			BlockPos entityPos =this.hasMount() ? this.getMount().blockPosition() : this.mob.blockPosition();
+			Region chunkcache = new ChunkCacheCQR(this.level, entityPos, pos, entityPos, 32, false);
+			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.mob, pos, MathHelper.ceil(distance + 32.0F));
+			this.level.profiler.endSection();
 			return path;
 		}
 	}
 
 	@Override
-	public boolean setPath(Path pathentityIn, double speedIn) {
+	public boolean moveTo(Path pathentityIn, double speedIn) {
 		if (pathentityIn == null) {
-			this.currentPath = null;
+			this.path = null;
 			this.targetPos = null;
 			return false;
 		} else {
 
 			if (this.hasMount()) {
-				this.getMount().getNavigator().setPath(pathentityIn, speedIn);
+				this.getMount().getNavigation().moveTo(pathentityIn, speedIn);
 			}
 
-			if (pathentityIn.isSamePath(this.currentPath)) {
+			if (pathentityIn.sameAs(this.path)) {
 				return true;
 			}
 
-			this.currentPath = pathentityIn;
+			this.path = pathentityIn;
 
-			this.removeSunnyPath();
+			this.trimPath();
 
-			if (this.currentPath.getCurrentPathLength() <= 0) {
-				this.currentPath = null;
+			if (this.path.getNodeCount() <= 0) {
+				this.path = null;
 				this.targetPos = null;
 				return false;
 			} else {
-				PathPoint finalPathPoint = pathentityIn.getFinalPathPoint();
+				PathPoint finalPathPoint = pathentityIn.getEndNode();
 				this.targetPos = new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z);
-				this.speed = speedIn;
+				this.speedModifier = speedIn;
 				this.ticksAtLastPos = this.totalTicks;
-				this.lastPosCheck = this.getEntityPosition();
+				this.lastPosCheck = this.getTempMobPos();
 				return true;
 			}
 		}
 	}
 
 	@Override
-	protected boolean canNavigate() {
-		return super.canNavigate() || this.hasMount();
+	protected boolean canUpdatePath() {
+		return super.canUpdatePath() || this.hasMount();
 	}
 
 	@Override
-	protected void checkForStuck(Vector3d positionVec3) {
+	protected void doStuckDetection(Vector3d positionVec3) {
 		if (this.totalTicks - this.ticksAtLastPos >= 100) {
-			double aiMoveSpeed = this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed();
+			double aiMoveSpeed = this.hasMount() ? this.getMount().getSpeed() : this.mob.getSpeed();
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 			if (positionVec3.distanceTo(this.lastPosCheck) / 100.0D < aiMoveSpeed * 0.5D) {
-				this.clearPath();
+				this.stop();
 			}
 
 			this.ticksAtLastPos = this.totalTicks;
 			this.lastPosCheck = positionVec3;
 		}
 
-		if (this.currentPath != null && !this.currentPath.isFinished()) {
-			Vector3d vec3d = this.currentPath.getCurrentPos();
+		if (this.path != null && !this.path.isDone()) {
+			PathPoint currentNode = this.path.getNode(path.getNextNodeIndex() -1);
+			Vector3d vec3d = new Vector3d(currentNode.x, currentNode.y, currentNode.z);
 
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
 				this.timeoutTimer = this.totalTicks;
-				double aiMoveSpeedOrig = this.hasMount() ? this.getMount().getAIMoveSpeed() : this.entity.getAIMoveSpeed();
+				double aiMoveSpeedOrig = this.hasMount() ? this.getMount().getSpeed() : this.mob.getSpeed();
 				double aiMoveSpeed = aiMoveSpeedOrig;
 				if (aiMoveSpeed > 0.0F) {
 					aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
@@ -294,7 +311,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 				this.timeoutCachedNode = Vector3d.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
-				this.clearPath();
+				this.stop();
 			}
 		}
 	}
@@ -302,20 +319,20 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	@Nullable
 	private MobEntity getMount() {
 		try {
-			return (MobEntity) this.entity.getRidingEntity();
+			return (MobEntity) this.mob.getVehicle();
 		} catch (NullPointerException npe) {
 			return null;
 		}
 	}
 
 	@Override
-	public void clearPath() {
+	public void stop() {
 		if (this.hasMount()) {
-			this.getMount().getNavigator().clearPath();
+			this.getMount().getNavigation().stop();;
 		}
-		this.currentPath = null;
+		this.path = null;
 		this.targetPos = null;
-		super.clearPath();
+		super.stop();
 	}
 
 }
