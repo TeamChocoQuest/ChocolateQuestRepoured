@@ -362,7 +362,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		if (!this.world.isRemote) {
 			this.checkForEntityStuck(this.thrower);
 		} else {
-			if(this.thrower == null || !(this.thrower instanceof EntityPlayer && CQRMain.proxy.isPlayerCurrentClientPlayer((EntityPlayer) this.thrower))) {
+			if(this.thrower == null || !(this.thrower instanceof EntityPlayer && CQRMain.PROXY.isPlayerCurrentClientPlayer((EntityPlayer) this.thrower))) {
 				return;
 			}
 		}

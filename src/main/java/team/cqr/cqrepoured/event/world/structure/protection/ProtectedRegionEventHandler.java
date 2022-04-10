@@ -73,7 +73,7 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
-		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
+		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.PROXY.isOwnerOfIntegratedServer(event.player)) {
 			CQRMain.NETWORK.sendTo(new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection), (ServerPlayerEntity) event.player);
 		}
 

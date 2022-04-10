@@ -201,7 +201,7 @@ public class EventsHandler {
 		FactionRegistry.instance(event.player).syncPlayerReputationData((ServerPlayerEntity) event.player);
 
 		// Send packets with ct's to player
-		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.proxy.isOwnerOfIntegratedServer(event.player)) {
+		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.PROXY.isOwnerOfIntegratedServer(event.player)) {
 			TextureSetManager.sendTexturesToClient((ServerPlayerEntity) event.player);
 		}
 	}

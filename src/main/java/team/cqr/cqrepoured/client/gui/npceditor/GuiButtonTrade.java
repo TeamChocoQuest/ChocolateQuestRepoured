@@ -109,8 +109,8 @@ public class GuiButtonTrade extends Button {
 			if (!isUnlocked) {
 				tooltip.add(I18n.format("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					TextFormatting formatting = CQRMain.proxy.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
-					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					TextFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
+					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
 					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
 					tooltip.add(formatting + advancementName);
 				}
@@ -124,7 +124,7 @@ public class GuiButtonTrade extends Button {
 			} else {
 				tooltip.add(I18n.format("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					Advancement advancement = CQRMain.proxy.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
 					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
 					tooltip.add(TextFormatting.GREEN + advancementName);
 				}

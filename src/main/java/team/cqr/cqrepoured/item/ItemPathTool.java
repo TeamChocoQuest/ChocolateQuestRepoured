@@ -88,7 +88,7 @@ public class ItemPathTool extends ItemLore {
 
 		if (context.getLevel().isClientSide) {
 			if (node == null) {
-				CQRMain.proxy.openGui(GuiHandler.ADD_PATH_NODE_GUI_ID, player, world, hand.ordinal(), selectedNode != null ? selectedNode.getIndex() : -1, position.getX(), position.getY(), position.getZ());
+				CQRMain.PROXY.openGui(GuiHandler.ADD_PATH_NODE_GUI_ID, player, world, hand.ordinal(), selectedNode != null ? selectedNode.getIndex() : -1, position.getX(), position.getY(), position.getZ());
 			}
 		} else if (node != null) {
 			if (selectedNode != null && player.isCrouching()) {

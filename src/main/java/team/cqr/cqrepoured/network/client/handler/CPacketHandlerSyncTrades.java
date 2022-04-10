@@ -26,7 +26,7 @@ public class CPacketHandlerSyncTrades extends AbstractPacketHandler<SPacketSyncT
 			if (player.containerMenu instanceof ContainerMerchant) {
 				((ContainerMerchant) player.containerMenu).onTradesUpdated();
 			}
-			CQRMain.proxy.updateGui();
+			CQRMain.PROXY.updateGui();
 		}
 	}
 
