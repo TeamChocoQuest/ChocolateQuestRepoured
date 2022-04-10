@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ITextureVariants;
 
-public abstract class ModelGeoCQRBase<T extends LivingEntity & IAnimatable & IAnimationTickable> extends AnimatedTickingGeoModel<T> {
+public abstract class AbstractModelGeoCQRBase<T extends LivingEntity & IAnimatable & IAnimationTickable> extends AnimatedTickingGeoModel<T> {
 
 	protected final ResourceLocation MODEL_RESLOC;
 	protected final ResourceLocation TEXTURE_DEFAULT;
@@ -17,7 +17,7 @@ public abstract class ModelGeoCQRBase<T extends LivingEntity & IAnimatable & IAn
 
 	protected ResourceLocation[] textureVariantCache = null;
 
-	public ModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
+	public AbstractModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
 		super();
 		this.MODEL_RESLOC = model;
 		this.TEXTURE_DEFAULT = textureDefault;
