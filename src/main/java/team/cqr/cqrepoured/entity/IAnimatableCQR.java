@@ -60,8 +60,10 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	@Override
 	public default void registerControllers(AnimationData data) {
 		//Always playing
-		for(String animName : this.getAlwaysPlayingAnimations()) {
-			data.addAnimationController(new AnimationController<>(this, "controller_always_playing_" + animName, 0, (e) -> PlayState.CONTINUE));
+		if(this.getAlwaysPlayingAnimations() != null) {
+			for(String animName : this.getAlwaysPlayingAnimations()) {
+				data.addAnimationController(new AnimationController<>(this, "controller_always_playing_" + animName, 0, (e) -> PlayState.CONTINUE));
+			}
 		}
 		// Idle
 		data.addAnimationController(new AnimationController<>(this, "controller_idle", 0, this::predicateIdle));
