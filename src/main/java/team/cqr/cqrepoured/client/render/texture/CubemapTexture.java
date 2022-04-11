@@ -1,21 +1,18 @@
 package team.cqr.cqrepoured.client.render.texture;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.texture.NativeImage;
-import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import java.io.IOException;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.NativeImage;
+import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 
 public class CubemapTexture extends Texture {
 
@@ -49,9 +46,9 @@ public class CubemapTexture extends Texture {
 	 */
 	public static ResourceLocation get(ResourceLocation originalTexture) {
 		ResourceLocation texture = appendBeforeEnding(originalTexture, "_cubemap");
-		EntityRendererManager renderManager = Minecraft.getInstance().getEntityRenderDispatcher();
-		if (renderManager.textureManager.getTexture(texture) == null) {
-			renderManager.textureManager.loadTexture(texture, new CubemapTexture(originalTexture, texture));
+		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+		if (textureManager.getTexture(texture) == null) {
+			textureManager.register(texture, new CubemapTexture(originalTexture, texture));
 		}
 		return texture;
 	}
@@ -83,14 +80,8 @@ public class CubemapTexture extends Texture {
 	}
 
 	private void load(IResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
-		try (IResource iresource = resourceManager.getResource(location)) {
-			NativeImage bufferedimage = NativeImage.read(TextureUtil.readResource(iresource.getInputStream()));
-			int w = bufferedimage.getWidth();
-			int h = bufferedimage.getHeight();
-			IntBuffer data = ByteBuffer.allocateDirect(w * h * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
-			data.put(bufferedimage.getRGB(0, 0, w, h, new int[w * h], 0, w));
-			data.flip();
-			GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, w, h, 0, GL12.GL_BGRA, GL11.GL_UNSIGNED_BYTE, data);
+		try (IResource iresource = resourceManager.getResource(location); NativeImage image = NativeImage.read(iresource.getInputStream())) {
+			GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image.pixels);
 		}
 	}
 
