@@ -12,20 +12,20 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -85,10 +85,10 @@ public class ItemDungeonPlacer extends ItemLore {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
 		if (stack.getTag() != null && stack.getTag().contains("dependencies")) {
-			tooltip.add("Mod Dependencies: ");
+			tooltip.add(new StringTextComponent("Mod Dependencies: "));
 			for (INBT nbtTag : stack.getTag().getList("dependencies", Constants.NBT.TAG_STRING)) {
 				String dependency = nbtTag.toString().replace("\"", "");
-				if (Loader.isModLoaded(dependency)) {
+				if (ModList.get().isLoaded(dependency)) {
 					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency);
 				} else {
 					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.RED + dependency);
@@ -101,9 +101,9 @@ public class ItemDungeonPlacer extends ItemLore {
 	public ITextComponent getName(ItemStack stack) {
 		if (stack.hasTag()) {
 			CompoundNBT compound = stack.getTag();
-			return "Dungeon Placer - " + compound.getString("dungeonName");
+			return new StringTextComponent("Dungeon Placer - " + compound.getString("dungeonName"));
 		}
-		return "Dungeon Placer";
+		return new StringTextComponent("Dungeon Placer");
 	}
 
 	@Override
