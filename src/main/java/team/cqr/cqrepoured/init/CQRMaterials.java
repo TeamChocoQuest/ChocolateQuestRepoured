@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.init;
 
+import net.minecraft.item.IItemTier;
+import net.minecraft.item.ItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
@@ -54,6 +56,19 @@ public class CQRMaterials {
 		public static final CQRItemTier TOOL_TURTLE = createItemTier(CQRConfig.materials.itemTiers.turtle, () -> Ingredient.of(CQRItems.SCALE_TURTLE.get()));
 		public static final CQRItemTier TOOL_WALKER = createItemTier(CQRConfig.materials.itemTiers.walker, () -> Ingredient.EMPTY);
 
+		public static final CQRExtendedItemTier IRON_DAGGER = createExtendedItemTier(ItemTier.IRON, CQRConfig.materials.itemTiers.dagger);
+		public static final CQRExtendedItemTier DIAMOND_DAGGER = createExtendedItemTier(ItemTier.DIAMOND, CQRConfig.materials.itemTiers.dagger);
+		public static final CQRExtendedItemTier NINJA_DAGGER = createExtendedItemTier(TOOL_NINJA, CQRConfig.materials.itemTiers.dagger);
+		public static final CQRExtendedItemTier MONKING_DAGGER = createExtendedItemTier(TOOL_MONKING, CQRConfig.materials.itemTiers.dagger);
+
+		public static final CQRExtendedItemTier IRON_GREAT_SWORD = createExtendedItemTier(ItemTier.IRON, CQRConfig.materials.itemTiers.great_sword);
+		public static final CQRExtendedItemTier DIAMOND_GREAT_SWORD = createExtendedItemTier(ItemTier.DIAMOND, CQRConfig.materials.itemTiers.great_sword);
+		public static final CQRExtendedItemTier NINJA_GREAT_SWORD = createExtendedItemTier(TOOL_NINJA, CQRConfig.materials.itemTiers.great_sword);
+		public static final CQRExtendedItemTier MONKING_GREAT_SWORD = createExtendedItemTier(TOOL_MONKING, CQRConfig.materials.itemTiers.great_sword);
+
+		public static final CQRExtendedItemTier IRON_SPEAR = createExtendedItemTier(ItemTier.IRON, CQRConfig.materials.itemTiers.spear);
+		public static final CQRExtendedItemTier DIAMOND_SPEAR = createExtendedItemTier(ItemTier.DIAMOND, CQRConfig.materials.itemTiers.spear);
+
 		private static CQRItemTier createItemTier(ItemTierConfig config, Supplier<Ingredient> repairIngredient)
 		{
 			return createItemTier(config.getUses(), config.getSpeed(), config.getAttackDamageBonus(), config.getLevel(), config.getEnchantmentValue(), repairIngredient);
@@ -63,6 +78,16 @@ public class CQRMaterials {
 		{
 			return new CQRItemTier(uses, speed, attackDamageBonus, level, enchantmentValue, repairIngredient);
 			//return EnumHelper.addToolMaterial(CQRMain.MODID + ":" + name, harvestLevel, maxUses, efficiency, damage, enchantability);
+		}
+
+		private static CQRExtendedItemTier createExtendedItemTier(IItemTier tier, ExtendedItemTierConfig config)
+		{
+			return createExtendedItemTier(tier.getUses(), tier.getSpeed(), tier.getAttackDamageBonus(), tier.getLevel(), tier.getEnchantmentValue(), tier.getRepairIngredient(), config.getFixedAttackDamageBonus(), config.getAttackSpeedBonus(), config.getMovementSpeedBonus());
+		}
+
+		private static CQRExtendedItemTier createExtendedItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Ingredient repairIngredient, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
+		{
+			return new CQRExtendedItemTier(uses, speed, attackDamageBonus, level, enchantmentValue, () -> repairIngredient, fixedAttackDamageBonus, attackSpeedBonus, movementSpeedBonus);
 		}
 	}
 

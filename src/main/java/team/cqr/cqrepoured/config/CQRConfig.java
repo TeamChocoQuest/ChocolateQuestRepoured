@@ -111,14 +111,18 @@ public class CQRConfig {
 		public ItemTierConfig turtle = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
 		public ItemTierConfig walker = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
 
-		public int daggerAttackDamageBonus = -1;
+		public ExtendedItemTierConfig dagger = new ExtendedItemTierConfig(-1, 0.4F, 0.05D);
+		public ExtendedItemTierConfig great_sword = new ExtendedItemTierConfig(3, -0.4F, 0.0D);
+		public ExtendedItemTierConfig spear = new ExtendedItemTierConfig(1, 0.0F, 1.0D); //#TODO movement speed bonus is reach distance for spear???
+
+		/*public int daggerAttackDamageBonus = -1;
 		public float daggerAttackSpeedBonus = 0.4F;
 		public double daggerMovementSpeedBonus = 0.05D;
 		public double greatSwordAttackDamageBonus = 3.0D;
 		public double greatSwordAttackSpeedBonus = -0.4D;
 		public int spearAttackDamageBonus = 1;
 		public float spearAttackSpeedBonus = -0.F;
-		public double spearReachDistanceBonus = 1.0D;
+		public double spearReachDistanceBonus = 1.0D; */
 
 	}
 

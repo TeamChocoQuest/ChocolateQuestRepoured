@@ -28,6 +28,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
+import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.item.sword.ItemCQRWeapon;
 import team.cqr.cqrepoured.util.ItemUtil;
@@ -47,9 +48,9 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private final double reachDistanceBonus;
 
-	public ItemSpearBase(Properties props, IItemTier material) {
-		super(material, CQRConfig.materials.itemTiers.spearAttackDamageBonus, CQRConfig.materials.itemTiers.spearAttackSpeedBonus, props);
-		this.reachDistanceBonus = CQRConfig.materials.itemTiers.spearReachDistanceBonus;
+	public ItemSpearBase(Properties props, IExtendedItemTier material) {
+		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
+		this.reachDistanceBonus = material.getMovementSpeedBonus(); //#TODO PROBABLY NEEDS TO BE TWEAKED
 	}
 
 	public double getReach() {
