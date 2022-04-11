@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.config;
 
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.IItemTier;
 import team.cqr.cqrepoured.item.IExtendedItemTier;
-
-import java.util.function.Supplier;
 
 public class CQRExtendedItemTier extends CQRItemTier implements IExtendedItemTier
 {
@@ -11,9 +9,9 @@ public class CQRExtendedItemTier extends CQRItemTier implements IExtendedItemTie
     public float attackSpeedBonus;
     public double movementSpeedBonus;
 
-    public CQRExtendedItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Supplier<Ingredient> repairIngredient, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
+    public CQRExtendedItemTier(IItemTier tier, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
     {
-        super(uses, speed, attackDamageBonus, level, enchantmentValue, repairIngredient);
+        super(tier.getUses(), tier.getSpeed(), tier.getAttackDamageBonus(), tier.getLevel(), tier.getEnchantmentValue(), tier::getRepairIngredient);
 
         this.fixedAttackDamageBonus = fixedAttackDamageBonus;
         this.attackSpeedBonus = attackSpeedBonus;

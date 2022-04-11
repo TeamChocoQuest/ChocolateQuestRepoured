@@ -63,7 +63,7 @@ public class CQRMaterials {
 
 		public static final CQRExtendedItemTier IRON_GREAT_SWORD = createExtendedItemTier(ItemTier.IRON, CQRConfig.materials.itemTiers.great_sword);
 		public static final CQRExtendedItemTier DIAMOND_GREAT_SWORD = createExtendedItemTier(ItemTier.DIAMOND, CQRConfig.materials.itemTiers.great_sword);
-		public static final CQRExtendedItemTier NINJA_GREAT_SWORD = createExtendedItemTier(TOOL_NINJA, CQRConfig.materials.itemTiers.great_sword);
+		public static final CQRExtendedItemTier BULL_GREAT_SWORD = createExtendedItemTier(TOOL_BULL, CQRConfig.materials.itemTiers.great_sword);
 		public static final CQRExtendedItemTier MONKING_GREAT_SWORD = createExtendedItemTier(TOOL_MONKING, CQRConfig.materials.itemTiers.great_sword);
 
 		public static final CQRExtendedItemTier IRON_SPEAR = createExtendedItemTier(ItemTier.IRON, CQRConfig.materials.itemTiers.spear);
@@ -82,13 +82,13 @@ public class CQRMaterials {
 
 		private static CQRExtendedItemTier createExtendedItemTier(IItemTier tier, ExtendedItemTierConfig config)
 		{
-			return createExtendedItemTier(tier.getUses(), tier.getSpeed(), tier.getAttackDamageBonus(), tier.getLevel(), tier.getEnchantmentValue(), tier.getRepairIngredient(), config.getFixedAttackDamageBonus(), config.getAttackSpeedBonus(), config.getMovementSpeedBonus());
+			return new CQRExtendedItemTier(tier, config.getFixedAttackDamageBonus(), config.getAttackSpeedBonus(), config.getMovementSpeedBonus());
 		}
 
-		private static CQRExtendedItemTier createExtendedItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Ingredient repairIngredient, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
-		{
-			return new CQRExtendedItemTier(uses, speed, attackDamageBonus, level, enchantmentValue, () -> repairIngredient, fixedAttackDamageBonus, attackSpeedBonus, movementSpeedBonus);
-		}
+		//private static CQRExtendedItemTier createExtendedItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Ingredient repairIngredient, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
+	//	{
+	//		return new CQRExtendedItemTier(uses, speed, attackDamageBonus, level, enchantmentValue, () -> repairIngredient, fixedAttackDamageBonus, attackSpeedBonus, movementSpeedBonus);
+	//	}
 	}
 
 	public static void setRepairItemsForMaterials() {

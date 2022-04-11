@@ -63,24 +63,17 @@ import team.cqr.cqrepoured.item.staff.ItemStaffSpider;
 import team.cqr.cqrepoured.item.staff.ItemStaffThunder;
 import team.cqr.cqrepoured.item.staff.ItemStaffVampiric;
 import team.cqr.cqrepoured.item.staff.ItemStaffWind;
-import team.cqr.cqrepoured.item.sword.ItemDagger;
-import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
-import team.cqr.cqrepoured.item.sword.ItemGreatSword;
-import team.cqr.cqrepoured.item.sword.ItemSwordMoonlight;
-import team.cqr.cqrepoured.item.sword.ItemSwordSpider;
-import team.cqr.cqrepoured.item.sword.ItemSwordSunshine;
-import team.cqr.cqrepoured.item.sword.ItemSwordTurtle;
-import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
+import team.cqr.cqrepoured.item.sword.*;
 
 public class CQRItems {
 
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRMain.MODID);
 
 	// Daggers
-	public static final RegistryObject<ItemDagger> DAGGER_IRON = null;
-	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = null;
-	public static final RegistryObject<ItemDagger> DAGGER_NINJA = null;
-	public static final RegistryObject<ItemDagger> DAGGER_MONKING = null;
+	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.IRON_DAGGER, 25));
+	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamoond", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.DIAMOND_DAGGER, 20));
+	public static final RegistryObject<ItemDaggerNinja> DAGGER_NINJA = register("dagger_ninja", prop -> new ItemDaggerNinja(prop, CQRMaterials.CQRItemTiers.NINJA_DAGGER, 15));
+	public static final RegistryObject<ItemDagger> DAGGER_MONKING = register("dagger_monking", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.MONKING_DAGGER, 10));
 
 	// Swords
 	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = register("sword_turtle", prop -> new ItemSwordTurtle(CQRMaterials.CQRItemTiers.TOOL_TURTLE, 5, prop)); //#TODO tweak stats
@@ -122,14 +115,14 @@ public class CQRItems {
 	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = null;
 
 	// Great Swords
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = null;
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = null;
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = null;
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = null;
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.IRON_GREAT_SWORD, 30));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = register("great_sword_diamond", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.DIAMOND_GREAT_SWORD, 25));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = register("great_sword_bull", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.BULL_GREAT_SWORD, 20));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = register("great_sword_monking", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.MONKING_GREAT_SWORD, 20));
 
 	// Spears
-	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = null;
-	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = null;
+	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = register("spear_diamond", prop -> new ItemSpearBase(prop, CQRMaterials.CQRItemTiers.DIAMOND_SPEAR));
+	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = register("spear_iron", prop -> new ItemSpearBase(prop, CQRMaterials.CQRItemTiers.IRON_SPEAR));
 
 	// Staves
 	public static final RegistryObject<ItemStaff> STAFF = register("staff", ItemStaff::new);
