@@ -54,7 +54,10 @@ public interface ISizable {
 	 */
 
 	default EntitySize callOnGetDimensions(EntitySize parentResult) {
-		return parentResult.scale(this.getSizeVariation());
+		if(parentResult != null) {
+			return parentResult.scale(this.getSizeVariation());
+		}
+		return parentResult;
 	}
 
 	// This needs to be called in the implementing entity's constructor
