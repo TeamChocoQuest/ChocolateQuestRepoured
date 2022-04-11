@@ -7,6 +7,8 @@ import net.minecraft.entity.EntityType.IFactory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -57,6 +59,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
+@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
 
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, CQRMain.MODID);
@@ -210,7 +213,8 @@ public class CQREntityTypes {
 	@SubscribeEvent
 	public static void initializeAttributes(EntityAttributeCreationEvent event) {
 		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
-		//TODO
+		
+		event.put(EXTERMINATOR.get(), EntityCQRExterminator.createCQRAttributes().build());
 	}
 
 	public static void registerEntityTypes()
