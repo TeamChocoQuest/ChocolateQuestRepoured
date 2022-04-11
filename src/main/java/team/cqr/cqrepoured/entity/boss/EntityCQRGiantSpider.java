@@ -65,16 +65,6 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public float getDefaultHeight() {
-		return 1F;
-	}
-
-	@Override
-	public float getDefaultWidth() {
-		return 2.3F;
-	}
-
-	@Override
 	public boolean canOpenDoors() {
 		return false;
 	}

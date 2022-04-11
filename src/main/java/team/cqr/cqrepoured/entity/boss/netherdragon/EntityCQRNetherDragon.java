@@ -178,16 +178,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public float getDefaultWidth() {
-		return 2.0F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 2.0F;
-	}
-
-	@Override
 	protected boolean usesEnderDragonDeath() {
 		return false;
 	}

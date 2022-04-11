@@ -26,11 +26,6 @@ public class EntityCQRGoblin extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getDefaultHeight() {
-		return super.getDefaultHeight() * 0.75F;
-	}
-
-	@Override
 	protected SoundEvent getDeathSound() {
 		return CQRSounds.GOBLIN_DEATH;
 	}

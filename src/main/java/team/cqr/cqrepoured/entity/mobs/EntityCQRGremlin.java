@@ -51,16 +51,6 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getDefaultWidth() {
-		return 0.6F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.2F;
-	}
-
-	@Override
 	protected SoundEvent getAmbientSound() {
 		return CQRSounds.GREMLIN_AMBIENT;
 	}

@@ -219,16 +219,6 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public float getDefaultWidth() {
-		return 0.6F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 2.9F;
-	}
-
-	@Override
 	public void aiStep() {
 		if (this.level.isClientSide) {
 			// Client

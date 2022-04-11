@@ -34,14 +34,4 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 		return false;
 	}
 
-	@Override
-	public float getDefaultWidth() {
-		return 0.6F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.9F;
-	}
-
 }

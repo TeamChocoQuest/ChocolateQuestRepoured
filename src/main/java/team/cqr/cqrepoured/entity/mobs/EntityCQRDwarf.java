@@ -58,16 +58,6 @@ public class EntityCQRDwarf extends AbstractEntityCQR implements IAnimatableCQR 
 		return 3;
 	}
 
-	@Override
-	public float getDefaultWidth() {
-		return 0.54F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.235F;
-	}
-
 	// Geckolib
 	private AnimationFactory factory = new AnimationFactory(this);
 

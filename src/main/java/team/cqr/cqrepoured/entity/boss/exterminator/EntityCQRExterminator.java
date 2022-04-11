@@ -207,9 +207,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
 		this.goalSelector.addGoal(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
-		this.goalSelector.addGoal(14, new EntityAIPotionThrower(this)); /* AI for secondary Item */
-		this.goalSelector.addGoal(15, new EntityAIFireball(this)); /* AI for secondary Item */
-		this.goalSelector.addGoal(16, new EntityAIHooker(this)); /* AI for secondary Item */
+		this.goalSelector.addGoal(14, new EntityAIPotionThrower(this)); // AI for secondary Item
+		this.goalSelector.addGoal(15, new EntityAIFireball(this)); // AI for secondary Item
+		this.goalSelector.addGoal(16, new EntityAIHooker(this)); // AI for secondary Item
 		this.goalSelector.addGoal(17, new EntityAIBackstab(this));
 		this.goalSelector.addGoal(18, new EntityAIAttack(this) {
 			@Override
@@ -462,17 +462,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	@Override
 	public AnimationFactory getFactory() {
 		return this.factory;
-	}
-
-	// Default hitbox size
-	@Override
-	public float getDefaultHeight() {
-		return 2.75F;
-	}
-
-	@Override
-	public float getDefaultWidth() {
-		return 2F;
 	}
 
 	protected boolean isEmitterShortCircuited(SubEntityExterminatorFieldEmitter emitter) {

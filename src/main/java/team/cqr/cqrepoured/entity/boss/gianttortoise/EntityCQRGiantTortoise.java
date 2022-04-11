@@ -180,16 +180,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public float getDefaultWidth() {
-		return 2.0F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.7F;
-	}
-
-	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
 

@@ -236,16 +236,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 	}
 
-	@Override
-	public float getDefaultHeight() {
-		return 2F;
-	}
-
-	@Override
-	public float getDefaultWidth() {
-		return 2F;
-	}
-
 	public static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
 	public static final String ANIM_NAME_IDLE_BODY = ANIM_NAME_PREFIX + "idle";
 	public static final String ANIM_NAME_HURT = ANIM_NAME_PREFIX + "hit";
