@@ -201,7 +201,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	protected ServerBossInfo bossInfoServer;
 	
 	//Sizing bullshit
-	protected final EntitySize size;
+	protected EntitySize size;
 	
 	// Client only
 	@OnlyIn(Dist.CLIENT)
@@ -1593,16 +1593,6 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.setMagicArmorActive(true);
 	}
 
-	@Override
-	public float getDefaultWidth() {
-		return 0.6F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.875F;
-	}
-
 	public CQRNPCPath getPath() {
 		return this.path;
 	}
@@ -1813,6 +1803,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	// ISizable stuff
 	public EntitySize getSize() {
+		if(this.size == null) {
+			this.size = new EntitySize(this.getDefaultWidth(), this.getDefaultWidth(), false);
+		}
 		return this.size;
 	}
 	
@@ -1826,21 +1819,30 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.sizeScaling = value;
 	}
 	
+	@Nullable
 	private EntitySize getDimensionsCloneFromEntity(Pose poseIn) {
-		EntitySize result = poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize().scale(this.getScale());
-		
-		if(poseIn != Pose.SLEEPING) {
-			if(this.isSitting()) {
-				result.scale(1.0F, 0.75F);
+		if(poseIn != null) {
+			EntitySize result = poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize();
+			if(result == null) {
+				return null;
 			}
+			float scale = this.getSizeVariation();
+			result = result.scale(scale);
+			
+			if(poseIn != Pose.SLEEPING) {
+				if(this.isSitting()) {
+					result.scale(1.0F, 0.75F);
+				}
+			}
+			
+			return result;
 		}
-		
-		return result;
+		return this.getSize();
 	}
 
 	@Override
 	public EntitySize getDimensions(Pose pPose) {
-		EntitySize result = this.getDimensionsCloneFromEntity(pPose);
+		EntitySize result = super.getDimensions(pPose);//this.getDimensionsCloneFromEntity(pPose);
 		if(this instanceof ISizable) {
 			ISizable is = (ISizable)this;
 			return is.callOnGetDimensions(result);
