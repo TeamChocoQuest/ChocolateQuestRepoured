@@ -69,7 +69,7 @@ public class ItemSwordSunshine extends SwordItem implements IEquipListener {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 
-		tooltip.add(new TranslationTextComponent(TextFormatting.GOLD + "description.attack_damage_at_day.name", 3));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.sword_sunshine.attack_damage_at_day", 3).withStyle(TextFormatting.GOLD));
 	}
 
 }

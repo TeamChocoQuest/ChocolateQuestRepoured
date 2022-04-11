@@ -76,7 +76,7 @@ public class ItemDungeonPlacer extends ItemLore {
 	 * slot when shift-clicked.
 	 */
 	@Override
-	public boolean isValidArmor(ItemStack stack, EquipmentSlotType armorType, Entity entity) {
+	public boolean canEquip(ItemStack stack, EquipmentSlotType armorType, Entity entity) {
 		return armorType == EquipmentSlotType.HEAD;
 	}
 
@@ -89,9 +89,9 @@ public class ItemDungeonPlacer extends ItemLore {
 			for (INBT nbtTag : stack.getTag().getList("dependencies", Constants.NBT.TAG_STRING)) {
 				String dependency = nbtTag.toString().replace("\"", "");
 				if (ModList.get().isLoaded(dependency)) {
-					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency);
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency));
 				} else {
-					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.RED + dependency);
+					tooltip.add(new StringTextComponent(TextFormatting.GRAY + "- " + TextFormatting.RED + dependency));
 				}
 			}
 		}
