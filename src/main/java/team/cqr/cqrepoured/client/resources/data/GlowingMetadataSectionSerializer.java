@@ -19,7 +19,7 @@ public class GlowingMetadataSectionSerializer implements JsonSerializer<GlowingM
 	public GlowingMetadataSection fromJson(JsonObject jsonobject) {
 		//JsonObject jsonobject = JSONUtils.convertToJsonObject(jsonelement, "metadata section");
 		if (jsonobject.has("sections")) {
-			JsonArray jsonarray = JSONUtils.convertToJsonArray(jsonobject, "sections");
+			JsonArray jsonarray = JSONUtils.convertToJsonArray(jsonobject.get("sections"), "sections");
 			GlowingMetadataSection result = new GlowingMetadataSection();
 			for (int i = 0; i < jsonarray.size(); ++i) {
 				JsonElement jsonelement = jsonarray.get(i);

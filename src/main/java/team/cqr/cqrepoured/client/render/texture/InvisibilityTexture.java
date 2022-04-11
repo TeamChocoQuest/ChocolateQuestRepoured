@@ -1,5 +1,11 @@
 package team.cqr.cqrepoured.client.render.texture;
 
+import java.io.IOException;
+import java.util.Random;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.NativeImage;
@@ -9,12 +15,7 @@ import net.minecraft.client.resources.data.TextureMetadataSection;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import team.cqr.cqrepoured.util.Perlin2D;
-
-import java.io.IOException;
-import java.util.Random;
 
 public class InvisibilityTexture extends Texture {
 
@@ -45,7 +46,7 @@ public class InvisibilityTexture extends Texture {
 		this.releaseId();
 
 		try (IResource iresource = resourceManager.getResource(this.originalTextureLocation)) {
-			NativeImage bufferedimage = NativeImage.read(TextureUtil.readResource(iresource.getInputStream()));
+			NativeImage bufferedimage = NativeImage.read(iresource.getInputStream());
 
 			// CQR Start
 			PERLIN.setup(RANDOM.nextLong(), 4.0F);
@@ -77,7 +78,8 @@ public class InvisibilityTexture extends Texture {
 				}
 			//}
 
-			TextureUtil.uploadTextureImageAllocate(this.getId(), bufferedimage, flag, flag1);
+			TextureUtil.prepareImage(this.getId(), bufferedimage.getWidth(), bufferedimage.getHeight());
+			bufferedimage.upload(0, 0, 0, false);
 		}
 	}
 
