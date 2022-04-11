@@ -1,11 +1,28 @@
 package team.cqr.cqrepoured.config;
 
-import net.minecraft.item.crafting.Ingredient;
-
-public class ExtendedItemTierConfig extends CQRExtendedItemTier
+public class ExtendedItemTierConfig
 {
+    public int fixedAttackDamageBonus;
+    public float attackSpeedBonus;
+    public double movementSpeedBonus;
+
     //Skip tier
-    public ExtendedItemTierConfig(int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus) {
-        super(fixedAttackDamageBonus, attackSpeedBonus, movementSpeedBonus);
+    public ExtendedItemTierConfig(int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
+    {
+        this.fixedAttackDamageBonus = fixedAttackDamageBonus;
+        this.attackSpeedBonus = attackSpeedBonus;
+        this.movementSpeedBonus = movementSpeedBonus;
+    }
+
+    public int getFixedAttackDamageBonus() {
+        return this.fixedAttackDamageBonus;
+    }
+
+    public float getAttackSpeedBonus() {
+        return this.attackSpeedBonus;
+    }
+
+    public double getMovementSpeedBonus() {
+        return this.movementSpeedBonus;
     }
 }
