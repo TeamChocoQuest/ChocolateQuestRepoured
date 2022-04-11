@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -126,13 +126,15 @@ public class ItemCursedBone extends ItemLore {
 		if (hasCursedBoneEntityTag(stack)) {
 			try {
 				CompoundNBT tag = stack.getTag();// .getCompoundTag("tag");
-				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
+				tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", this.getEntityName(tag.getString("entity_to_summon"))));
+				//tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
 			} catch (Exception ex) {
-				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + "missingNo");
+				//tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + "missingNo");
+				tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", "missingNo"));
 			}
 			return;
 		}
-		tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(CQRMain.MODID + ":skeleton"));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", this.getEntityName(CQRMain.MODID + ":skeleton")));
 	}
 
 	private String getEntityName(String registryName) {
