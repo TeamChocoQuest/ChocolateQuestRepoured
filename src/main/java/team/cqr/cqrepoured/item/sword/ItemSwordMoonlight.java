@@ -64,7 +64,7 @@ public class ItemSwordMoonlight extends SwordItem implements IEquipListener {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 
-		tooltip.add(new TranslationTextComponent(TextFormatting.DARK_AQUA + "description.attack_damage_at_night.name", 3));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.sword_moonlight.attack_damage_at_night", 3).withStyle(TextFormatting.DARK_AQUA));
 	}
 
 	@Override
