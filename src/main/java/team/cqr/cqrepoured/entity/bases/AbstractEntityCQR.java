@@ -468,7 +468,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
 		this.goalSelector.addGoal(22, new EntityAIFireFighter(this));
-		this.goalSelector.addGoal(23, new EntityAITorchIgniter(this));
+		//this.goalSelector.addGoal(23, new EntityAITorchIgniter(this));
 		this.goalSelector.addGoal(24, new EntityAILooter(this));
 		this.goalSelector.addGoal(25, new EntityAITameAndLeashPet(this));
 		this.goalSelector.addGoal(26, new EntityAISearchMount(this));
