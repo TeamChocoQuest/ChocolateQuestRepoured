@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.sword;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -31,11 +32,18 @@ public class ItemDagger extends ItemCQRWeapon {
 	private static final UUID MOVEMENT_SPEED_MODIFIER = UUID.fromString("3915fbe7-e8ed-4032-9b18-749c96a37173");
 	private final double movementSpeedBonus;
 	private final int specialAttackCooldown;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemDagger(Properties props, IExtendedItemTier material, int cooldown) {
 		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
 		this.movementSpeedBonus = material.getMovementSpeedBonus();
 		this.specialAttackCooldown = cooldown;
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
@@ -46,14 +54,15 @@ public class ItemDagger extends ItemCQRWeapon {
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType slot) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(slot);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		return slot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
+		//Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(slot);
 
-		if (slot == EquipmentSlotType.MAINHAND) {
-			multimap.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, Operation.ADDITION));
-		}
+		//if (slot == EquipmentSlotType.MAINHAND) {
+		//	multimap.put(Attributes.MOVEMENT_SPEED, new AttributeModifier(MOVEMENT_SPEED_MODIFIER, "Weapon modifier", this.movementSpeedBonus, Operation.ADDITION));
+		//}
 
-		return multimap;
+		//return multimap;
 	}
 
 	@Override

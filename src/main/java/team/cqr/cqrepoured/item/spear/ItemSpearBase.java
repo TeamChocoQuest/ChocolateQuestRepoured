@@ -1,12 +1,14 @@
 package team.cqr.cqrepoured.item.spear;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -47,11 +49,22 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	private static final UUID REACH_DISTANCE_MODIFIER = UUID.fromString("95dd73a8-c715-42f9-8f6d-abf5e40fa3cd");
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private final double reachDistanceBonus;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemSpearBase(Properties props, IExtendedItemTier material) {
 		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
 		this.reachDistanceBonus = material.getMovementSpeedBonus(); //#TODO PROBABLY NEEDS TO BE TWEAKED
-	}
+		
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		if(ForgeMod.REACH_DISTANCE.isPresent())
+		{
+			modifierBuilder.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(REACH_DISTANCE_MODIFIER, "Weapon modifier", this.reachDistanceBonus, Operation.ADDITION));
+		}
+		//modifierBuilder.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(REACH_DISTANCE_MODIFIER, "Weapon modifier", this.reachDistanceBonus, Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
+	} //#TODO do not work
 
 	public double getReach() {
 		return this.reachDistanceBonus;
@@ -68,14 +81,15 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType slot) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(slot);
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+		return slot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
+	/*	Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(slot);
 
 		if (slot == EquipmentSlotType.MAINHAND) {
 			multimap.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(REACH_DISTANCE_MODIFIER, "Weapon modifier", this.reachDistanceBonus, Operation.ADDITION));
 		}
 
-		return multimap;
+		return multimap; */
 	}
 
 	// Makes the right click a "charge attack" action
