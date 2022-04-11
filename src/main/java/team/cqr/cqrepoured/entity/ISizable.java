@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.entity.PartEntity;
 
@@ -36,9 +37,16 @@ public interface ISizable {
 	}
 
 	// Used to acquire the default size of the entity
-	float getDefaultWidth();
+	default float getDefaultWidth() {
+		return this.getType().getWidth();
+	}
 
-	float getDefaultHeight();
+	public EntityType<?> getType();
+
+	default float getDefaultHeight() {
+		return this.getType().getHeight();
+	}
+	
 
 	// Getter and setter for sizeScale field
 	float getSizeVariation();
