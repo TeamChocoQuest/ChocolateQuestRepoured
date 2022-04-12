@@ -1875,4 +1875,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public boolean isSensitiveToWater() {
 		return super.isSensitiveToWater() || this.getMobType() == CQRCreatureAttributes.MECHANICAL;
 	}
+	
+	@Override
+	public boolean isMultipartEntity() {
+		return super.isMultipartEntity() || (this.getParts() != null && this.getParts().length > 0);
+	}
 }
