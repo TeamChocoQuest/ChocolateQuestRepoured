@@ -4,6 +4,8 @@ import java.util.EnumSet;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Sets;
+
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,7 +33,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.Region;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
-import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath.PathNode;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
 
 /**
@@ -49,6 +50,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	private long lastTimeUpdated;
 	private BlockPos targetPos;
 	private PathFinder pathFinder;
+	protected float maxPathSearchRange = 256;
 
 	public PathNavigateGroundCQR(MobEntity entitylivingIn, World worldIn) {
 		super(entitylivingIn, worldIn);
@@ -153,14 +155,14 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	}*/
 
 	@Override
-	public void tick() {
+	public void recomputePath() {
 		if (this.hasMount()) {
 			this.getMount().getNavigation().tick();
 		}
 		if (this.level.getGameTime() - this.lastTimeUpdated > 20L) {
 			if (this.targetPos != null) {
 				this.path = null;
-				this.path = this.getPathToPos(this.targetPos);
+				this.path = this.createPath(this.targetPos, (int) (this.mob.getBbWidth() / 2));
 				this.lastTimeUpdated = this.level.getGameTime();
 				this.hasDelayedRecomputation = false;
 			}
@@ -170,10 +172,10 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	}
 
 	@Override
-	public void onUpdateNavigation() {
-		super.onUpdateNavigation();
-		if (!this.noPath() && this.hasMount()) {
-			this.getMount().getNavigation().onUpdateNavigation();
+	public void tick() {
+		super.tick();
+		if (!this.isDone() && this.hasMount()) {
+			this.getMount().getNavigation().tick();
 		}
 	}
 
@@ -223,15 +225,16 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 		} else {
 			Entity ent = this.hasMount() ? this.getMount() : this.mob;
 			float distance = (float) Math.sqrt(ent.blockPosition().distSqr(pos));
-			if (distance > this.getPathSearchRange()) {
+			if (distance > this.getMaxPathSearchRange()/*this.getPathSearchRange()*/) {
 				return null;
 			}
 
-			this.level.profiler.startSection("pathfind");
+			this.level.getProfiler().push("pathfind");
 			BlockPos entityPos =this.hasMount() ? this.getMount().blockPosition() : this.mob.blockPosition();
 			Region chunkcache = new ChunkCacheCQR(this.level, entityPos, pos, entityPos, 32, false);
-			Path path = this.pathFinder.findPath(chunkcache, this.hasMount() ? this.getMount() : this.mob, pos, MathHelper.ceil(distance + 32.0F));
-			this.level.profiler.endSection();
+			MobEntity mob = (this.hasMount() ? this.getMount() : this.mob);
+			Path path = this.pathFinder.findPath(chunkcache, mob, Sets.newHashSet(pos), MathHelper.ceil(distance + 32.0F), (int) (mob.getBbWidth() / 2), 1.0F);
+			this.level.getProfiler().pop();
 			return path;
 		}
 	}
@@ -264,7 +267,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 				PathPoint finalPathPoint = pathentityIn.getEndNode();
 				this.targetPos = new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z);
 				this.speedModifier = speedIn;
-				this.ticksAtLastPos = this.totalTicks;
+				this.ticksAtLastPos = this.tick;
 				this.lastPosCheck = this.getTempMobPos();
 				return true;
 			}
@@ -278,14 +281,14 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 	@Override
 	protected void doStuckDetection(Vector3d positionVec3) {
-		if (this.totalTicks - this.ticksAtLastPos >= 100) {
+		if (this.tick - this.ticksAtLastPos >= 100) {
 			double aiMoveSpeed = this.hasMount() ? this.getMount().getSpeed() : this.mob.getSpeed();
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 			if (positionVec3.distanceTo(this.lastPosCheck) / 100.0D < aiMoveSpeed * 0.5D) {
 				this.stop();
 			}
 
-			this.ticksAtLastPos = this.totalTicks;
+			this.ticksAtLastPos = this.tick;
 			this.lastPosCheck = positionVec3;
 		}
 
@@ -295,7 +298,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
-				this.timeoutTimer = this.totalTicks;
+				this.timeoutTimer = this.tick;
 				double aiMoveSpeedOrig = this.hasMount() ? this.getMount().getSpeed() : this.mob.getSpeed();
 				double aiMoveSpeed = aiMoveSpeedOrig;
 				if (aiMoveSpeed > 0.0F) {
@@ -307,7 +310,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 				}
 			}
 
-			if (this.timeoutLimit > 0.0D && this.totalTicks - this.timeoutTimer > this.timeoutLimit * 2.0D) {
+			if (this.timeoutLimit > 0.0D && this.tick - this.timeoutTimer > this.timeoutLimit * 2.0D) {
 				this.timeoutCachedNode = Vector3d.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
@@ -333,6 +336,14 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 		this.path = null;
 		this.targetPos = null;
 		super.stop();
+	}
+
+	public float getMaxPathSearchRange() {
+		return maxPathSearchRange;
+	}
+
+	public void setMaxPathSearchRange(float maxPathSearchRange) {
+		this.maxPathSearchRange = maxPathSearchRange;
 	}
 
 }
