@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -41,6 +43,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
@@ -55,6 +58,8 @@ import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.proxy.ClientProxy;
 import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
+import team.cqr.cqrepoured.util.ConfigBackupHandler;
+import team.cqr.cqrepoured.util.CopyHelper;
 
 @Mod(CQRMain.MODID)
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
@@ -62,7 +67,7 @@ public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
 	public static final String VERSION = "2.6.3B";
-	
+
 	public static final IProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	private static final String PROTOCOL_VERSION = "1";
@@ -86,7 +91,6 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_ROOT = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = null;
-	public static File CQ_GLOWING_TEXTURES_FOLDER = null;
 
 	public static boolean isWorkspaceEnvironment = true;
 	public static boolean isPhosphorInstalled;
@@ -159,6 +163,8 @@ public class CQRMain {
 		isWorkspaceEnvironment = !CQRMain.class.getResource("").getProtocol().equals("jar");
 
 		final IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		initConfigFolder(FMLPaths.CONFIGDIR.get());
 		
 		GeckoLib.initialize();
 
@@ -193,21 +199,45 @@ public class CQRMain {
 	 * // Instantiating enums EBannerPatternsCQ.values(); EBanners.values(); CreatureAttribute.values(); // DO NOT REMOVE, this fixes the neat issue CQRCreatureAttributes.VOID.name();
 	 * 
 	 * CQRMessages.registerMessages(); CQRCapabilities.registerCapabilities(); CQRLoottables.registerLootTables(); }
-	 * 
-	 * private void initConfigFolder(FMLPreInitializationEvent event) { CQ_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "CQR"); File[] subfolders = new File[] { CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons"),
-	 * CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs"), CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures"), CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output"), CQ_FACTION_FOLDER = new
-	 * File(CQ_CONFIG_FOLDER, "factions"), CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants"), CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items"), CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
-	 * CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"), CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"), CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new
-	 * File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync"), CQ_GLOWING_TEXTURES_FOLDER = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "eyes"), CQ_DUNGEON_GRID_FOLDER = new File(CQ_CONFIG_FOLDER, "grids") };
-	 * 
-	 * ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.1.0"); ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "1.0.0"); ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
-	 * ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.0.1"); ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.0"); ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "1.0.0");
-	 * ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "1.0.0"); ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "1.0.0");
-	 * 
-	 * if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) { CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true); } else { ConfigBackupHandler.checkAndBackupConfigs(); }
-	 * 
-	 * int i = CQ_CONFIG_FOLDER.getAbsolutePath().length(); for (File folder : subfolders) { CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs" + folder.getAbsolutePath().substring(i), folder, false); } }
-	 * 
+	 */
+	private void initConfigFolder(final Path configFolderPath) {
+		CQ_CONFIG_FOLDER = new File(configFolderPath.toAbsolutePath().getFileName().toString(), "CQR");
+		File[] subfolders = new File[] {
+				CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons"),
+				CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs"),
+				CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures"),
+				CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output"),
+				CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions"),
+				CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants"),
+				CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items"),
+				CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures"),
+				CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets"),
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures"),
+				CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "sync"),
+				CQ_DUNGEON_GRID_FOLDER = new File(CQ_CONFIG_FOLDER, "grids") 
+		};
+
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "2.0.0");
+
+		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
+			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
+		} else {
+			ConfigBackupHandler.checkAndBackupConfigs();
+		}
+
+		int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
+		for (File folder : subfolders) {
+			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs" + folder.getAbsolutePath().substring(i), folder, false);
+		}
+	}
+	/*
 	 * @SubscribeEvent public void init(FMLInitializationEvent event) { proxy.init();
 	 * 
 	 * NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler()); CQRMaterials.setRepairItemsForMaterials(); SmeltingHandler.init(); FireBlock.init();
