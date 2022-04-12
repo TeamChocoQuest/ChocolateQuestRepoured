@@ -1,5 +1,19 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.FileUtils;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
@@ -11,7 +25,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.ModList;
-import org.apache.commons.io.FileUtils;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -22,12 +35,6 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -61,7 +68,7 @@ public abstract class DungeonBase {
 	protected int yOffsetMin = 0;
 	protected int yOffsetMax = 0;
 
-	protected String dungeonMob = DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName();
+	protected String dungeonMob = "DEFAULT";//DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName();
 	protected boolean replaceBanners = true;
 
 	protected boolean buildSupportPlatform = true;

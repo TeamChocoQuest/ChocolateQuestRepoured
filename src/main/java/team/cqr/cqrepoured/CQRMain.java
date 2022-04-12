@@ -101,8 +101,7 @@ public class CQRMain {
 	public static final ItemGroup CQR_ITEMS_TAB = new ItemGroup(CQRMain.MODID + "_items") {
 		@Override
 		public ItemStack makeIcon() {
-			return new ItemStack(Items.APPLE);
-			// return new ItemStack(CQRItems.BOOTS_CLOUD);
+			return new ItemStack(CQRItems.BOOTS_CLOUD.get());
 		}
 
 	};
@@ -122,7 +121,6 @@ public class CQRMain {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.SKULL_BANNER_PATTERN);
-			// return EBanners.WALKER_ORDO.getBanner();
 		}
 
 		@Override
@@ -176,6 +174,9 @@ public class CQRMain {
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
 		CQREnchantments.registerEnchantments();
+		
+		//TODO: Change so the actual values of the files get loaded LATER
+		//DungeonRegistry.getInstance().loadDungeonFiles();
 
 		MinecraftForge.EVENT_BUS.register(this);
 		bus.<FMLCommonSetupEvent>addListener(this::init);
@@ -299,6 +300,7 @@ public class CQRMain {
 	}
 
 	public void init(final FMLCommonSetupEvent event) {
+		//DungeonInhabitantManager.instance().loadDungeonInhabitants();
 		CQRCapabilities.registerCapabilities();
 		CQRMessages.registerMessages();
 		event.enqueueWork(() -> {
