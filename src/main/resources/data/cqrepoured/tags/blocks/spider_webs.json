@@ -2,6 +2,6 @@
   "replace": false,
   "values": [
     "minecraft:cobweb",
-    "cqrepoured:temporary_web"
+    "cqrepoured:poisonous_web"
   ]
 }
