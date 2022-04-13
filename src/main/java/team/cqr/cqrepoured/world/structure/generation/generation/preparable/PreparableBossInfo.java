@@ -98,18 +98,10 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos) {
-		Entity entity = EntityList.createEntityFromNBT(this.bossTag, world);
-		entity.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-
-		if (entity instanceof MobEntity) {
-			((MobEntity) entity).enablePersistence();
-
-			if (entity instanceof AbstractEntityCQR) {
-				((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
-				((AbstractEntityCQR) entity).enableBossBar();
-			}
+		Entity entity = PreparableSpawnerInfo.createEntityFromTag(world, placement, pos, bossTag);
+		if (entity instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR) entity).enableBossBar();
 		}
-
 		return entity;
 	}
 
