@@ -1,9 +1,13 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import java.util.function.Function;
+
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -11,7 +15,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> {
 
 	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
-		super(scale, 0.0F, textureWidth, textureHeight);
+		this(RenderType::entityCutoutNoCull, scale, 0.0F, textureWidth, textureHeight);
+	}
+	
+	public ModelCustomArmorBase(Function<ResourceLocation, RenderType> renderType, float scale, float inflate, int texWidth, int texHeight) {
+		super(renderType, scale, inflate, texWidth, texHeight);
 	}
 
 	@Override
