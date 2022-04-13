@@ -34,7 +34,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entity.isRiding()) {
 			return false;
 		}
-		if (this.random.nextInt(10) == 0) {
+		if (this.random.nextInt(20) == 0) {
 			boolean hasSaddle = hasSaddle();
 			Vec3d vec1 = this.entity.getPositionVector().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);

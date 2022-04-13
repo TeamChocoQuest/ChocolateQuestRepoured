@@ -47,7 +47,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.cooldown > 0) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 4 == 0) {
+		if (this.random.nextInt(20) == 0) {
 			if (!this.hasBackpack(this.entity)) {
 				return false;
 			}
