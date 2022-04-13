@@ -75,7 +75,6 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void start() {
-		this.specialAttackTick = this.entity.tickCount;
 		this.tick = 0;
 
 		LivingEntity attackTarget = this.entity.getTarget();
@@ -84,6 +83,7 @@ public class EntityAIAttackSpecial extends AbstractCQREntityAI<AbstractEntityCQR
 
 	@Override
 	public void stop() {
+		this.specialAttackTick = this.entity.tickCount;
 		this.tick = -1;
 
 		this.activeSpecialAttack.resetAttack(this.entity);
