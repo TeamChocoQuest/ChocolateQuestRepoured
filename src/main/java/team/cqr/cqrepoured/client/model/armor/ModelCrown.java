@@ -1,13 +1,7 @@
 package team.cqr.cqrepoured.client.model.armor;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
 
 /**
  * ModelCrown - DerToaster Created using Tabula 7.0.1
@@ -57,62 +51,13 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 		this.crownJewelFrontBase.addChild(this.crownJewelFront);
 		this.head.addChild(this.crownBorderBack);
 		this.head.addChild(this.crownBorderFront);
-		this.hat.visible = true;
-		this.body.visible = true;
-		this.leftArm.visible = true;
-		this.rightArm.visible = true;
-		this.leftLeg.visible = true;
-		this.rightLeg.visible = true;
-	}
-
-	@Override
-	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		float f = 1.3F;
-		float f1 = f - 1.0F;
-
-		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-		GlStateManager.pushMatrix();
-
-		if (this.isChild) {
-			GlStateManager.scale(0.75F, 0.75F, 0.75F);
-			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
-		} else if (entityIn.isSneaking()) {
-			GlStateManager.translate(0.0F, 0.2F, 0.0F);
-		}
-		GlStateManager.translate(-this.head.rotationPointX * 0.0625F * f1, -this.head.rotationPointY * 0.0625F * f1, -this.head.rotationPointZ * 0.0625F * f1);
-		GlStateManager.scale(f, f, f);
-		this.head.render(scale);
-
-		GlStateManager.popMatrix();
-	}
-
-	@Override
-	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, ModelBiped model, EquipmentSlotType slot) {
-		this.render(entityIn, scale, renderer, model);
-	}
-
-	public void render(Entity entityIn, float scale, EntityRenderer<?> renderer, ModelBiped model) {
-		float f = 1.3F;
-		float f1 = f - 1.0F;
-
-		this.applyRotations(this.head, model.bipedHead);
-		GlStateManager.pushMatrix();
-
-		if (this.isChild) {
-			GlStateManager.scale(0.75F, 0.75F, 0.75F);
-			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
-		} else if (entityIn.isSneaking()) {
-			GlStateManager.translate(0.0F, 0.2F, 0.0F);
-		}
-		if (renderer instanceof RenderCQREntity) {
-			((RenderCQREntity<?>) renderer).setupHeadOffsets(this.head, EquipmentSlotType.HEAD);
-		}
-		GlStateManager.translate(-this.head.rotationPointX * 0.0625F * f1, -this.head.rotationPointY * 0.0625F * f1, -this.head.rotationPointZ * 0.0625F * f1);
-		GlStateManager.scale(f, f, f);
-		this.head.render(scale);
-
-		GlStateManager.popMatrix();
-		this.resetRotations(this.head);
+		
+		this.hat.visible = false;
+		this.body.visible = false;
+		this.leftArm.visible = false;
+		this.rightArm.visible = false;
+		this.leftLeg.visible = false;
+		this.rightLeg.visible = false;
 	}
 
 }
