@@ -107,7 +107,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y + entityIn.height * 0.5D, z);
-			GlStateManager.scale(2.5D, 2.5D, 2.5D);
+			double width = this.getWidthScale(entityIn);
+			double height = this.getHeightScale(entityIn);
+			GlStateManager.scale(width, height, width);
+			GlStateManager.scale(1.25D, 1.25D, 1.25D);
 			GlStateManager.rotate((entityIn.ticksExisted + partialTicks) * 4.0F, 1.0F, 1.0F, 0.0F);
 			float f = 0.7F + 0.15F * (float) Math.sin(entityIn.ticksExisted * 0.1D);
 			GlStateManager.color(0.6F, 0.2F, 0.7F, f);
