@@ -5,6 +5,7 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -53,7 +54,7 @@ public abstract class MixinLivingEntity extends Entity {
 					if((myVolume / 2) <= theirVolume) {
 						
 						Vector3d velocity = this.position().subtract(pEntity.position());
-						velocity = velocity.add(0, 0.1, 0);
+						velocity = velocity.add(0, 0.5, 0);
 						velocity = velocity.multiply(1.5, 1.5, 1.5);
 						velocity = velocity.add(this.getDeltaMovement());
 						this.setDeltaMovement(velocity);
@@ -65,29 +66,34 @@ public abstract class MixinLivingEntity extends Entity {
 	
 	@Inject(at = @At("HEAD"), method = "travel(Lnet/minecraft/util/math/vector/Vector3d;)V", cancellable = true)
 	private void mixinTravel(Vector3d vectorIn, CallbackInfo ci) {
-		 if (this.isEffectiveAi() || this.isControlledByLocalInstance()) {
+		//Doesn't work yet
+		/*Entity ent = (Entity) this;
+		 if ((this.isEffectiveAi() || this.isControlledByLocalInstance())) {
 			 FluidState fluidstate = this.level.getFluidState(this.blockPosition());
 	         if (this.isInWater() && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate.getType())) {
 	        	 //Not needed here
 	         } else if (this.isInLava() && this.isAffectedByFluids() && !this.canStandOnFluid(fluidstate.getType())) {
 	        	 //Not needed here
-	         } else if (this.isFallFlying()) {
+	         } else if (this.isFallFlying() || !this.isOnGround()) {
 	        	 //We're elytra flying
-	        	 if(ItemUtil.hasFullSet(this, ItemArmorSlime.class) && (this.horizontalCollision || this.verticalCollision)) {
+	        	// System.out.println("Falldistance: " + this.fallDistance);
+	        	 if(ItemUtil.hasFullSet(this, ItemArmorSlime.class) && (this.horizontalCollision || this.verticalCollision) && this.fallDistance > 3) {
 	        		 Vector3d lastMovedToPos = this.getBoundingBox().getCenter().subtract(this.getBoundingBox().getXsize(), this.getBoundingBox().getYsize(), this.getBoundingBox().getZsize());
 	        		 //TODO: Add AT for this, couldn't find the correct mapping using the CSV file
 	        		 Vector3d vector3d = this.collide(lastMovedToPos);
 	        		 //Taken from the calculations for this.horizontalCollison
 	        		 boolean collidedOnXAxis = MathHelper.equal(lastMovedToPos.x, vector3d.x);
 	        		 boolean collidedOnZAxis = MathHelper.equal(lastMovedToPos.z, vector3d.z);
+	        		 //System.out.println("Collision: x: " + collidedOnXAxis + "   y: " + this.verticalCollision + "   z: " + collidedOnZAxis);
 	        		 
 	        		 Vector3d resultingVector = this.getDeltaMovement().scale(0.75);
-	        		 resultingVector = resultingVector.multiply(collidedOnXAxis ? -1 : 1, this.verticalCollision ? -1 : 1, collidedOnZAxis ? -1 : 1);
+	        		 resultingVector = resultingVector.multiply(collidedOnXAxis ? -1 : 1, 4 * (this.verticalCollision ? -1 : 1), collidedOnZAxis ? -1 : 1);
+	        		 //System.out.println("Resulting vector: " + resultingVector.toString());
 	        		 
 	        		 this.setDeltaMovement(resultingVector);
 	        	 }
 	         }
-		 }
+		 }*/
 	}
 
 	@Shadow
