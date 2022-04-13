@@ -10,6 +10,7 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerHookShotPlayerSt
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerInitialFactionInformation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerItemStackSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSpawnParticles;
+import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncLaserRotation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectedRegions;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectionConfig;
@@ -48,6 +49,7 @@ import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
@@ -91,6 +93,7 @@ public class CQRMessages {
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateElectrocuteCapability.class, SPacketUpdateElectrocuteCapability.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerUpdateEmitterTarget.class, SPacketUpdateEmitterTarget.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncTrades.class, SPacketSyncTrades.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(CPacketHandlerSyncEntity.class, SPacketSyncEntity.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SPacketHandlerSaveStructureRequest.class, CPacketSaveStructureRequest.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(SPacketHandlerStructureSelector.class, CPacketStructureSelector.class, messageID++, Side.SERVER);

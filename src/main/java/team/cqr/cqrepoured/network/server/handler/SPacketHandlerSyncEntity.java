@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 
 public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEntity, IMessage> {
 
@@ -30,6 +31,8 @@ public class SPacketHandlerSyncEntity implements IMessageHandler<CPacketSyncEnti
 						cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, message.getDropChanceMainhand() / 100.0F);
 						cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, message.getDropChanceOffhand() / 100.0F);
 						cqrentity.setSizeVariation(message.getSizeScaling() / 100.0F);
+
+						CQRMain.NETWORK.sendToAllTracking(new SPacketSyncEntity(cqrentity), cqrentity);
 					}
 				}
 			});
