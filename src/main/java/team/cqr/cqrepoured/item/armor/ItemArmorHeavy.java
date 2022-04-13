@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -20,26 +22,25 @@ import team.cqr.cqrepoured.client.init.CQRArmorModels;
 
 public class ItemArmorHeavy extends ArmorItem {
 
-	private AttributeModifier movementSpeed;
-	private AttributeModifier knockbackResistance;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemArmorHeavy(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 
-		this.movementSpeed = new AttributeModifier("HeavySpeedModifier", -0.05D, Operation.MULTIPLY_TOTAL);
-		this.knockbackResistance = new AttributeModifier("HeavyKnockbackModifier", 0.1D, Operation.MULTIPLY_TOTAL);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("HeavySpeedModifier", -0.05D, Operation.MULTIPLY_TOTAL));
+		modifierBuilder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier("HeavyKnockbackModifier", 0.1D, Operation.MULTIPLY_TOTAL));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-
 		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
-			multimap.put(Attributes.KNOCKBACK_RESISTANCE, this.knockbackResistance);
-			multimap.put(Attributes.MOVEMENT_SPEED, this.movementSpeed);
+			return this.attributeModifier;
 		}
-
-		return multimap;
+		return super.getAttributeModifiers(slot, stack);
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class ItemArmorHeavy extends ArmorItem {
 		super.onArmorTick(stack, world, player);
 		player.flyingSpeed *= 0.95F;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@OnlyIn(Dist.CLIENT)
 	@Override
