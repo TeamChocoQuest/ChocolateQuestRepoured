@@ -5,7 +5,11 @@ import net.minecraft.client.Minecraft;
 public class PartialTicksUtil {
 
 	public static float getCurrentPartialTicks() {
-		return Minecraft.getInstance().getFrameTime();
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.isPaused()) {
+			return mc.pausePartialTick;
+		}
+		return mc.getFrameTime();
 	}
 
 }

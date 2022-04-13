@@ -15,6 +15,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
+import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 @OnlyIn(Dist.CLIENT)
 //@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
@@ -44,7 +45,7 @@ public class EntityRenderManager {
 
 			Entity entity = mc.getCameraEntity();
 			if (entity != null) {
-				double partialTick = mc.getRenderPartialTicks();
+				double partialTick = PartialTicksUtil.getCurrentPartialTicks();
 				x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
 				y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTick;
 				z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTick;

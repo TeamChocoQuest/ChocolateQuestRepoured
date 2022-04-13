@@ -36,7 +36,7 @@ public class ModelExterminator extends AbstractModelGeoCQRBase<EntityCQRExtermin
 		}
 
 		try {
-			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
+			final float partialTicks = customPredicate.getPartialTick();
 
 			if (entity.limbSwingAmount >= 0.01D && (!entity.isCannonRaised() && ((entity.getCurrentAnimation() == null) || !entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);

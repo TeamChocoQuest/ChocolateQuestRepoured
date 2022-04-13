@@ -14,7 +14,6 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
-import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ModelCQRBiped<T extends LivingEntity> extends BipedModel<T> {
 
@@ -96,7 +95,7 @@ public class ModelCQRBiped<T extends LivingEntity> extends BipedModel<T> {
 			pLimbSwing = 0;
 			pLimbSwingAmount = 0;
 
-			float f = (pEntity.tickCount - 1.0F + PartialTicksUtil.getCurrentPartialTicks()) * 16.0F;
+			float f = pAgeInTicks * 16.0F;
 			//GlStateManager.rotate(f, 0F, 1F, 0F);
 			this.body.yRot = (float) Math.toRadians(f);
 		}
