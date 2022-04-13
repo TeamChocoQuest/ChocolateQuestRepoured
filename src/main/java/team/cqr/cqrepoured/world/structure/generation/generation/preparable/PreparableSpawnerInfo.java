@@ -3,12 +3,17 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import java.util.Collection;
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EntityEquipmentSlot.Type;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -144,7 +149,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		for (int i = 0; i < items.tagCount(); i++) {
 			NBTTagCompound itemTag = items.getCompoundTagAt(i);
 			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
-			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
+			Entity entity = createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
 				NBTTagCompound newEntityTag = new NBTTagCompound();
@@ -171,7 +176,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		for (int i = 0; i < items.tagCount() && i < tileEntity.inventory.getSlots(); i++) {
 			NBTTagCompound itemTag = items.getCompoundTagAt(i);
 			NBTTagCompound entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
-			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
+			Entity entity = createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
 				NBTTagCompound newEntityTag = new NBTTagCompound();
@@ -190,7 +195,8 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		}
 	}
 
-	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, NBTTagCompound entityTag) {
+	@Nullable
+	public static Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, NBTTagCompound entityTag) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -200,33 +206,55 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		entityTag.removeTag("Pos");
 
 		String id = entityTag.getString("id");
-		if (id.equals(CQRMain.MODID + ":dummy")) {
-			entityTag.setString("id", placement.getInhabitant().getEntityID().toString());
-		}
 
-		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+		try {
+			if (id.equals(CQRMain.MODID + ":dummy")) {
+				entityTag.setString("id", placement.getInhabitant().getEntityID().toString());
+			}
 
-		entityTag.setString("id", id);
+			Entity entity = EntityList.createEntityFromNBT(entityTag, world);
 
-		if (entity != null) {
-			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			if (entity == null) {
+				return null;
+			}
 
-			if (entity instanceof EntityLiving) {
-				((EntityLiving) entity).enablePersistence();
+			entity.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 
-				if (entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
+			if (entity instanceof EntityLivingBase) {
+				// fix attribute modifiers being applied in the first tick instead of directly when creating the entity from nbt
+				for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+					ItemStack stack = ((EntityLiving) entity).getItemStackFromSlot(slot);
+
+					if (!stack.isEmpty()) {
+						((EntityLiving) entity).getAttributeMap().applyAttributeModifiers(stack.getAttributeModifiers(slot));
+
+						if (slot.getSlotType() == Type.HAND) {
+							((EntityLivingBase) entity).handInventory.set(slot.getIndex(), stack);
+						} else {
+							((EntityLivingBase) entity).armorArray.set(slot.getIndex(), stack);
+						}
+					}
+				}
+
+				if (entity instanceof EntityLiving) {
+					((EntityLiving) entity).enablePersistence();
+
+					if (entity instanceof AbstractEntityCQR) {
+						((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
+					}
 				}
 			}
 
 			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (NBTBase passengerNBT : passengers) {
-				Entity passenger = this.createEntityFromTag(world, placement, pos, (NBTTagCompound) passengerNBT);
+				Entity passenger = createEntityFromTag(world, placement, pos, (NBTTagCompound) passengerNBT);
 				passenger.startRiding(entity);
 			}
-		}
 
-		return entity;
+			return entity;
+		} finally {
+			entityTag.setString("id", id);
+		}
 	}
 
 	public NBTTagCompound getTileEntityData() {
