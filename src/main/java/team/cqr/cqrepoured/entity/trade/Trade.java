@@ -386,7 +386,7 @@ public class Trade {
 
 	public void incStock() {
 		if (this.canRestock()) {
-			this.inStock += this.restockRate;
+			this.inStock = Math.min(this.inStock + this.restockRate, this.maxStock);
 			this.holder.onTradesUpdated();
 		}
 	}
@@ -401,11 +401,11 @@ public class Trade {
 			this.holder.onTradesUpdated();
 		}
 
-		List<Trade> trades = this.holder.getTrades().stream().filter(Trade::canRestock).collect(Collectors.toList());
+		List<Trade> trades = this.holder.getTrades().stream()
+				.filter(Trade::canRestock)
+				.filter(trade -> trade != this)
+				.collect(Collectors.toList());
 		if (!trades.isEmpty()) {
-			if (trades.contains(this)) {
-				trades.remove(this);
-			}
 			trades.get(rdm.nextInt(trades.size())).incStock();
 		}
 	}
@@ -443,7 +443,7 @@ public class Trade {
 	}
 	
 	public boolean canRestock() {
-		return this.hasLimitedStock && this.restockRate > 0 && this.inStock <= (this.maxStock - this.restockRate);
+		return this.hasLimitedStock && this.restockRate > 0 && this.inStock < this.maxStock;
 	}
 
 }
