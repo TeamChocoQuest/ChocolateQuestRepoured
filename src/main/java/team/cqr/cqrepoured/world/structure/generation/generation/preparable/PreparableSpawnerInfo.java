@@ -144,7 +144,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		for (int i = 0; i < items.tagCount(); i++) {
 			CompoundNBT itemTag = items.getCompoundTagAt(i);
 			CompoundNBT entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
-			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
+			Entity entity = createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
 				CompoundNBT newEntityTag = new CompoundNBT();
@@ -171,7 +171,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		for (int i = 0; i < items.tagCount() && i < tileEntity.inventory.getSlots(); i++) {
 			CompoundNBT itemTag = items.getCompoundTagAt(i);
 			CompoundNBT entityTag = itemTag.getCompoundTag("tag").getCompoundTag("EntityIn");
-			Entity entity = this.createEntityFromTag(world, placement, pos, entityTag);
+			Entity entity = createEntityFromTag(world, placement, pos, entityTag);
 
 			if (entity != null) {
 				CompoundNBT newEntityTag = new CompoundNBT();
@@ -190,7 +190,8 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		}
 	}
 
-	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, CompoundNBT entityTag) {
+	@Nullable
+	public static Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos, CompoundNBT entityTag) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -200,33 +201,55 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		entityTag.removeTag("Pos");
 
 		String id = entityTag.getString("id");
-		if (id.equals(CQRMain.MODID + ":dummy")) {
-			entityTag.setString("id", placement.getInhabitant().getEntityID().toString());
-		}
 
-		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+		try {
+			if (id.equals(CQRMain.MODID + ":dummy")) {
+				entityTag.setString("id", placement.getInhabitant().getEntityID().toString());
+			}
 
-		entityTag.setString("id", id);
+			Entity entity = EntityList.createEntityFromNBT(entityTag, world);
 
-		if (entity != null) {
-			entity.setPosition(pos.getX(), pos.getY(), pos.getZ());
+			if (entity == null) {
+				return null;
+			}
 
-			if (entity instanceof MobEntity) {
-				((MobEntity) entity).enablePersistence();
+			entity.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 
-				if (entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
+			if (entity instanceof EntityLivingBase) {
+				// fix attribute modifiers being applied in the first tick instead of directly when creating the entity from nbt
+				for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+					ItemStack stack = ((EntityLiving) entity).getItemStackFromSlot(slot);
+
+					if (!stack.isEmpty()) {
+						((EntityLiving) entity).getAttributeMap().applyAttributeModifiers(stack.getAttributeModifiers(slot));
+
+						if (slot.getSlotType() == Type.HAND) {
+							((EntityLivingBase) entity).handInventory.set(slot.getIndex(), stack);
+						} else {
+							((EntityLivingBase) entity).armorArray.set(slot.getIndex(), stack);
+						}
+					}
+				}
+
+				if (entity instanceof EntityLiving) {
+					((EntityLiving) entity).enablePersistence();
+
+					if (entity instanceof AbstractEntityCQR) {
+						((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(placement);
+					}
 				}
 			}
 
-			ListNBT passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
-			for (INBT passengerNBT : passengers) {
-				Entity passenger = this.createEntityFromTag(world, placement, pos, (CompoundNBT) passengerNBT);
+			NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+			for (NBTBase passengerNBT : passengers) {
+				Entity passenger = createEntityFromTag(world, placement, pos, (NBTTagCompound) passengerNBT);
 				passenger.startRiding(entity);
 			}
-		}
 
-		return entity;
+			return entity;
+		} finally {
+			entityTag.setString("id", id);
+		}
 	}
 
 	public CompoundNBT getTileEntityData() {
