@@ -1,15 +1,18 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
-
-import java.util.function.Supplier;
+import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 
 public class SPacketHandlerSyncEntity extends AbstractPacketHandler<CPacketSyncEntity> {
 
@@ -27,6 +30,8 @@ public class SPacketHandlerSyncEntity extends AbstractPacketHandler<CPacketSyncE
 				cqrentity.setDropChance(EquipmentSlotType.MAINHAND, packet.getDropChanceMainhand() / 100.0F);
 				cqrentity.setDropChance(EquipmentSlotType.OFFHAND, packet.getDropChanceOffhand() / 100.0F);
 				cqrentity.setSizeVariation(packet.getSizeScaling() / 100.0F);
+
+				CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> cqrentity), new SPacketSyncEntity(cqrentity));
 			}
 		}
 	}

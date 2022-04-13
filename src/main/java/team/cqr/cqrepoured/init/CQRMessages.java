@@ -78,6 +78,7 @@ public class CQRMessages {
 		registerServerToClient(SPacketUpdateElectrocuteCapability.class, CPacketHandlerUpdateElectrocuteCapability.class);
 		registerServerToClient(SPacketUpdateEmitterTarget.class, CPacketHandlerUpdateEmitterTarget.class);
 		registerServerToClient(SPacketSyncTrades.class, CPacketHandlerSyncTrades.class);
+		registerServerToClient(SPacketSyncEntity.class, CPacketHandlerSyncEntity.class);
 		
 		
 		registerClientToServer(CPacketSaveStructureRequest.class, SPacketHandlerSaveStructureRequest.class);
