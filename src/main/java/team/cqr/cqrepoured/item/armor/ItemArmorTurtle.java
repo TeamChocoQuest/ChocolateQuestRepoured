@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
@@ -30,23 +31,25 @@ import java.util.List;
 
 public class ItemArmorTurtle extends ArmorItem {
 
-	private AttributeModifier health;
+	
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemArmorTurtle(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 
-		this.health = new AttributeModifier("TurtleHealthModifier", 2.0D, Operation.ADDITION);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.MAX_HEALTH, new AttributeModifier("TurtleHealthModifier", 2.0D, Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-
 		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
-			multimap.put(Attributes.MAX_HEALTH, this.health);
+			return this.attributeModifier;
 		}
-
-		return multimap;
+		return super.getAttributeModifiers(slot, stack);
 	}
 
 	@Override
