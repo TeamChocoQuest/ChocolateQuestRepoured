@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -29,6 +31,9 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!this.entity.canIgniteTorch()) {
 			return false;
 		}
+		if (!isFlintNSteel(entity.getHeldItemMainhand()) && !isFlintNSteel(entity.getHeldItemOffhand())) {
+			return false;
+		}
 
 		if (this.random.nextInt(this.lastTickStarted + 60 >= this.entity.ticksExisted ? 5 : 20) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
@@ -40,6 +45,10 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 		}
 
 		return this.nearestTorch != null;
+	}
+
+	private boolean isFlintNSteel(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() == Items.FLINT_AND_STEEL;
 	}
 
 	@Override
