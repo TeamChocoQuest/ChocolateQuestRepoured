@@ -19,6 +19,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEmptyInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 public class PlateauDungeonPart implements IDungeonPart {
 
@@ -196,6 +197,9 @@ public class PlateauDungeonPart implements IDungeonPart {
 		public void markGround(CQStructure structure, BlockPos pos, Mirror mirror, Rotation rotation) {
 			List<PreparablePosInfo> blocks = structure.getBlockInfoList();
 			BlockPos size = structure.getSize();
+			BlockPos offset = Offset.NORTH_EAST.apply(BlockPos.ORIGIN, structure, mirror, rotation);
+			int offsetX = offset.getX() == 0 ? 0 : offset.getX() - 1;
+			int offsetZ = offset.getZ() == 0 ? 0 : offset.getZ() - 1;
 			for (int x = 0; x < structure.getSize().getX(); x++) {
 				for (int z = 0; z < structure.getSize().getZ(); z++) {
 					MutableBlockPos transformed = DungeonPlacement.transform(x, 0, z, mirror, rotation);
@@ -212,9 +216,9 @@ public class PlateauDungeonPart implements IDungeonPart {
 						y--;
 					}
 					if (y < 0) {
-						this.ground[x1][z1] = -1;
+						this.ground[offsetX + x1][offsetZ + z1] = -1;
 					} else {
-						this.ground[x1][z1] = Math.min(pos.getY() + y + 2, this.endY + 1);
+						this.ground[offsetX + x1][offsetZ + z1] = Math.min(pos.getY() + y + 2, this.endY + 1);
 					}
 				}
 			}
