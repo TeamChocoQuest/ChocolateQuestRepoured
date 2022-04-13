@@ -31,7 +31,7 @@ public class ItemArmorHeavy extends ArmorItem {
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
 		modifierBuilder.putAll(attributeMap);
 		modifierBuilder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier("HeavySpeedModifier", -0.05D, Operation.MULTIPLY_TOTAL));
-		modifierBuilder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier("HeavyKnockbackModifier", 0.1D, Operation.MULTIPLY_TOTAL));
+		modifierBuilder.put(Attributes.MOVEMENT_SPEED, new AttributeModifier("HeavyKnockbackModifier", -0.1D, Operation.MULTIPLY_TOTAL));
 		this.attributeModifier = modifierBuilder.build();
 	}
 
