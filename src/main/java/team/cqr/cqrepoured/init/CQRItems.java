@@ -73,7 +73,7 @@ public class CQRItems {
 
 	// Daggers
 	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.IRON_DAGGER, 25));
-	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamoond", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.DIAMOND_DAGGER, 20));
+	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamond", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.DIAMOND_DAGGER, 20));
 	public static final RegistryObject<ItemDaggerNinja> DAGGER_NINJA = register("dagger_ninja", prop -> new ItemDaggerNinja(prop, CQRMaterials.CQRItemTiers.NINJA_DAGGER, 15));
 	public static final RegistryObject<ItemDagger> DAGGER_MONKING = register("dagger_monking", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.MONKING_DAGGER, 10));
 
