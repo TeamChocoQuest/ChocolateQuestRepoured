@@ -19,6 +19,7 @@ import java.util.UUID;
 
 public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> {
 
+	public static final String TAG_TAMED_BY_CQR_MOB = "tamed_by_cqr_mob";
 	protected static final double MOUNT_SEARCH_RADIUS = 16;
 	protected static final double DISTANCE_TO_MOUNT = 2.0D;
 	protected static final boolean FORCE_MOUNTING = true;
@@ -32,39 +33,6 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		this.setFlags(EnumSet.of(Flag.MOVE));
 	}
 
-	protected boolean belongsToPlayerEntity(@Nonnull UUID uuid) {
-		/*
-		 * if (this.world instanceof WorldServer) {
-		 * WorldServer server = (WorldServer) this.world;
-		 * Entity byUUID = server.getEntityFromUuid(uuid);
-		 * return byUUID != null && byUUID instanceof EntityPlayer;
-		 * }
-		 */
-
-		return this.world.getPlayerByUUID(uuid) != null;
-	}
-
-	protected boolean isMountOwnedByPlayer(MobEntity mount) {
-
-		if (mount instanceof AbstractHorseEntity) {
-			AbstractHorseEntity horse = (AbstractHorseEntity) mount;
-			if (horse.getOwnerUUID() != null) {
-				return this.belongsToPlayerEntity(horse.getOwnerUUID());
-			}
-		}
-
-		if (mount instanceof IEntityOwnable) {
-			IEntityOwnable ownable = (IEntityOwnable) mount;
-			if (ownable.getOwner() != null) {
-				return ownable.getOwner() instanceof PlayerEntity;
-			}
-			if (ownable.getOwnerId() != null) {
-				return this.belongsToPlayerEntity(ownable.getOwnerId());
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public boolean canUse() {
 		if (!this.entity.canMountEntity()) {
@@ -74,16 +42,33 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			return false;
 		}
 		if (this.random.nextInt(10) == 0) {
+			boolean hasSaddle = hasSaddle();
 			Vector3d vec1 = this.entity.position().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vector3d vec2 = this.entity.position().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<MobEntity> possibleMounts = this.world.getEntitiesOfClass(MobEntity.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && !this.isMountOwnedByPlayer(input) && this.entity.getSensing().canSee(input));
+			List<MobEntity> possibleMounts = this.world.getEntitiesOfClass(MobEntity.class, aabb, input -> {
+				if (!TargetUtil.PREDICATE_MOUNTS.apply(input)) {
+					return false;
+				}
+				if (!this.entity.getSensing().canSee(input)) {
+					return false;
+				}
+				return hasSaddle || input.getTags().contains(TAG_TAMED_BY_CQR_MOB);
+			});
 			if (!possibleMounts.isEmpty()) {
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
 			}
 		}
 		return false;
+	}
+
+	private boolean hasSaddle() {
+		return isSaddle(entity.getMainHandItem()) || isSaddle(entity.getOffhandItem());
+	}
+
+	private boolean isSaddle(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() == Items.SADDLE;
 	}
 
 	@Override
@@ -95,6 +80,9 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			return false;
 		}
 		if (this.entityToMount == null) {
+			return false;
+		}
+		if (hasSaddle() || entityToMount.getTags().contains(TAG_TAMED_BY_CQR_MOB)) {
 			return false;
 		}
 		if (!this.entityToMount.isAlive()) {
@@ -135,6 +123,16 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			}
 			this.entity.getNavigation().stop();
 			this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
+
+			if (!entityToMount.getTags().contains(TAG_TAMED_BY_CQR_MOB)) {
+				entityToMount.addTag(TAG_TAMED_BY_CQR_MOB);
+
+				if (isSaddle(entity.getMainHandItem())) {
+					entity.getMainHandItem().shrink(1);
+				} else if (isSaddle(entity.getOffhandItem())) {
+					entity.getOffhandItem().shrink(1);
+				}
+			}
 		}
 	}
 
