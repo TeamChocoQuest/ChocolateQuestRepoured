@@ -59,11 +59,11 @@ public class ItemArmorTurtle extends ArmorItem {
 		if (player != null) {
 			int cooldown = CapabilityCooldownHandlerHelper.getCooldown(player, CQRItems.CHESTPLATE_TURTLE.get());
 			if (cooldown > 0) {
-				tooltip.add(new TranslationTextComponent(TextFormatting.RED + "description.turtle_armor_charging.name", this.convertCooldown(cooldown)));
+				tooltip.add(new TranslationTextComponent("item.cqrepoured.turtle_armor.charging", this.convertCooldown(cooldown)).withStyle(TextFormatting.RED));
 			}
 		}
 		
-		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "turtle_armor");
 	}
 
 	private String convertCooldown(int cd) {

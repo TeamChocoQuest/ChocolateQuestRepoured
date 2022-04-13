@@ -48,7 +48,7 @@ public class ItemArmorSlime extends ArmorItem {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "slime_armor");
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.item.sword;
 
+import java.util.List;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
@@ -11,8 +14,14 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.IExtendedItemTier;
+import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemDaggerNinja extends ItemDagger {
 
@@ -60,6 +69,14 @@ public class ItemDaggerNinja extends ItemDagger {
 			return super.use(worldIn, playerIn, handIn);
 		}
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+	}
+	
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.rear_damage.tooltip", "200%").withStyle(TextFormatting.BLUE));
+
+		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 	}
 
 }

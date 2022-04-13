@@ -151,7 +151,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "spear");
 	}
 
 	@Override

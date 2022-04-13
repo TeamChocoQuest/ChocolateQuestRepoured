@@ -81,9 +81,9 @@ public class ItemDagger extends ItemCQRWeapon {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent(TextFormatting.BLUE + "description.rear_damage.name", "200%"));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.rear_damage.tooltip", "200%").withStyle(TextFormatting.BLUE));
 
-		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+		ItemLore.addHoverTextLogic(tooltip, flagIn, "leap");
 	}
 
 }
