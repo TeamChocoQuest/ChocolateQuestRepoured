@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.item.armor;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.util.ITooltipFlag;
@@ -28,23 +29,24 @@ import java.util.List;
 
 public class ItemArmorBull extends ArmorItem {
 
-	private AttributeModifier strength;
+	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
 	public ItemArmorBull(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 
-		this.strength = new AttributeModifier("BullArmorModifier", 1D, Operation.ADDITION);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
+		modifierBuilder.putAll(attributeMap);
+		modifierBuilder.put(Attributes.ATTACK_DAMAGE,new AttributeModifier("BullArmorModifier", 1D, Operation.ADDITION));
+		this.attributeModifier = modifierBuilder.build();
 	}
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-
 		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
-			multimap.put(Attributes.ATTACK_DAMAGE, this.strength);
+			return this.attributeModifier;
 		}
-
-		return multimap;
+		return super.getAttributeModifiers(slot, stack);
 	}
 	
 	@Override
