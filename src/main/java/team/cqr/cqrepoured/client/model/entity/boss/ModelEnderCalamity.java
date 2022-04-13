@@ -57,7 +57,7 @@ public class ModelEnderCalamity extends ModelGeoCQRBase<EntityCQREnderCalamity> 
 		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
 		float correctPitch = bodyBone.getRotationX();
 		if (entity.rotateBodyPitch()) {
-			float pitch = (float) Math.toRadians(this.getPitch(entity, Minecraft.getMinecraft().getRenderPartialTicks()) - 90F);
+			float pitch = (float) Math.toRadians(this.getPitch(entity, customPredicate.getPartialTick()) - 90F);
 			pitch -= rootBone.getRotationX();
 			// System.out.println("Client pitch: " + pitch);
 			// System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);

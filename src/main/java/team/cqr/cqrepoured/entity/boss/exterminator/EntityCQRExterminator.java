@@ -79,7 +79,6 @@ import team.cqr.cqrepoured.init.CQRMaterials;
 import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.PartialTicksUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDontSpreadElectrocution, IMechanical, IDontRenderFire, IEntityMultiPart, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
@@ -464,7 +463,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return PlayState.STOP;
 		}
 
-		if (this.getSwingProgress(PartialTicksUtil.getCurrentPartialTicks()) > 0.0F) {
+		if (this.getSwingProgress(event.getPartialTick()) > 0.0F) {
 			boolean isKicking = this.dataManager.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, false));

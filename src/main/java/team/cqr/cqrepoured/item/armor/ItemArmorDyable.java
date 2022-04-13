@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ItemArmorDyable extends ItemArmor {
 
@@ -55,9 +56,9 @@ public class ItemArmorDyable extends ItemArmor {
 							float j = 1530.0F / (color >> 16 & 255);
 							float s = (color >> 8 & 255) / 255.0F;
 							float b = (color & 255) / 255.0F;
-							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
+							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + PartialTicksUtil.getCurrentPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
 						} else if ((color >> 24 & 15) > 0) {
-							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) / 15.0F * (color >> 25 & 15));
+							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + PartialTicksUtil.getCurrentPartialTicks()) / 15.0F * (color >> 25 & 15));
 							int r = Math.round((color >> 16 & 255) * f);
 							int g = Math.round((color >> 8 & 255) * f);
 							int b = Math.round((color & 255) * f);

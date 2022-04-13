@@ -6,7 +6,6 @@ import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.ModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 
@@ -39,7 +38,7 @@ public class ModelExterminator extends ModelGeoCQRBase<EntityCQRExterminator> {
 		}
 
 		try {
-			final float partialTicks = PartialTicksUtil.getCurrentPartialTicks();
+			final float partialTicks = customPredicate.getPartialTick();
 
 			if (entity.limbSwingAmount >= 0.01D && (!entity.isCannonRaised() && ((entity.getCurrentAnimation() == null) || !entity.getCurrentAnimation().equalsIgnoreCase(EntityCQRExterminator.ANIM_NAME_THROW)))) {
 				IBone torsoBone = this.getAnimationProcessor().getBone(BONE_IDENT_TORSO);
