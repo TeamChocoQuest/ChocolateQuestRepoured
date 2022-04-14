@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -45,8 +46,10 @@ public class ItemSuperTool extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Mode: " + this.getModeName(this.getMode(stack))));
-		tooltip.add(new StringTextComponent(TextFormatting.BLUE + "Block: " + this.getBlock(stack).getName()));
+		tooltip.add(new StringTextComponent("Mode: " + this.getModeName(this.getMode(stack))).withStyle(TextFormatting.BLUE));
+		//tooltip.add(new StringTextComponent("Block: " + this.getBlock(stack).asItem().toString()).withStyle(TextFormatting.BLUE));
+		tooltip.add(new StringTextComponent("Block: " + this.getBlock(stack).getName().getString()).withStyle(TextFormatting.BLUE));
+	
 	}
 
 	public String getModeName(int mode) {
