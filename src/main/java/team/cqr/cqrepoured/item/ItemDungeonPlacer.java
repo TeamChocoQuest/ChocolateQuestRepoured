@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ItemDungeonPlacer extends ItemLore {
-
+//#TODO register
 	private static final List<ClientDungeon> CLIENT_DUNGEON_LIST = new ArrayList<>();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
@@ -60,7 +60,7 @@ public class ItemDungeonPlacer extends ItemLore {
 					compound.putInt("iconID", iconID);
 					ListNBT dependencies = new ListNBT();
 					for (String dependency : fakeDungeon.getDependencies()) {
-						dependencies.appendTag(StringNBT.valueOf(dependency));
+						dependencies.add(StringNBT.valueOf(dependency));
 					}
 					compound.put("dependencies", dependencies);
 					stack.setTag(compound);

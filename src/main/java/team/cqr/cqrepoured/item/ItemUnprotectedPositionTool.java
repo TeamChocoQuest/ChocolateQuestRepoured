@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.item;
 
 import com.google.common.collect.Streams;
+import net.minecraft.entity.passive.horse.AbstractChestedHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -78,7 +79,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 
 	public void addPosition(ItemStack stack, BlockPos pos) {
 		int[] data = new int[] { pos.getX(), pos.getY(), pos.getZ() };
-		this.getOrCreatePositionTagList(stack).appendTag(new IntArrayNBT(data)); //#TODO not sure what should be there, dont want to break things ;]
+		this.getOrCreatePositionTagList(stack).add(new IntArrayNBT(data));
 	}
 
 	public boolean removePosition(ItemStack stack, BlockPos pos) {

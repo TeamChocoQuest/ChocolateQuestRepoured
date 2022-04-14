@@ -140,7 +140,7 @@ public class ItemCursedBone extends ItemLore {
 	private String getEntityName(String registryName) {
 		EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName));
 		if (entityType != null) {
-			return I18n.format("entity." + ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName)).getName() + ".name");
+			return new TranslationTextComponent("entity." + ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName)).toString() + ".name").toString();
 		}
 		return "missingNO";
 	}
