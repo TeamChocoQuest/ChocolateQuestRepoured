@@ -75,7 +75,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entityToMount == null) {
 			return false;
 		}
-		if (hasSaddle() || entityToMount.getTags().contains(TAG_TAMED_BY_CQR_MOB)) {
+		if (!hasSaddle() && !entityToMount.getTags().contains(TAG_TAMED_BY_CQR_MOB)) {
 			return false;
 		}
 		if (!this.entityToMount.isEntityAlive()) {
