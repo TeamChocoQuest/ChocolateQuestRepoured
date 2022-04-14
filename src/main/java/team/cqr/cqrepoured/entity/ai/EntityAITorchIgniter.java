@@ -53,6 +53,9 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if (!isFlintNSteel(entity.getHeldItemMainhand()) && !isFlintNSteel(entity.getHeldItemOffhand())) {
+			return false;
+		}
 		if (this.nearestTorch == null) {
 			return false;
 		}
