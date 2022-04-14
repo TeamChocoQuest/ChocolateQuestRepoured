@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
-public class SPacketSyncEntity implements IMessage {
+public class SPacketSyncEntity extends AbstractPacket<SPacketSyncEntity> {
 
 	private int entityId;
 	private double healthScaling;
@@ -22,41 +22,15 @@ public class SPacketSyncEntity implements IMessage {
 	}
 
 	public SPacketSyncEntity(AbstractEntityCQR entity) {
-		this.entityId = entity.getEntityId();
+		this.entityId = entity.getId();
 		this.healthScaling = entity.getHealthScale();
-		this.dropChanceHelm = entity.getDropChance(EntityEquipmentSlot.HEAD);
-		this.dropChanceChest = entity.getDropChance(EntityEquipmentSlot.CHEST);
-		this.dropChanceLegs = entity.getDropChance(EntityEquipmentSlot.LEGS);
-		this.dropChanceFeet = entity.getDropChance(EntityEquipmentSlot.FEET);
-		this.dropChanceMainhand = entity.getDropChance(EntityEquipmentSlot.MAINHAND);
-		this.dropChanceOffhand = entity.getDropChance(EntityEquipmentSlot.OFFHAND);
+		this.dropChanceHelm = entity.getDropChance(EquipmentSlotType.HEAD);
+		this.dropChanceChest = entity.getDropChance(EquipmentSlotType.CHEST);
+		this.dropChanceLegs = entity.getDropChance(EquipmentSlotType.LEGS);
+		this.dropChanceFeet = entity.getDropChance(EquipmentSlotType.FEET);
+		this.dropChanceMainhand = entity.getDropChance(EquipmentSlotType.MAINHAND);
+		this.dropChanceOffhand = entity.getDropChance(EquipmentSlotType.OFFHAND);
 		this.sizeScaling = entity.getSizeVariation();
-	}
-
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.entityId = buf.readInt();
-		this.healthScaling = buf.readDouble();
-		this.dropChanceHelm = buf.readFloat();
-		this.dropChanceChest = buf.readFloat();
-		this.dropChanceLegs = buf.readFloat();
-		this.dropChanceFeet = buf.readFloat();
-		this.dropChanceMainhand = buf.readFloat();
-		this.dropChanceOffhand = buf.readFloat();
-		this.sizeScaling = buf.readFloat();
-	}
-
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeDouble(this.healthScaling);
-		buf.writeFloat(this.dropChanceHelm);
-		buf.writeFloat(this.dropChanceChest);
-		buf.writeFloat(this.dropChanceLegs);
-		buf.writeFloat(this.dropChanceFeet);
-		buf.writeFloat(this.dropChanceMainhand);
-		buf.writeFloat(this.dropChanceOffhand);
-		buf.writeFloat(this.sizeScaling);
 	}
 
 	public int getEntityId() {
@@ -93,6 +67,40 @@ public class SPacketSyncEntity implements IMessage {
 
 	public float getSizeScaling() {
 		return this.sizeScaling;
+	}
+
+	@Override
+	public Class<SPacketSyncEntity> getPacketClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SPacketSyncEntity fromBytes(PacketBuffer buffer) {
+		SPacketSyncEntity result = new SPacketSyncEntity();
+		result.entityId = buffer.readInt();
+		result.healthScaling = buffer.readDouble();
+		result.dropChanceHelm = buffer.readFloat();
+		result.dropChanceChest = buffer.readFloat();
+		result.dropChanceLegs = buffer.readFloat();
+		result.dropChanceFeet = buffer.readFloat();
+		result.dropChanceMainhand = buffer.readFloat();
+		result.dropChanceOffhand = buffer.readFloat();
+		result.sizeScaling = buffer.readFloat();
+		return result;
+	}
+
+	@Override
+	public void toBytes(SPacketSyncEntity packet, PacketBuffer buffer) {
+		buffer.writeInt(packet.entityId);
+		buffer.writeDouble(packet.healthScaling);
+		buffer.writeFloat(packet.dropChanceHelm);
+		buffer.writeFloat(packet.dropChanceChest);
+		buffer.writeFloat(packet.dropChanceLegs);
+		buffer.writeFloat(packet.dropChanceFeet);
+		buffer.writeFloat(packet.dropChanceMainhand);
+		buffer.writeFloat(packet.dropChanceOffhand);
+		buffer.writeFloat(packet.sizeScaling);
 	}
 
 }

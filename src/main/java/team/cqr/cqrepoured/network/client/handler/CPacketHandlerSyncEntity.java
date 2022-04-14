@@ -1,39 +1,34 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 
-public class CPacketHandlerSyncEntity implements IMessageHandler<SPacketSyncEntity, IMessage> {
+public class CPacketHandlerSyncEntity extends AbstractPacketHandler<SPacketSyncEntity> {
 
 	@Override
-	public IMessage onMessage(SPacketSyncEntity message, MessageContext ctx) {
-		if (ctx.side.isClient()) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
-				World world = CQRMain.proxy.getWorld(ctx);
-				Entity entity = world.getEntityByID(message.getEntityId());
-				if (entity instanceof AbstractEntityCQR) {
-					AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
-					cqrentity.setHealthScale(message.getHealthScaling());
-					cqrentity.setDropChance(EntityEquipmentSlot.HEAD, message.getDropChanceHelm());
-					cqrentity.setDropChance(EntityEquipmentSlot.CHEST, message.getDropChanceChest());
-					cqrentity.setDropChance(EntityEquipmentSlot.LEGS, message.getDropChanceLegs());
-					cqrentity.setDropChance(EntityEquipmentSlot.FEET, message.getDropChanceFeet());
-					cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, message.getDropChanceMainhand());
-					cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, message.getDropChanceOffhand());
-					cqrentity.setSizeVariation(message.getSizeScaling());
-				}
-				CQRMain.proxy.updateGui();
-			});
+	protected void execHandlePacket(SPacketSyncEntity packet, Supplier<Context> context, World world, PlayerEntity player) {
+		Entity entity = world.getEntity(packet.getEntityId());
+		if (entity instanceof AbstractEntityCQR) {
+			AbstractEntityCQR cqrentity = (AbstractEntityCQR) entity;
+			cqrentity.setHealthScale(packet.getHealthScaling());
+			cqrentity.setDropChance(EquipmentSlotType.HEAD, packet.getDropChanceHelm());
+			cqrentity.setDropChance(EquipmentSlotType.CHEST, packet.getDropChanceChest());
+			cqrentity.setDropChance(EquipmentSlotType.LEGS, packet.getDropChanceLegs());
+			cqrentity.setDropChance(EquipmentSlotType.FEET, packet.getDropChanceFeet());
+			cqrentity.setDropChance(EquipmentSlotType.MAINHAND, packet.getDropChanceMainhand());
+			cqrentity.setDropChance(EquipmentSlotType.OFFHAND, packet.getDropChanceOffhand());
+			cqrentity.setSizeVariation(packet.getSizeScaling());
 		}
-		return null;
+		CQRMain.PROXY.updateGui();
 	}
 
 }
