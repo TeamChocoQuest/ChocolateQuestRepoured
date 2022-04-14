@@ -15,6 +15,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -97,14 +98,14 @@ public class ItemStructureSelector extends Item {
 		BlockPos pos2 = this.getSecondPos(stack);
 
 		if (pos1 != null) {
-			tooltip.add(new StringTextComponent("First position: " + pos1));
+			tooltip.add(new StringTextComponent("First position: " + pos1).withStyle(TextFormatting.BLUE));
 		} else {
-			tooltip.add(new StringTextComponent("First position: not set"));
+			tooltip.add(new StringTextComponent("First position: not set").withStyle(TextFormatting.BLUE));
 		}
 		if (pos2 != null) {
-			tooltip.add(new StringTextComponent("Second position: " + pos2));
+			tooltip.add(new StringTextComponent("Second position: " + pos2).withStyle(TextFormatting.BLUE));
 		} else {
-			tooltip.add(new StringTextComponent("Second position: not set"));
+			tooltip.add(new StringTextComponent("Second position: not set").withStyle(TextFormatting.BLUE));
 		}
 	}
 
