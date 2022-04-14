@@ -609,6 +609,7 @@
     "item.cqrepoured.dummy_shield.tooltip": "\u00A79A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.",
     "item.cqrepoured.king_crown.tooltip": "§9Can be worn on its own, or combined with a helmet. Either way, you'll look as regal as you've always felt.",
     "item.cqrepoured.path_tool.tooltip": "§9Sneak+Left Click an entity to apply the path to that entity.%sLeft Click an entity to copy the path of that entity.%sSneak+Right Click a block to add a new path node.%sRight Click a block to select an existing path node.%sSneak+Right Click air to clear the current path.",
+    "item.cqrepoured.unprotected_positions_tool.tooltip": "WIP",
 
     "_comment": "Materials",
     "item.cqrepoured.giant_spider_poison.tooltip": "§9This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.",
