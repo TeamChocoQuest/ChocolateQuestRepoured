@@ -75,7 +75,7 @@ public class ItemCrown extends ArmorItem {
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		LazyOptional<CapabilityDynamicCrown> lOpCap = stack.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null);
 		if (lOpCap.isPresent()) {
-			tooltip.add(new StringTextComponent("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).toString()));
+			tooltip.add(new StringTextComponent("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).getHoverName().getString()));
 		}
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
