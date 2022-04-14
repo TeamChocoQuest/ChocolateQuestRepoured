@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.*;
@@ -140,7 +139,7 @@ public class ItemCursedBone extends ItemLore {
 	private String getEntityName(String registryName) {
 		EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName));
 		if (entityType != null) {
-			return new TranslationTextComponent("entity." + ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName)).toString() + ".name").toString();
+			return new TranslationTextComponent(entityType.toString()).getString();
 		}
 		return "missingNO";
 	}
