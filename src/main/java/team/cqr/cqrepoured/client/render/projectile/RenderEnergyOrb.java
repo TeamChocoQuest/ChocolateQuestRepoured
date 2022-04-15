@@ -1,9 +1,8 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.model.Model;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -15,7 +14,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 public class RenderEnergyOrb extends EntityRenderer<ProjectileEnergyOrb> {
 
 	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/energy_orb.png");
-	private final ModelBase modelEnderCrystal = new ModelEnergyOrb(0.0F);
+	private final Model modelEnderCrystal = new ModelEnergyOrb(0.0F);
 	private final BossDeathRayHelper rayHelper;
 
 	public RenderEnergyOrb(EntityRendererManager renderManager) {
@@ -24,7 +23,7 @@ public class RenderEnergyOrb extends EntityRenderer<ProjectileEnergyOrb> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileEnergyOrb entity) {
+	public ResourceLocation getTextureLocation(ProjectileEnergyOrb pEntity) {
 		return RenderEnergyOrb.ENDER_CRYSTAL_TEXTURES;
 	}
 
