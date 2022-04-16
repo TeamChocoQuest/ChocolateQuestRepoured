@@ -1,37 +1,74 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.inventory.EquipmentSlotType;
-import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQROgre;
-import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.geo.entity.ModelCQROgreGeo;
+import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQROgre;
 
-public class RenderCQROgre extends RenderCQREntity<EntityCQROgre> {
+public class RenderCQROgre extends RenderCQRBipedBaseGeo<EntityCQROgre> {
 
-	public RenderCQROgre(EntityRendererManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelCQROgre(), 0.5F, "mob/ogre", 1.0D, 1.0D);
+	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/ogre.png");
+	
+	public RenderCQROgre(EntityRendererManager renderManager) {
+		super(renderManager, new ModelCQROgreGeo(CQRMain.prefix("geo/entity/biped_ogre.geo.json"), TEXTURE, "mob/ogre"));
 	}
 
 	@Override
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		this.applyRotations(modelRenderer);
-		GlStateManager.translate(0.0D, 0.0D, 0.0D);
-		this.resetRotations(modelRenderer);
+	protected void calculateArmorStuffForBone(String boneName, EntityCQROgre currentEntity) {
+		standardArmorCalculationForBone(boneName, currentEntity);
 	}
 
 	@Override
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		if (slot == EquipmentSlotType.CHEST) {
-			this.applyRotations(modelRenderer);
-			GlStateManager.scale(1.0D, 1.0D, 1.25D);
-			this.resetRotations(modelRenderer);
-		} else if (slot == EquipmentSlotType.LEGS) {
-			this.applyRotations(modelRenderer);
-			GlStateManager.scale(1.1D, 1.0D, 1.45D);
-			this.resetRotations(modelRenderer);
-		}
+	protected void calculateItemStuffForBone(String boneName, EntityCQROgre currentEntity) {
+		standardItemCalculationForBone(boneName, currentEntity);
 	}
+
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQROgre currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected void preRenderItem(ItemStack item, String boneName, EntityCQROgre currentEntity) {
+		
+	}
+
+	@Override
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQROgre currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(ItemStack item, String boneName, EntityCQROgre currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQROgre currentEntity) {
+		
+	}
+
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQROgre currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQROgre currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQROgre currentEntity, IBone bone) {
+		
+	}
+
 
 }
