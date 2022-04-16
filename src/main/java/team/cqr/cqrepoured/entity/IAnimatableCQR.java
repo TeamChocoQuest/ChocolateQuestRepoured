@@ -69,6 +69,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		data.addAnimationController(new AnimationController<>(this, "controller_idle", 0, this::predicateIdle));
 		// Body pose
 		data.addAnimationController(new AnimationController<>(this, "controller_body_pose", 20, this::predicateBodyPose));
+		// Walking
+		data.addAnimationController(new AnimationController<>(this, "controller_walk", 10, this::predicateWalking));
 		// Arms
 		data.addAnimationController(new AnimationController<>(this, "controller_left_hand_pose", 10, this::predicateLeftArmPose));
 		data.addAnimationController(new AnimationController<>(this, "controller_right_hand_pose", 10, this::predicateRightArmPose));
@@ -242,6 +244,17 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		}
 		return PlayState.STOP;
 	}
+	
+	public String ANIM_NAME_WALKING = ANIM_NAME_PREFIX + "legs.walk";
+	
+	default <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
+		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALKING, true));
+			event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
 
 	//Access to entity stuff
 	public boolean isSitting();
@@ -265,5 +278,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public ItemStack getOffhandItem();
 
 	public ItemStack getMainHandItem();	
+	
+	public boolean isSprinting();
 
 }
