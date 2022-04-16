@@ -287,13 +287,15 @@ public class TargetUtil {
 		}
 
 		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
-		if (target instanceof PlayerEntity && faction == FactionRegistry.DUMMY_FACTION) {
-			if (!(entity instanceof MonsterEntity)) {
-				return false;
-			}
-		} else {
-			if (!faction.isEnemy(target)) {
-				return false;
+		if(faction != null) {
+			if (target instanceof PlayerEntity && faction == FactionRegistry.DUMMY_FACTION) {
+				if (!(entity instanceof MonsterEntity)) {
+					return false;
+				}
+			} else {
+				if (!faction.isEnemy(target)) {
+					return false;
+				}
 			}
 		}
 
