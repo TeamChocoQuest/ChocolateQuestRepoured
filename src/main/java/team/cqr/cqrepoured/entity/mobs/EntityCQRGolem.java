@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
+import java.util.Set;
+
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -9,13 +11,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
-public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
+public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical, IAnimatableCQR {
 
 	public EntityCQRGolem(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
@@ -70,6 +74,24 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical {
 		
 		this.getAttribute(Attributes.ARMOR).setBaseValue(ArmorMaterial.IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
 		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(ArmorMaterial.IRON.getToughness());
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }
