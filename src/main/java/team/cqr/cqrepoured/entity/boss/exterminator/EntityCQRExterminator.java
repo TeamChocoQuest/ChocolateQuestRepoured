@@ -320,6 +320,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public void registerControllers(AnimationData data) {
 		// Spin animation for tesla coils
 		data.addAnimationController(new AnimationController<>(this, "controller_spin_coils", 0, this::predicateSpinCoils));
+		
+		// Walking animation
+		data.addAnimationController(new AnimationController<>(this, "controller_walking", 10, this::predicateWalking));
 
 		// Punch and Kick
 		data.addAnimationController(new AnimationController<>(this, "controller_kick_and_punch", 0, this::predicateSimpleAttack));
@@ -456,6 +459,26 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			event.getController().clearAnimationCache();
 		}
 		return PlayState.CONTINUE;
+	}
+	
+	public static final String ANIM_NAME_WALK_NO_BODY_SWING = ANIM_NAME_PREFIX + "walk_legs_only";
+	public static final String ANIM_NAME_WALK = ANIM_NAME_PREFIX + "walk";
+	
+	private <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
+		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
+			return PlayState.STOP;
+		}
+
+		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
+			if ((this.isCannonRaised() && this.isCannonArmPlayingAnimation()) || this.isExecutingThrow()) {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALK_NO_BODY_SWING, true));
+			} else {
+				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALK, true));
+			}
+			event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
 	}
 
 	@Override
