@@ -18,7 +18,7 @@ public class RenderCQRDwarf extends RenderCQRBipedBaseGeo<EntityCQRDwarf> {
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/dwarf_0.png");
 
 	public RenderCQRDwarf(EntityRendererManager renderManager, AnimatedGeoModel<EntityCQRDwarf> modelProvider) {
-		super(renderManager, new ModelCQRDwarfGeo(TEXTURE, STANDARD_BIPED_GEO_MODEL, "dwarf"), 0.9F, 0.65F);
+		super(renderManager, new ModelCQRDwarfGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "dwarf"), 0.9F, 0.65F);
 	}
 
 	@Override
