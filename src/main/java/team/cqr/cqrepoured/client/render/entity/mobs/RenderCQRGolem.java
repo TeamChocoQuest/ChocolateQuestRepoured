@@ -10,6 +10,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.ModelCQRGolemGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
 
 public class RenderCQRGolem extends RenderCQRBipedBaseGeo<EntityCQRGolem> {
@@ -18,6 +19,8 @@ public class RenderCQRGolem extends RenderCQRBipedBaseGeo<EntityCQRGolem> {
 	
 	public RenderCQRGolem(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRGolemGeo(CQRMain.prefix("geo/entity/biped_golem.geo.json"), TEXTURE, "mob/golem"));
+		
+		this.addLayer(new LayerGlowingAreasGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
