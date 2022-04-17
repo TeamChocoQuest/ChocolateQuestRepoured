@@ -82,7 +82,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 // DONE: Create helper classes to control arm management (status, animations, etc)
 public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAnimatable, ISummoner, ICirclingEntity, IServerAnimationReceiver, IAnimationTickable {
 
-	private static final int HURT_DURATION = 24; // 1.2 * 20
+	private static final int HURT_DURATION = 8; // 1.2 * 20
 	private static final int ARENA_RADIUS = 20;
 
 	private int cqrHurtTime = 0;
