@@ -17,7 +17,7 @@ public class ECPhaseTeleportLaser implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canSummonAlliesDuringPhase() {
-		return true;
+		return false;
 	}
 
 	@Override
