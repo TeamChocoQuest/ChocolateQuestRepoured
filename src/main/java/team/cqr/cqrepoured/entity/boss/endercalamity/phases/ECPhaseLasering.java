@@ -17,7 +17,7 @@ public class ECPhaseLasering implements IEnderCalamityPhase {
 
 	@Override
 	public boolean canSummonAlliesDuringPhase() {
-		return true;
+		return false;
 	}
 
 	@Override
