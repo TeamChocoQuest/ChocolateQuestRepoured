@@ -790,7 +790,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.tennisAI.calculateRemainingAttempts();
 					this.noTennisCounter++;
-					if (this.noTennisCounter > (this.level.getDifficulty().getId() + 2) * 2) {
+					//TODO: Move to config?
+					if (this.noTennisCounter > 5) {
 						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 						this.noTennisCounter = 0;
 					}
