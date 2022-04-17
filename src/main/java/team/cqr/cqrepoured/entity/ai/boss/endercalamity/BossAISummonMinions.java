@@ -82,9 +82,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			pos = pos.offset(-2 + this.entity.getRandom().nextInt(3), 0, -2 + this.entity.getRandom().nextInt(3));
 			minion.setPos(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
-			
+
 			//minion.onInitialSpawn(this.world.getCurrentDifficultyAt(minion.blockPosition()), null);
 			minion.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(minion.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
+			
+			if (DungeonGenUtils.percentageRandom(0.33, world.random)) {
+				minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
+			}
+			
 			if(minion instanceof EntityCQREnderman) {
 				((EntityCQREnderman)minion).setMayTeleport(false);
 			}
@@ -132,11 +137,6 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
 			break;
 		}
-
-		if (DungeonGenUtils.percentageRandom(0.33, world.random)) {
-			entity.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
-		}
-		//TODO: Disable teleport for minions
 
 		return entity;
 	}
