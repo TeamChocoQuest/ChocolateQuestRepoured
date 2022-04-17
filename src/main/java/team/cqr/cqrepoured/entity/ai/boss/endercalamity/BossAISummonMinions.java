@@ -69,7 +69,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			this.borderMinion = 80;
 
 			double seed = 1 - this.entity.getHealth() / this.entity.getMaxHealth();
-			seed *= 4;
+			seed *= DungeonGenUtils.percentageRandom(0.2, world.rand) ? 4 : 3;
 
 			AbstractEntityCQR minion = this.getNewMinion((int) seed, this.world);
 			BlockPos pos = this.entity.hasHomePositionCQR() ? this.entity.getHomePositionCQR() : this.entity.getPosition();
