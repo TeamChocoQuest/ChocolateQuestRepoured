@@ -89,6 +89,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			if (DungeonGenUtils.percentageRandom(0.33, world.random)) {
 				minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
 			}
+			minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ItemStack.EMPTY);
 			
 			if(minion instanceof EntityCQREnderman) {
 				((EntityCQREnderman)minion).setMayTeleport(false);
