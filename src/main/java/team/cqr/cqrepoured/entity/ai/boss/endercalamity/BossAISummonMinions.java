@@ -76,7 +76,6 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			pos = pos.add(-2 + this.entity.getRNG().nextInt(3), 0, -2 + this.entity.getRNG().nextInt(3));
 			minion.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
-			minion.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(minion)), null);
 			
 			if (DungeonGenUtils.percentageRandom(0.33, world.rand)) {
 				minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
@@ -104,6 +103,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private AbstractEntityCQR getNewMinion(int seed, World world) {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
+		entity.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(entity)), null);
 		switch (seed) {
 		case 4:
 			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
