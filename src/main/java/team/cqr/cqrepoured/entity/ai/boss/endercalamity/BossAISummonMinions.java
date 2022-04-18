@@ -81,7 +81,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			this.borderMinion = 80;
 
 			double seed = 1 - this.entity.getHealth() / this.entity.getMaxHealth();
-			seed *= DungeonGenUtils.percentageRandom(0.2, world.rand) ? 4 : 3;
+			seed *= DungeonGenUtils.percentageRandom(0.2, world.random) ? 4 : 3;
 
 			AbstractEntityCQR minion = this.getNewMinion((int) seed, this.world);
 			BlockPos pos = this.entity.hasHomePositionCQR() ? this.entity.getHomePositionCQR() : this.entity.blockPosition();
@@ -116,7 +116,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 
 	private AbstractEntityCQR getNewMinion(int seed, World world) {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
-		entity.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(minion.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
+		entity.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
 		switch (seed) {
 		case 4:
 			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
