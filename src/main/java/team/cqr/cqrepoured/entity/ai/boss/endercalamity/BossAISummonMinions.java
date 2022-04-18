@@ -16,6 +16,12 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
+	
+	//TODO: Change it to the following
+	// - minions spawn in multiple waves, waves begin once the previous one has been cleared
+	// - wave count = 3 + 3 * (1- boss HP percent)
+	// - entity count per wave = difficultyID * nearbyPlayers * wave
+	// - equipment loadout: Gets better with wave count
 
 	private int minionSpawnTick = 0;
 	private int borderMinion = 80;
