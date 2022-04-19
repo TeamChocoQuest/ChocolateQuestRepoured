@@ -9,21 +9,18 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
-import team.cqr.cqrepoured.mixinutil.IEntityRendererSelfAccessorHelper;
 
 @Mixin(EntityRendererManager.class)
 public abstract class MixinEntityRendererManager {
 	
 	@Inject(
-			at = @At("TAIL"),
+			at = @At("RETURN"),
 			method = "getRenderer(Lnet/minecraft/entity/Entity;)Lnet/minecraft/client/renderer/entity/EntityRenderer;",
 			cancellable = true
 	)
 	private void mixinGetRenderer(Entity entityIn, CallbackInfoReturnable<EntityRenderer<? extends Entity>> cir) {
-		if(entityIn instanceof CQRPartEntity<?> && this instanceof IEntityRendererSelfAccessorHelper) {
-			if(((IEntityRendererSelfAccessorHelper)this).getSelfOrNull() != null) {
-				cir.setReturnValue(((CQRPartEntity<?>)entityIn).renderer(((IEntityRendererSelfAccessorHelper)this).getSelfOrNull()));
-			}
+		if(entityIn instanceof CQRPartEntity<?> ) {
+			cir.setReturnValue(((CQRPartEntity<?>)entityIn).renderer((EntityRendererManager)(Object)this));
 		}
 	}
 

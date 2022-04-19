@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.entity.CQRPartEntity;
 public abstract class MixinClientWorld {
 	
 	@Inject(
-			at = @At("TAIL"),
+			at = @At("RETURN"),
 			method = "entitiesForRendering()Ljava/lang/Iterable;",
 			cancellable = true
 	)
@@ -25,7 +25,7 @@ public abstract class MixinClientWorld {
 		List<Entity> list = new ArrayList<>();
 		Iterable<Entity> iter = cir.getReturnValue();
 		//COmmented out until fixed, currently causes the game to crash cause it leads to it assigning the geckolib renderer to the golem parts?!?!
-		/*iter.forEach(entity -> {
+		iter.forEach(entity -> {
 			list.add(entity);
 			if(entity.isMultipartEntity() && entity.getParts() != null) {
 				for(PartEntity<?> part : entity.getParts()) {
@@ -34,7 +34,7 @@ public abstract class MixinClientWorld {
 					}
 				}
 			}
-		});*/
+		});
 		cir.setReturnValue(iter);
 	}
 

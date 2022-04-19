@@ -19,13 +19,10 @@ public abstract class MixinTrackedEntity {
 			method = "sendDirtyEntityData()V"
 	)
 	private void mixinSendMetadata(CallbackInfo ci) {
-		if(this instanceof AccessorTrackedEntity) {
-			AccessorTrackedEntity ate = (AccessorTrackedEntity) this;
-			Entity trackedEntity = ate.getEntity();
-			
-			if(trackedEntity.isMultipartEntity()) {
-				CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> trackedEntity), new SPacketUpdateCQRMultipart(trackedEntity));
-			}
+		Entity trackedEntity = ((TrackedEntity)((Object)this)).entity;
+		
+		if(trackedEntity.isMultipartEntity()) {
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> trackedEntity), new SPacketUpdateCQRMultipart(trackedEntity));
 		}
 	}
 	

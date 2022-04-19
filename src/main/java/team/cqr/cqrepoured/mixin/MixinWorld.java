@@ -21,7 +21,7 @@ import team.cqr.cqrepoured.mixinutil.PartEntityCache;
 public abstract class MixinWorld {
 	
 	@Inject(
-			at = @At("TAIL"),
+			at = @At("RETURN"),
 			method = "getEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/AxisAlignedBB;Ljava/util/function/Predicate;)Ljava/util/List;",
 			cancellable = true
 	)
