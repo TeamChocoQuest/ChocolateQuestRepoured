@@ -71,8 +71,7 @@ public class SPacketSyncEntity extends AbstractPacket<SPacketSyncEntity> {
 
 	@Override
 	public Class<SPacketSyncEntity> getPacketClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return SPacketSyncEntity.class;
 	}
 
 	@Override
