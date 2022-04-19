@@ -8,7 +8,7 @@ import java.util.WeakHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.entity.CQRPartEntity;
 
 public class PartEntityCache {
 	
-	public static final WeakHashMap<IWorld, List<CQRPartEntity<?>>> PART_ENTITY_CACHE_CQR = new WeakHashMap<>();
+	public static final WeakHashMap<World, List<CQRPartEntity<?>>> PART_ENTITY_CACHE_CQR = new WeakHashMap<>();
 
 	public static void registerMultipartEvents(IEventBus bus) {
 		bus.addListener((Consumer<EntityJoinWorldEvent>) event -> {
