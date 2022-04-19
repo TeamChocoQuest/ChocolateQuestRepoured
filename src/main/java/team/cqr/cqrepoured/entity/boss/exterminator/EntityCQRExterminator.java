@@ -191,12 +191,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Override
 	protected void registerGoals() {
-		if (CQRConfig.advanced.debugAI) {
+		/*if (CQRConfig.advanced.debugAI) {
 			//this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
 		this.goalSelector.addGoal(1, new SwimGoal(this));
-		this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
+		//this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
@@ -226,7 +226,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
 		this.goalSelector.addGoal(24, new EntityAILooter(this));
 
-		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		//this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
 		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
 		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
 		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));
@@ -235,7 +235,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.targetSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
 		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
-		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
+		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));*/
 	}
 
 	public LivingEntity getElectroCuteTargetLeft() {

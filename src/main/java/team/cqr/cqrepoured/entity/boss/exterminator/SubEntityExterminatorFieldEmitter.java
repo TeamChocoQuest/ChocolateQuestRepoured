@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -110,6 +111,11 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 			return ActionResultType.FAIL;
 		}
 		return this.exterminator.interact(player, hand);
+	}
+	
+	@Override
+	protected Class<? extends CQRPartEntity<?>> getClassForRenderer() {
+		return SubEntityExterminatorFieldEmitter.class;
 	}
 
 }

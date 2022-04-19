@@ -134,4 +134,9 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 		
 	}
 
+	@Override
+	protected Class<? extends CQRPartEntity<?>> getClassForRenderer() {
+		return SubEntityNetherDragonSegment.class;
+	}
+
 }

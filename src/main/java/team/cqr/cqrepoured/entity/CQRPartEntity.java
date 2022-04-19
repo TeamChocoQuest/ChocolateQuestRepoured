@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
@@ -43,9 +46,22 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		newPosRotationIncrements = posRotationIncrements;
 	}
 	
+	@OnlyIn(Dist.CLIENT)
+	protected static Map<Class<? extends CQRPartEntity<?>>, EntityRenderer<? extends CQRPartEntity<?>>> RENDERERS = new HashMap<>();
 	
 	@OnlyIn(Dist.CLIENT)
 	public EntityRenderer<?> renderer(EntityRendererManager manager) {
+		if(RENDERERS.containsKey(this.getClassForRenderer())) {
+			return RENDERERS.get(this.getClassForRenderer());
+		}
+		EntityRenderer<? extends CQRPartEntity<?>> r = this.createRenderer(manager);
+		RENDERERS.put(this.getClassForRenderer(), r);
+		return r;
+	}
+	
+	protected abstract Class<? extends CQRPartEntity<?>> getClassForRenderer();
+	
+	protected EntityRenderer<? extends CQRPartEntity<?>> createRenderer(EntityRendererManager manager) {
 		return new RenderMultiPartPart<>(manager);
 	}
 	
@@ -98,9 +114,8 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		this.refreshDimensions();
 	}
 	
-	private void setSize(Object object) {
-		// TODO Auto-generated method stub
-		
+	private void setSize(EntitySize size) {
+		this.size = size;
 	}
 
 	@Override
