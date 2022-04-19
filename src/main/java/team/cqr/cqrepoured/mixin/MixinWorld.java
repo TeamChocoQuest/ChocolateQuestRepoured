@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.mixinutil.PartEntityCache;
@@ -27,18 +26,14 @@ public abstract class MixinWorld {
 	)
 	private void mixinGetEntitiesExcluding(@Nullable Entity pEntity, AxisAlignedBB pArea, @Nullable Predicate<? super Entity> pPredicate, CallbackInfoReturnable<List<Entity>> cir) {
 		synchronized (PartEntityCache.PART_ENTITY_CACHE_CQR) {
-			List<CQRPartEntity<?>> parts = PartEntityCache.PART_ENTITY_CACHE_CQR.get((IWorld)this);
+			List<CQRPartEntity<?>> parts = PartEntityCache.PART_ENTITY_CACHE_CQR.get((World)(Object)this);
 			List<Entity> list = cir.getReturnValue();
 			if(parts != null) {
+				//System.out.println("cir list is null: " + (list == null));
 				for (CQRPartEntity<?> part : parts) {
-					if (part != pEntity &&
-
-							part.getBoundingBox().intersects(pArea) &&
-
-							(pPredicate == null || pPredicate.test(part)) &&
-
-							!list.contains(part))
+					if (part != pEntity && part.getBoundingBox().intersects(pArea) && (pPredicate == null || pPredicate.test(part)) && !list.contains(part)) {
 						list.add(part);
+					}
 				}
 			}
 			cir.setReturnValue(list);
