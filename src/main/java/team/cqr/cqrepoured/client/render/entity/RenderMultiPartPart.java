@@ -10,7 +10,7 @@ import net.minecraftforge.entity.PartEntity;
 
 public class RenderMultiPartPart<T extends PartEntity<?>> extends EntityRenderer<T> {
 
-	protected RenderMultiPartPart(EntityRendererManager p_i46179_1_) {
+	public RenderMultiPartPart(EntityRendererManager p_i46179_1_) {
 		super(p_i46179_1_);
 	}
 

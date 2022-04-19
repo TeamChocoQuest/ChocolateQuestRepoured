@@ -55,6 +55,7 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMessages;
 import team.cqr.cqrepoured.init.CQRStructureProcessors;
 import team.cqr.cqrepoured.init.CQRStructures;
+import team.cqr.cqrepoured.mixinutil.PartEntityCache;
 import team.cqr.cqrepoured.proxy.ClientProxy;
 import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
@@ -166,6 +167,8 @@ public class CQRMain {
 		
 		GeckoLib.initialize();
 
+		PartEntityCache.registerMultipartEvents(MinecraftForge.EVENT_BUS);
+		
 		CQRBlocks.registerBlocks();
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();

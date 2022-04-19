@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.client.render.entity.layer.special;
 
-import net.minecraft.client.model.ModelBox;
+import com.mojang.blaze3d.platform.GlStateManager;
+
 import net.minecraft.client.model.ModelParrot;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.renderer.model.ModelRenderer.ModelBox;
 import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

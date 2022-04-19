@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.netherdragon;
 
+import javax.annotation.Nullable;
+
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
+
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -8,12 +11,10 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Explosion.Mode;
-import net.minecraftforge.entity.PartEntity;
+import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 
-import javax.annotation.Nullable;
-
-public class SubEntityNetherDragonSegment extends PartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire {
+public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;

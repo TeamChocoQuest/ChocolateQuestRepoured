@@ -4,13 +4,18 @@
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
+		"AccessorTrackedEntity",
 		"AccessorAbstractSpawner",
 		"MixinChestBlock",
 		"MixinEndermanEntity",
 		"MixinFireBlock",
 		"MixinShulkerEntity",
 		"MixinEnderdragonEntity",
-		"MixinLivingEntity"
+		"MixinLivingEntity",
+		"MixinWorld",
+		"MixinTrackedEntity",
+		"MixinEntityRendererManager",
+		"MixinClientWorld"
 	],
 	"minVersion": "0.8"
 }

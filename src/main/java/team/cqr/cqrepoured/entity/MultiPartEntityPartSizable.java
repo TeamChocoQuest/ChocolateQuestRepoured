@@ -1,16 +1,15 @@
 package team.cqr.cqrepoured.entity;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.entity.PartEntity;
 
-public class MultiPartEntityPartSizable<T extends Entity & IEntityMultiPart<?> & ISizable> extends PartEntity<T> implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
+public class MultiPartEntityPartSizable<T extends Entity & IEntityMultiPart<?> & ISizable> extends CQRPartEntity<T> implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
 	private final float dw, dh;
-	private final EntitySize size;
 
 	public MultiPartEntityPartSizable(T parent, String partName, float width, float height) {
 		super(parent);
@@ -63,10 +62,6 @@ public class MultiPartEntityPartSizable<T extends Entity & IEntityMultiPart<?> &
 		return callOnGetDimensions(this.size);
 	}
 	
-	public EntitySize getSize() {
-		return this.size;
-	}
-
 	@Override
 	protected void defineSynchedData() {
 
