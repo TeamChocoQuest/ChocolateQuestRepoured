@@ -129,7 +129,7 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	}
 	
 	public final void updateLastPos() {
-		setPos(getX(), getY(), getZ());
+		setPosAndOldPos(getX(), getY(), getZ());
 		yRotO = yRot;
 		xRotO = xRot;
 		tickCount++;
