@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
@@ -191,7 +192,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Override
 	protected void registerGoals() {
-		/*if (CQRConfig.advanced.debugAI) {
+		if (CQRConfig.advanced.debugAI) {
 			//this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
@@ -201,7 +202,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
 		this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
-		this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
+		//this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
 		this.goalSelector.addGoal(4, new BossAIArmCannon(this));
 
 		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
@@ -235,7 +236,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.targetSelector.addGoal(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetSelector.addGoal(1, new EntityAIHurtByTarget(this));
 		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetLeft, this::setElectroCuteTargetLeft));
-		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));*/
+		this.targetSelector.addGoal(2, new EntityAITargetElectrocute(this, this::getElectroCuteTargetRight, this::setElectroCuteTargetRight));
 	}
 
 	public LivingEntity getElectroCuteTargetLeft() {
@@ -676,7 +677,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
 		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getWidth() / 2)).inflate(1));
-		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity));
+		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity || ( entity instanceof ProjectileEntity && ((ProjectileEntity)entity).getOwner() == this)));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
 		}
