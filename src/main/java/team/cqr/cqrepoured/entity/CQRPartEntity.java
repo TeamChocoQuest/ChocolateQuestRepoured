@@ -33,8 +33,17 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	public int deathTime;
 	public int hurtTime;
 	
-	public CQRPartEntity(T parent) {
+	protected final int partID;
+	
+	public CQRPartEntity(T parent, final int partID) {
 		super(parent);
+		this.partID = partID;
+		this.setId(parent.getId() + partID);
+	}
+	
+	@Override
+	public void setId(int pId) {
+		super.setId(pId + this.partID);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
@@ -124,19 +133,21 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		return true;
 	}
 	
-	@Override
-	public void setId(int pId) {
-		super.setId(pId +1);
-	}
-	
 	public final void updateLastPos() {
-		this.setPos(getX(), getY(), getZ());
+		this.setPosAndOldPos(getX(), getY(), getZ());
 		yRotO = yRot;
 		xRotO = xRot;
 		tickCount++;
 	}
 	
 	@Override
+	public void setPosAndOldPos(double pX, double pY, double pZ) {
+		super.setPosAndOldPos(pX, pY, pZ);
+		
+		this.setBoundingBox(this.size.makeBoundingBox(pX, pY, pZ));
+	}
+	
+	/*@Override
 	public void setPos(double pX, double pY, double pZ) {
 		this.xo = this.getX();
 		this.yo = this.getY();
@@ -147,7 +158,7 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		this.zOld = this.zo;
 		
 		super.setPos(pX, pY, pZ);
-	}
+	}*/
 	
 	public EntitySize getSize() {
 		return this.size;
@@ -160,10 +171,16 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	
 	@Override
 	public boolean hurt(DamageSource pSource, float pAmount) {
+		if(this.level.isClientSide) {
+			//return false;
+		}
+		if(this.isInvulnerableTo(pSource)) {
+			return false;
+		}
 		if(this.getParent() instanceof IEntityMultiPart) {
 			return ((IEntityMultiPart)this.getParent()).hurt(this, pSource, pAmount);
 		}
 		return super.hurt(pSource, pAmount);
 	}
-
+	
 }

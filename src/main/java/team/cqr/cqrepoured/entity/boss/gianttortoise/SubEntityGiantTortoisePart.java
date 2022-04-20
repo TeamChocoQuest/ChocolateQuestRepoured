@@ -12,8 +12,8 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 
 	private boolean isHead;
 
-	public SubEntityGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
-		super(parent, partName, width, height);
+	public SubEntityGiantTortoisePart(EntityCQRGiantTortoise parent, final int partID, String partName, float width, float height, boolean isHead) {
+		super(parent, partID, partName, width, height);
 
 		// setInvisible(true);
 	}

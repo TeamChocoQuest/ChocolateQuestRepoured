@@ -24,7 +24,7 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	public static final EntitySize DEFAULT_SIZE = new EntitySize(1.25F, 1.25F, false);
 
 	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
-		super(dragon);
+		super(dragon, partID);
 
 		this.dragon = dragon;
 		this.partIndex = dragon.INITIAL_SEGMENT_COUNT - partID;

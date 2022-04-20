@@ -7,8 +7,8 @@ import net.minecraftforge.entity.PartEntity;
 
 public interface IEntityMultiPart<T extends Entity> {
 
-	World getWorld();
+	public World getWorld();
 
-    boolean hurt(PartEntity<T> dragonPart, DamageSource source, float damage);
-	
+	public boolean hurt(PartEntity<T> dragonPart, DamageSource source, float damage);
+
 }

@@ -26,8 +26,8 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	private int activeTimeNoTarget;
 	private int cooldown;
 
-	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, String partName, final Supplier<LivingEntity> funcGetElectrocuteTarget, final Supplier<Boolean> funcGetIsActive, final Consumer<Boolean> funcSetIsActiveInParent) {
-		super(parent, partName, 0.5F, 0.5F);
+	public SubEntityExterminatorFieldEmitter(EntityCQRExterminator parent, final int partID, String partName, final Supplier<LivingEntity> funcGetElectrocuteTarget, final Supplier<Boolean> funcGetIsActive, final Consumer<Boolean> funcSetIsActiveInParent) {
+		super(parent, partID, partName, 0.5F, 0.5F);
 		this.exterminator = parent;
 		this.funcGetElectrocuteTarget = funcGetElectrocuteTarget;
 		this.funcGetIsActive = funcGetIsActive;
