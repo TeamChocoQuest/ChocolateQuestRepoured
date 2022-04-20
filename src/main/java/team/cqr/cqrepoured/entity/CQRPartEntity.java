@@ -129,10 +129,23 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	}
 	
 	public final void updateLastPos() {
-		setPosAndOldPos(getX(), getY(), getZ());
+		this.setPos(getX(), getY(), getZ());
 		yRotO = yRot;
 		xRotO = xRot;
 		tickCount++;
+	}
+	
+	@Override
+	public void setPos(double pX, double pY, double pZ) {
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
+		
+		this.xOld = this.xo;
+		this.yOld = this.yo;
+		this.zOld = this.zo;
+		
+		super.setPos(pX, pY, pZ);
 	}
 	
 	public EntitySize getSize() {
