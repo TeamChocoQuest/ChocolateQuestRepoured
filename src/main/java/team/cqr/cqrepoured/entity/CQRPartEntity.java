@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
@@ -155,6 +156,14 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	@Override
 	public EntitySize getDimensions(Pose pPose) {
 		return this.size;
+	}
+	
+	@Override
+	public boolean hurt(DamageSource pSource, float pAmount) {
+		if(this.getParent() instanceof IEntityMultiPart) {
+			return ((IEntityMultiPart)this.getParent()).hurt(this, pSource, pAmount);
+		}
+		return super.hurt(pSource, pAmount);
 	}
 
 }
