@@ -113,11 +113,11 @@ public class TargetUtil {
 	};
 
 	public static final Predicate<Entity> createPredicateAlly(Faction faction) {
-		return input -> faction.isAlly(input);
+		return input -> faction != null && faction.isAlly(input);
 	}
 
 	public static final Predicate<Entity> createPredicateNonAlly(Faction faction) {
-		return input -> !faction.isAlly(input);
+		return input -> faction != null && !faction.isAlly(input);
 	}
 
 	public static final <T extends Entity> T getNearestEntity(MobEntity entity, List<T> list) {
