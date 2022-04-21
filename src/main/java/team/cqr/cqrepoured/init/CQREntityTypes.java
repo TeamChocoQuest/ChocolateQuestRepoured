@@ -46,7 +46,19 @@ import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
-import team.cqr.cqrepoured.entity.projectiles.*;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHotFireball;
+import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
@@ -110,6 +122,10 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileEnergyOrb>of(ProjectileEnergyOrb::new, EntityClassification.MISC).sized(1.5F, 1.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_energy_orb").toString())); */
 
+	public static final RegistryObject<EntityType<ProjectileHookShotHook>> PROJECTILE_HOOKSHOT_HOOK = ENTITY_TYPES.register("projectile_hookshot_hook",
+			() -> EntityType.Builder.<ProjectileHookShotHook>of(ProjectileHookShotHook::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(12).updateInterval(5)
+					.build(CQRMain.prefix("projectile_hookshot_hook").toString()));
+	
 
 	public static final RegistryObject<EntityType<EntityColoredLightningBolt>> COLORED_LIGHTNING = ENTITY_TYPES.register("colored_lightning_bolt",
 			() -> EntityType.Builder.<EntityColoredLightningBolt>of(EntityColoredLightningBolt::new, EntityClassification.MISC)
