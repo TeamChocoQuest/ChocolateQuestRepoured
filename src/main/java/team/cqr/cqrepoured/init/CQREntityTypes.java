@@ -79,7 +79,7 @@ public class CQREntityTypes {
 					.build(CQRMain.prefix("projectile_bullet").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileEarthQuake>> PROJECTILE_EARTH_QUAKE = ENTITY_TYPES.register("projectile_earth_quake",
-			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
+			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, EntityClassification.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_earth_quake").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileCannonBall>> PROJECTILE_CANNON_BALL = ENTITY_TYPES.register("projectile_cannon_ball",
