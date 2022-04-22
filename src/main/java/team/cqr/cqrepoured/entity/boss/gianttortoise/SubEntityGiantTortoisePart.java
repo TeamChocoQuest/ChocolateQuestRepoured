@@ -6,7 +6,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
-import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorHitboxPart;
 
 public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<EntityCQRGiantTortoise> {
 
@@ -42,13 +41,6 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
-	}
-
-	@Override
-	public void tick() {
-		super.tick();
-
-		++this.tickCount;
 	}
 
 	// As this is a part it does not make any noises

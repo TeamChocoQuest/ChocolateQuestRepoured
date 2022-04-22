@@ -54,7 +54,6 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	@Override
 	public void baseTick() {
 		//Apparently this is no longer totalTicksExisted?
-		this.tickCount++;
 		super.baseTick();
 		
 		boolean active = this.isActive();

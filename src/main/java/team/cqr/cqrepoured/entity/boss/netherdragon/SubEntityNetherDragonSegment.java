@@ -64,8 +64,6 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	public void tick() {
 		super.tick();
 
-		++this.tickCount;
-
 		if (this.dragon.getSegmentCount() < this.partIndex) {
 			// this.world.removeEntityDangerously(this);
 			this.remove();
