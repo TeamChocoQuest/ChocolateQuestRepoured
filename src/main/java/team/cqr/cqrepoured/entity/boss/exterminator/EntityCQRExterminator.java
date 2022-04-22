@@ -125,6 +125,16 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
 		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+
+		this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
+	}
+
+	@Override
+	public void setId(int pId) {
+		super.setId(pId);
+		for (int i = 0; i < this.parts.length; i++) {
+			this.parts[i].setId(pId + i + 1);
+		}
 	}
 
 	protected boolean isAnyEmitterActive() {
