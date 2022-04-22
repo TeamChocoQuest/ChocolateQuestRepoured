@@ -20,7 +20,7 @@ public class RenderMultiPartPart<T extends PartEntity<?>> extends EntityRenderer
 
 	@Override
 	public boolean shouldRender(T livingEntity, ClippingHelper camera, double camX, double camY, double camZ) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -30,7 +30,6 @@ public class RenderMultiPartPart<T extends PartEntity<?>> extends EntityRenderer
 	
 	@Override
 	public ResourceLocation getTextureLocation(T pEntity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
