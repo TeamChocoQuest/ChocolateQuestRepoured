@@ -132,6 +132,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.initBody();
 
 		this.moveControl = new MoveHelperDirectFlight(this);
+		
+		this.callLastInConstructorForMultiparts();
 	}
 
 	public static void reloadBreakableBlocks() {
@@ -194,7 +196,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public boolean hurt(PartEntity dragonPart, DamageSource source, float damage) {
+	public boolean hurt(PartEntity<EntityCQRNetherDragon> dragonPart, DamageSource source, float damage) {
 		if (this.phase == 0) {
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
 			if (damage >= this.getHealth()) {

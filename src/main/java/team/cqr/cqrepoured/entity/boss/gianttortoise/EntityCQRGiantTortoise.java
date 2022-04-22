@@ -123,6 +123,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.setNoGravity(false);
 		this.xpReward = 100;
+		
+		this.callLastInConstructorForMultiparts();
 	}
 	
 	@Override
@@ -216,7 +218,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public boolean hurt(PartEntity dragonPart, DamageSource source, float damage) {
+	public boolean hurt(PartEntity<EntityCQRGiantTortoise> dragonPart, DamageSource source, float damage) {
 		return this.hurt(source, damage, true);
 	}
 

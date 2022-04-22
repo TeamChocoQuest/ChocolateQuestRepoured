@@ -126,15 +126,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
 		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 
-		this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
-	}
-
-	@Override
-	public void setId(int pId) {
-		super.setId(pId);
-		for (int i = 0; i < this.parts.length; i++) {
-			this.parts[i].setId(pId + i + 1);
-		}
+		//this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
+		this.callLastInConstructorForMultiparts();
 	}
 
 	protected boolean isAnyEmitterActive() {
@@ -613,7 +606,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public boolean hurt(PartEntity part, DamageSource source, float damage) {
+	public boolean hurt(PartEntity<EntityCQRExterminator> part, DamageSource source, float damage) {
 		boolean isMainHBPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
 		return this.hurt(source, damage, isMainHBPart);
 	}
