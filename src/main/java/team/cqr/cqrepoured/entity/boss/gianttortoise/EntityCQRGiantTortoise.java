@@ -117,9 +117,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.maxUpStep = 2.1F;
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
-			this.parts[i] = new SubEntityGiantTortoisePart(this, i+1, "tortoise_leg" + i, 0.7F, 1.1F, false);
+			this.parts[i] = new SubEntityGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
 		}
-		this.parts[this.parts.length - 1] = new SubEntityGiantTortoisePart(this, this.parts.length, "tortoise_head", 0.7F, 0.7F, true);
+		this.parts[this.parts.length - 1] = new SubEntityGiantTortoisePart(this, "tortoise_head", 0.7F, 0.7F, true);
 
 		this.setNoGravity(false);
 		this.xpReward = 100;

@@ -15,8 +15,8 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	private Supplier<Boolean> funcGetAnyEmitterActive;
 	private EntityCQRExterminator exterminator;
 	
-	public SubEntityExterminatorBackpack(EntityCQRExterminator parent, final int partID, String partName, Supplier<Boolean> funcGetAnyEmitterActive) {
-		super(parent, partID, partName, 1.0F, 1.0F);
+	public SubEntityExterminatorBackpack(EntityCQRExterminator parent, String partName, Supplier<Boolean> funcGetAnyEmitterActive) {
+		super(parent, partName, 1.0F, 1.0F);
 		this.exterminator = parent;
 		this.funcGetAnyEmitterActive = funcGetAnyEmitterActive;
 	}

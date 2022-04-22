@@ -120,12 +120,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.xpReward = 100;
 
 		this.parts = new PartEntity[5];
-
-		this.parts[0] = new SubEntityExterminatorBackpack(this, 1, "exterminator_backpack", this::isAnyEmitterActive);
-		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, 2, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
-		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, 3, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
-		this.parts[3] = new SubEntityExterminatorHitboxPart(this, 4, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
-		this.parts[4] = new SubEntityExterminatorHitboxPart(this, 5, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
+		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
+		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
+		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
 	}
 
 	protected boolean isAnyEmitterActive() {

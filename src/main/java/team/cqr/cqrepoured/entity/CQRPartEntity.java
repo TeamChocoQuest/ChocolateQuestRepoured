@@ -32,20 +32,11 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 
 	public int deathTime;
 	public int hurtTime;
-	
-	protected final int partID;
-	
-	public CQRPartEntity(T parent, final int partID) {
+
+	public CQRPartEntity(T parent) {
 		super(parent);
-		this.partID = partID;
-		this.setId(parent.getId() + partID);
 	}
-	
-	@Override
-	public void setId(int pId) {
-		super.setId(pId + this.partID);
-	}
-	
+
 	@OnlyIn(Dist.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements) {
 		interpTargetX = x;

@@ -9,8 +9,8 @@ import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 
 public class SubEntityExterminatorHitboxPart extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
-	public SubEntityExterminatorHitboxPart(EntityCQRExterminator parent, final int partID, String partName, float width, float height) {
-		super(parent, partID, partName, width, height);
+	public SubEntityExterminatorHitboxPart(EntityCQRExterminator parent, String partName, float width, float height) {
+		super(parent, partName, width, height);
 	}
 	
 	@Override

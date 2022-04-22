@@ -11,8 +11,8 @@ public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMulti
 
 	private final float dw, dh;
 
-	public MultiPartEntityPartSizable(T parent, final int partID, String partName, float width, float height) {
-		super(parent, partID);
+	public MultiPartEntityPartSizable(T parent, String partName, float width, float height) {
+		super(parent);
 
 		this.dw = width;
 		this.dh = height;
