@@ -18,6 +18,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -35,7 +36,10 @@ public class ItemSuperTool extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-		if (player.isCreative() && !(entity instanceof PlayerEntity)) {
+		if (entity instanceof PartEntity<?>) {
+			entity = ((PartEntity<?>) entity).getParent();
+		}
+		if (!player.level.isClientSide() && player.isCreative() && !(entity instanceof PlayerEntity)) {
 			entity.kill();
 			return true;
 		}
