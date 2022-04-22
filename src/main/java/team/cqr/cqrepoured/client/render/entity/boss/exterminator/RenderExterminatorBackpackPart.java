@@ -44,11 +44,12 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				pMatrixStack.pushPose();
 
-				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 0, 0, 0, 5, seed);
+				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
 
 				pMatrixStack.popPose();
 			}
 		}
+		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
 	}
 	
 }
