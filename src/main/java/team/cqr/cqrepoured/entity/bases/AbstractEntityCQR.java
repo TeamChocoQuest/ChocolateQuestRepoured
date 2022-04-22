@@ -447,7 +447,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 		this.spellHandler = this.createSpellHandler();
 		this.goalSelector.addGoal(0, new SwimGoal(this));
-		this.goalSelector.addGoal(1, new EntityAIOpenCloseDoor(this));
+		//this.goalSelector.addGoal(1, new EntityAIOpenCloseDoor(this));
 		// TODO disabled for now as it doesn't work properly
 		// this.tasks.addTask(2, new EntityAISneakUnderSmallObstacle<AbstractEntityCQR>(this));
 
@@ -470,10 +470,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.goalSelector.addGoal(22, new EntityAIFireFighter(this));
 		//this.goalSelector.addGoal(23, new EntityAITorchIgniter(this));
 		this.goalSelector.addGoal(24, new EntityAILooter(this));
-		this.goalSelector.addGoal(25, new EntityAITameAndLeashPet(this));
+		//this.goalSelector.addGoal(25, new EntityAITameAndLeashPet(this));
 		this.goalSelector.addGoal(26, new EntityAISearchMount(this));
 
-		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		//this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
 		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
 		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
 		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));
@@ -1879,5 +1879,22 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	public boolean isMultipartEntity() {
 		return super.isMultipartEntity() || (this.getParts() != null && this.getParts().length > 0);
+	}
+	
+	//Multipart fix
+	@Override
+	public void setId(int pId) {
+		super.setId(pId);
+		if(this.isMultipartEntity() && this.getParts() != null) {
+			for (int i = 0; i < this.getParts().length; i++) {
+				this.getParts()[i].setId(pId + i + 1);
+			}
+		}
+	}
+	
+	protected void callLastInConstructorForMultiparts() {
+		if(this.isMultipartEntity() && this.getParts() != null) {
+			this.setId(ENTITY_COUNTER.getAndAdd(this.getParts().length +1) +1);
+		}
 	}
 }
