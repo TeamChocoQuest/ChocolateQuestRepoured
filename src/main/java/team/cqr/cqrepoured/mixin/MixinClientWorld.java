@@ -35,7 +35,7 @@ public abstract class MixinClientWorld {
 				}
 			}
 		});
-		cir.setReturnValue(iter);
+		cir.setReturnValue(list);
 	}
 
 }
