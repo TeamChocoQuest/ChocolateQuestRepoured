@@ -160,6 +160,7 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		return this.size;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean hurt(DamageSource pSource, float pAmount) {
 		if(this.level.isClientSide) {
@@ -172,6 +173,12 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 			return ((IEntityMultiPart)this.getParent()).hurt(this, pSource, pAmount);
 		}
 		return super.hurt(pSource, pAmount);
+	}
+	
+	@Override
+	public boolean isInvisible() {
+		//Return true to not render the hitbox two times
+		return true;
 	}
 	
 }
