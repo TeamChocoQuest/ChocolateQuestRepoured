@@ -19,11 +19,6 @@ public class RenderMultiPartPart<T extends PartEntity<?>> extends EntityRenderer
 	}
 
 	@Override
-	public boolean shouldRender(T livingEntity, ClippingHelper camera, double camX, double camY, double camZ) {
-		return true;
-	}
-
-	@Override
 	public void render(T pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
 	}
