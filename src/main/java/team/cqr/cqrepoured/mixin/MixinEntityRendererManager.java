@@ -18,7 +18,7 @@ public abstract class MixinEntityRendererManager {
 			method = "getRenderer(Lnet/minecraft/entity/Entity;)Lnet/minecraft/client/renderer/entity/EntityRenderer;",
 			cancellable = true
 	)
-	private void mixinGetRenderer(Entity entityIn, CallbackInfoReturnable<EntityRenderer<? extends Entity>> cir) {
+	private  <T extends Entity> void mixinGetRenderer(T entityIn, CallbackInfoReturnable<EntityRenderer<? extends Entity>> cir) {
 		if(entityIn instanceof CQRPartEntity<?> ) {
 			cir.setReturnValue(((CQRPartEntity<?>)entityIn).renderer((EntityRendererManager)(Object)this));
 		}
