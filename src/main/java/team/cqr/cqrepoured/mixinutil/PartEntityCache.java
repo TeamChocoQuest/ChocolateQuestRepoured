@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityLeaveWorldEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 
@@ -38,8 +39,12 @@ public class PartEntityCache {
 							collect(Collectors.toList()));
 					return list;
 				});
+				if(PART_ENTITY_CACHE_CQR.get(event.getWorld()).isEmpty()) {
+					PART_ENTITY_CACHE_CQR.remove(event.getWorld());
+				}
 			}
 		});
+		bus.addListener((Consumer<WorldEvent.Unload>) event -> PART_ENTITY_CACHE_CQR.remove(event.getWorld()));
 	}
 
 }
