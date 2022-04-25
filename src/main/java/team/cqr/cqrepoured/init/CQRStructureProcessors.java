@@ -1,10 +1,20 @@
 package team.cqr.cqrepoured.init;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.Optional;
+
+import org.apache.commons.io.FileUtils;
+
+import com.mojang.serialization.Codec;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.processor.FileBasedReplaceBlocksProcessor;
 import team.cqr.cqrepoured.world.processor.ProcessorExtendLowestBlocksToFloor;
 
 public class CQRStructureProcessors {
@@ -18,7 +28,34 @@ public class CQRStructureProcessors {
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
+            
+            Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_PROCESSOR_FOLDER, new String[] { "processor", "json" }, true);
+    		CQRMain.logger.info("Loading {} structure processor files...", files.size());
+            for(File file : files) {
+            	Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> opt = createFileBasedReplaceBlocksProcessor(file);
+            	if(opt.isPresent()) {
+            		final String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
+            		final ResourceLocation id = CQRMain.prefix(fileName);
+            		Registry.register(Registry.STRUCTURE_PROCESSOR, id, opt.get());
+            		CQRMain.logger.info("Successfully registered replacement processor {}!", id);
+            	} else {
+            		CQRMain.logger.warn("Failed to load replacement processor file {}!", file);
+            	}
+            }
         });
+    }
+    
+    private static Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> createFileBasedReplaceBlocksProcessor(final File file) {
+    	try {
+    		FileBasedReplaceBlocksProcessor proc = new FileBasedReplaceBlocksProcessor(file);
+    		IStructureProcessorType<FileBasedReplaceBlocksProcessor> ispt = () -> Codec.unit(() -> proc);
+    		proc.setType(ispt);
+    		return Optional.of(ispt);
+    		
+    	} catch(Exception ex) {
+    		ex.printStackTrace();
+    		return Optional.empty();
+    	}
     }
 	
 }
