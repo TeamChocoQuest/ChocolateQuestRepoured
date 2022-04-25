@@ -1,0 +1,11 @@
+{
+	"inputs": [
+		"minecraft:dirt"
+	],
+	"outputs": [
+		{
+			"state": "minecraft:stone",
+			"weight": 1
+		}
+	]
+}
