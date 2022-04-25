@@ -83,6 +83,7 @@ public class CQRMain {
 	public static File CQ_DUNGEON_GRID_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
+	public static File CQ_STRUCTURE_PROCESSOR_FOLDER = null;
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	public static File CQ_FACTION_FOLDER = null;
@@ -210,6 +211,7 @@ public class CQRMain {
 				CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons"),
 				CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs"),
 				CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures"),
+				CQ_STRUCTURE_PROCESSOR_FOLDER = new File(CQ_CONFIG_FOLDER, "structure_processors"),
 				CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output"),
 				CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions"),
 				CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants"),
@@ -225,6 +227,7 @@ public class CQRMain {
 		ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "2.0.0");
+		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_PROCESSOR_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "2.0.0");
