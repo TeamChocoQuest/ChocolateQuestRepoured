@@ -1,0 +1,15 @@
+{
+	"inputs": [
+		"minecraft:cobblestone_wall"
+	],
+	"outputs": [
+		{
+			"state": "minecraft:cobblestone_wall",
+			"weight": 40
+		},
+		{
+			"state": "minecraft:mossy_cobblestone_wall",
+			"weight": 60
+		}
+	]
+}

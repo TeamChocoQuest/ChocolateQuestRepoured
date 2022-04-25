@@ -1,0 +1,19 @@
+{
+	"inputs": [
+		"minecraft:stone_bricks"
+	],
+	"outputs": [
+		{
+			"state": "minecraft:stone_bricks",
+			"weight": 30
+		},
+		{
+			"state": "minecraft:mossy_stone_bricks",
+			"weight": 40
+		},
+		{
+			"state": "minecraft:cracked_stone_bricks",
+			"weight": 30
+		}
+	]
+}
