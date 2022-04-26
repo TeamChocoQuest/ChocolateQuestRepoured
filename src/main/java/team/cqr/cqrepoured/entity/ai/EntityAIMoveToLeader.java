@@ -1,15 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.state.BlockFaceShape;
+import java.util.EnumSet;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.EnumSet;
 
 public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -59,7 +56,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 				for (int l = 0; l <= 4; ++l) {
 					for (int i1 = 0; i1 <= 4; ++i1) {
 						if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
-							this.entity.setLocationAndAngles(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.yRot, this.entity.xRot);
+							this.entity.getLookControl().setLookAt(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.yRot, this.entity.xRot);
 							this.entity.getNavigation().stop();
 							return;
 						}
@@ -82,8 +79,11 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	protected boolean isTeleportFriendlyBlock(int x, int z, int y, int xOffset, int zOffset) {
 		BlockPos blockpos = new BlockPos(x + xOffset, y - 1, z + zOffset);
-		BlockState iblockstate = this.world.getBlockState(blockpos);
-		return iblockstate.getBlockFaceShape(this.world, blockpos, Direction.DOWN) == BlockFaceShape.SOLID && iblockstate.canEntitySpawn(this.entity) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
+		//Workaround for the thing below
+		return this.entity.getNavigation().isStableDestination(blockpos);
+		
+		//BlockState iblockstate = this.world.getBlockState(blockpos);
+		//return iblockstate.getBlockFaceShape(this.world, blockpos, Direction.DOWN) == BlockFaceShape.SOLID && iblockstate.canEntitySpawn(this.entity) && this.world.isAirBlock(blockpos.up()) && this.world.isAirBlock(blockpos.up(2));
 	}
 
 }
