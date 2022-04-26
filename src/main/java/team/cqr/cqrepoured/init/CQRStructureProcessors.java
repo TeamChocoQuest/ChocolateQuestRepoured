@@ -15,11 +15,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.processor.FileBasedReplaceBlocksProcessor;
+import team.cqr.cqrepoured.world.processor.ProcessorLootChest;
 import team.cqr.cqrepoured.world.processor.ProcessorExtendLowestBlocksToFloor;
 
 public class CQRStructureProcessors {
 
-	public static IStructureProcessorType<ProcessorExtendLowestBlocksToFloor> PROCESSOR_EXTEND_LOWEST_TO_FLOOR = () -> ProcessorExtendLowestBlocksToFloor.CODEC;
+	public static final IStructureProcessorType<ProcessorExtendLowestBlocksToFloor> PROCESSOR_EXTEND_LOWEST_TO_FLOOR = () -> ProcessorExtendLowestBlocksToFloor.CODEC;
+	public static final IStructureProcessorType<ProcessorLootChest> PROCESSOR_LOOT_CHEST = () -> ProcessorLootChest.CODEC;
 	
 	public static void registerStructureProcessors() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRStructureProcessors::commonSetup);
@@ -28,6 +30,7 @@ public class CQRStructureProcessors {
     private static void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
+            Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
             
             Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_PROCESSOR_FOLDER, new String[] { "processor", "json" }, true);
     		CQRMain.logger.info("Loading {} structure processor files...", files.size());
@@ -35,7 +38,7 @@ public class CQRStructureProcessors {
             	Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> opt = createFileBasedReplaceBlocksProcessor(file);
             	if(opt.isPresent()) {
             		final String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
-            		final ResourceLocation id = CQRMain.prefix(fileName);
+            		final ResourceLocation id = CQRMain.prefix("custom_" + fileName);
             		Registry.register(Registry.STRUCTURE_PROCESSOR, id, opt.get());
             		CQRMain.logger.info("Successfully registered replacement processor {}!", id);
             	} else {
