@@ -67,16 +67,12 @@ public class AutoGlowingTexture extends Texture {
 
 				GlowingMetadataSection glowInformation = originalResource.getMetadata(new GlowingMetadataSectionSerializer());
 				if (glowInformation != null) {
-					for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> area : glowInformation.getGlowingSections()) {
-						for (int ix = area.getA().getA(); ix < area.getB().getA(); ix++) {
-							for (int iy = area.getA().getB(); iy < area.getB().getB(); iy++) {
-								glowingImage.setPixelRGBA(ix, iy, originalImage.getPixelRGBA(ix, iy));
+					glowInformation.getGlowingSections().forEach(section -> section.forEach((x, y) -> {
+						glowingImage.setPixelRGBA(x, y, originalImage.getPixelRGBA(x, y));
 
-								// Remove it from the original
-								originalImage.setPixelRGBA(ix, iy, 0);
-							}
-						}
-					}
+						// Remove it from the original
+						originalImage.setPixelRGBA(x, y, 0);
+					}));
 					//originalImage.fillRect(0, 0, originalImage.getWidth(), originalImage.getHeight(), 0);
 				}
 
