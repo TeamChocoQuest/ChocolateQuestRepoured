@@ -1,7 +1,14 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.*;
-import net.minecraft.block.DoorBlock.EnumDoorHalf;
+import java.util.List;
+
+import net.minecraft.block.AbstractButtonBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.DirectionalBlock;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.LeverBlock;
+import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
@@ -11,12 +18,12 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.List;
 
 public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -63,7 +70,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 				this.doorBlock = (DoorBlock) state.getBlock();
 				if (i > 0) {
 					PathPoint pathPoint1 = path.getNode(i - 1);
-					this.doorEnterFacing = Direction.getFacingFromVector(pathPoint1.x - pathPoint.x, pathPoint1.y - pathPoint.y, pathPoint1.z - pathPoint.z);
+					this.doorEnterFacing = Direction.getNearest(pathPoint1.x - pathPoint.x, pathPoint1.y - pathPoint.y, pathPoint1.z - pathPoint.z);
 				} else {
 					this.doorEnterFacing = this.entity.getDirection().getOpposite();
 				}
@@ -114,7 +121,8 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
 		}
-		state = state.getActualState(this.world, this.doorPos);
+		// Still necessary?
+		//state = state.getActualState(this.world, this.doorPos);
 		boolean doorOpen = state.getValue(DoorBlock.OPEN);
 		Direction doorFacing = state.getValue(DoorBlock.FACING);
 		Direction.Axis blockedAxis = doorOpen ? doorFacing.getClockWise().getAxis() : doorFacing.getAxis(); //OLD instead of getClockWise() -> rotateY()
@@ -158,11 +166,13 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		BlockState state = this.world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof AbstractButtonBlock && state.getValue(DirectionalBlock.FACING) == facing) {
-			block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
+			block.use(state, this.world, pos, null, Hand.MAIN_HAND, new BlockRayTraceResult(Vector3d.atBottomCenterOf(pos), facing, pos, false));
+			//block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
-		if (block instanceof LeverBlock && state.getValue(LeverBlock.FACING).getFacing() == facing) {
-			block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
+		if (block instanceof LeverBlock && state.getValue(LeverBlock.FACING) == facing) {
+			block.use(state, this.world, pos, null, Hand.MAIN_HAND, new BlockRayTraceResult(Vector3d.atBottomCenterOf(pos), facing, pos, false));
+			//block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 		return false;
@@ -219,7 +229,8 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
 		}
-		state = state.getActualState(world, pos);
+		//Still necessary?
+		//state = state.getActualState(world, pos);
 		boolean doorOpen = state.getValue(DoorBlock.OPEN);
 		Direction doorFacing = state.getValue(DoorBlock.FACING);
 		Direction.Axis blockedAxis = doorOpen ? doorFacing.getClockWise().getAxis() : doorFacing.getAxis();
