@@ -447,7 +447,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 		this.spellHandler = this.createSpellHandler();
 		this.goalSelector.addGoal(0, new SwimGoal(this));
-		//this.goalSelector.addGoal(1, new EntityAIOpenCloseDoor(this));
+		this.goalSelector.addGoal(1, new EntityAIOpenCloseDoor(this));
 		// TODO disabled for now as it doesn't work properly
 		// this.tasks.addTask(2, new EntityAISneakUnderSmallObstacle<AbstractEntityCQR>(this));
 
@@ -473,7 +473,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		//this.goalSelector.addGoal(25, new EntityAITameAndLeashPet(this));
 		this.goalSelector.addGoal(26, new EntityAISearchMount(this));
 
-		//this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
 		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
 		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
 		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));

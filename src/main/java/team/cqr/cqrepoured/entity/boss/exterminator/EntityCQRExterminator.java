@@ -139,12 +139,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Nullable
-	private SubEntityExterminatorFieldEmitter getEmitterLeft() {
+	public SubEntityExterminatorFieldEmitter getEmitterLeft() {
 		return (SubEntityExterminatorFieldEmitter) this.parts[1];
 	}
 
 	@Nullable
-	private SubEntityExterminatorFieldEmitter getEmitterRight() {
+	public SubEntityExterminatorFieldEmitter getEmitterRight() {
 		return (SubEntityExterminatorFieldEmitter) this.parts[2];
 	}
 
@@ -199,7 +199,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
 		this.goalSelector.addGoal(1, new SwimGoal(this));
-		//this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
+		this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
@@ -229,7 +229,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.goalSelector.addGoal(20, new EntityAIFollowAttackTarget(this));
 		this.goalSelector.addGoal(24, new EntityAILooter(this));
 
-		//this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
+		this.goalSelector.addGoal(30, new EntityAIMoveToLeader(this));
 		this.goalSelector.addGoal(31, new EntityAIFollowPath(this));
 		this.goalSelector.addGoal(32, new EntityAIMoveToHome(this));
 		this.goalSelector.addGoal(33, new EntityAIIdleSit(this));
