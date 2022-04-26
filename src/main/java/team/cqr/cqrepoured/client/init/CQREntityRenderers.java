@@ -5,6 +5,9 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRLich;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNecromancer;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
@@ -171,6 +174,9 @@ public class CQREntityRenderers
 		// Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.EXTERMINATOR.get(), RenderCQRExterminator::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LICH.get(), RenderCQRLich::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.NECROMANCER.get(), RenderCQRNecromancer::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BOARMAGE.get(), RenderCQRBoarmage::new);
 	}
 
 }
