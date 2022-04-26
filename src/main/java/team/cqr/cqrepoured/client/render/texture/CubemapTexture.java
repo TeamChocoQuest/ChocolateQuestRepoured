@@ -6,10 +6,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -45,24 +43,11 @@ public class CubemapTexture extends Texture {
 	 * @return The new {@code ResourceLocation} with "_cubemap" inserted before the last dot.
 	 */
 	public static ResourceLocation get(ResourceLocation originalTexture) {
-		ResourceLocation texture = appendBeforeEnding(originalTexture, "_cubemap");
-		TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-		if (textureManager.getTexture(texture) == null) {
-			textureManager.register(texture, new CubemapTexture(originalTexture, texture));
-		}
-		return texture;
-	}
-
-	private static ResourceLocation appendBeforeEnding(ResourceLocation location, String suffix) {
-		String path = location.getPath();
-		int i = path.lastIndexOf('.');
-		return new ResourceLocation(location.getNamespace(), path.substring(0, i) + suffix + path.substring(i));
+		return AbstractTexture.get(originalTexture, "cubemap", CubemapTexture::new);
 	}
 
 	@Override
 	public void load(IResourceManager resourceManager) throws IOException {
-		this.releaseId();
-
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, this.getId());
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
@@ -71,16 +56,17 @@ public class CubemapTexture extends Texture {
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_BASE_LEVEL, 0);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL12.GL_TEXTURE_MAX_LEVEL, 0);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_right"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_left"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_top"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_bottom"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_front"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
-		this.load(resourceManager, appendBeforeEnding(this.originalTexture, "_back"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_right"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_left"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_X);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_top"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Y);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_bottom"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_front"), GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_Z);
+		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_back"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
 	}
 
 	private void load(IResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
-		try (IResource iresource = resourceManager.getResource(location); NativeImage image = NativeImage.read(iresource.getInputStream())) {
+		try (IResource iresource = resourceManager.getResource(location);
+				NativeImage image = NativeImage.read(iresource.getInputStream())) {
 			GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image.pixels);
 		}
 	}
