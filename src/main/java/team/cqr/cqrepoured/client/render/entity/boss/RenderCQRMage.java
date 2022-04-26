@@ -1,53 +1,78 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.model.ModelBiped;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.entity.boss.ModelMageHidden;
-import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerMagicalArmor;
+import team.cqr.cqrepoured.client.model.geo.entity.boss.AbstractModelMageGeo;
+import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
-public class RenderCQRMage<T extends AbstractEntityCQRMageBase> extends RenderCQREntity<T> {
+public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR> extends RenderCQRBipedBaseGeo<T> {
 
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/mage_hidden.png");
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
-	private final ModelBiped modelHidden;
-	private final ModelBiped modelRevealed;
-
-	public RenderCQRMage(EntityRendererManager rendermanagerIn, ModelBiped model, String entityName) {
-		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
-		this.modelHidden = new ModelMageHidden();
-		this.modelRevealed = model;
-
-		for (int i = 0; i < this.layerRenderers.size(); i++) {
-			LayerRenderer<?> layer = this.layerRenderers.get(i);
-			if (layer instanceof BipedArmorLayer) {
-				this.layerRenderers.remove(i--);
-			}
-		}
-		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
-		this.addLayer(new LayerMagicalArmor(this, TEXTURES_ARMOR, model));
+	public RenderCQRMage(EntityRendererManager rendermanagerIn, AbstractModelMageGeo<T> model) {
+		super(rendermanagerIn, model);
+		
+		this.addLayer(new LayerGlowingAreasGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
-	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (entity.isIdentityHidden()) {
-			this.mainModel = this.modelHidden;
-		} else {
-			this.mainModel = this.modelRevealed;
-		}
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	protected void calculateArmorStuffForBone(String boneName, T currentEntity) {
+		standardArmorCalculationForBone(boneName, currentEntity);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(T entity) {
-		return entity.isIdentityHidden() ? TEXTURES_HIDDEN : super.getEntityTexture(entity);
+	protected void calculateItemStuffForBone(String boneName, T currentEntity) {
+		standardItemCalculationForBone(boneName, currentEntity);
+	}
+
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, T currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected void preRenderItem(ItemStack item, String boneName, T currentEntity) {
+		
+	}
+
+	@Override
+	protected void preRenderBlock(BlockState block, String boneName, T currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(ItemStack item, String boneName, T currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(BlockState block, String boneName, T currentEntity) {
+		
+	}
+
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, T currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+		
 	}
 
 }

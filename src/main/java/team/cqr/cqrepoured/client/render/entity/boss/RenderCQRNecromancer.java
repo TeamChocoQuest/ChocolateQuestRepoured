@@ -1,15 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRNecromancerBoneShield;
+import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelCQRNecromancerGeo;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 
 public class RenderCQRNecromancer extends RenderCQRMage<EntityCQRNecromancer> {
+	
+	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/boss/necromancer.png");
 
-	public RenderCQRNecromancer(EntityRendererManager rendermanagerIn, ModelBiped model, String entityName) {
-		super(rendermanagerIn, model, entityName);
-		this.addLayer(new LayerCQRNecromancerBoneShield(this));
+	public RenderCQRNecromancer(EntityRendererManager rendermanagerIn) {
+		super(rendermanagerIn, new ModelCQRNecromancerGeo(CQRMain.prefix("geo/entity/boss/mage/biped_mage_necromancer.geo.json"), TEXTURE, "boss/necromancer"));
+		//this.addLayer(new LayerCQRNecromancerBoneShield(this));
 	}
 
 }
