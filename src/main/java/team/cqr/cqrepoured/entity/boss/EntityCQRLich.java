@@ -13,8 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIArmorSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIFangAttack;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIShootPoisonProjectiles;
@@ -29,8 +31,9 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {
+public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
@@ -38,7 +41,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public EntityCQRLich(World world) {
 		this(CQREntityTypes.LICH.get(), world);
 	}
-	
+
 	public EntityCQRLich(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -99,7 +102,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 			}
 		});
 	}
-	
+
 	@Override
 	public void die(DamageSource cause) {
 		// Kill minions
@@ -174,10 +177,28 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public boolean hasPhylactery() {
 		return (this.currentPhylacteryPosition != null && (this.level.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY.get()));
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }

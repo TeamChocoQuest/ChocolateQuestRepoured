@@ -15,8 +15,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIBlindTargetSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIFangAttack;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAISummonMinionSpell;
@@ -30,8 +32,9 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
+public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
 	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
 
@@ -207,6 +210,24 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+	
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }

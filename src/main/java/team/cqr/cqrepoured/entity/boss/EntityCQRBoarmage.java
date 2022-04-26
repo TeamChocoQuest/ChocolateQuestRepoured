@@ -8,7 +8,9 @@ import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.boss.boarmage.BossAIBoarmageExplodeAreaAttack;
 import team.cqr.cqrepoured.entity.ai.boss.boarmage.BossAIBoarmageTeleportSpell;
 import team.cqr.cqrepoured.entity.ai.spells.EntityAIExplodeAreaStartSpell;
@@ -23,8 +25,9 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
+public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 
@@ -33,11 +36,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public EntityCQRBoarmage(World world) {
 		this(CQREntityTypes.BOARMAGE.get(), world);
 	}
-	
+
 	public EntityCQRBoarmage(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 	}
-	
+
 	@Override
 	public boolean fireImmune() {
 		return true;
@@ -47,7 +50,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public boolean ignoreExplosion() {
 		return true;
 	}
-	
+
 	public void startExplodeAreaAttack() {
 		this.startedExplodeAreaAttack = true;
 	}
@@ -129,6 +132,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public LivingEntity getSummoner() {
 		return this;
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 3;
+	}
 
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
@@ -144,10 +152,28 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public boolean canPutOutFire() {
 		return false;
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }
