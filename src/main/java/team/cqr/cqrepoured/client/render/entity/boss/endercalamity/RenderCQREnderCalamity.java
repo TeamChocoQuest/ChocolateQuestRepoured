@@ -130,16 +130,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		return null;
 	}
 
-	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQREnderCalamity currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQREnderCalamity currentEntity) {
-		// Unused
-	}
-
 	@Nullable
 	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQREnderCalamity currentEntity) {

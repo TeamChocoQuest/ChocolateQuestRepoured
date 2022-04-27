@@ -86,32 +86,4 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		BlockRenderUtil.renderBlockAtEntity(matrixStack, rtb, packedLightIn, iBlockState, this.currentEntityBeingRendered, this);
 	}
 
-	/*
-	 * Return null if there is no item
-	 */
-	@Nullable
-	protected abstract ItemStack getHeldItemForBone(String boneName, T currentEntity);
-
-	protected abstract TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName);
-
-	/*
-	 * Return null if there is no held block
-	 */
-	@Nullable
-	protected abstract BlockState getHeldBlockForBone(String boneName, T currentEntity);
-
-	protected abstract void preRenderItem(ItemStack item, String boneName, T currentEntity);
-
-	protected abstract void preRenderBlock(BlockState block, String boneName, T currentEntity);
-
-	protected abstract void postRenderItem(ItemStack item, String boneName, T currentEntity);
-
-	protected abstract void postRenderBlock(BlockState block, String boneName, T currentEntity);
-
-	/*
-	 * Return null, if the entity's texture is used
-	 */
-	@Nullable
-	protected abstract ResourceLocation getTextureForBone(String boneName, T currentEntity);
-
 }

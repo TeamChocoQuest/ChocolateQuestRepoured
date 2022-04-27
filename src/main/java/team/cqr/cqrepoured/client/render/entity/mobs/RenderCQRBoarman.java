@@ -36,17 +36,7 @@ public class RenderCQRBoarman extends RenderCQRBipedBaseGeo<EntityCQRBoarman> {
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRBoarman currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRBoarman currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRBoarman currentEntity) {
 		
 	}
 

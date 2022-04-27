@@ -36,17 +36,7 @@ public class RenderCQRHuman extends RenderCQRBipedBaseGeo<EntityCQRHuman> {
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRHuman currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRHuman currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRHuman currentEntity) {
 		
 	}
 

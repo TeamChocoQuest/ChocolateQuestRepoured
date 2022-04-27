@@ -36,17 +36,7 @@ public class RenderCQRMummy extends RenderCQRBipedBaseGeo<EntityCQRMummy> {
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRMummy currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRMummy currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRMummy currentEntity) {
 		
 	}
 

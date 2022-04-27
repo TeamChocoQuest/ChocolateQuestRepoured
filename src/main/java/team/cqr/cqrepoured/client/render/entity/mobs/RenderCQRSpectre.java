@@ -46,17 +46,7 @@ public class RenderCQRSpectre extends RenderCQRBipedBaseGeo<EntityCQRSpectre> {
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRSpectre currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRSpectre currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRSpectre currentEntity) {
 		
 	}
 

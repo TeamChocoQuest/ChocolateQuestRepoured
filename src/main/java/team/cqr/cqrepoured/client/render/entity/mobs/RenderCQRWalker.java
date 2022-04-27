@@ -39,17 +39,7 @@ public class RenderCQRWalker extends RenderCQRBipedBaseGeo<EntityCQRWalker> {
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRWalker currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRWalker currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRWalker currentEntity) {
 		
 	}
 

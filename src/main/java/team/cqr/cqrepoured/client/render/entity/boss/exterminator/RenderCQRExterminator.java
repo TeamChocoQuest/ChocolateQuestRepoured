@@ -46,12 +46,12 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 		return null;
 	}
 
-	@Override
+	/*@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			//TODO: Figure out values
 			//move left or right (from the entity's POV, positive: Right), move up or down the arm, move above (negative) or under the arm (positive)
-			/*GlStateManager.translate(0.0, 0.0, -0.25);
+			GlStateManager.translate(0.0, 0.0, -0.25);
 			//Since the golem is massive we need to scale it up a bit
 			
 			//Standard code from LayerHeldItem
@@ -64,17 +64,12 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 			} else {
 				//Different scale cause flamethrower is very small
 				GlStateManager.scale(1.5, 1.5, 1.5);
-			}*/
+			}
 		}
-	}
+	}*/
 
 	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRExterminator currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 	}
 

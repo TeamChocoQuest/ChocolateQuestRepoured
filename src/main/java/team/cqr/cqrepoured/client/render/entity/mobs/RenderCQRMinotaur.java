@@ -36,17 +36,7 @@ public class RenderCQRMinotaur extends RenderCQRBipedBaseGeo<EntityCQRMinotaur> 
 	}
 
 	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRMinotaur currentEntity) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(BlockState block, String boneName, EntityCQRMinotaur currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRMinotaur currentEntity) {
 		
 	}
 

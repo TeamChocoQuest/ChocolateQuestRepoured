@@ -29,16 +29,6 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 		return null;
 	}
 
-	@Override
-	protected void preRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected void postRenderItem(ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity) {
-		// Unused
-	}
-
 	@Nullable
 	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRGiantTortoise currentEntity) {
