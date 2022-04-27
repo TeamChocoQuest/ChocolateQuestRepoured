@@ -9,5 +9,10 @@ public class ModelCQRWalkerGeo extends AbstractModelGeoCQRStandardBiped<EntityCQ
 	public ModelCQRWalkerGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
+	
+	@Override
+	protected String getHeadBoneIdent() {
+		return STANDARD_HEAD_IDENT;
+	}
 
 }

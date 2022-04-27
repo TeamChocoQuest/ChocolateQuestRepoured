@@ -47,5 +47,10 @@ public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimata
 		}
 		return super.getModelLocation(object);
 	}
+	
+	@Override
+	protected String getHeadBoneIdent() {
+		return STANDARD_HEAD_IDENT;
+	}
 
 }

@@ -9,5 +9,10 @@ public class ModelCQRMinotaurGeo extends AbstractModelGeoCQRStandardBiped<Entity
 	public ModelCQRMinotaurGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
+	
+	@Override
+	protected String getHeadBoneIdent() {
+		return STANDARD_HEAD_IDENT;
+	}
 
 }

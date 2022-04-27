@@ -9,5 +9,10 @@ public class ModelCQRDummyGeo extends AbstractModelGeoCQRStandardBiped<EntityCQR
 	public ModelCQRDummyGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
+	
+	@Override
+	protected String getHeadBoneIdent() {
+		return STANDARD_HEAD_IDENT;
+	}
 
 }

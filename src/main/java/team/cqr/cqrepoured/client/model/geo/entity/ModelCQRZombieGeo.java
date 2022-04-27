@@ -10,4 +10,9 @@ public class ModelCQRZombieGeo extends AbstractModelGeoCQRStandardBiped<EntityCQ
 		super(model, textureDefault, entityName);
 	}
 
+	@Override
+	protected String getHeadBoneIdent() {
+		return STANDARD_HEAD_IDENT;
+	}
+
 }

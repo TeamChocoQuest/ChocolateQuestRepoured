@@ -9,6 +9,8 @@ import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class AbstractModelGeoCQRStandardBiped<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelGeoCQRBase<T> {
+	
+	protected static final String STANDARD_HEAD_IDENT = "bipedHead";
 
 	public AbstractModelGeoCQRStandardBiped(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
