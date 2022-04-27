@@ -72,7 +72,7 @@ public abstract class AbstractTexture extends Texture {
 		TextureMetadataSection textureMetadata = null;
 		NativeImage newImage;
 		boolean updateOriginal;
-		try (IResource iresource = resourceManager.getResource(location)) {
+		try (IResource iresource = resourceManager.getResource(originalLocation)) {
 			originalImage = originalTexture instanceof DynamicTexture ? ((DynamicTexture) originalTexture).getPixels() : NativeImage.read(iresource.getInputStream());
 			newImage = new NativeImage(originalImage.getWidth(), originalImage.getHeight(), false);
 

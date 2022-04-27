@@ -17,7 +17,7 @@ public class InvisibilityTexture extends AbstractTexture {
 	}
 
 	public static ResourceLocation get(ResourceLocation originalTexture) {
-		return get(originalTexture, "invisible", InvisibilityTexture::new);
+		return get(originalTexture, "_invisible", InvisibilityTexture::new);
 	}
 
 	@Override

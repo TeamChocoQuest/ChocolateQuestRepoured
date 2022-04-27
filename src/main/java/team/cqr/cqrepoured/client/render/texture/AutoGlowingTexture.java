@@ -12,7 +12,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 	}
 
 	public static ResourceLocation get(ResourceLocation originalLocation) {
-		return get(originalLocation, "glowing", AutoGlowingTexture::new);
+		return get(originalLocation, "_glowing", AutoGlowingTexture::new);
 	}
 
 	@Override
