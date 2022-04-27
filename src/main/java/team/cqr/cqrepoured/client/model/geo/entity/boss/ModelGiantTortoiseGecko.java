@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.model.entity.boss;
+package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
