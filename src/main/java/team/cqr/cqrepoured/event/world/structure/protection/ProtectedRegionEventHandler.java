@@ -25,6 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -91,6 +92,20 @@ public class ProtectedRegionEventHandler {
 			return;
 		}
 		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.player);
+	}
+	
+	@SubscribeEvent
+	public static void onMobGriefing(EntityMobGriefingEvent event) {
+		Entity griefingFuck = event.getEntity();
+		if(griefingFuck == null) {
+			return;
+		}
+		World world = griefingFuck.world;
+		BlockPos pos = griefingFuck.getPosition();
+
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, griefingFuck, true, true)) {
+			event.setCanceled(true);
+		}
 	}
 
 	private static void syncProtectedRegions(IProtectedRegionManager protectedRegionManager, ServerPlayerEntity player) {
