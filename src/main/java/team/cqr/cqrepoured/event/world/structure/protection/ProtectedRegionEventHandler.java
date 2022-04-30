@@ -35,6 +35,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.RegionFileCache;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -102,6 +103,20 @@ public class ProtectedRegionEventHandler {
 			return;
 		}
 		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
+	}
+	
+	@SubscribeEvent
+	public static void onMobGriefing(EntityMobGriefingEvent event) {
+		Entity griefingFuck = event.getEntity();
+		if(griefingFuck == null) {
+			return;
+		}
+		World world = griefingFuck.world;
+		BlockPos pos = griefingFuck.getPosition();
+
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, griefingFuck, true, true)) {
+			event.setCanceled(true);
+		}
 	}
 
 	private static void syncProtectedRegions(IProtectedRegionManager protectedRegionManager, EntityPlayerMP player) {
