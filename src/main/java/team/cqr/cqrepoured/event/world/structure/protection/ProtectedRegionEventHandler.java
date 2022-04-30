@@ -49,6 +49,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
@@ -97,7 +98,8 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onMobGriefing(EntityMobGriefingEvent event) {
 		Entity griefingFuck = event.getEntity();
-		if(griefingFuck == null) {
+		//TODO: Move the instanceof check to a config based check (whitelist)
+		if(griefingFuck == null || griefingFuck instanceof AbstractEntityCQR) {
 			return;
 		}
 		World world = griefingFuck.world;
@@ -105,6 +107,7 @@ public class ProtectedRegionEventHandler {
 
 		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, griefingFuck, true, true)) {
 			event.setCanceled(true);
+			event.setResult(Result.DENY);
 		}
 	}
 
