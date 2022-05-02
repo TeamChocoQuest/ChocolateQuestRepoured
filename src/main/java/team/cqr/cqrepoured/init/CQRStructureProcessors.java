@@ -22,43 +22,51 @@ public class CQRStructureProcessors {
 
 	public static final IStructureProcessorType<ProcessorExtendLowestBlocksToFloor> PROCESSOR_EXTEND_LOWEST_TO_FLOOR = () -> ProcessorExtendLowestBlocksToFloor.CODEC;
 	public static final IStructureProcessorType<ProcessorLootChest> PROCESSOR_LOOT_CHEST = () -> ProcessorLootChest.CODEC;
-	
-	public static void registerStructureProcessors() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRStructureProcessors::commonSetup);
-    }
 
-    private static void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
-            Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
-            
-            Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_PROCESSOR_FOLDER, new String[] { "processor", "json" }, true);
-    		CQRMain.logger.info("Loading {} structure processor files...", files.size());
-            for(File file : files) {
-            	Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> opt = createFileBasedReplaceBlocksProcessor(file);
-            	if(opt.isPresent()) {
-            		final String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
-            		final ResourceLocation id = CQRMain.prefix("custom_" + fileName);
-            		Registry.register(Registry.STRUCTURE_PROCESSOR, id, opt.get());
-            		CQRMain.logger.info("Successfully registered replacement processor {}!", id);
-            	} else {
-            		CQRMain.logger.warn("Failed to load replacement processor file {}!", file);
-            	}
-            }
-        });
-    }
-    
-    private static Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> createFileBasedReplaceBlocksProcessor(final File file) {
-    	try {
-    		FileBasedReplaceBlocksProcessor proc = new FileBasedReplaceBlocksProcessor(file);
-    		IStructureProcessorType<FileBasedReplaceBlocksProcessor> ispt = () -> Codec.unit(() -> proc);
-    		proc.setType(ispt);
-    		return Optional.of(ispt);
-    		
-    	} catch(Exception ex) {
-    		ex.printStackTrace();
-    		return Optional.empty();
-    	}
-    }
-	
+	public static void registerStructureProcessors() {
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRStructureProcessors::commonSetup);
+	}
+
+	private static void commonSetup(FMLCommonSetupEvent event) {
+		event.enqueueWork(() -> {
+			//First, let's load our fixed processors
+			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
+			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
+
+			//Then we load the customizable ones
+			loadFileBasedProcessors();
+			
+			//Now, at last load the processor lists from file
+		});
+	}
+
+	private static void loadFileBasedProcessors() {
+		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_PROCESSOR_FOLDER, new String[] { "processor", "json" }, true);
+		CQRMain.logger.info("Loading {} structure processor files...", files.size());
+		for (File file : files) {
+			Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> opt = createFileBasedReplaceBlocksProcessor(file);
+			if (opt.isPresent()) {
+				final String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
+				final ResourceLocation id = CQRMain.prefix("custom_" + fileName);
+				Registry.register(Registry.STRUCTURE_PROCESSOR, id, opt.get());
+				CQRMain.logger.info("Successfully registered replacement processor {}!", id);
+			} else {
+				CQRMain.logger.warn("Failed to load replacement processor file {}!", file);
+			}
+		}
+	}
+
+	private static Optional<IStructureProcessorType<FileBasedReplaceBlocksProcessor>> createFileBasedReplaceBlocksProcessor(final File file) {
+		try {
+			FileBasedReplaceBlocksProcessor proc = new FileBasedReplaceBlocksProcessor(file);
+			IStructureProcessorType<FileBasedReplaceBlocksProcessor> ispt = () -> Codec.unit(() -> proc);
+			proc.setType(ispt);
+			return Optional.of(ispt);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return Optional.empty();
+		}
+	}
+
 }
