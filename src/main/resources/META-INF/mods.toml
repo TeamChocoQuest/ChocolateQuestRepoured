@@ -7,7 +7,7 @@ license="MIT-license"
 	modId="cqrepoured"
 	version="${file.jarVersion}"
 	displayName="Chocolate Quest Repoured Mod"
-	logoFile="assets/cqrepoured/logo.png"
+	logoFile="logo.png"
 	credits="Everyone who made textures, dungeons and other content, developers and ArloTheEpic and DerToaster (main developer). Also huge thanks to McHorse#0420, who helped a lot in getting geckolib and other rendering related stuff to work"
 	authors="At first we want to thank and credit Chocolatin for creating the original Chocolate Quest and with that gave the base and motivation for this (even if this is a complete rewrite from scratch)\n\nProject Lead:\n  > ArloTheEpic\nCoders:\n  > DerToaster98 - Pretty much everything except some items and the randomized castles\n  > Meldexun - Entities & everywhere a bit\n  > jdawg3636 - Assisting & Fixing\n  > KalgogSmash - Castles & Random structures\n  > MrMarnic - Protection System and Help with Tile-Entities\n  > Tiviacz1337 - Items\nArtists:\n  > Sir Squidly - Blocks\n  > Silentine - Items"
 	description='''
@@ -38,5 +38,29 @@ license="MIT-license"
 		modId="geckolib3"
 		versionRange="[3.0.13,)"
 		mandatory=true
+		ordering="NONE"
+		side="BOTH"
+		
+[[mods]]
+	modId="cqrepoured_structures"
+	version="${file.jarVersion}"
+	displayName="CQR - Structures"
+	logoFile="logo.png"
+	credits="Everyone who made textures, dungeons and other content, developers and ArloTheEpic and DerToaster (main developer). Also huge thanks to McHorse#0420, who helped a lot in getting geckolib and other rendering related stuff to work"
+	authors="At first we want to thank and credit Chocolatin for creating the original Chocolate Quest and with that gave the base and motivation for this (even if this is a complete rewrite from scratch)\n\nProject Lead:\n  > ArloTheEpic\nCoders:\n  > DerToaster98 - Pretty much everything except some items and the randomized castles\n  > Meldexun - Entities & everywhere a bit\n  > jdawg3636 - Assisting & Fixing\n  > KalgogSmash - Castles & Random structures\n  > MrMarnic - Protection System and Help with Tile-Entities\n  > Tiviacz1337 - Items\nArtists:\n  > Sir Squidly - Blocks\n  > Silentine - Items"
+	description='''
+	Dummy mod needed for internal stuff
+	'''
+	[[dependencies.cqrepoured_structures]]
+		modId="minecraft"
+		mandatory=true
+		versionRange="[1.16.5,1.17)"
+		ordering="NONE"
+		side="BOTH"
+	
+	[[dependencies.cqrepoured_structures]]
+		modId="forge"
+		mandatory=true
+		versionRange="[36,)"
 		ordering="NONE"
 		side="BOTH"

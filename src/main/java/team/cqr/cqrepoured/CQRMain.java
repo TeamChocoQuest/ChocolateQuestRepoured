@@ -67,6 +67,8 @@ import team.cqr.cqrepoured.util.CopyHelper;
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
+	public static final String MODID_STRUCTURES = "cqrepoured_structures";
+	
 	public static final String VERSION = "2.6.3B";
 
 	public static final IProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
@@ -317,6 +319,10 @@ public class CQRMain {
 
 	public static final ResourceLocation prefix(final String path) {
 		return new ResourceLocation(MODID, path);
+	}
+	
+	public static final ResourceLocation prefixStructureTemplateId(final String path) {
+		return new ResourceLocation(MODID_STRUCTURES, path);
 	}
 
 	public static <T extends IForgeRegistryEntry<T>> T register(IForgeRegistry<T> registry, T entry, String registryKey) {
