@@ -255,12 +255,12 @@ public class CQStructure {
 			BlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
-			if (block != CQRBlocks.NULL_BLOCK
+			if (block != CQRBlocks.NULL_BLOCK.get()
 					&& block != Blocks.STRUCTURE_VOID
-					&& block != CQRBlocks.BOSS_BLOCK
+					&& block != CQRBlocks.BOSS_BLOCK.get()
 					&& !(block instanceof BlockExporterChest)
-					&& block != CQRBlocks.SPAWNER
-					&& block != CQRBlocks.MAP_PLACEHOLDER
+					&& block != CQRBlocks.SPAWNER.get()
+					&& block != CQRBlocks.MAP_PLACEHOLDER.get()
 					&& state.getDestroySpeed(world, pos) < 0.0F) {
 				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, pos);
 			}
