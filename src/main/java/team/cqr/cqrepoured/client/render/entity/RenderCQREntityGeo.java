@@ -2,8 +2,6 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -11,8 +9,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,7 +16,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
