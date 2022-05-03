@@ -8,6 +8,9 @@ import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRLich;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNecromancer;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKingIllusion;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
@@ -76,9 +79,9 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BUBBLE.get(), RenderBubble::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, RenderCQRWalkerKingIllusion::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING_ILLUSION.get(), RenderCQRWalkerKingIllusion::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new);*/
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_TORNADO.get(), RenderWalkerTornado::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, RenderPirateParrot::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, RenderIceSpike::new);
@@ -136,21 +139,6 @@ public class CQREntityRenderers
 		// RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoiseGecko::new);
 
-		// Lich
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelLich(), "boss/lich"));
-
-		// Boar Mage
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage<>(renderManager, new ModelPigMage(), "boss/pig_mage"));
-
-		// Necromancer
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRNecromancer(renderManager, new ModelNecromancer(), "boss/necromancer"));
-
-		// Walker King
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, RenderCQRWalkerKing::new);
-
-		// Pirate Captain
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateCaptain.class, RenderCQRPirateCaptain::new);
-
 		// Shelob
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, RenderCQRGiantSpider::new);
 
@@ -174,9 +162,16 @@ public class CQREntityRenderers
 		// Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.EXTERMINATOR.get(), RenderCQRExterminator::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);*/
+		
+		// Mages
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LICH.get(), RenderCQRLich::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.NECROMANCER.get(), RenderCQRNecromancer::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BOARMAGE.get(), RenderCQRBoarmage::new);
+		// Walker King
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING.get(), RenderCQRWalkerKing::new);
+
+		// Pirate Captain
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PIRATE_CAPTAIN.get(), RenderCQRPirateCaptain::new);
 	}
 
 }
