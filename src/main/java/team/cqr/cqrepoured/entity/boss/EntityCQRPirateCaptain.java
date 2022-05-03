@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.Set;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -18,9 +20,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateFleeSpell;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateSummonParrot;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
@@ -30,7 +34,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 
-public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
+public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAnimatableCQR {
 
 	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>defineId(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>defineId(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
@@ -42,7 +46,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	public EntityCQRPirateCaptain(World world) {
 		this(CQREntityTypes.PIRATE_CAPTAIN.get(), world);
 	}
-	
+
 	public EntityCQRPirateCaptain(EntityType<? extends EntityCQRPirateCaptain> type, World worldIn) {
 		super(type, worldIn);
 	}
@@ -56,7 +60,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.PIRATE;
 	}
-	
+
 	@Override
 	public boolean canBeAffected(EffectInstance potioneffectIn) {
 		if (!super.canBeAffected(potioneffectIn)) {
@@ -67,8 +71,6 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		}
 		return potioneffectIn.getEffect() == Effects.GLOWING;
 	}
-	
-	
 
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
@@ -108,7 +110,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		this.entityData.define(IS_DISINTEGRATING, false);
 		this.entityData.define(IS_REINTEGRATING, false);
 	}
-	
+
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
@@ -169,9 +171,27 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	protected int getInvisibilityTurningTime() {
 		return EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 }
