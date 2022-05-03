@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WebBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,9 +33,11 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
 import team.cqr.cqrepoured.entity.ai.boss.walkerking.BossAIWalkerLightningSpiral;
 import team.cqr.cqrepoured.entity.ai.boss.walkerking.BossAIWalkerTornadoAttack;
@@ -54,7 +58,7 @@ import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
+public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnimatableCQR {
 
 	private int lightningTick = 0;
 	private int borderLightning = 20;
@@ -66,7 +70,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public EntityCQRWalkerKing(World world) {
 		this(CQREntityTypes.WALKER_KING.get(), world);
 	}
-	
+
 	public EntityCQRWalkerKing(EntityType<? extends EntityCQRWalkerKing> type, World worldIn) {
 		super(type, worldIn);
 
@@ -121,7 +125,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(3);
 				teleportPos = new BlockPos(this.getTarget().position().subtract(v));
-				if (this.level.getBlockState(teleportPos) .isFaceSturdy(this.level, teleportPos, Direction.UP)|| this.level.isEmptyBlock(teleportPos.relative(Direction.DOWN))) {
+				if (this.level.getBlockState(teleportPos).isFaceSturdy(this.level, teleportPos, Direction.UP) || this.level.isEmptyBlock(teleportPos.relative(Direction.DOWN))) {
 					teleportPos = this.getTarget().blockPosition();
 				}
 			} else if (this.getHomePositionCQR() != null && !this.level.isClientSide) {
@@ -139,7 +143,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 		if (this.active && !this.level.isClientSide) {
-			ServerWorld sw = (ServerWorld)this.level;
+			ServerWorld sw = (ServerWorld) this.level;
 			if (this.getTarget() == null) {
 				this.activationCooldown--;
 				if (this.activationCooldown < 0) {
@@ -148,11 +152,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 					this.activationCooldown = 80;
 				}
 			} else {
-				/*this.level.getWorldInfo().setCleanWeatherTime(0);
-				this.level.getWorldInfo().setRainTime(400);
-				this.level.getWorldInfo().setThunderTime(200);
-				this.level.getWorldInfo().setRaining(true);
-				this.level.getWorldInfo().setThundering(true);*/
+				/*
+				 * this.level.getWorldInfo().setCleanWeatherTime(0); this.level.getWorldInfo().setRainTime(400); this.level.getWorldInfo().setThunderTime(200); this.level.getWorldInfo().setRaining(true); this.level.getWorldInfo().setThundering(true);
+				 */
 				sw.setThunderLevel(5);
 				sw.setWeatherParameters(0, 400, true, true);
 			}
@@ -205,7 +207,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public void thunderHit(ServerWorld pLevel, LightningBoltEntity pLightning) {
 		this.heal(2F);
 	}
-	
+
 	private void backStabAttacker(DamageSource source) {
 		if (source.getEntity() != null && source.getEntity() instanceof LivingEntity) {
 			if (this.teleportBehindEntity(source.getEntity())) {
@@ -223,7 +225,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (this.getNavigation().isStableDestination(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
-					for(int i = 0; i < 10; i++) {
+					for (int i = 0; i < 10; i++) {
 						((ServerWorld) this.level).addParticle(ParticleTypes.LARGE_SMOKE, this.getX() + ix, this.getY() + 2, this.getZ() + iz, 0, 0, 0);
 					}
 				}
@@ -245,8 +247,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				dragon.getControllingPassenger().unRide();
 				// ((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				/*
-				 * if(dragon instanceof EntityTameable) { try { ((EntityTameable)dragon).setOwnerId(null); } catch(NullPointerException
-				 * ex) {
+				 * if(dragon instanceof EntityTameable) { try { ((EntityTameable)dragon).setOwnerId(null); } catch(NullPointerException ex) {
 				 * 
 				 * } try { ((EntityTameable)dragon).setTamedBy(null); } catch(NullPointerException ex) {
 				 * 
@@ -271,18 +272,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	private void handleActivation() {
-		if (!this.level.isClientSide && !((ServerWorld)this.level).isThundering()) {
+		if (!this.level.isClientSide && !((ServerWorld) this.level).isThundering()) {
 
 			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);
 
 			this.active = true;
 			this.activationCooldown = 80;
-			/*this.level.getWorldInfo().setCleanWeatherTime(0);
-			this.level.getWorldInfo().setRainTime(400);
-			this.level.getWorldInfo().setThunderTime(200);
-			this.level.getWorldInfo().setRaining(true);
-			this.level.getWorldInfo().setThundering(true);*/
-			ServerWorld sw = (ServerWorld)this.level;
+			/*
+			 * this.level.getWorldInfo().setCleanWeatherTime(0); this.level.getWorldInfo().setRainTime(400); this.level.getWorldInfo().setThunderTime(200); this.level.getWorldInfo().setRaining(true); this.level.getWorldInfo().setThundering(true);
+			 */
+			ServerWorld sw = (ServerWorld) this.level;
 			sw.setWeatherParameters(0, 400, true, true);
 			sw.setThunderLevel(5);
 		}
@@ -310,16 +309,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 		// Now handled by enchantment itself
 		/*
-		 * boolean spectralFlag = false;
-		 * if (source.getTrueSource() instanceof EntityLivingBase) {
-		 * if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase)
-		 * source.getTrueSource()).getHeldItemMainhand()) > 0 ||
-		 * EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase)
-		 * source.getTrueSource()).getHeldItemOffhand()) > 0) {
-		 * amount *= 2;
-		 * spectralFlag = true;
-		 * }
-		 * }
+		 * boolean spectralFlag = false; if (source.getTrueSource() instanceof EntityLivingBase) { if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 ||
+		 * EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) { amount *= 2; spectralFlag = true; } }
 		 */
 		if (/* !spectralFlag && */((source.getDirectEntity() == null) || !(source.getDirectEntity() instanceof SpectralArrowEntity)) && !CQRConfig.bosses.armorForTheWalkerKing) {
 			amount *= 0.5F;
@@ -374,10 +365,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 						v = v.add(0, 0.75, 0);
 
 						LivingEntity attacker = (LivingEntity) source.getDirectEntity();
-						/*attacker.motionX = v.x;
-						attacker.motionY = v.y;
-						attacker.motionZ = v.z;
-						attacker.velocityChanged = true;*/
+						/*
+						 * attacker.motionX = v.x; attacker.motionY = v.y; attacker.motionZ = v.z; attacker.velocityChanged = true;
+						 */
 						attacker.setDeltaMovement(v);
 						attacker.hasImpulse = true;
 						this.swing(Hand.OFF_HAND);
@@ -515,7 +505,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		return 0.75F * super.getVoicePitch();
 	}
 
-	
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
@@ -554,9 +543,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		ItemStack sword = new ItemStack(CQRItems.SWORD_WALKER.get(), 1);
 
 		/*
-		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword =
-		 * EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20
-		 * + getRNG().nextInt(41), true); }
+		 * for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) { sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true); }
 		 */
 		sword = EnchantmentHelper.enchantItem(this.getRandom(), sword, 30, true);
 		if (!EnchantmentHelper.hasVanishingCurse(sword)) {
@@ -569,8 +556,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	public void die(DamageSource cause) {
 		this.level.setThunderLevel(0);
-		if(!this.level.isClientSide) {
-			((ServerWorld)this.level).setWeatherParameters(200, 0, false, false);
+		if (!this.level.isClientSide) {
+			((ServerWorld) this.level).setWeatherParameters(200, 0, false, false);
 		}
 		super.die(cause);
 	}
@@ -578,7 +565,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected void tickDeath() {
 		super.tickDeath();
-		if (!this.level.isClientSide &&this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+		if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (this.deathTime > 150 && this.deathTime % 5 == 0) {
 				this.dropExperience(MathHelper.floor(50F));
 			}
@@ -619,10 +606,28 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }

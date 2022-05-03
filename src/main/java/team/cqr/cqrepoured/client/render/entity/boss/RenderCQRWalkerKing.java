@@ -1,43 +1,109 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerBossDeath;
-import team.cqr.cqrepoured.client.render.entity.layer.LayerGlowingAreas;
-import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelWalkerKingGeo;
+import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerBossDeathGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 
-public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
+public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKing> {
+	
+	public static final ResourceLocation TEXTURE_WALKER_KING_DEFAULT = CQRMain.prefix("textures/entity/boss/walker_king.png");
 
 	public RenderCQRWalkerKing(EntityRendererManager rendermanagerIn) {
-		super(rendermanagerIn, "boss/walker_king", true);
+		super(rendermanagerIn, new ModelWalkerKingGeo<>(STANDARD_BIPED_GEO_MODEL, TEXTURE_WALKER_KING_DEFAULT, "boss/walker_king"));
 
-		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
-		this.addLayer(new LayerBossDeath(191, 0, 255));
+		this.addLayer(new LayerGlowingAreasGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addLayer(new LayerBossDeathGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER, 191, 0, 255));
 	}
-
+	
+	private boolean renderingDeath = false;
+	private boolean renderingDeathSecondRenderCycle = false;
+	
 	@Override
-	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-		if (entitylivingbaseIn.deathTime > 0) {
-			float f = (float) entitylivingbaseIn.deathTime / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
-
-			GlStateManager.alphaFunc(516, f);
-			this.bindTexture(InvisibilityTexture.get(this.getEntityTexture(entitylivingbaseIn)));
-			this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-			GlStateManager.alphaFunc(516, 0.1F);
-			GlStateManager.depthFunc(514);
-			super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-			GlStateManager.depthFunc(515);
+	public void render(EntityCQRWalkerKing entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+		if(entity.deathTime > 0) {
+			this.renderingDeath = true;
+			
+			super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+			
+			this.renderingDeathSecondRenderCycle = true;
+			super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+			this.renderingDeathSecondRenderCycle = false;
+			
+			
+			this.renderingDeath = false;
 		} else {
-			super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 		}
+	}
+	
+	@Override
+	public RenderType getRenderType(EntityCQRWalkerKing animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+		if (this.renderingDeath) {
+			 float f2 = (float)animatable.deathTime / 200.0F;
+			if(this.renderingDeathSecondRenderCycle) {
+				return RenderType.entityDecal(this.getTextureLocation(animatable));
+			}
+			return RenderType.dragonExplosionAlpha(this.getTextureLocation(animatable), f2);
+		}
+		return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
 
 	@Override
 	protected float getDeathMaxRotation(EntityCQRWalkerKing entityLivingBaseIn) {
 		return 0;
+	}
+
+	@Override
+	protected void calculateArmorStuffForBone(String boneName, EntityCQRWalkerKing currentEntity) {
+		standardArmorCalculationForBone(boneName, currentEntity);
+	}
+
+	@Override
+	protected void calculateItemStuffForBone(String boneName, EntityCQRWalkerKing currentEntity) {
+		standardItemCalculationForBone(boneName, currentEntity);
+	}
+
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQRWalkerKing currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQRWalkerKing currentEntity) {
+		return null;
+	}
+
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRWalkerKing currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRWalkerKing currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+		
 	}
 
 }
