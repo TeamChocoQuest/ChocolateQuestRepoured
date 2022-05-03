@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.server.ServerWorld;
@@ -125,15 +126,27 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 		}
 		return super.getStrafingSpeed();
 	}
+	
+	final IParticleData[] SHOOT_PARTICLES = new IParticleData[] {
+		ParticleTypes.LARGE_SMOKE,
+		ParticleTypes.CLOUD,
+		ParticleTypes.FLAME
+	};
 
 	private void spawnParticles(Vector3d armPos) {
 		if (this.world instanceof ServerWorld) {
-			for(int i = 0; i < 5; i++) {
-				((ServerWorld) this.world).addParticle(ParticleTypes.LARGE_SMOKE, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
-				((ServerWorld) this.world).addParticle(ParticleTypes.LARGE_SMOKE, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
-				
-				((ServerWorld) this.world).addParticle(ParticleTypes.CLOUD, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
-				((ServerWorld) this.world).addParticle(ParticleTypes.FLAME, true, armPos.x, armPos.y, armPos.z, 0, 0, 0);
+			ServerWorld sw = (ServerWorld)this.world;
+			
+			for(int i = 0; i < SHOOT_PARTICLES.length; i++) {
+				int count = i > 0 ? 5 : 10;
+				sw.sendParticles(SHOOT_PARTICLES[i], armPos.x, armPos.y, armPos.z, count, 0, 0, 0, 0.05D);
+			}
+		} else {
+			for(int i = 0; i < SHOOT_PARTICLES.length; i++) {
+				int count = i > 0 ? 5 : 10;
+				for(int j = 0; j < count; j++) {
+					this.world.addParticle(SHOOT_PARTICLES[i], armPos.x, armPos.y, armPos.z, 0, 0, 0);
+				}
 			}
 		}
 	}
