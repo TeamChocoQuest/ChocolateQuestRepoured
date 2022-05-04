@@ -1,56 +1,63 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.inventory.EquipmentSlotType;
-import org.lwjgl.opengl.GL11;
-import team.cqr.cqrepoured.client.model.entity.mobs.ModelCQRMandril;
-import team.cqr.cqrepoured.client.render.entity.RenderCQREntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.processor.IBone;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.geo.entity.ModelCQRMandrilGeo;
+import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
 
-public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
+public class RenderCQRMandril extends RenderCQRBipedBaseGeo<EntityCQRMandril> {
+	
+	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/mandril.png");
 
 	public RenderCQRMandril(EntityRendererManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelCQRMandril(), 0.5F, "mob/mandril", 1.0D, 1.0D);
+		super(rendermanagerIn, new ModelCQRMandrilGeo(CQRMain.prefix("geo/entity/biped_mandril.geo.json"), TEXTURE, "mob/mandril"));
 	}
 
 	@Override
-	protected void renderModel(EntityCQRMandril entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-		if (entitylivingbaseIn.isSitting()) {
-			GL11.glTranslatef(0, 0, 0.25F);
-		} else {
-			GL11.glTranslatef(0, 0, 0.15F);
-		}
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	protected void calculateArmorStuffForBone(String boneName, EntityCQRMandril currentEntity) {
+		standardArmorCalculationForBone(boneName, currentEntity);
 	}
 
 	@Override
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		this.applyRotations(modelRenderer);
-		GlStateManager.translate(0.0D, 0.5D, 0.0D);
-		this.resetRotations(modelRenderer);
+	protected void calculateItemStuffForBone(String boneName, EntityCQRMandril currentEntity) {
+		standardItemCalculationForBone(boneName, currentEntity);
 	}
 
 	@Override
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		this.applyRotations(modelRenderer);
-		GlStateManager.translate(0.0D, 0.0D, -0.28125D);
-		this.resetRotations(modelRenderer);
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQRMandril currentEntity) {
+		return null;
 	}
 
 	@Override
-	public void setupRightArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		this.applyRotations(modelRenderer);
-		GlStateManager.translate(0.0D, 0.125D, 0.0D);
-		this.resetRotations(modelRenderer);
+	protected BlockState getHeldBlockForBone(String boneName, EntityCQRMandril currentEntity) {
+		return null;
 	}
 
 	@Override
-	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EquipmentSlotType slot) {
-		this.applyRotations(modelRenderer);
-		GlStateManager.translate(0.0D, 0.125D, 0.0D);
-		this.resetRotations(modelRenderer);
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRMandril currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void preRenderBlock(BlockState block, String boneName, EntityCQRMandril currentEntity) {
+		
+	}
+
+	@Override
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRMandril currentEntity, IBone bone) {
+		
+	}
+
+	@Override
+	protected void postRenderBlock(BlockState block, String boneName, EntityCQRMandril currentEntity) {
+		
 	}
 
 }
