@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
@@ -25,8 +27,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -40,14 +44,14 @@ import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 
-public class EntityCQREnderKing extends AbstractEntityCQRBoss {
+public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimatableCQR {
 
 	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>defineId(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
 
 	public EntityCQREnderKing(World world) {
 		this(CQREntityTypes.ENDER_KING.get(), world);
 	}
-	
+
 	public EntityCQREnderKing(EntityType<? extends EntityCQREnderKing> type, World worldIn) {
 		super(type, worldIn);
 		this.maxUpStep = 1.0F;
@@ -138,37 +142,38 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		double d2 = this.getZ() + (this.getRandom().nextDouble() - 0.5D) * 64.0D;
 		return this.teleportEnderman(d0, d1, d2);
 	}
-	
+
 	@Override
 	public void teleport(double x, double y, double z) {
-		if(!this.teleportEnderman(x, y, z)) {
+		if (!this.teleportEnderman(x, y, z)) {
 			super.teleport(x, y, z);
 		}
 	}
-	
+
 	public boolean teleportEnderman(double pX, double pY, double pZ) {
-		 BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(pX, pY, pZ);
+		BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(pX, pY, pZ);
 
-	      while(blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
-	         blockpos$mutable.move(Direction.DOWN);
-	      }
+		while (blockpos$mutable.getY() > 0 && !this.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) {
+			blockpos$mutable.move(Direction.DOWN);
+		}
 
-	      BlockState blockstate = this.level.getBlockState(blockpos$mutable);
-	      boolean flag = blockstate.getMaterial().blocksMotion();
-	      boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
-	      if (flag && !flag1) {
-	         net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
-	         if (event.isCanceled()) return false;
-	         boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-	         if (flag2 && !this.isSilent()) {
-	            this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
-	            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-	         }
+		BlockState blockstate = this.level.getBlockState(blockpos$mutable);
+		boolean flag = blockstate.getMaterial().blocksMotion();
+		boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
+		if (flag && !flag1) {
+			net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
+			if (event.isCanceled())
+				return false;
+			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+			if (flag2 && !this.isSilent()) {
+				this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+			}
 
-	         return flag2;
-	      } else {
-	         return false;
-	      }
+			return flag2;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -212,7 +217,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	public boolean canMountEntity() {
 		return false;
 	}
-	
+
 	@Override
 	public double getEyeY() {
 		return this.getBbHeight() * 0.875F;
@@ -223,17 +228,17 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		if (this.level.isClientSide) {
 			// Client
 			for (int i = 0; i < 4; ++i) {
-				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), (this.getRandom().nextDouble() - 0.5D) * 2.0D, -this.getRandom().nextDouble(),
-						(this.getRandom().nextDouble() - 0.5D) * 2.0D);
+				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.getRandom().nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.getRandom().nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.getRandom()
+						.nextDouble() - 0.5D) * this.getBbWidth(), (this.getRandom().nextDouble() - 0.5D) * 2.0D, -this.getRandom().nextDouble(), (this.getRandom().nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 		super.aiStep();
 	}
-	
+
 	@Override
 	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
 		this.populateDefaultEquipmentSlots(difficulty);
-		
+
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
@@ -269,7 +274,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 	protected float getVoicePitch() {
 		return 0.75F * super.getVoicePitch();
 	}
-	
+
 	@Override
 	public int getAmbientSoundInterval() {
 		// Super: 80
@@ -292,10 +297,28 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 		super.readAdditionalSaveData(compound);
 		this.entityData.set(WIDE, compound.getBoolean("wide_enderman"));
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 
 }

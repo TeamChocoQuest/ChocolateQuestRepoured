@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.mobs;
 
+import java.util.Set;
+
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -13,21 +15,23 @@ import net.minecraft.util.IndirectEntityDamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
-public class EntityCQREnderman extends AbstractEntityCQR {
-	
+public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableCQR {
+
 	protected boolean mayTeleport = true;
 
 	public EntityCQREnderman(World world) {
 		this(CQREntityTypes.ENDERMAN.get(), world);
 	}
-	
+
 	public EntityCQREnderman(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
 		this.maxUpStep = 1.0F;
@@ -41,11 +45,11 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		this.goalSelector.addGoal(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this) {
 			@Override
 			public boolean canUse() {
-				return EntityCQREnderman.this.mayTeleport && super.canUse(); 
+				return EntityCQREnderman.this.mayTeleport && super.canUse();
 			}
 		});
 	}
-	
+
 	public void setMayTeleport(boolean value) {
 		this.mayTeleport = value;
 	}
@@ -64,7 +68,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	@Override
 	protected void customServerAiStep() {
-		if (this.isInWater() /*|| (this.isWet()*/ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
+		if (this.isInWater() /* || (this.isWet() */ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
 			this.hurt(DamageSource.DROWN, 1.0F);
 		}
 		super.customServerAiStep();
@@ -77,17 +81,17 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		return this.customTeleportTo(d0, d1, d2);
 	}
 
-	
 	private boolean customTeleportTo(double pX, double pY, double pZ) {
-		 net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
-         if (event.isCanceled()) return false;
-         boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-         if (flag2 && !this.isSilent()) {
-            this.level.playSound((PlayerEntity)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
-            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
-         }
+		net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, pX, pY, pZ);
+		if (event.isCanceled())
+			return false;
+		boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+		if (flag2 && !this.isSilent()) {
+			this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+			this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+		}
 
-         return flag2;
+		return flag2;
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENDERMAN_DEATH;
 	}
-	
+
 	@Override
 	protected void applyAttributeValues() {
 		super.applyAttributeValues();
@@ -142,8 +146,8 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		if (this.level.isClientSide) {
 			// Client
 			for (int i = 0; i < 2; ++i) {
-				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.random.nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D) * this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(),
-						(this.random.nextDouble() - 0.5D) * 2.0D);
+				this.level.addParticle(ParticleTypes.PORTAL, this.getX() + (this.random.nextDouble() - 0.5D) * this.getBbWidth(), this.getY() + this.random.nextDouble() * this.getBbHeight() - 0.25D, this.getZ() + (this.random.nextDouble() - 0.5D)
+						* this.getBbWidth(), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
 			}
 		}
 		super.aiStep();
@@ -153,19 +157,37 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public CreatureAttribute getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
-	
+
 	@Override
 	public void addAdditionalSaveData(CompoundNBT compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("mayTeleport", mayTeleport);
 	}
-	
+
 	@Override
 	public void readAdditionalSaveData(CompoundNBT compound) {
 		super.readAdditionalSaveData(compound);
-		if(compound.contains("mayTeleport")) {
+		if (compound.contains("mayTeleport")) {
 			this.mayTeleport = compound.getBoolean("mayTeleport");
 		}
 	}
-	
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
+	}
+
+	@Override
+	public boolean isSwinging() {
+		return this.swinging;
+	}
+
 }
