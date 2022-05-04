@@ -93,9 +93,7 @@ public class ItemTeleportStone extends ItemLore {
 				stack.getTag().remove(Y);
 				stack.getTag().remove(Z);
 				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-				for (int i = 0; i < 10; i++) {
-					worldIn.addParticle(ParticleTypes.LARGE_SMOKE, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
-				}
+					sw.sendParticles(ParticleTypes.LARGE_SMOKE, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 10, 0D, 0D, 0D, 1.0D);
 			}
 
 			else if (this.getPoint(stack) == null || !stack.hasTag()) {

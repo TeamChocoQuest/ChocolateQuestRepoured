@@ -135,7 +135,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 				// spawn cloud
 				for (int ix = -1; ix <= 1; ix++) {
 					for (int iz = -1; iz <= 1; iz++) {
-						((ServerWorld) this.level).addParticle(ParticleTypes.LARGE_SMOKE, this.getX() + ix, this.getY() + 2, this.getZ() + iz, 0, 0, 0);
+						((ServerWorld) this.level).sendParticles(ParticleTypes.LARGE_SMOKE, this.getX() + ix, this.getY() + 2, this.getZ() + iz, 10, 0, 0, 0, 0.25);
 					}
 				}
 				this.level.playSound(null, this.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundCategory.AMBIENT, 1, 1);
@@ -225,9 +225,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 		if (this.getNavigation().isStableDestination(new BlockPos(p.x, p.y, p.z))) {
 			for (int ix = -1; ix <= 1; ix++) {
 				for (int iz = -1; iz <= 1; iz++) {
-					for (int i = 0; i < 10; i++) {
-						((ServerWorld) this.level).addParticle(ParticleTypes.LARGE_SMOKE, this.getX() + ix, this.getY() + 2, this.getZ() + iz, 0, 0, 0);
-					}
+					((ServerWorld) this.level).sendParticles(ParticleTypes.LARGE_SMOKE, this.getX() + ix, this.getY() + 2, this.getZ() + iz, 10, 0, 0, 0, 0.25);
 				}
 			}
 			this.playSound(CQRSounds.WALKER_KING_LAUGH, 10.0F, 1.0F);

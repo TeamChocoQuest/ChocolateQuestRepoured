@@ -85,9 +85,7 @@ public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTor
 				this.entity.setTimesHealed(this.entity.getTimesHealed() + 1);
 				this.getBoss().setCanBeStunned(true);
 			} else {
-				for(int i = 0; i < 5; i++) {
-					((ServerWorld) this.entity.getWorld()).addParticle(ParticleTypes.HEART, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 0.5D, 1.0D, 0.5D);
-				}
+					((ServerWorld) this.entity.getWorld()).sendParticles(ParticleTypes.HEART, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 5, 0.5D, 1.0D, 0.5D, 0);
 				this.getBoss().heal(1F);
 				this.getBoss().setCanBeStunned(false);
 				this.getBoss().setStunned(false);

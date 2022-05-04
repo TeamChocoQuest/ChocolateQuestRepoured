@@ -76,7 +76,11 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 				float f = (this.random.nextFloat() - 0.5F) * 8.0F;
 				float f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
 				float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
-				this.level.addParticle(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
+				if(this.level.isClientSide) {
+					this.level.addParticle(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
+				} else {
+					((ServerWorld)this.level).sendParticles(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 1, 0.0D, 0.0D, 0.0D, 1.0);
+				}
 			}
 			this.setNoGravity(true);
 			// DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
@@ -158,14 +162,16 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			double d2 = this.random.nextGaussian() * 0.02D;
 			double d0 = this.random.nextGaussian() * 0.02D;
 			double d1 = this.random.nextGaussian() * 0.02D;
-			((ServerWorld) this.level).addParticle(
+			((ServerWorld) this.level).sendParticles(
 					ParticleTypes.EXPLOSION.getType(),
 					this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), 
 					this.getY() + this.random.nextFloat() * this.getBbHeight(), 
 					this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), 
+					1,
 					d2, 
 					d0, 
-					d1
+					d1,
+					0.05
 			);
 		}
 	}

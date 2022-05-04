@@ -76,25 +76,25 @@ public class EventsHandler {
 
 		if (event.getEntityLiving() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-			Entity attacker = event.getSource().getTrueSource();
+			Entity attacker = event.getSource().getEntity(();
 			@SuppressWarnings("unused")
 			float amount = event.getAmount();
-			World world = player.world;
+			World world = player.level;
 
-			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING || player.getHeldItemMainhand().getItem() != CQRItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
+			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING || player.getMainHandItem().getItem() != CQRItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
 				return;
 			}
 
-			double d = attacker.posX + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
-			double d1 = attacker.posY;
-			double d2 = attacker.posZ + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
+			double d = attacker.getX() + (attacker.level.rand.nextDouble() - 0.5D) * 4.0D;
+			double d1 = attacker.getY();
+			double d2 = attacker.getZ() + (attacker.level.rand.nextDouble() - 0.5D) * 4.0D;
 
 			@SuppressWarnings("unused")
-			double d3 = player.posX;
+			double d3 = player.getX();
 			@SuppressWarnings("unused")
-			double d4 = player.posY;
+			double d4 = player.getY();
 			@SuppressWarnings("unused")
-			double d5 = player.posZ;
+			double d5 = player.getZ();
 
 			int i = MathHelper.floor(d);
 			int j = MathHelper.floor(d1);
@@ -108,8 +108,8 @@ public class EventsHandler {
 					tep = true;
 				} else {
 					tep = false;
-					if (!world.isRemote) {
-						((ServerWorld) world).spawnParticle(ParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+					if (!world.isClientSide) {
+						((ServerWorld) world).spawnParticle(ParticleTypes.SMOKE_LARGE, player.getX(), player.getY() + player.height * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
 					}
 				}
 			}
@@ -120,8 +120,8 @@ public class EventsHandler {
 						ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 
 						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
-						if (!world.isRemote) {
-							((ServerWorld) world).spawnParticle(ParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+						if (!world.isClientSide) {
+							((ServerWorld) world).spawnParticle(ParticleTypes.PORTAL, player.getX(), player.getY() + player.height * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
 						}
 						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
@@ -150,8 +150,8 @@ public class EventsHandler {
 				ItemStack stack = new ItemStack(entry);
 
 				if (!stack.isEmpty()) {
-					if (!entity.world.isRemote) {
-						entity.world.spawnEntity(new ItemEntity(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
+					if (!entity.level.isClientSide) {
+						entity.level.spawnEntity(new ItemEntity(entity.level, entity.getX() + rand.nextDouble(), entity.getY(), entity.getZ() + rand.nextDouble(), stack));
 					}
 				}
 			}
@@ -162,7 +162,7 @@ public class EventsHandler {
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
 
-		if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == 0) {
+		if (!e.getWorld().isClientSide && e.getWorld().provider.getDimension() == 0) {
 			LootTableLoader.registerCustomLootTables((ServerWorld) e.getWorld());
 		}
 	}
@@ -190,7 +190,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
-		if (!e.getWorld().isRemote) {
+		if (!e.getWorld().isClientSide()) {
 			DungeonDataManager.handleWorldUnload(e.getWorld());
 		}
 	}
@@ -214,14 +214,14 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
 		if (CQRConfig.mobs.blockCancelledByAxe) {
-			PlayerEntity player = event.getEntityPlayer();
-			World world = player.world;
+			PlayerEntity player = event.getPlayer();
+			World world = player.level;
 
-			if (!world.isRemote && event.getTarget() instanceof AbstractEntityCQR) {
+			if (!world.isClientSide && event.getTarget() instanceof AbstractEntityCQR) {
 				AbstractEntityCQR targetCQR = (AbstractEntityCQR) event.getTarget();
 
-				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof AxeItem && player.getCooledAttackStrength(0) >= 0.9F) {
-					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
+				if (targetCQR.canBlockDamageSource(DamageSource.playerAttack(player)) && player.getMainHandItem().getItem() instanceof AxeItem && player.getAttackStrengthScale(0) >= 0.9F) {
+					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.tickCount);
 				}
 			}
 		}
@@ -229,44 +229,44 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
-		if (CQRConfig.bosses.antiCowardMode && event.getEntityPlayer() != null && !event.getEntityPlayer().isCreative()) {
-			BlockPos pos = new BlockPos(event.getEntityPlayer());
+		if (CQRConfig.bosses.antiCowardMode && event.getPlayer() != null && !event.getPlayer().isCreative()) {
+			BlockPos pos = event.getPlayer().blockPosition()
 			int radius = CQRConfig.bosses.antiCowardRadius;
-			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
-			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
+			AxisAlignedBB aabb = new AxisAlignedBB(pos.offset(-radius, -radius / 2, -radius), pos.offset(radius, radius / 2, radius));
+			event.setCanceled(!event.getWorld().getEntitiesOfClass(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}
 	}
 
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
 		if (CQRConfig.bosses.preventBlockPlacingNearBosses && event.getEntity() != null && (!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity) event.getEntity()).isCreative())) {
-			BlockPos pos = new BlockPos(event.getEntity());
+			BlockPos pos = event.getEntity().blockPosition()
 			int radius = CQRConfig.bosses.antiCowardRadius;
-			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));
-			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, aabb).isEmpty());
+			AxisAlignedBB aabb = new AxisAlignedBB(pos.offset(-radius, -radius / 2, -radius), pos.offset(radius, radius / 2, radius));
+			event.setCanceled(!event.getWorld().getEntitiesOfClass(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLeaderAttackedEvent(LivingAttackEvent event) {
-		if (event.getEntity().world.isRemote) {
+		if (event.getEntity().level.isClientSide) {
 			return;
 		}
 		if (!(event.getEntity() instanceof PlayerEntity)) {
 			return;
 		}
-		if (!(event.getSource().getTrueSource() instanceof LivingEntity)) {
+		if (!(event.getSource().getEntity(() instanceof LivingEntity)) {
 			return;
 		}
 		PlayerEntity player = (PlayerEntity) event.getEntity();
-		LivingEntity attacker = (LivingEntity) event.getSource().getTrueSource();
-		double x = player.posX;
-		double y = player.posY + player.eyeHeight;
-		double z = player.posZ;
+		LivingEntity attacker = (LivingEntity) event.getSource().getEntity();
+		double x = player.getX();
+		double y = player.getY() + player.getEyeHeight();
+		double z = player.getZ();
 		double r = 8.0D;
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
-			ItemStack stack = entity.getHeldItemMainhand();
+		for (AbstractEntityCQR entity : player.level.getEntitiesOfClass(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
+			ItemStack stack = entity.getMainHandItem();
 			if (stack.getItem() instanceof ISupportWeapon) {
 				continue;
 			}
@@ -282,21 +282,21 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLeaderAttackingEvent(AttackEntityEvent event) {
-		if (event.getEntityPlayer().world.isRemote) {
+		if (event.getPlayer().level.isClientSide) {
 			return;
 		}
 		if (!(event.getTarget() instanceof LivingEntity)) {
 			return;
 		}
-		PlayerEntity player = event.getEntityPlayer();
+		PlayerEntity player = event.getPlayer();
 		LivingEntity target = (LivingEntity) event.getTarget();
-		double x = player.posX;
-		double y = player.posY + player.eyeHeight;
-		double z = player.posZ;
+		double x = player.getX();
+		double y = player.getY() + player.getEyeHeight();
+		double z = player.getZ();
 		double r = 8.0D;
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-		for (AbstractEntityCQR entity : player.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
-			ItemStack stack = entity.getHeldItemMainhand();
+		for (AbstractEntityCQR entity : player.level.getEntitiesOfClass(AbstractEntityCQR.class, aabb, e -> (e.getLeader() == player))) {
+			ItemStack stack = entity.getMainHandItem();
 			if (stack.getItem() instanceof ISupportWeapon) {
 				continue;
 			}
@@ -310,16 +310,16 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onLivingFallEvent(LivingFallEvent event) {
 		LivingEntity entity = event.getEntityLiving();
-		ItemStack feet = entity.getItemStackFromSlot(EquipmentSlotType.FEET);
-		ItemStack mainhand = entity.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-		ItemStack offhand = entity.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+		ItemStack feet = entity.getItemBySlot(EquipmentSlotType.FEET);
+		ItemStack mainhand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
+		ItemStack offhand = entity.getItemBySlot(EquipmentSlotType.OFFHAND);
 
-		if (feet.getItem() == CQRItems.BOOTS_CLOUD) {
+		if (feet.getItem() == CQRItems.BOOTS_CLOUD.get()) {
 			event.setDistance(0.0F);
-		} else if (mainhand.getItem() == CQRItems.FEATHER_GOLDEN) {
+		} else if (mainhand.getItem() == CQRItems.FEATHER_GOLDEN.get()) {
 			mainhand.damageItem((int) event.getDistance(), entity);
 			event.setDistance(0.0F);
-		} else if (offhand.getItem() == CQRItems.FEATHER_GOLDEN) {
+		} else if (offhand.getItem() == CQRItems.FEATHER_GOLDEN.get()) {
 			offhand.damageItem((int) event.getDistance(), entity);
 			event.setDistance(0.0F);
 		}

@@ -149,9 +149,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				dy *= 2;
 				double dz = -0.5 + this.entity.getRandom().nextDouble();
 				dz *= 2;
-				for(int j = 0; j < 10; j++) {
-					ws.addParticle(ParticleTypes.ENCHANT, pos.x, pos.y, pos.z, dx * 0.05, dy * 0.05, dz * 0.05);
-				}
+				ws.sendParticles(ParticleTypes.ENCHANT, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
 				this.entity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 			}
 		}

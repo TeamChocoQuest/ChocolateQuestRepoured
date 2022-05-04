@@ -10,6 +10,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -137,11 +138,15 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 						summoned.setUUID(MathHelper.createInsecureUUID());
 						summoned.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
-						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F);
-						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F);
-						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F);
-						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F);
-						this.entity.level.addParticle(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F);
+						if(!this.entity.level.isClientSide) {
+							ServerWorld sw = (ServerWorld)this.entity.level;
+							
+							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0F, 0.5F, 0F, 2);
+							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0.5F, 0.0F, 0.5F, 1);
+							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0.5F, 0.0F, -0.5F, 1);
+							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, -0.5F, 0.0F, 0.5F, 1);
+							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, -0.5F, 0.0F, -0.5F, 1);
+						}
 
 						this.entity.level.addFreshEntity(summoned);
 						if (this.summoner != null && !this.summoner.getSummoner().isDeadOrDying()) {

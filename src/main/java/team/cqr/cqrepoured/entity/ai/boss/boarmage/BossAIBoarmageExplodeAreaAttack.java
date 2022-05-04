@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion.Mode;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityCQRBoarmage> {
 
@@ -64,10 +65,13 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 		// Particles on positions
 		if (this.entity.tickCount % 5 == 0) {
 			for (BlockPos p : this.explosions) {
-				this.world.addParticle(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, -0.125);
-				this.world.addParticle(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, 0.125);
-				this.world.addParticle(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, -0.125);
-				this.world.addParticle(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, 0.125);
+				if(!this.world.isClientSide) {
+					ServerWorld sw = (ServerWorld)this.world;
+					sw.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 3, -0.125, 0.125, -0.125, 0.05);
+					sw.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 3, -0.125, 0.125, 0.125, 0.05);
+					sw.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 3, 0.125, 0.125, -0.125, 0.05);
+					sw.sendParticles(ParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 3, 0.125, 0.125, 0.125, 0.05);
+				}
 			}
 		}
 

@@ -21,6 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -707,9 +708,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double f = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
 			double f1 = (this.random.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
 			double f2 = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
-			for (int i = 0; i < 20; i++) {
-				this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
-				this.level.addParticle(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
+			if(!this.level.isClientSide) {
+				ServerWorld sw = (ServerWorld) this.level;
+				sw.sendParticles(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
+				sw.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
 			}
 		}
 		if (this.deathTime == 34 && this.isServerWorld()) {

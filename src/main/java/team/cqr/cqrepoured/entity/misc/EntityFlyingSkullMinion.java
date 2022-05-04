@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
@@ -16,13 +18,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.UUID;
 
 public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire {
 
@@ -159,10 +160,13 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			if (this.summoner != null && this.summoner.isAlive() && this.isAlive()) {
 				this.level.explode(this.summoner, this.position().x(), this.position().y(), this.position().z(), 2 * strengthMultiplier, false, Mode.NONE);
 			}
-			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 0.5F, 0.0F, 0.5F);
-			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 0.5F, 0.0F, -0.5F);
-			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), -0.5F, 0.0F, -0.5F);
-			this.level.addParticle(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), -0.5F, 0.0F, 0.5F);
+			if(!this.level.isClientSide) {
+				ServerWorld sw = (ServerWorld) this.level;
+				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, 0.5F, 1);
+				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, -0.5F, 1);
+				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, -0.5F, 0.0F, -0.5F, 1);
+				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, -0.5F, 0.0F, 0.5F, 1);
+			}
 		}
 	}
 

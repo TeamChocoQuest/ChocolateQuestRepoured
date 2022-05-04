@@ -71,7 +71,7 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 		Vector3d vec3 = vec1.add(new Vector3d(-0.4D, -0.5D, 0.0D).xRot((float) -pitch).yRot((float) -yaw));
 		for (double d = reachDistance; d >= 0.0D; d--) {
 			Vector3d vec4 = vec3.add(vec2.scale(d));
-			((ServerWorld) attacker.level).addParticle(ParticleTypes.SMOKE, vec4.x, vec4.y, vec4.z, 0.05D, 0.05D, 0.05D);
+			((ServerWorld) attacker.level).sendParticles(ParticleTypes.SMOKE, vec4.x, vec4.y, vec4.z, 1, 0, 0, 0, 0.05);
 		}
 
 		attacker.level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, attacker.getSoundSource(), 1.0F, 1.0F);

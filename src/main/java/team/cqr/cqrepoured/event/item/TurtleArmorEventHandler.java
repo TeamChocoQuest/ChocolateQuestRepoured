@@ -34,7 +34,7 @@ public class TurtleArmorEventHandler {
 				double x = entity.getX();
 				double y = entity.getY() + entity.getEyeHeight();
 				double z = entity.getZ();
-				((ServerWorld) entity.level).addParticle(ParticleTypes.HEART, x, y, z, /*2,*/ 0.5D, 0.5D, 0.5D/*, 1.0D*/);
+				((ServerWorld) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class TurtleArmorEventHandler {
 		double x = entity.getX();
 		double y = entity.getY() + entity.getEyeHeight();
 		double z = entity.getZ();
-		((ServerWorld) entity.level).addParticle(ParticleTypes.HEART, x, y, z, /*4,*/ 0.5D, 0.5D, 0.5D/*, 1.0D*/);
+		((ServerWorld) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
 
 		entity.level.playSound(null, x, y, z, SoundEvents.GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
 

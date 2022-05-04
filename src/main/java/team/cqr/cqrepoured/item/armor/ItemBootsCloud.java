@@ -1,7 +1,10 @@
 package team.cqr.cqrepoured.item.armor;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -18,11 +21,10 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.ItemLore;
-
-import java.util.List;
 
 public class ItemBootsCloud extends ArmorItem {
 
@@ -61,7 +63,9 @@ public class ItemBootsCloud extends ArmorItem {
 
 		player.flyingSpeed += 0.04F; //Correct replacement?
 		if (player.fallDistance > 0.0F || player.isSprinting()) {
-			world.addParticle(ParticleTypes.CLOUD, player.position().x, player.position().y, player.position().y, (random.nextFloat() - 0.5F) / 2.0F, -0.5D, (random.nextFloat() - 0.5F) / 2.0F);
+			if(!world.isClientSide) {
+				((ServerWorld)world).sendParticles(ParticleTypes.CLOUD, player.position().x, player.position().y, player.position().y, 3, (random.nextFloat() - 0.5F) / 2.0F, -0.5D, (random.nextFloat() - 0.5F) / 2.0F, 1);
+			}
 		}
 	}
 

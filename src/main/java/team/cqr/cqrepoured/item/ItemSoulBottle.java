@@ -138,7 +138,7 @@ public class ItemSoulBottle extends ItemLore {
 	private void spawnAdditions(World world, double x, double y, double z) {
 		if (!world.isClientSide) {
 			for(int i = 0; i < 4; i++) {
-				((ServerWorld) world).addParticle(ParticleTypes.CLOUD, x, y, z, 0.25D, 0.25D, 0.25D);
+				((ServerWorld) world).sendParticles(ParticleTypes.CLOUD, x, y, z, 5, 0.25D, 0.25D, 0.25D, 1.0);
 			}
 			world.playSound(null, x, y, z, SoundEvents.ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 0.6F + random.nextFloat() * 0.2F);
 		}
