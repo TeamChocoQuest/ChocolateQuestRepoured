@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -102,6 +103,11 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected boolean isArmorBone(GeoBone bone) {
+		return false;
 	}
 
 }
