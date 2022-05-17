@@ -4,6 +4,10 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -12,6 +16,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -57,6 +62,27 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	 * 1) getHeldItemForBone
 	 * 2) getCameraTransformForItemAtBone
 	 */
+	
+	@Override
+	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE)) {
+			bone.setHidden(this.currentEntityBeingRendered.hasCape(), false);
+		}
+		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
+	
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, T currentEntity) {
+		if(boneName.equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && currentEntity.hasCape()) {
+			return currentEntity.getResourceLocationOfCape();
+		}
+		return null;
+	}
+	
+	@Override
+	protected boolean isArmorBone(GeoBone bone) {
+		return bone.getName().startsWith("armor");
+	}
 	
 	protected abstract void calculateArmorStuffForBone(String boneName, T currentEntity);
 	protected abstract void calculateItemStuffForBone(String boneName, T currentEntity);
@@ -151,6 +177,11 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 			return this.currentArmorPartAtBone.apply(armorModel);
 		}
 		return null;
+	}
+	
+	@Override
+	public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 	}
 	
 	@Override
