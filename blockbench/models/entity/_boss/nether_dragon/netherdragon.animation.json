@@ -1,0 +1,127 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.netherdragon.idle": {
+			"loop": true,
+			"bones": {
+				"jawUpper": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"jawLower": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.netherdragon.mouth_open": {
+			"loop": true,
+			"bones": {
+				"jawUpper": {
+					"rotation": {
+						"vector": [-7.5, 0, 0]
+					}
+				},
+				"jawLower": {
+					"rotation": {
+						"vector": [37.5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.netherdragon.growl": {
+			"animation_length": 3.12,
+			"bones": {
+				"root": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [-15, 0, 0]
+						},
+						"0.76": {
+							"vector": [-15, 22.5, 0]
+						},
+						"1.04": {
+							"vector": [-15, 0, 0]
+						},
+						"1.32": {
+							"vector": [-15, -22.5, 0]
+						},
+						"1.56": {
+							"vector": [-15, 0, 0]
+						},
+						"1.8": {
+							"vector": [-15, 22.5, 0]
+						},
+						"2.08": {
+							"vector": [-15, 0, 0]
+						},
+						"3.12": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"jawUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.28": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [-22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [-40, 0, 0]
+						},
+						"2.36": {
+							"vector": [-22.5, 0, 0]
+						},
+						"3.12": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"jawLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.28": {
+							"vector": [0, 0, 0]
+						},
+						"0.52": {
+							"vector": [22.5, 0, 0]
+						},
+						"1.04": {
+							"vector": [40, 0, 0]
+						},
+						"2.36": {
+							"vector": [22.5, 0, 0]
+						},
+						"3.12": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			},
+			"sound_effects": {
+				"0.52": {
+					"effect": "start_scream"
+				},
+				"1.04": {
+					"effect": "scream"
+				},
+				"2.36": {
+					"effect": "end_scream"
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
