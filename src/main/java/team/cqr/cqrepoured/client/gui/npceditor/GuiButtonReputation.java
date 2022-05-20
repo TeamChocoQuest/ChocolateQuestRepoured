@@ -7,6 +7,7 @@ public class GuiButtonReputation extends GuiButtonTextured {
 
 	private static final String[] POSSIBLE_REPUTAITONS = { "None", "Neutral", "Accepted", "Friend", "Ally", "Member" };
 	private int reputationIndex = 0;
+	private String displayString;
 
 	public GuiButtonReputation(int buttonId, int x, int y) {
 		super(buttonId, x, y, 60, 12, POSSIBLE_REPUTAITONS[0], "container/gui_button_reputation", null, 0.0D, 0.0D, 1.0D, 1.0D / 3.0D);

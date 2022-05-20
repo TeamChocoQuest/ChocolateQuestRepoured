@@ -141,7 +141,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
 
 			this.entity.getTrades().editTrade(index, trade);
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+			player.open(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
 		}
 	}
 
