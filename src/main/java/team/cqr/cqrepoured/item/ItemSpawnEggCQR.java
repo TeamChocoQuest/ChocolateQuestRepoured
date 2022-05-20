@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.item;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -10,13 +11,20 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public class ItemSpawnEggCQR extends Item {
@@ -46,7 +54,7 @@ public class ItemSpawnEggCQR extends Item {
 				CQRMain.logger.error("Failed to spawn entity from preset item!", e);
 			}
 			if (entity != null) {
-				entity.onInitialSpawn(context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), null);
+				entity.finalizeSpawn((ServerWorld) context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), SpawnReason.SPAWN_EGG, null, null );
 				BlockPos blockpos = context.getClickedPos().relative(context.getClickedFace());
 				double d0 = this.getYOffset(context.getLevel(), blockpos);
 				entity.setPos(blockpos.getX() + 0.5D, blockpos.getY() + d0, blockpos.getZ() + 0.5D);
@@ -62,15 +70,15 @@ public class ItemSpawnEggCQR extends Item {
 
 	protected double getYOffset(World world, BlockPos blockpos) {
 		AxisAlignedBB aabb = new AxisAlignedBB(blockpos).expandTowards(0.0D, -1.0D, 0.0D);
-		List<AxisAlignedBB> list = world.getCollisionBoxes(null, aabb);
+		List<VoxelShape> list = world.getBlockCollisions(null, aabb).collect(Collectors.toList());
 
 		if (list.isEmpty()) {
 			return 0.0D;
 		} else {
 			double d0 = aabb.minY;
 
-			for (AxisAlignedBB aabb1 : list) {
-				d0 = Math.max(aabb1.maxY, d0);
+			for (VoxelShape aabb1 : list) {
+				d0 = Math.max(aabb1.max(Direction.Axis.Y), d0);
 			}
 
 			return d0 - blockpos.getY();
@@ -79,7 +87,7 @@ public class ItemSpawnEggCQR extends Item {
 
 	@Override
 	public ITextComponent getName(ItemStack stack) {
-		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")";
+		return new TranslationTextComponent("entity.cqr_" + this.entityName + ".name").append(new StringTextComponent(" (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")"));
 	}
 
 	private void setEquipment(AbstractEntityCQR entity) {
