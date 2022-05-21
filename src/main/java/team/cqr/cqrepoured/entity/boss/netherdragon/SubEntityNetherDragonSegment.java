@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -11,10 +13,17 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.world.Explosion.Mode;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonBodyPart;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 
-public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire {
+public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire, IAnimatable, IAnimationTickable {
 
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
@@ -135,6 +144,30 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	@Override
 	protected Class<? extends CQRPartEntity<?>> getClassForRenderer() {
 		return SubEntityNetherDragonSegment.class;
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		
+	}
+	
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public EntityRenderer<? extends SubEntityNetherDragonSegment> createRenderer(EntityRendererManager manager) {
+		return new RenderNetherDragonBodyPart(manager);
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return null;
+	}
+
+	@Override
+	public int tickTimer() {
+		if(this.getParent() != null) {
+			return this.getParent().tickCount;
+		}
+		return this.tickCount;
 	}
 
 }
