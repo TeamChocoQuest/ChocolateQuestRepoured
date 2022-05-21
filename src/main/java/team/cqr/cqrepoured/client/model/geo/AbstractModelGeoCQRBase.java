@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.model.geo;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ITextureVariants;
 
-public abstract class AbstractModelGeoCQRBase<T extends LivingEntity & IAnimatable & IAnimationTickable> extends AnimatedTickingGeoModel<T> {
+public abstract class AbstractModelGeoCQRBase<T extends Entity & IAnimatable & IAnimationTickable> extends AnimatedTickingGeoModel<T> {
 
 	protected final ResourceLocation MODEL_RESLOC;
 	protected final ResourceLocation TEXTURE_DEFAULT;
