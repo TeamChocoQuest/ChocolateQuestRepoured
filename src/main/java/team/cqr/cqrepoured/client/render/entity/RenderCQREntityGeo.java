@@ -6,7 +6,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -33,11 +32,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
 	
-	@SuppressWarnings("resource")
-	protected void bindTexture(ResourceLocation textureLocation) {
-		Minecraft.getInstance().textureManager.bind(textureLocation);
-	}
-
 	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
