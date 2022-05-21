@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
@@ -9,7 +12,9 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.trade.Trade;
@@ -17,6 +22,7 @@ import team.cqr.cqrepoured.faction.FactionRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public class GuiButtonTrade extends Button {
 
@@ -42,17 +48,19 @@ public class GuiButtonTrade extends Button {
 	}
 
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		// Referenced from net.minecraftforge.fml.client.gui.widget.ExtendedButton:renderButton
 		if (this.visible && this.trade != null) {
-			mc.getTextureManager().bindTexture(TEXTURE);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-			int i = this.getHoverState(this.hovered);
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			Minecraft mc = Minecraft.getInstance();
+			mc.getTextureManager().bind(TEXTURE);
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			this.isHovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+			int i = this.getYImage(this.isHovered());
+			RenderSystem.enableBlend();
+			RenderSystem.defaultBlendFunc();
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GuiHelper.drawTexture(this.x, this.y, 0.0D, i / 4.0D, this.width, this.height, 0.90625D, 0.25D);
-			this.mouseDragged(mc, mouseX, mouseY);
+			this.mouseMoved(mouseX, mouseY);
 
 			GuiHelper.drawTexture(this.x + 77.0D, this.y + 2.0D, 0.0D, 0.75D, 16.0D, 16.0D, 0.125D, 0.2D);
 			if (!this.trade.isUnlockedFor(mc.player)) {
@@ -61,27 +69,27 @@ public class GuiButtonTrade extends Button {
 				GuiHelper.drawTexture(this.x + 77.0D, this.y + 2.0D, 0.125D, 0.75D, 16.0D, 16.0D, 0.125D, 0.2D);
 			}
 
-			ItemRenderer itemRender = mc.getRenderItem();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-			RenderHelper.enableGUIStandardItemLighting();
-			GlStateManager.enableRescaleNormal();
-			GlStateManager.enableDepth();
+			ItemRenderer itemRender = mc.getItemRenderer();
+			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+			// TODO Unknown moved reference:
+			// OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+			RenderHelper.setupForFlatItems();
+			RenderSystem.enableRescaleNormal();
+			RenderSystem.enableDepthTest();
 
-			itemRender.zLevel = 100.0F;
+			itemRender.blitOffset = 100.0F;
 			int x = this.x + 4;
 			int y = this.y + 2;
 			for (int j = 0; j < 4 && j < this.trade.getInputItemsClient().size(); j++) {
-				itemRender.renderItemAndEffectIntoGUI(mc.player, this.trade.getInputItemsClient().get(j).getStack(), x + j * 18, y);
-				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, this.trade.getInputItemsClient().get(j).getStack(), x + j * 18, y, null);
+				itemRender.renderAndDecorateItem(this.trade.getInputItemsClient().get(j).getStack(), x + j * 18, y);
+				itemRender.renderGuiItemDecorations(mc.font, this.trade.getInputItemsClient().get(j).getStack(), x + j * 18, y, null);
 			}
-			itemRender.renderItemAndEffectIntoGUI(mc.player, this.trade.getOutputClient(), x + 92, y);
-			itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, this.trade.getOutputClient(), x + 92, y, null);
-			itemRender.zLevel = 0.0F;
+			itemRender.renderAndDecorateItem( this.trade.getOutputClient(), x + 92, y);
+			itemRender.renderGuiItemDecorations(mc.font, this.trade.getOutputClient(), x + 92, y, null);
+			itemRender.blitOffset = 0.0F;
 
-			GlStateManager.disableDepth();
-			GlStateManager.disableRescaleNormal();
-			RenderHelper.disableStandardItemLighting();
+			RenderSystem.disableDepthTest();
+			RenderSystem.disableRescaleNormal();
 		}
 	}
 
