@@ -1,7 +1,10 @@
 package team.cqr.cqrepoured.client.util;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class GuiHelper {
 
@@ -21,28 +24,28 @@ public class GuiHelper {
 		GL11.glEnd();
 	}
 
-	public static void drawString(FontRenderer fontRenderer, String text, int x, int y, int color, boolean centered, boolean withShadow) {
+	public static void drawString(FontRenderer fontRenderer, MatrixStack matrixStack, String text, int x, int y, int color, boolean centered, boolean withShadow) {
 		if (centered) {
 			x -= fontRenderer.width(text) / 2;
 		}
 		if (withShadow) {
-			fontRenderer.drawStringWithShadow(text, x, y, color);
+			fontRenderer.drawShadow(matrixStack, text, x, y, color);
 		} else {
-			fontRenderer.drawString(text, x, y, color);
+			fontRenderer.draw(matrixStack, text, x, y, color);
 		}
 	}
 
-	public static boolean isMouseOver(int mouseX, int mouseY, GuiTextField textField) {
-		if (mouseX < textField.x) {
+	public static boolean isMouseOver(int mouseX, int mouseY, TextField textField) {
+		if (mouseX < textField.getX()) {
 			return false;
 		}
-		if (mouseX > textField.x + textField.width) {
+		if (mouseX > textField.getX() + textField.getWidth()) {
 			return false;
 		}
-		if (mouseY < textField.y) {
+		if (mouseY < textField.getY()) {
 			return false;
 		}
-		return mouseY <= textField.y + textField.height;
+		return mouseY <= textField.getY() + textField.getHeight();
 	}
 
 	public static boolean isValidCharForNumberTextField(char typedChar, int keyCode, boolean allowNegative, boolean allowDouble) {
