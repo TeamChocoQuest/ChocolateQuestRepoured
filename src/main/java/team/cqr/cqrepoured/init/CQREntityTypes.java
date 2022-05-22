@@ -50,6 +50,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
@@ -118,9 +119,9 @@ public class CQREntityTypes {
 			() -> EntityType.Builder.<ProjectileThrownBlock>of(ProjectileThrownBlock::new, EntityClassification.MISC).sized(1.0F, 1.0F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_thrown_block").toString()));
 
-	/*public static final RegistryObject<EntityType<ProjectileEnergyOrb>> PROJECTILE_ENERGY_ORB = ENTITY_TYPES.register("projectile_energy_orb",
+	public static final RegistryObject<EntityType<ProjectileEnergyOrb>> PROJECTILE_ENERGY_ORB = ENTITY_TYPES.register("projectile_energy_orb",
 			() -> EntityType.Builder.<ProjectileEnergyOrb>of(ProjectileEnergyOrb::new, EntityClassification.MISC).sized(1.5F, 1.5F).clientTrackingRange(4).updateInterval(10)
-					.build(CQRMain.prefix("projectile_energy_orb").toString())); */
+					.build(CQRMain.prefix("projectile_energy_orb").toString())); 
 
 	public static final RegistryObject<EntityType<ProjectileHookShotHook>> PROJECTILE_HOOKSHOT_HOOK = ENTITY_TYPES.register("projectile_hookshot_hook",
 			() -> EntityType.Builder.<ProjectileHookShotHook>of(ProjectileHookShotHook::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(12).updateInterval(5)
@@ -209,7 +210,7 @@ public class CQREntityTypes {
 	}
 
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(IFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
-		return ENTITY_TYPES.register(entityName, () -> EntityType.Builder
+		RegistryObject<EntityType<T>> result = ENTITY_TYPES.register(entityName, () -> EntityType.Builder
 				.<T>of(factory, EntityClassification.MISC)
 				.sized(width, height)
 				.setTrackingRange(128)
@@ -217,13 +218,43 @@ public class CQREntityTypes {
 				.updateInterval(updateInterval)
 				.setShouldReceiveVelocityUpdates(true)
 				.build(CQRMain.prefix(entityName).toString()));
+		
+		return result;
 	}
 	
 	@SubscribeEvent
 	public static void initializeAttributes(EntityAttributeCreationEvent event) {
 		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
+
+		event.put(BOARMAGE.get(), EntityCQRBoarmage.createCQRAttributes().build());
+		
+		event.put(ENDER_CALAMITY.get(), EntityCQREnderCalamity.createCQRAttributes().build());
+		
+		event.put(ENDER_KING.get(), EntityCQREnderKing.createCQRAttributes().build());
+		
+		event.put(ENDERMAN.get(), EntityCQREnderman.createCQRAttributes().build());
 		
 		event.put(EXTERMINATOR.get(), EntityCQRExterminator.createCQRAttributes().build());
+		
+		event.put(GIANT_SPIDER.get(), EntityCQRGiantSpider.createCQRAttributes().build());
+		
+		event.put(GIANT_TORTOISE.get(), EntityCQRGiantTortoise.createCQRAttributes().build());
+		
+		event.put(LICH.get(), EntityCQRLich.createCQRAttributes().build());
+		
+		event.put(NECROMANCER.get(), EntityCQRNecromancer.createCQRAttributes().build());
+		
+		event.put(NETHER_DRAGON.get(), EntityCQRNetherDragon.createCQRAttributes().build());
+		
+		event.put(PIRATE_CAPTAIN.get(), EntityCQRPirateCaptain.createCQRAttributes().build());
+		
+		event.put(PIRATE_PARROT.get(), EntityCQRPirateParrot.createAttributes().build());
+		
+		event.put(SPECTRE_LORD_ILLUSION.get(), EntitySpectreLordIllusion.createCQRAttributes().build());
+		
+		event.put(WALKER_KING.get(), EntityCQRWalkerKing.createCQRAttributes().build());
+		
+		event.put(WALKER_KING_ILLUSION.get(), EntityWalkerKingIllusion.createCQRAttributes().build());
 	}
 
 	public static void registerEntityTypes()
