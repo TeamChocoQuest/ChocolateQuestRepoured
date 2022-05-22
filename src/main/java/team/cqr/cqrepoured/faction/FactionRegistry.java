@@ -47,6 +47,7 @@ public class FactionRegistry {
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
 
 	private final Map<String, Faction> factions = new HashMap<>();
+	//TODO: Replace player reputation saving with generic capability
 	private final Map<UUID, Object2IntMap<String>> playerFactionRepuMap = new HashMap<>();
 	private final Map<Class<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
 
