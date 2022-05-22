@@ -1,5 +1,14 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -7,15 +16,10 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
 
 public class DungeonDataManager {
 
@@ -59,7 +63,7 @@ public class DungeonDataManager {
 	private final File file;
 	private boolean modifiedSinceLastSave = false;
 
-	public DungeonDataManager(World world) {
+	public DungeonDataManager(IWorld world) {
 		/*int dim = world.provider.getDimension();
 		if (dim == 0) {
 			this.file = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/structures.nbt");
@@ -68,7 +72,7 @@ public class DungeonDataManager {
 		}*/
 		if(world instanceof ServerWorld) {
 			ServerWorld sw = (ServerWorld)world;
-			if(world.dimension().equals(DimensionType.OVERWORLD_LOCATION)) {
+			if(sw.dimension().equals(DimensionType.OVERWORLD_LOCATION)) {
 				//Is now a .dat file
 				this.file = sw.getDataStorage().getDataFile("CQR/structures");
 			} else {
@@ -82,28 +86,28 @@ public class DungeonDataManager {
 	}
 
 	@Nullable
-	public static DungeonDataManager getInstance(World world) {
-		if (!world.isClientSide) {
+	public static DungeonDataManager getInstance(IWorld world) {
+		if (!world.isClientSide()) {
 			return INSTANCES.get(world);
 		}
 		return null;
 	}
 
-	public static void handleWorldLoad(World world) {
-		if (!world.isClientSide && !INSTANCES.containsKey(world)) {
+	public static void handleWorldLoad(IWorld world) {
+		if (!world.isClientSide() && !INSTANCES.containsKey(world)) {
 			INSTANCES.put(world, new DungeonDataManager(world));
 			INSTANCES.get(world).readData();
 		}
 	}
 
-	public static void handleWorldSave(World world) {
-		if (!world.isClientSide && INSTANCES.containsKey(world)) {
+	public static void handleWorldSave(IWorld world) {
+		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 		}
 	}
 
-	public static void handleWorldUnload(World world) {
-		if (!world.isClientSide && INSTANCES.containsKey(world)) {
+	public static void handleWorldUnload(IWorld world) {
+		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
@@ -115,21 +119,21 @@ public class DungeonDataManager {
 		}
 	}
 
-	public static Set<String> getSpawnedDungeonNames(World world) {
+	public static Set<String> getSpawnedDungeonNames(IWorld world) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getSpawnedDungeonNames();
 		}
 		return Collections.emptySet();
 	}
 
-	public static Set<DungeonInfo> getLocationsOfDungeon(World world, DungeonBase dungeon) {
+	public static Set<DungeonInfo> getLocationsOfDungeon(IWorld world, DungeonBase dungeon) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
 		}
 		return Collections.emptySet();
 	}
 
-	public static boolean isDungeonSpawnLimitMet(World world, DungeonBase dungeon) {
+	public static boolean isDungeonSpawnLimitMet(IWorld world, DungeonBase dungeon) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
 		}

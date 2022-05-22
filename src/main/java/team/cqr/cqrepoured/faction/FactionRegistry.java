@@ -1,5 +1,24 @@
 package team.cqr.cqrepoured.faction;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.FileUtils;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -10,13 +29,12 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.io.FileUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
@@ -27,14 +45,6 @@ import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformatio
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
 
 public class FactionRegistry {
 
@@ -59,8 +69,8 @@ public class FactionRegistry {
 		return SERVER_INSTANCE;
 	}
 
-	public static FactionRegistry instance(World world) {
-		return world.isClientSide ? CLIENT_INSTANCE : SERVER_INSTANCE;
+	public static FactionRegistry instance(IWorld world) {
+		return world.isClientSide() ? CLIENT_INSTANCE : SERVER_INSTANCE;
 	}
 
 	public static FactionRegistry instance(Entity entity) {
@@ -403,7 +413,7 @@ public class FactionRegistry {
 		}
 	}
 
-	public void saveAllReputationData(final boolean removeMapsFromMemory, final World world) {
+	public void saveAllReputationData(final boolean removeMapsFromMemory, final IWorld world) {
 		for (UUID playerID : this.playerFactionRepuMap.keySet()) {
 			this.savePlayerReputation(playerID, removeMapsFromMemory, world);
 		}
@@ -412,11 +422,11 @@ public class FactionRegistry {
 		}
 	}
 	
-	public void savePlayerReputation(final UUID playerID, final World world) {
+	public void savePlayerReputation(final UUID playerID, final IWorld world) {
 		this.savePlayerReputation(playerID, false, world);
 	}
 
-	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap, final World world) {
+	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap, final IWorld world) {
 		Map<String, Integer> mapping = this.playerFactionRepuMap.get(playerID);
 		CompoundNBT root = new CompoundNBT();
 		for (Map.Entry<String, Integer> entry : mapping.entrySet()) {

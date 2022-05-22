@@ -1,17 +1,24 @@
 package team.cqr.cqrepoured.util.data;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.storage.DimensionSavedDataManager;
-
-import javax.annotation.Nullable;
-import java.io.*;
-import java.util.Properties;
 
 public class FileIOUtil {
 
@@ -22,7 +29,7 @@ public class FileIOUtil {
 	}
 
 	@Nullable
-	public static File getWorldRootFolder(World world) {
+	public static File getWorldRootFolder(IWorld world) {
 		File levelDatFile = getDatFileInWorldAtPath(world, "level");
 		if(levelDatFile != null) {
 			return levelDatFile.getParentFile();
@@ -31,7 +38,7 @@ public class FileIOUtil {
 	}
 	
 	@Nullable
-	public static File getDatFileInWorldAtPath(World world, String filePath) {
+	public static File getDatFileInWorldAtPath(IWorld world, String filePath) {
 		if(!(world instanceof ServerWorld)) {
 			return null;
 		}
