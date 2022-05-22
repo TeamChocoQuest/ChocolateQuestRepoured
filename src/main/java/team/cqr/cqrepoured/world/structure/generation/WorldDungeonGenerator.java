@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
 import com.google.common.base.Predicates;
+
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.AbstractChunkProvider;
@@ -103,12 +105,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	}
 
 	public static Random getRandomForCoords(World world, int x, int z) {
-		return new Random(getSeed(world, x, z));
+		return new Random(getSeed((ISeedReader) world, x, z));
 	}
 
 	// This is needed to calculate the seed, cause we need a new seed for every
 	// generation OR we'll have the same dungeon generating every time
-	public static long getSeed(World world, int chunkX, int chunkZ) {
+	public static long getSeed(ISeedReader world, int chunkX, int chunkZ) {
 		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1_094_792_450L;
 		long result = xorShift64(mix);
 
