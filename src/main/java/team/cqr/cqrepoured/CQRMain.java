@@ -2,9 +2,7 @@ package team.cqr.cqrepoured;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,20 +11,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.FlatChunkGenerator;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.settings.DimensionStructuresSettings;
-import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -64,7 +50,6 @@ import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 @Mod(CQRMain.MODID)
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
@@ -281,37 +266,6 @@ public class CQRMain {
 	 * 
 	 * @SubscribeEvent public static void onFMLServerStoppingEvent(FMLServerStoppingEvent event) { FactionRegistry.getServerInstance().saveAllReputationData(true, event.getServer().overworld()); CQStructure.clearCache(); }
 	 */
-
-	@SubscribeEvent
-	public void biomeModification(final BiomeLoadingEvent event) {
-		RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
-
-		if (BiomeDictionary.hasType(key, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(key, BiomeDictionary.Type.END)) {
-
-		} else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD)) {
-			event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_WALL_IN_THE_NORTH);
-		}
-	}
-
-	@SubscribeEvent
-	public void addDimensionalSpacing(final WorldEvent.Load event) {
-		if (event.getWorld() instanceof ServerWorld) {
-			ServerWorld serverWorld = (ServerWorld) event.getWorld();
-
-			// Prevent spawning our structure in Vanilla's superflat world as
-			// people seem to want their superflat worlds free of modded structures.
-			// Also that vanilla superflat is really tricky and buggy to work with in my experience.
-			if (serverWorld.getChunkSource().getGenerator() instanceof FlatChunkGenerator && serverWorld.dimension().equals(World.OVERWORLD)) {
-				return;
-			}
-
-			Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
-			if (serverWorld.dimension().equals(World.OVERWORLD)) {
-				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
-			}
-			serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
-		}
-	}
 
 	public void init(final FMLCommonSetupEvent event) {
 		//DungeonInhabitantManager.instance().loadDungeonInhabitants();

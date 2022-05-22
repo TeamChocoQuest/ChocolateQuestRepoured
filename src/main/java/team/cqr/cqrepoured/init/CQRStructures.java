@@ -2,15 +2,26 @@ package team.cqr.cqrepoured.init;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,6 +31,7 @@ import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
 import java.util.HashMap;
 import java.util.Map;
 
+@EventBusSubscriber
 public class CQRStructures {
 	
 	public static final DeferredRegister<Structure<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
@@ -81,6 +93,37 @@ public class CQRStructures {
 	
 	protected static IStructurePieceType register(IStructurePieceType type, String id) {
 		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id );
+	}
+	
+	@SubscribeEvent
+	public static void biomeModification(final BiomeLoadingEvent event) {
+		RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
+
+		if (BiomeDictionary.hasType(key, BiomeDictionary.Type.NETHER) || BiomeDictionary.hasType(key, BiomeDictionary.Type.END)) {
+
+		} else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD)) {
+			event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_WALL_IN_THE_NORTH);
+		}
+	}
+
+	@SubscribeEvent
+	public static void addDimensionalSpacing(final WorldEvent.Load event) {
+		if (event.getWorld() instanceof ServerWorld) {
+			ServerWorld serverWorld = (ServerWorld) event.getWorld();
+
+			// Prevent spawning our structure in Vanilla's superflat world as
+			// people seem to want their superflat worlds free of modded structures.
+			// Also that vanilla superflat is really tricky and buggy to work with in my experience.
+			if (serverWorld.getChunkSource().getGenerator() instanceof FlatChunkGenerator && serverWorld.dimension().equals(World.OVERWORLD)) {
+				return;
+			}
+
+			Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkSource().generator.getSettings().structureConfig());
+			if (serverWorld.dimension().equals(World.OVERWORLD)) {
+				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
+			}
+			serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
+		}
 	}
 	
 }
