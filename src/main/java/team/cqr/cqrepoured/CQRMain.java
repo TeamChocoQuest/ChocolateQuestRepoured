@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -44,6 +45,8 @@ import software.bernie.geckolib3.GeckoLib;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.customtextures.TextureSetManager;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
@@ -61,6 +64,7 @@ import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 @Mod(CQRMain.MODID)
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
@@ -262,14 +266,16 @@ public class CQRMain {
 	 * 
 	 * DungeonRegistry.getInstance().loadDungeonFiles(); CQStructure.checkAndUpdateStructureFiles(); CQStructure.updateSpecialEntities(); ProtectedRegionHelper.updateWhitelists(); CQRDispenseBehaviors.registerDispenseBehaviors();
 	 * EntityCQRNetherDragon.reloadBreakableBlocks(); DungeonInhabitantManager.instance().loadDungeonInhabitants(); }
-	 * 
-	 * @SubscribeEvent public static void onFMLServerStartingEvent(FMLServerAboutToStartEvent event) { // Since the CTS manager could also be corrupted, let's make him reload his data...
-	 * TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
-	 * 
-	 * FactionRegistry.getServerInstance().loadFactions();
-	 * 
-	 * CQStructure.cacheFiles(); }
-	 * 
+	 *
+	 */
+	 @SubscribeEvent 
+	 public void onFMLServerStartingEvent(FMLServerAboutToStartEvent event) { 
+		 // Since the CTS manager could also be corrupted, let's make him reload his data...
+		 TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+		 FactionRegistry.getServerInstance().loadFactions();
+		 //CQStructure.cacheFiles(); 
+	 }
+	 /* 
 	 * @SubscribeEvent public static void onFMLServerStartingEvent(FMLServerStartingEvent event) { event.registerServerCommand(new CommandExport()); event.registerServerCommand(new CommandChangeReputation()); event.registerServerCommand(new
 	 * CommandGetProtectedRegion()); event.registerServerCommand(new CommandDeleteProtectedRegion()); event.registerServerCommand(new CommandLocateDungeon()); event.registerServerCommand(new CommandImport()); }
 	 * 
