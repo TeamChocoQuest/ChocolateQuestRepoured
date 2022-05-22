@@ -11,6 +11,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
@@ -122,6 +124,7 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 	
 	@Override
+	@OnlyIn(Dist.CLIENT)
 	public EntityRenderer<SubEntityExterminatorFieldEmitter> createRenderer(EntityRendererManager manager) {
 		return new RenderExterminatorBackpackPart<SubEntityExterminatorFieldEmitter>(manager);
 	}
