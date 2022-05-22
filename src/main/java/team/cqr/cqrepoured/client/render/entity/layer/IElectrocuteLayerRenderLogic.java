@@ -25,7 +25,7 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 					return;
 				}
 				long seed = (entity.getId() * 255L) ^ (entity.tickCount >> 1 << 1);
-				ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(entity, 0, 0, 0, 5, seed);
+				ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(matrix, buffer, entity, 0, 0, 0, 5, seed);
 				if (cap.getTarget() != null) {
 					Entity target = cap.getTarget();
 

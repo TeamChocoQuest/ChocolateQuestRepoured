@@ -25,7 +25,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 	public void render(T pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		if (pEntity.isActive()) {
 			long seed = (pEntity.getId() * 255L) ^ (pEntity.tickCount >> 1 << 1);
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pEntity, 0, 0, 0, 5, seed);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, pEntity, 0, 0, 0, 5, seed);
 			if (pEntity.getTargetedEntity() != null) {
 				Entity target = pEntity.getTargetedEntity();
 
@@ -44,7 +44,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				pMatrixStack.pushPose();
 
-				ElectricFieldRenderUtil.renderElectricLineBetween(start, end, 0.5, 0, 0, 0, 5, seed);
+				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 0, 0, 0, 5, seed);
 
 				pMatrixStack.popPose();
 			}
