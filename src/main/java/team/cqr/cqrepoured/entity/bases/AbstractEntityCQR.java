@@ -103,6 +103,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacemen
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import io.netty.buffer.Unpooled;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -501,6 +504,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		//Apply base attributes
 		this.applyAttributeValues();
 		
+		this.setHealth(this.getMaxHealth());
+		
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 	
@@ -695,7 +700,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 							
 							@Override
 							public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
-								return CQRContainerTypes.CQR_ENTITY_EDITOR.get().create(windowId, invPlayer);
+								PacketBuffer buf = new PacketBuffer(Unpooled.buffer(32));
+								buf.writeInt(AbstractEntityCQR.this.getId());
+								return CQRContainerTypes.CQR_ENTITY_EDITOR.get().create(windowId, invPlayer, buf);
 							}
 							
 							@Override
