@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.customtextures;
 
+import java.io.File;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.resource.VanillaResourceType;
-
-import java.io.File;
 
 public class TextureUtil {
 
@@ -39,11 +40,12 @@ public class TextureUtil {
 	@OnlyIn(Dist.CLIENT)
 	public static void reloadResourcepacks() {
 		CTResourcepack.loadAllTextures();
-		/*IResourceManager rm = Minecraft.getInstance().getResourceManager();
-		if (rm instanceof SimpleReloadableResourceManager) {
-			((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
-		} else {*/
-			ForgeHooksClient.refreshResources(Minecraft.getInstance(), VanillaResourceType.TEXTURES);
+		//IResourceManager rm = Minecraft.getInstance().getResourceManager();
+		//Minecraft.getInstance().reloadResourcePacks();
+		//if (rm instanceof SimpleReloadableResourceManager) {
+			//((SimpleReloadableResourceManager) rm).reloadResourcePack(CTResourcepack.getInstance());
+		//} else {
+			//ForgeHooksClient.refreshResources(Minecraft.getInstance(), VanillaResourceType.TEXTURES);
 			//FMLClientHandler.instance().refreshResources(VanillaResourceType.TEXTURES);
 		//}
 	}

@@ -13,9 +13,9 @@ public class TextureSet {
 
 	private static final Random random = new Random();
 	private String name;
-	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
-	private static Map<String, File> files = new HashMap<>();
-	private static Map<String, ResourceLocation> texNameRLMap = new HashMap<>();
+	private volatile Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
+	private static volatile Map<String, File> files = new HashMap<>();
+	private static volatile  Map<String, ResourceLocation> texNameRLMap = new HashMap<>();
 
 	// FOR CLIENT
 	public TextureSet(String name) {
@@ -29,7 +29,7 @@ public class TextureSet {
 
 	// FOR SERVER
 	public TextureSet(Properties config, String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		try {
 			for (String entry : config.stringPropertyNames()) {
 				if (entry.startsWith("#")) {
@@ -67,6 +67,7 @@ public class TextureSet {
 				TextureSetManager.registerTextureSet(this);
 			}
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			this.entityTextureMap.clear();
 		}
 	}

@@ -1,21 +1,30 @@
 package team.cqr.cqrepoured.customtextures;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.FileUtils;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.network.PacketDistributor;
-import org.apache.commons.io.FileUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
 
 public class TextureSetManager {
 
@@ -73,6 +82,14 @@ public class TextureSetManager {
 				}
 			}
 			CQRMain.logger.info("Loaded {} texture Sets!", loadedSets);
+			
+			//Now, register the pack...
+			IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+			if(resourceManager instanceof SimpleReloadableResourceManager) {
+				((SimpleReloadableResourceManager)resourceManager).add(CTResourcepack.getInstance());
+			} else {
+				//WTF?!
+			}
 
 			//Correct replacement for FMLCommonHandler.isServer()?
 			if (FMLEnvironment.dist.isClient()) {

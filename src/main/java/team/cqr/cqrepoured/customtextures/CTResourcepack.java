@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.customtextures;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DownloadingTexture;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.IPackNameDecorator;
@@ -15,6 +17,7 @@ import team.cqr.cqrepoured.CQRMain;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -93,7 +96,20 @@ public class CTResourcepack implements IResourcePack {
 			if (entry.getKey().getPath().endsWith(".mcmeta")) {
 				continue;
 			}
-			DownloadingTexture dlt = new DownloadingTexture(entry.getValue(), null, entry.getKey(), false, null);
+			NativeImage ni;
+			try {
+				ni = NativeImage.read(new FileInputStream(entry.getValue()));
+				
+				DynamicTexture dynTex = new DynamicTexture(ni);
+				tm.register(entry.getKey(), dynTex);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			//ThreadDownloadImageData tex = new ThreadDownloadImageData(entry.getValue(), null, entry.getKey(), new UniversalImageBuffer());
 			//Looks like this is no longer required in 1.16... was hacky either way
 			/*try {
@@ -101,7 +117,6 @@ public class CTResourcepack implements IResourcePack {
 			} catch (IOException e) {
 				// Ignore
 			}*/
-			tm.register(entry.getKey(), dlt);
 		}
 	}
 
