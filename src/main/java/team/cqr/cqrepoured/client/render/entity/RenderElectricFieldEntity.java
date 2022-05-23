@@ -18,7 +18,7 @@ public class RenderElectricFieldEntity extends EntityRenderer<EntityElectricFiel
 	@Override
 	public void render(EntityElectricField entity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		long seed = (entity.getId() * 255L) ^ (entity.tickCount >> 1 << 1);
-		ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, entity, 0, 0, 0, 5, seed);
+		ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, entity, 5, seed);
 	}
 	
 	@Override
