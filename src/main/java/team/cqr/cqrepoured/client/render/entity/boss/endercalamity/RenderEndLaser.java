@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.client.MinecraftForgeClient;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
@@ -73,14 +74,12 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 		GlStateManager.translate(worldPos.x - x2, worldPos.y - y2, worldPos.z - z2);
 
 		GlStateManager.scale(scale, scale, scale);
-		PentagramUtil.preRenderPentagram(worldPos.x, worldPos.y, worldPos.z, entity.ticksExisted);
 
 		// Rotate pentagram
 		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-pitch - 90.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1.0D, -1.0D, 1.0D);
-		PentagramUtil.renderPentagram(entity.ticksExisted, entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier, entity.getColorB() * colorMultiplier, corners);
-		PentagramUtil.postRenderPentagram();
+		PentagramUtil.renderPentagram(matrix, CQRRenderTypes.emissiveSolid(), entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier, entity.getColorB() * colorMultiplier, corners);
 		GlStateManager.popMatrix();
 	}
 

@@ -36,5 +36,10 @@ public class CQRRenderTypes extends RenderType {
 				.setWriteMaskState(COLOR_DEPTH_WRITE)
 				.createCompositeState(false));
 	}
+	
+	public static RenderType emissiveSolid() {
+		return RenderType.create("cqrepoured_emissive_solid", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, State.builder()
+				.createCompositeState(true));
+	}
 
 }

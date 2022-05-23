@@ -1,11 +1,16 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Vector3f;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 
@@ -35,25 +40,13 @@ public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle>
 	}
 
 	@Override
-	public void doRender(EntitySummoningCircle entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		// GlStateManager.translate((float) x, (float) y, (float) z);
-
-		/*
-		 * GlStateManager.color(new Float(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)), 0F, 0F);
-		 * 
-		 * this.bindTexture(this.getEntityTexture(entity)); this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
-		 */
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y + 0.02, (float) z);
-		float f = (entity.ticksExisted - 1.0F + partialTicks) * 4.0F;
-		GlStateManager.rotate(f, 0F, 1F, 0F);
-		PentagramUtil.preRenderPentagram(x, y, z, entity.ticksExisted);
-		PentagramUtil.renderPentagram(entity.ticksExisted);
-		PentagramUtil.postRenderPentagram();
-
-		GlStateManager.popMatrix();
-
+	public void render(EntitySummoningCircle pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer,
+			int pPackedLight) {
+		float ageInTicks = pEntity.tickCount + pPartialTicks;
+		pMatrixStack.pushPose();
+		pMatrixStack.mulPose(Vector3f.YP.rotation(ageInTicks * 4.0F));
+		PentagramUtil.renderPentagram(pMatrixStack, CQRRenderTypes.emissiveSolid(), ageInTicks);
+		pMatrixStack.popPose();
 	}
 
 	@Override
