@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -25,7 +26,12 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 	public void render(T pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		if (pEntity.isActive()) {
 			long seed = (pEntity.getId() * 255L) ^ (pEntity.tickCount >> 1 << 1);
-			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, pEntity, 0, 0, 0, 5, seed);
+
+			pMatrixStack.pushPose();
+			pMatrixStack.translate(0.0D, pEntity.getBbHeight() * 0.5D, 0.0D);
+			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, pEntity, 5, seed);
+			pMatrixStack.popPose();
+
 			if (pEntity.getTargetedEntity() != null) {
 				Entity target = pEntity.getTargetedEntity();
 
@@ -42,11 +48,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				final Vector3d start = new Vector3d(0, pEntity.getHeight() * 0.5, 0);
 				final Vector3d end = new Vector3d(x2 - x1, y2 - y1, z2 - z1);
 
-				pMatrixStack.pushPose();
-
-				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 0, 0, 0, 5, seed);
-
-				pMatrixStack.popPose();
+				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 5, seed);
 			}
 		}
 		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
