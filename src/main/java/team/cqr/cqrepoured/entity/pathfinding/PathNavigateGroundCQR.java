@@ -292,8 +292,10 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 			this.lastPosCheck = positionVec3;
 		}
 
-		if (this.path != null && !this.path.isDone() && (path.getNextNodeIndex() - 1) < path.getNodeCount()) {
-			PathPoint currentNode = this.path.getNode(path.getNextNodeIndex() -1);
+		int currentNodeIndex = (this.path.getNextNodeIndex() - 1);
+		currentNodeIndex = currentNodeIndex > 0 ? currentNodeIndex : 0;
+		if (this.path != null && !this.path.isDone() && currentNodeIndex < this.path.getNodeCount()) {
+			PathPoint currentNode = this.path.getNode(currentNodeIndex);
 			Vector3d vec3d = new Vector3d(currentNode.x, currentNode.y, currentNode.z);
 
 			if (!vec3d.equals(this.timeoutCachedNode)) {
