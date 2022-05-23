@@ -59,7 +59,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		Path path = this.entity.getNavigation().getPath();
 		int end = Math.min(path.getNextNodeIndex() + 1, path.getNodeCount());
 		for (int i = path.getNextNodeIndex() -1; i < end; i++) {
-			PathPoint pathPoint = path.getNode(i);
+			PathPoint pathPoint = path.getNode(i < 0 ? 0 : i);
 			this.doorPos.set(pathPoint.x, pathPoint.y, pathPoint.z);
 			if (this.entity.distanceToSqr(this.doorPos.getX() + 0.5D, this.doorPos.getY(), this.doorPos.getZ() + 0.5D) >= 1.5D * 1.5D) {
 				continue;
