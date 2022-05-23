@@ -199,15 +199,15 @@ public class ModelCustomArmorBase extends ModelBiped {
 	}
 
 	public void resetRotations(ModelRenderer target) {
-		target.offsetX = this.rotations.dequeue();
-		target.offsetY = this.rotations.dequeue();
-		target.offsetZ = this.rotations.dequeue();
-		target.rotateAngleX = this.rotations.dequeue();
-		target.rotateAngleY = this.rotations.dequeue();
-		target.rotateAngleZ = this.rotations.dequeue();
-		target.rotationPointX = this.rotations.dequeue();
-		target.rotationPointY = this.rotations.dequeue();
-		target.rotationPointZ = this.rotations.dequeue();
+		target.offsetX = this.rotations.dequeueFloat();
+		target.offsetY = this.rotations.dequeueFloat();
+		target.offsetZ = this.rotations.dequeueFloat();
+		target.rotateAngleX = this.rotations.dequeueFloat();
+		target.rotateAngleY = this.rotations.dequeueFloat();
+		target.rotateAngleZ = this.rotations.dequeueFloat();
+		target.rotationPointX = this.rotations.dequeueFloat();
+		target.rotationPointY = this.rotations.dequeueFloat();
+		target.rotationPointZ = this.rotations.dequeueFloat();
 	}
 
 }
