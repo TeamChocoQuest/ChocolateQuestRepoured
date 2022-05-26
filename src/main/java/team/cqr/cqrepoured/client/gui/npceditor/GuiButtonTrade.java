@@ -1,46 +1,54 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.gui.INumericIDButton;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class GuiButtonTrade extends Button {
+public class GuiButtonTrade extends Button implements INumericIDButton {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_button_trade.png");
 	private int index;
+	private final int id;
 	private Trade trade;
 	private GuiMerchant parent;
 
-	public GuiButtonTrade(GuiMerchant parent, int x, int y, int index) {
+	public GuiButtonTrade(GuiMerchant parent, final int id, int x, int y, int index) {
 		super(x, y, 116, 20, new StringTextComponent(""), Button::onPress);
 		this.index = index;
+		this.id = id;
 		this.parent = parent;
+	}
+	
+	@Override
+	public int getId() {
+		return this.id;
 	}
 
 	@Override
 	public void onPress() {
 		super.onPress();
-		try {
-			this.parent.actionPerformed(this);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		this.parent.actionPerformed(this);
 	}
 
 	public void setIndex(int index) {
@@ -101,6 +109,7 @@ public class GuiButtonTrade extends Button {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public void renderHoveredToolTip(GuiMerchant parent, MatrixStack matrixStack,int mouseX, int mouseY) {
 		if (!this.visible || this.trade == null) {
 			return;
@@ -109,31 +118,34 @@ public class GuiButtonTrade extends Button {
 			int x = this.x + 4 + i * 18;
 			int y = this.y + 2;
 			if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
-				parent.renderToolTip(this.trade.getInputItemsClient().get(i).getStack(), mouseX, mouseY);
+				parent.renderTooltip(matrixStack, this.trade.getInputItemsClient().get(i).getStack(), mouseX, mouseY);
 			}
 		}
 		int x = this.x + 96;
 		int y = this.y + 2;
 		if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
-			parent.renderToolTip(this.trade.getOutputClient(), mouseX, mouseY);
+			parent.renderTooltip(matrixStack, this.trade.getOutputClient(), mouseX, mouseY);
 		}
 		x = this.x + 78;
+		if(this.parent.getMinecraft() == null) {
+			return;
+		}
 		if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
 			List<ITextComponent> tooltip = new ArrayList<>();
-			boolean isUnlocked = this.trade.isUnlockedFor(parent.mc.player);
+			boolean isUnlocked = this.trade.isUnlockedFor(parent.getMinecraft().player);
 			boolean inStock = this.trade.isInStock();
 			if (!isUnlocked) {
 				tooltip.add(new TranslationTextComponent("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					TextFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
-					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					TextFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
+					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement());
 					IFormattableTextComponent advancementName =
 							advancement != null ? advancement.getDisplay().getTitle().plainCopy().withStyle(formatting)
 									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(formatting);
 					tooltip.add(advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
-					int i = FactionRegistry.instance(parent.mc.player).getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
+					int i = FactionRegistry.instance(parent.getMinecraft().player).getExactReputationOf(parent.getMinecraft().player.getUUID(), this.trade.getHolder().getTraderFaction());
 					TextFormatting formatting = i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED;
 					tooltip.add(new StringTextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
 				}
@@ -142,7 +154,7 @@ public class GuiButtonTrade extends Button {
 			} else {
 				tooltip.add(new TranslationTextComponent("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
+					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement());
 					IFormattableTextComponent advancementName =
 							advancement != null ? advancement.getDisplay().getTitle().plainCopy()
 									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(TextFormatting.GREEN);
