@@ -1,29 +1,31 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.gui.IdentifiedButton;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
-
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchantEditTrade extends ContainerScreen {
@@ -34,10 +36,11 @@ public class GuiMerchantEditTrade extends ContainerScreen {
 	private final int tradeIndex;
 	@Nullable
 	private final Trade trade;
-	private final GuiCheckBox[] ignoreMetaCheckBoxes = new GuiCheckBox[4];
-	private final GuiCheckBox[] ignoreNBTCheckBoxes = new GuiCheckBox[4];
+	
+	private final CheckboxButton[] ignoreMetaCheckBoxes = new CheckboxButton[4];
+	private final CheckboxButton[] ignoreNBTCheckBoxes = new CheckboxButton[4];
 
-	private GuiCheckBox stockCheckBox;
+	private CheckboxButton stockCheckBox;
 	private TextFieldWidget restockTextField;
 	private TextFieldWidget inStockTextField;
 	private TextFieldWidget maxStockTextField;
@@ -50,42 +53,42 @@ public class GuiMerchantEditTrade extends ContainerScreen {
 		this.entity = entity;
 		this.tradeIndex = tradeIndex;
 		this.trade = entity.getTrades().get(tradeIndex);
-		this.xSize = 304;
-		this.ySize = 166;
+		this.imageWidth = 304;
+		this.imageHeight = 166;
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		this.addButton(new Button(0, this.guiLeft + 155, this.guiTop + 139, 142, 20, "Cancel"));
-		this.addButton(new Button(1, this.guiLeft + 7, this.guiTop + 139, 142, 20, "Apply"));
+		this.addButton(new IdentifiedButton(0, this.leftPos + 155, this.topPos + 139, 142, 20, "Cancel"));
+		this.addButton(new IdentifiedButton(1, this.leftPos + 7, this.topPos + 139, 142, 20, "Apply"));
 
 		List<TradeInput> tradeInputs = this.trade != null ? this.trade.getInputItems() : Collections.emptyList();
 		for (int i = 0; i < this.ignoreMetaCheckBoxes.length; i++) {
 			this.ignoreMetaCheckBoxes[i] = this.addButton(
-					new GuiCheckBox(i * 2 + 2, this.guiLeft + i * 26 + 76, this.guiTop + 31, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
+					new CheckboxButton(i * 2 + 2, this.leftPos + i * 26 + 76, this.topPos + 31, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
 			this.ignoreMetaCheckBoxes[i].width = 11;
 			this.ignoreNBTCheckBoxes[i] = this.addButton(
-					new GuiCheckBox(i * 2 + 3, this.guiLeft + i * 26 + 76, this.guiTop + 44, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
+					new CheckboxButton(i * 2 + 3, this.leftPos + i * 26 + 76, this.topPos + 44, "", i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
 			this.ignoreNBTCheckBoxes[i].width = 11;
 		}
 
-		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.guiLeft + 7, this.guiTop + 72));
+		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.leftPos + 7, this.topPos + 72));
 		this.reputationButton.setReputationIndex(this.trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
-		this.advancementTextField = new TextFieldWidget(40, this.fontRenderer, this.guiLeft + 8, this.guiTop + 103, 58, 10);
+		this.advancementTextField = new TextFieldWidget(40, this.font, this.leftPos + 8, this.topPos + 103, 58, 10);
 		this.advancementTextField
 				.setText(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
 
-		this.stockCheckBox = this.addButton(new GuiCheckBox(20, this.guiLeft + 237, this.guiTop + 17, "", this.trade != null && this.trade.hasLimitedStock()));
+		this.stockCheckBox = this.addButton(new CheckboxButton(20, this.leftPos + 237, this.topPos + 17, "", this.trade != null && this.trade.hasLimitedStock()));
 		this.stockCheckBox.width = 11;
-		this.restockTextField = new TextFieldWidget(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 43, 38, 10);
+		this.restockTextField = new TextFieldWidget(21, this.font, this.leftPos + 238, this.topPos + 43, 38, 10);
 		this.restockTextField.setText(this.trade != null ? Integer.toString(this.trade.getRestockRate()) : "0");
 		this.restockTextField.setEnabled(this.stockCheckBox.isChecked());
-		this.inStockTextField = new TextFieldWidget(21, this.fontRenderer, this.guiLeft + 238, this.guiTop + 69, 38, 10);
+		this.inStockTextField = new TextFieldWidget(21, this.font, this.leftPos + 238, this.topPos + 69, 38, 10);
 		this.inStockTextField.setText(this.trade != null ? Integer.toString(this.trade.getInStock()) : "0");
 		this.inStockTextField.setEnabled(this.stockCheckBox.isChecked());
-		this.maxStockTextField = new TextFieldWidget(22, this.fontRenderer, this.guiLeft + 238, this.guiTop + 95, 38, 10);
+		this.maxStockTextField = new TextFieldWidget(22, this.font, this.leftPos + 238, this.topPos + 95, 38, 10);
 		this.maxStockTextField.setText(this.trade != null ? Integer.toString(this.trade.getMaxStock()) : "0");
 		this.maxStockTextField.setEnabled(this.stockCheckBox.isChecked());
 	}
@@ -154,18 +157,18 @@ public class GuiMerchantEditTrade extends ContainerScreen {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		this.drawDefaultBackground();
 		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
-		GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 512.0D, this.ySize / 256.0D);
+		GuiHelper.drawTexture(this.leftPos, this.topPos, 0.0D, 0.0D, this.imageWidth, this.imageHeight, this.imageWidth / 512.0D, this.imageHeight / 256.0D);
 
-		this.fontRenderer.drawString("Ignore Meta", this.guiLeft + 7, this.guiTop + 33, 0x404040);
-		this.fontRenderer.drawString("Ignore NBT", this.guiLeft + 7, this.guiTop + 46, 0x404040);
+		this.font.drawString("Ignore Meta", this.leftPos + 7, this.topPos + 33, 0x404040);
+		this.font.drawString("Ignore NBT", this.leftPos + 7, this.topPos + 46, 0x404040);
 
-		this.fontRenderer.drawString("Reputation", this.guiLeft + 7, this.guiTop + 62, 0x404040);
-		this.fontRenderer.drawString("Advancement", this.guiLeft + 7, this.guiTop + 92, 0x404040);
+		this.font.drawString("Reputation", this.leftPos + 7, this.topPos + 62, 0x404040);
+		this.font.drawString("Advancement", this.leftPos + 7, this.topPos + 92, 0x404040);
 
-		this.fontRenderer.drawString("Stock", this.guiLeft + 237, this.guiTop + 7, 0x404040);
-		this.fontRenderer.drawString("Restock", this.guiLeft + 237, this.guiTop + 32, 0x404040);
-		this.fontRenderer.drawString("In Stock", this.guiLeft + 237, this.guiTop + 58, 0x404040);
-		this.fontRenderer.drawString("Max Stock", this.guiLeft + 237, this.guiTop + 84, 0x404040);
+		this.font.drawString("Stock", this.leftPos + 237, this.topPos + 7, 0x404040);
+		this.font.drawString("Restock", this.leftPos + 237, this.topPos + 32, 0x404040);
+		this.font.drawString("In Stock", this.guiLeft + 237, this.topPos + 58, 0x404040);
+		this.font.drawString("Max Stock", this.guiLeft + 237, this.topPos + 84, 0x404040);
 	}
 
 	@Override
