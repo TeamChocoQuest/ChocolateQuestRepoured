@@ -1,20 +1,25 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.io.IOException;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.java.games.input.Mouse;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.MerchantContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.input.Mouse;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
+import team.cqr.cqrepoured.client.gui.INumericIDButton;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -22,8 +27,6 @@ import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
-
-import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchant extends ContainerScreen<Container> implements IUpdatableGui {
@@ -46,24 +49,24 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 		super(container, pPlayerInventory, pTitle);
 		this.entity = entity;
 		this.trades = entity.getTrades();
-		this.xSize = 307;
-		this.ySize = 166;
+		this.imageWidth = 307;
+		this.imageHeight = 166;
 	}
-
+	
 	@Override
-	public void initGui() {
-		super.initGui();
+	protected void init() {
+		super.init();
 
 		for (int i = 0; i < this.tradeButtons.length; i++) {
-			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(10 + i, this.guiLeft + 8, this.guiTop + 18 + i * 20, i));
+			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(this, 10 + i, this.leftPos + 8, this.topPos + 18 + i * 20, i));
 			if (i < this.tradeButtons.length - 1) {
-				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.guiLeft - 12, this.guiTop + 18 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_up"));
-				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.guiLeft - 12, this.guiTop + 28 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_down"));
-				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.guiLeft - 2, this.guiTop + 18 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_delete"));
-				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.guiLeft - 2, this.guiTop + 28 + i * 20, 10, 10, "", "container/gui_button_10px", "container/icon_edit"));
+				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.leftPos - 12, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0,	CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_up"), this::actionPerformed, new StringTextComponent("")));
+				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.leftPos - 12, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_down"), this::actionPerformed, new StringTextComponent("")));
+				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.leftPos - 2, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_delete"), this::actionPerformed, new StringTextComponent("")));
+				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.leftPos - 2, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_edit"), this::actionPerformed, new StringTextComponent("")));
 			}
 		}
-		this.addNewTradeButton = this.addButton(new Button(0, this.guiLeft - 12, this.guiTop + 138, 136, 20, "- Create Trade -"));
+		this.addNewTradeButton = this.addButton(new Button(/*0, */this.leftPos - 12, this.topPos + 138, 136, 20, new TranslationTextComponent("- Create Trade -"), this::actionPerformed));
 
 		this.update();
 	}
@@ -82,46 +85,44 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 
 		this.renderBackground(pMatrixStack);
 
-		if (this.mc.player.isCreative()) {
-			this.mc.getTextureManager().bindTexture(BG_TEXTURE_CREATIVE);
-			GuiHelper.drawTexture(this.guiLeft - 20.0D, this.guiTop, 0.0D, 0.0D, this.xSize + 20.0D, this.ySize, (this.xSize + 20) / 512.0D, this.ySize / 256.0D);
+		if (this.getMinecraft().player.isCreative()) {
+			this.getMinecraft().getTextureManager().bind(BG_TEXTURE_CREATIVE);
+			GuiHelper.drawTexture(this.leftPos - 20.0D, this.topPos, 0.0D, 0.0D, this.imageWidth + 20.0D, this.imageHeight, (this.imageWidth + 20) / 512.0D, this.imageHeight / 256.0D);
 		} else {
-			this.mc.getTextureManager().bindTexture(BG_TEXTURE);
-			GuiHelper.drawTexture(this.guiLeft, this.guiTop, 0.0D, 0.0D, this.xSize, this.ySize, this.xSize / 512.0D, this.ySize / 256.0D);
+			this.getMinecraft().getTextureManager().bind(BG_TEXTURE);
+			GuiHelper.drawTexture(this.leftPos, this.topPos, 0.0D, 0.0D, this.imageWidth, this.imageHeight, this.imageWidth / 512.0D, this.imageHeight / 256.0D);
 		}
 
-		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
-			int scrollOffsetY = (int) ((double) this.buttonStartIndex / (double) (this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0))) * 113.0D);
-			GuiHelper.drawTexture(this.guiLeft + 125.0D, this.guiTop + 18.0D + scrollOffsetY, 0.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
+		if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
+			int scrollOffsetY = (int) ((double) this.buttonStartIndex / (double) (this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0))) * 113.0D);
+			GuiHelper.drawTexture(this.leftPos + 125.0D, this.topPos + 18.0D + scrollOffsetY, 0.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
 		} else {
-			GuiHelper.drawTexture(this.guiLeft + 125.0D, this.guiTop + 18.0D, 6.0D / 512.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
+			GuiHelper.drawTexture(this.leftPos + 125.0D, this.topPos + 18.0D, 6.0D / 512.0D, 166.0D / 256.0D, 6, 27, 6.0D / 512.0D, 27.0D / 256.0D);
 		}
 
-		if (this.mc.player.isCreative()) {
-			this.fontRenderer.drawString(this.entity.getDisplayName().getFormattedText(), this.guiLeft - 13, this.guiTop + 7, 0x404040);
+		if (this.getMinecraft().player.isCreative()) {
+			this.font.draw(pMatrixStack, this.entity.getDisplayName(), this.leftPos - 13, this.topPos + 7, 0x404040);
 		} else {
-			this.fontRenderer.drawString(this.entity.getDisplayName().getFormattedText(), this.guiLeft + 7, this.guiTop + 7, 0x404040);
+			this.font.draw(pMatrixStack, this.entity.getDisplayName(), this.leftPos + 7, this.topPos + 7, 0x404040);
 		}
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
-
-	@Override
-	protected void actionPerformed(Button button) throws IOException {
+	
+	protected void actionPerformed(Button button) {
 		if (button instanceof GuiButtonTrade) {
-			((ContainerMerchant) this.inventorySlots).setCurrentTradeIndex(((GuiButtonTrade) button).getIndex());
-			((ContainerMerchant) this.inventorySlots).updateInputsForTrade(((GuiButtonTrade) button).getIndex());
+			((ContainerMerchant) this.menu).setCurrentTradeIndex(((GuiButtonTrade) button).getIndex());
+			((ContainerMerchant) this.menu).updateInputsForTrade(((GuiButtonTrade) button).getIndex());
 		}
-		if (button.id < 10) {
-			if (button.id == 0) {
-				CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(button.id));
-			}
-		} else {
-			int index = this.buttonStartIndex + (button.id % 10);
-			CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(button.id, buf -> buf.writeInt(index)));
+		if (button == addNewTradeButton) {
+				CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(0 /* new Trade button */));
+		} else if (button instanceof INumericIDButton) {
+			INumericIDButton inib = (INumericIDButton) button;
+			int index = this.buttonStartIndex + (inib.getId() % 10);
+			CQRMain.NETWORK.sendToServer(new CPacketContainerClickButton(inib.getId(), buf -> buf.writeInt(index)));
 		}
 	}
 
@@ -131,48 +132,51 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 		double dWheel = Mouse.getEventDWheel();
 		if (dWheel != 0.0D) {
 			int scrollAmount = (int) (dWheel / 60.0D);
-			if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
-				this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)));
+			if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
+				this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
 				this.update();
 			}
 		}
 	}
-
+	
 	@Override
-	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+	public boolean mouseDragged(double pMouseX, double mouseY, int pButton, double pDragX, double pDragY) {
 		if (this.scrollBarClicked) {
-			int y1 = this.guiTop + 18;
+			int y1 = this.topPos + 18;
 			int y2 = y1 + 139;
-			int scrollLength = this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0));
+			int scrollLength = this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0));
 			float f = ((float) mouseY - (float) y1 - 13.5F) / (y2 - y1 - 27.0F);
 			f = f * scrollLength + 0.5F;
 			this.buttonStartIndex = MathHelper.clamp((int) f, 0, scrollLength);
 			this.update();
+			return true;
 		} else {
-			super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+			return super.mouseDragged(pMouseX, mouseY, pButton, pDragX, pDragY);
 		}
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.scrollBarClicked = false;
-		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0) && mouseButton == 0) {
-			int x1 = this.guiLeft + 125;
-			int y1 = this.guiTop + 18;
+		if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0) && mouseButton == 0) {
+			int x1 = this.leftPos + 125;
+			int y1 = this.topPos + 18;
 			int x2 = x1 + 5;
 			int y2 = y1 + 139;
 			if (x1 <= mouseX && mouseX <= x2 && y1 <= mouseY && mouseY <= y2) {
 				this.scrollBarClicked = true;
 			}
 		}
+		//Super class always returns true
+		return true;
 	}
 
 	@Override
 	public void update() {
-		if (this.trades.size() > this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)) {
-			this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex, 0, this.trades.size() - (this.tradeButtons.length - (this.mc.player.isCreative() ? 1 : 0)));
+		if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
+			this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
 		} else {
 			this.buttonStartIndex = 0;
 		}
@@ -180,39 +184,40 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 		for (int i = 0; i < this.tradeButtons.length; i++) {
 			Trade trade = this.trades.get(this.buttonStartIndex + i);
 
-			this.tradeButtons[i].visible = trade != null && (i < this.tradeButtons.length - 1 || !this.mc.player.isCreative());
+			this.tradeButtons[i].visible = trade != null && (i < this.tradeButtons.length - 1 || !this.getMinecraft().player.isCreative());
 			if (trade != null) {
 				this.tradeButtons[i].setIndex(this.buttonStartIndex + i);
 				this.tradeButtons[i].setTrade(trade);
 			}
 
 			if (i < this.tradeButtons.length - 1) {
-				this.pushUpButtons[i].visible = trade != null && this.mc.player.isCreative();
-				this.pushDownButtons[i].visible = trade != null && this.mc.player.isCreative();
-				this.deleteButtons[i].visible = trade != null && this.mc.player.isCreative();
-				this.editButtons[i].visible = trade != null && this.mc.player.isCreative();
+				this.pushUpButtons[i].visible = trade != null && this.getMinecraft().player.isCreative();
+				this.pushDownButtons[i].visible = trade != null && this.getMinecraft().player.isCreative();
+				this.deleteButtons[i].visible = trade != null && this.getMinecraft().player.isCreative();
+				this.editButtons[i].visible = trade != null && this.getMinecraft().player.isCreative();
 			}
 		}
 
-		this.addNewTradeButton.visible = this.mc.player.isCreative();
-		this.addNewTradeButton.x = this.guiLeft - 12;
-		this.addNewTradeButton.y = this.guiTop + (this.trades.size() < this.tradeButtons.length - 1 ? 18 + this.trades.size() * 20 : 138);
+		this.addNewTradeButton.visible = this.getMinecraft().player.isCreative();
+		this.addNewTradeButton.x = this.leftPos - 12;
+		this.addNewTradeButton.y = this.topPos + (this.trades.size() < this.tradeButtons.length - 1 ? 18 + this.trades.size() * 20 : 138);
 	}
 
 	// Overriding to set access modifier to public
 	@Override
-	public void renderToolTip(ItemStack stack, int x, int y) {
-		super.renderToolTip(stack, x, y);
+	public void renderTooltip(MatrixStack pMatrixStack, ItemStack pItemStack, int pMouseX, int pMouseY) {
+		super.renderTooltip(pMatrixStack, pItemStack, pMouseX, pMouseY);
 	}
+	
 
 	@Override
 	public int getGuiLeft() {
-		return super.getGuiLeft() - (this.mc.player.isCreative() ? 20 : 0);
+		return super.getGuiLeft() - (this.getMinecraft().player.isCreative() ? 20 : 0);
 	}
 
 	@Override
 	public int getXSize() {
-		return super.getXSize() + (this.mc.player.isCreative() ? 20 : 0);
+		return super.getXSize() + (this.getMinecraft().player.isCreative() ? 20 : 0);
 	}
 
 }
