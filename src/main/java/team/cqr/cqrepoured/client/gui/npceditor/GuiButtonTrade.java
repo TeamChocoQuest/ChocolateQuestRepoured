@@ -6,33 +6,41 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.util.text.*;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntSupplier;
 
 public class GuiButtonTrade extends Button {
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_button_trade.png");
 	private int index;
 	private Trade trade;
+	private GuiMerchant parent;
 
-	public GuiButtonTrade(int buttonId, int x, int y, int index) {
-		super(buttonId, x, y, 116, 20, "");
+	public GuiButtonTrade(GuiMerchant parent, int x, int y, int index) {
+		super(x, y, 116, 20, new StringTextComponent(""), Button::onPress);
 		this.index = index;
+		this.parent = parent;
+	}
+
+	@Override
+	public void onPress() {
+		super.onPress();
+		try {
+			this.parent.actionPerformed(this);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void setIndex(int index) {
@@ -93,7 +101,7 @@ public class GuiButtonTrade extends Button {
 		}
 	}
 
-	public void renderHoveredToolTip(GuiMerchant parent, int mouseX, int mouseY) {
+	public void renderHoveredToolTip(GuiMerchant parent, MatrixStack matrixStack,int mouseX, int mouseY) {
 		if (!this.visible || this.trade == null) {
 			return;
 		}
@@ -111,37 +119,41 @@ public class GuiButtonTrade extends Button {
 		}
 		x = this.x + 78;
 		if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
-			List<String> tooltip = new ArrayList<>();
+			List<ITextComponent> tooltip = new ArrayList<>();
 			boolean isUnlocked = this.trade.isUnlockedFor(parent.mc.player);
 			boolean inStock = this.trade.isInStock();
 			if (!isUnlocked) {
-				tooltip.add(I18n.format("description.gui_button_trade.locked.name"));
+				tooltip.add(new TranslationTextComponent("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
 					TextFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.mc.player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
 					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
-					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
-					tooltip.add(formatting + advancementName);
+					IFormattableTextComponent advancementName =
+							advancement != null ? advancement.getDisplay().getTitle().plainCopy().withStyle(formatting)
+									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(formatting);
+					tooltip.add(advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = FactionRegistry.instance(parent.mc.player).getExactReputationOf(parent.mc.player.getUniqueID(), this.trade.getHolder().getTraderFaction());
 					TextFormatting formatting = i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED;
-					tooltip.add("" + formatting + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation());
+					tooltip.add(new StringTextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
 				}
 			} else if (!inStock) {
-				tooltip.add(I18n.format("description.gui_button_trade.out_of_stock.name"));
+				tooltip.add(new TranslationTextComponent("description.gui_button_trade.out_of_stock.name"));
 			} else {
-				tooltip.add(I18n.format("description.gui_button_trade.unlocked.name"));
+				tooltip.add(new TranslationTextComponent("description.gui_button_trade.unlocked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
 					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.mc.player, this.trade.getRequiredAdvancement());
-					String advancementName = advancement != null ? advancement.getDisplay().getTitle().getFormattedText() : this.trade.getRequiredAdvancement().toString();
-					tooltip.add(TextFormatting.GREEN + advancementName);
+					IFormattableTextComponent advancementName =
+							advancement != null ? advancement.getDisplay().getTitle().plainCopy()
+									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(TextFormatting.GREEN);
+					tooltip.add(advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = this.trade.getRequiredReputation();
-					tooltip.add("" + TextFormatting.GREEN + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i);
+					tooltip.add(new StringTextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i).withStyle(TextFormatting.GREEN));
 				}
 			}
-			parent.drawHoveringText(tooltip, mouseX, mouseY);
+			parent.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);
 		}
 	}
 

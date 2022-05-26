@@ -1,11 +1,15 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.MerchantContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.input.Mouse;
@@ -22,7 +26,7 @@ import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiMerchant extends ContainerScreen implements IUpdatableGui {
+public class GuiMerchant extends ContainerScreen<Container> implements IUpdatableGui {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");
 	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_creative.png");
@@ -38,8 +42,8 @@ public class GuiMerchant extends ContainerScreen implements IUpdatableGui {
 	private int buttonStartIndex = 0;
 	private boolean scrollBarClicked;
 
-	public GuiMerchant(Container container, AbstractEntityCQR entity) {
-		super(container);
+	public GuiMerchant(Container container, PlayerInventory pPlayerInventory, ITextComponent pTitle, AbstractEntityCQR entity) {
+		super(container, pPlayerInventory, pTitle);
 		this.entity = entity;
 		this.trades = entity.getTrades();
 		this.xSize = 307;
@@ -65,17 +69,18 @@ public class GuiMerchant extends ContainerScreen implements IUpdatableGui {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+	public void render(MatrixStack pMatrixStack, int mouseX, int mouseY, float partialTicks) {
+		super.render(pMatrixStack,mouseX, mouseY, partialTicks);
+		this.renderTooltip(pMatrixStack, mouseX, mouseY);
 		for (GuiButtonTrade tradeButton : this.tradeButtons) {
-			tradeButton.renderHoveredToolTip(this, mouseX, mouseY);
+			tradeButton.renderHoveredToolTip(this, pMatrixStack, mouseX, mouseY);
 		}
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-		this.drawDefaultBackground();
+	protected void renderBg(MatrixStack pMatrixStack, float partialTicks, int mouseX, int mouseY) {
+
+		this.renderBackground(pMatrixStack);
 
 		if (this.mc.player.isCreative()) {
 			this.mc.getTextureManager().bindTexture(BG_TEXTURE_CREATIVE);
