@@ -41,12 +41,6 @@ public class CQRepouredClient {
 	}
 
 	public static void setupClient(FMLClientSetupEvent event) {
-		ScreenManager.register(CQRContainerTypes.SPAWNER.get(), ScreenSpawner::new);
-		ScreenManager.register(CQRContainerTypes.BOSS_BLOCK.get(), ScreenBossBlock::new);
-		ScreenManager.register(CQRContainerTypes.BACKPACK.get(), ScreenBackpack::new);
-		ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
-		ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
-
 		CQREntityRenderers.registerRenderers();
 
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CQR.get(), TileEntityExporterChestRenderer::new);
@@ -54,6 +48,13 @@ public class CQRepouredClient {
 
 		event.enqueueWork(() -> {
 			SphereRenderer.init();
+
+			ScreenManager.register(CQRContainerTypes.SPAWNER.get(), ScreenSpawner::new);
+			ScreenManager.register(CQRContainerTypes.BOSS_BLOCK.get(), ScreenBossBlock::new);
+			ScreenManager.register(CQRContainerTypes.BACKPACK.get(), ScreenBackpack::new);
+			ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
+			ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
+
 			// Has to happen later
 			CQRItemProperties.register();
 		});
