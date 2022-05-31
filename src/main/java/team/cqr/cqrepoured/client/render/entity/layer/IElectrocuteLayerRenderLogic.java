@@ -25,7 +25,7 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 					return;
 				}
 				long seed = (entity.getId() * 255L) ^ (entity.tickCount >> 1 << 1);
-				ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(matrix, buffer, entity, 0, 0, 0, 5, seed);
+				ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(matrix, buffer, entity, 5, seed);
 				if (cap.getTarget() != null) {
 					Entity target = cap.getTarget();
 
@@ -48,7 +48,7 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 					this.performPreLineRenderPreparation(matrix);
 					matrix.mulPose(Vector3f.YP.rotation(yaw -180));
 
-					ElectricFieldRenderUtil.renderElectricLineBetween(matrix, buffer, start, end, 0.5, 0, 0, 0, 5, seed);
+					ElectricFieldRenderUtil.renderElectricLineBetween(matrix, buffer, start, end, 0.5, 5, seed);
 
 					matrix.popPose();
 				}
