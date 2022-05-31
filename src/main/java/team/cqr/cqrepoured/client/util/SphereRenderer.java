@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.client.util;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.BufferBuilder.DrawState;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
@@ -9,6 +11,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.datafixers.util.Pair;
+
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
 import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
@@ -240,10 +246,11 @@ public class SphereRenderer {
 		return arr[(index + arr.length - 1) % arr.length];
 	}
 
-	public static void renderSphere(VertexBuffer buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
+	public static void renderSphere(MatrixStack matrixStack, RenderType renderType, VertexBuffer buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
 		if (!drawFront && !drawBack) {
 			return;
 		}
+		renderType.setupRenderState();
 		preDraw(textureLocation);
 
 		buffer.bind();
@@ -252,17 +259,18 @@ public class SphereRenderer {
 
 		if (drawBack) {
 			GL11.glCullFace(GL11.GL_FRONT);
-			buffer.drawArrays(mode);
+			buffer.draw(matrixStack.last().pose(), mode);
 			GL11.glCullFace(GL11.GL_BACK);
 		}
 		if (drawFront) {
-			buffer.drawArrays(mode);
+			buffer.draw(matrixStack.last().pose(), mode);
 		}
 
 		GL20.glDisableVertexAttribArray(0);
-		buffer.unbind();
+		VertexBuffer.unbind();
 
 		postDraw();
+		renderType.clearRenderState();
 	}
 
 	public static void renderSphere(BufferBuilder buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
@@ -271,16 +279,17 @@ public class SphereRenderer {
 		}
 		preDraw(textureLocation);
 
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, buffer.getByteBuffer());
+		Pair<DrawState, ByteBuffer> drawInfo = buffer.popNextBuffer();
+		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, drawInfo.getSecond());
 		GL20.glEnableVertexAttribArray(0);
 
 		if (drawBack) {
 			GL11.glCullFace(GL11.GL_FRONT);
-			GL11.glDrawArrays(mode, 0, buffer.vertexCounts.size()/*getVertexCount()*/);
+			GL11.glDrawArrays(mode, 0, drawInfo.getFirst().vertexCount());
 			GL11.glCullFace(GL11.GL_BACK);
 		}
 		if (drawFront) {
-			GL11.glDrawArrays(mode, 0, buffer.vertexCounts.size()/*getVertexCount()*/);
+			GL11.glDrawArrays(mode, 0, drawInfo.getFirst().vertexCount());
 		}
 
 		GL20.glDisableVertexAttribArray(0);
@@ -292,7 +301,7 @@ public class SphereRenderer {
 		prevProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 		GL20.glUseProgram(shader.getShaderProgram());
 
-		GL11.glGetFloat(GL11.GL_CURRENT_COLOR, BUFFER);
+		GL11.glGetFloatv(GL11.GL_CURRENT_COLOR, BUFFER);
 		GL20.glUniform4f(uniformColor, BUFFER.get(0), BUFFER.get(1), BUFFER.get(2), BUFFER.get(3));
 
 		if (textureLocation != null) {

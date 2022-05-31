@@ -8,13 +8,11 @@ import javax.annotation.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -23,9 +21,11 @@ import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
@@ -76,8 +76,11 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		});
 
 		buffer.end();
-		SPHERE_VBO.upload(buffer/*.getByteBuffer()*/);
-		buffer.clear();//Correct replacement for reset?
+		SPHERE_VBO.upload(buffer);
+	}
+	private static final Vector3f SPHERE_ROT_AXIS = new Vector3f(1.0F, 1.0F, 0.0F);
+	static {
+		SPHERE_ROT_AXIS.normalize();
 	}
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
@@ -89,39 +92,28 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public boolean isMultipass() {
-		return true;
-	}
-	
-	//TODO: Move to render layer?
-	@Override
-	public void renderMultipass(EntityCQREnderCalamity entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.renderMultipass(entityIn, x, y, z, entityYaw, partialTicks);
+	public void render(EntityCQREnderCalamity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 
-		// since the sphere is transparent it needs to render in the "transparent entity" render-pass
-		if (entityIn.isShieldActive()) {
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 0.6F + 0.25F * MathHelper.cos(0.1F * (entityIn.ticksExisted + partialTicks)));
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-			GlStateManager.depthMask(false);
+		if (entity.isShieldActive()) {
+			float width = this.getWidthScale(entity);
+			float height = this.getHeightScale(entity);
 
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y + entityIn.height * 0.5D, z);
-			double width = this.getWidthScale(entityIn);
-			double height = this.getHeightScale(entityIn);
-			GlStateManager.scale(width, height, width);
-			GlStateManager.scale(1.25D, 1.25D, 1.25D);
-			GlStateManager.rotate((entityIn.ticksExisted + partialTicks) * 4.0F, 1.0F, 1.0F, 0.0F);
-			float f = 0.7F + 0.15F * (float) Math.sin(entityIn.ticksExisted * 0.1D);
-			GlStateManager.color(0.6F, 0.2F, 0.7F, f);
-			SphereRenderer.renderSphere(SPHERE_VBO, GL11.GL_TRIANGLES, null, true, false);
-			GlStateManager.color(0.6F, 0.2F, 0.7F, f * 0.35F);
-			SphereRenderer.renderSphere(SPHERE_VBO, GL11.GL_TRIANGLES, null, false, true);
-			GlStateManager.popMatrix();
+			stack.pushPose();
+			stack.translate(0.0D, entity.getBbHeight() * 0.5D, 0.0D);
+			stack.scale(width, height, width);
+			stack.scale(1.25F, 1.25F, 1.25F);
+			stack.mulPose(SPHERE_ROT_AXIS.rotationDegrees((entity.tickCount + partialTicks) * 4.0F));
 
-			GlStateManager.depthMask(true);
-			GlStateManager.disableBlend();
+			float f = 0.7F + 0.15F * MathHelper.sin((entity.tickCount + partialTicks) * 0.1F);
+			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f);
+			SphereRenderer.renderSphere(stack, CQRRenderTypes.sphere(), SPHERE_VBO, GL11.GL_TRIANGLES, null, true, false);
+			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f * 0.35F);
+			SphereRenderer.renderSphere(stack, CQRRenderTypes.sphere(), SPHERE_VBO, GL11.GL_TRIANGLES, null, false, true);
+
+			stack.popPose();
 		}
 	}
 

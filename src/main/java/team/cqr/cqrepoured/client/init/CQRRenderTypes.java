@@ -41,5 +41,12 @@ public class CQRRenderTypes extends RenderType {
 		return RenderType.create("cqrepoured_emissive_solid", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, State.builder()
 				.createCompositeState(true));
 	}
+	
+	public static RenderType sphere() {
+		return RenderType.create("cqrepoured_sphere", DefaultVertexFormats.POSITION, GL11.GL_TRIANGLES, 256, State.builder()
+				.setTransparencyState(LIGHTNING_TRANSPARENCY)
+				.setWriteMaskState(COLOR_WRITE)
+				.createCompositeState(true));
+	}
 
 }

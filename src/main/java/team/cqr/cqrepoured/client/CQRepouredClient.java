@@ -17,6 +17,7 @@ import team.cqr.cqrepoured.client.gui.ScreenSpawner;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRItemProperties;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
+import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 
@@ -52,6 +53,7 @@ public class CQRepouredClient {
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
 
 		event.enqueueWork(() -> {
+			SphereRenderer.init();
 			// Has to happen later
 			CQRItemProperties.register();
 		});
