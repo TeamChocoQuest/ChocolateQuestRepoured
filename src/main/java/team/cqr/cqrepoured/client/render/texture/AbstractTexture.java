@@ -77,8 +77,8 @@ public abstract class AbstractTexture extends Texture {
 		boolean updateOriginal;
 		try (IResource iresource = resourceManager.getResource(originalLocation)) {
 			originalImage = originalTexture instanceof DynamicTexture ? ((DynamicTexture) originalTexture).getPixels() : NativeImage.read(iresource.getInputStream());
-			newImage = new NativeImage(originalImage.getWidth(), originalImage.getHeight(), false);
-
+			newImage = new NativeImage(originalImage.getWidth(), originalImage.getHeight(), true);
+			
 			try {
 				textureMetadata = iresource.getMetadata(TextureMetadataSection.SERIALIZER);
 			} catch (RuntimeException e) {
@@ -92,7 +92,8 @@ public abstract class AbstractTexture extends Texture {
 		boolean clamp = textureMetadata != null && textureMetadata.isClamp();
 
 		if(CQRMain.isWorkspaceEnvironment) {
-			debugWriteGeneratedImageToDisk(newImage);
+			debugWriteGeneratedImageToDisk(originalImage, originalLocation);
+			debugWriteGeneratedImageToDisk(newImage, this.location);
 		}
 		
 		if (!RenderSystem.isOnRenderThreadOrInit()) {
@@ -120,7 +121,7 @@ public abstract class AbstractTexture extends Texture {
 		}
 	}
 
-	private final void debugWriteGeneratedImageToDisk(NativeImage newImage) {
+	private final void debugWriteGeneratedImageToDisk(NativeImage newImage, ResourceLocation id) {
 		try {
 			File file = new File(FMLPaths.GAMEDIR.get().toFile(), "autoglow-gen");
 			if(!file.exists()) {
@@ -130,7 +131,7 @@ public abstract class AbstractTexture extends Texture {
 				file.delete();
 				file.mkdirs();
 			}
-			file = new File(file, this.location.getPath().replace('/', '#'));
+			file = new File(file, id.getPath().replace('/', '#'));
 			if(!file.exists()) {
 				file.createNewFile();
 			}
