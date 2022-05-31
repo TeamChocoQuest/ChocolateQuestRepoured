@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.render.texture;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
@@ -20,6 +21,8 @@ import net.minecraft.client.resources.data.TextureMetadataSection;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.loading.FMLPaths;
+import team.cqr.cqrepoured.CQRMain;
 
 public abstract class AbstractTexture extends Texture {
 
@@ -88,6 +91,10 @@ public abstract class AbstractTexture extends Texture {
 		boolean blur = textureMetadata != null && textureMetadata.isBlur();
 		boolean clamp = textureMetadata != null && textureMetadata.isClamp();
 
+		if(CQRMain.isWorkspaceEnvironment) {
+			debugWriteGeneratedImageToDisk(newImage);
+		}
+		
 		if (!RenderSystem.isOnRenderThreadOrInit()) {
 			RenderSystem.recordRenderCall(() -> {
 				uploadSimple(this.getId(), newImage, blur, clamp);
@@ -110,6 +117,26 @@ public abstract class AbstractTexture extends Texture {
 					uploadSimple(originalTexture.getId(), originalImage, blur, clamp);
 				}
 			}
+		}
+	}
+
+	private final void debugWriteGeneratedImageToDisk(NativeImage newImage) {
+		try {
+			File file = new File(FMLPaths.GAMEDIR.get().toFile(), "autoglow-gen");
+			if(!file.exists()) {
+				file.mkdirs();
+			}
+			else if(!file.isDirectory()) {
+				file.delete();
+				file.mkdirs();
+			}
+			file = new File(file, this.location.getPath().replace('/', '#'));
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			newImage.writeToFile(file);
+		} catch(IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 
