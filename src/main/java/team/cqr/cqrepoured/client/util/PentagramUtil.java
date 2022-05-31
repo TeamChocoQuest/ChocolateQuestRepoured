@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.client.model.entity.ModelPentagram;
 public class PentagramUtil {
 
 	public static void renderPentagram(MatrixStack matrix, RenderType renderType, float ageInTicks) {
-		float r = 0.2F + 0.8F * (0.5F + 0.5F * MathHelper.sin(0.25F * ageInTicks));
+		float r = 0.6F + 0.4F * MathHelper.sin(0.25F * ageInTicks);
 		float g = 0.0F;
 		float b = 0.0F;
 		renderPentagram(matrix, renderType, r, g, b, 5);
