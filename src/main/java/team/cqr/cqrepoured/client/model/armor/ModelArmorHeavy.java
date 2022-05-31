@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -18,7 +19,7 @@ public class ModelArmorHeavy<T extends LivingEntity> extends ModelCustomArmorBas
 	public ModelRenderer skirtL;
 
 	public ModelArmorHeavy(float scale) {
-		super(scale, 128, 128);
+		super(RenderType::armorCutoutNoCull, scale, 128, 128);
 
 		this.lowerHeadArmor = new ModelRenderer(this, 0, 64);
 		this.lowerHeadArmor.setPos(0.0F, 0.0F, 0.0F);

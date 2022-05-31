@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -21,7 +22,7 @@ public class ModelArmorInquisition<T extends LivingEntity> extends ModelCustomAr
 	public ModelRenderer gauntletL;
 
 	public ModelArmorInquisition(float scale) {
-		super(scale, 128, 128);
+		super(RenderType::armorCutoutNoCull, scale, 128, 128);
 
 		this.helmR = new ModelRenderer(this, 0, 64);
 		this.helmR.setPos(-5.0F, -1.0F, -5.0F);

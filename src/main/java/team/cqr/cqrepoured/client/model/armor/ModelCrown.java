@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -17,7 +18,7 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 	public ModelRenderer crownJewelFront;
 
 	public ModelCrown(float scale) {
-		super(scale, 32, 32);
+		super(RenderType::armorCutoutNoCull, scale, 32, 32);
 
 		this.crownBorderLeft = new ModelRenderer(this, 18, 16);
 		this.crownBorderLeft.setPos(3.0F, 1.3F, 0.0F);
@@ -39,7 +40,7 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 		this.crownBorderBack.addBox(-4.0F, -9.0F, 1.0F, 8, 2, 1, 0.0F);
 		this.head = new ModelRenderer(this, 0, 10);
 		this.head.setPos(0.0F, 0.0F, 0.0F);
-		//this.head.addBox(-3.0F, -7.0F, -3.0F, 6, 1, 6, 0.0F);
+		// this.head.addBox(-3.0F, -7.0F, -3.0F, 6, 1, 6, 0.0F);
 		this.crownBorderFront = new ModelRenderer(this, 0, 29);
 		this.crownBorderFront.setPos(0.0F, 1.3F, -3.0F);
 		this.crownBorderFront.addBox(-4.0F, -9.0F, -1.0F, 8, 2, 1, 0.0F);

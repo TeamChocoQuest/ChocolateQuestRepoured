@@ -12,16 +12,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> {
+public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> implements IRenderTypeProvider {
 
 	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
 		this(RenderType::entityCutoutNoCull, scale, 0.0F, textureWidth, textureHeight);
 	}
-	
+
 	public ModelCustomArmorBase(Function<ResourceLocation, RenderType> renderType, float scale, int textureWidth, int textureHeight) {
 		this(renderType, scale, 0.0F, textureWidth, textureHeight);
 	}
-	
+
 	public ModelCustomArmorBase(Function<ResourceLocation, RenderType> renderType, float scale, float inflate, int texWidth, int texHeight) {
 		super(renderType, scale, inflate, texWidth, texHeight);
 	}
@@ -64,5 +64,9 @@ public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> 
 		modelRenderer.zRot = z;
 	}
 
+	@Override
+	public RenderType getRenderType(ResourceLocation texture) {
+		return renderType(texture);
+	}
 
 }

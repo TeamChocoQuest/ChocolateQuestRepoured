@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -26,7 +27,7 @@ public class ModelArmorBull<T extends LivingEntity> extends ModelCustomArmorBase
 	public ModelRenderer shoulderHornL3;
 
 	public ModelArmorBull(float scale) {
-		super(scale, 128, 128);
+		super(RenderType::armorCutoutNoCull, scale, 128, 128);
 
 		this.hornR1 = new ModelRenderer(this, 0, 64);
 		this.hornR1.setPos(-4.5F, -8.5F, -4.5F);

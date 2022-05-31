@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -12,7 +13,7 @@ public class ModelBackpack<T extends LivingEntity> extends ModelCustomArmorBase<
 	// private ModelRenderer backBag;
 
 	public ModelBackpack(float scale) {
-		super(scale, 64, 32);
+		super(RenderType::armorCutoutNoCull, scale, 64, 32);
 
 		this.mainBag = new ModelRenderer(this, 0, 0);
 		this.mainBag.setPos(0.0F, 0.0F, 0.0F);

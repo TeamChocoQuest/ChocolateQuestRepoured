@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
 
@@ -14,7 +15,7 @@ public class ModelArmorTurtle<T extends LivingEntity> extends ModelCustomArmorBa
 	public ModelRenderer tassetRight;
 
 	public ModelArmorTurtle(float scale) {
-		super(scale, 64, 64);
+		super(RenderType::armorCutoutNoCull, scale, 64, 64);
 
 		this.shell1 = new ModelRenderer(this, 0, 32);
 		this.shell1.setPos(0.0F, -2.0F, 3.5F);
