@@ -42,11 +42,29 @@ public class CQRRenderTypes extends RenderType {
 				.createCompositeState(true));
 	}
 	
+	public static RenderType emissiveColorable() {
+		return RenderType.create("cqrepoured_emissive_colorable", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, State.builder()
+				.setAlphaState(DEFAULT_ALPHA)
+				.setCullState(NO_CULL)
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setOverlayState(OVERLAY)
+				.createCompositeState(true)
+				);
+	}
+	
 	public static RenderType sphere() {
 		return RenderType.create("cqrepoured_sphere", DefaultVertexFormats.POSITION, GL11.GL_TRIANGLES, 256, State.builder()
 				.setTransparencyState(LIGHTNING_TRANSPARENCY)
 				.setWriteMaskState(COLOR_WRITE)
 				.createCompositeState(true));
+	}
+	
+	public static RenderType speechbubble(ResourceLocation texture) {
+		return RenderType.create("cqrepoured_speechbubble", DefaultVertexFormats.POSITION_TEX, GL11.GL_QUADS, 256, State.builder()
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setTextureState(new TextureState(texture, false, false))
+				.createCompositeState(false)
+				);
 	}
 
 }
