@@ -18,6 +18,7 @@ import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -46,6 +47,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addLayer(new LayerCQRSpeechbubble<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
