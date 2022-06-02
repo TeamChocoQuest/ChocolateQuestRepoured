@@ -27,7 +27,7 @@ public class RenderCQREnderKing extends RenderCQRBipedBaseGeo<EntityCQREnderKing
 	}
 
 	@Override
-	protected float getWidthScale(EntityCQREnderKing entity) {
+	public float getWidthScale(EntityCQREnderKing entity) {
 		float superVal = super.getWidthScale(entity);
 		if (entity.isWide()) {
 			superVal *= 2;
