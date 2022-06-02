@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
@@ -27,13 +28,13 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable>  ex
 	}
 
 	@Override
-	public void render(MatrixStack matrixstack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
 			//Tessellator tessellator = Tessellator.getInstance();
 			//Minecraft minecraft = Minecraft.getInstance();
 
-			matrixstack.pushPose();
-			matrixstack.mulPose(Vector3f.YP.rotation(netHeadYaw));
+			matrixStack.pushPose();
+			matrixStack.mulPose(Vector3f.YP.rotation(netHeadYaw));
 			//Potentially unneeded
 			// DONE : This does not really line up with scaling mob size
 			/*if (this.extendedRenderer.heightScale != 1.0D || this.extendedRenderer.widthScale != 1.0D) {
@@ -41,7 +42,7 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable>  ex
 				matrixstack.scale(1.0D / this.extendedRenderer.widthScale, 1.0D / this.extendedRenderer.heightScale, 1.0D / this.extendedRenderer.widthScale);
 				matrixstack.translate(0.0D, -1.5D, 0.0D);
 			}*/
-			matrixstack.translate(-0.5D, (-1.0D * entity.getBbHeight()) / entity.getSizeVariation(), 0.0D);
+			matrixStack.translate(-0.5D, (-1.0D * entity.getBbHeight()) / entity.getSizeVariation(), 0.0D);
 
 			/*minecraft.getTextureManager().bindTexture(entity.getCurrentSpeechBubble().getResourceLocation());
 
@@ -55,13 +56,13 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable>  ex
 			tessellator.draw();*/
 			
 			IVertexBuilder builder = bufferIn.getBuffer(CQRRenderTypes.speechbubble(entity.getCurrentSpeechBubble().getResourceLocation()));
-			builder.vertex(0, 1, 0).uv(0, 1).endVertex();
-			builder.vertex(1, 1, 0).uv(1, 1).endVertex();
-			builder.vertex(1, 0, 0).uv(1, 0).endVertex();
-			builder.vertex(0, 0, 0).uv(0, 0).endVertex();
+			Matrix4f matrix = matrixStack.last().pose();
+			builder.vertex(matrix, 0, 1, 0).uv(0, 1).endVertex();
+			builder.vertex(matrix, 1, 1, 0).uv(1, 1).endVertex();
+			builder.vertex(matrix, 1, 0, 0).uv(1, 0).endVertex();
+			builder.vertex(matrix, 0, 0, 0).uv(0, 0).endVertex();
 			
-			matrixstack.popPose();
-
+			matrixStack.popPose();
 		}
 	}
 
