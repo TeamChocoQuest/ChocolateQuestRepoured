@@ -63,6 +63,9 @@ public class CQRRenderTypes extends RenderType {
 		return RenderType.create("cqrepoured_speechbubble", DefaultVertexFormats.POSITION_TEX, GL11.GL_QUADS, 256, State.builder()
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setTextureState(new TextureState(texture, false, false))
+				.setDiffuseLightingState(DIFFUSE_LIGHTING)
+				.setOverlayState(NO_OVERLAY)
+				.setCullState(NO_CULL)
 				.createCompositeState(false)
 				);
 	}
