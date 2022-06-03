@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer.EModelRenderCycle;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ISizable;
@@ -28,10 +29,6 @@ public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjecti
 	
 	protected float widthScale;
 	protected float heightScale;
-	
-	static enum EModelRenderCycle {
-		INITIAL, REPEATED, SPECIAL /* For special use by the user */
-	}
 	
 	protected EModelRenderCycle currentModelRenderCycle = EModelRenderCycle.INITIAL;
 	

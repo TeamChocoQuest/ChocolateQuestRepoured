@@ -1,5 +1,17 @@
 package team.cqr.cqrepoured.client.render.entity;
 
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_BODY;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_HEAD;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_LEFT_ARM;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_LEFT_FOOT;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_LEFT_LEG;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_RIGHT_ARM;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_RIGHT_FOOT;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.ARMOR_RIGHT_LEG;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.LEFT_HAND;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.POTION_BONE;
+import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.RIGHT_HAND;
+
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -21,8 +33,6 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
-
-import static team.cqr.cqrepoured.client.render.entity.StandardBipedBones.*;
 
 public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnimatable> extends RenderCQREntityGeo<T> {
 	
@@ -66,7 +76,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE)) {
-			bone.setHidden(this.currentEntityBeingRendered.hasCape(), false);
+			bone.setHidden(this.getCurrentModelRenderCycle() != EModelRenderCycle.INITIAL || !this.currentEntityBeingRendered.hasCape(), false);
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
