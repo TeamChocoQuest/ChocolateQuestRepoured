@@ -5,6 +5,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
+import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
@@ -15,7 +16,6 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKingIllusion;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
-import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
@@ -30,7 +30,6 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileThrownBlock;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -83,8 +82,8 @@ public class CQREntityRenderers
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BUBBLE.get(), RenderBubble::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SUMMONING_CIRCLE.get(), RenderSummoningCircle::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);*/
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING_ILLUSION.get(), RenderCQRWalkerKingIllusion::new);
 		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new);*/
