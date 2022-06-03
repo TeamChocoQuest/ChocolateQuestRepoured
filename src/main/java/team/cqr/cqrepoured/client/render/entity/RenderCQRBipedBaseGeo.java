@@ -109,15 +109,10 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 				this.currentArmorPartAtBone = GET_ARMOR_ARM_RIGHT;
 				this.currentSlotAtBone = EquipmentSlotType.CHEST;
 				break;
-			case ARMOR_LEFT_FOOT:
-				this.currentArmorAtBone = boots;
-				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
-				this.currentSlotAtBone = EquipmentSlotType.FEET;
-				break;
 			case ARMOR_RIGHT_LEG:
-				this.currentArmorAtBone = boots;
+				this.currentArmorAtBone = leggings;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
-				this.currentSlotAtBone = EquipmentSlotType.FEET;
+				this.currentSlotAtBone = EquipmentSlotType.LEGS;
 				break;
 			case ARMOR_LEFT_LEG:
 				this.currentArmorAtBone = leggings;
@@ -125,9 +120,14 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 				this.currentSlotAtBone = EquipmentSlotType.LEGS;
 				break;
 			case ARMOR_RIGHT_FOOT:
-				this.currentArmorAtBone = leggings;
+				this.currentArmorAtBone = boots;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
-				this.currentSlotAtBone = EquipmentSlotType.LEGS;
+				this.currentSlotAtBone = EquipmentSlotType.FEET;
+				break;
+			case ARMOR_LEFT_FOOT:
+				this.currentArmorAtBone = boots;
+				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
+				this.currentSlotAtBone = EquipmentSlotType.FEET;
 				break;
 			default:
 				break;
