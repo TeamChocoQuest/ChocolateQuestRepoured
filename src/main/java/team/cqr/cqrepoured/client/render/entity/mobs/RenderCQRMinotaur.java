@@ -46,11 +46,6 @@ public class RenderCQRMinotaur extends RenderCQRBipedBaseGeo<EntityCQRMinotaur> 
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRMinotaur currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRMinotaur currentEntity, IBone bone) {
 		
 	}

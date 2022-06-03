@@ -46,11 +46,6 @@ public class RenderCQROgre extends RenderCQRBipedBaseGeo<EntityCQROgre> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQROgre currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQROgre currentEntity, IBone bone) {
 		
 	}

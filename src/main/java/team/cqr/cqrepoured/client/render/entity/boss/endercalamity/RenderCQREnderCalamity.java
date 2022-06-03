@@ -9,10 +9,12 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -28,6 +30,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
+import team.cqr.cqrepoured.client.render.entity.StandardBipedBones;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.client.util.SphereRenderer.Triangle;
@@ -92,7 +95,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void render(EntityCQREnderCalamity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
 		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
@@ -145,6 +147,9 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 	@Override
 	protected ResourceLocation getTextureForBone(String boneName, EntityCQREnderCalamity currentEntity) {
+		if(boneName.equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && currentEntity.hasCape()) {
+			return currentEntity.getResourceLocationOfCape();
+		}
 		return null;
 	}
 
@@ -171,6 +176,11 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	@Override
 	protected boolean isArmorBone(GeoBone bone) {
 		return false;
+	}
+	
+	@Override
+	public RenderType getRenderType(EntityCQREnderCalamity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+		return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
 
 }

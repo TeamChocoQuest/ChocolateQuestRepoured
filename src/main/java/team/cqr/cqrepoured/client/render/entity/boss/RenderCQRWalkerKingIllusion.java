@@ -31,11 +31,6 @@ public class RenderCQRWalkerKingIllusion extends RenderCQRBipedBaseGeo<EntityWal
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityWalkerKingIllusion currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityWalkerKingIllusion currentEntity) {
 		return null;
 	}

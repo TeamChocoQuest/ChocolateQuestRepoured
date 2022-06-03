@@ -13,6 +13,7 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelExterminator;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
+import team.cqr.cqrepoured.client.render.entity.StandardBipedBones;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
@@ -80,12 +81,6 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRExterminator currentEntity) {
-		// Unused
-		return null;
-	}
-
-	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
 			return TransformType.THIRD_PERSON_RIGHT_HAND;
@@ -108,6 +103,14 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected boolean isArmorBone(GeoBone bone) {
 		return false;
+	}
+
+	@Override
+	protected ResourceLocation getTextureForBone(String boneName, EntityCQRExterminator currentEntity) {
+		if(boneName.equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && currentEntity.hasCape()) {
+			return currentEntity.getResourceLocationOfCape();
+		}
+		return null;
 	}
 
 }

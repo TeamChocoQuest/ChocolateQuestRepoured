@@ -31,11 +31,6 @@ public class RenderCQRMandril extends RenderCQRBipedBaseGeo<EntityCQRMandril> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRMandril currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRMandril currentEntity) {
 		return null;
 	}

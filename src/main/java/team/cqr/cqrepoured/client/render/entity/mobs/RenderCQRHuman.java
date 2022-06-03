@@ -46,11 +46,6 @@ public class RenderCQRHuman extends RenderCQRBipedBaseGeo<EntityCQRHuman> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRHuman currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRHuman currentEntity, IBone bone) {
 		
 	}

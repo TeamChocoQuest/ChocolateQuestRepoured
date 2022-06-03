@@ -51,11 +51,6 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR>
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, T currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 		
 	}

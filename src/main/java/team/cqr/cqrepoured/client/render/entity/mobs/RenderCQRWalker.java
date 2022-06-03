@@ -49,11 +49,6 @@ public class RenderCQRWalker extends RenderCQRBipedBaseGeo<EntityCQRWalker> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRWalker currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRWalker currentEntity, IBone bone) {
 		
 	}

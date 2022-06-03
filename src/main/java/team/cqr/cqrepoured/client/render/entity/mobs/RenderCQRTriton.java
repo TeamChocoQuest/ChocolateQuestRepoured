@@ -31,11 +31,6 @@ public class RenderCQRTriton extends RenderCQRBipedBaseGeo<EntityCQRTriton> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRTriton currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRTriton currentEntity) {
 		return null;
 	}

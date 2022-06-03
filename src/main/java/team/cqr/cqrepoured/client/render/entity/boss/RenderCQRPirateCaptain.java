@@ -31,11 +31,6 @@ public class RenderCQRPirateCaptain extends RenderCQRBipedBaseGeo<EntityCQRPirat
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRPirateCaptain currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRPirateCaptain currentEntity) {
 		return null;
 	}

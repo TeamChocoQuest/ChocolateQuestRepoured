@@ -77,11 +77,6 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRWalkerKing currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRWalkerKing currentEntity) {
 		return null;
 	}

@@ -46,11 +46,6 @@ public class RenderCQRBoarman extends RenderCQRBipedBaseGeo<EntityCQRBoarman> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRBoarman currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRBoarman currentEntity, IBone bone) {
 		
 	}

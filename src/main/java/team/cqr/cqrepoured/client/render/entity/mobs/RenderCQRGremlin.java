@@ -31,11 +31,6 @@ public class RenderCQRGremlin extends RenderCQRBipedBaseGeo<EntityCQRGremlin> {
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRGremlin currentEntity) {
-		return null;
-	}
-
-	@Override
 	protected BlockState getHeldBlockForBone(String boneName, EntityCQRGremlin currentEntity) {
 		return null;
 	}
