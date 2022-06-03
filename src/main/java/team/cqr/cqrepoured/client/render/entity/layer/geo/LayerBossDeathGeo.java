@@ -34,6 +34,7 @@ public class LayerBossDeathGeo<T extends AbstractEntityCQRBoss & IAnimatable> ex
 	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		int ticks = this.getAnimationTick(entityLivingBaseIn);
 		if(ticks > 0) {
+			matrixStackIn.translate(0, 1 + entityLivingBaseIn.getBbHeight() / 2, 1.75F + entityLivingBaseIn.getBbWidth() / 2);
 			this.rayHelper.renderRays(matrixStackIn, bufferIn.getBuffer(RenderType.lightning()), ticks, partialTicks);
 		}
 	}
