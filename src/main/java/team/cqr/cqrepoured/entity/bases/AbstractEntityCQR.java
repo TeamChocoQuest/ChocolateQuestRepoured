@@ -208,7 +208,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	
 	// Client only
 	@OnlyIn(Dist.CLIENT)
-	protected ESpeechBubble currentSpeechBubbleID;
+	protected ESpeechBubble currentSpeechBubbleID = ESpeechBubble.BLOCK_BED;
 
 	protected AbstractEntityCQR(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
 		super(type, worldIn);
@@ -773,7 +773,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
 			LootTable lootTable = this.level.getServer().getLootTables().get(resourcelocation);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
+			LootContext.Builder lootContextBuilder =  this.createLootContext(wasRecentlyHit, deathCause);//new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
 			if (wasRecentlyHit && this.lastHurtByPlayer != null) {
 				lootContextBuilder = lootContextBuilder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
 			}
