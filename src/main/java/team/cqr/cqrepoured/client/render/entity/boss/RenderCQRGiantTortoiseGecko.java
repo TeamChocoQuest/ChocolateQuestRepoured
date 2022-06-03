@@ -18,7 +18,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/bossgiant_tortoise.geo.json");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/giant_tortoise.geo.json");
 
 	public RenderCQRGiantTortoiseGecko(EntityRendererManager renderManager) {
 		super(renderManager, new ModelGiantTortoiseGecko(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
