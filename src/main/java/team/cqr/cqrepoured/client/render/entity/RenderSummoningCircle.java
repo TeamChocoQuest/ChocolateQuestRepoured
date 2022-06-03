@@ -2,11 +2,9 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import team.cqr.cqrepoured.CQRMain;
@@ -31,15 +29,6 @@ public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle>
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntitySummoningCircle entity) {
-		if (entity.getTextureID() >= TEXTURES.length) {
-			return TEXTURES[0];
-		} else {
-			return TEXTURES[entity.getTextureID()];
-		}
-	}
-
-	@Override
 	public void render(EntitySummoningCircle pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer,
 			int pPackedLight) {
 		float ageInTicks = pEntity.tickCount + pPartialTicks;
@@ -50,8 +39,12 @@ public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle>
 	}
 
 	@Override
-	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
-		// Should be empty!!
+	public ResourceLocation getTextureLocation(EntitySummoningCircle entity) {
+		if (entity.getTextureID() >= TEXTURES.length) {
+			return TEXTURES[0];
+		} else {
+			return TEXTURES[entity.getTextureID()];
+		}
 	}
 
 }
