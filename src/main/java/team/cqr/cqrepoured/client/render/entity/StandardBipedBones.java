@@ -31,7 +31,7 @@ public class StandardBipedBones {
 	public static final String ARMOR_RIGHT_ARM = "armorBipedRightArm";
 	public static final String ARMOR_LEFT_LEG = "armorBipedLeftLeg";
 	public static final String ARMOR_RIGHT_LEG = "armorBipedRightLeg";
-	public static final String ARMOR_LEFT_FOOT = "armroBipedLeftFoot";
+	public static final String ARMOR_LEFT_FOOT = "armorBipedLeftFoot";
 	public static final String ARMOR_RIGHT_FOOT = "armorBipedRightFoot"; 
 	
 
