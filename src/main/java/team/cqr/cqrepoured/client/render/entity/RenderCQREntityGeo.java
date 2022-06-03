@@ -51,12 +51,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	@Override
-	protected float getWidthScale(T entity) {
+	public float getWidthScale(T entity) {
 		return this.widthScale * entity.getSizeVariation();
 	}
 
 	@Override
-	protected float getHeightScale(T entity) {
+	public float getHeightScale(T entity) {
 		return this.heightScale * entity.getSizeVariation();
 	}
 	
