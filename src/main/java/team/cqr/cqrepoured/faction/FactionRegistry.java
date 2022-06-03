@@ -59,7 +59,7 @@ public class FactionRegistry {
 	private final Map<String, Faction> factions = new HashMap<>();
 	//TODO: Replace player reputation saving with generic capability
 	private final Map<UUID, Object2IntMap<String>> playerFactionRepuMap = new HashMap<>();
-	private final Map<Class<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
+	private final Map<EntityType<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
 
 	public static FactionRegistry getClientInstance() {
 		return CLIENT_INSTANCE;
@@ -89,7 +89,7 @@ public class FactionRegistry {
 		}
 
 		this.factions.put(DUMMY_FACTION.getName(), DUMMY_FACTION);
-		this.entityFactionMap.put(Entity.class, DUMMY_FACTION);
+		//this.entityFactionMap.put(Entity.class, DUMMY_FACTION);
 
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
@@ -132,7 +132,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
 				continue;
 			}
-			if (this.entityFactionMap.containsKey(entry.getClass())) {
+			if (this.entityFactionMap.containsKey(entry)) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity already has an assigned faction!", s);
 				continue;
 			}
@@ -141,8 +141,7 @@ public class FactionRegistry {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Faction does not exists!", s);
 				continue;
 			}
-			//TODO: Reimplement
-			//this.entityFactionMap.put(entry.getEntityClass(), faction);
+			this.entityFactionMap.put(entry, faction);
 		}
 	}
 
@@ -273,21 +272,20 @@ public class FactionRegistry {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
-		return this.getFactionOf(entity.getClass());
+		return this.getFactionOf(entity.getType());
 	}
 
-	@SuppressWarnings("unchecked")
-	private Faction getFactionOf(Class<? extends Entity> entityClass) {
-		if(entityClass == null) {
-			CQRMain.logger.error("Class of entity is null! This should never happen!");
+	private Faction getFactionOf(EntityType<?> typeObject) {
+		if(typeObject == null) {
+			CQRMain.logger.error("Type of entity is null! This should never happen!");
 			return null;
 		}
 		
-		Faction faction = this.entityFactionMap.get(entityClass);
-		if (faction == null && entityClass != Entity.class) {
-			faction = this.getFactionOf((Class<? extends Entity>) entityClass.getSuperclass());
+		Faction faction = this.entityFactionMap.getOrDefault(typeObject, DUMMY_FACTION);
+		/*if (faction == null && entityClass != Entity.class) {
+			faction = this.getFactionOf((Class<? extends Entity<?>>) entityClass.getSuperClass());
 			this.entityFactionMap.put(entityClass, faction);
-		}
+		}*/
 		return faction;
 	}
 
