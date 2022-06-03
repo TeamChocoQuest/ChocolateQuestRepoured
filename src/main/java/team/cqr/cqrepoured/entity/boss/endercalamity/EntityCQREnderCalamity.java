@@ -1,15 +1,25 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.LootTable;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -17,7 +27,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
@@ -44,7 +58,17 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
-import team.cqr.cqrepoured.entity.ai.boss.endercalamity.*;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIAreaLightnings;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIBlockThrower;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAICalamityBuilding;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAICalamityHealing;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIEndLaser;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIEnergyTennis;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIRandomTeleportEyes;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIRandomTeleportLaser;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAIStunned;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAISummonMinions;
+import team.cqr.cqrepoured.entity.ai.boss.endercalamity.BossAITeleportAroundHome;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAINearestAttackTargetAtHomeArea;
@@ -61,12 +85,6 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 // DONE: Move the minion & lightning handling to a AI class, it is cleaner that way
 // DONE: Create helper classes to control arm management (status, animations, etc)
@@ -1139,7 +1157,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		// LOOTVOLCANO
-		if (this.deathTime % 2 == 0) {
+		if (this.deathTime % 2 == 0 && this.deathCause != null && this.deathCause.getEntity() != null) {
 			//Recent second arg: recentlyHit
 			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.lastHurt > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getEntity(), this.deathCause), this.deathCause);
 		}
@@ -1166,16 +1184,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (table != null) {
 			LootTable lootTable = this.level.getServer().getLootTables().get(table);
 			float luck = 0;
-			if(this.lastHurtByPlayer != null && wasRecentlyHit) {
+			if (this.lastHurtByPlayer != null && wasRecentlyHit) {
 				luck = this.lastHurtByPlayer.getLuck();
 			}
-			LootContext lootContext = new LootContext.Builder((ServerWorld) this.level)
+			LootContext lootContext = this.createLootContext(wasRecentlyHit, source).withLuck(luck).withRandom(this.getRandom()).create(LootParameterSets.ENTITY); /*new LootContext.Builder((ServerWorld) this.level)
 					.withParameter(LootParameters.THIS_ENTITY, this)
 					.withParameter(LootParameters.DAMAGE_SOURCE, source)
 					.withOptionalParameter(LootParameters.LAST_DAMAGE_PLAYER, wasRecentlyHit ? this.lastHurtByPlayer : null)
 					.withLuck(luck)
 					.withRandom(this.getRandom())
-					.create(LootParameterSets.ENTITY);
+					.create(LootParameterSets.ENTITY);*/
 
 			List<ItemStack> loot = lootTable.getRandomItems(lootContext);
 			if (loot.isEmpty()) {
