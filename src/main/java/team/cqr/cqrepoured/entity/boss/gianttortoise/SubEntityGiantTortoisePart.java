@@ -22,10 +22,6 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 		return true;
 	}
 
-	public EntityCQRGiantTortoise getParent() {
-		return (EntityCQRGiantTortoise) this.getParent();
-	}
-
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (this.isHead) {
