@@ -309,15 +309,15 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		return PlayState.CONTINUE;
 	}
 
-	/*
-	 * private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
-	 * if (event.getController().getCurrentAnimation() == null) {
-	 * event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
-	 * }
-	 * 
-	 * return PlayState.CONTINUE;
-	 * }
-	 */
+	
+	private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
+		if (event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
+		}
+	 
+		return PlayState.CONTINUE;
+	}
+	 
 
 	private <E extends IAnimatable> void soundListenerArms(SoundKeyframeEvent<E> event) {
 		SoundEvent sound = null;
@@ -480,8 +480,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
 		// Spin hands controller
-		// data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10,
-		// this::predicateSpinHands));
+		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
 
 		// Arms
 		@SuppressWarnings("rawtypes")

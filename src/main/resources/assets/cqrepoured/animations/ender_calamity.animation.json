@@ -1098,6 +1098,72 @@
 				}
 			}
 		},
+		"animation.ender_calamity.spin_hands": {
+			"loop": true,
+			"animation_length": 2.16,
+			"bones": {
+				"handRightUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [360, 0, 360]
+						},
+						"2.16": {
+							"vector": [0, 360, 0]
+						}
+					}
+				},
+				"handRightMiddle": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 360, 360]
+						},
+						"2.16": {
+							"vector": [360, 0, 0]
+						}
+					}
+				},
+				"handRightLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [360, 0, 0]
+						},
+						"2.16": {
+							"vector": [0, 0, 360]
+						}
+					}
+				},
+				"handLeftUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 360]
+						},
+						"2.16": {
+							"vector": [360, 360, 0]
+						}
+					}
+				},
+				"handLeftMiddle": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.16": {
+							"vector": [360, 0, 360]
+						}
+					}
+				},
+				"handLeftLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.16": {
+							"vector": [0, 360, 360]
+						}
+					}
+				}
+			}
+		},
 		"animation.ender_calamity.laser_stationary": {
 			"loop": true,
 			"animation_length": 2.08,
