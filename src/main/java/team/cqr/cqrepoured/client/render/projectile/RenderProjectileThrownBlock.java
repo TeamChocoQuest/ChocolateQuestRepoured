@@ -33,17 +33,12 @@ public class RenderProjectileThrownBlock extends EntityRenderer<ProjectileThrown
 		//GL11.glPushMatrix();
 		//GL11.glTranslated(x, y, z);
 		matrixStack.pushPose();
-		matrixStack.translate(-0.35F, 0.0F, 0.35F);
+		matrixStack.translate(-0.35F, 0.0F, -0.35F);
 		matrixStack.scale(0.7F, 0.7F, 0.7F);
 		//this.bindEntityTexture(entity);
 		//GlStateManager.translate(-0.35F, 0F, 0.35F);
 		// GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		//GlStateManager.scale(0.7F, 0.7F, 0.7F);
-		ClientWorld level = Minecraft.getInstance().level;
-		double dx = entity.getX() + (-0.5 + (level.random.nextDouble()));
-		double dy = 0.25 + entity.getY() + (-0.5 + (level.random.nextDouble()));
-		double dz = entity.getZ() + (-0.5 + (level.random.nextDouble()));
-		level.addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
 		blockrendererdispatcher.renderBlock(entity.getBlock(), matrixStack, buffer, packedLight, OverlayTexture.NO_OVERLAY, EmptyModelData.INSTANCE);
 		// GlStateManager.translate(0.25F, 0.0F, 0.55F);
 		//GL11.glPopMatrix();

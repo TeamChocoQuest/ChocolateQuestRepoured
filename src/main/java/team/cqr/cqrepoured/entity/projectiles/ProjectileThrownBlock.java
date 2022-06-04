@@ -46,18 +46,20 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.state = block;
 		this.shooter = shooter;
 	}
-
-/*	@Override
-	public void writeSpawnData(ByteBuf buffer)
-	{
-		ByteBufUtils.writeUTF8String(buffer, this.block.toString());
-	}
-
+	
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		this.block = new ResourceLocation(ByteBufUtils.readUTF8String(additionalData));
-		this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
-	} */
+	public void tick() {
+		super.tick();
+		
+		double dx = this.getX() + (-0.5 + (level.random.nextDouble()));
+		double dy = 0.25 + this.getY() + (-0.5 + (level.random.nextDouble()));
+		double dz = this.getZ() + (-0.5 + (level.random.nextDouble()));
+		if(this.level.isClientSide()) {
+			this.level.addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		} else if(this.level instanceof ServerWorld) {
+			((ServerWorld)this.level).sendParticles(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 1, 0, 0, 0, 0.05D);
+		}
+	}
 
 	public BlockState getBlock() {
 		return this.state != null ? this.state : Blocks.BEDROCK.defaultBlockState();
