@@ -109,16 +109,14 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 				//Vector3d pos = result.getLocation();
 				BlockPos pos = result.getBlockPos();
 				double particleSpeed = 0.2D;
-				for (int i = 0; i < 50; i++) {
-					double dx = -0.5 + this.random.nextDouble();
-					dx *= particleSpeed;
-					double dy = -0.5 + this.random.nextDouble();
-					dy *= particleSpeed;
-					double dz = -0.5 + this.random.nextDouble();
-					dz *= particleSpeed;
-					ws.sendParticles(new BlockParticleData(ParticleTypes.BLOCK, this.state), pos.getX(), pos.getY(), pos.getZ(), 10, dx, dy, dz, 0.1);
-					this.playSound(this.state.getBlock().getSoundType(this.state, this.level, this.blockPosition(), this).getPlaceSound(), 1.5F, 1.25F);
-				}
+				double dx = -0.5 + this.random.nextDouble();
+				dx *= particleSpeed;
+				double dy = -0.5 + this.random.nextDouble();
+				dy *= particleSpeed;
+				double dz = -0.5 + this.random.nextDouble();
+				dz *= particleSpeed;
+				ws.sendParticles(new BlockParticleData(ParticleTypes.BLOCK, this.state), pos.getX(), pos.getY(), pos.getZ(), 50, dx, dy, dz, 0.1);
+				this.playSound(this.state.getBlock().getSoundType(this.state, this.level, this.blockPosition(), this).getPlaceSound(), 1.5F, 1.25F);
 			}
 		}
 		this.remove();
