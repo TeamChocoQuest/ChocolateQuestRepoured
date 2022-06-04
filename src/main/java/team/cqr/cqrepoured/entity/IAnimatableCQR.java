@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
@@ -250,7 +252,12 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	default <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
 		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALKING, true));
-			event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
+			if(this instanceof LivingEntity) {
+				LivingEntity entity = (LivingEntity) this;
+				event.getController().setAnimationSpeed(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.0);
+			} else {
+				event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
+			}
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
