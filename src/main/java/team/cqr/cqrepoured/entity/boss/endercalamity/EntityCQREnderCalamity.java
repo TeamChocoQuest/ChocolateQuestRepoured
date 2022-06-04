@@ -480,7 +480,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	public void registerControllers(AnimationData data) {
 		data.addAnimationController(new AnimationController<>(this, "controller", 10, this::predicate));
 		// Spin hands controller
-		data.addAnimationController(new AnimationController<EntityCQREnderCalamity>(this, "controller_spin_hands", 10, this::predicateSpinHands));
+		data.addAnimationController(new AnimationController<>(this, "controller_spin_hands", 0, this::predicateSpinHands));
 
 		// Arms
 		@SuppressWarnings("rawtypes")
