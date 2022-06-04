@@ -142,16 +142,14 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		if (this.world instanceof ServerWorld && CQRConfig.bosses.calamityBlockEquipParticles) {
 			ServerWorld ws = (ServerWorld) this.world;
 			Vector3d pos = this.getPositionOfHand(hand);
-			for (int i = 0; i < 50; i++) {
-				double dx = -0.5 + this.entity.getRandom().nextDouble();
-				dx *= 2;
-				double dy = -0.5 + this.entity.getRandom().nextDouble();
-				dy *= 2;
-				double dz = -0.5 + this.entity.getRandom().nextDouble();
-				dz *= 2;
-				ws.sendParticles(ParticleTypes.ENCHANT, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
-				this.entity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
-			}
+			double dx = -0.5 + this.entity.getRandom().nextDouble();
+			dx *= 2;
+			double dy = -0.5 + this.entity.getRandom().nextDouble();
+			dy *= 2;
+			double dz = -0.5 + this.entity.getRandom().nextDouble();
+			dz *= 2;
+			ws.sendParticles(ParticleTypes.ENCHANT, pos.x, pos.y, pos.z, 25, dx, dy, dz, 0.05);
+			this.entity.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 		}
 	}
 
