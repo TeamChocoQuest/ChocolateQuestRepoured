@@ -1,18 +1,16 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.data.EmptyModelData;
-import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 
 public class RenderProjectileThrownBlock extends EntityRenderer<ProjectileThrownBlock> {
