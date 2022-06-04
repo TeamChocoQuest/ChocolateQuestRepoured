@@ -102,7 +102,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 		if(CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
 			// TODO: Add placed block to whitelist of protected region
-			this.level.setBlockAndUpdate(new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ()), this.state);
+			this.level.setBlockAndUpdate(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ()), this.state);
 			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
 			if (this.level instanceof ServerWorld) {
 				ServerWorld ws = (ServerWorld) this.level;
