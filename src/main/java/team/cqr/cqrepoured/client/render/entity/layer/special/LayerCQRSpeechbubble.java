@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.client.render.entity.layer.AbstractCQRLayerGeo;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable>  extends AbstractCQRLayerGeo<T> {
+public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
@@ -28,21 +28,17 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable>  ex
 	public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
 			matrixStack.pushPose();
-			matrixStack.scale(1F, -1F, 1F);
 			matrixStack.mulPose(Vector3f.YP.rotation(netHeadYaw));
-			//Potentially unneeded
-			// DONE : This does not really line up with scaling mob size
-			matrixStack.translate(-0.5D, (-1.0D * entity.getBbHeight()) / entity.getSizeVariation(), 0.0D);
-			matrixStack.translate(0, -1.25, 0);
-			
+			matrixStack.translate(-0.5D, entity.getBbHeight() / entity.getSizeVariation() + 0.25D, 0.0D);
+
 			IVertexBuilder builder = bufferIn.getBuffer(CQRRenderTypes.speechbubble(entity.getCurrentSpeechBubble().getResourceLocation()));
 			Matrix4f matrix = matrixStack.last().pose();
 
-			builder.vertex(matrix, 0, 1, 0).uv(0, 1).endVertex();
-			builder.vertex(matrix, 1, 1, 0).uv(1, 1).endVertex();
-			builder.vertex(matrix, 1, 0, 0).uv(1, 0).endVertex();
-			builder.vertex(matrix, 0, 0, 0).uv(0, 0).endVertex();
-			
+			builder.vertex(matrix, 0, 1, 0).uv(0, 0).uv2(packedLightIn).endVertex();
+			builder.vertex(matrix, 1, 1, 0).uv(1, 0).uv2(packedLightIn).endVertex();
+			builder.vertex(matrix, 1, 0, 0).uv(1, 1).uv2(packedLightIn).endVertex();
+			builder.vertex(matrix, 0, 0, 0).uv(0, 1).uv2(packedLightIn).endVertex();
+
 			matrixStack.popPose();
 		}
 	}
