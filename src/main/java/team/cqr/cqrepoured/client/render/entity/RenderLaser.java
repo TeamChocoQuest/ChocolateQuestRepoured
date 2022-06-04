@@ -50,9 +50,9 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		float yaw = this.getYaw(entity, partialTicks);
 		float pitch = this.getPitch(entity, partialTicks);
 		Entity renderViewEntity = mc.getCameraEntity();
-		double x2 = renderViewEntity.xOld + (renderViewEntity.getX() - renderViewEntity.xOld) * partialTicks;
-		double y2 = renderViewEntity.yOld + (renderViewEntity.getY() - renderViewEntity.yOld) * partialTicks;
-		double z2 = renderViewEntity.zOld + (renderViewEntity.getZ() - renderViewEntity.zOld) * partialTicks;
+		double x2 = entity.xOld + (entity.getX() - entity.xOld) * partialTicks;
+		double y2 = entity.yOld + (entity.getY() - entity.yOld) * partialTicks;
+		double z2 = entity.zOld + (entity.getZ() - entity.zOld) * partialTicks;
 
 		pMatrixStack.pushPose();
 		//Replaced by rendertype
