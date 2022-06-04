@@ -12,7 +12,7 @@ public class RenderProjectileHomingEnderEye extends RenderSpriteBase<ProjectileH
 
 	public RenderProjectileHomingEnderEye(EntityRendererManager renderManager)
 	{
-		super(renderManager, new ResourceLocation("textures/items/ender_eye.png"));
+		super(renderManager, new ResourceLocation("textures/item/ender_eye.png"));
 	}
 
 	@Override
