@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -81,7 +82,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 		if(entity == this.shooter) return;
 
-		if(entity instanceof PartEntity && ((PartEntity)entity).getParent() == this.shooter) return;
+		if(entity instanceof PartEntity && ((PartEntity<?>)entity).getParent() == this.shooter) return;
 
 		entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), 10);
 		this.remove();
@@ -183,14 +184,13 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	@Override
 	public void writeSpawnData(PacketBuffer buffer)
 	{
-		//ByteBufUtil.writeUtf8(buffer, this.block.toString());
-		buffer.writeUtf(this.block.toString());
+		buffer.writeResourceLocation(this.block);
 	}
 
 	@Override
 	public void readSpawnData(PacketBuffer additionalData)
 	{
-		this.block = new ResourceLocation(additionalData.readUtf());
-		//this.state = Block.REGISTRY.getObject(this.block).getDefaultState();
+		this.block = additionalData.readResourceLocation();
+		this.state = ForgeRegistries.BLOCKS.getValue(this.block).defaultBlockState();
 	}
 }
