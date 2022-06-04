@@ -1,131 +1,37 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceContext.BlockMode;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import team.cqr.cqrepoured.client.init.CQRRenderTypes;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.model.entity.ModelLaser;
+import team.cqr.cqrepoured.client.util.EmissiveUtil;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 
 public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T> {
 
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/effects/ray.png");
+	private final ModelBase model;
+
 	public RenderLaser(EntityRendererManager renderManager) {
 		super(renderManager);
+		this.model = new ModelLaser();
 	}
-	
+
 	@Override
-	public void render(T entity, float pEntityYaw, float partialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
-		super.render(entity, pEntityYaw, partialTicks, pMatrixStack, pBuffer, pPackedLight);
-		
-		double x1 = entity.caster.xOld + (entity.caster.getX() - entity.caster.xOld) * partialTicks;
-		double y1 = entity.caster.yOld + (entity.caster.getY() - entity.caster.yOld) * partialTicks;
-		double z1 = entity.caster.zOld + (entity.caster.getZ() - entity.caster.zOld) * partialTicks;
-		Vector3d offset = entity.getOffsetVector();
-		x1 += offset.x;
-		y1 += offset.y;
-		z1 += offset.z;
-		float yaw = this.getYaw(entity, partialTicks);
-		float pitch = this.getPitch(entity, partialTicks);
-		final Vector3d laserDirection = Vector3d.directionFromRotation(pitch, yaw).scale(this.getLaserLength(entity, partialTicks));
-		/*Entity renderViewEntity = Minecraft.getInstance().getCameraEntity();
-		double x2 = renderViewEntity.xOld + (renderViewEntity.getX() - renderViewEntity.xOld) * partialTicks;
-		double y2 = renderViewEntity.yOld + (renderViewEntity.getY() - renderViewEntity.yOld) * partialTicks;
-		double z2 = renderViewEntity.zOld + (renderViewEntity.getZ() - renderViewEntity.zOld) * partialTicks;*/
-		double x2 = x1 + laserDirection.x();
-		double y2 = y1 + laserDirection.y();
-		double z2 = z1 + laserDirection.z();
-		final double laserHalfWidth = entity.laserEffectRadius();
-		
-		pMatrixStack.pushPose();
-		
-		pMatrixStack.translate(x1 - x2, y1 - y2, z1 - z2);
-		
-		IVertexBuilder builder = pBuffer.getBuffer(CQRRenderTypes.emissiveColorable());
-		
-		final float laserIncrease = 0.125F / 2;
-		x1 -= (laserHalfWidth - 0.125F);
-		y1 -= (laserHalfWidth - 0.125F);
-		z1 -= (laserHalfWidth - 0.125F);
-		x2 += (laserHalfWidth - 0.125F);
-		y2 += (laserHalfWidth - 0.125F);
-		z2 += (laserHalfWidth - 0.125F);
-		
-		//Inner white part
-		drawCube(builder, x1, y1, z1, x2, y2, z2, 1F, 1F, 1F, 1F);
-		
-		//Middle part
-		x1 -= laserIncrease;
-		y1 -= laserIncrease;
-		z1 -= laserIncrease;
-		x2 += laserIncrease;
-		y2 += laserIncrease;
-		z2 += laserIncrease;
-		
-		float colorMultiplier = 2F / 3F;
-		drawCube(builder, x1, y1, z1, x2, y2, z2, colorMultiplier * entity.getColorR(), colorMultiplier * entity.getColorG(), colorMultiplier * entity.getColorB(), colorMultiplier);
-		
-		//Outer most translucent part
-		x1 -= laserIncrease;
-		y1 -= laserIncrease;
-		z1 -= laserIncrease;
-		x2 += laserIncrease;
-		y2 += laserIncrease;
-		z2 += laserIncrease;
-		
-		colorMultiplier = 1F / 3F;
-		drawCube(builder, x1, y1, z1, x2, y2, z2, colorMultiplier * entity.getColorR(), colorMultiplier * entity.getColorG(), colorMultiplier * entity.getColorB(), colorMultiplier);
-		
-		pMatrixStack.popPose();
+	protected ResourceLocation getEntityTexture(T entity) {
+		return TEXTURE;
 	}
-	
-	protected void drawCube(IVertexBuilder builder, double x1, double y1, double z1, double x2, double y2, double z2, float colorR, float colorG, float colorB, float colorAlpha) {
-		//Bottom face
-		builder.vertex(x1, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		
-		//Top face
-		builder.vertex(x1, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		
-		//X+ face
-		builder.vertex(x1, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		
-		//X- face
-		builder.vertex(x2, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		
-		//Z+ face
-		builder.vertex(x1, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y1, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z1).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		
-		//Z- face
-		builder.vertex(x1, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x1, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y1, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-		builder.vertex(x2, y2, z2).color(colorR, colorG, colorB, colorAlpha).endVertex();
-	}
-	
-	/*@Override
+
+	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		EmissiveUtil.preEmissiveTextureRendering();
 
@@ -192,7 +98,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		GlStateManager.popMatrix();
 
 		EmissiveUtil.postEmissiveTextureRendering();
-	}*/
+	}
 
 	protected float getPitch(T entity, float partialTicks) {
 		return this.interpolateRotation(entity.prevRotationPitchCQR, entity.rotationPitchCQR, partialTicks);
@@ -207,11 +113,10 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 	}
 
 	protected double getLaserLength(T entity, float pitch, float yaw) {
-		Vector3d start = entity.position();
-		Vector3d end = start.add(Vector3d.directionFromRotation(pitch, yaw).scale(entity.length));
-		RayTraceContext rtc = new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
-		RayTraceResult result = entity.level.clip(rtc);
-		double d = result != null ? (float) result.getLocation().subtract(entity.position()).length() : entity.length;
+		Vector3d start = entity.getPositionVector();
+		Vector3d end = start.add(Vector3d.fromPitchYaw(pitch, yaw).scale(entity.length));
+		RayTraceResult result = entity.world.rayTraceBlocks(start, end, false, true, false);
+		double d = result != null ? (float) result.hitVec.subtract(entity.getPositionVector()).length() : entity.length;
 
 		return d;
 	}
@@ -220,10 +125,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
 
-
 	@Override
-	public ResourceLocation getTextureLocation(T pEntity) {
-		return null;
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
 	}
 
 }
