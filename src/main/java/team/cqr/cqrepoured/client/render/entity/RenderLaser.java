@@ -56,7 +56,6 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 
 		pMatrixStack.pushPose();
 		RenderType renderType = CQRRenderTypes.emissive(this.getTextureLocation(entity));
-		renderType.setupRenderState();
 		//Replaced by rendertype
 		/*GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -102,7 +101,6 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();*/
-		renderType.clearRenderState();
 		
 		pMatrixStack.popPose();
 		
