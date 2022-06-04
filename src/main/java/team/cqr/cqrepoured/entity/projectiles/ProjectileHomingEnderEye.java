@@ -24,7 +24,6 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	private Entity target = null;
-	private LivingEntity shooter = null;
 
 /*	public ProjectileHomingEnderEye(World worldIn) {
 		super(worldIn);
@@ -47,7 +46,8 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 
 	public ProjectileHomingEnderEye(LivingEntity shooter, World world, Entity target) {
 		super(CQREntityTypes.PROJECTILE_HOMING_ENDER_EYE.get(), shooter, world);
-		this.shooter = shooter;
+		//this.shooter = shooter;
+		this.setOwner(shooter);
 		this.target = target;
 	}
 	
@@ -60,6 +60,11 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		
 		super.tick();
 	}
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
+	}
 
 	@Override
 	protected void onHit(RayTraceResult result)
@@ -67,7 +72,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		// TODO: Remove a few end blocks around the location
 		//if (!this.level.isClientSide) {
 			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
-			entityareaeffectcloud.setOwner(this.shooter);
+			entityareaeffectcloud.setOwner(this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null);
 			entityareaeffectcloud.setParticle(ParticleTypes.DRAGON_BREATH);
 			entityareaeffectcloud.setRadius(2F);
 			entityareaeffectcloud.setDuration(200);
@@ -91,9 +96,12 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	public void onHitEntity(EntityRayTraceResult entityResult)
 	{
-		if(entityResult.getEntity() != this.shooter && !(entityResult.getEntity() instanceof PartEntity))
+		if(entityResult.getEntity() != this.getOwner() && !(entityResult.getEntity() instanceof PartEntity))
 		{
 			this.push(entityResult.getEntity());
+		}
+		if(entityResult.getEntity() == this.getOwner()) {
+			return;
 		}
 		super.onHitEntity(entityResult);
 	}
@@ -101,7 +109,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onHitBlock(BlockRayTraceResult result) {
 		super.onHitBlock(result);
-		this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
+		this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
 		this.remove();
 	}
 
@@ -110,19 +118,19 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (entityIn == null) {
 			return;
 		}
-		if (entityIn == this.shooter) {
+		if (entityIn == this.getOwner()) {
 			return;
 		}
 		if (entityIn instanceof ProjectileBase || entityIn instanceof EndermanEntity || entityIn instanceof EntityCQREnderman) {
 			return;
 		}
-		boolean hitTarget = this.target != null && entityIn != this.shooter;
+		boolean hitTarget = this.target != null && entityIn != this.getOwner();
 		if (hitTarget) {
-			this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
+			this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
 			this.remove();
 		}
-		if (this.shooter != null) {
-			entityIn.hurt(DamageSource.indirectMobAttack(this, this.shooter), 2 + this.level.getDifficulty().getId());
+		if (this.getOwner() != null && this.getOwner() instanceof LivingEntity) {
+			entityIn.hurt(DamageSource.indirectMobAttack(this, (LivingEntity) this.getOwner()), 2 + this.level.getDifficulty().getId());
 		}
 	}
 
@@ -130,7 +138,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
 		if (this.tickCount > 400 && !this.level.isClientSide) {
-			this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
+			this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
 			this.remove();
 			return;
 		}
