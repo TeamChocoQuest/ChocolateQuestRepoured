@@ -58,16 +58,15 @@ public class CQRRenderTypes extends RenderType {
 				.setWriteMaskState(COLOR_WRITE)
 				.createCompositeState(true));
 	}
-	
+
 	public static RenderType speechbubble(ResourceLocation texture) {
-		return RenderType.create("cqrepoured_speechbubble", DefaultVertexFormats.POSITION_TEX, GL11.GL_QUADS, 256, State.builder()
-				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+		return RenderType.create("cqrepoured_speechbubble", CQRVertexFormats.POSITION_TEX_LIGHTMAP, GL11.GL_QUADS, 256, State.builder()
 				.setTextureState(new TextureState(texture, false, false))
-				.setLightmapState(LIGHTMAP)
-				.setOverlayState(NO_OVERLAY)
+				.setDiffuseLightingState(DIFFUSE_LIGHTING)
+				.setAlphaState(DEFAULT_ALPHA)
 				.setCullState(NO_CULL)
-				.createCompositeState(false)
-				);
+				.setLightmapState(LIGHTMAP)
+				.createCompositeState(false));
 	}
 
 }
