@@ -73,7 +73,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	@Override
 	public boolean shouldRenderAtSqrDistance(double distance) {
-		return distance < 64.0D * 64.0D;
+		return true; //distance < 64.0D * 64.0D;
 	}
 	
 	
