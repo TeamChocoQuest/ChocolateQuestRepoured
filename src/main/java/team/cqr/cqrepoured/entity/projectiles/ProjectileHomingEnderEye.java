@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -10,6 +15,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -19,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.init.CQRBlockTags;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileHomingEnderEye extends ProjectileBase {
@@ -69,27 +76,18 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onHit(RayTraceResult result)
 	{
-		// TODO: Remove a few end blocks around the location
-		//if (!this.level.isClientSide) {
-			AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
-			entityareaeffectcloud.setOwner(this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null);
-			entityareaeffectcloud.setParticle(ParticleTypes.DRAGON_BREATH);
-			entityareaeffectcloud.setRadius(2F);
-			entityareaeffectcloud.setDuration(200);
-			entityareaeffectcloud.setRadiusOnUse(-0.25F);
-			entityareaeffectcloud.setWaitTime(10);
-			entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
-			entityareaeffectcloud.addEffect(new EffectInstance(Effects.HARM, 20, 1));
+		AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+		entityareaeffectcloud.setOwner(this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null);
+		entityareaeffectcloud.setParticle(ParticleTypes.DRAGON_BREATH);
+		entityareaeffectcloud.setRadius(2F);
+		entityareaeffectcloud.setDuration(200);
+		entityareaeffectcloud.setRadiusOnUse(-0.25F);
+		entityareaeffectcloud.setWaitTime(10);
+		entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
+		entityareaeffectcloud.addEffect(new EffectInstance(Effects.HARM, 20, 1));
 
-			this.level.addFreshEntity(entityareaeffectcloud);
+		this.level.addFreshEntity(entityareaeffectcloud);
 
-			/*if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-				this.world.createExplosion(this.shooter, this.posX, this.posY, this.posZ, 2, false);
-				this.setDead();
-			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof PartEntity)) {
-				this.applyEntityCollisionEye(result.entityHit);
-			} */
-		//}
 		super.onHit(result);
 	}
 
@@ -111,6 +109,49 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		super.onHitBlock(result);
 		this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
 		this.remove();
+		
+		BlockPos blockPos = this.blockPosition();
+		this.removeBlocksRecursively(blockPos.mutable(), 0, this.level.getDifficulty().ordinal() * 3);
+	}
+	
+	protected void removeBlocksRecursively(BlockPos.Mutable blockPos, int recursionDepth, final int maxRecursion) {
+		BlockState state = this.level.getBlockState(blockPos);
+		Block block = state.getBlock();
+		if(block.is(CQRBlockTags.HOMING_ENDER_EYE_DESTROYABLE)) {
+			this.level.destroyBlock(blockPos, state.hasTileEntity() || this.level.getRandom().nextBoolean());
+			
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.0, 0.025, 0.0);
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, 0.025);
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, -0.025);
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, 0.025);
+			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, -0.025);
+			
+			recursionDepth++;
+			if(recursionDepth < maxRecursion) {
+				switch(this.level.getRandom().nextInt(6)) {
+					case 0:
+						this.removeBlocksRecursively(blockPos.above().mutable(), recursionDepth, maxRecursion);
+						break;
+					case 1:
+						this.removeBlocksRecursively(blockPos.below().mutable(), recursionDepth, maxRecursion);
+						break;
+					case 2:
+						this.removeBlocksRecursively(blockPos.north().mutable(), recursionDepth, maxRecursion);
+						break;
+					case 3:
+						this.removeBlocksRecursively(blockPos.east().mutable(), recursionDepth, maxRecursion);
+						break;
+					case 4:
+						this.removeBlocksRecursively(blockPos.south().mutable(), recursionDepth, maxRecursion);
+						break;
+					case 5:
+						this.removeBlocksRecursively(blockPos.west().mutable(), recursionDepth, maxRecursion);
+						break;
+					default:
+						break;
+				}
+			}
+		}
 	}
 
 	@Override

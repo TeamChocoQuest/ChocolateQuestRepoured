@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:end_stone",
+    "minecraft:end_stone_bricks",
+    "minecraft:purpur_slab",
+    "minecraft:purpur_block",
+    "minecraft:purpur_pillar",
+    "minecraft:purpur_stairs",
+    "minecraft:end_stone_brick_wall",
+    "cqrepoured:endstone_carved",
+    "cqrepoured:endstone_pillar",
+    "cqrepoured:endstone_cube",
+    "cqrepoured:endstone_scale",
+    "cqrepoured:endstone_square",
+    "cqrepoured:endstone_small",
+    "cqrepoured:purpur_carved",
+    "cqrepoured:purpur_cube",
+    "cqrepoured:purpur_scale",
+    "cqrepoured:purpur_small",
+    "cqrepoured:purpur_large"
+  ]
+}
