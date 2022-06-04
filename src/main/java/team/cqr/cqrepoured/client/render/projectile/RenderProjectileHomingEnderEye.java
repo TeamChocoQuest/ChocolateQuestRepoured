@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.client.render.RenderSpriteBase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
 
@@ -12,7 +12,7 @@ public class RenderProjectileHomingEnderEye extends RenderSpriteBase<ProjectileH
 
 	public RenderProjectileHomingEnderEye(EntityRendererManager renderManager)
 	{
-		super(renderManager, CQRMain.prefix("textures/items/ender_eye.png"));
+		super(renderManager, new ResourceLocation("textures/items/ender_eye.png"));
 	}
 
 	@Override
