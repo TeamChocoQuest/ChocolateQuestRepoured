@@ -203,9 +203,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
-		this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
-		//this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
-		this.goalSelector.addGoal(4, new BossAIArmCannon(this));
+		//this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
+		this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
+		//this.goalSelector.addGoal(4, new BossAIArmCannon(this));
 
 		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
 		this.goalSelector.addGoal(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
@@ -969,7 +969,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		result = result.add(0, 1.88, 0);
 
-		final Vector3d facing = Vector3d.directionFromRotation(this.xRot, this.yRot);
+		final Vector3d facing = Vector3d.directionFromRotation(this.xRot, this.yBodyRot);
 		result = result.add(facing.scale(1.25));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.68));
 
