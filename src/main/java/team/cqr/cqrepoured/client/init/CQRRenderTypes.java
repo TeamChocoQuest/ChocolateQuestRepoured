@@ -26,6 +26,13 @@ public class CQRRenderTypes extends RenderType {
 				.setOverlayState(OVERLAY)
 				.createCompositeState(true));
 	}
+
+	public static RenderType laser() {
+		return RenderType.create("cqrepoured_laser", DefaultVertexFormats.NEW_ENTITY, GL11.GL_QUADS, 256, State.builder()
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setWriteMaskState(COLOR_WRITE)
+				.createCompositeState(true));
+	}
 	
 	public static RenderType lineStrip(double lineWidth) {
 		return RenderType.create("cqrepoured_line_strip", DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINE_STRIP, 256, State.builder()

@@ -55,7 +55,6 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 		double z2 = renderViewEntity.zOld + (renderViewEntity.getZ() - renderViewEntity.zOld) * partialTicks;
 
 		pMatrixStack.pushPose();
-		RenderType renderType = CQRRenderTypes.emissive(this.getTextureLocation(entity));
 		//Replaced by rendertype
 		/*GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -70,7 +69,7 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 
 		float laserLength = this.getLaserLength(entity, pitch, yaw);
 		
-		IVertexBuilder ivb = pBuffer.getBuffer(renderType);
+		IVertexBuilder ivb = pBuffer.getBuffer(CQRRenderTypes.laser());
 
 		pMatrixStack.pushPose();
 		float d3 = 1.0F;
