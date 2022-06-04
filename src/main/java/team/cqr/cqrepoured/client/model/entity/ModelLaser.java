@@ -1,32 +1,40 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-public class ModelLaser extends ModelBase {
+import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
+import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+
+public class ModelLaser extends EntityModel<AbstractEntityLaser> {
 
 	private final ModelRenderer bone;
 
 	public ModelLaser() {
-		this.textureWidth = 64;
-		this.textureHeight = 32;
+		super(CQRRenderTypes::emissive);
+		this.texWidth = 64;
+		this.texHeight = 32;
 
 		this.bone = new ModelRenderer(this);
-		this.bone.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.bone.cubeList.add(new ModelBox(this.bone, 0, 0, -4.0F, -4.0F, -16.0F, 8, 8, 16, 0.0F, false));
+		bone.setPos(0.0F, 24.0F, 0.0F);
+		bone.texOffs(0, 0).addBox(-4.0F, -28.0F, -16.0F, 8.0F, 8.0F, 16.0F, 0.0F, false);
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.bone.render(f5);
+	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha){
+		bone.render(matrixStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
+		modelRenderer.xRot = x;
+		modelRenderer.yRot = y;
+		modelRenderer.zRot = z;
 	}
 
+	@Override
+	public void setupAnim(AbstractEntityLaser pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		
+	}
 }
