@@ -28,7 +28,6 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	private ResourceLocation block = Blocks.END_STONE.getRegistryName();
 	private BlockState state = null;
 	private boolean placeOnImpact = false;
-	private LivingEntity shooter;
 
 	public ProjectileThrownBlock(EntityType<? extends ProjectileBase> throwableEntity, World world) {
 		super(throwableEntity, world);
@@ -44,7 +43,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		this.block = block.getBlock().getRegistryName();
 		this.placeOnImpact = placeOnImpact;
 		this.state = block;
-		this.shooter = shooter;
+		//this.shooter = shooter;
+		this.setOwner(shooter);
 	}
 	
 	@Override
@@ -74,6 +74,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	public boolean isNoGravity() {
 		return false;
 	}
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
+	}
 
 	@Override
 	public void onHitEntity(EntityRayTraceResult entityResult)
@@ -82,11 +87,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 
 		Entity entity = entityResult.getEntity();
 
-		if(entity == this.shooter) return;
+		if(entity == this.getOwner()) return;
 
-		if(entity instanceof PartEntity && ((PartEntity<?>)entity).getParent() == this.shooter) return;
+		if(entity instanceof PartEntity && ((PartEntity<?>)entity).getParent() == this.getOwner()) return;
 
-		entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), 10);
+		entity.hurt(DamageSource.indirectMobAttack(this, this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null), 10);
 		this.remove();
 	}
 
@@ -118,49 +123,6 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		}
 		this.remove();
 	}
-
-/*	@Override
-	protected void onHit(RayTraceResult result) {
-		if (this.world.isRemote) {
-			return;
-		}
-
-		if (result.typeOfHit == Type.ENTITY) {
-			if (result.entityHit == this.thrower) {
-				return;
-			}
-
-			if (result.entityHit instanceof PartEntity && ((PartEntity) result.entityHit).parent == this.thrower) {
-				return;
-			}
-
-			result.entityHit.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), 10);
-			this.setDead();
-			return;
-		}
-		if (CQRConfig.bosses.thrownBlocksGetPlaced && this.placeOnImpact) {
-			// TODO: Add placed block to whitelist of protected region
-			this.world.setBlockState(new BlockPos(result.hitVec.x, result.hitVec.y, result.hitVec.z), this.state);
-			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
-			if (this.world instanceof ServerWorld) {
-				ServerWorld ws = (ServerWorld) this.world;
-				Vector3d pos = result.hitVec;
-				double particleSpeed = 0.2D;
-				for (int i = 0; i < 50; i++) {
-					double dx = -0.5 + this.rand.nextDouble();
-					dx *= particleSpeed;
-					double dy = -0.5 + this.rand.nextDouble();
-					dy *= particleSpeed;
-					double dz = -0.5 + this.rand.nextDouble();
-					dz *= particleSpeed;
-					ws.spawnParticle(ParticleTypes.BLOCK_CRACK, pos.x, pos.y, pos.z, dx, dy, dz, Block.getStateId(this.state));
-					this.playSound(this.state.getBlock().getSoundType(this.state, this.world, this.getPosition(), this).getPlaceSound(), 1.5F, 1.25F);
-				}
-			}
-		}
-
-		this.setDead();
-	} */
 
 	@Override
 	protected void readAdditionalSaveData(CompoundNBT compound)
