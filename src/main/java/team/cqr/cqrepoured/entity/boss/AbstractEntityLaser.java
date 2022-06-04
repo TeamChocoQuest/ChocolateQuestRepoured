@@ -27,6 +27,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.util.math.BoundingBox;
 
@@ -66,7 +67,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	public Vector3d getOffsetVector() {
 		if (this.caster == null) return Vector3d.ZERO;
-		Vector3d v = new Vector3d(0.0D, this.caster.getBbHeight() * 0.6D, 0.0D);
+		Vector3d v = new Vector3d(0.0D, this.caster.getBbHeight() * 0.6D / (caster instanceof AbstractEntityCQR ? ((AbstractEntityCQR) caster).getSizeVariation() : 1), 0.0D);
 		v = v.add(this.caster.getLookAngle().scale(0.25D));
 		return v;
 	}
