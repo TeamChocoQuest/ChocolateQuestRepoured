@@ -5,6 +5,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
+import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
@@ -16,6 +17,7 @@ import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKing;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRWalkerKingIllusion;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderCalamity;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
+import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
@@ -30,6 +32,9 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileThrownBlock;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
+import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -141,7 +146,6 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);*/
 
 		// Giant Tortoise
-		// RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_TORTOISE.get(), RenderCQRGiantTortoiseGecko::new);
 
 		// Shelob
@@ -160,13 +164,13 @@ public class CQREntityRenderers
 		// Geckolib
 		// Ender Calamity
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ENDER_CALAMITY.get(), RenderCQREnderCalamity::new);
-		// RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER_TARGETING.get(), RenderEndLaser<AbstractEntityLaser>::new);
-		// RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER.get(), RenderEndLaser<AbstractEntityLaser>::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER_TARGETING.get(), RenderEndLaser<EntityEndLaserTargeting>::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER.get(), RenderEndLaser<EntityEndLaser>::new);
 		
 		// GeckoLib
 		// Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.EXTERMINATOR.get(), RenderCQRExterminator::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LASER_EXTERMINATOR.get(), RenderLaser<EntityExterminatorHandLaser>::new);
 		
 		// Mages
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LICH.get(), RenderCQRLich::new);
