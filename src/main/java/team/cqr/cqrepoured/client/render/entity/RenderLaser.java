@@ -18,7 +18,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.entity.ModelLaser;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T> {
 

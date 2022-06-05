@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import net.minecraft.network.PacketBuffer;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketSyncLaserRotation extends AbstractPacket<SPacketSyncLaserRotation> {

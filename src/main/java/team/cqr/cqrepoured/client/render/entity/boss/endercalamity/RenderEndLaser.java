@@ -9,7 +9,7 @@ import net.minecraft.util.math.vector.Vector3f;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T> {
 

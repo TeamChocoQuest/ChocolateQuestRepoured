@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 import java.util.EnumSet;
 
@@ -23,7 +24,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 		super(entity);
 
 		//this.setMutexBits(7);
-		this.setFlags(EnumSet.allOf(Flag.class));
+		this.setFlags(EnumSet.of(Flag.LOOK));
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class BossAIExterminatorHandLaser extends AbstractCQREntityAI<EntityCQREx
 			this.timeOut--;
 			return false;
 		}
-		if (this.entity != null && this.entity.isAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)) {
+		if (this.entity != null && this.entity.isAlive() && this.entity.hasAttackTarget() && !this.entity.isCurrentlyPlayingAnimation() /*&& (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.5F)*/) {
 			if (this.entity.isStunned()) {
 				return false;
 			}

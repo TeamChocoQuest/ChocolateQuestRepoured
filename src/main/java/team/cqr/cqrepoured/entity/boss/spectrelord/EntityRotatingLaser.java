@@ -7,7 +7,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityRotatingLaser extends AbstractEntityLaser {

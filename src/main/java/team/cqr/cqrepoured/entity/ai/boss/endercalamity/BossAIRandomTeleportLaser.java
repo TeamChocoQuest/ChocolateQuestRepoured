@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import team.cqr.cqrepoured.entity.boss.AbstractEntityLaser;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
+import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 public class BossAIRandomTeleportLaser extends AbstractBossAIRandomShoot {
 
