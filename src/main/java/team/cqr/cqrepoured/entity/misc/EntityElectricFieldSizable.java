@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.UUID;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ISizable;
-
-import java.util.UUID;
 
 public class EntityElectricFieldSizable extends EntityElectricField implements ISizable {
 
@@ -26,16 +26,6 @@ public class EntityElectricFieldSizable extends EntityElectricField implements I
 	protected void addAdditionalSaveData(CompoundNBT compound) {
 		super.addAdditionalSaveData(compound);
 		this.callOnWriteToNBT(compound);
-	}
-
-	@Override
-	public float getDefaultWidth() {
-		return 1.0F;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return 1.0F;
 	}
 
 	@Override
