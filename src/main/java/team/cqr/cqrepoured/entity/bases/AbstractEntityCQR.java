@@ -1,7 +1,23 @@
 package team.cqr.cqrepoured.entity.bases;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import io.netty.buffer.Unpooled;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.*;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntitySize;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -34,17 +50,27 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.*;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,8 +91,20 @@ import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.*;
-import team.cqr.cqrepoured.entity.ai.*;
+import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
+import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
+import team.cqr.cqrepoured.entity.ISizable;
+import team.cqr.cqrepoured.entity.ITextureVariants;
+import team.cqr.cqrepoured.entity.ITradeRestockOverTime;
+import team.cqr.cqrepoured.entity.ai.EntityAIFireFighter;
+import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
+import team.cqr.cqrepoured.entity.ai.EntityAIFollowPath;
+import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
+import team.cqr.cqrepoured.entity.ai.EntityAIMoveToHome;
+import team.cqr.cqrepoured.entity.ai.EntityAIMoveToLeader;
+import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
+import team.cqr.cqrepoured.entity.ai.EntityAIRideHorse;
+import team.cqr.cqrepoured.entity.ai.EntityAISearchMount;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttack;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIBackstab;
@@ -83,7 +121,6 @@ import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIHurtByTarget;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
-import team.cqr.cqrepoured.entity.pathfinding.PathNavigateGroundCQR;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
@@ -92,23 +129,21 @@ import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.item.*;
+import team.cqr.cqrepoured.item.IFakeWeapon;
+import team.cqr.cqrepoured.item.ISupportWeapon;
+import team.cqr.cqrepoured.item.ItemBadge;
+import team.cqr.cqrepoured.item.ItemPotionHealing;
+import team.cqr.cqrepoured.item.ItemShieldDummy;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
-import team.cqr.cqrepoured.util.*;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.EntityUtil;
+import team.cqr.cqrepoured.util.ItemUtil;
+import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import io.netty.buffer.Unpooled;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, IIsBeingRiddenHelper {
 
@@ -217,7 +252,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 		this.xpReward = 5;
 		this.initializeSize();
-		this.size = new EntitySize(this.getDefaultWidth(), this.getDefaultWidth(), false);
+		this.size = new EntitySize(this.getBbWidth(), this.getBbHeight(), false);
 	}
 
 	public void enableBossBar() {
@@ -285,14 +320,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 	}
 
-	@Override
+	/*@Override
 	protected PathNavigator createNavigation(World worldIn) {
 		PathNavigator navigator = new PathNavigateGroundCQR(this, worldIn);
 		((GroundPathNavigator) navigator).setCanOpenDoors(true);
 		//Seems to be moved or removed in 1.16
 		//((GroundPathNavigator) navigator).setBreakDoors(this.canOpenDoors());
 		return navigator;
-	}
+	}*/
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
@@ -1811,7 +1846,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	// ISizable stuff
 	public EntitySize getSize() {
 		if(this.size == null) {
-			this.size = new EntitySize(this.getDefaultWidth(), this.getDefaultWidth(), false);
+			this.size = new EntitySize(this.getBbWidth(), this.getBbHeight(), false);
 		}
 		return this.size;
 	}
