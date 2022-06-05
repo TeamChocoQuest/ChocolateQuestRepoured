@@ -123,8 +123,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.parts[0] = new SubEntityExterminatorBackpack(this, "exterminator_backpack", this::isAnyEmitterActive);
 		this.parts[1] = new SubEntityExterminatorFieldEmitter(this, "emitter_left", this::getElectroCuteTargetLeft, this::isEmitterLeftActive, this::setEmitterLeftActive);
 		this.parts[2] = new SubEntityExterminatorFieldEmitter(this, "emitter_right", this::getElectroCuteTargetRight, this::isEmitterRightActive, this::setEmitterRightActive);
-		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getDefaultWidth() / 3, this.getDefaultHeight());
-		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getDefaultWidth() / 3, this.getDefaultHeight());
+		this.parts[3] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_left", this.getBbWidth() / 3, this.getBbHeight());
+		this.parts[4] = new SubEntityExterminatorHitboxPart(this, "main_hitbox_right", this.getBbWidth() / 3, this.getBbHeight());
 
 		//this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1);
 		this.callLastInConstructorForMultiparts();
@@ -203,9 +203,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
-		//this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
+		this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
 		this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
-		//this.goalSelector.addGoal(4, new BossAIArmCannon(this));
+		this.goalSelector.addGoal(4, new BossAIArmCannon(this));
 
 		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
 		this.goalSelector.addGoal(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
@@ -678,7 +678,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
-		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getWidth() / 2)).inflate(1));
+		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() / 2)).inflate(1));
 		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity || ( entity instanceof ProjectileEntity && ((ProjectileEntity)entity).getOwner() == this)));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
@@ -721,7 +721,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 				this.entityData.set(PUNCH_IS_KICK, false);
 				if (this.getRandom().nextBoolean() && !this.isCannonRaised()) {
 					// Throw animation
-					List<Entity> affectedEntities = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getWidth() * 0.75 * this.getSizeVariation())));
+					List<Entity> affectedEntities = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() * 0.75 * this.getSizeVariation())));
 					this.tryStartThrowingAnimation(affectedEntities, entityIn);
 				}
 			}
@@ -763,7 +763,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	private void alignParts() {
 		// Artificial main hitbox
-		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookAngle().normalize().scale((this.getDefaultWidth() * this.getSizeVariation()) / 6), 90.0D);
+		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookAngle().normalize().scale(this.getBbWidth()/ 6), 90.0D);
 		this.parts[4].setPos(this.getX() + offsetMainHitbox.x, this.getY(), this.getZ() + offsetMainHitbox.z);
 		this.parts[3].setPos(this.getX() - offsetMainHitbox.x, this.getY(), this.getZ() - offsetMainHitbox.z);
 

@@ -705,13 +705,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if (this.deathTime > 20) {
 			float sizeVariation = this.getSizeVariation();
 			sizeVariation *= 1.5F;
-			double f = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
-			double f1 = (this.random.nextDouble() - 0.5D) * (this.getDefaultHeight() * sizeVariation);
-			double f2 = (this.random.nextDouble() - 0.5D) * (this.getDefaultWidth() * sizeVariation);
+			double f = (this.random.nextDouble() - 0.5D) * (this.getBbWidth() * sizeVariation);
+			double f1 = (this.random.nextDouble() - 0.5D) * (this.getBbHeight() * sizeVariation);
+			double f2 = (this.random.nextDouble() - 0.5D) * (this.getBbWidth() * sizeVariation);
 			if(!this.level.isClientSide) {
 				ServerWorld sw = (ServerWorld) this.level;
-				sw.sendParticles(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
-				sw.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getDefaultHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
+				sw.sendParticles(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getBbHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
+				sw.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getBbHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
 			}
 		}
 		if (this.deathTime == 34 && this.isServerWorld()) {

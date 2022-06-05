@@ -40,7 +40,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 				double x1 = pEntity.xOld + (pEntity.getX() - pEntity.xOld) * pPartialTicks;
 				double y1 = pEntity.yOld + (pEntity.getY() - pEntity.yOld) * pPartialTicks;
-				y1 += pEntity.getHeight() * 0.5;
+				y1 += pEntity.getBbHeight() * 0.5;
 				double z1 = pEntity.zOld + (pEntity.getZ() - pEntity.zOld) * pPartialTicks;
 
 				double x2 = target.xOld + (target.getX() - target.xOld) * pPartialTicks;
@@ -48,7 +48,7 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				y2 += target.getEyeHeight();
 				double z2 = target.zOld + (target.getZ() - target.zOld) * pPartialTicks;
 
-				final Vector3d start = new Vector3d(0, pEntity.getHeight() * 0.5, 0);
+				final Vector3d start = new Vector3d(0, pEntity.getBbHeight() * 0.5, 0);
 				final Vector3d end = new Vector3d(x2 - x1, y2 - y1, z2 - z1);
 
 				RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);

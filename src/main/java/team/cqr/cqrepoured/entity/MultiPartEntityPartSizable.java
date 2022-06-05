@@ -9,13 +9,8 @@ import net.minecraft.nbt.CompoundNBT;
 
 public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMultiPart<?> & ISizable> extends CQRPartEntity<T> implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
-	private final float dw, dh;
-
 	public MultiPartEntityPartSizable(T parent, String partName, float width, float height) {
 		super(parent);
-
-		this.dw = width;
-		this.dh = height;
 
 		this.size = new EntitySize(width, height, false);
 		
@@ -25,16 +20,6 @@ public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMulti
 	@Override
 	public boolean isPickable() {
 		return true;
-	}
-
-	@Override
-	public float getDefaultWidth() {
-		return this.dw;
-	}
-
-	@Override
-	public float getDefaultHeight() {
-		return this.dh;
 	}
 
 	@Override
