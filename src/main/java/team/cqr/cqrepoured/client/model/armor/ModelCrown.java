@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.client.model.armor;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +43,7 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 		this.crownBorderBack.addBox(-4.0F, -9.0F, 1.0F, 8, 2, 1, 0.0F);
 		this.head = new ModelRenderer(this, 0, 10);
 		this.head.setPos(0.0F, 0.0F, 0.0F);
-		// this.head.addBox(-3.0F, -7.0F, -3.0F, 6, 1, 6, 0.0F);
+		this.head.addBox(-3.0F, -7.0F, -3.0F, 6, 1, 6, 0.0F);
 		this.crownBorderFront = new ModelRenderer(this, 0, 29);
 		this.crownBorderFront.setPos(0.0F, 1.3F, -3.0F);
 		this.crownBorderFront.addBox(-4.0F, -9.0F, -1.0F, 8, 2, 1, 0.0F);
@@ -52,6 +55,8 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 		this.crownJewelFrontBase.addChild(this.crownJewelFront);
 		this.head.addChild(this.crownBorderBack);
 		this.head.addChild(this.crownBorderFront);
+		
+		this.hat = new ModelRenderer(this, 0, 0);
 
 		this.hat.visible = false;
 		this.body.visible = false;
@@ -65,6 +70,16 @@ public class ModelCrown<T extends LivingEntity> extends ModelCustomArmorBase<T> 
 	public void setAllVisible(boolean pVisible) {
 		super.setAllVisible(false);
 		this.head.visible = pVisible;
+	}
+	
+	@Override
+	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+		pMatrixStack.pushPose();
+		
+		pMatrixStack.scale(1.15F, 1.15F, 1.15F);
+		super.renderToBuffer(pMatrixStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
+		
+		pMatrixStack.popPose();
 	}
 
 }

@@ -18,8 +18,9 @@ public class LayerCrownRenderer<T extends LivingEntity, M extends BipedModel<T>,
 
 	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
 
+	@SuppressWarnings("unchecked")
 	public LayerCrownRenderer(IEntityRenderer<T, M> renderer) {
-		super(renderer, null, CQRArmorModels.crown);
+		super(renderer, null, (A) CQRArmorModels.CROWN);
 	}
 
 	@Override
@@ -30,9 +31,10 @@ public class LayerCrownRenderer<T extends LivingEntity, M extends BipedModel<T>,
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected A getArmorModelHook(T entity, ItemStack itemStack, EquipmentSlotType slot, A model) {
-		return CQRArmorModels.crown;
+		return (A) CQRArmorModels.CROWN;
 	}
 
 	@Override
