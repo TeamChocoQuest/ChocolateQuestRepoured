@@ -43,12 +43,12 @@ public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 
 	@Override
 	protected boolean isStillSuitableTarget(LivingEntity possibleTarget) {
-		return possibleTarget != null && this.entity.distanceTo(possibleTarget) <= (this.entity.getWidth() + 4 * CQRConfig.general.electricFieldEffectSpreadRange) && super.isStillSuitableTarget(possibleTarget) && this.entity.canSee(possibleTarget);
+		return possibleTarget != null && this.entity.distanceTo(possibleTarget) <= (this.entity.getBbWidth() + 4 * CQRConfig.general.electricFieldEffectSpreadRange) && super.isStillSuitableTarget(possibleTarget) && this.entity.canSee(possibleTarget);
 	}
 
 	@Override
 	protected boolean isSuitableTargetEnemy(LivingEntity possibleTarget) {
-		return possibleTarget != null && this.entity.distanceTo(possibleTarget) <= (this.entity.getWidth() + CQRConfig.general.electricFieldEffectSpreadRange * 2) && super.isSuitableTargetEnemy(possibleTarget) && TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget)
+		return possibleTarget != null && this.entity.distanceTo(possibleTarget) <= (this.entity.getBbWidth() + CQRConfig.general.electricFieldEffectSpreadRange * 2) && super.isSuitableTargetEnemy(possibleTarget) && TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED.apply(possibleTarget)
 				&& !TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(possibleTarget);
 	}
 
