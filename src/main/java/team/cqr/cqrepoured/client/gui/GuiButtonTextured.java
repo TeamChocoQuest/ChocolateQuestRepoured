@@ -12,11 +12,13 @@ public class GuiButtonTextured extends ImageButton implements INumericIDButton {
 
 	protected final int id;
 	protected final ResourceLocation icon;
+	private ResourceLocation resourceLocation;
 	
 	public GuiButtonTextured(final int id, int pX, int pY, int pWidth, int pHeight, int pXTexStart, int pYTexStart, int pYDiffTex, ResourceLocation pResourceLocation, @Nullable ResourceLocation icon, IPressable pOnPress, ITextComponent pMessage) {
 		super(pX, pY, pWidth, pHeight, pXTexStart, pYTexStart, pYDiffTex, pResourceLocation, 256, 256, pOnPress, pMessage);
 		this.id = id;
 		this.icon = icon;
+		this.resourceLocation = pResourceLocation;
 	}
 	
 	@Override

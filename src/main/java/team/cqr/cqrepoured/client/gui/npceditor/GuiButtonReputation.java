@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.faction.EReputationState;
@@ -8,9 +10,11 @@ public class GuiButtonReputation extends GuiButtonTextured {
 
 	private static final String[] POSSIBLE_REPUTAITONS = { "None", "Neutral", "Accepted", "Friend", "Ally", "Member" };
 	private int reputationIndex = 0;
+	private int onPress;
 
-	public GuiButtonReputation(int buttonId, int x, int y) {
-		super(buttonId, x, y, 60, 12, POSSIBLE_REPUTAITONS[0], "container/gui_button_reputation", null, 0.0D, 0.0D, 1.0D, 1.0D / 3.0D);
+	public GuiButtonReputation(int buttonId, int x, int y, Button.IPressable pOnPress) {
+		super(buttonId, x, y, 60, 12, 0, 1,  1 / 3,
+				new ResourceLocation("container/gui_button_reputation"), null , pOnPress, new StringTextComponent(POSSIBLE_REPUTAITONS[0]));
 	}
 
 	public void updateReputationIndex(boolean leftClick) {
