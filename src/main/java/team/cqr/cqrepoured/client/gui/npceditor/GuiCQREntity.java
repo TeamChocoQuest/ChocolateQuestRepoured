@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -66,7 +67,7 @@ public class GuiCQREntity extends ContainerScreen {
 		this.addButton(this.sliderDropChanceMainhand);
 		this.addButton(this.sliderDropChanceOffhand);
 		this.addButton(this.openTradeGUIButton);
-		if (!Minecraft.getInstance().player.isCreative()) {
+		if (!this.getMinecraft().player.isCreative()) {
 			this.sliderHealthScaling.active = false;
 			this.sliderHealthScaling.visible = false;
 
@@ -100,12 +101,12 @@ public class GuiCQREntity extends ContainerScreen {
 		this.renderComponentHoverEffect( matrixStack, null ,mouseX, mouseY);
 	}
 
-	protected void renderBG(float partialTicks, int mouseX, int mouseY) {
-		this.drawGradientRect(0, 0, this.width, this.height, 0xC010_1010, 0xD010_1010);
-		GlStateManager.color(1, 1, 1, 1);
-		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
-		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
-		this.drawEntity(this.guiLeft + 225, this.guiTop + 100, 30, mouseX, mouseY);
+	protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+		this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xC010_1010, 0xD010_1010);
+		GlStateManager._color4f(1, 1, 1, 1);
+		this.getMinecraft().getTextureManager().bind(BG_TEXTURE);
+		this.blit(matrixStack, this.getGuiLeft(), this.getGuiTop(), 0, 0, this.getXSize(), this.getYSize());
+		this.drawEntity(this.getGuiLeft() + 225, this.getGuiTop() + 100, 30, mouseX, mouseY);
 	}
 
 	protected void drawEntity(int x, int y, int scale, float mouseX, float mouseY) {
