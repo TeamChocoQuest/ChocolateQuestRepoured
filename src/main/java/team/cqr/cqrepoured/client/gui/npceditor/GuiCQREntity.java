@@ -2,19 +2,16 @@ package team.cqr.cqrepoured.client.gui.npceditor;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.client.gui.widget.Slider;
 import team.cqr.cqrepoured.CQRMain;
@@ -58,7 +55,7 @@ public class GuiCQREntity extends ContainerScreen {
 		this.sliderDropChanceMainhand = new Slider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true);
 		this.sliderDropChanceOffhand = new Slider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true);
 		this.sliderSizeScaling = new Slider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
-		this.openTradeGUIButton = new ExtendedButton(8, 5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, "Trades", );
+		this.openTradeGUIButton = new ExtendedButton(8, 5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, new StringTextComponent("Trades"), this::actionPerformed);
 		this.addButton(this.sliderHealthScaling);
 		this.addButton(this.sliderDropChanceHelm);
 		this.addButton(this.sliderDropChanceChest);
@@ -142,12 +139,10 @@ public class GuiCQREntity extends ContainerScreen {
 		return false;
 	}
 
-	@Override
-	protected void actionPerformed(Button button) throws IOException {
-		super.actionPerformed(button);
-		ClientPlayerEntity player = Minecraft.getMinecraft().player;
+	protected void actionPerformed(Button button) {
+		ClientPlayerEntity player = this.getMinecraft().player;
 		if (button == this.openTradeGUIButton && (player.isCreative() || (!this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
-			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getEntityId()));
+			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getId()));
 		}
 	}
 
