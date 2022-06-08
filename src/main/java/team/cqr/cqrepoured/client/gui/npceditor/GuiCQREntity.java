@@ -100,8 +100,7 @@ public class GuiCQREntity extends ContainerScreen {
 		this.renderComponentHoverEffect( matrixStack, null ,mouseX, mouseY);
 	}
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+	protected void renderBG(float partialTicks, int mouseX, int mouseY) {
 		this.drawGradientRect(0, 0, this.width, this.height, 0xC010_1010, 0xD010_1010);
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
@@ -110,12 +109,12 @@ public class GuiCQREntity extends ContainerScreen {
 	}
 
 	protected void drawEntity(int x, int y, int scale, float mouseX, float mouseY) {
-		InventoryScreen.drawEntityOnScreen(x, y, scale, x - mouseX, y - scale * this.entity.getEyeHeight() - mouseY, this.entity);
+		InventoryScreen.renderEntityInInventory(x, y, scale, x - mouseX, y - scale * this.entity.getEyeHeight() - mouseY, this.entity);
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
+	public void onClose() {
+		super.onClose();
 		int healthScaling = this.sliderHealthScaling.getValueInt();
 		int dropChanceHelm = this.sliderDropChanceHelm.getValueInt();
 		int dropChanceChest = this.sliderDropChanceChest.getValueInt();
@@ -134,7 +133,7 @@ public class GuiCQREntity extends ContainerScreen {
 		this.entity.setDropChance(EquipmentSlotType.OFFHAND, dropChanceOffhand / 100.0F);
 		this.entity.setSizeVariation(sizeScaling / 100.0F);
 
-		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
+		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
 	}
 
 	@Override
