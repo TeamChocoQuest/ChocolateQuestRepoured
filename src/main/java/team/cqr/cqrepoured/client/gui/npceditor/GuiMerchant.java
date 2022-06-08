@@ -127,16 +127,15 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 	}
 
 	@Override
-	public void handleMouseInput() throws IOException {
-		super.handleMouseInput();
-		double dWheel = Mouse.getEventDWheel();
-		if (dWheel != 0.0D) {
-			int scrollAmount = (int) (dWheel / 60.0D);
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+		if (pDelta != 0.0D) {
+			int scrollAmount = (int) (pDelta / 60.0D);
 			if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
 				this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
 				this.update();
 			}
 		}
+		return true;
 	}
 	
 	@Override
