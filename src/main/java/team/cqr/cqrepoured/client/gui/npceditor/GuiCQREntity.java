@@ -13,6 +13,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.fml.client.gui.widget.Slider;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
@@ -27,16 +29,15 @@ public class GuiCQREntity extends ContainerScreen {
 
 	private AbstractEntityCQR entity;
 
-	private GuiButtonExt openTradeGUIButton;
-
-	private GuiSlider sliderHealthScaling;
-	private GuiSlider sliderDropChanceHelm;
-	private GuiSlider sliderDropChanceChest;
-	private GuiSlider sliderDropChanceLegs;
-	private GuiSlider sliderDropChanceFeet;
-	private GuiSlider sliderDropChanceMainhand;
-	private GuiSlider sliderDropChanceOffhand;
-	private GuiSlider sliderSizeScaling;
+	private ExtendedButton openTradeGUIButton;
+	private Slider sliderHealthScaling;
+	private Slider sliderDropChanceHelm;
+	private Slider sliderDropChanceChest;
+	private Slider sliderDropChanceLegs;
+	private Slider sliderDropChanceFeet;
+	private Slider sliderDropChanceMainhand;
+	private Slider sliderDropChanceOffhand;
+	private Slider sliderSizeScaling;
 
 	public GuiCQREntity(Container inventorySlotsIn, AbstractEntityCQR entity) {
 		super(inventorySlotsIn);
@@ -44,52 +45,52 @@ public class GuiCQREntity extends ContainerScreen {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 		// W := 107 -> steps are 10% steps
-		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 107, 16, "Health Scale ", " %", 10, 1000, this.entity.getHealthScale() * 100.0D, false, true);
-		this.sliderDropChanceHelm = new GuiSlider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true);
-		this.sliderDropChanceChest = new GuiSlider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true);
-		this.sliderDropChanceLegs = new GuiSlider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true);
-		this.sliderDropChanceFeet = new GuiSlider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.FEET) * 100.0D, false, true);
-		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true);
-		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true);
-		this.sliderSizeScaling = new GuiSlider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
-		this.openTradeGUIButton = new GuiButtonExt(8, 5 + this.sliderHealthScaling.width + 40, 25, 54, 16, "Trades");
-		this.buttonList.add(this.sliderHealthScaling);
-		this.buttonList.add(this.sliderDropChanceHelm);
-		this.buttonList.add(this.sliderDropChanceChest);
-		this.buttonList.add(this.sliderDropChanceLegs);
-		this.buttonList.add(this.sliderDropChanceFeet);
-		this.buttonList.add(this.sliderDropChanceMainhand);
-		this.buttonList.add(this.sliderDropChanceOffhand);
-		this.buttonList.add(this.openTradeGUIButton);
-		if (!this.mc.player.isCreative()) {
-			this.sliderHealthScaling.enabled = false;
+		this.sliderHealthScaling = new Slider(0, 5, 5, 107, 16, "Health Scale ", " %", 10, 1000, this.entity.getHealthScale() * 100.0D, false, true);
+		this.sliderDropChanceHelm = new Slider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true);
+		this.sliderDropChanceChest = new Slider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true);
+		this.sliderDropChanceLegs = new Slider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true);
+		this.sliderDropChanceFeet = new Slider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.FEET) * 100.0D, false, true);
+		this.sliderDropChanceMainhand = new Slider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true);
+		this.sliderDropChanceOffhand = new Slider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true);
+		this.sliderSizeScaling = new Slider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
+		this.openTradeGUIButton = new ExtendedButton(8, 5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, "Trades", );
+		this.addButton(this.sliderHealthScaling);
+		this.addButton(this.sliderDropChanceHelm);
+		this.addButton(this.sliderDropChanceChest);
+		this.addButton(this.sliderDropChanceLegs);
+		this.addButton(this.sliderDropChanceFeet);
+		this.addButton(this.sliderDropChanceMainhand);
+		this.addButton(this.sliderDropChanceOffhand);
+		this.addButton(this.openTradeGUIButton);
+		if (!Minecraft.getInstance().player.isCreative()) {
+			this.sliderHealthScaling.active = false;
 			this.sliderHealthScaling.visible = false;
 
-			this.sliderDropChanceHelm.enabled = false;
+			this.sliderDropChanceHelm.active = false;
 			this.sliderDropChanceHelm.visible = false;
 
-			this.sliderDropChanceChest.enabled = false;
+			this.sliderDropChanceChest.active = false;
 			this.sliderDropChanceChest.visible = false;
 
-			this.sliderDropChanceLegs.enabled = false;
+			this.sliderDropChanceLegs.active = false;
 			this.sliderDropChanceLegs.visible = false;
 
-			this.sliderDropChanceFeet.enabled = false;
+			this.sliderDropChanceFeet.active = false;
 			this.sliderDropChanceFeet.visible = false;
 
-			this.sliderDropChanceMainhand.enabled = false;
+			this.sliderDropChanceMainhand.active = false;
 			this.sliderDropChanceMainhand.visible = false;
 
-			this.sliderDropChanceOffhand.enabled = false;
+			this.sliderDropChanceOffhand.active = false;
 			this.sliderDropChanceOffhand.visible = false;
 
-			this.sliderSizeScaling.enabled = false;
+			this.sliderSizeScaling.active = false;
 			this.sliderSizeScaling.visible = false;
 		}
-		this.buttonList.add(this.sliderSizeScaling);
+		this.addButton(this.sliderSizeScaling);
 	}
 
 	@Override
@@ -136,7 +137,7 @@ public class GuiCQREntity extends ContainerScreen {
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
