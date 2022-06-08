@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -94,9 +95,9 @@ public class GuiCQREntity extends ContainerScreen {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.renderHoveredToolTip(mouseX, mouseY);
+	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		this.renderComponentHoverEffect( matrixStack, null ,mouseX, mouseY);
 	}
 
 	@Override
