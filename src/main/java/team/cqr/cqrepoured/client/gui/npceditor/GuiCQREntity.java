@@ -6,6 +6,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
@@ -18,8 +19,6 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
-
-import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiCQREntity extends ContainerScreen {
@@ -38,8 +37,8 @@ public class GuiCQREntity extends ContainerScreen {
 	private Slider sliderDropChanceOffhand;
 	private Slider sliderSizeScaling;
 
-	public GuiCQREntity(Container inventorySlotsIn, AbstractEntityCQR entity) {
-		super(inventorySlotsIn);
+	public GuiCQREntity(Container inventorySlotsIn, PlayerInventory pPlayerInventory,AbstractEntityCQR entity) {
+		super(inventorySlotsIn, pPlayerInventory, new StringTextComponent("Merhcant"));
 		this.entity = entity;
 	}
 
@@ -47,15 +46,15 @@ public class GuiCQREntity extends ContainerScreen {
 	public void init() {
 		super.init();
 		// W := 107 -> steps are 10% steps
-		this.sliderHealthScaling = new Slider(0, 5, 5, 107, 16, "Health Scale ", " %", 10, 1000, this.entity.getHealthScale() * 100.0D, false, true);
-		this.sliderDropChanceHelm = new Slider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true);
-		this.sliderDropChanceChest = new Slider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true);
-		this.sliderDropChanceLegs = new Slider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true);
-		this.sliderDropChanceFeet = new Slider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.FEET) * 100.0D, false, true);
-		this.sliderDropChanceMainhand = new Slider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true);
-		this.sliderDropChanceOffhand = new Slider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true);
-		this.sliderSizeScaling = new Slider(7, 5, 145, 107, 16, "Size Scale ", " %", 5, 500, this.entity.getSizeVariation() * 100.0D, false, true);
-		this.openTradeGUIButton = new ExtendedButton(8, 5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, new StringTextComponent("Trades"), this::actionPerformed);
+		this.sliderHealthScaling = new Slider(0, 5, 5, 107, new StringTextComponent("Health Scale "), new StringTextComponent(" %"), 10,  1000, this.entity.getHealthScale() * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceHelm = new Slider(1, 5, 25, 108,  new StringTextComponent("Drop helm "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceChest = new Slider(2, 5, 45, 108,  new StringTextComponent("Drop chest "), new StringTextComponent(" %"), 0,  100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceLegs = new Slider(3, 5, 65, 108,  new StringTextComponent("Drop legs "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceFeet = new Slider(4, 5, 85, 108,  new StringTextComponent("Drop feet "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.FEET) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceMainhand = new Slider(5, 5, 105, 108,  new StringTextComponent("Drop mainhand "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceOffhand = new Slider(6, 5, 125, 108,  new StringTextComponent("Drop offhand "), new StringTextComponent(" %"), 0, 100,  this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true, (x) -> {});
+		this.sliderSizeScaling = new Slider(7, 5, 145, 107,  new StringTextComponent("Size Scale "), new StringTextComponent(" %"), 5, 500, this.entity.getSizeVariation() * 100.0D, false, true, (x) -> {});
+		this.openTradeGUIButton = new ExtendedButton(8, 5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, new StringTextComponent("Trades"), this::onPress);
 		this.addButton(this.sliderHealthScaling);
 		this.addButton(this.sliderDropChanceHelm);
 		this.addButton(this.sliderDropChanceChest);
@@ -139,7 +138,11 @@ public class GuiCQREntity extends ContainerScreen {
 		return false;
 	}
 
-	protected void actionPerformed(Button button) {
+	public void onPress() {
+
+	}
+
+	protected void onPress(Button button) {
 		ClientPlayerEntity player = this.getMinecraft().player;
 		if (button == this.openTradeGUIButton && (player.isCreative() || (!this.entity.getTrades().isEmpty() && !this.entity.getFaction().isEnemy(player)))) {
 			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getId()));
