@@ -1,15 +1,17 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.network.server.packet.SPacketSpawnParticles;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public enum CQRParticleType {
 
@@ -68,7 +70,7 @@ public enum CQRParticleType {
 	}
 
 	public static void spawnParticles(CQRParticleType particleType, World world, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int count, double xOffset, double yOffset, double zOffset, int... optionalArguments) {
-		if (world.isRemote) {
+		if (world.isClientSide()) {
 			CQRParticleManager.spawnParticlesClient(particleType, world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments);
 		} else {
 			if (count == 1) {
@@ -84,9 +86,15 @@ public enum CQRParticleType {
 				if (zOffset != 0.0D) {
 					y += (Math.random() - Math.random()) * zOffset;
 				}
-				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments), new TargetPoint(world.provider.getDimension(), x, y, z, 0.0D));
+				final double fX = x;
+				final double fY = y;
+				final double fZ = z;
+				
+				CQRMain.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (Chunk)world.getChunk(new BlockPos(fX, fY, fZ))), new SPacketSpawnParticles(particleType.id, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments));
+				//CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, x, y, z, xSpeed, ySpeed, zSpeed, optionalArguments), new TargetPoint(world.provider.getDimension(), x, y, z, 0.0D));
 			} else {
-				CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments), new TargetPoint(world.provider.getDimension(), xCoord, yCoord, zCoord, 0.0D));
+				CQRMain.NETWORK.send(PacketDistributor.TRACKING_CHUNK.with(() -> (Chunk)world.getChunk(new BlockPos(xCoord,yCoord,zCoord))), new SPacketSpawnParticles(particleType.id, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments));
+				//CQRMain.NETWORK.sendToAllTracking(new SPacketSpawnParticles(particleType.id, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, count, xOffset, yOffset, zOffset, optionalArguments), new TargetPoint(world.provider.getDimension(), xCoord, yCoord, zCoord, 0.0D));
 			}
 		}
 	}
