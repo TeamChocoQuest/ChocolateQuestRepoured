@@ -267,11 +267,11 @@ public class ProtectedRegionHelper {
 		}
 
 		// If the exploder is our own custom tnt => let it blow!
-		if (explosion.source instanceof EntityTNTPrimedCQR) {
+		if (explosion.getExploder() instanceof EntityTNTPrimedCQR) {
 			return;
 		}
 
-		boolean flag = explosion.source instanceof TNTEntity;
+		boolean flag = explosion.getExploder() instanceof TNTEntity;
 		boolean flag1 = (flag && CQRConfig.dungeonProtection.enablePreventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.enablePreventExplosionOther);
 		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
 
