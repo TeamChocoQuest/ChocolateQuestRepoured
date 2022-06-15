@@ -79,8 +79,8 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 	      float f1 = - 1.0F;//-MathHelper.sin((pX + pZ) * ((float)Math.PI / 180F));
 	      float f2 = MathHelper.cos(pY * ((float)Math.PI / 180F)) * MathHelper.cos(pX * ((float)Math.PI / 180F));
 	      this.shoot((double)f, (double)f1, (double)f2, pVelocity, pInaccuracy);
-	     // Vector3d vector3d = pShooter.getDeltaMovement();
-	     // this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, pShooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
+	     Vector3d vector3d = pShooter.getDeltaMovement();
+	     this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, pShooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
 	   }
 	   
 	@Override
@@ -163,6 +163,11 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 
         this.setPos(d2, d0, d1);
     } */
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
+	}
 
 	private void onUpdateInAir() {
 		this.lifeTime -= 1;

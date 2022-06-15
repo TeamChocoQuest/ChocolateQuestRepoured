@@ -39,6 +39,11 @@ public class ProjectileBubble extends ProjectileBase {
 		this.damage = 1F;
 		//this.fireImmune() FireImmune in entity constructor
 	}
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
+	}
 
 /*	public ProjectileBubble(World worldIn) {
 		super(worldIn);

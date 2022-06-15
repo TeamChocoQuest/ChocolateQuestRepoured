@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -31,6 +32,11 @@ public class ProjectileCannonBall extends ProjectileBase {
 		super(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), shooter, world);
 		this.isFast = fast;
 		this.shooter = shooter;
+	}
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
 	}
 
 	/*@Override

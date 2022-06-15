@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.block.AirBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.IPacket;
@@ -33,6 +34,11 @@ public class ProjectileWeb extends ProjectileBase {
 		super(CQREntityTypes.PROJECTILE_WEB.get(), shooter, world);
 		this.shooter = shooter;
 		//this.isImmuneToFire = false;
+	}
+	
+	@Override
+	protected boolean canHitEntity(Entity pTarget) {
+		return super.canHitEntity(pTarget) && pTarget != this.getOwner();
 	}
 
 /*	@Override
