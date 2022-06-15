@@ -8,6 +8,7 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -70,8 +71,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void handleChunkLoad(Chunk chunk) {
-		CapabilityProtectedRegionData capabilityProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
-		capabilityProtectedRegionData.removeIf(uuid -> this.provideProtectedRegion(uuid) == null);
+		LazyOptional<CapabilityProtectedRegionData> capabilityProtectedRegionData = chunk.getCapability(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, null);
+		capabilityProtectedRegionData.ifPresent(cap -> cap.removeIf(uuid -> this.provideProtectedRegion(uuid) == null));
 	}
 
 	public void handleChunkUnload(Chunk chunk) {
@@ -81,7 +82,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void handleWorldTick() {
-		long time = this.world.getTotalWorldTime();
+		long time = this.world.getGameTime(); //Correct replacement?
 		for (Iterator<ProtectedRegionContainer> iterator = this.protectedRegions.values().iterator(); iterator.hasNext();) {
 			ProtectedRegionContainer container = iterator.next();
 			if (!container.chunkSet.isEmpty()) {
@@ -91,11 +92,13 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 					this.saveProtectedRegionToFile(container.protectedRegion);
 				}
 				iterator.remove();
-				CQRMain.NETWORK.sendToDimension(new SPacketUnloadProtectedRegion(container.protectedRegion.getUuid()), this.world.provider.getDimension());
+				CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.world::dimension), new SPacketUnloadProtectedRegion(container.protectedRegion.getUuid()));
+				//CQRMain.NETWORK.sendToDimension(new SPacketUnloadProtectedRegion(container.protectedRegion.getUuid()), this.world.provider.getDimension());
 				continue;
 			}
 			if (container.protectedRegion.needsSyncing()) {
-				CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(container.protectedRegion), this.world.provider.getDimension());
+				CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.world::dimension), new SPacketUpdateProtectedRegion(container.protectedRegion));
+				//CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(container.protectedRegion), this.world.provider.getDimension());
 				container.protectedRegion.clearNeedsSyncing();
 			}
 		}
@@ -110,7 +113,9 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		ProtectedRegion protectedRegion = this.createProtectedRegionFromFile(uuid);
 		if (protectedRegion != null) {
 			this.protectedRegions.put(uuid, new ProtectedRegionContainer(protectedRegion, false));
-			CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
+			
+			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.world::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
+			//CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
 			protectedRegion.clearNeedsSyncing();
 		}
 		return protectedRegion;
@@ -135,7 +140,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 
 		this.protectedRegions.put(protectedRegion.getUuid(), new ProtectedRegionContainer(protectedRegion, true));
-		CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
+		CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.world::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
+		//CQRMain.NETWORK.sendToDimension(new SPacketUpdateProtectedRegion(protectedRegion), this.world.provider.getDimension());
 		protectedRegion.clearNeedsSyncing();
 	}
 
@@ -160,7 +166,8 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 					cap.removeProtectedRegionUuid(uuid);
 				});
 			}
-			CQRMain.NETWORK.sendToDimension(new SPacketUnloadProtectedRegion(uuid), this.world.provider.getDimension());
+			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.world::dimension), new SPacketUnloadProtectedRegion(uuid));
+			//CQRMain.NETWORK.sendToDimension(new SPacketUnloadProtectedRegion(uuid), this.world.provider.getDimension());
 		}
 	}
 
