@@ -76,6 +76,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -1498,8 +1499,13 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public double getAttackReach(LivingEntity target) {
 		double reach = ((double) this.getBbWidth() + (double) target.getBbWidth()) * 0.5D + 0.85D;
 		ItemStack stack = this.getMainHandItem();
-		if (stack.getItem() instanceof ItemSpearBase) {
+		/*if (stack.getItem() instanceof ItemSpearBase) {
 			reach += ((ItemSpearBase) stack.getItem()).getReach();
+		}*/
+		if(stack.getAttributeModifiers(EquipmentSlotType.MAINHAND).containsKey(ForgeMod.REACH_DISTANCE.get())) {
+			for(AttributeModifier am : stack.getAttributeModifiers(EquipmentSlotType.MAINHAND).get(ForgeMod.REACH_DISTANCE.get())) {
+				reach += am.getAmount();
+			}
 		}
 		return reach;
 	}
@@ -1938,5 +1944,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		if(this.isMultipartEntity() && this.getParts() != null) {
 			this.setId(ENTITY_COUNTER.getAndAdd(this.getParts().length +1) +1);
 		}
+	}
+	
+	
+	public boolean isSwinging() {
+		return this.swinging;
 	}
 }
