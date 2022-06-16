@@ -44,7 +44,7 @@ public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {
 	@Override
 	public void toBytes(SPacketDungeonSync packet, PacketBuffer buf) {
 		buf.writeByte(packet.dungeons.size());
-		for (DungeonBase dungeon : this.dungeons) {
+		for (DungeonBase dungeon : packet.dungeons) {
 			buf.writeUtf(dungeon.getDungeonName());
 			buf.writeByte(dungeon.getIconID());
 			buf.writeByte(dungeon.getModDependencies().length);
