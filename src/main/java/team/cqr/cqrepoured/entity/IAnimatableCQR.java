@@ -254,7 +254,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALKING, true));
 			if(this instanceof LivingEntity) {
 				LivingEntity entity = (LivingEntity) this;
-				event.getController().setAnimationSpeed(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 1.0);
+				event.getController().setAnimationSpeed(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 6.0);
 			} else {
 				event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
 			}
