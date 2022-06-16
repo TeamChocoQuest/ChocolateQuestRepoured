@@ -37,6 +37,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 		LivingEntity attackTarget = this.entity.getTarget();
 		this.updatePath(attackTarget);
 		this.checkAndPerformBlock();
+		this.entity.setAggressive(true);
 	}
 
 	@Override
@@ -53,6 +54,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void stop() {
+		this.entity.setAggressive(false);
 		this.entity.getNavigation().stop();
 		this.entity.stopUsingItem();
 	}
@@ -86,7 +88,9 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			this.attackTick = this.entity.tickCount;
 			this.entity.swing(Hand.MAIN_HAND);
-			this.entity.canAttack(attackTarget);
+			if(this.entity.canAttack(attackTarget)) {
+				this.entity.doHurtTarget(attackTarget);
+			}
 		}
 	}
 
