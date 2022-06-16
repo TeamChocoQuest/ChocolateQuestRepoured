@@ -21,7 +21,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 	private static final int SHOT_COUNT_FAST = 10;
 	private static final int SHOT_COUNT_NORMAL = 1;
 
-	private static final double MIN_DISTANCE_SQ = 9;
+	private static final double MIN_DISTANCE_SQ = 64;
 
 	private int cooldown = 100;
 
