@@ -62,9 +62,6 @@ import team.cqr.cqrepoured.entity.ai.attack.EntityAIBackstab;
 import team.cqr.cqrepoured.entity.ai.attack.special.EntityAIAttackSpecial;
 import team.cqr.cqrepoured.entity.ai.attack.special.EntityAIHooker;
 import team.cqr.cqrepoured.entity.ai.attack.special.EntityAILooter;
-import team.cqr.cqrepoured.entity.ai.boss.exterminator.BossAIArmCannon;
-import team.cqr.cqrepoured.entity.ai.boss.exterminator.BossAIExterminatorHandLaser;
-import team.cqr.cqrepoured.entity.ai.boss.exterminator.BossAIExterminatorHulkSmash;
 import team.cqr.cqrepoured.entity.ai.boss.exterminator.BossAIExterminatorStun;
 import team.cqr.cqrepoured.entity.ai.item.EntityAICursedBoneSummoner;
 import team.cqr.cqrepoured.entity.ai.item.EntityAIFireball;
@@ -203,9 +200,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
 
-		this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
-		this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
-		this.goalSelector.addGoal(4, new BossAIArmCannon(this));
+		//this.goalSelector.addGoal(2, new BossAIExterminatorHulkSmash(this));
+		//this.goalSelector.addGoal(3, new BossAIExterminatorHandLaser(this));
+		//this.goalSelector.addGoal(4, new BossAIArmCannon(this));
 
 		this.goalSelector.addGoal(12, new EntityAIAttackSpecial(this));
 		this.goalSelector.addGoal(13, new EntityAIAttackRanged<AbstractEntityCQR>(this));
@@ -450,7 +447,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return PlayState.STOP;
 		}
 
-		if (this.getAttackAnim(event.getPartialTick()) > 0.0F) {
+		if (this.isSwinging()) {
 			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, false));
@@ -463,7 +460,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 		return PlayState.CONTINUE;
 	}
-	
+
 	public static final String ANIM_NAME_WALK_NO_BODY_SWING = ANIM_NAME_PREFIX + "walk_legs_only";
 	public static final String ANIM_NAME_WALK = ANIM_NAME_PREFIX + "walk";
 	
