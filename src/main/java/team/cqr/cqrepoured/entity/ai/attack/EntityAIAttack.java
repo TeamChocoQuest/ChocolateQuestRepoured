@@ -60,7 +60,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected void updatePath(LivingEntity target) {
-		this.entity.getNavigation().moveTo(target, 1.0D);
+		this.entity.getNavigation().moveTo(target, 1.5D);
 	}
 
 	protected void checkAndPerformBlock() {
@@ -87,7 +87,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.attackCooldownOverhead = 0.0F;
 			}
 			this.attackTick = this.entity.tickCount;
-			this.entity.swing(Hand.MAIN_HAND);
+			this.entity.swing(Hand.MAIN_HAND, true);
 			if(this.entity.canAttack(attackTarget)) {
 				this.entity.doHurtTarget(attackTarget);
 			}
