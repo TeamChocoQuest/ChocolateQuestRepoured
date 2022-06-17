@@ -1,29 +1,41 @@
 package team.cqr.cqrepoured.item.crafting;
 
+import com.google.gson.JsonObject;
+
 import net.minecraft.entity.MobEntity;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.registries.IForgeRegistryEntry;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRRecipeTypes;
 import team.cqr.cqrepoured.item.armor.ItemCrown;
 
-public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
-
-	public RecipeCrownDetach() {
-		this.setRegistryName(CQRMain.MODID, "crown_detach");
+public class RecipeCrownDetach implements IRecipe<IInventory> {
+	
+	protected final ResourceLocation ID;
+	public static final ResourceLocation TYPE_ID = CQRMain.prefix("crown_detach");
+	
+	public RecipeCrownDetach(final ResourceLocation idIn) {
+		super();
+		this.ID = idIn;
 	}
 
 	@Override
-	public boolean matches(CraftingInventory inv, World worldIn) {
+	public boolean matches(IInventory inv, World worldIn) {
 		ItemStack helmet = ItemStack.EMPTY;
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			ItemStack stack = inv.getStackInSlot(i);
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getSlotForItemStack(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -34,12 +46,12 @@ public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public ItemStack getCraftingResult(CraftingInventory inv) {
+	public ItemStack assemble(IInventory inv) {
 		ItemStack helmet = ItemStack.EMPTY;
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			ItemStack stack = inv.getStackInSlot(i);
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getSlotForItemStack(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
@@ -50,19 +62,19 @@ public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 			return ItemStack.EMPTY;
 		}
 
-		return new ItemStack(helmet.getTagCompound().getCompoundTag(ItemCrown.NBT_KEY_CROWN));
+		return ItemStack.of(helmet.getOrCreateTag().getCompound(ItemCrown.NBT_KEY_CROWN));
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(CraftingInventory inv) {
-		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			ItemStack stack = inv.getStackInSlot(i);
-			if (!stack.isEmpty() && stack.hasTagCompound()) {
+	public NonNullList<ItemStack> getRemainingItems(IInventory inv) {
+		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (!stack.isEmpty() && stack.hasTag()) {
 				ItemStack copy = stack.copy();
-				copy.getTagCompound().removeTag(ItemCrown.NBT_KEY_CROWN);
-				if (copy.getTagCompound().isEmpty()) {
-					copy.setTagCompound(null);
+				copy.getOrCreateTag().remove(ItemCrown.NBT_KEY_CROWN);
+				if (copy.getOrCreateTag().isEmpty()) {
+					copy.setTag(null);
 				}
 				ret.set(i, copy);
 			}
@@ -71,13 +83,54 @@ public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	}
 
 	@Override
-	public boolean canFit(int width, int height) {
+	public boolean canCraftInDimensions(int width, int height) {
 		return width * height >= 1;
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public IRecipeSerializer<?> getSerializer() {
+		return CQRRecipeTypes.CROWN_DETACH_SERIALIZER.get();
+	}
+
+	@Override
+	public ItemStack getResultItem() {
 		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public ResourceLocation getId() {
+		return this.ID;
+	}
+
+	@Override
+	public IRecipeType<?> getType() {
+		return Registry.RECIPE_TYPE.getOptional(TYPE_ID).get();
+	}
+
+	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RecipeCrownDetach> {
+
+		@Override
+		public RecipeCrownDetach fromJson(ResourceLocation pRecipeId, JsonObject pJson) {
+			return new RecipeCrownDetach(pRecipeId);
+		}
+
+		@Override
+		public RecipeCrownDetach fromNetwork(ResourceLocation pRecipeId, PacketBuffer pBuffer) {
+			return new RecipeCrownDetach(pRecipeId);
+		}
+
+		@Override
+		public void toNetwork(PacketBuffer pBuffer, RecipeCrownDetach pRecipe) {
+
+		}
+
+	}
+
+	public static class RecipeType implements IRecipeType<RecipeCrownDetach> {
+		@Override
+		public String toString() {
+			return RecipeCrownDetach.TYPE_ID.toString();
+		}
 	}
 
 }
