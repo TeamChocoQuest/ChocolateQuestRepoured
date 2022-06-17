@@ -1,18 +1,26 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.Map;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.FlatGenerationSettings;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraftforge.fml.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class CQRConfiguredStructures {
 	
 	public static StructureFeature<?, ?> CONFIGURED_WALL_IN_THE_NORTH = CQRStructures.WALL_IN_THE_NORTH.get().configured(IFeatureConfig.NONE);
     /* public static StructureFeature<?, ?> CONFIGURED_SKY_BATTLE_TOWER = BTStructures
             .SKY_BATTLE_TOWER.get().configured(IFeatureConfig.NONE); */
+	
+	// Config holds data that will be available to the structure class during generation => Use custom class for this!
+	// Codec => Used to save and load the config
 
     public static void registerConfiguredStructures() {
         Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
@@ -36,6 +44,16 @@ public class CQRConfiguredStructures {
          */
         FlatGenerationSettings.STRUCTURE_FEATURES.put(CQRStructures.WALL_IN_THE_NORTH.get(), CONFIGURED_WALL_IN_THE_NORTH);
         // FlatGenerationSettings.STRUCTURE_FEATURES.put(BTStructures.SKY_BATTLE_TOWER.get(), CONFIGURED_SKY_BATTLE_TOWER);
+        
+        //Now, parse all structures (dungeons) in CQRSTructures.DUNGEON_STRUCTURES and register those, the dungeon class will receive a method to generate teh structure feature to be registered as well as a getter for the structure object
+        for(Map.Entry<DungeonBase, RegistryObject<Structure<?>>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) {
+        	//TODO: Check if we need that featureconfig at all, if yes => properly implement it!
+        	StructureFeature<?, ?> sf = entry.getValue().get().configured(IFeatureConfig.NONE);
+        	
+        	Registry.register(registry, CQRMain.prefix(entry.getValue().getId().getPath()), sf);
+        	FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue().get(), sf);
+        	CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf);
+        }
     }
 
 }

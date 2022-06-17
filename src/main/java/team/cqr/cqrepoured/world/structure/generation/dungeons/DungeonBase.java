@@ -87,12 +87,23 @@ public abstract class DungeonBase {
 	protected boolean preventFireSpreading = false;
 	protected boolean preventEntitySpawning = false;
 	protected boolean ignoreNoBossOrNexus = false;
+	
+	//1.16+ Worldgen stuff
+	protected boolean useVanillaSpreadSystem = false;
+	protected int vanillaSpreadSpacing = 0;
+	protected int vanillaSpreadSeparation = 1;
+	protected int vanillaSpreadSeed = 1234567890;
 
 	protected DungeonBase(String name, Properties prop) {
 		this.name = name;
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
 		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID, 0, 19);
 
+		this.useVanillaSpreadSystem = PropertyFileHelper.getBooleanProperty(prop, "useVanillaSpreadSystem", this.useVanillaSpreadSystem);
+		this.vanillaSpreadSpacing = PropertyFileHelper.getIntProperty(prop, "vanillaSpreadSpacing", 0);
+		this.vanillaSpreadSeparation = PropertyFileHelper.getIntProperty(prop, "vanillaSpreadSeparation", 1);
+		this.vanillaSpreadSeed = PropertyFileHelper.getIntProperty(prop, "vanillaSpreadSeed", 1234567890);
+		
 		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", this.weight, 0, Integer.MAX_VALUE);
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", this.chance, 0, 100);
 		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", this.spawnLimit, -1, Integer.MAX_VALUE);
@@ -511,6 +522,22 @@ public abstract class DungeonBase {
 
 	public boolean ignoreNoBossOrNexus() {
 		return this.ignoreNoBossOrNexus;
+	}
+
+	public boolean isUseVanillaSpreadSystem() {
+		return useVanillaSpreadSystem;
+	}
+
+	public int getVanillaSpreadSpacing() {
+		return vanillaSpreadSpacing;
+	}
+
+	public int getVanillaSpreadSeparation() {
+		return vanillaSpreadSeparation;
+	}
+
+	public int getVanillaSpreadSeed() {
+		return vanillaSpreadSeed;
 	}
 
 }

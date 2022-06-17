@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -11,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
@@ -26,10 +30,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.structure.StructureDungeonCQR;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @EventBusSubscriber
 public class CQRStructures {
@@ -38,9 +42,25 @@ public class CQRStructures {
 	
 	public static RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
 	
+	protected static final Map<DungeonBase, RegistryObject<Structure<?>>> DUNGEON_ENTRIES = new HashMap<>(); 
+	public static final Map<DungeonBase, StructureFeature<?,?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
+	
 	public static void setupStructures() {
 		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
 		
+		//Now, load all dungeon configs and setup the spacing for them
+		for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
+			Structure<?> structure = new StructureDungeonCQR(null, false, dunConf);
+			RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
+			DUNGEON_ENTRIES.put(dunConf, regObj);
+			StructureSeparationSettings sepSettings;
+			if(dunConf.isUseVanillaSpreadSystem()) {
+				sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
+			} else {
+				sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+			}
+			setupMapSpacingAndLand(regObj.get(), sepSettings, dunConf.doBuildSupportPlatform());
+		}
     }
 
     static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {
@@ -104,6 +124,26 @@ public class CQRStructures {
 		} else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD)) {
 			event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_WALL_IN_THE_NORTH);
 		}
+		
+		//Now, parse all configured dungeon structures and add them too
+		boolean skip = false;
+		for(Map.Entry<DungeonBase, StructureFeature<?,?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
+			for(ResourceLocation rs : entry.getKey().getDisallowedBiomes()) {
+				if(rs.equals(key.getRegistryName())) {
+					skip = true;
+					break;
+				}
+			}
+			if(skip) {
+				skip = false;
+				continue;
+			}
+			for(ResourceLocation rs : entry.getKey().getAllowedBiomes()) {
+				if(rs.equals(key.getRegistryName())) {
+					event.getGeneration().getStructures().add(entry::getValue);
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -122,6 +162,25 @@ public class CQRStructures {
 			if (serverWorld.dimension().equals(World.OVERWORLD)) {
 				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
 			}
+			boolean done = false;
+			for(Map.Entry<DungeonBase, RegistryObject<Structure<?>>> entry : DUNGEON_ENTRIES.entrySet()) {
+				for(ResourceLocation rs : entry.getKey().getAllowedDims()) {
+					if(rs.equals(serverWorld.dimension().getRegistryName())) {
+						if(entry.getKey().isAllowedDimsAsBlacklist()) {
+							done = true;
+							break;
+						} else {
+							tempMap.putIfAbsent(entry.getValue().get(), DimensionStructuresSettings.DEFAULTS.get(entry.getValue().get()));
+							done = true;
+							break;
+						}
+					}
+				}
+				if(done) {
+					break;
+				}
+			}
+			
 			serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
 		}
 	}
