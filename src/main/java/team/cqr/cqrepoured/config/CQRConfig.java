@@ -2,453 +2,575 @@ package team.cqr.cqrepoured.config;
 
 import java.time.Month;
 import java.time.MonthDay;
+import java.util.Arrays;
+import java.util.List;
 
-import mezz.jei.config.forge.Config;
-import team.cqr.cqrepoured.CQRMain;
+import org.apache.commons.lang3.tuple.Pair;
 
-@Config(modid = CQRMain.MODID, name = "CQR/" + CQRMain.MODID)
+import com.google.common.base.Predicates;
+
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+
 public class CQRConfig {
 
-	public static Advanced advanced = new Advanced();
-	public static Bosses bosses = new Bosses();
-	public static BossDamageCaps bossDamageCaps = new BossDamageCaps();
-	public static DungeonProtection dungeonProtection = new DungeonProtection();
-	public static General general = new General();
-	public static Mobs mobs = new Mobs();
-	public static Wall wall = new Wall();
-	public static Materials materials = new Materials();
-	public static BaseHealths baseHealths = new BaseHealths();
+	public static final ServerConfig SERVER_CONFIG;
+	public static final ForgeConfigSpec SERVER_SPEC;
+	static {
+		final Pair<ServerConfig, ForgeConfigSpec> serverSpecPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+		SERVER_CONFIG = serverSpecPair.getLeft();
+		SERVER_SPEC = serverSpecPair.getRight();
+	}
+
+	public static class ServerConfig {
+
+		public final Advanced advanced;
+		public final Bosses bosses;
+		public final BossDamageCaps bossDamageCaps;
+		public final DungeonProtection dungeonProtection;
+		public final General general;
+		public final Mobs mobs;
+		public final Wall wall;
+		public final Materials materials;
+		public final BaseHealths baseHealths;
+
+		public ServerConfig(ForgeConfigSpec.Builder builder) {
+			this.advanced = new Advanced(builder);
+			this.bosses = new Bosses(builder);
+			this.bossDamageCaps = new BossDamageCaps(builder);
+			this.dungeonProtection = new DungeonProtection(builder);
+			this.general = new General(builder);
+			this.mobs = new Mobs(builder);
+			this.wall = new Wall(builder);
+			this.materials = new Materials(builder);
+			this.baseHealths = new BaseHealths(builder);
+		}
+
+	}
 
 	public static class Advanced {
 
-		public boolean debugDungeonGen = false;
+		public final BooleanValue debugDungeonGen;
 
-		public boolean debugAI = false;
+		public final BooleanValue debugAI;
 
-		//@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat" };
+		public final ConfigValue<List<? extends String>> specialEntities;
 
-		//@Config.Comment("When enabled cqr mobs only take 50% damage from IceAndFire mobs and deal 200% damage against IceAndFire mobs.")
-		public boolean enableSpecialFeatures = true;
+		public final BooleanValue enableSpecialFeatures;
 
-		//@Config.Comment("Skip rendering of entities that are behind blocks/not visible. Bosses will be rendered normally. This might cause issues where a mob is partly behind a block and thus does not get rendered but it's usually not really noticable. This setting has no effect when Entity Culling is installed.")
-		public boolean skipHiddenEntityRendering = true;
-		//@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the positions that were hit and only renders the entity when no block was hit or the distance between both points is lower than this setting. This setting has no effect when Entity Culling is installed.")
-		//@Config.RangeDouble(min = 0.0D, max = 256.0D)
-		public double skipHiddenEntityRenderingDiff = 1.0D;
+		public final BooleanValue skipHiddenEntityRendering;
+		public final DoubleValue skipHiddenEntityRenderingDiff;
 
-		//@Config.RequiresWorldRestart
-		//@Config.Comment("Enable/Disable loading and caching of structure files during startup.")
-		public boolean cacheStructureFiles = true;
-		//@Config.RequiresWorldRestart
-		//@Config.Comment("The maximum amount of kilobytes which will be cached. Ram usage will be approximately x * 200 kilobytes. This was the result when caching multiple, differently sized structure files and thus might not be representative for your setup.")
-		//@Config.RangeInt(min = 1, max = 16384)
-		public int cachedStructureFilesMaxSize = 256;
-		//@Config.RequiresWorldRestart
-		//@Config.Comment("The maximum amount of files which will be cached.")
-		//@Config.RangeInt(min = 1, max = 16384)
-		public int cachedStructureFilesMaxAmount = 256;
+		public final BooleanValue cacheStructureFiles;
+		public final IntValue cachedStructureFilesMaxSize;
+		public final IntValue cachedStructureFilesMaxAmount;
 
-		//@Config.Comment("When disable all light updates are delayed until the dungeon is generated which is usually a lot faster. (When Phosphor is installed this has no effect and light updates are processed immediately)")
-		public boolean instantLightUpdates = false;
+		public final BooleanValue instantLightUpdates;
 
-		//@Config.Comment("When enabled and a flying entity is hit by a cqr lightning it gets extra damage.")
-		public boolean flyingCowardPenaltyEnabled = true;
-		//@Config.RangeDouble(min = 1)
-		public double flyingCowardPenaltyDamage = 10.0;
+		public final BooleanValue flyingCowardPenaltyEnabled;
+		public final DoubleValue flyingCowardPenaltyDamage;
 
-		//@Config.Comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon. In the dungeon configs you can define which structures will prevent a dungeon from generating.")
-		public boolean generationRespectOtherStructures = true;
+		public final BooleanValue generationRespectOtherStructures;
 
-		//@Config.Comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.")
-		public boolean multithreadedDungeonPreparation = true;
+		public final BooleanValue multithreadedDungeonPreparation;
 
-		//@Config.Comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.")
-		public boolean checkAndUpdateDeprecatedStructureFiles = false;
+		public final BooleanValue checkAndUpdateDeprecatedStructureFiles;
 
-		//@Config.Comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.")
-		public boolean enableOldFactionMemberTeams = false;
+		public final BooleanValue enableOldFactionMemberTeams;
 
-		//@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
-		public boolean scaleEntitiesOnPlayerCount = false;
-		public double entityCountGrowPerPlayer = 0.25D;
+		public final BooleanValue scaleEntitiesOnPlayerCount;
+		public final DoubleValue entityCountGrowPerPlayer;
 
-		public boolean structureImportMode = false;
+		public final BooleanValue structureImportMode;
+
+		public Advanced(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("advanced");
+			this.debugDungeonGen = builder.comment("").define("debugDungeonGen", false);
+
+			this.debugAI = builder.comment("").define("debugAI", false);
+
+			this.specialEntities = builder.comment("Entities which will be exported despite the ignore entities checkbox being checked.").defineList("specialEntities", () -> Arrays.asList("minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand", "minecraft:minecart", "minecraft:chest_minecart", "minecraft:furnace_minecart", "minecraft:tnt_minecart", "minecraft:hopper_minecart", "minecraft:boat"), Predicates.alwaysTrue());
+
+			this.enableSpecialFeatures = builder.comment("When enabled cqr mobs only take 50% damage from IceAndFire mobs and deal 200% damage against IceAndFire mobs.").define("enableSpecialFeatures", true);
+
+			this.skipHiddenEntityRendering = builder.comment("Skip rendering of entities that are behind blocks/not visible. Bosses will be rendered normally. This might cause issues where a mob is partly behind a block and thus does not get rendered but it's usually not really noticable. This setting has no effect when Entity Culling is installed.").define("skipHiddenEntityRendering", true);
+			this.skipHiddenEntityRenderingDiff = builder.comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the positions that were hit and only renders the entity when no block was hit or the distance between both points is lower than this setting. This setting has no effect when Entity Culling is installed.").defineInRange("skipHiddenEntityRenderingDiff", 1.0D, 0.0D, 256.0D);
+
+			this.cacheStructureFiles = builder.comment("Enable/Disable loading and caching of structure files during startup.").define("cacheStructureFiles", true);
+			this.cachedStructureFilesMaxSize = builder.comment("The maximum amount of kilobytes which will be cached. Ram usage will be approximately x * 200 kilobytes. This was the result when caching multiple, differently sized structure files and thus might not be representative for your setup.").defineInRange("cachedStructureFilesMaxSize", 256, 1, 16384);
+			this.cachedStructureFilesMaxAmount = builder.comment("The maximum amount of files which will be cached.").defineInRange("cachedStructureFilesMaxAmount", 256, 1, 16384);
+
+			this.instantLightUpdates = builder.comment("When disable all light updates are delayed until the dungeon is generated which is usually a lot faster. (When Phosphor is installed this has no effect and light updates are processed immediately)").define("instantLightUpdates", false);
+
+			this.flyingCowardPenaltyEnabled = builder.comment("When enabled and a flying entity is hit by a cqr lightning it gets extra damage.").define("flyingCowardPenaltyEnabled", true);
+			this.flyingCowardPenaltyDamage = builder.comment("").defineInRange("flyingCowardPenaltyDamage", 10.0D, 0.0D, Double.MAX_VALUE);
+
+			this.generationRespectOtherStructures = builder.comment("Enable/Disable checking for nearby vanilla structures before spawning a dungeon. In the dungeon configs you can define which structures will prevent a dungeon from generating.").define("generationRespectOtherStructures", true);
+
+			this.multithreadedDungeonPreparation = builder.comment("Enable/Disable multithreaded dungeon preparation. When enabled the calculations to prepare a dungeon for generation are done on another thread.").define("multithreadedDungeonPreparation", true);
+
+			this.checkAndUpdateDeprecatedStructureFiles = builder.comment("When enabled when starting the game it checks all structure files and tries to update the deprecated ones.").define("checkAndUpdateDeprecatedStructureFiles", false);
+
+			this.enableOldFactionMemberTeams = builder.comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.").define("enableOldFactionMemberTeams", false);
+
+			this.scaleEntitiesOnPlayerCount = builder.comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer").define("scaleEntitiesOnPlayerCount", false);
+			this.entityCountGrowPerPlayer = builder.comment("").defineInRange("entityCountGrowPerPlayer", 0.25D, 0.0D, Double.MAX_VALUE);
+
+			this.structureImportMode = builder.comment("").define("structureImportMode", false);
+			builder.pop();
+		}
 
 	}
 
 	public static class Materials {
 
-		public ArmorMaterials armorMaterials = new ArmorMaterials();
-		public ItemTiers itemTiers = new ItemTiers();
+		public final ArmorMaterials armorMaterials;
+		public final ItemTiers itemTiers;
+
+		public Materials(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("materials");
+			this.armorMaterials = new ArmorMaterials(builder);
+			this.itemTiers = new ItemTiers(builder);
+			builder.pop();
+		}
 
 	}
-	//TODO tweak knockback resistnace? Optional
+
+	// TODO tweak knockback resistance? Optional
 	public static class ArmorMaterials {
 
-		public ArmorMaterialConfig backpack = new ArmorMaterialConfig(67, new int[] { 1, 3, 4, 1 } ,5, 0.0F, 0.0F);
-		public ArmorMaterialConfig bull = new ArmorMaterialConfig(38, new int[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig cloud = new ArmorMaterialConfig(20, new int[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig dragon = new ArmorMaterialConfig(87, new int[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig heavyDiamond = new ArmorMaterialConfig(82, new int[] { 4, 7, 9, 4 }, 10, 4.0F, 0.0F);
-		public ArmorMaterialConfig heavyIron = new ArmorMaterialConfig(74, new int[] { 3, 6, 8, 3 }, 9, 2.0F, 0.0F);
-		public ArmorMaterialConfig inquisition = new ArmorMaterialConfig(38, new int[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig kingCrown = new ArmorMaterialConfig(10, new int[] { 4, 7, 9, 4 }, 25, 0.5F, 0.0F);
-		public ArmorMaterialConfig slime = new ArmorMaterialConfig(38, new int[] { 1, 4, 6, 1 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig spider = new ArmorMaterialConfig(38, new int[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
-		public ArmorMaterialConfig turtle = new ArmorMaterialConfig(38, new int[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
+		public final ArmorMaterialConfig backpack;
+		public final ArmorMaterialConfig bull;
+		public final ArmorMaterialConfig cloud;
+		public final ArmorMaterialConfig dragon;
+		public final ArmorMaterialConfig heavyDiamond;
+		public final ArmorMaterialConfig heavyIron;
+		public final ArmorMaterialConfig inquisition;
+		public final ArmorMaterialConfig kingCrown;
+		public final ArmorMaterialConfig slime;
+		public final ArmorMaterialConfig spider;
+		public final ArmorMaterialConfig turtle;
+
+		public ArmorMaterials(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("materials");
+			this.backpack = new ArmorMaterialConfig(builder, "backpack", 67, new Integer[] { 1, 3, 4, 1 }, 5, 0.0F, 0.0F);
+			this.bull = new ArmorMaterialConfig(builder, "bull", 38, new Integer[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
+			this.cloud = new ArmorMaterialConfig(builder, "cloud", 20, new Integer[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
+			this.dragon = new ArmorMaterialConfig(builder, "dragon", 87, new Integer[] { 4, 7, 9, 4 }, 10, 1.0F, 0.0F);
+			this.heavyDiamond = new ArmorMaterialConfig(builder, "heavyDiamond", 82, new Integer[] { 4, 7, 9, 4 }, 10, 4.0F, 0.0F);
+			this.heavyIron = new ArmorMaterialConfig(builder, "heavyIron", 74, new Integer[] { 3, 6, 8, 3 }, 9, 2.0F, 0.0F);
+			this.inquisition = new ArmorMaterialConfig(builder, "inquisition", 38, new Integer[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
+			this.kingCrown = new ArmorMaterialConfig(builder, "kingCrown", 10, new Integer[] { 4, 7, 9, 4 }, 25, 0.5F, 0.0F);
+			this.slime = new ArmorMaterialConfig(builder, "slime", 38, new Integer[] { 1, 4, 6, 1 }, 10, 1.0F, 0.0F);
+			this.spider = new ArmorMaterialConfig(builder, "spoder", 38, new Integer[] { 2, 5, 7, 2 }, 10, 1.0F, 0.0F);
+			this.turtle = new ArmorMaterialConfig(builder, "turtle", 38, new Integer[] { 3, 6, 8, 3 }, 10, 1.0F, 0.0F);
+			builder.pop();
+		}
 
 	}
 
 	public static class ItemTiers {
 
-		public ItemTierConfig bull = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig monking = new ItemTierConfig(1561, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig moonlight = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig ninja = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig spider = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig sunshine = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig turtle = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
-		public ItemTierConfig walker = new ItemTierConfig(2048, 0.0F, 5.0F, 0, 10);
+		public final ItemTierConfig bull;
+		public final ItemTierConfig monking;
+		public final ItemTierConfig moonlight;
+		public final ItemTierConfig ninja;
+		public final ItemTierConfig spider;
+		public final ItemTierConfig sunshine;
+		public final ItemTierConfig turtle;
+		public final ItemTierConfig walker;
 
-		public ExtendedItemTierConfig dagger = new ExtendedItemTierConfig(-1, 0.4F, 0.05D);
-		public ExtendedItemTierConfig great_sword = new ExtendedItemTierConfig(3, -0.4F, 0.0D);
-		public ExtendedItemTierConfig spear = new ExtendedItemTierConfig(1, 0.0F, 1.0D); //#TODO movement speed bonus is reach distance for spear???
+		public final ExtendedItemTierConfig dagger;
+		public final ExtendedItemTierConfig great_sword;
+		// TODO movement speed bonus is reach distance for spear, why?
+		public final ExtendedItemTierConfig spear;
 
-		/*public int daggerAttackDamageBonus = -1;
-		public float daggerAttackSpeedBonus = 0.4F;
-		public double daggerMovementSpeedBonus = 0.05D;
-		public double greatSwordAttackDamageBonus = 3.0D;
-		public double greatSwordAttackSpeedBonus = -0.4D;
-		public int spearAttackDamageBonus = 1;
-		public float spearAttackSpeedBonus = -0.F;
-		public double spearReachDistanceBonus = 1.0D; */
+		/*
+		 * public final IntValue daggerAttackDamageBonus = -1;
+		 * public final DoubleValue daggerAttackSpeedBonus = 0.4F;
+		 * public final DoubleValue daggerMovementSpeedBonus = 0.05D;
+		 * public final DoubleValue greatSwordAttackDamageBonus = 3.0D;
+		 * public final DoubleValue greatSwordAttackSpeedBonus = -0.4D;
+		 * public final IntValue spearAttackDamageBonus = 1;
+		 * public final DoubleValue spearAttackSpeedBonus = -0.F;
+		 * public final DoubleValue spearReachDistanceBonus = 1.0D;
+		 */
+
+		public ItemTiers(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("itemTiers");
+			this.bull = new ItemTierConfig(builder, "bull", 1561, 0.0F, 5.0F, 0, 10);
+			this.monking = new ItemTierConfig(builder, "monking", 1561, 0.0F, 5.0F, 0, 10);
+			this.moonlight = new ItemTierConfig(builder, "moonlight", 2048, 0.0F, 5.0F, 0, 10);
+			this.ninja = new ItemTierConfig(builder, "ninja", 2048, 0.0F, 5.0F, 0, 10);
+			this.spider = new ItemTierConfig(builder, "spider", 2048, 0.0F, 5.0F, 0, 10);
+			this.sunshine = new ItemTierConfig(builder, "sunshine", 2048, 0.0F, 5.0F, 0, 10);
+			this.turtle = new ItemTierConfig(builder, "turtle", 2048, 0.0F, 5.0F, 0, 10);
+			this.walker = new ItemTierConfig(builder, "walker", 2048, 0.0F, 5.0F, 0, 10);
+
+			this.dagger = new ExtendedItemTierConfig(builder, "dagger", -1.0F, 0.4F, 0.05D);
+			this.great_sword = new ExtendedItemTierConfig(builder, "great_sword", 3.0F, -0.4F, 0.0D);
+			this.spear = new ExtendedItemTierConfig(builder, "spear", 1.0F, 0.0F, 1.0D);
+			builder.pop();
+		}
 
 	}
 
 	public static class Bosses {
 
-		public boolean blackListBossesFromIaFGorgonHead = true;
-		public boolean antiCowardMode = true;
-		public boolean preventBlockPlacingNearBosses = true;
-		public int antiCowardRadius = 16;
-		public boolean enableHealthRegen = true;
-		//@Config.RequiresWorldRestart
-		//@Config.Comment("WARNING: This WILL affect every player on the server or your lan world! Changing this as a player on a server does not have any effect")
-		public boolean enableBossBars = true;
+		public final BooleanValue blackListBossesFromIaFGorgonHead;
+		public final BooleanValue antiCowardMode;
+		public final BooleanValue preventBlockPlacingNearBosses;
+		public final IntValue antiCowardRadius;
+		public final BooleanValue enableHealthRegen;
+		public final BooleanValue enableBossBars;
 
-		public boolean hotFireballsDestroyTerrain = true;
+		public final BooleanValue hotFireballsDestroyTerrain;
 
-		public boolean armorForTheWalkerKing = true;
+		public final BooleanValue armorForTheWalkerKing;
 
-		public boolean netherDragonDestroysBlocks = true;
-		public int netherDragonStageTwoFireballInterval = 40;
-		public int netherDragonStageTwoSegmentHP = 50;
-		public String[] netherDragonBreakableBlocks = {
-				"minecraft:stone",
-				"minecraft:netherrack",
-				"minecraft:grass",
-				"minecraft:dirt",
-				"minecraft:quartz_ore",
-				"minecraft:gravel",
-				"minecraft:soul_sand",
-				"minecraft:sand",
-				"minecraft:leaves",
-				"minecraft:tall_grass",
-				"minecraft:double_plant",
-				"minecraft:coal_ore",
-				"minecraft:iron_ore",
-				"minecraft:gold_ore",
-				"minecraft:water",
-				"minecraft:lava",
-				"minecraft:magma",
-				"minecraft:glowstone",
-				"cqrepoured:phylactery" };
+		public final BooleanValue netherDragonDestroysBlocks;
+		public final IntValue netherDragonStageTwoFireballInterval;
+		public final IntValue netherDragonStageTwoSegmentHP;
+		public final ConfigValue<List<? extends String>> netherDragonBreakableBlocks;
 
-		public double pirateCaptainFleeCheckRadius = 16;
+		public final DoubleValue pirateCaptainFleeCheckRadius;
 
-		public boolean boarmageExplosionRayDestroysTerrain = false;
-		public boolean boarmageExplosionAreaDestroysTerrain = false;
+		public final BooleanValue boarmageExplosionRayDestroysTerrain;
+		public final BooleanValue boarmageExplosionAreaDestroysTerrain;
 
-		public String[] giantTortoiseHardBlocks = { "minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock" };
+		public final ConfigValue<List<? extends String>> giantTortoiseHardBlocks;
 
-		public float giantSpiderMaxHealByBite = 8F;
+		public final DoubleValue giantSpiderMaxHealByBite;
 
-		//@Config.Comment("Controls the roundness of the ender-calamity's shield, has a massive impact on performance. The higher, the rounder")
-		//@RequiresMcRestart
-		public int enderCalamityShieldRoundness = 32;
-		public boolean thrownBlocksDestroyTerrain = true;
-		public boolean thrownBlocksGetPlaced = true;
-		public boolean calamityBlockEquipParticles = true;
-		public int netherDragonLength = 28;
-		public int enderCalamityHealingCrystalAbsorbAmount = 40;
-		public boolean enableWalkerKingFog = true;
+		// TODO client option
+		public final IntValue enderCalamityShieldRoundness;
+		public final BooleanValue thrownBlocksDestroyTerrain;
+		public final BooleanValue thrownBlocksGetPlaced;
+		public final BooleanValue calamityBlockEquipParticles;
+		public final IntValue netherDragonLength;
+		public final IntValue enderCalamityHealingCrystalAbsorbAmount;
+		public final BooleanValue enableWalkerKingFog;
+
+		public Bosses(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("bosses");
+			this.blackListBossesFromIaFGorgonHead = builder.comment("").define("blackListBossesFromIaFGorgonHead", true);
+			this.antiCowardMode = builder.comment("").define("antiCowardMode", true);
+			this.preventBlockPlacingNearBosses = builder.comment("").define("preventBlockPlacingNearBosses", true);
+			this.antiCowardRadius = builder.comment("").defineInRange("antiCowardRadius", 16, 0, Integer.MAX_VALUE);
+			this.enableHealthRegen = builder.comment("").define("enableHealthRegen", true);
+			this.enableBossBars = builder.comment("").define("enableBossBars", true);
+
+			this.hotFireballsDestroyTerrain = builder.comment("").define("hotFireballsDestroyTerrain", true);
+
+			this.armorForTheWalkerKing = builder.comment("").define("armorForTheWalkerKing", true);
+
+			this.netherDragonDestroysBlocks = builder.comment("").define("netherDragonDestroysBlocks", true);
+			this.netherDragonStageTwoFireballInterval = builder.comment("").defineInRange("netherDragonStageTwoFireballInterval", 40, 0, Integer.MAX_VALUE);
+			this.netherDragonStageTwoSegmentHP = builder.comment("").defineInRange("netherDragonStageTwoSegmentHP", 50, 0, Integer.MAX_VALUE);
+			this.netherDragonBreakableBlocks = builder.comment("").defineList("netherDragonBreakableBlocks",
+					() -> Arrays.asList("minecraft:stone", "minecraft:netherrack", "minecraft:grass", "minecraft:dirt", "minecraft:quartz_ore", "minecraft:gravel", "minecraft:soul_sand", "minecraft:sand", "minecraft:leaves", "minecraft:tall_grass", "minecraft:double_plant", "minecraft:coal_ore", "minecraft:iron_ore", "minecraft:gold_ore", "minecraft:water", "minecraft:lava", "minecraft:magma", "minecraft:glowstone", "cqrepoured:phylactery"), Predicates.alwaysTrue());
+
+			this.pirateCaptainFleeCheckRadius = builder.comment("").defineInRange("pirateCaptainFleeCheckRadius", 16.0D, 0.0D, Double.MAX_VALUE);
+
+			this.boarmageExplosionRayDestroysTerrain = builder.comment("").define("boarmageExplosionRayDestroysTerrain", false);
+			this.boarmageExplosionAreaDestroysTerrain = builder.comment("").define("boarmageExplosionAreaDestroysTerrain", false);
+
+			this.giantTortoiseHardBlocks = builder.comment("").defineList("giantTortoiseHardBlocks", () -> Arrays.asList("minecraft:obsidian", "minecraft:iron_block", "minecraft:bedrock"), Predicates.alwaysTrue());
+
+			this.giantSpiderMaxHealByBite = builder.comment("").defineInRange("giantSpiderMaxHealByBite", 8.0D, 0.0D, Double.MAX_VALUE);
+
+			this.enderCalamityShieldRoundness = builder.comment("Controls the roundness of the ender-calamity's shield, has a massive impact on performance. The higher, the rounder").defineInRange("enderCalamityShieldRoundness", 32, 0, Integer.MAX_VALUE);
+			this.thrownBlocksDestroyTerrain = builder.comment("").define("thrownBlocksDestroyTerrain", true);
+			this.thrownBlocksGetPlaced = builder.comment("").define("thrownBlocksGetPlaced", true);
+			this.calamityBlockEquipParticles = builder.comment("").define("calamityBlockEquipParticles", true);
+			this.netherDragonLength = builder.comment("").defineInRange("netherDragonLength", 28, 0, Integer.MAX_VALUE);
+			this.enderCalamityHealingCrystalAbsorbAmount = builder.comment("").defineInRange("enderCalamityHealingCrystalAbsorbAmount", 40, 0, Integer.MAX_VALUE);
+			this.enableWalkerKingFog = builder.comment("").define("enableWalkerKingFog", true);
+			builder.pop();
+		}
 
 	}
 
 	public static class BossDamageCaps {
 
-		public boolean enableDamageCapForBosses = true;
-		public float maxUncappedDamage = 30F;
-		public float maxDamageInPercentOfMaxHP = 0.1F;
+		public final BooleanValue enableDamageCapForBosses;
+		public final DoubleValue maxUncappedDamage;
+		public final DoubleValue maxDamageInPercentOfMaxHP;
+
+		public BossDamageCaps(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("boss_damage_caps");
+			this.enableDamageCapForBosses = builder.comment("").define("enableDamageCapForBosses", true);
+			this.maxUncappedDamage = builder.comment("").defineInRange("maxUncappedDamage", 30.0D, 0.0D, Double.MAX_VALUE);
+			this.maxDamageInPercentOfMaxHP = builder.comment("").defineInRange("maxDamageInPercentOfMaxHP", 0.1D, 0.0D, Double.MAX_VALUE);
+			builder.pop();
+		}
 
 	}
 
 	public static class DungeonProtection {
 
-		private static final String NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS = "This is a global toggle for the options in the individual dungeon configs, enabling this here does not enable it in all dungeons! Please adjust the individual dungeon configs!";
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventBlockBreaking = true;
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventBlockPlacing = false;
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventEntitySpawning = true;
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventExplosionOther = true;
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventExplosionTNT = true;
-		//@Config.Comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS)
-		public boolean enablePreventFireSpreading = true;
-		//@Config.Comment("This enables the protection system. Set to false to disable it globally. Disabling this does not delete Protected Regions and instead just does not prevent the player from for example placing blocks.")
-		public boolean protectionSystemEnabled = true;
+		public final BooleanValue enablePreventBlockBreaking;
+		public final BooleanValue enablePreventBlockPlacing;
+		public final BooleanValue enablePreventEntitySpawning;
+		public final BooleanValue enablePreventExplosionOther;
+		public final BooleanValue enablePreventExplosionTNT;
+		public final BooleanValue enablePreventFireSpreading;
+		public final BooleanValue protectionSystemEnabled;
 
-		//@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus", "gravestone:gravestone", "openblocks:grave" };
+		public final ConfigValue<List<? extends String>> protectionSystemBreakableBlockWhitelist;
 
-		//@Config.Comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
+		public final ConfigValue<List<? extends String>> protectionSystemBreakableMaterialWhitelist;
 
-		//@Config.Comment("Blocks which will be placeable at positions protected by the protection system.")
-		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
+		public final ConfigValue<List<? extends String>> protectionSystemPlaceableBlockWhitelist;
 
-		//@Config.Comment("Blocks with a whitelisted material will be placeable at positions protected by the protection system.")
-		public String[] protectionSystemPlaceableMaterialWhitelist = {};
+		public final ConfigValue<List<? extends String>> protectionSystemPlaceableMaterialWhitelist;
+
+		public DungeonProtection(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("dungeonProtection");
+			String NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS = "This is a global toggle for the options in the individual dungeon configs, enabling this here does not enable it in all dungeons! Please adjust the individual dungeon configs!";
+			this.enablePreventBlockBreaking = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventBlockBreaking", true);
+			this.enablePreventBlockPlacing = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventBlockPlacing", false);
+			this.enablePreventEntitySpawning = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventEntitySpawning", true);
+			this.enablePreventExplosionOther = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventExplosionOther", true);
+			this.enablePreventExplosionTNT = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventExplosionTNT", true);
+			this.enablePreventFireSpreading = builder.comment(NO_THIS_DOES_NOT_AFFECT_ALL_DUNGEONS).define("enablePreventFireSpreading", true);
+			this.protectionSystemEnabled = builder.comment("This enables the protection system. Set to false to disable it globally. Disabling this does not delete Protected Regions and instead just does not prevent the player from for example placing blocks.").define("protectionSystemEnabled", true);
+
+			this.protectionSystemBreakableBlockWhitelist = builder.comment("Blocks which will be breakable despite being protected by the protection system.").defineList("protectionSystemBreakableBlockWhitelist", () -> Arrays.asList("minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus", "gravestone:gravestone", "openblocks:grave"), Predicates.alwaysTrue());
+			this.protectionSystemBreakableMaterialWhitelist = builder.comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.").defineList("protectionSystemBreakableMaterialWhitelist", () -> Arrays.asList("WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB"), Predicates.alwaysTrue());
+			this.protectionSystemPlaceableBlockWhitelist = builder.comment("Blocks which will be placeable at positions protected by the protection system.").defineList("protectionSystemPlaceableBlockWhitelist", () -> Arrays.asList("minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch"), Predicates.alwaysTrue());
+			this.protectionSystemPlaceableMaterialWhitelist = builder.comment("Blocks with a whitelisted material will be placeable at positions protected by the protection system.").defineList("protectionSystemPlaceableMaterialWhitelist", () -> Arrays.asList(), Predicates.alwaysTrue());
+			builder.pop();
+		}
 
 	}
 
 	public static class General {
 
-		//@Config.Comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.")
-		//@Config.RangeInt(min = 0, max = 1000)
-		public int dungeonSpawnDistance = 25;
-		//@Config.Comment("Enable/Disable dungeon generation in super flat worlds.")
-		public boolean dungeonsInFlat = false;
-		//@Config.Comment("Setting this to true allows you to set min and max items per chest")
-		public boolean singleLootPoolPerLootTable = true;
-		//@Config.RangeInt(min = 0, max = 27)
-		public int minItemsPerLootChest = 2;
-		//@Config.RangeInt(min = 1, max = 27)
-		public int maxItemsPerLootChest = 8;
-		//@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
-		public boolean reinstallDefaultConfigs = false;
-		//@Config.RangeInt(min = 0, max = 256)
-		public int spawnerActivationDistance = 48;
-		//@Config.RangeInt(min = 0, max = 32)
-		public int supportHillWallSize = 8;
-		public boolean moreDungeonsBehindWall = true;
-		//@Config.RangeDouble(min = 0.0D, max = 10.0D)
-		public double densityBehindWallFactor = 2.0D;
-		public boolean enableSpeechBubbles = true;
-		public boolean hookOnlyPullsSmallerEntities = true;
-		public boolean enableAprilFools = true;
-		public boolean preventOtherModLoot = true;
+		public final IntValue dungeonSpawnDistance;
+		public final BooleanValue dungeonsInFlat;
+		public final BooleanValue singleLootPoolPerLootTable;
+		public final IntValue minItemsPerLootChest;
+		public final IntValue maxItemsPerLootChest;
+		public final BooleanValue reinstallDefaultConfigs;
+		public final DoubleValue spawnerActivationDistance;
+		public final IntValue supportHillWallSize;
+		public final BooleanValue moreDungeonsBehindWall;
+		public final DoubleValue densityBehindWallFactor;
+		public final BooleanValue enableSpeechBubbles;
+		public final BooleanValue hookOnlyPullsSmallerEntities;
+		public final BooleanValue enableAprilFools;
+		public final BooleanValue preventOtherModLoot;
 
-		public String[] entityFactionRelation = {
-				"minecraft:enderman=ENDERMEN",
-				"minecraft:endermite=ENDERMEN",
-				"minecraft:villager=VILLAGERS",
-				"minecraft:villager_golem=VILLAGERS",
-				"minecraft:vindication_illager=ILLAGERS",
-				"minecraft:evocation_illager=ILLAGERS",
-				"minecraft:vex=ILLAGERS",
-				"minecraft:zombie=UNDEAD",
-				"minecraft:zombie_villager=UNDEAD",
-				"minecraft:husk=UNDEAD",
-				"minecraft:skeleton=UNDEAD",
-				"minecraft:skeleton_horse=UNDEAD",
-				"minecraft:stray=UNDEAD",
-				"minecraft:spider=BEASTS",
-				"minecraft:cave_spider=BEASTS",
-				"minecraft:ender_dragon=DRAGONS",
-				"iceandfire:dragonegg=DRAGONS",
-				"iceandfire:firedragon=DRAGONS",
-				"iceandfire:icedragon=DRAGONS" };
+		public final ConfigValue<List<? extends String>> entityFactionRelation;
 
-		//@Config.Comment("Each entry represents one set of mobtypes per \"ring\"")
-		public String[] defaultInhabitantConfig = { "SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR" };
-		public float electricFieldEffectSpreadRange = 4;
-		public double damageBlockedByShield = 12.0D;
+		public final ConfigValue<List<? extends String>> defaultInhabitantConfig;
+		public final DoubleValue electricFieldEffectSpreadRange;
+		public final DoubleValue damageBlockedByShield;
+
+		public General(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("general");
+			this.dungeonSpawnDistance = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("dungeonSpawnDistance", 25, 0, Integer.MAX_VALUE);
+			this.dungeonsInFlat = builder.comment("Enable/Disable dungeon generation in super flat worlds.").define("dungeonsInFlat", false);
+			this.singleLootPoolPerLootTable = builder.comment("Setting this to true allows you to set min and max items per chest").define("singleLootPoolPerLootTable", true);
+			this.minItemsPerLootChest = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("minItemsPerLootChest", 2, 0, Integer.MAX_VALUE);
+			this.maxItemsPerLootChest = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("maxItemsPerLootChest", 8, 0, Integer.MAX_VALUE);
+			this.reinstallDefaultConfigs = builder.comment("Copies the default config files from the jar to the config folder (existing files will get replaced).").define("reinstallDefaultConfigs", false);
+			this.spawnerActivationDistance = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("spawnerActivationDistance", 48.0D, 0.0D, Double.MAX_VALUE);
+			this.supportHillWallSize = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("supportHillWallSize", 8, 0, Integer.MAX_VALUE);
+			this.moreDungeonsBehindWall = builder.comment("").define("moreDungeonsBehindWall", true);
+			this.densityBehindWallFactor = builder.comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.").defineInRange("densityBehindWallFactor", 2.0D, 0.0D, Double.MAX_VALUE);
+			this.enableSpeechBubbles = builder.comment("").define("enableSpeechBubbles", true);
+			this.hookOnlyPullsSmallerEntities = builder.comment("").define("hookOnlyPullsSmallerEntities", true);
+			this.enableAprilFools = builder.comment("").define("enableAprilFools", true);
+			this.preventOtherModLoot = builder.comment("").define("preventOtherModLoot", true);
+
+			this.entityFactionRelation = builder.comment("").defineList("entityFactionRelation", () -> Arrays.asList("minecraft:enderman=ENDERMEN", "minecraft:endermite=ENDERMEN", "minecraft:villager=VILLAGERS", "minecraft:villager_golem=VILLAGERS", "minecraft:vindication_illager=ILLAGERS", "minecraft:evocation_illager=ILLAGERS", "minecraft:vex=ILLAGERS", "minecraft:zombie=UNDEAD", "minecraft:zombie_villager=UNDEAD", "minecraft:husk=UNDEAD", "minecraft:skeleton=UNDEAD",
+					"minecraft:skeleton_horse=UNDEAD", "minecraft:stray=UNDEAD", "minecraft:spider=BEASTS", "minecraft:cave_spider=BEASTS", "minecraft:ender_dragon=DRAGONS", "iceandfire:dragonegg=DRAGONS", "iceandfire:firedragon=DRAGONS", "iceandfire:icedragon=DRAGONS"), Predicates.alwaysTrue());
+
+			this.defaultInhabitantConfig = builder.comment("Each entry represents one set of mobtypes per \"ring\"").defineList("defaultInhabitantConfig", () -> Arrays.asList("SKELETON", "ZOMBIE,MUMMY", "ILLAGER", "SPECTER", "MINOTAUR"), Predicates.alwaysTrue());
+			this.electricFieldEffectSpreadRange = builder.comment("").defineInRange("electricFieldEffectSpreadRange", 4.0D, 0.0D, Double.MAX_VALUE);
+			this.damageBlockedByShield = builder.comment("").defineInRange("damageBlockedByShield", 12.0D, 0.0D, Double.MAX_VALUE);
+			builder.pop();
+		}
 
 	}
 
 	public static class Mobs {
 
-		//@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
-		public boolean blockCancelledByAxe = true;
-		public boolean armorShattersOnMobs = true;
-		public boolean enableHealthChangeOnDistance = true;
-		//@Config.RangeInt(min = 1, max = 100_000)
-		//@Config.Comment("Every X blocks the mobs HP goes up by 10% of it's base health")
-		public int distanceDivisor = 1000;
-		//@Config.RangeInt(min = 1, max = 100_000)
-		public int mobTypeChangeDistance = 1500;
-		//@Config.RangeInt(min = 0, max = 128)
-		public int factionUpdateRadius = 100;
-		//@Config.RangeInt(min = 0, max = 128)
-		public int alertRadius = 20;
-		//@Config.Comment("For every player after the first bosses will receive x percent less damage. bossDamageReduction = (1.0 - x) ^ (playerCount - 1)")
-		//@Config.RangeDouble(min = 0.0D, max = 0.5D)
-		public double bossDamageReductionPerPlayer = 0.25D;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double dropDurabilityModalValue = 0.25D;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double dropDurabilityStandardDeviation = 0.05D;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double dropDurabilityMinimum = 0.1D;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double dropDurabilityMaximum = 0.5D;
-		public boolean enableEntityStrafing = false;
-		public boolean enableEntityStrafingBoss = true;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double entityStrafingSpeed = 0.5D;
-		//@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double entityStrafingSpeedBoss = 0.5D;
-		//@Config.RangeInt(min = 2, max = 64)
-		public int looterAIChestSearchRange = 16;
-		public int looterAIStealableItems = 4;
+		public final BooleanValue blockCancelledByAxe;
+		public final BooleanValue armorShattersOnMobs;
+		public final BooleanValue enableHealthChangeOnDistance;
+		public final DoubleValue distanceDivisor;
+		public final DoubleValue mobTypeChangeDistance;
+		public final DoubleValue factionUpdateRadius;
+		public final DoubleValue alertRadius;
+		public final DoubleValue bossDamageReductionPerPlayer;
+		public final DoubleValue dropDurabilityModalValue;
+		public final DoubleValue dropDurabilityStandardDeviation;
+		public final DoubleValue dropDurabilityMinimum;
+		public final DoubleValue dropDurabilityMaximum;
+		public final BooleanValue enableEntityStrafing;
+		public final BooleanValue enableEntityStrafingBoss;
+		public final DoubleValue entityStrafingSpeed;
+		public final DoubleValue entityStrafingSpeedBoss;
+		public final DoubleValue looterAIChestSearchRange;
+		public final IntValue looterAIStealableItems;
 
-		public boolean offhandPotionsAreSingleUse = true;
+		public final BooleanValue offhandPotionsAreSingleUse;
 
-		public boolean enableDamageCapForNonBossMobs = false;
-		public float maxUncappedDamageForNonBossMobs = 50F;
-		public float maxUncappedDamageInMaxHPPercent = 1F;
-		public boolean disableFirePanicAI = false;
-		
-		public boolean enableTradeRestockOverTime = true;
-		//@Config.Comment("Measured in ticks)")
-		public int tradeRestockTime = 72000; // One hour
-		public int maxAutoRestocksOverTime = 8;
+		public final BooleanValue enableDamageCapForNonBossMobs;
+		public final DoubleValue maxUncappedDamageForNonBossMobs;
+		public final DoubleValue maxUncappedDamageInMaxHPPercent;
+		public final BooleanValue disableFirePanicAI;
+
+		public final BooleanValue enableTradeRestockOverTime;
+		public final IntValue tradeRestockTime;
+		public final IntValue maxAutoRestocksOverTime;
+
+		public Mobs(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("mobs");
+			this.blockCancelledByAxe = builder.comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield").define("blockCancelledByAxe", true);
+			this.armorShattersOnMobs = builder.comment("").define("armorShattersOnMobs", true);
+			this.enableHealthChangeOnDistance = builder.comment("").define("enableHealthChangeOnDistance", true);
+			this.distanceDivisor = builder.comment("Every X blocks the mobs HP goes up by 10% of it's base health").defineInRange("distanceDivisor", 1000.0D, 0.0D, Double.MAX_VALUE);
+			this.mobTypeChangeDistance = builder.comment("").defineInRange("mobTypeChangeDistance", 1500.0D, 0.0D, Double.MAX_VALUE);
+			this.factionUpdateRadius = builder.comment("").defineInRange("factionUpdateRadius", 100.0D, 0.0D, Double.MAX_VALUE);
+			this.alertRadius = builder.comment("").defineInRange("alertRadius", 20.0D, 0.0D, Double.MAX_VALUE);
+			this.bossDamageReductionPerPlayer = builder.comment("For every player after the first bosses will receive x percent less damage. bossDamageReduction = (1.0 - x) ^ (playerCount - 1)").defineInRange("bossDamageReductionPerPlayer", 0.25D, 0.0D, Double.MAX_VALUE);
+			this.dropDurabilityModalValue = builder.comment("").defineInRange("dropDurabilityModalValue", 0.25D, 0.0D, Double.MAX_VALUE);
+			this.dropDurabilityStandardDeviation = builder.comment("").defineInRange("dropDurabilityStandardDeviation", 0.05D, 0.0D, Double.MAX_VALUE);
+			this.dropDurabilityMinimum = builder.comment("").defineInRange("dropDurabilityMinimum", 0.1D, 0.0D, Double.MAX_VALUE);
+			this.dropDurabilityMaximum = builder.comment("").defineInRange("dropDurabilityMaximum", 0.5D, 0.0D, Double.MAX_VALUE);
+			this.enableEntityStrafing = builder.comment("").define("enableEntityStrafing", false);
+			this.enableEntityStrafingBoss = builder.comment("").define("enableEntityStrafingBoss", true);
+			this.entityStrafingSpeed = builder.comment("").defineInRange("entityStrafingSpeed", 0.5D, 0.0D, Double.MAX_VALUE);
+			this.entityStrafingSpeedBoss = builder.comment("").defineInRange("entityStrafingSpeedBoss", 0.5D, 0.0D, Double.MAX_VALUE);
+			this.looterAIChestSearchRange = builder.comment("").defineInRange("looterAIChestSearchRange", 16.0D, 0.0D, Double.MAX_VALUE);
+			this.looterAIStealableItems = builder.comment("").defineInRange("looterAIStealableItems", 4, 0, Integer.MAX_VALUE);
+			this.offhandPotionsAreSingleUse = builder.comment("").define("offhandPotionsAreSingleUse", true);
+			this.enableDamageCapForNonBossMobs = builder.comment("").define("enableDamageCapForNonBossMobs", false);
+			this.maxUncappedDamageForNonBossMobs = builder.comment("").defineInRange("maxUncappedDamageForNonBossMobs", 50.0D, 0.0D, Double.MAX_VALUE);
+			this.maxUncappedDamageInMaxHPPercent = builder.comment("").defineInRange("maxUncappedDamageInMaxHPPercent", 1.0D, 0.0D, Double.MAX_VALUE);
+			this.disableFirePanicAI = builder.comment("").define("disableFirePanicAI", false);
+			this.enableTradeRestockOverTime = builder.comment("").define("enableTradeRestockOverTime", true);
+			this.tradeRestockTime = builder.comment("").defineInRange("tradeRestockTime", 72000, 0, Integer.MAX_VALUE);
+			this.maxAutoRestocksOverTime = builder.comment("").defineInRange("maxAutoRestocksOverTime", 8, 0, Integer.MAX_VALUE);
+			builder.pop();
+		}
 
 	}
 
 	public static class Wall {
 
-		//@Config.RangeInt(min = 0, max = 1000)
-		public int distance = 500;
-		public boolean enabled = true;
-		public String mob = "cqrepoured:spectre";
-		public boolean obsidianCore = true;
-		//@Config.RangeInt(min = 80, max = 240)
-		public int topY = 140;
-		//@Config.RangeInt(min = 0, max = 10)
-		public int towerDistance = 3;
+		public final IntValue distance;
+		public final BooleanValue enabled;
+		public final ConfigValue<String> mob;
+		public final BooleanValue obsidianCore;
+		public final IntValue topY;
+		public final IntValue towerDistance;
+
+		public Wall(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("wall");
+			this.distance = builder.comment("").defineInRange("distance", 500, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			this.enabled = builder.comment("").define("enabled", true);
+			this.mob = builder.comment("").define("mob", "cqrepoured:spectre");
+			this.obsidianCore = builder.comment("").define("obsidianCore", true);
+			this.topY = builder.comment("").defineInRange("topY", 500, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			this.towerDistance = builder.comment("").defineInRange("towerDistance", 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			builder.pop();
+		}
 
 	}
 
 	public static class BaseHealths {
 
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Dummy = 1F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Dwarf = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Enderman = 40F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Goblin = 20F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Golem = 40F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Gremlin = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Human = 20F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Illager = 25F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Minotaur = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Mummy = 20F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float NPC = 20F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Ogre = 35F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Orc = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Boarman = 25F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Pirate = 25F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Skeleton = 20F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Spectre = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Triton = 30F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float AbyssWalker = 40F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Zombie = 25F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Mandril = 30F;
+		public final DoubleValue dummy;
+		public final DoubleValue dwarf;
+		public final DoubleValue enderman;
+		public final DoubleValue goblin;
+		public final DoubleValue golem;
+		public final DoubleValue gremlin;
+		public final DoubleValue human;
+		public final DoubleValue illager;
+		public final DoubleValue mandril;
+		public final DoubleValue minotaur;
+		public final DoubleValue mummy;
+		public final DoubleValue npc;
+		public final DoubleValue ogre;
+		public final DoubleValue orc;
+		public final DoubleValue boarman;
+		public final DoubleValue pirate;
+		public final DoubleValue skeleton;
+		public final DoubleValue spectre;
+		public final DoubleValue triton;
+		public final DoubleValue abyssWalker;
+		public final DoubleValue zombie;
 
-		//	@Config.RangeDouble(min = 1, max = 1000)
-		public float NetherDragon = 250F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float GiantTortoise = 400F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Lich = 200F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Necromancer = 150F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Boarmage = 250F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float AbyssWalkerKing = 300F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float PirateCaptain = 200F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float GiantSpider = 150F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float EnderCalamity = 300F;
-		//@Config.RangeDouble(min = 1, max = 1000)
-		public float Exterminatior = 200F;
+		public final DoubleValue netherDragon;
+		public final DoubleValue giantTortoise;
+		public final DoubleValue lich;
+		public final DoubleValue necromancer;
+		public final DoubleValue boarmage;
+		public final DoubleValue abyssWalkerKing;
+		public final DoubleValue pirateCaptain;
+		public final DoubleValue giantSpider;
+		public final DoubleValue enderCalamity;
+		public final DoubleValue exterminatior;
+
+		public BaseHealths(ForgeConfigSpec.Builder builder) {
+			builder.comment("").push("base_healths");
+			this.dummy = builder.comment("").defineInRange("dummy", 1.0F, 0.0F, Double.MAX_VALUE);
+			this.dwarf = builder.comment("").defineInRange("dwarf", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.enderman = builder.comment("").defineInRange("enderman", 40.0F, 0.0F, Double.MAX_VALUE);
+			this.goblin = builder.comment("").defineInRange("goblin", 20.0F, 0.0F, Double.MAX_VALUE);
+			this.golem = builder.comment("").defineInRange("golem", 40.0F, 0.0F, Double.MAX_VALUE);
+			this.gremlin = builder.comment("").defineInRange("gremlin", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.human = builder.comment("").defineInRange("human", 20.0F, 0.0F, Double.MAX_VALUE);
+			this.illager = builder.comment("").defineInRange("illager", 25.0F, 0.0F, Double.MAX_VALUE);
+			this.mandril = builder.comment("").defineInRange("mandril", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.minotaur = builder.comment("").defineInRange("minotaur", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.mummy = builder.comment("").defineInRange("mummy", 20.0F, 0.0F, Double.MAX_VALUE);
+			this.npc = builder.comment("").defineInRange("npc", 20.0F, 0.0F, Double.MAX_VALUE);
+			this.ogre = builder.comment("").defineInRange("ogre", 35.0F, 0.0F, Double.MAX_VALUE);
+			this.orc = builder.comment("").defineInRange("orc", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.boarman = builder.comment("").defineInRange("boarman", 25.0F, 0.0F, Double.MAX_VALUE);
+			this.pirate = builder.comment("").defineInRange("pirate", 25.0F, 0.0F, Double.MAX_VALUE);
+			this.skeleton = builder.comment("").defineInRange("skeleton", 20.0F, 0.0F, Double.MAX_VALUE);
+			this.spectre = builder.comment("").defineInRange("spectre", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.triton = builder.comment("").defineInRange("triton", 30.0F, 0.0F, Double.MAX_VALUE);
+			this.abyssWalker = builder.comment("").defineInRange("abyssWalker", 40.0F, 0.0F, Double.MAX_VALUE);
+			this.zombie = builder.comment("").defineInRange("zombie", 25.0F, 0.0F, Double.MAX_VALUE);
+
+			this.netherDragon = builder.comment("").defineInRange("netherDragon", 250.0F, 0.0F, Double.MAX_VALUE);
+			this.giantTortoise = builder.comment("").defineInRange("giantTortoise", 400.0F, 0.0F, Double.MAX_VALUE);
+			this.lich = builder.comment("").defineInRange("lich", 200.0F, 0.0F, Double.MAX_VALUE);
+			this.necromancer = builder.comment("").defineInRange("necromancer", 150.0F, 0.0F, Double.MAX_VALUE);
+			this.boarmage = builder.comment("").defineInRange("boarmage", 250.0F, 0.0F, Double.MAX_VALUE);
+			this.abyssWalkerKing = builder.comment("").defineInRange("abyssWalkerKing", 300.0F, 0.0F, Double.MAX_VALUE);
+			this.pirateCaptain = builder.comment("").defineInRange("pirateCaptain", 200.0F, 0.0F, Double.MAX_VALUE);
+			this.giantSpider = builder.comment("").defineInRange("giantSpider", 150.0F, 0.0F, Double.MAX_VALUE);
+			this.enderCalamity = builder.comment("").defineInRange("enderCalamity", 300.0F, 0.0F, Double.MAX_VALUE);
+			this.exterminatior = builder.comment("").defineInRange("exterminatior", 200.0F, 0.0F, Double.MAX_VALUE);
+			builder.pop();
+		}
 
 	}
 
 	private static Boolean aprilFoolsResult = null;
 
 	public static boolean isAprilFoolsEnabled() {
-		if (general.enableAprilFools) {
-			if (aprilFoolsResult == null) {
-				MonthDay monthDay = MonthDay.now();
-				// Counting begins at 0, not one!! Read the documentation properly...
-				// Or just use constants...
-				if (monthDay.getMonth() == Month.APRIL) {
-					// Days are initiated with 1
-					aprilFoolsResult = monthDay.getDayOfMonth() == 1;
-				} else {
-					aprilFoolsResult = false;
-				}
-			}
-			return aprilFoolsResult;
+		if (!SERVER_CONFIG.general.enableAprilFools.get()) {
+			return false;
 		}
-		return false;
-	}
-
-	//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
-	private static class EventHandler {
-
-		/*@SubscribeEvent
-		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-			if (event.getModID().equals(CQRMain.MODID)) {
-				ConfigManager.sync(CQRMain.MODID, Config.Type.INSTANCE);
-				CQStructure.updateSpecialEntities();
-				if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().isIntegratedServerRunning()) {
-					ProtectedRegionHelper.updateWhitelists();
-				}
-				EntityCQRNetherDragon.reloadBreakableBlocks();
-				EntityCQRGiantTortoise.realoadHardBlocks();
-			}
-		}*/
-
+		if (aprilFoolsResult == null) {
+			MonthDay monthDay = MonthDay.now();
+			aprilFoolsResult = monthDay.getMonth() == Month.APRIL && monthDay.getDayOfMonth() == 1;
+		}
+		return aprilFoolsResult;
 	}
 
 }

@@ -1,35 +1,62 @@
 package team.cqr.cqrepoured.config;
 
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.crafting.Ingredient;
 import team.cqr.cqrepoured.item.IExtendedItemTier;
 
-public class CQRExtendedItemTier extends CQRItemTier implements IExtendedItemTier
-{
-    public int fixedAttackDamageBonus;
-    public float attackSpeedBonus;
-    public double movementSpeedBonus;
+public class CQRExtendedItemTier implements IItemTier, IExtendedItemTier {
 
-    public CQRExtendedItemTier(IItemTier tier, int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
-    {
-        super(tier.getUses(), tier.getSpeed(), tier.getAttackDamageBonus(), tier.getLevel(), tier.getEnchantmentValue(), tier::getRepairIngredient);
+	private final IItemTier tier;
+	private final ExtendedItemTierConfig config;
 
-        this.fixedAttackDamageBonus = fixedAttackDamageBonus;
-        this.attackSpeedBonus = attackSpeedBonus;
-        this.movementSpeedBonus = movementSpeedBonus;
-    }
+	public CQRExtendedItemTier(IItemTier tier, ExtendedItemTierConfig config) {
+		this.tier = tier;
+		this.config = config;
+	}
 
-    @Override
-    public int getFixedAttackDamageBonus() {
-        return this.fixedAttackDamageBonus;
-    }
+	@Override
+	public int getUses() {
+		return tier.getUses();
+	}
 
-    @Override
-    public float getAttackSpeedBonus() {
-        return this.attackSpeedBonus;
-    }
+	@Override
+	public float getSpeed() {
+		return tier.getSpeed();
+	}
 
-    @Override
-    public double getMovementSpeedBonus() {
-        return this.movementSpeedBonus;
-    }
+	@Override
+	public float getAttackDamageBonus() {
+		return tier.getAttackDamageBonus();
+	}
+
+	@Override
+	public int getLevel() {
+		return tier.getLevel();
+	}
+
+	@Override
+	public int getEnchantmentValue() {
+		return tier.getEnchantmentValue();
+	}
+
+	@Override
+	public Ingredient getRepairIngredient() {
+		return tier.getRepairIngredient();
+	}
+
+	@Override
+	public float getFixedAttackDamageBonus() {
+		return (float) (double) config.fixedAttackDamageBonus.get();
+	}
+
+	@Override
+	public float getAttackSpeedBonus() {
+		return (float) (double) config.attackSpeedBonus.get();
+	}
+
+	@Override
+	public double getMovementSpeedBonus() {
+		return config.movementSpeedBonus.get();
+	}
+
 }

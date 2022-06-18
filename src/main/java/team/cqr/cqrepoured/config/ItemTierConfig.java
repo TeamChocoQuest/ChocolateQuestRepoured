@@ -1,12 +1,25 @@
 package team.cqr.cqrepoured.config;
 
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
-public class ItemTierConfig extends CQRItemTier
-{
-    //Skip repair ingredient for config
-    public ItemTierConfig(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue)
-    {
-        super(uses, speed, attackDamageBonus, level, enchantmentValue, () -> Ingredient.EMPTY);
-    }
+public class ItemTierConfig {
+
+	public final IntValue uses;
+	public final DoubleValue speed;
+	public final DoubleValue attackDamageBonus;
+	public final IntValue level;
+	public final IntValue enchantmentValue;
+
+	public ItemTierConfig(ForgeConfigSpec.Builder builder, String name, int uses, float speed, float attackDamageBonus, int level, int enchantmentValue) {
+		builder.comment("").push(name);
+		this.uses = builder.comment("").defineInRange("uses", uses, 1, Integer.MAX_VALUE);
+		this.speed = builder.comment("").defineInRange("speed", uses, 0.0D, Double.MAX_VALUE);
+		this.attackDamageBonus = builder.comment("").defineInRange("attackDamageBonus", uses, 0.0D, Double.MAX_VALUE);
+		this.level = builder.comment("").defineInRange("level", uses, 1, Integer.MAX_VALUE);
+		this.enchantmentValue = builder.comment("").defineInRange("enchantmentValue", uses, 1, Integer.MAX_VALUE);
+		builder.pop();
+	}
+
 }

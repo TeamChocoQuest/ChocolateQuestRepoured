@@ -1,28 +1,20 @@
 package team.cqr.cqrepoured.config;
 
-public class ExtendedItemTierConfig
-{
-    public int fixedAttackDamageBonus;
-    public float attackSpeedBonus;
-    public double movementSpeedBonus;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 
-    //Skip tier
-    public ExtendedItemTierConfig(int fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus)
-    {
-        this.fixedAttackDamageBonus = fixedAttackDamageBonus;
-        this.attackSpeedBonus = attackSpeedBonus;
-        this.movementSpeedBonus = movementSpeedBonus;
-    }
+public class ExtendedItemTierConfig {
 
-    public int getFixedAttackDamageBonus() {
-        return this.fixedAttackDamageBonus;
-    }
+	public final DoubleValue fixedAttackDamageBonus;
+	public final DoubleValue attackSpeedBonus;
+	public final DoubleValue movementSpeedBonus;
 
-    public float getAttackSpeedBonus() {
-        return this.attackSpeedBonus;
-    }
+	public ExtendedItemTierConfig(ForgeConfigSpec.Builder builder, String name, float fixedAttackDamageBonus, float attackSpeedBonus, double movementSpeedBonus) {
+		builder.comment("").push(name);
+		this.fixedAttackDamageBonus = builder.comment("").defineInRange("fixedAttackDamageBonus", fixedAttackDamageBonus, Double.MIN_VALUE, Double.MAX_VALUE);
+		this.attackSpeedBonus = builder.comment("").defineInRange("attackSpeedBonus", attackSpeedBonus, Double.MIN_VALUE, Double.MAX_VALUE);
+		this.movementSpeedBonus = builder.comment("").defineInRange("movementSpeedBonus", movementSpeedBonus, Double.MIN_VALUE, Double.MAX_VALUE);
+		builder.pop();
+	}
 
-    public double getMovementSpeedBonus() {
-        return this.movementSpeedBonus;
-    }
 }

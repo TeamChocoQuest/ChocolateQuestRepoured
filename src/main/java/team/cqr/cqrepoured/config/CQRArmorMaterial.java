@@ -1,82 +1,80 @@
 package team.cqr.cqrepoured.config;
 
+import java.util.function.Supplier;
+
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import team.cqr.cqrepoured.CQRMain;
 
-import java.util.function.Supplier;
+public class CQRArmorMaterial implements IArmorMaterial {
 
-public class CQRArmorMaterial implements IArmorMaterial
-{
-	public String name;
-	public int durability;
-	public int[] defense;
-	public int enchantmentValue;
-	public SoundEvent equipSound;
-	public LazyValue<Ingredient> repairIngredient;
-	public float toughness;
-	public float knockbackResistance;
+	private static final int[] HEALTH_PER_SLOT = new int[] { 13, 15, 16, 11 };
+	private final String name;
+	private final ArmorMaterialConfig config;
+	private final SoundEvent equipSound;
+	private final LazyValue<Ingredient> repairIngredient;
 
-	public CQRArmorMaterial(String name, int durability, int[] defense, int enchantmentValue, SoundEvent equipSound, Supplier<Ingredient> repairIngredient, float toughness, float knockbackResistance)
-	{
+	public CQRArmorMaterial(String name, ArmorMaterialConfig config) {
+		this(name, config, SoundEvents.ARMOR_EQUIP_GENERIC, () -> Ingredient.EMPTY);
+	}
+
+	public CQRArmorMaterial(String name, ArmorMaterialConfig config, SoundEvent equipSound) {
+		this(name, config, equipSound, () -> Ingredient.EMPTY);
+	}
+
+	public CQRArmorMaterial(String name, ArmorMaterialConfig config, Supplier<Ingredient> repairIngredient) {
+		this(name, config, SoundEvents.ARMOR_EQUIP_GENERIC, repairIngredient);
+	}
+
+	public CQRArmorMaterial(String name, ArmorMaterialConfig config, SoundEvent equipSound, Supplier<Ingredient> repairIngredient) {
 		this.name = CQRMain.MODID + ":" + name;
-		this.durability = durability;
-		this.defense = defense;
-		this.enchantmentValue = enchantmentValue;
+		this.config = config;
 		this.equipSound = equipSound;
 		this.repairIngredient = new LazyValue<>(repairIngredient);
-		this.toughness = toughness;
-		this.knockbackResistance = knockbackResistance;
 	}
 
 	@Override
-	public String getName()
-	{
-		return this.name;
+	public String getName() {
+		return name;
 	}
 
 	@Override
-	public int getDurabilityForSlot(EquipmentSlotType slot)
-	{
-		return this.durability;
+	public int getDurabilityForSlot(EquipmentSlotType slot) {
+		return HEALTH_PER_SLOT[slot.getIndex()] * config.durability.get();
 	}
 
 	@Override
-	public int getDefenseForSlot(EquipmentSlotType slot)
-	{
-		return this.defense[slot.getIndex()];
+	public int getDefenseForSlot(EquipmentSlotType slot) {
+		return config.defense.get().get(slot.getIndex());
 	}
 
 	@Override
-	public int getEnchantmentValue()
-	{
-		return this.enchantmentValue;
+	public int getEnchantmentValue() {
+		return config.enchantmentValue.get();
 	}
 
 	@Override
-	public SoundEvent getEquipSound()
-	{
-		return this.equipSound;
+	public SoundEvent getEquipSound() {
+		return equipSound;
 	}
 
 	@Override
-	public Ingredient getRepairIngredient()
-	{
-		return this.repairIngredient.get();
+	public Ingredient getRepairIngredient() {
+		return repairIngredient.get();
 	}
 
 	@Override
-	public float getToughness()
-	{
-		return this.toughness;
+	public float getToughness() {
+		return (float) (double) config.toughness.get();
 	}
 
 	@Override
-	public float getKnockbackResistance()
-	{
-		return this.knockbackResistance;
+	public float getKnockbackResistance() {
+		return (float) (double) config.knockbackResistance.get();
 	}
+
 }

@@ -1,44 +1,31 @@
 package team.cqr.cqrepoured.config;
 
-public class ArmorMaterialConfig
-{
-    public int durability;
-    public int[] defense;
-    public int enchantmentValue;
-    public float toughness;
-    public float knockbackResistance;
+import java.util.Arrays;
+import java.util.List;
 
-    public ArmorMaterialConfig(int durability, int[] defense, int enchantmentValue, float toughness, float knockbackResistance)
-    {
-        this.durability = durability;
-        this.defense = defense;
-        this.enchantmentValue = enchantmentValue;
-        this.toughness = toughness;
-        this.knockbackResistance = knockbackResistance;
-    }
+import com.google.common.base.Predicates;
 
-    public int getDurabilityForSlot()
-    {
-        return this.durability;
-    }
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
-    public int[] getDefenseForSlot()
-    {
-        return this.defense;
-    }
+public class ArmorMaterialConfig {
 
-    public int getEnchantmentValue()
-    {
-        return this.enchantmentValue;
-    }
+	public final IntValue durability;
+	public final ConfigValue<List<? extends Integer>> defense;
+	public final IntValue enchantmentValue;
+	public final DoubleValue toughness;
+	public final DoubleValue knockbackResistance;
 
-    public float getToughness()
-    {
-        return this.toughness;
-    }
+	public ArmorMaterialConfig(ForgeConfigSpec.Builder builder, String name, int durability, Integer[] defense, int enchantmentValue, float toughness, float knockbackResistance) {
+		builder.comment("").push(name);
+		this.durability = builder.comment("").defineInRange("durability", durability, 1, Integer.MAX_VALUE);
+		this.defense = builder.comment("").defineList("defense", Arrays.asList(defense), Predicates.alwaysTrue());
+		this.enchantmentValue = builder.comment("").defineInRange("enchantmentValue", enchantmentValue, 0, Integer.MAX_VALUE);
+		this.toughness = builder.comment("").defineInRange("toughness", toughness, 0.0D, Double.MAX_VALUE);
+		this.knockbackResistance = builder.comment("").defineInRange("knockbackResistance", knockbackResistance, Double.MIN_VALUE, Double.MAX_VALUE);
+		builder.pop();
+	}
 
-    public float getKnockbackResistance()
-    {
-        return this.knockbackResistance;
-    }
 }

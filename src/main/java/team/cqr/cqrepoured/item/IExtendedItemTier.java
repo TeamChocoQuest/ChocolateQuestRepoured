@@ -4,8 +4,10 @@ import net.minecraft.item.IItemTier;
 
 public interface IExtendedItemTier extends IItemTier {
 
-	public int getFixedAttackDamageBonus();
+	public float getFixedAttackDamageBonus();
+
 	public float getAttackSpeedBonus();
+
 	public double getMovementSpeedBonus();
-	
+
 }

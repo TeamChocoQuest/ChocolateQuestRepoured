@@ -1,63 +1,49 @@
 package team.cqr.cqrepoured.config;
 
+import java.util.function.Supplier;
+
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 
-import java.util.function.Supplier;
-
 public class CQRItemTier implements IItemTier {
 
-	public int uses;
-	public float speed;
-	public float attackDamageBonus;
-	public int level;
-	public int enchantmentValue;
-	public LazyValue<Ingredient> repairIngredient;
+	private final ItemTierConfig config;
+	private final LazyValue<Ingredient> repairIngredient;
 
-	public CQRItemTier(int uses, float speed, float attackDamageBonus, int level, int enchantmentValue, Supplier<Ingredient> repairIngredient)
-	{
-		this.uses = uses;
-		this.speed = speed;
-		this.attackDamageBonus = attackDamageBonus;
-		this.level = level;
-		this.enchantmentValue = enchantmentValue;
+	public CQRItemTier(ItemTierConfig config, Supplier<Ingredient> repairIngredient) {
+		this.config = config;
 		this.repairIngredient = new LazyValue<>(repairIngredient);
 	}
 
 	@Override
-	public int getUses()
-	{
-		return this.uses;
+	public int getUses() {
+		return config.uses.get();
 	}
 
 	@Override
-	public float getSpeed()
-	{
-		return this.speed;
+	public float getSpeed() {
+		return (float) (double) config.speed.get();
 	}
 
 	@Override
-	public float getAttackDamageBonus()
-	{
-		return this.attackDamageBonus;
+	public float getAttackDamageBonus() {
+		return (float) (double) config.attackDamageBonus.get();
 	}
 
 	@Override
-	public int getLevel()
-	{
-		return this.level;
+	public int getLevel() {
+		return config.level.get();
 	}
 
 	@Override
-	public int getEnchantmentValue()
-	{
-		return this.enchantmentValue;
+	public int getEnchantmentValue() {
+		return config.enchantmentValue.get();
 	}
 
 	@Override
-	public Ingredient getRepairIngredient()
-	{
-		return this.repairIngredient.get();
+	public Ingredient getRepairIngredient() {
+		return repairIngredient.get();
 	}
+
 }
