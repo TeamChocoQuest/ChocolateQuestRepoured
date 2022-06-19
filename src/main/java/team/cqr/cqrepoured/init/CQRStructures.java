@@ -54,7 +54,7 @@ public class CQRStructures {
 		try {
 			for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
 				//TODO: Create codec, it MUST NOT BE NULL!!
-				Structure<?> structure = new StructureDungeonCQR(null, false, dunConf);
+				Structure<?> structure = new StructureDungeonCQR(DungeonBase.CODEC, false);
 				RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
 				DUNGEON_ENTRIES.put(dunConf, regObj);
 				StructureSeparationSettings sepSettings;

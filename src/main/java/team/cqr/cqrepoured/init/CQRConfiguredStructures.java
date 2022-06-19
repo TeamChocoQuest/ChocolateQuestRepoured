@@ -11,6 +11,7 @@ import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraftforge.fml.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.structure.StructureDungeonCQR;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class CQRConfiguredStructures {
@@ -48,11 +49,15 @@ public class CQRConfiguredStructures {
         //Now, parse all structures (dungeons) in CQRSTructures.DUNGEON_STRUCTURES and register those, the dungeon class will receive a method to generate teh structure feature to be registered as well as a getter for the structure object
         for(Map.Entry<DungeonBase, RegistryObject<Structure<?>>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) {
         	//TODO: Check if we need that featureconfig at all, if yes => properly implement it!
-        	StructureFeature<?, ?> sf = entry.getValue().get().configured(IFeatureConfig.NONE);
-        	
-        	Registry.register(registry, CQRMain.prefix(entry.getValue().getId().getPath()), sf);
-        	FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue().get(), sf);
-        	CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf);
+        	if(entry.getValue().get() instanceof StructureDungeonCQR) {
+        		StructureDungeonCQR sdcqr = (StructureDungeonCQR) entry.getValue().get();
+        		final DungeonBase featureConfig = entry.getKey();
+            	StructureFeature<?, ?> sf = sdcqr.configured(featureConfig);
+            	
+            	Registry.register(registry, CQRMain.prefix(entry.getValue().getId().getPath()), sf);
+            	FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue().get(), sf);
+            	CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf);
+        	}
         }
     }
 
