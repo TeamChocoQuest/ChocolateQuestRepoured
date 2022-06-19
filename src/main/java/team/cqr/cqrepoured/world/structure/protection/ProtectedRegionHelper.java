@@ -48,26 +48,26 @@ public class ProtectedRegionHelper {
 		BREAKABLE_MATERIAL_WHITELIST.clear();
 		PLACEABLE_BLOCK_WHITELIST.clear();
 		PLACEABLE_MATERIAL_WHITELIST.clear();
-		for (String s : CQRConfig.dungeonProtection.protectionSystemBreakableBlockWhitelist) {
+		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemBreakableBlockWhitelist.get()) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				BREAKABLE_BLOCK_WHITELIST.add(b);
 			}
 		}
-		for (String s : CQRConfig.dungeonProtection.protectionSystemBreakableMaterialWhitelist) {
+		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemBreakableMaterialWhitelist.get()) {
 			try {
 				BREAKABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
 				// ignore
 			}
 		}
-		for (String s : CQRConfig.dungeonProtection.protectionSystemPlaceableBlockWhitelist) {
+		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemPlaceableBlockWhitelist.get()) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				PLACEABLE_BLOCK_WHITELIST.add(b);
 			}
 		}
-		for (String s : CQRConfig.dungeonProtection.protectionSystemPlaceableMaterialWhitelist) {
+		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemPlaceableMaterialWhitelist.get()) {
 			try {
 				PLACEABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
@@ -106,7 +106,7 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency && CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockBreaking && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockBreaking.get() && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
@@ -149,7 +149,7 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.dungeonProtection.protectionSystemEnabled && CQRConfig.dungeonProtection.enablePreventBlockPlacing && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
+		if (CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockPlacing.get() && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
@@ -204,7 +204,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionTNTPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.enablePreventExplosionTNT) {
+		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) {
 			return false;
 		}
 
@@ -229,7 +229,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionOtherPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.enablePreventExplosionOther) {
+		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get()) {
 			return false;
 		}
 
@@ -272,8 +272,8 @@ public class ProtectedRegionHelper {
 		}
 
 		boolean flag = explosion.getExploder() instanceof TNTEntity;
-		boolean flag1 = (flag && CQRConfig.dungeonProtection.enablePreventExplosionTNT) || (!flag && CQRConfig.dungeonProtection.enablePreventExplosionOther);
-		boolean flag2 = CQRConfig.dungeonProtection.protectionSystemEnabled && flag1;
+		boolean flag1 = (flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) || (!flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get());
+		boolean flag2 = CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && flag1;
 
 		if (flag2) {
 			BlockPos pos = new BlockPos(explosion.getPosition());
@@ -306,7 +306,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isFireSpreadingPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.enablePreventFireSpreading) {
+		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventFireSpreading.get()) {
 			return false;
 		}
 
@@ -331,7 +331,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isEntitySpawningPrevented(World world, BlockPos pos) {
-		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.enablePreventEntitySpawning) {
+		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventEntitySpawning.get()) {
 			return false;
 		}
 

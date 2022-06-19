@@ -110,8 +110,8 @@ public class DungeonGrid {
 	public boolean isChunkOnGrid(World world, int chunkX, int chunkZ) {
 		int dungeonSeparation = this.getDistance();
 		// Check whether this chunk is farther north than the wall
-		if (CQRConfig.wall.enabled && chunkZ < -CQRConfig.wall.distance && CQRConfig.general.moreDungeonsBehindWall) {
-			dungeonSeparation = MathHelper.ceil(dungeonSeparation / CQRConfig.general.densityBehindWallFactor);
+		if (CQRConfig.SERVER_CONFIG.wall.enabled.get() && chunkZ < -CQRConfig.SERVER_CONFIG.wall.distance.get() && CQRConfig.SERVER_CONFIG.general.moreDungeonsBehindWall.get()) {
+			dungeonSeparation = MathHelper.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
 		}
 		int dungeonSpread = Math.min(this.getSpread() + 1, dungeonSeparation);
 
@@ -171,7 +171,7 @@ public class DungeonGrid {
 	}
 
 	private static void log(World world, int chunkX, int chunkZ, String message, Object... params) {
-		if (!CQRConfig.advanced.debugDungeonGen) {
+		if (!CQRConfig.SERVER_CONFIG.advanced.debugDungeonGen.get()) {
 			return;
 		}
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));

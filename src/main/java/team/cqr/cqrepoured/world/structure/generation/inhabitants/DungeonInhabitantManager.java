@@ -68,7 +68,7 @@ public class DungeonInhabitantManager {
 	}
 
 	private void loadDistantMapping() {
-		for (String s : CQRConfig.general.defaultInhabitantConfig) {
+		for (String s : CQRConfig.SERVER_CONFIG.general.defaultInhabitantConfig.get()) {
 			String[] entries = s.split(",");
 			List<String> tmpList = new ArrayList<>();
 			for (String s1 : entries) {
@@ -97,7 +97,7 @@ public class DungeonInhabitantManager {
 		double x1 = (double) blockX - DungeonGenUtils.getSpawnX(world);
 		double z1 = (double) blockZ - DungeonGenUtils.getSpawnZ(world);
 		int distToSpawn = (int) Math.sqrt(x1 * x1 + z1 * z1);
-		int index = distToSpawn / CQRConfig.mobs.mobTypeChangeDistance;
+		int index = distToSpawn / (int)(double)CQRConfig.SERVER_CONFIG.mobs.mobTypeChangeDistance.get();
 
 		if (index >= this.distantMapping.size()) {
 			index = this.random.nextInt(this.distantMapping.size());

@@ -48,14 +48,14 @@ public class CQStructure {
 	private BlockPos size = BlockPos.ZERO;
 	private String author = "";
 
-	private CQStructure() {
+	public CQStructure() {
 
 	}
 
 	public static void cacheFiles() {
 		CACHED_STRUCTURES.clear();
 
-		if (!CQRConfig.advanced.cacheStructureFiles) {
+		if (!CQRConfig.SERVER_CONFIG.advanced.cacheStructureFiles.get()) {
 			return;
 		}
 
@@ -71,10 +71,10 @@ public class CQStructure {
 		});
 
 		long fileSizeSum = 0;
-		for (int i = 0; i < fileList.size() && i < CQRConfig.advanced.cachedStructureFilesMaxAmount; i++) {
+		for (int i = 0; i < fileList.size() && i < CQRConfig.SERVER_CONFIG.advanced.cachedStructureFilesMaxAmount.get(); i++) {
 			File file = fileList.get(i);
 			long fileSize = file.length();
-			if (fileSizeSum + fileSize < CQRConfig.advanced.cachedStructureFilesMaxSize * 1000) {
+			if (fileSizeSum + fileSize < CQRConfig.SERVER_CONFIG.advanced.cachedStructureFilesMaxSize.get() * 1000) {
 				CACHED_STRUCTURES.put(file, createFromFile(file));
 				fileSizeSum += fileSize;
 			}
@@ -331,14 +331,14 @@ public class CQStructure {
 
 	public static void updateSpecialEntities() {
 		CQStructure.SPECIAL_ENTITIES.clear();
-		for (String s : CQRConfig.advanced.specialEntities) {
+		for (String s : CQRConfig.SERVER_CONFIG.advanced.specialEntities.get()) {
 			CQStructure.SPECIAL_ENTITIES.add(new ResourceLocation(s));
 		}
 	}
 
 	@Deprecated
 	public static void checkAndUpdateStructureFiles() {
-		if (!CQRConfig.advanced.checkAndUpdateDeprecatedStructureFiles) {
+		if (!CQRConfig.SERVER_CONFIG.advanced.checkAndUpdateDeprecatedStructureFiles.get()) {
 			return;
 		}
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true);

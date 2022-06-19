@@ -172,7 +172,7 @@ public class LootTableLoader {
 				List<WeightedItemStack> items = getItemList(properties);
 				LootTable newLootTable = LootTable.EMPTY;
 
-				if (CQRConfig.general.singleLootPoolPerLootTable) {
+				if (CQRConfig.SERVER_CONFIG.general.singleLootPoolPerLootTable.get()) {
 					StandaloneLootEntry.Builder[] entries = new StandaloneLootEntry.Builder[items.size()];
 					for (int i = 0; i < items.size(); i++) {
 						entries[i] = items.get(i).getAsLootEntry(i);
@@ -181,11 +181,11 @@ public class LootTableLoader {
 					LootPool.Builder poolBuilder = LootPool.lootPool()
 							.setRolls(RandomValueRange.between(
 									Math.min(
-											CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest
+											CQRConfig.SERVER_CONFIG.general.minItemsPerLootChest.get(), CQRConfig.SERVER_CONFIG.general.maxItemsPerLootChest.get()
 											), 
 									Math.min(
 											Math.max(
-													CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest
+													CQRConfig.SERVER_CONFIG.general.minItemsPerLootChest.get(), CQRConfig.SERVER_CONFIG.general.maxItemsPerLootChest.get()
 													),
 											items.size()
 											)

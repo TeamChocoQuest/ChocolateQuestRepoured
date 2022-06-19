@@ -186,7 +186,7 @@ public abstract class DungeonBase {
 
 		if (generateImmediately) {
 			DungeonGenerationManager.generateNow(world, generator.get(), this, spawnType);
-		} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
+		} else if (!CQRConfig.SERVER_CONFIG.advanced.multithreadedDungeonPreparation.get()) {
 			DungeonGenerationManager.generate(world, generator.get(), this, spawnType);
 		} else {
 			CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, generator);
@@ -246,7 +246,7 @@ public abstract class DungeonBase {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (this.spawnOnlyBehindWall && world.dimension() == World.OVERWORLD && CQRConfig.wall.enabled && pos.getZ() >> 4 < -CQRConfig.wall.distance) {
+		if (this.spawnOnlyBehindWall && world.dimension() == World.OVERWORLD && CQRConfig.SERVER_CONFIG.wall.enabled.get() && pos.getZ() >> 4 < -CQRConfig.SERVER_CONFIG.wall.distance.get()) {
 			return false;
 		}
 		if (!this.isValidBiome(biome)) {
@@ -350,7 +350,7 @@ public abstract class DungeonBase {
 	}
 
 	public boolean isStructureNearby(World world, BlockPos pos) {
-		if (!CQRConfig.advanced.generationRespectOtherStructures) {
+		if (!CQRConfig.SERVER_CONFIG.advanced.generationRespectOtherStructures.get()) {
 			return false;
 		}
 		for (String structure : this.structuresPreventingGeneration) {
