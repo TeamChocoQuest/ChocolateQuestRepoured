@@ -12,7 +12,7 @@ public class EntityAIPanicFire extends PanicGoal {
 
 	@Override
 	public boolean canUse() {
-		if (CQRConfig.mobs.disableFirePanicAI) {
+		if (CQRConfig.SERVER_CONFIG.mobs.disableFirePanicAI.get()) {
 			return false;
 		}
 		if (this.mob.fireImmune()) {

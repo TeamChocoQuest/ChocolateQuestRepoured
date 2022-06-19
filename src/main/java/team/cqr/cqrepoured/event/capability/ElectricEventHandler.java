@@ -130,7 +130,7 @@ public class ElectricEventHandler {
 			if (!spreader.canSee(entityLiving)) {
 				return false;
 			}
-			if (spreader.distanceTo(entityLiving) > CQRConfig.general.electricFieldEffectSpreadRange) {
+			if (spreader.distanceTo(entityLiving) > CQRConfig.SERVER_CONFIG.general.electricFieldEffectSpreadRange.get()) {
 				return false;
 			}
 			return !TargetUtil.isAllyCheckingLeaders(spreader, entityLiving);

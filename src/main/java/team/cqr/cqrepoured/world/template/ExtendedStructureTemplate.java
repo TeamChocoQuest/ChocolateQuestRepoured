@@ -1,19 +1,27 @@
 package team.cqr.cqrepoured.world.template;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class ExtendedStructureTemplate extends Template {
 	
+	private final CQStructure INNER_DATA_STRUCTURE = new CQStructure();
+	
 	public static final String CQR_VERSION_KEY = "cqr_file_version";
+	
+	protected final Set<BlockState> BLOCK_STATE_PALETTE = new HashSet<>();
 	
 	@Override
 	public void fillFromWorld(World world, BlockPos origin, BlockPos size, boolean saveEntities, Block blockToIgnore) {
@@ -27,6 +35,7 @@ public class ExtendedStructureTemplate extends Template {
 	}
 	
 	//Gets called by method above
+	//Generatse the blockinfos for placement => Performs rotations and translations and so on...
 	@Override
 	public List<BlockInfo> filterBlocks(BlockPos pPos, PlacementSettings pSettings, Block pBlock, boolean pRelativePosition) {
 		return super.filterBlocks(pPos, pSettings, pBlock, pRelativePosition);

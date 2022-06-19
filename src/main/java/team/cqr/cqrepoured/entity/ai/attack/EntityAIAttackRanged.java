@@ -116,14 +116,15 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 	}
 
 	protected float getStrafingSpeed() {
-		return (float) (this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
+		double val = (this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.SERVER_CONFIG.mobs.entityStrafingSpeed.get() : CQRConfig.SERVER_CONFIG.mobs.entityStrafingSpeedBoss.get());
+		return (float)val;
 	}
 
 	protected boolean canStrafe() {
 		if (!this.entity.canStrafe()) {
 			return false;
 		}
-		return this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
+		return this.entity instanceof AbstractEntityCQRBoss ? CQRConfig.SERVER_CONFIG.mobs.enableEntityStrafing.get() : CQRConfig.SERVER_CONFIG.mobs.enableEntityStrafingBoss.get();
 	}
 
 	protected void checkAndPerformAttack(LivingEntity attackTarget) {

@@ -20,8 +20,8 @@ public class EntityCQRPirate extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Pirate;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.pirate.get();
 	}
 
 	@Override

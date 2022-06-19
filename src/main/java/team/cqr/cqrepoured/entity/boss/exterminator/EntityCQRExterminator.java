@@ -191,7 +191,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Override
 	protected void registerGoals() {
-		if (CQRConfig.advanced.debugAI) {
+		if (CQRConfig.SERVER_CONFIG.advanced.debugAI.get()) {
 			//this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
@@ -292,8 +292,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Exterminatior;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.exterminatior.get();
 	}
 
 	@Override

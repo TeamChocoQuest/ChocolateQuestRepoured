@@ -1,5 +1,17 @@
 package team.cqr.cqrepoured.event.world.structure.protection;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
+
 import meldexun.reflectionutil.ReflectionField;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,26 +37,28 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
-import org.apache.commons.io.FileUtils;
+import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -53,13 +67,12 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectionConfig;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
-import team.cqr.cqrepoured.world.structure.protection.*;
+import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager.ProtectedRegionContainer;
-
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)
 public class ProtectedRegionEventHandler {
@@ -75,24 +88,24 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
-		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.PROXY.isOwnerOfIntegratedServer(event.player)) {
-			CQRMain.NETWORK.sendTo(new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection), (ServerPlayerEntity) event.player);
+		if (FMLCommonHandler.instance().getSide().isServer() || !CQRMain.PROXY.isOwnerOfIntegratedServer(event.getPlayer())) {
+			CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new SPacketSyncProtectionConfig(CQRConfig.dungeonProtection));
 		}
 
-		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.getPlayer().level);
 		if (protectedRegionManager == null) {
 			return;
 		}
-		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.player);
+		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.getPlayer());
 	}
 
 	@SubscribeEvent
 	public static void onPlayerChangedDimensionEvent(PlayerChangedDimensionEvent event) {
-		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.getPlayer().level);
 		if (protectedRegionManager == null) {
 			return;
 		}
-		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.player);
+		syncProtectedRegions(protectedRegionManager, (ServerPlayerEntity) event.getPlayer());
 	}
 	
 	@SubscribeEvent
@@ -102,8 +115,8 @@ public class ProtectedRegionEventHandler {
 		if(griefingFuck == null || griefingFuck instanceof AbstractEntityCQR) {
 			return;
 		}
-		World world = griefingFuck.world;
-		BlockPos pos = griefingFuck.getPosition();
+		World world = griefingFuck.level;
+		BlockPos pos = griefingFuck.blockPosition();
 
 		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, griefingFuck, true, true)) {
 			event.setCanceled(true);
@@ -120,7 +133,7 @@ public class ProtectedRegionEventHandler {
 			int sum = 0;
 			for (int i = 0; i < list.size(); i++) {
 				ProtectedRegion protectedRegion = list.get(i);
-				BlockPos size = protectedRegion.getEndPos().subtract(protectedRegion.getStartPos()).add(1, 1, 1);
+				BlockPos size = protectedRegion.getEndPos().subtract(protectedRegion.getStartPos()).offset(1, 1, 1);
 				int j = size.getX() * size.getY() * size.getZ();
 				if (sum + j > 10_000_000) {
 					CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(list1, firstPacket), player);
@@ -246,10 +259,10 @@ public class ProtectedRegionEventHandler {
 		BlockPos offsetPos = pos.offset(event.getFace());
 
 		if (event.getWorld().getBlockState(offsetPos).getBlock() == Blocks.FIRE) {
-			if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, offsetPos, player, false, true, null)) {
+			if (ProtectedRegionHelper.isBlockBreakingPrevented(player.level, offsetPos, player, false, true, null)) {
 				event.setCanceled(true);
 			}
-		} else if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true, event.getFace())) {
+		} else if (ProtectedRegionHelper.isBlockBreakingPrevented(player.level, pos, player, false, true, event.getFace())) {
 			event.setCanceled(true);
 		}
 	}
@@ -283,7 +296,7 @@ public class ProtectedRegionEventHandler {
 		PlayerEntity player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
 
-		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.world, pos, player, false, true)) {
+		if (ProtectedRegionHelper.isBlockBreakingPrevented(player.level, pos, player, false, true)) {
 			event.setCanceled(true);
 		}
 	}
@@ -307,7 +320,7 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onLivingDeathEvent(LivingDeathEvent event) {
 		Entity entity = event.getEntity();
-		World world = entity.world;
+		World world = entity.level;
 		UUID uuid = entity.getPersistentID();
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 

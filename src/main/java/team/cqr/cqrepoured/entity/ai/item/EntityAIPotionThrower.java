@@ -62,7 +62,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 				this.entity.swing(Hand.OFF_HAND);
 				this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
-				if (CQRConfig.mobs.offhandPotionsAreSingleUse) {
+				if (CQRConfig.SERVER_CONFIG.mobs.offhandPotionsAreSingleUse.get()) {
 					stack.shrink(1);
 				}
 

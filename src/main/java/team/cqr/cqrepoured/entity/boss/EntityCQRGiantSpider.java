@@ -208,7 +208,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			int effectlvl = 1;
 			if (this.getRandom().nextDouble() > 0.7) {
 				effectlvl = 2;
-				this.heal(Math.min(CQRConfig.bosses.giantSpiderMaxHealByBite, ((LivingEntity) entityIn).getHealth() * 0.25F));
+				this.heal(Math.min((float)(double)CQRConfig.SERVER_CONFIG.bosses.giantSpiderMaxHealByBite.get(), ((LivingEntity) entityIn).getHealth() * 0.25F));
 			}
 			((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.POISON, 20 + entityIn.level.getDifficulty().ordinal() * 40, effectlvl));
 		}
@@ -216,8 +216,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.GiantSpider;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.giantSpider.get();
 	}
 
 	@Override

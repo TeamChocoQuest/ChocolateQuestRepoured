@@ -49,7 +49,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	}
 
 	@Override
-	public float getBaseHealth() {
+	public double getBaseHealth() {
 		return 200.0F;
 	}
 

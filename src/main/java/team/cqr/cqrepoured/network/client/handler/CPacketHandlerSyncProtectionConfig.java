@@ -14,7 +14,8 @@ public class CPacketHandlerSyncProtectionConfig extends AbstractPacketHandler<SP
 
 	@Override
 	protected void execHandlePacket(SPacketSyncProtectionConfig message, Supplier<Context> context, World world, PlayerEntity player) {
-		CQRConfig.dungeonProtection = message.getProtectionConfig();
+		//TODO: Implement again
+		CQRConfig.SERVER_CONFIG.dungeonProtection = message.getProtectionConfig();
 		ProtectedRegionHelper.updateWhitelists();
 	}
 

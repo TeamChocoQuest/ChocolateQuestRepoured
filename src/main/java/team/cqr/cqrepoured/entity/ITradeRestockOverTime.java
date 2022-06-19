@@ -17,7 +17,7 @@ public interface ITradeRestockOverTime {
 	public boolean hasTrades();
 	
 	public default void updateTradeRestockTimer() {
-		if(CQRConfig.mobs.enableTradeRestockOverTime && this instanceof Entity) {
+		if(CQRConfig.SERVER_CONFIG.mobs.enableTradeRestockOverTime.get() && this instanceof Entity) {
 			if(!this.hasTrades()) {
 				return;
 			}
@@ -28,8 +28,8 @@ public interface ITradeRestockOverTime {
 				return;
 			}
 			final long delta = ticksExisted - lastTimed;
-			int restocks = (int) Math.floorDiv(delta, CQRConfig.mobs.tradeRestockTime);
-			restocks = Math.min(restocks, CQRConfig.mobs.maxAutoRestocksOverTime);
+			int restocks = (int) Math.floorDiv(delta, CQRConfig.SERVER_CONFIG.mobs.tradeRestockTime.get());
+			restocks = Math.min(restocks, CQRConfig.SERVER_CONFIG.mobs.maxAutoRestocksOverTime.get());
 			if(delta > 0 && restocks > 0) {
 				if(this.getTrades() != null) {
 					TraderOffer offer = this.getTrades();

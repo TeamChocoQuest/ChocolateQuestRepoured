@@ -17,8 +17,8 @@ public class EntityCQRDummy extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Dummy;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.dummy.get();
 	}
 
 	@Override

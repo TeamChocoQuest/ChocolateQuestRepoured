@@ -125,7 +125,7 @@ public class ProjectileHotFireball extends ProjectileBase {
 	@Override
 	protected void onHitBlock(BlockRayTraceResult result) {
 		super.onHitBlock(result);
-		this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 3.0F, CQRConfig.bosses.hotFireballsDestroyTerrain ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+		this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 3.0F, CQRConfig.SERVER_CONFIG.bosses.hotFireballsDestroyTerrain.get() ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 		this.remove();
 	}
 

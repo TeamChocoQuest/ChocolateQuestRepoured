@@ -259,7 +259,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public void enableBossBar() {
 		if (!this.level.isClientSide && this.bossInfoServer == null) {
 			this.bossInfoServer = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-			this.bossInfoServer.setVisible(CQRConfig.bosses.enableBossBars);
+			this.bossInfoServer.setVisible(CQRConfig.SERVER_CONFIG.bosses.enableBossBars.get());
 		}
 	}
 
@@ -337,7 +337,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		// Start IceAndFire compatibility
-		if (CQRConfig.advanced.enableSpecialFeatures && source.getEntity() != null) {
+		if (CQRConfig.SERVER_CONFIG.advanced.enableSpecialFeatures.get() && source.getEntity() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getEntity());
 			if (resLoc != null && resLoc.getNamespace().equalsIgnoreCase("iceandfire")) {
 				amount *= 0.5F;
@@ -367,7 +367,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				this.lastTickShieldDisabled = this.tickCount;
 			} else {
 				this.damageBlockedWithShield += amount;
-				if (this.damageBlockedWithShield >= CQRConfig.general.damageBlockedByShield) {
+				if (this.damageBlockedWithShield >= CQRConfig.SERVER_CONFIG.general.damageBlockedByShield.get()) {
 					this.damageBlockedWithShield = 0.0F;
 					this.lastTickShieldDisabled = this.tickCount;
 				}
@@ -376,7 +376,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 		boolean flag = super.hurt(source, amount);
 
-		if (flag && CQRConfig.mobs.armorShattersOnMobs) {
+		if (flag && CQRConfig.SERVER_CONFIG.mobs.armorShattersOnMobs.get()) {
 			this.handleArmorBreaking();
 		}
 
@@ -423,15 +423,15 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 
 	protected boolean damageCapEnabled() {
-		return CQRConfig.mobs.enableDamageCapForNonBossMobs;
+		return CQRConfig.SERVER_CONFIG.mobs.enableDamageCapForNonBossMobs.get();
 	}
 
 	protected float maxDamageInPercentOfMaxHP() {
-		return CQRConfig.mobs.maxUncappedDamageInMaxHPPercent;
+		return (float)(double)CQRConfig.SERVER_CONFIG.mobs.maxUncappedDamageInMaxHPPercent.get();
 	}
 
 	protected float maxUncappedDamage() {
-		return CQRConfig.mobs.maxUncappedDamageForNonBossMobs;
+		return (float)(double)CQRConfig.SERVER_CONFIG.mobs.maxUncappedDamageForNonBossMobs.get();
 	}
 
 	private float handleDamageCap(DamageSource source, float originalAmount) {
@@ -479,7 +479,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@Override
 	protected void registerGoals() {
-		if (CQRConfig.advanced.debugAI) {
+		if (CQRConfig.SERVER_CONFIG.advanced.debugAI.get()) {
 			//TODO: AI Selectors are final now, change this or not?
 			//this.goalSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
 			//this.targetSelector = new EntityAITasksProfiled((IProfiler) this.level.getProfiler(), this.level);
@@ -563,10 +563,10 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			this.spawnAtLocation(stack1, 0.0F);
 		}
 
-		double modalValue = CQRConfig.mobs.dropDurabilityModalValue;
-		double standardDeviation = CQRConfig.mobs.dropDurabilityStandardDeviation;
-		double min = Math.min(CQRConfig.mobs.dropDurabilityMinimum, modalValue);
-		double max = Math.max(CQRConfig.mobs.dropDurabilityMaximum, modalValue);
+		double modalValue = CQRConfig.SERVER_CONFIG.mobs.dropDurabilityModalValue.get();
+		double standardDeviation = CQRConfig.SERVER_CONFIG.mobs.dropDurabilityStandardDeviation.get();
+		double min = Math.min(CQRConfig.SERVER_CONFIG.mobs.dropDurabilityMinimum.get(), modalValue);
+		double max = Math.max(CQRConfig.SERVER_CONFIG.mobs.dropDurabilityMaximum.get(), modalValue);
 
 		for (EquipmentSlotType entityequipmentslot : EquipmentSlotType.values()) {
 			ItemStack itemstack = this.getItemBySlot(entityequipmentslot);
@@ -1061,7 +1061,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			i += EnchantmentHelper.getKnockbackBonus(this);
 		}
 		// Start IceAndFire compatibility
-		if (CQRConfig.advanced.enableSpecialFeatures) {
+		if (CQRConfig.SERVER_CONFIG.advanced.enableSpecialFeatures.get()) {
 			ResourceLocation resLoc = EntityList.getKey(entityIn);
 			if (resLoc != null && resLoc.getNamespace().equalsIgnoreCase("iceandfire")) {
 				f *= 2.0F;
@@ -1212,14 +1212,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		return this.getHomePositionCQR() != null;
 	}
 
-	public abstract float getBaseHealth();
+	public abstract double getBaseHealth();
 
 	public void setBaseHealthDependingOnPos(BlockPos pos) {
-		if (CQRConfig.mobs.enableHealthChangeOnDistance && !this.level.isClientSide) {
+		if (CQRConfig.SERVER_CONFIG.mobs.enableHealthChangeOnDistance.get() && !this.level.isClientSide) {
 			double x = (double) pos.getX() - DungeonGenUtils.getSpawnX(this.level);
 			double z = (double) pos.getZ() - DungeonGenUtils.getSpawnZ(this.level);
 			double distance = Math.sqrt(x * x + z * z);
-			double amount = 0.1D * (int) (distance / CQRConfig.mobs.distanceDivisor);
+			double amount = 0.1D * (int) (distance / CQRConfig.SERVER_CONFIG.mobs.distanceDivisor.get());
 
 			EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_DISTANCE_TO_SPAWN_ID, "Health Scale Distance To Spawn", amount);
 		}
@@ -1360,7 +1360,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public void updateReputationOnDeath(DamageSource cause) {
 		if (cause.getEntity() instanceof PlayerEntity && this.hasFaction() && !this.level.isClientSide) {
 			PlayerEntity player = (PlayerEntity) cause.getEntity();
-			int range = CQRConfig.mobs.factionUpdateRadius;
+			double range = CQRConfig.SERVER_CONFIG.mobs.factionUpdateRadius.get();
 			final Vector3d rangeVec = new Vector3d(range, range, range);
 			AxisAlignedBB aabb = new AxisAlignedBB(player.position().subtract(rangeVec), player.position().add(rangeVec));
 

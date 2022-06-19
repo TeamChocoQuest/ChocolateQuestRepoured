@@ -21,8 +21,8 @@ public class EntityCQRIllager extends AbstractEntityCQR implements IAnimatableCQ
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Illager;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.illager.get();
 	}
 
 	@Override

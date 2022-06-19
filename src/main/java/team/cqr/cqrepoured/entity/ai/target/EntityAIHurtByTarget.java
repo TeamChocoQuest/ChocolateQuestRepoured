@@ -78,7 +78,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		double x = this.entity.getX();
 		double y = this.entity.getY() + this.entity.getEyeHeight();
 		double z = this.entity.getZ();
-		double r = CQRConfig.mobs.alertRadius;
+		double r = CQRConfig.SERVER_CONFIG.mobs.alertRadius.get();
 		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
 		List<AbstractEntityCQR> allies = this.world.getEntitiesOfClass(AbstractEntityCQR.class, aabb, this::isSuitableAlly);
 		for (AbstractEntityCQR ally : allies) {

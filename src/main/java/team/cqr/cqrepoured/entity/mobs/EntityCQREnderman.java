@@ -100,8 +100,8 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Enderman;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.enderman.get();
 	}
 
 	@Override

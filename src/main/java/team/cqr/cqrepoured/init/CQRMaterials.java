@@ -58,7 +58,7 @@ public class CQRMaterials {
 
 		private static CQRExtendedItemTier createExtendedItemTier(IItemTier tier, ExtendedItemTierConfig config)
 		{
-			return new CQRExtendedItemTier(tier, config.getFixedAttackDamageBonus(), config.getAttackSpeedBonus(), config.getMovementSpeedBonus());
+			return new CQRExtendedItemTier(tier, config/*config.fixedAttackDamageBonus.get(), config.attackSpeedBonus.get(), config.movementSpeedBonus.get()*/);
 		}
 
 	}

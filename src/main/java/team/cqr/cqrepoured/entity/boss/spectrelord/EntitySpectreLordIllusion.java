@@ -106,7 +106,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public float getBaseHealth() {
+	public double getBaseHealth() {
 		return 20.0F;
 	}
 

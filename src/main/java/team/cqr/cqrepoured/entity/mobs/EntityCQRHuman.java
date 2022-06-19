@@ -17,8 +17,8 @@ public class EntityCQRHuman extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Human;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.human.get();
 	}
 
 	@Override

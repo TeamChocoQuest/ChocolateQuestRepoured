@@ -21,8 +21,8 @@ public class EntityCQRSkeleton extends AbstractEntityCQR implements IAnimatableC
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Skeleton;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.skeleton.get();
 	}
 
 	@Override

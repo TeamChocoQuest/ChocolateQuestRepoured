@@ -42,6 +42,7 @@ import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMessages;
+import team.cqr.cqrepoured.init.CQRRecipeTypes;
 import team.cqr.cqrepoured.init.CQRStructureProcessors;
 import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.mixinutil.PartEntityCache;
@@ -169,6 +170,7 @@ public class CQRMain {
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
 		CQREnchantments.registerEnchantments();
+		CQRRecipeTypes.register(bus);
 		
 		//TODO: Change so the actual values of the files get loaded LATER
 		//DungeonRegistry.getInstance().loadDungeonFiles();
@@ -224,7 +226,7 @@ public class CQRMain {
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "2.0.0");
 
-		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
+		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.SERVER_CONFIG.general.reinstallDefaultConfigs.get()) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
 		} else {
 			ConfigBackupHandler.checkAndBackupConfigs();

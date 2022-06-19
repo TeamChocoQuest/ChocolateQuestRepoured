@@ -21,8 +21,8 @@ public class EntityCQRZombie extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Zombie;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.zombie.get();
 	}
 
 	@Override

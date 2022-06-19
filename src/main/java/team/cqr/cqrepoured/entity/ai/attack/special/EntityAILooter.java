@@ -63,7 +63,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			BlockPos pos = this.entity.blockPosition();
 			Vector3d vec = this.entity.getEyePosition(1.0F);
-			int horizontalRadius = CQRConfig.mobs.looterAIChestSearchRange;
+			int horizontalRadius = CQRConfig.SERVER_CONFIG.mobs.looterAIChestSearchRange.get();
 			int verticalRadius = horizontalRadius >> 1;
 			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.getBbHeight()) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
 				if (this.visitedChests.contains(mutablePos)) {
@@ -125,7 +125,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			// TODO: let it stay open
 			if (this.currentLootingTime >= 0) {
 				this.currentLootingTime--;
-				if (this.currentLootingTime % (this.LOOTING_DURATION / CQRConfig.mobs.looterAIStealableItems) == 0) {
+				if (this.currentLootingTime % (this.LOOTING_DURATION / CQRConfig.SERVER_CONFIG.mobs.looterAIStealableItems.get()) == 0) {
 					ItemStack stolenItem = null;
 					for (int i = 0; i < tile.getContainerSize(); i++) {
 						if (!tile.getItem(i).isEmpty() && tile.getItem(i).getItem() != Items.BREAD) {

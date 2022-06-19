@@ -52,14 +52,14 @@ public class EventsHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
-		if (event.getName().getNamespace().equals(CQRMain.MODID) && !CQRConfig.general.preventOtherModLoot) {
+		if (event.getName().getNamespace().equals(CQRMain.MODID) && !CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
 			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onLootTableLoadPost(LootTableLoadEvent event) {
-		if (event.getName().getNamespace().equals(CQRMain.MODID) && CQRConfig.general.preventOtherModLoot) {
+		if (event.getName().getNamespace().equals(CQRMain.MODID) && CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
 			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 		}
 		LootTableLoader.freezeLootTable();
@@ -210,7 +210,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
-		if (CQRConfig.mobs.blockCancelledByAxe) {
+		if (CQRConfig.SERVER_CONFIG.mobs.blockCancelledByAxe.get()) {
 			PlayerEntity player = event.getPlayer();
 			World world = player.level;
 
@@ -226,9 +226,9 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
-		if (CQRConfig.bosses.antiCowardMode && event.getPlayer() != null && !event.getPlayer().isCreative()) {
+		if (CQRConfig.SERVER_CONFIG.bosses.antiCowardMode.get() && event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			BlockPos pos = event.getPlayer().blockPosition();
-			int radius = CQRConfig.bosses.antiCowardRadius;
+			int radius = CQRConfig.SERVER_CONFIG.bosses.antiCowardRadius.get();
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.offset(-radius, -radius / 2, -radius), pos.offset(radius, radius / 2, radius));
 			event.setCanceled(!event.getWorld().getEntitiesOfClass(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}
@@ -236,9 +236,9 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
-		if (CQRConfig.bosses.preventBlockPlacingNearBosses && event.getEntity() != null && (!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity) event.getEntity()).isCreative())) {
+		if (CQRConfig.SERVER_CONFIG.bosses.preventBlockPlacingNearBosses.get() && event.getEntity() != null && (!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity) event.getEntity()).isCreative())) {
 			BlockPos pos = event.getEntity().blockPosition();
-			int radius = CQRConfig.bosses.antiCowardRadius;
+			int radius = CQRConfig.SERVER_CONFIG.bosses.antiCowardRadius.get();
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.offset(-radius, -radius / 2, -radius), pos.offset(radius, radius / 2, radius));
 			event.setCanceled(!event.getWorld().getEntitiesOfClass(AbstractEntityCQRBoss.class, aabb).isEmpty());
 		}

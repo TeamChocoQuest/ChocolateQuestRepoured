@@ -177,8 +177,8 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return 2F * CQRConfig.baseHealths.Enderman;
+	public double getBaseHealth() {
+		return 2F * CQRConfig.SERVER_CONFIG.baseHealths.enderman.get();
 	}
 
 	@Override

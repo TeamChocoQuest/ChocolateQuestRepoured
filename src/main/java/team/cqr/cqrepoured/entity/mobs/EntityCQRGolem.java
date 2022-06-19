@@ -26,8 +26,8 @@ public class EntityCQRGolem extends AbstractEntityCQR implements IMechanical, IA
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Golem;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.golem.get();
 	}
 
 	@Override

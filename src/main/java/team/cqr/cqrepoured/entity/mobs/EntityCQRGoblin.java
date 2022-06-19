@@ -20,8 +20,8 @@ public class EntityCQRGoblin extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Goblin;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.goblin.get();
 	}
 
 	@Override

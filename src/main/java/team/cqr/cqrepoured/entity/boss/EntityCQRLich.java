@@ -120,8 +120,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Lich;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.lich.get();
 	}
 
 	@Override

@@ -465,7 +465,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 					this.setDeltaMovement(Vector3d.ZERO);
 					this.setLatchedEntity(entityHit);
 					this.setLatchedPos(v.subtract(entityHit.getX(), entityHit.getY(), entityHit.getZ()));
-					if (CQRConfig.general.hookOnlyPullsSmallerEntities) {
+					if (CQRConfig.SERVER_CONFIG.general.hookOnlyPullsSmallerEntities.get()) {
 						double sizeOwner = this.getOwner().getBbWidth() * this.getOwner().getBbHeight() * 1.25D;
 						double sizeHit = entityHit.getBbWidth() * entityHit.getBbHeight();
 						if (sizeOwner >= sizeHit || entityHit instanceof PartEntity) {

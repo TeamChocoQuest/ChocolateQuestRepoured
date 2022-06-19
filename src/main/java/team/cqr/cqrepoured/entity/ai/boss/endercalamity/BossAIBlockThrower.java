@@ -139,7 +139,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		if (this.world instanceof ServerWorld && CQRConfig.bosses.calamityBlockEquipParticles) {
+		if (this.world instanceof ServerWorld && CQRConfig.SERVER_CONFIG.bosses.calamityBlockEquipParticles.get()) {
 			ServerWorld ws = (ServerWorld) this.world;
 			Vector3d pos = this.getPositionOfHand(hand);
 			double dx = -0.5 + this.entity.getRandom().nextDouble();

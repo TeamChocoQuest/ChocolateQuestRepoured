@@ -21,8 +21,8 @@ public class EntityCQRDwarf extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Dwarf;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.dwarf.get();
 	}
 
 	@Override

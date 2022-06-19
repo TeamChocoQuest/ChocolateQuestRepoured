@@ -22,8 +22,8 @@ public class EntityCQRTriton extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Triton;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.triton.get();
 	}
 
 	@Override

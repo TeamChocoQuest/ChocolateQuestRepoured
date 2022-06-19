@@ -109,8 +109,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Boarmage;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.boarmage.get();
 	}
 
 	@Override

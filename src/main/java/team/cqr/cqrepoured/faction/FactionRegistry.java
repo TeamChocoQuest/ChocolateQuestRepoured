@@ -120,7 +120,7 @@ public class FactionRegistry {
 	}
 
 	private void loadEntityFactionRelations() {
-		for (String s : CQRConfig.general.entityFactionRelation) {
+		for (String s : CQRConfig.SERVER_CONFIG.general.entityFactionRelation.get()) {
 			int i = s.indexOf('=');
 			if (i == -1) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Format is incorrect!", s);
@@ -255,7 +255,7 @@ public class FactionRegistry {
 			return FactionRegistry.DUMMY_FACTION;
 		}
 
-		if (CQRConfig.advanced.enableOldFactionMemberTeams) {
+		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
 			if (entity.getTeam() != null) {
 				Faction teamFaction = this.factions.get(entity.getTeam().getName());
 				if (teamFaction != null) {

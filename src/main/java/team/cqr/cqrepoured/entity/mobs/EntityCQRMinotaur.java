@@ -20,8 +20,8 @@ public class EntityCQRMinotaur extends AbstractEntityCQR implements IAnimatableC
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Minotaur;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.minotaur.get();
 	}
 
 	@Override

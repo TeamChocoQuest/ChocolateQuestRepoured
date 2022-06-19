@@ -26,8 +26,8 @@ public class EntityCQRWalker extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.AbyssWalker;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.abyssWalker.get();
 	}
 
 	@Override

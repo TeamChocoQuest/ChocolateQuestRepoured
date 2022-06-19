@@ -163,8 +163,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Necromancer;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.necromancer.get();
 	}
 
 	@Override

@@ -25,8 +25,8 @@ public class EntityCQRMandril extends AbstractEntityCQR implements IAnimatableCQ
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Mandril;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.mandril.get();
 	}
 
 	@Override

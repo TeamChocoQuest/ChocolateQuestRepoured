@@ -83,8 +83,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setColor(Color.PURPLE);
-			this.bossInfoServer.setCreateWorldFog(CQRConfig.bosses.enableWalkerKingFog);
-			this.bossInfoServer.setDarkenScreen(CQRConfig.bosses.enableWalkerKingFog);
+			this.bossInfoServer.setCreateWorldFog(CQRConfig.SERVER_CONFIG.bosses.enableWalkerKingFog.get());
+			this.bossInfoServer.setDarkenScreen(CQRConfig.SERVER_CONFIG.bosses.enableWalkerKingFog.get());
 			this.bossInfoServer.setPlayBossMusic(true);
 		}
 	}
@@ -240,7 +240,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 	}
 
 	private void handleAttackedByDragon(Entity dragon) {
-		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /* && (getRNG().nextInt(100) +1) > 95 */) {
+		if (CQRConfig.SERVER_CONFIG.advanced.enableSpecialFeatures.get() && dragon.getControllingPassenger() != null /* && (getRNG().nextInt(100) +1) > 95 */) {
 			if (dragon instanceof MobEntity && dragon.getControllingPassenger() instanceof LivingEntity) {
 				dragon.getControllingPassenger().unRide();
 				// ((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
@@ -310,7 +310,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 		 * boolean spectralFlag = false; if (source.getTrueSource() instanceof EntityLivingBase) { if (EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemMainhand()) > 0 ||
 		 * EnchantmentHelper.getEnchantmentLevel(CQREnchantments.SPECTRAL, ((EntityLivingBase) source.getTrueSource()).getHeldItemOffhand()) > 0) { amount *= 2; spectralFlag = true; } }
 		 */
-		if (/* !spectralFlag && */((source.getDirectEntity() == null) || !(source.getDirectEntity() instanceof SpectralArrowEntity)) && !CQRConfig.bosses.armorForTheWalkerKing) {
+		if (/* !spectralFlag && */((source.getDirectEntity() == null) || !(source.getDirectEntity() instanceof SpectralArrowEntity)) && !CQRConfig.SERVER_CONFIG.bosses.armorForTheWalkerKing.get()) {
 			amount *= 0.5F;
 		}
 
@@ -333,7 +333,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 			ResourceLocation resLoc = EntityList.getKey(source.getEntity());
 			if (resLoc != null) {
 				// Start IceAndFire compatibility
-				boolean flag = resLoc.getNamespace().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				boolean flag = resLoc.getNamespace().equalsIgnoreCase("iceandfire") && CQRConfig.SERVER_CONFIG.advanced.enableSpecialFeatures.get();
 				if (flag) {
 					amount /= 2;
 				}
@@ -469,8 +469,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.AbyssWalkerKing;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.abyssWalkerKing.get();
 	}
 
 	@Override
@@ -514,7 +514,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN.get(), 1));
 
 		// Give him some armor...
-		if (CQRConfig.bosses.armorForTheWalkerKing) {
+		if (CQRConfig.SERVER_CONFIG.bosses.armorForTheWalkerKing.get()) {
 			CompoundNBT nbttagcompound = new CompoundNBT();
 			CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
 

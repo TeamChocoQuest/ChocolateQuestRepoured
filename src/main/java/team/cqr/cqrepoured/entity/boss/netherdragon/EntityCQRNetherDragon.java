@@ -80,7 +80,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * fire or shoot fireballs
 	 */
 
-	public final int INITIAL_SEGMENT_COUNT = CQRConfig.bosses.netherDragonLength;
+	public final int INITIAL_SEGMENT_COUNT = CQRConfig.SERVER_CONFIG.bosses.netherDragonLength.get();
 	public final int SEGMENT_COUNT_ON_DEATH = 4;
 	public int segmentCount = this.INITIAL_SEGMENT_COUNT;
 	/*
@@ -88,7 +88,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 */
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
-	private float damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
+	private float damageTmpPhaseTwo = CQRConfig.SERVER_CONFIG.bosses.netherDragonStageTwoSegmentHP.get();
 	private int fireballTimer = 240;
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
@@ -149,7 +149,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public static void reloadBreakableBlocks() {
 		breakableBlocks.clear();
-		for (String s : CQRConfig.bosses.netherDragonBreakableBlocks) {
+		for (String s : CQRConfig.SERVER_CONFIG.bosses.netherDragonBreakableBlocks.get()) {
 			ResourceLocation rs = new ResourceLocation(s);
 			breakableBlocks.add(rs);
 		}
@@ -239,7 +239,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private void handleAttackedInSkeletalPhase(float damage, final DamageSource source) {
 		this.damageTmpPhaseTwo -= damage;
 		if (this.damageTmpPhaseTwo <= 0) {
-			this.damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
+			this.damageTmpPhaseTwo = CQRConfig.SERVER_CONFIG.bosses.netherDragonStageTwoSegmentHP.get();
 			// DONE: Remove last segment
 			damage = this.getMaxHealth() / (this.INITIAL_SEGMENT_COUNT - this.SEGMENT_COUNT_ON_DEATH);
 			this.setHealth(this.getHealth() - damage);
@@ -321,8 +321,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.NetherDragon;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.netherDragon.get();
 	}
 
 	@Override
@@ -443,7 +443,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		this.fireballTimer--;
 		if (!this.level.isClientSide && this.phase > 1 && this.fireballTimer <= 0) {
-			this.fireballTimer = CQRConfig.bosses.netherDragonStageTwoFireballInterval;
+			this.fireballTimer = CQRConfig.SERVER_CONFIG.bosses.netherDragonStageTwoFireballInterval.get();
 			this.shootFireballFromBody();
 		}
 
@@ -548,7 +548,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.dead || !(this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) || this.level.isClientSide) {
+		if (!CQRConfig.SERVER_CONFIG.bosses.netherDragonDestroysBlocks.get() || this.dead || !(this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) || this.level.isClientSide) {
 			return false;
 		}
 

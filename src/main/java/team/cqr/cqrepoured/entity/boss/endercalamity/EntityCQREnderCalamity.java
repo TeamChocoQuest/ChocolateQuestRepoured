@@ -505,8 +505,8 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.EnderCalamity;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.enderCalamity.get();
 	}
 
 	@Override

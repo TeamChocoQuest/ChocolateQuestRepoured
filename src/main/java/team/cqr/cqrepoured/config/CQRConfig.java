@@ -219,6 +219,7 @@ public class CQRConfig {
 	}
 
 	public static class Bosses {
+		//TODO: Move boss specific options to own classes
 
 		public final BooleanValue blackListBossesFromIaFGorgonHead;
 		public final BooleanValue antiCowardMode;
@@ -234,6 +235,7 @@ public class CQRConfig {
 		public final BooleanValue netherDragonDestroysBlocks;
 		public final IntValue netherDragonStageTwoFireballInterval;
 		public final IntValue netherDragonStageTwoSegmentHP;
+		//TODO: Replace with block tag
 		public final ConfigValue<List<? extends String>> netherDragonBreakableBlocks;
 
 		public final DoubleValue pirateCaptainFleeCheckRadius;
@@ -241,6 +243,7 @@ public class CQRConfig {
 		public final BooleanValue boarmageExplosionRayDestroysTerrain;
 		public final BooleanValue boarmageExplosionAreaDestroysTerrain;
 
+		//TODO: Replace with block tag
 		public final ConfigValue<List<? extends String>> giantTortoiseHardBlocks;
 
 		public final DoubleValue giantSpiderMaxHealByBite;
@@ -417,7 +420,7 @@ public class CQRConfig {
 		public final BooleanValue enableEntityStrafingBoss;
 		public final DoubleValue entityStrafingSpeed;
 		public final DoubleValue entityStrafingSpeedBoss;
-		public final DoubleValue looterAIChestSearchRange;
+		public final IntValue looterAIChestSearchRange;
 		public final IntValue looterAIStealableItems;
 
 		public final BooleanValue offhandPotionsAreSingleUse;
@@ -449,7 +452,7 @@ public class CQRConfig {
 			this.enableEntityStrafingBoss = builder.comment("").define("enableEntityStrafingBoss", true);
 			this.entityStrafingSpeed = builder.comment("").defineInRange("entityStrafingSpeed", 0.5D, 0.0D, Double.MAX_VALUE);
 			this.entityStrafingSpeedBoss = builder.comment("").defineInRange("entityStrafingSpeedBoss", 0.5D, 0.0D, Double.MAX_VALUE);
-			this.looterAIChestSearchRange = builder.comment("").defineInRange("looterAIChestSearchRange", 16.0D, 0.0D, Double.MAX_VALUE);
+			this.looterAIChestSearchRange = builder.comment("").defineInRange("looterAIChestSearchRange", 16, 0, Integer.MAX_VALUE);
 			this.looterAIStealableItems = builder.comment("").defineInRange("looterAIStealableItems", 4, 0, Integer.MAX_VALUE);
 			this.offhandPotionsAreSingleUse = builder.comment("").define("offhandPotionsAreSingleUse", true);
 			this.enableDamageCapForNonBossMobs = builder.comment("").define("enableDamageCapForNonBossMobs", false);

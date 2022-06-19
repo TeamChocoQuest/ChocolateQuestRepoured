@@ -20,8 +20,8 @@ public class EntityCQRGremlin extends AbstractEntityCQR implements IAnimatableCQ
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Gremlin;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.gremlin.get();
 	}
 
 	@Override

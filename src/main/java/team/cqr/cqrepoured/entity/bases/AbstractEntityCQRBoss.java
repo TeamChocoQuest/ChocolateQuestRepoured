@@ -34,7 +34,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			}
 		}
 		for (int i = 0; i < nearbyPlayerCount - 1; i++) {
-			amount *= 1.0F - CQRConfig.mobs.bossDamageReductionPerPlayer;
+			amount *= 1.0F - CQRConfig.SERVER_CONFIG.mobs.bossDamageReductionPerPlayer.get();
 		}
 		return super.hurt(source, amount, sentFromPart);
 	}
@@ -54,7 +54,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 
 	@Override
 	public void tick() {
-		if (this.canHealWhenIdling() && CQRConfig.bosses.enableHealthRegen && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.tickCount && this.tickCount % 5 == 0) {
+		if (this.canHealWhenIdling() && CQRConfig.SERVER_CONFIG.bosses.enableHealthRegen.get() && !this.hasAttackTarget() && this.lastTickWithAttackTarget + 100 < this.tickCount && this.tickCount % 5 == 0) {
 			this.heal(this.getMaxHealth() * 0.005F);
 		}
 		super.tick();
@@ -133,22 +133,22 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	// Damage cap stuff
 	@Override
 	protected boolean damageCapEnabled() {
-		return CQRConfig.bossDamageCaps.enableDamageCapForBosses;
+		return CQRConfig.SERVER_CONFIG.bossDamageCaps.enableDamageCapForBosses.get();
 	}
 
 	@Override
 	protected float maxDamageInPercentOfMaxHP() {
-		return CQRConfig.bossDamageCaps.maxDamageInPercentOfMaxHP;
+		return (float)(double)CQRConfig.SERVER_CONFIG.bossDamageCaps.maxDamageInPercentOfMaxHP.get();
 	}
 
 	@Override
 	protected float maxUncappedDamage() {
-		return CQRConfig.bossDamageCaps.maxUncappedDamage;
+		return (float)(double)CQRConfig.SERVER_CONFIG.bossDamageCaps.maxUncappedDamage.get();
 	}
 
 	@Override
 	public boolean canBeTurnedToStone() {
-		return !CQRConfig.bosses.blackListBossesFromIaFGorgonHead;
+		return !CQRConfig.SERVER_CONFIG.bosses.blackListBossesFromIaFGorgonHead.get();
 	}
 
 	protected void spawnDeathPoofParticles() {

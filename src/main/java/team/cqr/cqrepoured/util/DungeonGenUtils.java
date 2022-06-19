@@ -139,7 +139,7 @@ public class DungeonGenUtils {
 
 	public static boolean isInWallRange(World world, int chunkX, int chunkZ) {
 		// Check if the wall is enabled
-		if (!CQRConfig.wall.enabled) {
+		if (!CQRConfig.SERVER_CONFIG.wall.enabled.get()) {
 			return false;
 		}
 		// Check if the world is the overworld
@@ -147,10 +147,10 @@ public class DungeonGenUtils {
 			return false;
 		}
 		// Check the coordinates
-		if (chunkZ < -CQRConfig.wall.distance - 12) {
+		if (chunkZ < -CQRConfig.SERVER_CONFIG.wall.distance.get() - 12) {
 			return false;
 		}
-		return chunkZ <= -CQRConfig.wall.distance + 12;
+		return chunkZ <= -CQRConfig.SERVER_CONFIG.wall.distance.get() + 12;
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
@@ -160,7 +160,7 @@ public class DungeonGenUtils {
 		}
 		int x = chunkX - (getSpawnX(world) >> 4);
 		int z = chunkZ - (getSpawnZ(world) >> 4);
-		return x * x + z * z >= CQRConfig.general.dungeonSpawnDistance * CQRConfig.general.dungeonSpawnDistance;
+		return x * x + z * z >= CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get() * CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get();
 	}
 
 	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int distance) {

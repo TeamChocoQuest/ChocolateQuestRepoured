@@ -1,14 +1,15 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import java.util.Iterator;
+
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
-
-import java.util.Iterator;
 
 public class EntityAITasksProfiled extends GoalSelector {
 
@@ -33,65 +34,65 @@ public class EntityAITasksProfiled extends GoalSelector {
 		this.profiler.push("goalSetup");
 
 		if (this.tickCount++ % this.tickRate == 0) {
-			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry : this.taskEntries) {
+			for (PrioritizedGoal entityaitasks$entityaitaskentry : this.availableGoals) {
 				long t = System.nanoTime();
 
-				if (entityaitasks$entityaitaskentry.using) {
+				if (entityaitasks$entityaitaskentry.isRunning()) {
 					if (!this.canUseCQR(entityaitasks$entityaitaskentry) || !this.canContinueCQR(entityaitasks$entityaitaskentry)) {
 						entityaitasks$entityaitaskentry.using = false;
-						entityaitasks$entityaitaskentry.action.stop();
+						entityaitasks$entityaitaskentry.getGoal().stop();
 						this.executingTaskEntries.remove(entityaitasks$entityaitaskentry);
 					}
-				} else if (this.canUseCQR(entityaitasks$entityaitaskentry) && entityaitasks$entityaitaskentry.action.canUse()) {
+				} else if (this.canUseCQR(entityaitasks$entityaitaskentry) && entityaitasks$entityaitaskentry.getGoal().canUse()) {
 					entityaitasks$entityaitaskentry.using = true;
-					entityaitasks$entityaitaskentry.action.start();
+					entityaitasks$entityaitaskentry.getGoal().start();
 					this.executingTaskEntries.add(entityaitasks$entityaitaskentry);
 				}
 
 				t = System.nanoTime() - t;
-				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry.action.getClass());
-				AI_TIMES.put(entityaitasks$entityaitaskentry.action.getClass(), t);
+				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry.getGoal().getClass());
+				AI_TIMES.put(entityaitasks$entityaitaskentry.getGoal().getClass(), t);
 			}
 		} else {
-			Iterator<GoalSelector.EntityAITaskEntry> iterator = this.executingTaskEntries.iterator();
+			Iterator<PrioritizedGoal> iterator = this.getRunningGoals().iterator();
 
 			while (iterator.hasNext()) {
-				GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry1 = iterator.next();
+				PrioritizedGoal entityaitasks$entityaitaskentry1 = iterator.next();
 
 				long t = System.nanoTime();
 
 				if (!this.canContinueCQR(entityaitasks$entityaitaskentry1)) {
 					entityaitasks$entityaitaskentry1.using = false;
-					entityaitasks$entityaitaskentry1.action.stop();
+					entityaitasks$entityaitaskentry1.getGoal().stop();
 					iterator.remove();
 				}
 
 				t = System.nanoTime() - t;
-				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry1.action.getClass());
-				AI_TIMES.put(entityaitasks$entityaitaskentry1.action.getClass(), t);
+				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry1.getGoal().getClass());
+				AI_TIMES.put(entityaitasks$entityaitaskentry1.getGoal().getClass(), t);
 			}
 		}
 
 		this.profiler.pop();
 
-		if (!this.executingTaskEntries.isEmpty()) {
+		if (this.getRunningGoals().count() > 0) {
 			this.profiler.push("goalTick");
 
-			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry2 : this.executingTaskEntries) {
+			this.getRunningGoals().forEach((entityaitasks$entityaitaskentry2) -> {
 				long t = System.nanoTime();
 
-				entityaitasks$entityaitaskentry2.action.tick();
+				entityaitasks$entityaitaskentry2.getGoal().tick();
 
 				t = System.nanoTime() - t;
-				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry2.action.getClass());
-				AI_TIMES.put(entityaitasks$entityaitaskentry2.action.getClass(), t);
-			}
+				t += AI_TIMES.getLong(entityaitasks$entityaitaskentry2.getGoal().getClass());
+				AI_TIMES.put(entityaitasks$entityaitaskentry2.getGoal().getClass(), t);
+			});
 
 			this.profiler.pop();
 		}
 
-		if (this.world.getTotalWorldTime() - lastTimeLogged > 200) {
-			lastTimeLogged = this.world.getTotalWorldTime();
+		if (this.world.getGameTime() - lastTimeLogged > 200) {
+			lastTimeLogged = this.world.getGameTime();
 
 			StringBuilder sb = new StringBuilder("AI Times: \n");
 			for (Object2LongMap.Entry<Class<? extends Goal>> entry : AI_TIMES.object2LongEntrySet()) {
@@ -124,18 +125,18 @@ public class EntityAITasksProfiled extends GoalSelector {
 	/**
 	 * Determine if a specific AI Task should continue being executed.
 	 */
-	private boolean canContinueCQR(GoalSelector.EntityAITaskEntry taskEntry) {
-		return taskEntry.action.canContinueToUse();
+	private boolean canContinueCQR(PrioritizedGoal taskEntry) {
+		return taskEntry.canContinueToUse();
 	}
 
 	/**
 	 * Determine if a specific AI Task can be executed, which means that all running higher (= lower int value) priority
 	 * tasks are compatible with it or all lower priority tasks can be interrupted.
 	 */
-	private boolean canUseCQR(GoalSelector.EntityAITaskEntry taskEntry) {
+	private boolean canUseCQR(PrioritizedGoal taskEntry) {
 		if (this.executingTaskEntries.isEmpty()) {
 			return true;
-		} else if (this.isControlFlagDisabled(taskEntry.action.getMutexBits())) {
+		} else if (this.isControlFlagDisabled(taskEntry.getGoal().getMutexBits())) {
 			return false;
 		} else {
 			for (GoalSelector.EntityAITaskEntry entityaitasks$entityaitaskentry : this.executingTaskEntries) {
@@ -157,8 +158,8 @@ public class EntityAITasksProfiled extends GoalSelector {
 	/**
 	 * Returns whether two EntityAITaskEntries can be executed concurrently
 	 */
-	private boolean areTasksCompatibleCQR(GoalSelector.EntityAITaskEntry taskEntry1, GoalSelector.EntityAITaskEntry taskEntry2) {
-		return (taskEntry1.action.getMutexBits() & taskEntry2.action.getMutexBits()) == 0;
+	private boolean areTasksCompatibleCQR(PrioritizedGoal taskEntry1, PrioritizedGoal taskEntry2) {
+		return (taskEntry1.getGoal().getMutexBits() & taskEntry2.getGoal().getMutexBits()) == 0;
 	}
 
 }

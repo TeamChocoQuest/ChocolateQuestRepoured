@@ -47,7 +47,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		super.start();
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRandom());
 		this.wallCounter = 0;
-		this.world.explode(this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 2, false, CQRConfig.bosses.boarmageExplosionRayDestroysTerrain ? Mode.DESTROY : Mode.NONE);
+		this.world.explode(this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 2, false, CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionRayDestroysTerrain.get() ? Mode.DESTROY : Mode.NONE);
 		Vector3d v = this.entity.position().subtract(this.entity.getTarget().position());
 		v = v.normalize().scale(5);
 		Vector3d p = this.entity.getTarget().position().subtract(v);

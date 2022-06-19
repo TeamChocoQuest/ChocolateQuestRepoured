@@ -45,7 +45,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	}
 
 	private boolean hasNearbyAllies() {
-		Vector3d vec = new Vector3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vector3d vec = new Vector3d(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
 		Vector3d v1 = this.entity.position().add(vec);
 		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
@@ -66,7 +66,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	public void castSpell() {
 		super.castSpell();
 
-		Vector3d vec = new Vector3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
+		Vector3d vec = new Vector3d(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
 		Vector3d v1 = this.entity.position().add(vec);
 		Vector3d v2 = this.entity.position().subtract(vec);
 		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);

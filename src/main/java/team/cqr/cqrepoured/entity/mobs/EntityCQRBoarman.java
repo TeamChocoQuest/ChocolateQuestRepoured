@@ -21,8 +21,8 @@ public class EntityCQRBoarman extends AbstractEntityCQR implements IAnimatableCQ
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Boarman;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.boarman.get();
 	}
 
 	@Override

@@ -19,8 +19,8 @@ public class EntityCQRSpectre extends AbstractEntityCQR implements IAnimatableCQ
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Spectre;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.spectre.get();
 	}
 
 	@Override

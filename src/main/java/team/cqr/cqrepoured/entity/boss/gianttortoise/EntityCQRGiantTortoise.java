@@ -144,7 +144,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	public static void realoadHardBlocks() {
 		hardBlocks.clear();
-		for (String s : CQRConfig.bosses.giantTortoiseHardBlocks) {
+		for (String s : CQRConfig.SERVER_CONFIG.bosses.giantTortoiseHardBlocks.get()) {
 			ResourceLocation rs = new ResourceLocation(s);
 			hardBlocks.add(rs);
 		}
@@ -299,8 +299,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.GiantTortoise;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.giantTortoise.get();
 	}
 
 	@Override

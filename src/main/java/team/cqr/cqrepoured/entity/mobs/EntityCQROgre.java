@@ -20,8 +20,8 @@ public class EntityCQROgre extends AbstractEntityCQR implements IAnimatableCQR {
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.Ogre;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.ogre.get();
 	}
 
 	@Override

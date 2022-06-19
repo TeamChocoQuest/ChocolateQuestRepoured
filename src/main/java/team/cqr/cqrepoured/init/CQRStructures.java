@@ -48,19 +48,28 @@ public class CQRStructures {
 	public static void setupStructures() {
 		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
 		
+		DungeonRegistry.getInstance().loadDungeonFiles();
+		
 		//Now, load all dungeon configs and setup the spacing for them
-		for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
-			Structure<?> structure = new StructureDungeonCQR(null, false, dunConf);
-			RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
-			DUNGEON_ENTRIES.put(dunConf, regObj);
-			StructureSeparationSettings sepSettings;
-			if(dunConf.isUseVanillaSpreadSystem()) {
-				sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
-			} else {
-				sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+		try {
+			for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
+				//TODO: Create codec, it MUST NOT BE NULL!!
+				Structure<?> structure = new StructureDungeonCQR(null, false, dunConf);
+				RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
+				DUNGEON_ENTRIES.put(dunConf, regObj);
+				StructureSeparationSettings sepSettings;
+				if(dunConf.isUseVanillaSpreadSystem()) {
+					sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
+				} else {
+					sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+				}
+				setupMapSpacingAndLand(regObj.get(), sepSettings, dunConf.doBuildSupportPlatform());
 			}
-			setupMapSpacingAndLand(regObj.get(), sepSettings, dunConf.doBuildSupportPlatform());
+		} catch(Exception ex) {
+			//Yes, this is necessary. Without it the error is suppressed!
+			ex.printStackTrace();
 		}
+		Registry.STRUCTURE_FEATURE.forEach((s) -> System.out.println(s.getRegistryName().toString()));
     }
 
     static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {

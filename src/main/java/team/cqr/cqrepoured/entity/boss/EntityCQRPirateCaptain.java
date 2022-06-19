@@ -52,8 +52,8 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public float getBaseHealth() {
-		return CQRConfig.baseHealths.PirateCaptain;
+	public double getBaseHealth() {
+		return CQRConfig.SERVER_CONFIG.baseHealths.pirateCaptain.get();
 	}
 
 	@Override
