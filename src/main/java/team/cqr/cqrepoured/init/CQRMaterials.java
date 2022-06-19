@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.function.Supplier;
-
-import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -11,8 +8,6 @@ import team.cqr.cqrepoured.config.CQRArmorMaterial;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.config.CQRExtendedItemTier;
 import team.cqr.cqrepoured.config.CQRItemTier;
-import team.cqr.cqrepoured.config.ExtendedItemTierConfig;
-import team.cqr.cqrepoured.config.ItemTierConfig;
 
 public class CQRMaterials {
 
@@ -32,8 +27,8 @@ public class CQRMaterials {
 
 	}
 
-	public static class CQRItemTiers
-	{
+	public static class CQRItemTiers {
+
 		public static final CQRItemTier TOOL_BULL = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.bull, () -> Ingredient.of(CQRItems.LEATHER_BULL.get()));
 		public static final CQRItemTier TOOL_MONKING = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.monking, () -> Ingredient.of(CQRItems.BONE_MONKING.get()));
 		public static final CQRItemTier TOOL_MOONLIGHT = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.moonlight, () -> Ingredient.EMPTY);
@@ -55,11 +50,6 @@ public class CQRMaterials {
 
 		public static final CQRExtendedItemTier IRON_SPEAR = new CQRExtendedItemTier(ItemTier.IRON, CQRConfig.SERVER_CONFIG.materials.itemTiers.spear);
 		public static final CQRExtendedItemTier DIAMOND_SPEAR = new CQRExtendedItemTier(ItemTier.DIAMOND, CQRConfig.SERVER_CONFIG.materials.itemTiers.spear);
-
-		private static CQRExtendedItemTier createExtendedItemTier(IItemTier tier, ExtendedItemTierConfig config)
-		{
-			return new CQRExtendedItemTier(tier, config/*config.fixedAttackDamageBonus.get(), config.attackSpeedBonus.get(), config.movementSpeedBonus.get()*/);
-		}
 
 	}
 
