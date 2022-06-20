@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.item.sword;
 
+import java.util.List;
+import java.util.UUID;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,7 +14,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -21,16 +23,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.IEquipListener;
 import team.cqr.cqrepoured.item.ItemLore;
 
-import java.util.List;
-import java.util.UUID;
-
-public class ItemSwordMoonlight extends SwordItem implements IEquipListener {
+public class ItemSwordMoonlight extends ItemCQRWeapon implements IEquipListener {
 
 	protected static final UUID ATTACK_DAMAGE_MODIFIER = UUID.fromString("89ADDE87-B021-417C-9112-2E2C94CBB0D1");
 	private static final double DAMAGE_BONUS = 3.0D;
 
-	public ItemSwordMoonlight(IItemTier material, int attackDamage, Item.Properties props) {
-		super(material, attackDamage, material.getSpeed(), props);
+	public ItemSwordMoonlight(IItemTier material, Item.Properties props) {
+		super(material, props);
 	}
 
 	@Override

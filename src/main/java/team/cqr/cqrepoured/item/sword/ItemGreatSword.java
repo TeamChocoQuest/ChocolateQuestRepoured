@@ -1,37 +1,42 @@
 package team.cqr.cqrepoured.item.sword;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
-import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemGreatSword extends ItemCQRWeapon {
 
 	private final float specialAttackDamage;
 	private final int specialAttackCooldown;
 
-	//#TODO Materials
-	public ItemGreatSword(Properties props, IExtendedItemTier material, int cooldown)
-	{
-		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
+	public ItemGreatSword(Properties props, IItemTier material, int cooldown) {
+		super(material, props);
+		this.addAttributeModifiers(CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
 		this.specialAttackDamage = material.getAttackDamageBonus();
 		this.specialAttackCooldown = cooldown;
 	}
@@ -44,20 +49,20 @@ public class ItemGreatSword extends ItemCQRWeapon {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
-	{
+	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "great_sword");
-		/*if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.great_sword.name"));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
-		} */
+		/*
+		 * if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+		 * tooltip.add(TextFormatting.BLUE + I18n.format("description.great_sword.name"));
+		 * } else {
+		 * tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
+		 * }
+		 */
 	}
 
-	//#TODO Needs tests
+	// #TODO Needs tests
 	@Override
-	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft)
-	{
+	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
 		float range = 3F;
 		double mx = entityLiving.position().x - range;
 		double my = entityLiving.position().y - range;
@@ -95,12 +100,11 @@ public class ItemGreatSword extends ItemCQRWeapon {
 			x *= (1.0F - Math.abs(y));
 			z *= (1.0F - Math.abs(y));
 
-			if (player.isOnGround() && this.getUseDuration(stack) - timeLeft > 40)
-			{
+			if (player.isOnGround() && this.getUseDuration(stack) - timeLeft > 40) {
 				player.position().add(0.0D, 0.1D, 0.0D);
 				player.getDeltaMovement().add(0.0D, 0.35D, 0.0D);
-				//player.posY += 0.1D;
-				//player.motionY += 0.35D;
+				// player.posY += 0.1D;
+				// player.motionY += 0.35D;
 			}
 
 			player.getCooldowns().addCooldown(stack.getItem(), this.specialAttackCooldown);
@@ -112,28 +116,24 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack stack)
-	{
+	public int getUseDuration(ItemStack stack) {
 		return 72000;
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack stack)
-	{
+	public UseAction getUseAnimation(ItemStack stack) {
 		return UseAction.BOW;
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
-	{
+	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		playerIn.startUsingItem(handIn);
 		return ActionResult.success(stack);
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World level, Entity entity, int slot, boolean selected)
-	{
+	public void inventoryTick(ItemStack stack, World level, Entity entity, int slot, boolean selected) {
 		if (!(entity instanceof LivingEntity)) {
 			return;
 		}

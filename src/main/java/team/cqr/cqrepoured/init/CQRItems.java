@@ -65,29 +65,37 @@ import team.cqr.cqrepoured.item.staff.ItemStaffSpider;
 import team.cqr.cqrepoured.item.staff.ItemStaffThunder;
 import team.cqr.cqrepoured.item.staff.ItemStaffVampiric;
 import team.cqr.cqrepoured.item.staff.ItemStaffWind;
-import team.cqr.cqrepoured.item.sword.*;
+import team.cqr.cqrepoured.item.sword.ItemDagger;
+import team.cqr.cqrepoured.item.sword.ItemDaggerNinja;
+import team.cqr.cqrepoured.item.sword.ItemFakeSwordHealingStaff;
+import team.cqr.cqrepoured.item.sword.ItemGreatSword;
+import team.cqr.cqrepoured.item.sword.ItemSwordMoonlight;
+import team.cqr.cqrepoured.item.sword.ItemSwordSpider;
+import team.cqr.cqrepoured.item.sword.ItemSwordSunshine;
+import team.cqr.cqrepoured.item.sword.ItemSwordTurtle;
+import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
 
 public class CQRItems {
 
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRMain.MODID);
 
 	// Daggers
-	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.IRON_DAGGER, 25));
-	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamond", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.DIAMOND_DAGGER, 20));
-	public static final RegistryObject<ItemDaggerNinja> DAGGER_NINJA = register("dagger_ninja", prop -> new ItemDaggerNinja(prop, CQRMaterials.CQRItemTiers.NINJA_DAGGER, 15));
-	public static final RegistryObject<ItemDagger> DAGGER_MONKING = register("dagger_monking", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.MONKING_DAGGER, 10));
+	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, ItemTier.IRON, 25));
+	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamond", prop -> new ItemDagger(prop, ItemTier.DIAMOND, 20));
+	public static final RegistryObject<ItemDaggerNinja> DAGGER_NINJA = register("dagger_ninja", prop -> new ItemDaggerNinja(prop, CQRMaterials.CQRItemTiers.TOOL_NINJA, 15));
+	public static final RegistryObject<ItemDagger> DAGGER_MONKING = register("dagger_monking", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.TOOL_MONKING, 10));
 
 	// Swords
-	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = register("sword_turtle", prop -> new ItemSwordTurtle(CQRMaterials.CQRItemTiers.TOOL_TURTLE, 5, prop)); //#TODO tweak stats
-	public static final RegistryObject<ItemSwordSpider> SWORD_SPIDER = register("sword_spider", prop -> new ItemSwordSpider(CQRMaterials.CQRItemTiers.TOOL_SPIDER, 5, prop)); //TODO tweak stats
-	public static final RegistryObject<ItemSwordMoonlight> SWORD_MOONLIGHT = register("sword_moonlight", prop -> new ItemSwordMoonlight(CQRMaterials.CQRItemTiers.TOOL_MOONLIGHT, 5, prop)); //TODO
-	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = register("sword_sunshine", prop -> new ItemSwordSunshine(CQRMaterials.CQRItemTiers.TOOL_SUNSHINE, 5, prop)); //TODO Tweak
+	public static final RegistryObject<ItemSwordTurtle> SWORD_TURTLE = register("sword_turtle", prop -> new ItemSwordTurtle(CQRMaterials.CQRItemTiers.TOOL_TURTLE, prop));
+	public static final RegistryObject<ItemSwordSpider> SWORD_SPIDER = register("sword_spider", prop -> new ItemSwordSpider(CQRMaterials.CQRItemTiers.TOOL_SPIDER, prop));
+	public static final RegistryObject<ItemSwordMoonlight> SWORD_MOONLIGHT = register("sword_moonlight", prop -> new ItemSwordMoonlight(CQRMaterials.CQRItemTiers.TOOL_MOONLIGHT, prop));
+	public static final RegistryObject<ItemSwordSunshine> SWORD_SUNSHINE = register("sword_sunshine", prop -> new ItemSwordSunshine(CQRMaterials.CQRItemTiers.TOOL_SUNSHINE, prop));
 
 	// Battle Axes
-	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = register("battle_axe_bull", prop -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, 5, prop)); //TODO tweak stats
+	public static final RegistryObject<ItemBullBattleAxe> BATTLE_AXE_BULL = register("battle_axe_bull", prop -> new ItemBullBattleAxe(CQRMaterials.CQRItemTiers.TOOL_BULL, prop));
 
 	// Walker RegistryObject<Item>s
-	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = register("sword_walker", prop -> new ItemSwordWalker(CQRMaterials.CQRItemTiers.TOOL_WALKER, 5, prop)); //#TODO TWEAK STATS
+	public static final RegistryObject<ItemSwordWalker> SWORD_WALKER = register("sword_walker", prop -> new ItemSwordWalker(CQRMaterials.CQRItemTiers.TOOL_WALKER, prop));
 	public static final RegistryObject<ItemShieldWalkerKing> SHIELD_WALKER_KING = register("shield_walker_king", ItemShieldWalkerKing::new);
 
 	// Shields
@@ -117,14 +125,14 @@ public class CQRItems {
 	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = null;
 
 	// Great Swords
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.IRON_GREAT_SWORD, 30));
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = register("great_sword_diamond", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.DIAMOND_GREAT_SWORD, 25));
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = register("great_sword_bull", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.BULL_GREAT_SWORD, 20));
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = register("great_sword_monking", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.MONKING_GREAT_SWORD, 20));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, ItemTier.IRON, 30));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = register("great_sword_diamond", prop -> new ItemGreatSword(prop, ItemTier.DIAMOND, 25));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = register("great_sword_bull", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.TOOL_BULL, 20));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = register("great_sword_monking", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.TOOL_MONKING, 20));
 
 	// Spears
-	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = register("spear_diamond", prop -> new ItemSpearBase(prop, CQRMaterials.CQRItemTiers.DIAMOND_SPEAR));
-	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = register("spear_iron", prop -> new ItemSpearBase(prop, CQRMaterials.CQRItemTiers.IRON_SPEAR));
+	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = register("spear_diamond", prop -> new ItemSpearBase(prop, ItemTier.DIAMOND));
+	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = register("spear_iron", prop -> new ItemSpearBase(prop, ItemTier.IRON));
 
 	// Staves
 	public static final RegistryObject<ItemStaff> STAFF = register("staff", ItemStaff::new);
@@ -133,7 +141,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemStaffWind> STAFF_WIND = register("staff_wind", ItemStaffWind::new); // #TODO DESCRIPTION
 	public static final RegistryObject<ItemStaffPoison> STAFF_POISON = register("staff_poison", ItemStaffPoison::new); // #TODO DESCRIPTION
 	public static final RegistryObject<ItemStaffHealing> STAFF_HEALING = register("staff_healing", ItemStaffHealing::new);
-	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = register("diamond_sword_fake_healing_staff", props -> new ItemFakeSwordHealingStaff(ItemTier.DIAMOND, 0, 0.0F, props)); //#TODO tweak values
+	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = register("diamond_sword_fake_healing_staff", props -> new ItemFakeSwordHealingStaff(ItemTier.DIAMOND, props));
 	public static final RegistryObject<ItemStaffThunder> STAFF_THUNDER = register("staff_thunder", ItemStaffThunder::new);
 	public static final RegistryObject<ItemStaffSpider> STAFF_SPIDER = register("staff_spider", ItemStaffSpider::new);
 	public static final RegistryObject<ItemStaffGun> STAFF_GUN = register("staff_gun", ItemStaffGun::new); // #TODO TEXTURES

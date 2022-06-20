@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
@@ -20,12 +21,11 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemDaggerNinja extends ItemDagger {
 
-	public ItemDaggerNinja(Properties props, IExtendedItemTier material, int cooldown) {
+	public ItemDaggerNinja(Properties props, IItemTier material, int cooldown) {
 		super(props, material, cooldown);
 	}
 	

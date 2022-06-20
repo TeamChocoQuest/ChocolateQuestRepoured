@@ -1,6 +1,16 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
@@ -8,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -32,9 +43,6 @@ import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
-
-import java.util.*;
-import java.util.function.Function;
 
 public class ItemUtil {
 
@@ -82,15 +90,35 @@ public class ItemUtil {
 		return false;
 	}
 
-	public static void replaceModifier(Multimap<Attribute, AttributeModifier> modifierMultimap, Attribute attribute, UUID id, Function<Double, Double> function) {
-		Collection<AttributeModifier> modifiers = modifierMultimap.values();
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getId().equals(id)).findFirst();
+	/**
+	 * @see ItemUtil#join(Collection)
+	 */
+	@SafeVarargs
+	public static Multimap<Attribute, AttributeModifier> join(Multimap<Attribute, AttributeModifier>... multimaps) {
+		return join(Arrays.asList(multimaps));
+	}
 
-		if (modifierOptional.isPresent()) {
-			AttributeModifier modifier = modifierOptional.get();
-			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getId(), modifier.getName(), function.apply(modifier.getAmount()), modifier.getOperation()));
-		}
+	/**
+	 * Constructs a new {@link Multimap} with the contents of all passed multimaps. Every attribute modifier is merged with
+	 * all attribute modifiers of the other multimaps which target the same attribute and use the same operation.
+	 */
+	public static Multimap<Attribute, AttributeModifier> join(Collection<Multimap<Attribute, AttributeModifier>> multimaps) {
+		ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+		SetMultimap<Attribute, Operation> used = HashMultimap.create();
+
+		multimaps.forEach(multimap -> multimap.forEach((attribute, modifier) -> {
+			if (!used.put(attribute, modifier.getOperation()))
+				return;
+			Operation operation = modifier.getOperation();
+			double amount = multimaps.stream()
+					.flatMap(multimap1 -> multimap1.get(attribute).stream())
+					.filter(modifier1 -> modifier1.getOperation() == operation)
+					.mapToDouble(modifier1 -> modifier1.getAmount())
+					.reduce(0.0D, (x, y) -> operation == Operation.MULTIPLY_TOTAL ? (1.0D + x) * (1.0D + y) - 1.0D : x + y);
+			builder.put(attribute, new AttributeModifier(modifier.getId(), modifier.getName(), amount, operation));
+		}));
+
+		return builder.build();
 	}
 
 	/**

@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.item.ItemTier;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvents;
 import team.cqr.cqrepoured.config.CQRArmorMaterial;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.config.CQRExtendedItemTier;
 import team.cqr.cqrepoured.config.CQRItemTier;
 
 public class CQRMaterials {
@@ -37,19 +35,6 @@ public class CQRMaterials {
 		public static final CQRItemTier TOOL_SUNSHINE = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.sunshine, () -> Ingredient.EMPTY);
 		public static final CQRItemTier TOOL_TURTLE = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.turtle, () -> Ingredient.of(CQRItems.SCALE_TURTLE.get()));
 		public static final CQRItemTier TOOL_WALKER = new CQRItemTier(CQRConfig.SERVER_CONFIG.materials.itemTiers.walker, () -> Ingredient.EMPTY);
-
-		public static final CQRExtendedItemTier IRON_DAGGER = new CQRExtendedItemTier(ItemTier.IRON, CQRConfig.SERVER_CONFIG.materials.itemTiers.dagger);
-		public static final CQRExtendedItemTier DIAMOND_DAGGER = new CQRExtendedItemTier(ItemTier.DIAMOND, CQRConfig.SERVER_CONFIG.materials.itemTiers.dagger);
-		public static final CQRExtendedItemTier NINJA_DAGGER = new CQRExtendedItemTier(TOOL_NINJA, CQRConfig.SERVER_CONFIG.materials.itemTiers.dagger);
-		public static final CQRExtendedItemTier MONKING_DAGGER = new CQRExtendedItemTier(TOOL_MONKING, CQRConfig.SERVER_CONFIG.materials.itemTiers.dagger);
-
-		public static final CQRExtendedItemTier IRON_GREAT_SWORD = new CQRExtendedItemTier(ItemTier.IRON, CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
-		public static final CQRExtendedItemTier DIAMOND_GREAT_SWORD = new CQRExtendedItemTier(ItemTier.DIAMOND, CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
-		public static final CQRExtendedItemTier BULL_GREAT_SWORD = new CQRExtendedItemTier(TOOL_BULL, CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
-		public static final CQRExtendedItemTier MONKING_GREAT_SWORD = new CQRExtendedItemTier(TOOL_MONKING, CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
-
-		public static final CQRExtendedItemTier IRON_SPEAR = new CQRExtendedItemTier(ItemTier.IRON, CQRConfig.SERVER_CONFIG.materials.itemTiers.spear);
-		public static final CQRExtendedItemTier DIAMOND_SPEAR = new CQRExtendedItemTier(ItemTier.DIAMOND, CQRConfig.SERVER_CONFIG.materials.itemTiers.spear);
 
 	}
 

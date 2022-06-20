@@ -183,10 +183,10 @@ public class CQRConfig {
 		public final ItemTierConfig turtle;
 		public final ItemTierConfig walker;
 
-		public final ExtendedItemTierConfig dagger;
-		public final ExtendedItemTierConfig great_sword;
+		public final AttributeConfig dagger;
+		public final AttributeConfig great_sword;
 		// TODO movement speed bonus is reach distance for spear, why?
-		public final ExtendedItemTierConfig spear;
+		public final AttributeConfig spear;
 
 		/*
 		 * public final IntValue daggerAttackDamageBonus = -1;
@@ -210,9 +210,16 @@ public class CQRConfig {
 			this.turtle = new ItemTierConfig(builder, "turtle", 2048, 0.0F, 5.0F, 0, 10);
 			this.walker = new ItemTierConfig(builder, "walker", 2048, 0.0F, 5.0F, 0, 10);
 
-			this.dagger = new ExtendedItemTierConfig(builder, "dagger", -1.0F, 0.4F, 0.05D);
-			this.great_sword = new ExtendedItemTierConfig(builder, "great_sword", 3.0F, -0.4F, 0.0D);
-			this.spear = new ExtendedItemTierConfig(builder, "spear", 1.0F, 0.0F, 1.0D);
+			this.dagger = new AttributeConfig(builder, "dagger", () -> Arrays.asList(
+					"generic.attack_damage,Attack Damage,-1.0,0",
+					"generic.attack_speed,Attack Speed,0.4,0",
+					"generic.movement_speed,Movement Speed,0.05,2"));
+			this.great_sword = new AttributeConfig(builder, "great_sword", () -> Arrays.asList(
+					"generic.attack_damage,Attack Damage,3.0,0",
+					"generic.attack_speed,Attack Speed,-0.4,0"));
+			this.spear = new AttributeConfig(builder, "spear", () -> Arrays.asList(
+					"generic.attack_damage,Attack Damage,1.0,0",
+					"forge:reach_distance,Attack Range,1.0,0"));
 			builder.pop();
 		}
 

@@ -1,21 +1,27 @@
 package team.cqr.cqrepoured.item.spear;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IItemTier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -26,30 +32,24 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeMod;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRPotions;
-import team.cqr.cqrepoured.item.IExtendedItemTier;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.item.sword.ItemCQRWeapon;
 import team.cqr.cqrepoured.util.ItemUtil;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Copyright (c) 20.12.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class ItemSpearBase extends ItemCQRWeapon {
 
-	private static final UUID REACH_DISTANCE_MODIFIER = UUID.fromString("95dd73a8-c715-42f9-8f6d-abf5e40fa3cd");
 	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private final double reachDistanceBonus;
 
-	public ItemSpearBase(Properties props, IExtendedItemTier material) {
-		super(material, material.getFixedAttackDamageBonus(), material.getAttackSpeedBonus(), props);
-		this.reachDistanceBonus = material.getMovementSpeedBonus(); //#TODO PROBABLY NEEDS TO BE TWEAKED
+	public ItemSpearBase(Properties props, IItemTier material) {
+		super(material, props);
+		this.addAttributeModifiers(CQRConfig.SERVER_CONFIG.materials.itemTiers.spear);
+		this.reachDistanceBonus = 1; // TODO PROBABLY NEEDS TO BE TWEAKED
 	}
 
 	public double getReach() {
@@ -66,16 +66,6 @@ public class ItemSpearBase extends ItemCQRWeapon {
 		return true;
 	}
 
-	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-		Multimap<Attribute, AttributeModifier> ret = LinkedHashMultimap.create(super.getAttributeModifiers(slot, stack));
-		 Attribute reachDistance = ForgeMod.REACH_DISTANCE.get(); //ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation("forge", "reach_distance"));
-         if(reachDistance != null && slot == EquipmentSlotType.MAINHAND)
-             ret.put(reachDistance, new AttributeModifier(REACH_DISTANCE_MODIFIER, "Weapon modifier", this.reachDistanceBonus, Operation.ADDITION));
-   
-        return ret;
-	}
-
 	// Makes the right click a "charge attack" action
 	@Override
 	public UseAction getUseAnimation(ItemStack stack) {
@@ -88,7 +78,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 		playerIn.startUsingItem(handIn);
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);
 	}
-	
+
 	@Override
 	public int getUseDuration(ItemStack stack) {
 		return 72000;
@@ -123,7 +113,8 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			}
 		}
 	}
-	//#TODO needs tests
+
+	// #TODO needs tests
 	private <T extends Entity> List<T> getEntities(World world, Class<T> entityClass, @Nullable T toIgnore, Vector3d vec1, Vector3d vec2, double range, @Nullable Predicate<T> predicate) {
 		List<T> list = new ArrayList<>();
 		Vector3d vec3 = vec1.add(vec2.normalize().scale(range));
@@ -139,8 +130,7 @@ public class ItemSpearBase extends ItemCQRWeapon {
 			AxisAlignedBB aabb2 = entity.getBoundingBox().inflate(entity.getPickRadius());
 			Optional opt = aabb2.clip(vec1, vec4);
 
-			if (opt.isPresent())
-			{
+			if (opt.isPresent()) {
 				list.add(entity);
 			}
 		}

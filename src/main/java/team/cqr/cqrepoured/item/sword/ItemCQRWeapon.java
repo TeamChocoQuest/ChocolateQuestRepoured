@@ -1,55 +1,45 @@
 package team.cqr.cqrepoured.item.sword;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Multimap;
-import net.minecraft.client.util.ITooltipFlag;
+
+import meldexun.reflectionutil.ReflectionField;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-
-import java.util.List;
+import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemCQRWeapon extends SwordItem {
 
-	// private static final UUID CQR_ATTACK_DAMAGE_MODIFIER = UUID.fromString("2636acdb-9693-428f-8eb3-328f9bb05ed2");
-	// private static final UUID CQR_ATTACK_SPEED_MODIFIER = UUID.fromString("e97e2edc-f024-4b1d-a832-17ae497ea18b");
-	//private final double attackDamageBonus;
-	//private final double attackSpeedBonus;
-	//private final Multimap<Attribute, AttributeModifier> attributeModifier;
+	private static final ReflectionField<Multimap<Attribute, AttributeModifier>> DEFAULT_MODIFIERS = new ReflectionField<>(SwordItem.class, "defaultModifiers", "field_234810_b_");
+	private final List<Supplier<Multimap<Attribute, AttributeModifier>>> attributeModifierSuppliers = new ArrayList<>();
+	// TODO reset on config change
+	private Multimap<Attribute, AttributeModifier> defaultModifiers;
 
-	public ItemCQRWeapon(IItemTier material, int attackDamage, Item.Properties props) {
-		this(material, attackDamage, material.getSpeed(), props);
+	public ItemCQRWeapon(IItemTier tier, Item.Properties properties) {
+		super(tier, 3, -2.4F, properties);
+		this.addAttributeModifiers(() -> DEFAULT_MODIFIERS.get(this));
 	}
-	
-	public ItemCQRWeapon(IItemTier material, int attackDamageBonus, float attackSpeedBonus, Item.Properties itemProps) {
-		super(material, attackDamageBonus, attackSpeedBonus, itemProps);
-		//this.attackDamageBonus = attackDamageBonus;
-		//this.attackSpeedBonus = attackSpeedBonus;
-	} //#TODO check
+
+	@SuppressWarnings("unchecked")
+	public <T extends ItemCQRWeapon> T addAttributeModifiers(Supplier<Multimap<Attribute, AttributeModifier>> attributeModifierSupplier) {
+		this.attributeModifierSuppliers.add(attributeModifierSupplier);
+		return (T) this;
+	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType slot) {
-		return super.getDefaultAttributeModifiers(slot);
-		/*Multimap<Attribute, AttributeModifier> modifiers = super.getDefaultAttributeModifiers(slot);
-		if (slot == EquipmentSlotType.MAINHAND) {
-			if (this.attackDamageBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, Attributes.ATTACK_DAMAGE, BASE_ATTACK_DAMAGE_UUID, oldValue -> (oldValue + this.attackDamageBonus));
-			}
-			if (this.attackSpeedBonus != 0.0D) {
-				ItemUtil.replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, oldValue -> (oldValue + this.attackSpeedBonus));
-			}
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType pEquipmentSlot) {
+		if (defaultModifiers == null) {
+			defaultModifiers = ItemUtil.join(attributeModifierSuppliers.stream().map(Supplier::get).collect(Collectors.toList()));
 		}
-		return modifiers; */
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		super.appendHoverText(stack, worldIn, tooltip, flagIn);
+		return pEquipmentSlot == EquipmentSlotType.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
 	}
 
 }
