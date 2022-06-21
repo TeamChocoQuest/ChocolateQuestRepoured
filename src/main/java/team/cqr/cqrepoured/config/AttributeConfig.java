@@ -39,7 +39,7 @@ public class AttributeConfig implements Supplier<Multimap<Attribute, AttributeMo
 			if (!(s instanceof String)) {
 				return false;
 			}
-			String[] a = ((String) s).split(",");
+			String[] a = ((String) s).trim().split("\\s*,\\s*");
 			if (a.length != 4) {
 				return false;
 			}
