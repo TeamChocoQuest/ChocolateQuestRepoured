@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
+import java.util.function.Function;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.AbstractCQRLayerGeo;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-import java.util.function.Function;
-
-public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> extends AbstractCQRLayerGeo<T>{
+public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerGeo<T>{
 
 	public LayerMagicArmorGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);

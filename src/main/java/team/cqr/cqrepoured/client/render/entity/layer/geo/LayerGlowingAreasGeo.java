@@ -9,11 +9,11 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
+import software.bernie.geckolib3.renderers.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
-import team.cqr.cqrepoured.client.render.entity.layer.AbstractCQRLayerGeo;
-import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 
-public class LayerGlowingAreasGeo<T extends MobEntity & IAnimatable> extends AbstractCQRLayerGeo<T> {
+public class LayerGlowingAreasGeo<T extends MobEntity & IAnimatable> extends AbstractLayerGeo<T> {
 
 	public LayerGlowingAreasGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);

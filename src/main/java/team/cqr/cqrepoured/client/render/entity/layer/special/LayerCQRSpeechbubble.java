@@ -10,13 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.AbstractCQRLayerGeo;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> extends AbstractCQRLayerGeo<T> {
+public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerGeo<T> {
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
