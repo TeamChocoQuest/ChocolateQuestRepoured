@@ -136,12 +136,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 

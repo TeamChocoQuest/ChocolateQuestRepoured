@@ -71,12 +71,12 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	}*/
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRExterminator currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRExterminator currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRExterminator currentEntity) {
 		// Unused
 	}
 

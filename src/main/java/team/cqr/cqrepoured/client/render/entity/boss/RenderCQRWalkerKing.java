@@ -15,6 +15,7 @@ import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelWalkerKingGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerBossDeathGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
+import team.cqr.cqrepoured.client.render.texture.InvisibilityTexture;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 
 public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKing> {
@@ -56,7 +57,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 			if(this.renderingDeathSecondRenderCycle) {
 				return RenderType.entityDecal(this.getTextureLocation(animatable));
 			}
-			return RenderType.dragonExplosionAlpha(this.getTextureLocation(animatable), f2);
+			return RenderType.dragonExplosionAlpha(InvisibilityTexture.get(this.getTextureLocation(animatable)), f2);
 		}
 		return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
@@ -87,7 +88,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
 		
 	}
 
@@ -97,7 +98,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
 		
 	}
 

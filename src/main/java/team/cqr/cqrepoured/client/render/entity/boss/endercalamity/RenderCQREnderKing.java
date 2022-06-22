@@ -56,7 +56,7 @@ public class RenderCQREnderKing extends RenderCQRBipedBaseGeo<EntityCQREnderKing
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQREnderKing currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
 		
 	}
 
@@ -66,7 +66,7 @@ public class RenderCQREnderKing extends RenderCQRBipedBaseGeo<EntityCQREnderKing
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQREnderKing currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
 		
 	}
 
