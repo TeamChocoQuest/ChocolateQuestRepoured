@@ -293,6 +293,13 @@ public class FactionRegistry {
 	public Faction getFactionInstance(String factionName) {
 		return this.factions.get(factionName);
 	}
+	
+	public Faction getFactionInstanceOrDefault(String factionName, final Faction defaultResult) {
+		if(factionName == null) {
+			return defaultResult;
+		}
+		return this.factions.getOrDefault(factionName, defaultResult);
+	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, Faction faction) {
 		return EReputationStateRough.getByRepuScore(this.getExactReputationOf(playerID, faction));
