@@ -223,10 +223,10 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 			if (entity instanceof EntityLivingBase) {
 				// fix attribute modifiers being applied in the first tick instead of directly when creating the entity from nbt
 				for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
-					ItemStack stack = ((EntityLiving) entity).getItemStackFromSlot(slot);
+					ItemStack stack = ((EntityLivingBase) entity).getItemStackFromSlot(slot);
 
 					if (!stack.isEmpty()) {
-						((EntityLiving) entity).getAttributeMap().applyAttributeModifiers(stack.getAttributeModifiers(slot));
+						((EntityLivingBase) entity).getAttributeMap().applyAttributeModifiers(stack.getAttributeModifiers(slot));
 
 						if (slot.getSlotType() == Type.HAND) {
 							((EntityLivingBase) entity).handInventory.set(slot.getIndex(), stack);
