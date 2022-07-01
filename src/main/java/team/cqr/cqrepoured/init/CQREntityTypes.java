@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntityType.IFactory;
+import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -46,6 +47,11 @@ import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
+import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
+import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishNormal;
+import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishRed;
+import team.cqr.cqrepoured.entity.mount.EntityPollo;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
@@ -200,6 +206,12 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityIceSpike>> ICE_SPIKE = registerSized(EntityIceSpike::new, "ice_spike", 0.5F, 0.8F, 3);
 	public static final RegistryObject<EntityType<EntityFlyingSkullMinion>> FLYING_SKULL = registerSized(EntityFlyingSkullMinion::new, "flying_skull", 0.5F, 0.5F, 3);
 	
+	//Mounts
+	public static final RegistryObject<EntityType<EntityPollo>> POLLO = registerSized(EntityPollo::new, "pollo", 0.7F, 1.5F, 3);
+	public static final RegistryObject<EntityType<EntityGiantEndermite>> GIANT_ENDERMITE = registerSized(EntityGiantEndermite::new, "giant_endermite", 1.5F, 1.5F, 3);
+	public static final RegistryObject<EntityType<EntityGiantSilverfishNormal>> GIANT_SILVERFISH = registerSized(EntityGiantSilverfishNormal::new, "giant_silverfish", 2.0F, 1.0F, 3);
+	public static final RegistryObject<EntityType<EntityGiantSilverfishRed>> GIANT_SILVERFISH_RED = registerSized(EntityGiantSilverfishRed::new, "giant_silverfish1", 2.0F, 1.0F, 3);
+	public static final RegistryObject<EntityType<EntityGiantSilverfishGreen>> GIANT_SILVERFISH_GREEN = registerSized(EntityGiantSilverfishGreen::new, "giant_silverfish2", 2.0F, 1.0F, 3);
 	
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSizedHumanoid(IFactory<T> factory, final String entityName, int updateInterval) {
 		return registerSized(factory, entityName, 0.6F, 1.875F, updateInterval);
@@ -255,6 +267,12 @@ public class CQREntityTypes {
 		event.put(WALKER_KING.get(), EntityCQRWalkerKing.createCQRAttributes().build());
 		
 		event.put(WALKER_KING_ILLUSION.get(), EntityWalkerKingIllusion.createCQRAttributes().build());
+		
+		event.put(GIANT_ENDERMITE.get(), AnimalEntity.createMobAttributes().build());
+		event.put(GIANT_SILVERFISH.get(), AnimalEntity.createMobAttributes().build());
+		event.put(GIANT_SILVERFISH_RED.get(), AnimalEntity.createMobAttributes().build());
+		event.put(GIANT_SILVERFISH_GREEN.get(), AnimalEntity.createMobAttributes().build());
+		event.put(POLLO.get(), AnimalEntity.createMobAttributes().build());
 	}
 
 	public static void registerEntityTypes()

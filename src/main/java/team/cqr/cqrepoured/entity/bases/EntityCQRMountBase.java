@@ -1,23 +1,58 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import net.minecraft.entity.*;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.AgeableEntity;
+import net.minecraft.entity.BoostHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRideable;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.goal.LookAtGoal;
+import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-import javax.annotation.Nullable;
-
 public abstract class EntityCQRMountBase extends AnimalEntity implements IRideable {
+
+	private static final DataParameter<Boolean> DATA_SADDLE_ID = EntityDataManager.defineId(EntityCQRMountBase.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> DATA_BOOST_TIME = EntityDataManager.defineId(EntityCQRMountBase.class, DataSerializers.INT);
+
+	private final BoostHelper steering = new BoostHelper(this.entityData, DATA_BOOST_TIME, DATA_SADDLE_ID);
 
 	public EntityCQRMountBase(EntityType<? extends EntityCQRMountBase> type, World worldIn) {
 		super(type, worldIn);
+	}
+
+	@Override
+	public void travelWithInput(Vector3d pTravelVec) {
+		super.travel(pTravelVec);
+	}
+
+	@Override
+	public void travel(Vector3d pTravelVector) {
+		this.travel(this, this.steering, pTravelVector);
+	}
+
+	@Override
+	public boolean boost() {
+		return this.steering.boost(this.getRandom());
+	}
+
+	@Override
+	public float getSteeringSpeed() {
+		return (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.225F;
 	}
 
 	@Override
@@ -30,13 +65,20 @@ public abstract class EntityCQRMountBase extends AnimalEntity implements IRideab
 	}
 
 	@Override
-	protected boolean canBeRidden(Entity entityIn) {
-		return entityIn instanceof AbstractEntityCQR || entityIn instanceof PlayerEntity;
+	protected boolean canRide(Entity pEntity) {
+		return pEntity instanceof AbstractEntityCQR || pEntity instanceof PlayerEntity;
 	}
 
 	@Override
 	public void spawnChildFromBreeding(ServerWorld pLevel, AnimalEntity p_234177_2_) {
 		return;
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(DATA_SADDLE_ID, true);
+		this.entityData.define(DATA_BOOST_TIME, 0);
 	}
 
 	@Override
@@ -49,14 +91,14 @@ public abstract class EntityCQRMountBase extends AnimalEntity implements IRideab
 	public Entity getControllingPassenger() {
 		return this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 	}
-	
+
 	@Override
 	public boolean canBeControlledByRider() {
 		Entity entity = this.getControllingPassenger();
 
 		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof PlayerEntity);
 	}
-	
+
 	@Override
 	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
 		if (super.mobInteract(player, hand) != ActionResultType.SUCCESS) {
@@ -72,61 +114,10 @@ public abstract class EntityCQRMountBase extends AnimalEntity implements IRideab
 		return ActionResultType.FAIL;
 
 	}
-	
+
 	@Override
 	public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
 		return null;
-	}
-	
-	@Override
-	public void travel(Vector3d direction) {
-		if (this.isVehicle() && this.canBeControlledByRider()) {
-			double vertical = direction.y();
-			LivingEntity entity = (LivingEntity) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null :
-																						// (Entity)this.getPassengers().get(0);
-			this.yRot = entity.yRot;
-			this.yRotO = this.yRot;
-			this.xRot = entity.xRot * 0.5F;
-			this.setRot(this.yRot, this.xRot);
-			this.yBodyRot = this.yRot;
-			this.yHeadRot = this.yBodyRot;
-			//this.stepHeight = 1.0F;
-			//this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
-
-			double v = 0.0;
-			if (this.isInWater() || this.isInLava()) {
-				v = vertical * 0.5;
-			}
-			if (this.isControlledByLocalInstance()) {
-				float f = (float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.5F;
-
-				this.setSpeed(f);
-				super.travel(new Vector3d(direction.x * f, v, direction.z * f));
-			} else {
-				this.setDeltaMovement(Vector3d.ZERO);
-			}
-
-			this.prevLimbSwingAmount = this.limbSwingAmount;
-			double d1 = this.posX - this.prevPosX;
-			double d0 = this.posZ - this.prevPosZ;
-			float f1 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
-
-			if (f1 > 1.0F) {
-				f1 = 1.0F;
-			}
-
-			this.limbSwingAmount += (f1 - this.limbSwingAmount) * 0.4F;
-			this.limbSwing += this.limbSwingAmount;
-		} else {
-			this.stepHeight = 0.5F;
-			this.jumpMovementFactor = 0.02F;
-			super.travel(strafe, vertical, forward);
-		}
-	}
-	
-	@Override
-	public void travelWithInput(Vector3d pTravelVec) {
-		super.travel(pTravelVec);
 	}
 
 }

@@ -10,7 +10,7 @@ public abstract class EntityCQRGiantSilverfishBase extends EntityCQRMountBase {
 
 	public EntityCQRGiantSilverfishBase(EntityType<? extends EntityCQRGiantSilverfishBase> type, World worldIn) {
 		super(type, worldIn);
-		this.setSize(2.0F, 1.0F);
+		//this.setSize(2.0F, 1.0F);
 	}
 
 	@Override
