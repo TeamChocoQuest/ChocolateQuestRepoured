@@ -25,7 +25,7 @@ public class SPacketDungeonSync implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		int dungeonCount = buf.readByte();
+		int dungeonCount = buf.readInt();
 		this.fakeDungeonSet = new ArrayList<>(dungeonCount);
 		for (int i = 0; i < dungeonCount; i++) {
 			String name = ByteBufUtils.readUTF8String(buf);
@@ -42,7 +42,7 @@ public class SPacketDungeonSync implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.dungeons.size());
+		buf.writeInt(this.dungeons.size());
 		for (DungeonBase dungeon : this.dungeons) {
 			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
 			buf.writeByte(dungeon.getIconID());
