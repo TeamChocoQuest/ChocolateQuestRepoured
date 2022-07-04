@@ -36,12 +36,12 @@ public class RenderCQRZombie extends RenderCQRBipedBaseGeo<EntityCQRZombie> {
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRZombie currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRZombie currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRZombie currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRZombie currentEntity) {
 		
 	}
 

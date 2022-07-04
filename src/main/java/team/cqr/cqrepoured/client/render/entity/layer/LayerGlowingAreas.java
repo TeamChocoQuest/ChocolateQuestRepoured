@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
+import java.util.function.Function;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.renderers.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
-import team.cqr.cqrepoured.client.render.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.function.Function;
 
 public class LayerGlowingAreas<T extends AbstractEntityCQR, M extends EntityModel<T>> extends LayerRenderer<T, M> {
 

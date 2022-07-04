@@ -24,3 +24,4 @@ TexturesCopy
 #Working files(e.g. GIMP files)
 *.xcf
 logs
+blockbench/*.java

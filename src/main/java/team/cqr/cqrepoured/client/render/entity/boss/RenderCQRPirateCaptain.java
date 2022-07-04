@@ -41,7 +41,7 @@ public class RenderCQRPirateCaptain extends RenderCQRBipedBaseGeo<EntityCQRPirat
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
 		
 	}
 
@@ -51,7 +51,7 @@ public class RenderCQRPirateCaptain extends RenderCQRBipedBaseGeo<EntityCQRPirat
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
 		
 	}
 

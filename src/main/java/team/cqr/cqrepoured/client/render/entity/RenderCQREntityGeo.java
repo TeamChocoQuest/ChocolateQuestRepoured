@@ -5,7 +5,6 @@ import java.util.function.Function;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +18,6 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
-import team.cqr.cqrepoured.client.util.BlockRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 @OnlyIn(Dist.CLIENT)
@@ -72,11 +70,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			float partialTicks) {
 		super.renderLate(animatable, stackIn, ticks, renderTypeBuffer, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		this.currentEntityBeingRendered = animatable;
-	}
-
-	@Override
-	protected void renderBlock(MatrixStack matrixStack, IRenderTypeBuffer rtb, int packedLightIn, BlockState iBlockState) {
-		BlockRenderUtil.renderBlockAtEntity(matrixStack, rtb, packedLightIn, iBlockState, this.currentEntityBeingRendered, this);
 	}
 	
 	@Override

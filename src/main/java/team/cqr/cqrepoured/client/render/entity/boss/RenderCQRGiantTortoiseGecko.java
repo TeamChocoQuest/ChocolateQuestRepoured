@@ -37,12 +37,12 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 

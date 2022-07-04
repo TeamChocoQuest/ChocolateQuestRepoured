@@ -36,12 +36,12 @@ public class RenderCQRDwarf extends RenderCQRBipedBaseGeo<EntityCQRDwarf> {
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRDwarf currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRDwarf currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRDwarf currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRDwarf currentEntity) {
 		
 	}
 

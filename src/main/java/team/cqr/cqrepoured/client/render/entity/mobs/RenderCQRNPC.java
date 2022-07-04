@@ -36,12 +36,12 @@ public class RenderCQRNPC extends RenderCQRBipedBaseGeo<EntityCQRNPC> {
 	}
 
 	@Override
-	protected void preRenderBlock(BlockState block, String boneName, EntityCQRNPC currentEntity) {
+	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRNPC currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(BlockState block, String boneName, EntityCQRNPC currentEntity) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRNPC currentEntity) {
 		
 	}
 
