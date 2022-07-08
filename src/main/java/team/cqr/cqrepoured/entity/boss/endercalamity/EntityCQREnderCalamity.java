@@ -1132,7 +1132,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		// LOOTVOLCANO
-		if (this.deathTime % 2 == 0) {
+		if (this.deathTime % 2 == 0 && this.deathCause != null) {
 			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 		}
 
