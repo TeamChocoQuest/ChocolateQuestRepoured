@@ -26,7 +26,7 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> ext
 
 	@Override
 	public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
+		if (CQRConfig.SERVER_CONFIG.general.enableSpeechBubbles.get() && entity.isChatting()) {
 			matrixStack.pushPose();
 			matrixStack.mulPose(Vector3f.YP.rotation(netHeadYaw));
 			matrixStack.translate(-0.5D, entity.getBbHeight() / entity.getSizeVariation() + 0.25D, 0.0D);
