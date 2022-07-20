@@ -69,7 +69,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	@Override
 	public void readAdditionalSaveData(CompoundNBT compound) {
 		super.readAdditionalSaveData(compound);
-		if (!compound.getBoolean("identityHidden")) {
+		if (compound.contains("identityHidden") && !compound.getBoolean("identityHidden")) {
 			this.revealIdentity();
 		}
 	}
