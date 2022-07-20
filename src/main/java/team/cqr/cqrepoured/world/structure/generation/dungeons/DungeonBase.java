@@ -109,6 +109,19 @@ public abstract class DungeonBase implements IFeatureConfig {
 
 	protected DungeonBase(String name, Properties prop) {
 		this.name = name;
+		String newName = "";
+		for(int i = 0; i < this.name.length(); i++) {
+			char c = this.name.charAt(i);
+			if(Character.isUpperCase(c)) {
+				if(i > 0) {
+					newName = newName + "_";
+				}
+				c = Character.toLowerCase(c);
+			}
+			newName = newName + c;
+		}
+		this.name = newName;
+		
 		this.enabled = PropertyFileHelper.getBooleanProperty(prop, "enabled", this.enabled);
 		this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", this.iconID, 0, 19);
 

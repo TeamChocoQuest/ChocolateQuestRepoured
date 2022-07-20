@@ -2,6 +2,9 @@ package team.cqr.cqrepoured.init;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
+import org.apache.commons.lang3.tuple.Triple;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -21,10 +24,12 @@ import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -42,34 +47,25 @@ public class CQRStructures {
 	
 	public static RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
 	
-	protected static final Map<DungeonBase, RegistryObject<Structure<?>>> DUNGEON_ENTRIES = new HashMap<>(); 
+	protected static final Map<DungeonBase, Structure<?>> DUNGEON_ENTRIES = new HashMap<>(); 
 	public static final Map<DungeonBase, StructureFeature<?,?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
+	protected static final ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE = new ConcurrentLinkedDeque<Triple<DungeonBase,Structure<?>,StructureSeparationSettings>>();
 	
 	public static void setupStructures() {
 		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
 		
-		DungeonRegistry.getInstance().loadDungeonFiles();
-		
-		//Now, load all dungeon configs and setup the spacing for them
 		try {
-			for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
-				//TODO: Create codec, it MUST NOT BE NULL!!
-				Structure<?> structure = new StructureDungeonCQR(DungeonBase.CODEC, false);
-				RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
-				DUNGEON_ENTRIES.put(dunConf, regObj);
-				StructureSeparationSettings sepSettings;
-				if(dunConf.isUseVanillaSpreadSystem()) {
-					sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
-				} else {
-					sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+			while(!SEP_SETTINGS_QUEUE.isEmpty()) {
+				Triple<DungeonBase, Structure<?>, StructureSeparationSettings> entry = SEP_SETTINGS_QUEUE.poll();
+				if(entry != null) {
+					setupMapSpacingAndLand(entry.getMiddle(), entry.getRight(), entry.getLeft().doBuildSupportPlatform());
 				}
-				setupMapSpacingAndLand(regObj.get(), sepSettings, dunConf.doBuildSupportPlatform());
 			}
 		} catch(Exception ex) {
 			//Yes, this is necessary. Without it the error is suppressed!
 			ex.printStackTrace();
 		}
-		Registry.STRUCTURE_FEATURE.forEach((s) -> System.out.println(s.getRegistryName().toString()));
+		//Registry.STRUCTURE_FEATURE.forEach((s) -> System.out.println(s.getRegistryName().toString()));
     }
 
     static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {
@@ -172,14 +168,14 @@ public class CQRStructures {
 				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
 			}
 			boolean done = false;
-			for(Map.Entry<DungeonBase, RegistryObject<Structure<?>>> entry : DUNGEON_ENTRIES.entrySet()) {
+			for(Map.Entry<DungeonBase, Structure<?>> entry : DUNGEON_ENTRIES.entrySet()) {
 				for(ResourceLocation rs : entry.getKey().getAllowedDims()) {
 					if(rs.equals(serverWorld.dimension().getRegistryName())) {
 						if(entry.getKey().isAllowedDimsAsBlacklist()) {
 							done = true;
 							break;
 						} else {
-							tempMap.putIfAbsent(entry.getValue().get(), DimensionStructuresSettings.DEFAULTS.get(entry.getValue().get()));
+							tempMap.putIfAbsent(entry.getValue(), DimensionStructuresSettings.DEFAULTS.get(entry.getValue()));
 							done = true;
 							break;
 						}
@@ -191,6 +187,34 @@ public class CQRStructures {
 			}
 			
 			serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
+		}
+	}
+	
+	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    public static class RegistryEvents {
+		@SubscribeEvent
+		public static void onStructureRegistration(final RegistryEvent.Register<Structure<?>> event) {
+			DungeonRegistry.getInstance().loadDungeonFiles();
+			//Now, load all dungeon configs and setup the spacing for them
+			for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
+				try {
+					//TODO: Create codec, it MUST NOT BE NULL!!
+					Structure<?> structure = new StructureDungeonCQR(DungeonBase.CODEC, false);
+					//event.getRegistry().register(structure);
+					//RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
+					event.getRegistry().register(structure.setRegistryName(CQRMain.prefix("dungeon_" + dunConf.getDungeonName())));
+					DUNGEON_ENTRIES.put(dunConf, structure);
+					StructureSeparationSettings sepSettings;
+					if(dunConf.isUseVanillaSpreadSystem()) {
+						sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
+					} else {
+						sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+					}
+					SEP_SETTINGS_QUEUE.add(Triple.of(dunConf, structure, sepSettings));
+ 				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 	

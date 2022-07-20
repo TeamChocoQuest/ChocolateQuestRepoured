@@ -17,11 +17,13 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.processor.FileBasedReplaceBlocksProcessor;
 import team.cqr.cqrepoured.world.processor.ProcessorLootChest;
 import team.cqr.cqrepoured.world.processor.ProcessorExtendLowestBlocksToFloor;
+import team.cqr.cqrepoured.world.processor.ProcessorFactionAdjuster;
 
 public class CQRStructureProcessors {
 
 	public static final IStructureProcessorType<ProcessorExtendLowestBlocksToFloor> PROCESSOR_EXTEND_LOWEST_TO_FLOOR = () -> ProcessorExtendLowestBlocksToFloor.CODEC;
 	public static final IStructureProcessorType<ProcessorLootChest> PROCESSOR_LOOT_CHEST = () -> ProcessorLootChest.CODEC;
+	public static final IStructureProcessorType<ProcessorFactionAdjuster> PROCESSOR_FACTION_ADJUSTER = () -> ProcessorFactionAdjuster.CODEC;
 
 	public static void registerStructureProcessors() {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(CQRStructureProcessors::commonSetup);
@@ -30,8 +32,9 @@ public class CQRStructureProcessors {
 	private static void commonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			//First, let's load our fixed processors
-			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
-			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
+			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
+			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
+			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/faction_adjuster"), PROCESSOR_FACTION_ADJUSTER);
 
 			//Then we load the customizable ones
 			loadFileBasedProcessors();
