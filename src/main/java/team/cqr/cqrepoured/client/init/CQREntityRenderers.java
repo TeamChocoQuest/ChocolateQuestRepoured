@@ -19,6 +19,10 @@ import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnde
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
+import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantEndermite;
+import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfish;
+import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
+import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishRed;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBubble;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileBullet;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -133,11 +137,11 @@ public class CQREntityRenderers
 
 	protected static void registerMountRenderers() {
 		// Mounts
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, RenderGiantSilverfish::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishGreen.class, RenderGiantSilverfishGreen::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishRed.class, RenderGiantSilverfishRed::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityPollo.class, RenderPollo::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_ENDERMITE.get(), RenderGiantEndermite::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_SILVERFISH.get(), RenderGiantSilverfish::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_SILVERFISH_GREEN.get(), RenderGiantSilverfishGreen::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_SILVERFISH_RED.get(), RenderGiantSilverfishRed::new);
+		//RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.POLLO.get(), RenderPollo::new);
 	}
 
 	protected static void registerBossRenderers() {
