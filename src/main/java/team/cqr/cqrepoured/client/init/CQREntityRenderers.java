@@ -56,7 +56,7 @@ public class CQREntityRenderers
 			registerEntityRenderers();
 		}*/
 		registerBossRenderers();
-		/*registerMountRenderers(); */
+		registerMountRenderers(); 
 	}
 
 	// Registers a big chungus renderer that renders on april the first
