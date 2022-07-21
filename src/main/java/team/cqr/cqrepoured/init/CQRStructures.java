@@ -42,84 +42,69 @@ import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
 
 @EventBusSubscriber
 public class CQRStructures {
-	
+
 	public static final DeferredRegister<Structure<?>> DEFERRED_REGISTRY_STRUCTURE = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
-	
+
 	public static RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
-	
-	protected static final Map<DungeonBase, Structure<?>> DUNGEON_ENTRIES = new HashMap<>(); 
-	public static final Map<DungeonBase, StructureFeature<?,?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
-	protected static final ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE = new ConcurrentLinkedDeque<Triple<DungeonBase,Structure<?>,StructureSeparationSettings>>();
-	
+
+	protected static final Map<DungeonBase, Structure<?>> DUNGEON_ENTRIES = new HashMap<>();
+	public static final Map<DungeonBase, StructureFeature<?, ?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
+	protected static final ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE = new ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>>();
+
 	public static void setupStructures() {
 		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
-		
+
 		try {
-			while(!SEP_SETTINGS_QUEUE.isEmpty()) {
+			while (!SEP_SETTINGS_QUEUE.isEmpty()) {
 				Triple<DungeonBase, Structure<?>, StructureSeparationSettings> entry = SEP_SETTINGS_QUEUE.poll();
-				if(entry != null) {
+				if (entry != null) {
 					setupMapSpacingAndLand(entry.getMiddle(), entry.getRight(), entry.getLeft().doBuildSupportPlatform());
 				}
 			}
-		} catch(Exception ex) {
-			//Yes, this is necessary. Without it the error is suppressed!
+		} catch (Exception ex) {
+			// Yes, this is necessary. Without it the error is suppressed!
 			ex.printStackTrace();
 		}
-		//Registry.STRUCTURE_FEATURE.forEach((s) -> System.out.println(s.getRegistryName().toString()));
-    }
+		// Registry.STRUCTURE_FEATURE.forEach((s) -> System.out.println(s.getRegistryName().toString()));
+	}
 
-    static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {
-        Registry.register(Registry.STRUCTURE_PIECE, rl, structurePiece);
-    }
-
+	static void registerStructurePiece(IStructurePieceType structurePiece, ResourceLocation rl) {
+		Registry.register(Registry.STRUCTURE_PIECE, rl, structurePiece);
+	}
 
 	public static void registerStructures() {
 		DEFERRED_REGISTRY_STRUCTURE.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
-	
-	public static <F extends Structure<?>> void setupMapSpacingAndLand(
-            F structure,
-            StructureSeparationSettings structureSeparationSettings,
-            boolean transformSurroundingLand)
-    {
-        Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
-        if(transformSurroundingLand){
-            Structure.NOISE_AFFECTING_FEATURES =
-                    ImmutableList.<Structure<?>>builder()
-                            .addAll(Structure.NOISE_AFFECTING_FEATURES)
-                            .add(structure)
-                            .build();
-        }
+	public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
+		Structure.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
 
-        DimensionStructuresSettings.DEFAULTS =
-                ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
-                        .putAll(DimensionStructuresSettings.DEFAULTS)
-                        .put(structure, structureSeparationSettings)
-                        .build();
+		if (transformSurroundingLand) {
+			Structure.NOISE_AFFECTING_FEATURES = ImmutableList.<Structure<?>>builder().addAll(Structure.NOISE_AFFECTING_FEATURES).add(structure).build();
+		}
 
+		DimensionStructuresSettings.DEFAULTS = ImmutableMap.<Structure<?>, StructureSeparationSettings>builder().putAll(DimensionStructuresSettings.DEFAULTS).put(structure, structureSeparationSettings).build();
 
-        WorldGenRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
-            Map<Structure<?>, StructureSeparationSettings> structureMap = settings.getValue().structureSettings().structureConfig();
+		WorldGenRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
+			Map<Structure<?>, StructureSeparationSettings> structureMap = settings.getValue().structureSettings().structureConfig();
 
-            /*
-             * Pre-caution in case a mod makes the structure map immutable like datapacks do.
-             */
-            if(structureMap instanceof ImmutableMap){
-                Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
-                tempMap.put(structure, structureSeparationSettings);
-                settings.getValue().structureSettings().structureConfig = tempMap;
-            }
-            else{
-                structureMap.put(structure, structureSeparationSettings);
-            }
-        });
-    }
-	
-	protected static IStructurePieceType register(IStructurePieceType type, String id) {
-		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id );
+			/*
+			 * Pre-caution in case a mod makes the structure map immutable like datapacks do.
+			 */
+			if (structureMap instanceof ImmutableMap) {
+				Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
+				tempMap.put(structure, structureSeparationSettings);
+				settings.getValue().structureSettings().structureConfig = tempMap;
+			} else {
+				structureMap.put(structure, structureSeparationSettings);
+			}
+		});
 	}
-	
+
+	protected static IStructurePieceType register(IStructurePieceType type, String id) {
+		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id);
+	}
+
 	@SubscribeEvent
 	public static void biomeModification(final BiomeLoadingEvent event) {
 		RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
@@ -129,22 +114,22 @@ public class CQRStructures {
 		} else if (BiomeDictionary.hasType(key, BiomeDictionary.Type.OVERWORLD)) {
 			event.getGeneration().getStructures().add(() -> CQRConfiguredStructures.CONFIGURED_WALL_IN_THE_NORTH);
 		}
-		
-		//Now, parse all configured dungeon structures and add them too
+
+		// Now, parse all configured dungeon structures and add them too
 		boolean skip = false;
-		for(Map.Entry<DungeonBase, StructureFeature<?,?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
-			for(ResourceLocation rs : entry.getKey().getDisallowedBiomes()) {
-				if(rs.equals(key.getRegistryName())) {
+		for (Map.Entry<DungeonBase, StructureFeature<?, ?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
+			for (ResourceLocation rs : entry.getKey().getDisallowedBiomes()) {
+				if (rs.equals(key.getRegistryName())) {
 					skip = true;
 					break;
 				}
 			}
-			if(skip) {
+			if (skip) {
 				skip = false;
 				continue;
 			}
-			for(ResourceLocation rs : entry.getKey().getAllowedBiomes()) {
-				if(rs.equals(key.getRegistryName())) {
+			for (ResourceLocation rs : entry.getKey().getAllowedBiomes()) {
+				if (rs.equals(key.getRegistryName())) {
 					event.getGeneration().getStructures().add(entry::getValue);
 				}
 			}
@@ -168,10 +153,10 @@ public class CQRStructures {
 				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
 			}
 			boolean done = false;
-			for(Map.Entry<DungeonBase, Structure<?>> entry : DUNGEON_ENTRIES.entrySet()) {
-				for(ResourceLocation rs : entry.getKey().getAllowedDims()) {
-					if(rs.equals(serverWorld.dimension().getRegistryName())) {
-						if(entry.getKey().isAllowedDimsAsBlacklist()) {
+			for (Map.Entry<DungeonBase, Structure<?>> entry : DUNGEON_ENTRIES.entrySet()) {
+				for (ResourceLocation rs : entry.getKey().getAllowedDims()) {
+					if (rs.equals(serverWorld.dimension().getRegistryName())) {
+						if (entry.getKey().isAllowedDimsAsBlacklist()) {
 							done = true;
 							break;
 						} else {
@@ -181,41 +166,41 @@ public class CQRStructures {
 						}
 					}
 				}
-				if(done) {
+				if (done) {
 					break;
 				}
 			}
-			
+
 			serverWorld.getChunkSource().generator.getSettings().structureConfig = tempMap;
 		}
 	}
-	
-	@Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
+
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+	public static class RegistryEvents {
 		@SubscribeEvent
 		public static void onStructureRegistration(final RegistryEvent.Register<Structure<?>> event) {
 			DungeonRegistry.getInstance().loadDungeonFiles();
-			//Now, load all dungeon configs and setup the spacing for them
-			for(DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
+			// Now, load all dungeon configs and setup the spacing for them
+			for (DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
 				try {
-					//TODO: Create codec, it MUST NOT BE NULL!!
+					// TODO: Create codec, it MUST NOT BE NULL!!
 					Structure<?> structure = new StructureDungeonCQR(DungeonBase.CODEC, false);
-					//event.getRegistry().register(structure);
-					//RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
+					// event.getRegistry().register(structure);
+					// RegistryObject<Structure<?>> regObj = DEFERRED_REGISTRY_STRUCTURE.register("dungeon_" + dunConf.getDungeonName(), () -> (structure));
 					event.getRegistry().register(structure.setRegistryName(CQRMain.prefix("dungeon_" + dunConf.getDungeonName())));
 					DUNGEON_ENTRIES.put(dunConf, structure);
 					StructureSeparationSettings sepSettings;
-					if(dunConf.isUseVanillaSpreadSystem()) {
+					if (dunConf.isUseVanillaSpreadSystem()) {
 						sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
 					} else {
 						sepSettings = new StructureSeparationSettings(1, 0, 123456789);
 					}
 					SEP_SETTINGS_QUEUE.add(Triple.of(dunConf, structure, sepSettings));
- 				} catch(Exception ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
 	}
-	
+
 }
