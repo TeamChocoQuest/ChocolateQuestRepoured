@@ -47,15 +47,15 @@ public class CQRConfiguredStructures {
         // FlatGenerationSettings.STRUCTURE_FEATURES.put(BTStructures.SKY_BATTLE_TOWER.get(), CONFIGURED_SKY_BATTLE_TOWER);
         
         //Now, parse all structures (dungeons) in CQRSTructures.DUNGEON_STRUCTURES and register those, the dungeon class will receive a method to generate teh structure feature to be registered as well as a getter for the structure object
-        for(Map.Entry<DungeonBase, RegistryObject<Structure<?>>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) {
+        for(Map.Entry<DungeonBase, Structure<?>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) {
         	//TODO: Check if we need that featureconfig at all, if yes => properly implement it!
-        	if(entry.getValue().get() instanceof StructureDungeonCQR) {
-        		StructureDungeonCQR sdcqr = (StructureDungeonCQR) entry.getValue().get();
+        	if(entry.getValue() instanceof StructureDungeonCQR) {
+        		StructureDungeonCQR sdcqr = (StructureDungeonCQR) entry.getValue();
         		final DungeonBase featureConfig = entry.getKey();
             	StructureFeature<?, ?> sf = sdcqr.configured(featureConfig);
             	
-            	Registry.register(registry, CQRMain.prefix(entry.getValue().getId().getPath()), sf);
-            	FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue().get(), sf);
+            	Registry.register(registry, CQRMain.prefix(entry.getValue().getRegistryName().getPath()), sf);
+            	FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue(), sf);
             	CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf);
         	}
         }
