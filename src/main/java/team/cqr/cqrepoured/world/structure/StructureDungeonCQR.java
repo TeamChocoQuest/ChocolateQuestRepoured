@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.world.structure;
 
+import java.util.Objects;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Predicates;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.ResourceLocation;
@@ -10,7 +14,10 @@ import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 
 public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 
@@ -49,12 +56,26 @@ public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 		int chunkX = chunkPos.x;
 		int chunkZ = chunkPos.z;
 		if(!featureConfig.isUseVanillaSpreadSystem()) {
-			// Check the grid!
-			// Problem: How do we access the world?
-			//DungeonBase gridSelected = GridRegistry.getInstance().getGrids().stream().filter(Predicates.alwaysTrue()).map(grid -> grid.getDungeonAt(this.level, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
-			//return gridSelected.getDungeonName().equalsIgnoreCase(this.dungeonConfig.getDungeonName());
+			Optional<ServerWorld> osw = tryFindWorldForChunkGenerator(chunkGenerator);
+			if(osw.isPresent()) {
+				ServerWorld sw = osw.get();
+				
+				DungeonBase gridSelected = GridRegistry.getInstance().getGrids().stream().filter(Predicates.alwaysTrue()).map(grid -> grid.getDungeonAt(sw, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
+				return gridSelected.getDungeonName().equalsIgnoreCase(featureConfig.getDungeonName());
+			}
 		}
 		return true;
+	}
+	
+	protected static Optional<ServerWorld> tryFindWorldForChunkGenerator(ChunkGenerator cg) {
+		ServerWorld sw = null;
+		for(ServerWorld world : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
+			if(world.getChunkSource().generator == cg) {
+				sw = world;
+				break;
+			}
+		}
+		return Optional.fromNullable(sw);
 	}
 
 	// The structure start can hold data like we want, we just need to return a supplier for them here
