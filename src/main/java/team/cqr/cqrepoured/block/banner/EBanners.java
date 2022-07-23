@@ -47,6 +47,10 @@ public enum EBanners {
 		this.colorList = colors;
 		this.patternList = patterns;
 	}
+	
+	public DyeColor getMainColor() {
+		return this.mainColor;
+	}
 
 	public ItemStack getBanner() {
 		BannerPattern.Builder builder = new Builder();
