@@ -46,6 +46,9 @@ public class DungeonGrid {
 		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
 		this.offset = PropertyFileHelper.getIntProperty(properties, "offset", 0);
 		this.dungeons = Arrays.stream(PropertyFileHelper.getStringArrayProperty(properties, "dungeons", new String[0], true)).map(s -> DungeonRegistry.getInstance().getDungeon(s)).filter(Objects::nonNull).collect(Collectors.toList());
+		this.dungeons.forEach(dun -> {
+			dun.assignGrid(this);
+		});
 	}
 
 	@Nullable

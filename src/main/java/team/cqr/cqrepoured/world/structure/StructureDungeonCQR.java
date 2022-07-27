@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.world.structure;
 import java.util.Objects;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Predicates;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.ResourceLocation;
@@ -17,7 +16,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 
 public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 
@@ -60,7 +58,7 @@ public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 			if(osw.isPresent()) {
 				ServerWorld sw = osw.get();
 				
-				DungeonBase gridSelected = GridRegistry.getInstance().getGrids().stream().filter(Predicates.alwaysTrue()).map(grid -> grid.getDungeonAt(sw, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
+				DungeonBase gridSelected = featureConfig.getGrids().stream().map(grid -> grid.getDungeonAt(sw, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
 				return gridSelected.getDungeonName().equalsIgnoreCase(featureConfig.getDungeonName());
 			}
 		}
@@ -82,7 +80,7 @@ public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 	// Gets called in "createStart(...)" => Override that so we can inject our own data! => That gets called in generate, so we could use our own code here too
 	@Override
 	public IStartFactory<T> getStartFactory() {
-		return null;
+		return StructureStartCQR::new;
 	}
 	
 }

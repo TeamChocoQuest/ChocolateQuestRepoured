@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -40,6 +42,7 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -57,6 +60,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 	protected String name;
 	protected boolean enabled = true;
 	protected int iconID = 0;
+	protected Set<DungeonGrid> grids = new HashSet<>();
 
 	protected int weight = 0;
 	protected int chance = 0;
@@ -78,6 +82,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 	protected boolean treatWaterAsAir = false;
 	protected int underGroundOffset = 0;
 	protected boolean fixedY = false;
+
 	protected int yOffsetMin = 0;
 	protected int yOffsetMax = 0;
 
@@ -568,6 +573,18 @@ public abstract class DungeonBase implements IFeatureConfig {
 
 	public int getVanillaSpreadSeed() {
 		return vanillaSpreadSeed;
+	}
+	
+	public boolean isFixedY() {
+		return fixedY;
+	}
+
+	public void assignGrid(DungeonGrid dungeonGrid) {
+		this.grids.add(dungeonGrid);
+	}
+
+	public Collection<DungeonGrid> getGrids() {
+		return Collections.unmodifiableCollection(this.grids);
 	}
 
 }
