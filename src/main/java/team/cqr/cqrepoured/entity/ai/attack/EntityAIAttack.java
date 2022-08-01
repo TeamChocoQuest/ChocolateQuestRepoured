@@ -88,9 +88,9 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			this.attackTick = this.entity.tickCount;
 			this.entity.swing(Hand.MAIN_HAND, true);
-			if(this.entity.canAttack(attackTarget)) {
+			//if(this.entity.canAttack(attackTarget)) {
 				this.entity.doHurtTarget(attackTarget);
-			}
+			//}
 		}
 	}
 

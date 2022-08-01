@@ -12,6 +12,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.Hand;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -19,6 +20,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.gun.IFireArmTwoHanded;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
@@ -129,19 +131,35 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return this.predicateHandSwing(this.getLeftHand(), true, event);
 	}
 
+	public String ANIM_NAME_SWING_NORMAL_LEFT = ANIM_NAME_PREFIX + "arms.left.item-use";
+	public String ANIM_NAME_SWING_NORMAL_RIGHT = ANIM_NAME_PREFIX + "arms.right.item-use";
+	
 	default <E extends IAnimatable> PlayState predicateHandSwing(Hand hand, boolean leftHand, AnimationEvent<E> event) {
-		if (this.isSwinging() && !this.isTwoHandedAnimationRunning()) {
-			ItemStack handItemStack = this.getItemInHand(hand);
-			if (!handItemStack.isEmpty()) {
-				if (handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.EAT || handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.DRINK) {
-					// Eating/Drinking animation
-				} else {
-					// Normal swinging
+		if (!this.isTwoHandedAnimationRunning()) {
+			if (this.isSwinging(hand, event)) {
+				ItemStack handItemStack = this.getItemInHand(hand);
+				if(event.getController().getAnimationState() != AnimationState.Running) {
+					event.getController().clearAnimationCache();
+					event.getController().markNeedsReload();
 				}
-				return PlayState.CONTINUE;
+				if (!handItemStack.isEmpty()) {
+					if (handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.EAT || handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.DRINK) {
+						// Eating/Drinking animation
+					} else {
+						// Normal swinging
+						event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, false));
+					}
+					return PlayState.CONTINUE;
+				} else {
+					event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, false));
+					return PlayState.CONTINUE;
+				}
+			} else {
+				//event.getController().setAnimation(null);
+				//event.getController().clearAnimationCache();
 			}
 		}
-		return PlayState.STOP;
+		return PlayState.CONTINUE;
 	}
 
 	default <E extends IAnimatable> PlayState predicateRightArmPose(AnimationEvent<E> event) {
@@ -160,6 +178,9 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 				event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_BLOCKING_LEFT : ANIM_NAME_BLOCKING_RIGHT, true));
 			} else {
 				// If the item is a small gun play the correct animation
+				// if(handItem instanceof IRangedWeapon) {
+				//	 event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_FIREARM_SMALL_POSE_LEFT : ANIM_NAME_FIREARM_SMALL_POSE_RIGHT, true));
+				// }
 			}
 			return PlayState.CONTINUE;
 		}
@@ -233,7 +254,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public String ANIM_NAME_SPEAR_SWING = ANIM_NAME_PREFIX + "arms.attack-spear";
 
 	default <E extends IAnimatable> PlayState predicateTwoHandedSwing(AnimationEvent<E> event) {
-		if (this.isTwoHandedAnimationRunning() && this.isSwinging()) {
+		if (this.isTwoHandedAnimationRunning() && this.isSwinging(event)) {
 			// Check for greatsword & spear and play their animations
 			if (this.getMainHandItem().getItem().getUseAnimation(this.getMainHandItem()) == UseAction.SPEAR || this.getOffhandItem().getItem().getUseAnimation(this.getOffhandItem()) == UseAction.SPEAR) {
 				// Spear use animation
@@ -268,7 +289,10 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
 	public boolean isLeftHanded();
 	
-	public boolean isSwinging();
+	public <E extends IAnimatable> boolean isSwinging(Hand hand, AnimationEvent<E> event);
+	public default <E extends IAnimatable> boolean isSwinging(AnimationEvent<E> event) {
+		return this.isSwinging(Hand.MAIN_HAND, event);
+	}
 	
 	public boolean isCrouching();
 
