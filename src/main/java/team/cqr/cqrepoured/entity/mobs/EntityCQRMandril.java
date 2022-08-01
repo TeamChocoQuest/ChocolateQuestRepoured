@@ -58,9 +58,4 @@ public class EntityCQRMandril extends AbstractEntityCQR implements IAnimatableCQ
 		return ALWAYS_PLAYING_MANDRIL;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

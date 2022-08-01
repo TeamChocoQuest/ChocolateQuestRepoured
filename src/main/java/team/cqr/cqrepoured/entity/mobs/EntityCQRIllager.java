@@ -68,9 +68,4 @@ public class EntityCQRIllager extends AbstractEntityCQR implements IAnimatableCQ
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

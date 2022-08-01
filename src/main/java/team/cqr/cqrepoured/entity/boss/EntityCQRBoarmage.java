@@ -171,9 +171,4 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

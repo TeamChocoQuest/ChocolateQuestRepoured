@@ -22,6 +22,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -447,16 +448,15 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return PlayState.STOP;
 		}
 
-		if (this.isSwinging()) {
+		if (this.isSwinging(Hand.MAIN_HAND, event)) {
 			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, false));
-
 		} else {
 			this.kickInProgressClient = false;
-
-			event.getController().setAnimation(null);
-			event.getController().clearAnimationCache();
+			
+			//event.getController().setAnimation(null);
+			//event.getController().clearAnimationCache();
 		}
 		return PlayState.CONTINUE;
 	}
@@ -705,10 +705,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 						// YEET!
 						Vector3d yeet = entityIn.getDeltaMovement().add(v).add(0, 0.75, 0);
-						/*entityIn.motionX += v.x;
-						entityIn.motionY += v.y + 0.75;
-						entityIn.motionZ += v.z;
-						entityIn.velocityChanged = true;*/
 						entityIn.setDeltaMovement(yeet);
 
 						this.entityData.set(PUNCH_IS_KICK, true);

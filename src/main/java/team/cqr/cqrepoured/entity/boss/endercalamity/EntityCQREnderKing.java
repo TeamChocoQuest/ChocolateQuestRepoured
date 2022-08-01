@@ -316,9 +316,4 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

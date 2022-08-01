@@ -225,9 +225,4 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

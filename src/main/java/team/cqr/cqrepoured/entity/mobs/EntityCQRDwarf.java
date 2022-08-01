@@ -71,9 +71,4 @@ public class EntityCQRDwarf extends AbstractEntityCQR implements IAnimatableCQR 
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

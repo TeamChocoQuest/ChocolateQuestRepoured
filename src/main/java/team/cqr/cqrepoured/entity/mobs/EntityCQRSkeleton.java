@@ -63,9 +63,4 @@ public class EntityCQRSkeleton extends AbstractEntityCQR implements IAnimatableC
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

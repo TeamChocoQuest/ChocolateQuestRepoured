@@ -196,9 +196,4 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

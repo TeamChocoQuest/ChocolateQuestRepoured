@@ -623,9 +623,4 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 		return null;
 	}
 
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
-
 }

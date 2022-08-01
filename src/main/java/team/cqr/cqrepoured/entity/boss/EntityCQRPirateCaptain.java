@@ -189,9 +189,4 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	public Set<String> getAlwaysPlayingAnimations() {
 		return null;
 	}
-
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
 }

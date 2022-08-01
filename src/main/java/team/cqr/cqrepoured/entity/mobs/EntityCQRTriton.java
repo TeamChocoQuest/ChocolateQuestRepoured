@@ -69,11 +69,6 @@ public class EntityCQRTriton extends AbstractEntityCQR implements IAnimatableCQR
 	public Set<String> getAlwaysPlayingAnimations() {
 		return ALWAYS_PLAYING_TRITON;
 	}
-
-	@Override
-	public boolean isSwinging() {
-		return this.swinging;
-	}
 	
 	@Override
 	public <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
