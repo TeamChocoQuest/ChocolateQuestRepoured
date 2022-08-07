@@ -36,7 +36,7 @@ public class ContainerCQREntity extends Container {
 	private final AbstractEntityCQR entity;
 	
 	public static final ResourceLocation EMPTY_SLOT_MAIN_HAND = CQRMain.prefix("items/empty_slot_sword");
-	public static final ResourceLocation EMPTY_SLOT_OFF_HAND = CQRMain.prefix("items/empty_armor_slot_shield");
+	public static final ResourceLocation EMPTY_SLOT_OFF_HAND = new ResourceLocation("item/empty_armor_slot_shield");
 	public static final ResourceLocation EMPTY_SLOT_POTION = CQRMain.prefix("items/empty_slot_potion");
 	public static final ResourceLocation EMPTY_SLOT_BADGE = CQRMain.prefix("items/empty_slot_badge");
 	public static final ResourceLocation EMPTY_SLOT_ARROW = CQRMain.prefix("items/empty_slot_arrow");
