@@ -50,7 +50,7 @@ public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 		// W := 107 -> steps are 10% steps
 		// NEW: x, y, w, h
 		// OLD: id, x, y, w, h
-		this.sliderHealthScaling = new Slider(5, 5, 108, 16, new StringTextComponent("Health Scale "), new StringTextComponent(" %"), 10,  1000, this.entity.getHealthScale() * 100.0D, false, true, (x) -> {});
+		this.sliderHealthScaling = new Slider(5, 5, 107, 16, new StringTextComponent("Health Scale "), new StringTextComponent(" %"), 10,  1000, this.entity.getHealthScale() * 100.0D, false, true, (x) -> {});
 		this.sliderDropChanceHelm = new Slider(5, 25, 108, 16,  new StringTextComponent("Drop helm "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true, (x) -> {});
 		this.sliderDropChanceChest = new Slider(5, 45, 108, 16,  new StringTextComponent("Drop chest "), new StringTextComponent(" %"), 0,  100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true, (x) -> {});
 		this.sliderDropChanceLegs = new Slider(5, 65, 108, 16,  new StringTextComponent("Drop legs "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true, (x) -> {});
