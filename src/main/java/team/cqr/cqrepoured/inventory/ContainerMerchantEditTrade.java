@@ -1,15 +1,22 @@
 package team.cqr.cqrepoured.inventory;
 
+import java.util.stream.IntStream;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -17,15 +24,26 @@ import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EReputationState;
-import team.cqr.cqrepoured.util.GuiHandler;
-
-import javax.annotation.Nullable;
-import java.util.stream.IntStream;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 
 public class ContainerMerchantEditTrade extends Container implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final IInventory tradeInventory;
+	
+	public ContainerMerchantEditTrade(int id, PlayerInventory playerInv, PacketBuffer buf) {
+		this(CQRContainerTypes.MERCHANT_EDIT_TRADE.get(), id, ContainerMerchant.tryGetCQREntity(buf), playerInv.player, tryGetTradeIndex(buf));
+	}
+
+	private static int tryGetTradeIndex(PacketBuffer data) {
+		try {
+			int id = data.readInt();
+			return id;
+		} catch(IndexOutOfBoundsException ioobex) {
+			CQRMain.logger.debug("Using proxy reference, packetbuffer is empty");
+			return 0;
+		}
+	}
 
 	public ContainerMerchantEditTrade(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
 		super(type, containerID);
@@ -119,7 +137,19 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	@Override
 	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
 		if (button == 0) {
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+			player.openMenu(new INamedContainerProvider() {
+				
+				@Override
+				public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
+					return CQRContainerTypes.MERCHANT.get().create(p_createMenu_1_, p_createMenu_2_);
+				}
+				
+				@Override
+				public ITextComponent getDisplayName() {
+					return ContainerMerchantEditTrade.this.entity.getDisplayName();
+				}
+			});
 		} else if (button == 1) {
 			int index = extraData.readInt();
 			boolean[] ignoreMeta = new boolean[4];
@@ -141,7 +171,19 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
 
 			this.entity.getTrades().editTrade(index, trade);
-			player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+			player.openMenu(new INamedContainerProvider() {
+				
+				@Override
+				public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
+					return CQRContainerTypes.MERCHANT.get().create(p_createMenu_1_, p_createMenu_2_);
+				}
+				
+				@Override
+				public ITextComponent getDisplayName() {
+					return ContainerMerchantEditTrade.this.entity.getDisplayName();
+				}
+			});
 		}
 	}
 

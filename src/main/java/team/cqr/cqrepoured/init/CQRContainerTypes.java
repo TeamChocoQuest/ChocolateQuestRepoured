@@ -13,6 +13,7 @@ import team.cqr.cqrepoured.inventory.ContainerBadge;
 import team.cqr.cqrepoured.inventory.ContainerBossBlock;
 import team.cqr.cqrepoured.inventory.ContainerCQREntity;
 import team.cqr.cqrepoured.inventory.ContainerMerchant;
+import team.cqr.cqrepoured.inventory.ContainerMerchantEditTrade;
 import team.cqr.cqrepoured.inventory.ContainerSpawner;
 
 public class CQRContainerTypes {
@@ -20,7 +21,7 @@ public class CQRContainerTypes {
 	public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, CQRMain.MODID);
 
 	public static final RegistryObject<ContainerType<ContainerMerchant>> MERCHANT = CONTAINERS.register("merchant", () -> IForgeContainerType.create(ContainerMerchant::new));
-	//public static final RegistryObject<ContainerType<ContainerMerchantEditTrade>> MERCHANT_EDIT_TRADE = CONTAINERS.register("merchant_edit_trade", () -> new ContainerType<>(ContainerMerchantEditTrade::new));
+	public static final RegistryObject<ContainerType<ContainerMerchantEditTrade>> MERCHANT_EDIT_TRADE = CONTAINERS.register("merchant_edit_trade", () -> IForgeContainerType.create(ContainerMerchantEditTrade::new));
 	public static final RegistryObject<ContainerType<ContainerAlchemyBag>> ALCHEMY_BAG = CONTAINERS.register("alchemy_bag", () -> IForgeContainerType.create(ContainerAlchemyBag::new));
 	public static final RegistryObject<ContainerType<ContainerBackpack>> BACKPACK = CONTAINERS.register("backpack", () -> IForgeContainerType.create(ContainerBackpack::new));
 	public static final RegistryObject<ContainerType<ContainerBadge>> BADGE = CONTAINERS.register("badge", () -> IForgeContainerType.create(ContainerBadge::new));
