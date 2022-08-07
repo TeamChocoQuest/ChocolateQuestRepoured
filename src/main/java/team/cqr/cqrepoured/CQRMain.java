@@ -181,6 +181,7 @@ public class CQRMain {
 		MinecraftForge.EVENT_BUS.register(this);
 		bus.<FMLCommonSetupEvent>addListener(this::init);
 		bus.addListener(CQRepouredClient::setupClient);
+		
 	}
 
 	/*
@@ -260,6 +261,7 @@ public class CQRMain {
 	 */
 	 @SubscribeEvent 
 	 public void onFMLServerStartingEvent(FMLServerAboutToStartEvent event) { 
+		 PROXY.postInit();
 		 // Since the CTS manager could also be corrupted, let's make him reload his data...
 		 TextureSetManager.loadTextureSetsFromFolder(CQ_CUSTOM_TEXTURES_FOLDER_SETS);
 		 FactionRegistry.getServerInstance().loadFactions();
@@ -280,6 +282,7 @@ public class CQRMain {
 			CQRStructures.setupStructures();
 			CQRConfiguredStructures.registerConfiguredStructures();
 		});
+		
 	}
 
 	public static final ResourceLocation prefix(final String path) {

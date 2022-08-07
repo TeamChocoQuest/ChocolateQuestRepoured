@@ -9,10 +9,6 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public interface IProxy {
 
-	void preInit();
-
-	void init();
-
 	void postInit();
 
 	PlayerEntity getPlayer(Context ctx);

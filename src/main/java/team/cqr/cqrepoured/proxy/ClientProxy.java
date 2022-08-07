@@ -16,11 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
-import team.cqr.cqrepoured.client.init.CQREntityRenderers;
-import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerElectrocute;
-import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class ClientProxy implements IProxy {
@@ -28,24 +25,6 @@ public class ClientProxy implements IProxy {
 	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
 
 	//public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
-
-	@Override
-	public void preInit() {
-		Minecraft mc = Minecraft.getInstance();
-
-		mc.getResourcePackRepository().addPackFinder(CTResourcepack.PACK_FINDER);
-		CQREntityRenderers.registerRenderers();
-		CQRParticleManager.init();
-
-		// Add custom metadataserializers
-		//Now longer needed?
-		//mc.registerMetadataSectionType(new GlowingMetadataSectionSerializer(), GlowingMetadataSection.class);
-	}
-
-	@Override
-	public void init() {
-		//ClientRegistry.registerKeyBinding(keybindReputationGUI);
-	}
 
 	@SuppressWarnings({ "unchecked", "resource", "rawtypes" })
 	@Override
