@@ -23,6 +23,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.util.VectorUtil;
 
@@ -179,7 +180,15 @@ public class ElectricFieldRenderUtil {
 	 */
 
 	public static void renderElectricFieldWithSizeOfEntityAt(MatrixStack matrix, IRenderTypeBuffer buffer, Entity entity, int bolts, long seed) {
+		matrix.pushPose();
+		//TODO: Fix offset on y axis
+		if(entity instanceof PartEntity<?>) {
+			
+		} else {
+			matrix.translate(0, entity.getBbHeight() / 2, 0);
+		}
 		renderElectricField(matrix, buffer, entity.getBbWidth() / 2, entity.getBbHeight() / 2, bolts, seed);
+		matrix.popPose();
 	}
 
 }
