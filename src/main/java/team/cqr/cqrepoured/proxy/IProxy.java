@@ -33,11 +33,4 @@ public interface IProxy {
 
 	void openGui(int id, PlayerEntity player, World world, int... args);
 
-	default void setCurrentCQREntityInGUI(AbstractEntityCQR abstractEntityCQR) {
-		
-	}
-	default AbstractEntityCQR getCurrentCQREntityInGUI() {
-		return null;
-	}
-
 }

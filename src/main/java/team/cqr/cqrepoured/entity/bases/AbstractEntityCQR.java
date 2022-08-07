@@ -726,7 +726,6 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			return super.mobInteract(player, hand);
 		}
 
-		CQRMain.PROXY.setCurrentCQREntityInGUI(this);
 		boolean flag = false;
 
 		if(player instanceof ServerPlayerEntity && !this.level.isClientSide()) {

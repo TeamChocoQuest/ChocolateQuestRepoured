@@ -114,15 +114,5 @@ public class ClientProxy implements IProxy {
 		}
 		return false;
 	}
-	
-	private AbstractEntityCQR currentEntity;
-	@Override
-	public void setCurrentCQREntityInGUI(AbstractEntityCQR abstractEntityCQR) {
-		this.currentEntity = abstractEntityCQR;
-	}
-	@Override
-	public AbstractEntityCQR getCurrentCQREntityInGUI() {
-		return this.currentEntity;
-	}
 
 }
