@@ -21,6 +21,7 @@ import team.cqr.cqrepoured.client.init.CQRParticleManager;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerElectrocute;
 import team.cqr.cqrepoured.customtextures.CTResourcepack;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class ClientProxy implements IProxy {
 
@@ -133,6 +134,16 @@ public class ClientProxy implements IProxy {
 			return ((PlayerEntity)Minecraft.getInstance().player).equals(player);
 		}
 		return false;
+	}
+	
+	private AbstractEntityCQR currentEntity;
+	@Override
+	public void setCurrentCQREntityInGUI(AbstractEntityCQR abstractEntityCQR) {
+		this.currentEntity = abstractEntityCQR;
+	}
+	@Override
+	public AbstractEntityCQR getCurrentCQREntityInGUI() {
+		return this.currentEntity;
 	}
 
 }

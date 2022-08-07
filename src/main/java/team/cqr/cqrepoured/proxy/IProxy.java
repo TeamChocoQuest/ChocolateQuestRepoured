@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public interface IProxy {
 
@@ -35,5 +36,12 @@ public interface IProxy {
 	boolean isPlayerCurrentClientPlayer(PlayerEntity player);
 
 	void openGui(int id, PlayerEntity player, World world, int... args);
+
+	default void setCurrentCQREntityInGUI(AbstractEntityCQR abstractEntityCQR) {
+		
+	}
+	default AbstractEntityCQR getCurrentCQREntityInGUI() {
+		return null;
+	}
 
 }

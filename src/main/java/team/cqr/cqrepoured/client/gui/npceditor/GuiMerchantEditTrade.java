@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -9,18 +8,16 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,11 +28,12 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
+import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiMerchantEditTrade extends ContainerScreen {
+public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchant> {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
 
@@ -55,8 +53,8 @@ public class GuiMerchantEditTrade extends ContainerScreen {
 	private GuiButtonReputation reputationButton;
 	private TextFieldWidget advancementTextField;
 
-	public GuiMerchantEditTrade(Container container, AbstractEntityCQR entity, int tradeIndex) {
-		super(container);
+	public GuiMerchantEditTrade(ContainerMerchant container, AbstractEntityCQR entity, int tradeIndex) {
+		super(container, Minecraft.getInstance().player.inventory, entity.getDisplayName());
 		this.entity = entity;
 		this.tradeIndex = tradeIndex;
 		this.trade = entity.getTrades().get(tradeIndex);
@@ -265,18 +263,21 @@ public class GuiMerchantEditTrade extends ContainerScreen {
 				this.inStockTextField.setFocus(false);
 				this.maxStockTextField.setFocus(false);
 			} else {
-				this.advancementTextField.textboxKeyTyped(typedChar, pKeyCode);
-				if (Character.isDigit(typedChar) || pKeyCode == 14 || pKeyCode == 211 || pKeyCode == 203 || pKeyCode == 205 || pKeyCode == 199 || pKeyCode == 207) {
-					this.restockTextField.textboxKeyTyped(typedChar, pKeyCode);
-					this.inStockTextField.textboxKeyTyped(typedChar, pKeyCode);
-					this.maxStockTextField.textboxKeyTyped(typedChar, pKeyCode);
+				this.advancementTextField.keyPressed(pKeyCode, pScanCode, pModifiers);
+				if (/*Character.isDigit(typedChar) ||*/ pKeyCode == 14 || pKeyCode == 211 || pKeyCode == 203 || pKeyCode == 205 || pKeyCode == 199 || pKeyCode == 207) {
+					this.restockTextField.keyPressed(pKeyCode, pScanCode, pModifiers);
+					this.inStockTextField.keyPressed(pKeyCode, pScanCode, pModifiers);
+					this.maxStockTextField.keyPressed(pKeyCode, pScanCode, pModifiers);
 				}
 			}
-		} else if (pKeyCode == 1 || this.minecraft.options.keyInventory.isActiveAndMatches(pKeyCode)) {
+		} else if (pKeyCode == 1 || this.minecraft.options.keyInventory.isActiveAndMatches(keyInput)) {
 			CQRMain.NETWORK.sendToServer(new CPacketOpenMerchantGui(this.entity.getId()));
 		} else {
-			super.keyPressed(pKeyCode, pScanCode, pModifiers);
+			if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	@Override

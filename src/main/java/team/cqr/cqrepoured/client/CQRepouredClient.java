@@ -14,6 +14,8 @@ import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.ScreenBadge;
 import team.cqr.cqrepoured.client.gui.ScreenBossBlock;
 import team.cqr.cqrepoured.client.gui.ScreenSpawner;
+import team.cqr.cqrepoured.client.gui.npceditor.GuiCQREntity;
+import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchant;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRItemProperties;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
@@ -55,6 +57,9 @@ public class CQRepouredClient {
 			ScreenManager.register(CQRContainerTypes.ALCHEMY_BAG.get(), ScreenAlchemyBag::new);
 			ScreenManager.register(CQRContainerTypes.BADGE.get(), ScreenBadge::new);
 
+			ScreenManager.register(CQRContainerTypes.MERCHANT.get(), GuiMerchant::new);
+			ScreenManager.register(CQRContainerTypes.CQR_ENTITY_EDITOR.get(), GuiCQREntity::new);
+			
 			// Has to happen later
 			CQRItemProperties.register();
 		});

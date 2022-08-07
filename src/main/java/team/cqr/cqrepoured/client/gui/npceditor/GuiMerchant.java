@@ -1,14 +1,10 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.java.games.input.Mouse;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -29,7 +25,7 @@ import team.cqr.cqrepoured.inventory.ContainerMerchant;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiMerchant extends ContainerScreen<Container> implements IUpdatableGui {
+public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements IUpdatableGui {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");
 	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_creative.png");
@@ -45,9 +41,9 @@ public class GuiMerchant extends ContainerScreen<Container> implements IUpdatabl
 	private int buttonStartIndex = 0;
 	private boolean scrollBarClicked;
 
-	public GuiMerchant(Container container, PlayerInventory pPlayerInventory, ITextComponent pTitle, AbstractEntityCQR entity) {
+	public GuiMerchant(ContainerMerchant container, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
 		super(container, pPlayerInventory, pTitle);
-		this.entity = entity;
+		this.entity = container.getMerchant();
 		this.trades = entity.getTrades();
 		this.imageWidth = 307;
 		this.imageHeight = 166;

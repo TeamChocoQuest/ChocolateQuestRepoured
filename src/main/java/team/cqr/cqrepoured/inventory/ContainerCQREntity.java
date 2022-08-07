@@ -45,13 +45,26 @@ public class ContainerCQREntity extends Container {
 	{
 		this(containerID, playerInv, getEntity(playerInv, data));
 	}
-
+	
+	public AbstractEntityCQR getEntity() {
+		return this.entity;
+	}
+	
 	private static AbstractEntityCQR getEntity(final PlayerInventory playerInventory, final PacketBuffer data)
 	{
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
-		Objects.requireNonNull(data, "data cannot be null");
+		if(data == null) {
+			CQRMain.logger.debug("Using proxy reference, packetbuffer is null");
+			return CQRMain.PROXY.getCurrentCQREntityInGUI();
+		}
 
-		int entityID = data.readInt();
+		int entityID = 0;
+		try {
+			entityID = data.readInt();
+		} catch(IndexOutOfBoundsException ioobex) {
+			CQRMain.logger.debug("Using proxy reference, packetbuffer is empty");
+			return CQRMain.PROXY.getCurrentCQREntityInGUI();
+		}
 
 		if(playerInventory.player.level.getEntity(entityID) != null && playerInventory.player.level.getEntity(entityID) instanceof AbstractEntityCQR)
 		{
@@ -63,6 +76,9 @@ public class ContainerCQREntity extends Container {
 	public ContainerCQREntity(final int containerID, PlayerInventory playerInv, AbstractEntityCQR entity) {
 		super(CQRContainerTypes.CQR_ENTITY_EDITOR.get(), containerID);
 		this.entity = entity;
+		if(entity == null) {
+			return;
+		}
 		LazyOptional<IItemHandler> lOpCap = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		IItemHandler inventory = null;
 		if(lOpCap.isPresent()) {
@@ -72,6 +88,8 @@ public class ContainerCQREntity extends Container {
 		CapabilityExtraItemHandler extraInventory = null;
 		if(lOpCapTwo.isPresent()) {
 			extraInventory = lOpCapTwo.resolve().get();
+		} else {
+			throw new NullPointerException("Extra item handler capability is NOT present!");
 		}
 
 		for (int i = 0; i < 3; i++) {
