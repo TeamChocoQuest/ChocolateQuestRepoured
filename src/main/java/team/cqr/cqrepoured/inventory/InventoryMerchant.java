@@ -1,17 +1,15 @@
 package team.cqr.cqrepoured.inventory;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
-
-import javax.annotation.Nullable;
 
 public class InventoryMerchant implements IInventory {
 
@@ -25,21 +23,6 @@ public class InventoryMerchant implements IInventory {
 	public InventoryMerchant(AbstractEntityCQR entity, PlayerEntity player) {
 		this.entity = entity;
 		this.player = player;
-	}
-
-	@Override
-	public String getName() {
-		return this.entity.getName();
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return new StringTextComponent(this.getName());
 	}
 
 	@Override
@@ -156,21 +139,6 @@ public class InventoryMerchant implements IInventory {
 	@Override
 	public void stopOpen(PlayerEntity player) {
 
-	}
-
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-
-	}
-	
-	@Override
-	public int getFieldCount() {
-		return 0;
 	}
 
 }
