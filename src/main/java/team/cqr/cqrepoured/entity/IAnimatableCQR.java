@@ -12,6 +12,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.Hand;
+import net.minecraftforge.fml.network.PacketDistributor;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -20,11 +21,13 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.gun.IFireArmTwoHanded;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
+import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
@@ -138,20 +141,20 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		if (!this.isTwoHandedAnimationRunning()) {
 			if (this.isSwinging(hand, event)) {
 				ItemStack handItemStack = this.getItemInHand(hand);
-				if(event.getController().getAnimationState() != AnimationState.Running) {
+				/*if(event.getController().getAnimationState() != AnimationState.Running) {
 					event.getController().clearAnimationCache();
 					event.getController().markNeedsReload();
-				}
+				}*/
 				if (!handItemStack.isEmpty()) {
 					if (handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.EAT || handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.DRINK) {
 						// Eating/Drinking animation
 					} else {
 						// Normal swinging
-						event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, false));
+						event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, true));
 					}
 					return PlayState.CONTINUE;
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, false));
+					event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, true));
 					return PlayState.CONTINUE;
 				}
 			} else {
@@ -311,5 +314,5 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public ItemStack getMainHandItem();	
 	
 	public boolean isSprinting();
-
+	
 }

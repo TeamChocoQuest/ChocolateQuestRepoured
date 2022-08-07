@@ -16,6 +16,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -451,7 +452,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		if (this.isSwinging(Hand.MAIN_HAND, event)) {
 			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, true));
 		} else {
 			this.kickInProgressClient = false;
 			
@@ -535,22 +536,24 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	// TODO: Add this to the interface?
 	@Override
 	public void sendAnimationUpdate(String animationName) {
+		IServerAnimationReceiver.super.sendAnimationUpdate(animationName);
 		if (this.isCurrentlyPlayingAnimation()) {
 			return;
 		}
-
-		IServerAnimationReceiver.super.sendAnimationUpdate(animationName);
 		switch (animationName) {
 		case ANIM_NAME_CANNON_SHOOT:
 			this.animationTimer = this.cannonArmTimer;
+			this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 			break;
 		case ANIM_NAME_THROW:
 			this.animationTimer = ARMS_THROW_DURATION;
+			this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 			break;
 		case ANIM_NAME_GROUND_SMASH:
 			this.setEmitterLeftActive(false);
 			this.setEmitterRightActive(false);
 			this.animationTimer = GROUND_SLAM_DURATION;
+			this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 			break;
 		// All others are no normal animations
 		default:
@@ -559,7 +562,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return;
 		}
 		this.currentAnimationPlaying = animationName;
-		this.entityData.set(ARMS_BLOCKED_BY_LONG_ANIMATION, true);
 	}
 
 	private int animationTimer = -1;
@@ -990,6 +992,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void processAnimationUpdate(String animationID) {
+		super.processAnimationUpdate(animationID);
 		this.currentAnimationPlaying = animationID;
 		switch (animationID) {
 		// Cannon shoot animation
