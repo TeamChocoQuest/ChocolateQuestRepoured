@@ -6,49 +6,49 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.server.ServerWorld;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
+import team.cqr.cqrepoured.network.CQRNetworkHooks;
 
 public class ContainerMerchantEditTrade extends Container implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final IInventory tradeInventory;
+	private final int tradeIndex;
+
+	public int getTradeIndex() {
+		return this.tradeIndex;
+	}
 	
 	public ContainerMerchantEditTrade(int id, PlayerInventory playerInv, PacketBuffer buf) {
 		this(CQRContainerTypes.MERCHANT_EDIT_TRADE.get(), id, ContainerMerchant.tryGetCQREntity(buf), playerInv.player, tryGetTradeIndex(buf));
 	}
 
 	private static int tryGetTradeIndex(PacketBuffer data) {
-		try {
-			int id = data.readInt();
-			return id;
-		} catch(IndexOutOfBoundsException ioobex) {
-			CQRMain.logger.debug("Using proxy reference, packetbuffer is empty");
-			return 0;
-		}
+		int id = data.readInt();
+		return id;
 	}
 
 	public ContainerMerchantEditTrade(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
 		super(type, containerID);
 		this.entity = entity;
-
+		this.tradeIndex = tradeIndex;
+		
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
@@ -59,7 +59,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			this.addSlot(new Slot(player.inventory, k, 72 + k * 18, 118));
 		}
 
-		this.tradeInventory = new Inventory(/*"", false,*/ 5);
+		this.tradeInventory = new Inventory(/* "", false, */ 5);
 		this.addSlot(new Slot(this.tradeInventory, 0, 74, 12));
 		this.addSlot(new Slot(this.tradeInventory, 1, 100, 12));
 		this.addSlot(new Slot(this.tradeInventory, 2, 126, 12));
@@ -114,11 +114,8 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 		super.removed(playerIn);
 
 		/*
-		 * if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected())
-		 * { for (int i = 0; i < 4; i++) {
-		 * playerIn.dropItem(this.tradeInventory.removeStackFromSlot(i), false); } } else { for (int
-		 * i = 0; i < 4; i++) { playerIn.inventory.placeItemBackInInventory(playerIn.world,
-		 * this.tradeInventory.removeStackFromSlot(i)); } }
+		 * if (!playerIn.isEntityAlive() || playerIn instanceof EntityPlayerMP && ((EntityPlayerMP) playerIn).hasDisconnected()) { for (int i = 0; i < 4; i++) { playerIn.dropItem(this.tradeInventory.removeStackFromSlot(i), false); } } else { for (int
+		 * i = 0; i < 4; i++) { playerIn.inventory.placeItemBackInInventory(playerIn.world, this.tradeInventory.removeStackFromSlot(i)); } }
 		 */
 	}
 
@@ -136,54 +133,35 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 
 	@Override
 	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
-		if (button == 0) {
-			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
-			player.openMenu(new INamedContainerProvider() {
-				
-				@Override
-				public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-					return CQRContainerTypes.MERCHANT.get().create(p_createMenu_1_, p_createMenu_2_);
-				}
-				
-				@Override
-				public ITextComponent getDisplayName() {
-					return ContainerMerchantEditTrade.this.entity.getDisplayName();
-				}
-			});
-		} else if (button == 1) {
-			int index = extraData.readInt();
-			boolean[] ignoreMeta = new boolean[4];
-			IntStream.range(0, ignoreMeta.length).forEach(i -> ignoreMeta[i] = extraData.readBoolean());
-			boolean[] ignoreNBT = new boolean[4];
-			IntStream.range(0, ignoreNBT.length).forEach(i -> ignoreNBT[i] = extraData.readBoolean());
-			String reputationName = extraData.readUtf();
-			String advancementName = extraData.readUtf();
-			boolean stock = extraData.readBoolean();
-			int restock = extraData.readInt();
-			int inStock = extraData.readInt();
-			int maxStock = extraData.readInt();
+		if (player instanceof ServerPlayerEntity) {
+			ServerPlayerEntity spe = (ServerPlayerEntity) player;
+			if (button == 0) {
+				// player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+				CQRNetworkHooks.openGUI(spe, this.entity.getDisplayName(), buf -> buf.writeInt(this.entity.getId()), CQRContainerTypes.MERCHANT.get());
+			} else if (button == 1) {
+				int index = extraData.readInt();
+				boolean[] ignoreMeta = new boolean[4];
+				IntStream.range(0, ignoreMeta.length).forEach(i -> ignoreMeta[i] = extraData.readBoolean());
+				boolean[] ignoreNBT = new boolean[4];
+				IntStream.range(0, ignoreNBT.length).forEach(i -> ignoreNBT[i] = extraData.readBoolean());
+				String reputationName = extraData.readUtf();
+				String advancementName = extraData.readUtf();
+				boolean stock = extraData.readBoolean();
+				int restock = extraData.readInt();
+				int inStock = extraData.readInt();
+				int maxStock = extraData.readInt();
 
-			TraderOffer trades = this.entity.getTrades();
-			int reputation = this.getRequriedReputation(reputationName);
-			ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.level, advancementName);
-			ItemStack output = this.getOutput();
-			TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
-			Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
+				TraderOffer trades = this.entity.getTrades();
+				int reputation = this.getRequriedReputation(reputationName);
+				ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.level, advancementName);
+				ItemStack output = this.getOutput();
+				TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
+				Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
 
-			this.entity.getTrades().editTrade(index, trade);
-			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
-			player.openMenu(new INamedContainerProvider() {
-				
-				@Override
-				public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-					return CQRContainerTypes.MERCHANT.get().create(p_createMenu_1_, p_createMenu_2_);
-				}
-				
-				@Override
-				public ITextComponent getDisplayName() {
-					return ContainerMerchantEditTrade.this.entity.getDisplayName();
-				}
-			});
+				this.entity.getTrades().editTrade(index, trade);
+				// player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
+				CQRNetworkHooks.openGUI(spe, this.entity.getDisplayName(), buf -> buf.writeInt(this.entity.getId()), CQRContainerTypes.MERCHANT.get());
+			}
 		}
 	}
 
@@ -214,6 +192,10 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 			return requiredAdvancement;
 		}
 		return null;
+	}
+
+	public AbstractEntityCQR getEntity() {
+		return this.entity;
 	}
 
 }

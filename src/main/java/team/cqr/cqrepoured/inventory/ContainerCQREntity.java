@@ -53,18 +53,7 @@ public class ContainerCQREntity extends Container {
 	private static AbstractEntityCQR getEntity(final PlayerInventory playerInventory, final PacketBuffer data)
 	{
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
-		if(data == null) {
-			CQRMain.logger.debug("Using proxy reference, packetbuffer is null");
-			return CQRMain.PROXY.getCurrentCQREntityInGUI();
-		}
-
-		int entityID = 0;
-		try {
-			entityID = data.readInt();
-		} catch(IndexOutOfBoundsException ioobex) {
-			CQRMain.logger.debug("Using proxy reference, packetbuffer is empty");
-			return CQRMain.PROXY.getCurrentCQREntityInGUI();
-		}
+		int entityID = data.readInt();
 
 		if(playerInventory.player.level.getEntity(entityID) != null && playerInventory.player.level.getEntity(entityID) instanceof AbstractEntityCQR)
 		{

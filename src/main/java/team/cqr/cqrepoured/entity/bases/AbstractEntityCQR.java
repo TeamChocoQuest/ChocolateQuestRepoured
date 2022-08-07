@@ -7,7 +7,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import io.netty.buffer.Unpooled;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -27,13 +26,10 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
@@ -83,7 +79,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -143,6 +138,7 @@ import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.ItemShieldDummy;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.item.staff.ItemStaffHealing;
+import team.cqr.cqrepoured.network.CQRNetworkHooks;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
@@ -739,55 +735,20 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 				if (player.isCreative() || this.getLeader() == player) {
 					if (!this.level.isClientSide) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getId(), 0, 0);
-						NetworkHooks.openGui(spe, new INamedContainerProvider() {
-							
-							@Override
-							public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
-								PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
-								buf.writeInt(AbstractEntityCQR.this.getId());
-								return CQRContainerTypes.CQR_ENTITY_EDITOR.get().create(windowId, invPlayer, buf);
-							}
-							
-							@Override
-							public ITextComponent getDisplayName() {
-								return AbstractEntityCQR.this.getDisplayName();
-							}
-						});
+						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.CQR_ENTITY_EDITOR.get());
 					}
 					flag = true;
 				} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
 					if (!this.level.isClientSide) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
-						NetworkHooks.openGui(spe, new INamedContainerProvider() {
-							
-							@Override
-							public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
-								return CQRContainerTypes.MERCHANT.get().create(windowId, invPlayer);
-							}
-							
-							@Override
-							public ITextComponent getDisplayName() {
-								return AbstractEntityCQR.this.getDisplayName();
-							}
-						});
+						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 					}
 					flag = true;
 				}
 			} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
 				if (!this.level.isClientSide) {
 					//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
-					NetworkHooks.openGui(spe, new INamedContainerProvider() {
-						
-						@Override
-						public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
-							return CQRContainerTypes.MERCHANT.get().create(windowId, invPlayer);
-						}
-						
-						@Override
-						public ITextComponent getDisplayName() {
-							return AbstractEntityCQR.this.getDisplayName();
-						}
-					});
+					CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 				}
 				flag = true;
 			}

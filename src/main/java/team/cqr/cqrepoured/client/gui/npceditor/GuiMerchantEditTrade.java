@@ -8,15 +8,16 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,12 +29,12 @@ import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
-import team.cqr.cqrepoured.inventory.ContainerMerchant;
+import team.cqr.cqrepoured.inventory.ContainerMerchantEditTrade;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchant> {
+public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditTrade> {
 
 	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
 
@@ -53,10 +54,12 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchant> {
 	private GuiButtonReputation reputationButton;
 	private TextFieldWidget advancementTextField;
 
-	public GuiMerchantEditTrade(ContainerMerchant container, AbstractEntityCQR entity, int tradeIndex) {
-		super(container, Minecraft.getInstance().player.inventory, entity.getDisplayName());
-		this.entity = entity;
-		this.tradeIndex = tradeIndex;
+	
+	public GuiMerchantEditTrade(ContainerMerchantEditTrade container, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+		super(container, pPlayerInventory, pTitle);
+
+		this.entity = container.getEntity();
+		this.tradeIndex = container.getTradeIndex();
 		this.trade = entity.getTrades().get(tradeIndex);
 		this.imageWidth = 304;
 		this.imageHeight = 166;

@@ -8,17 +8,15 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
+import team.cqr.cqrepoured.network.CQRNetworkHooks;
 import team.cqr.cqrepoured.util.CraftingHelper;
 
 public class ContainerMerchant extends Container implements IInteractable {
@@ -32,22 +30,10 @@ public class ContainerMerchant extends Container implements IInteractable {
 	
 	public static AbstractEntityCQR tryGetCQREntity(PacketBuffer data) {
 		AbstractEntityCQR aecqr = null;
-		if(data == null) {
-			CQRMain.logger.debug("packetbuffer is empty, using proxy reference");
-			aecqr = CQRMain.PROXY.getCurrentCQREntityInGUI();
-		} else {
-			try {
-				int id = data.readInt();
-				Entity ent = Minecraft.getInstance().level.getEntity(id);
-				if (ent instanceof AbstractEntityCQR) {
-					aecqr = (AbstractEntityCQR)ent;
-				} else {
-					aecqr = CQRMain.PROXY.getCurrentCQREntityInGUI();
-				}
-			} catch(IndexOutOfBoundsException ioobex) {
-				CQRMain.logger.debug("Using proxy reference, packetbuffer is empty");
-				aecqr = CQRMain.PROXY.getCurrentCQREntityInGUI();
-			}
+		int id = data.readInt();
+		Entity ent = Minecraft.getInstance().level.getEntity(id);
+		if (ent instanceof AbstractEntityCQR) {
+			aecqr = (AbstractEntityCQR)ent;
 		}
 		return aecqr;
 	}
@@ -220,19 +206,12 @@ public class ContainerMerchant extends Container implements IInteractable {
 			if (button == 0) {
 				// new trade
 				//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), this.entity.getTrades().size(), 0);
-				player.openMenu(new INamedContainerProvider() {
-					
-					@Override
-					public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-						//TODO: Use proper container-type
-						return new ContainerMerchantEditTrade(getType(), p_createMenu_1_, ContainerMerchant.this.entity, player, ContainerMerchant.this.entity.getTrades().size());
-					}
-					
-					@Override
-					public ITextComponent getDisplayName() {
-						return ContainerMerchant.this.entity.getDisplayName();
-					}
-				});
+				if(player instanceof ServerPlayerEntity) {
+					CQRNetworkHooks.openGUI(player, this.entity.getDisplayName(), buf -> {
+						buf.writeInt(ContainerMerchant.this.entity.getId());
+						buf.writeInt(ContainerMerchant.this.entity.getTrades().size());
+					}, CQRContainerTypes.MERCHANT_EDIT_TRADE.get());
+				}
 			}
 		} else if (button < 20) {
 			// select
@@ -257,19 +236,12 @@ public class ContainerMerchant extends Container implements IInteractable {
 			// edit
 			int index = extraData.readInt();
 			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), index, 0);
-			player.openMenu(new INamedContainerProvider() {
-				
-				@Override
-				public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-					//TODO: Use proper container-type
-					return new ContainerMerchantEditTrade(getType(), p_createMenu_1_, ContainerMerchant.this.entity, player, index);
-				}
-				
-				@Override
-				public ITextComponent getDisplayName() {
-					return ContainerMerchant.this.entity.getDisplayName();
-				}
-			});
+			if(player instanceof ServerPlayerEntity) {
+				CQRNetworkHooks.openGUI(player, this.entity.getDisplayName(), buf -> {
+					buf.writeInt(ContainerMerchant.this.entity.getId());
+					buf.writeInt(index);
+				}, CQRContainerTypes.MERCHANT_EDIT_TRADE.get());
+			}
 		}
 	}
 
