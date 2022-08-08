@@ -92,7 +92,7 @@ public class ContainerCQREntity extends Container {
 		}
 
 		//Boots
-		this.addSlot(new SlotItemHandler(inventory, 0, 107, 8) {
+		this.addSlot(new SlotItemHandler(inventory, 2, 107, 8) {
 			@Override
 			public int getMaxStackSize() {
 				return 1;
@@ -117,7 +117,7 @@ public class ContainerCQREntity extends Container {
 
 		});
 		//Legs
-		this.addSlot(new SlotItemHandler(inventory, 1, 89, 8) {
+		this.addSlot(new SlotItemHandler(inventory, 3, 89, 8) {
 			@Override
 			public int getMaxStackSize() {
 				return 1;
@@ -140,7 +140,7 @@ public class ContainerCQREntity extends Container {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_LEGGINGS);
 			}
 		});
-		this.addSlot(new SlotItemHandler(inventory, 2, 71, 8) {
+		this.addSlot(new SlotItemHandler(inventory, 4, 71, 8) {
 			@Override
 			public int getMaxStackSize() {
 				return 1;
@@ -163,7 +163,8 @@ public class ContainerCQREntity extends Container {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_CHESTPLATE);
 			}
 		});
-		this.addSlot(new SlotItemHandler(inventory, 3, 53, 8) {
+		//helmet
+		this.addSlot(new SlotItemHandler(inventory, 5, 53, 8) {
 			@Override
 			public int getMaxStackSize() {
 				return 1;
@@ -181,20 +182,23 @@ public class ContainerCQREntity extends Container {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_HELMET);
 			}
 		});
-		this.addSlot(new SlotItemHandler(inventory, 4, 71, 26) {
+		//mainhand
+		this.addSlot(new SlotItemHandler(inventory, 0, 71, 26) {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_MAIN_HAND);
 			}
 		});
-		this.addSlot(new SlotItemHandler(inventory, 5, 89, 26) {
+		//offhand
+		this.addSlot(new SlotItemHandler(inventory, 1, 89, 26) {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_OFF_HAND);
 			}
 		});
+		//potion
 		this.addSlot(new SlotItemHandler(extraInventory, 0, 53, 26) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
@@ -207,6 +211,7 @@ public class ContainerCQREntity extends Container {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_POTION);
 			}
 		});
+		//badge
 		this.addSlot(new SlotItemHandler(extraInventory, 1, 107, 26) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
@@ -219,6 +224,7 @@ public class ContainerCQREntity extends Container {
 				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_BADGE);
 			}
 		});
+		//arrow
 		this.addSlot(new SlotItemHandler(extraInventory, 2, 125, 26) {
 			@Override
 			public boolean mayPlace(ItemStack stack) {
