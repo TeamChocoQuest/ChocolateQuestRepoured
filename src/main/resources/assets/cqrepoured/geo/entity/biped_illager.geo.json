@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.biped_illager",
+				"identifier": "geometry.modelbipedgecko",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 2,
@@ -76,7 +76,7 @@
 					"pivot": [0, 14, 0],
 					"cubes": [
 						{"origin": [-4, 12, -3], "size": [8, 12, 6], "uv": [16, 20]},
-						{"origin": [-4, 8, -3], "size": [8, 16, 6], "inflate": 0.5, "uv": [0, 38]}
+						{"origin": [-4, 8, -3], "size": [8, 16, 6], "inflate": 0.25, "uv": [0, 38]}
 					]
 				},
 				{
@@ -154,7 +154,7 @@
 					"parent": "bipedBody",
 					"pivot": [0, 24, 0],
 					"cubes": [
-						{"origin": [-4, 12, -2.5], "size": [8, 12, 7], "uv": [16, 16]}
+						{"origin": [-4, 12, -3], "size": [8, 12, 6], "uv": [16, 16]}
 					]
 				},
 				{
