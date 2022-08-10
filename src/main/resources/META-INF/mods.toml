@@ -36,7 +36,7 @@ license="MIT-license"
 		
 	[[dependencies.cqrepoured]]
 		modId="geckolib3"
-		versionRange="[3.0.79,)"
+		versionRange="[3.0.86,)"
 		mandatory=true
 		ordering="NONE"
 		side="BOTH"
