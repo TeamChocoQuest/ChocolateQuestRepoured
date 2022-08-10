@@ -47,6 +47,8 @@ import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
 import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishNormal;
@@ -152,6 +154,8 @@ public class CQREntityTypes {
 	
 	//Standard mobs
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
+	public static final RegistryObject<EntityType<EntityCQRGremlin>> GREMLIN = registerSized(EntityCQRGremlin::new, "gremlin", 0.6F, 1.2F, 1);
+	public static final RegistryObject<EntityType<EntityCQRIllager>> ILLAGER = registerSizedHumanoid(EntityCQRIllager::new, "illager", 1);
 
 	//Ender calamity
 	public static final RegistryObject<EntityType<EntityCalamityCrystal>> CALAMITY_CRYSTAL = registerSized(EntityCalamityCrystal::new, "calamity_crystal", 2, 2, 1);
@@ -236,6 +240,10 @@ public class CQREntityTypes {
 	
 	@SubscribeEvent
 	public static void initializeAttributes(EntityAttributeCreationEvent event) {
+		event.put(ILLAGER.get(), EntityCQRIllager.createCQRAttributes().build());
+		
+		event.put(GREMLIN.get(), EntityCQRGremlin.createCQRAttributes().build());
+		
 		event.put(SMALL_SLIME.get(), EntitySlimePart.createMobAttributes().build());
 
 		event.put(BOARMAGE.get(), EntityCQRBoarmage.createCQRAttributes().build());

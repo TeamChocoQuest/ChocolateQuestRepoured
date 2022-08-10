@@ -19,6 +19,9 @@ import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnde
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQREnderman;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRGremlin;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRIllager;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantEndermite;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfish;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
@@ -52,9 +55,9 @@ public class CQREntityRenderers
 		/*
 		if (CQRConfig.isAprilFoolsEnabled()) {
 			registerAprilFoolsRenderer();
-		} else {
+		} else {*/
 			registerEntityRenderers();
-		}*/
+		/*}*/
 		registerBossRenderers();
 		registerMountRenderers(); 
 	}
@@ -114,13 +117,13 @@ public class CQREntityRenderers
 		// Mobs
 		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, RenderCQRBoarman::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, RenderCQRDummy::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, RenderCQRDwarf::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, RenderCQREnderman::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, RenderCQRGolem::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGremlin.class, RenderCQRGremlin::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRHuman.class, RenderCQRHuman::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRIllager.class, RenderCQRIllager::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, RenderCQRMandril::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, RenderCQRDwarf::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ENDERMAN.get(), RenderCQREnderman::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, RenderCQRGolem::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GREMLIN.get(), RenderCQRGremlin::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRHuman.class, RenderCQRHuman::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ILLAGER.get(), RenderCQRIllager::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, RenderCQRMandril::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, RenderCQRMinotaur::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMummy.class, RenderCQRMummy::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, RenderCQRNPC::new);
