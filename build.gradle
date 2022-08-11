@@ -65,7 +65,7 @@ dependencies {
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     // GeckoLib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.86')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.87')
 
     // ReachFix
     // TODO seems to cause issues in dev? atDependencies 'curse.maven:ReachFix-556777:3648997'
