@@ -4,6 +4,10 @@
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
+		"structure.MixinChunkStatus",
+		"structure.MixinStructure",
+		"structure.MixinStructureManager",
+		"structure.MixinWorldLoadProgressScreen",
 		"AccessorAbstractSpawner",
 		"MixinBipedArmorLayer",
 		"MixinChestBlock",
