@@ -12,6 +12,10 @@ import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 
+/**
+ * @deprecated TODO move into {@link RenderCQRExterminator}
+ */
+@Deprecated
 public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends RenderMultiPartPart<T> {
 
 	public RenderExterminatorBackpackPart(EntityRendererManager renderManager) {
