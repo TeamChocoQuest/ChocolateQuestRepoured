@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
@@ -15,7 +10,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
-import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 
 public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	
@@ -45,25 +39,6 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		interpTargetYaw = yaw;
 		interpTargetPitch = pitch;
 		newPosRotationIncrements = posRotationIncrements;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	protected static Map<Class<? extends CQRPartEntity<? extends Entity>>, EntityRenderer<? extends CQRPartEntity<? extends Entity>>> RENDERERS = new HashMap<>();
-	
-	@OnlyIn(Dist.CLIENT)
-	public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
-		if(RENDERERS.containsKey(this.getClassForRenderer())) {
-			return RENDERERS.get(this.getClassForRenderer());
-		}
-		EntityRenderer<? extends CQRPartEntity<? extends Entity>> r = this.createRenderer(manager);
-		RENDERERS.put(this.getClassForRenderer(), r);
-		return r;
-	}
-	
-	protected abstract Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer();
-	
-	protected EntityRenderer<? extends CQRPartEntity<? extends Entity>> createRenderer(EntityRendererManager manager) {
-		return new RenderMultiPartPart<>(manager);
 	}
 	
 	@Override

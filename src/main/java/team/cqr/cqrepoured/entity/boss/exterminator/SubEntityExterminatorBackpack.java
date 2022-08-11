@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-
-import java.util.function.Supplier;
 
 public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
@@ -57,11 +56,6 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 			return ActionResultType.FAIL;
 		}
 		return this.exterminator.interact(player, hand);
-	}
-	
-	@Override
-	protected Class<? extends CQRPartEntity<?>> getClassForRenderer() {
-		return SubEntityExterminatorBackpack.class;
 	}
 
 }

@@ -11,11 +11,7 @@
 		"MixinFireBlock",
 		"MixinShulkerEntity",
 		"MixinEnderdragonEntity",
-		"MixinLivingEntity",
-		"MixinWorld",
-		"MixinTrackedEntity",
-		"MixinEntityRendererManager",
-		"MixinClientWorld"
+		"MixinLivingEntity"
 	],
 	"minVersion": "0.8"
 }

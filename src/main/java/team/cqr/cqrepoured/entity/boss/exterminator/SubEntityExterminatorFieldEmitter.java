@@ -5,17 +5,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
-import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -116,17 +110,6 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 			return ActionResultType.FAIL;
 		}
 		return this.exterminator.interact(player, hand);
-	}
-	
-	@Override
-	protected Class<? extends CQRPartEntity<?>> getClassForRenderer() {
-		return SubEntityExterminatorFieldEmitter.class;
-	}
-	
-	@Override
-	@OnlyIn(Dist.CLIENT)
-	public EntityRenderer<SubEntityExterminatorFieldEmitter> createRenderer(EntityRendererManager manager) {
-		return new RenderExterminatorBackpackPart<SubEntityExterminatorFieldEmitter>(manager);
 	}
 
 }
