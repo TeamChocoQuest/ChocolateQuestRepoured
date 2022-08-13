@@ -46,9 +46,27 @@ import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRBoarman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRDummy;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRDwarf;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGoblin;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRHuman;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMinotaur;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMummy;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
+import team.cqr.cqrepoured.entity.mobs.EntityCQROgre;
+import team.cqr.cqrepoured.entity.mobs.EntityCQROrc;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRPirate;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSkeleton;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRZombie;
 import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishNormal;
@@ -153,9 +171,27 @@ public class CQREntityTypes {
 		);
 	
 	//Standard mobs
+	public static final RegistryObject<EntityType<EntityCQRDummy>> DUMMY = registerSizedHumanoid(EntityCQRDummy::new, "dummy", 1);
+	public static final RegistryObject<EntityType<EntityCQRDwarf>> DWARF = registerSized(EntityCQRDwarf::new, "dwarf", 0.54F, 1.235F, 1);
 	public static final RegistryObject<EntityType<EntityCQREnderman>> ENDERMAN = registerSized(EntityCQREnderman::new, "enderman", 0.6F, 2.9F, 1);
 	public static final RegistryObject<EntityType<EntityCQRGremlin>> GREMLIN = registerSized(EntityCQRGremlin::new, "gremlin", 0.6F, 1.2F, 1);
+	public static final RegistryObject<EntityType<EntityCQRGoblin>> GOBLIN = registerSized(EntityCQRGoblin::new, "goblin", 0.6F, 1.4F, 1);
+	public static final RegistryObject<EntityType<EntityCQRGolem>> GOLEM = registerSizedHumanoid(EntityCQRGolem::new, "golem", 1);
+	public static final RegistryObject<EntityType<EntityCQRHuman>> HUMAN = registerSizedHumanoid(EntityCQRHuman::new, "human", 1);
 	public static final RegistryObject<EntityType<EntityCQRIllager>> ILLAGER = registerSizedHumanoid(EntityCQRIllager::new, "illager", 1);
+	public static final RegistryObject<EntityType<EntityCQRNPC>> NPC = registerSizedHumanoid(EntityCQRNPC::new, "npc", 1);
+	public static final RegistryObject<EntityType<EntityCQRMinotaur>> MINOTAUR = registerSizedHumanoid(EntityCQRMinotaur::new, "minotaur", 1);
+	public static final RegistryObject<EntityType<EntityCQRMandril>> MANDRIL = registerSizedHumanoid(EntityCQRMandril::new, "mandril", 1);
+	public static final RegistryObject<EntityType<EntityCQRMummy>> MUMMY = registerSizedHumanoid(EntityCQRMummy::new, "mummy", 1);
+	public static final RegistryObject<EntityType<EntityCQROgre>> OGRE = registerSizedHumanoid(EntityCQROgre::new, "ogre", 1);
+	public static final RegistryObject<EntityType<EntityCQROrc>> ORC = registerSizedHumanoid(EntityCQROrc::new, "orc", 1);
+	public static final RegistryObject<EntityType<EntityCQRBoarman>> BOARMAN = registerSizedHumanoid(EntityCQRBoarman::new, "boarman", 1);
+	public static final RegistryObject<EntityType<EntityCQRPirate>> PIRATE = registerSizedHumanoid(EntityCQRPirate::new, "pirate", 1);
+	public static final RegistryObject<EntityType<EntityCQRSkeleton>> SKELETON = registerSizedHumanoid(EntityCQRSkeleton::new, "skeleton", 1);
+	public static final RegistryObject<EntityType<EntityCQRSpectre>> SPECTRE = registerSizedHumanoid(EntityCQRSpectre::new, "spectre", 1);
+	public static final RegistryObject<EntityType<EntityCQRTriton>> TRITON = registerSizedHumanoid(EntityCQRTriton::new, "triton", 1);
+	public static final RegistryObject<EntityType<EntityCQRWalker>> WALKER = registerSizedHumanoid(EntityCQRWalker::new, "walker", 1);
+	public static final RegistryObject<EntityType<EntityCQRZombie>> ZOMBIE = registerSizedHumanoid(EntityCQRZombie::new, "walker", 1);
 
 	//Ender calamity
 	public static final RegistryObject<EntityType<EntityCalamityCrystal>> CALAMITY_CRYSTAL = registerSized(EntityCalamityCrystal::new, "calamity_crystal", 2, 2, 1);
@@ -240,6 +276,42 @@ public class CQREntityTypes {
 	
 	@SubscribeEvent
 	public static void initializeAttributes(EntityAttributeCreationEvent event) {
+		event.put(BOARMAN.get(), EntityCQRBoarman.createCQRAttributes().build());
+		
+		event.put(DUMMY.get(), EntityCQRDummy.createCQRAttributes().build());
+		
+		event.put(DWARF.get(), EntityCQRDwarf.createCQRAttributes().build());
+		
+		event.put(GOBLIN.get(), EntityCQRGoblin.createCQRAttributes().build());
+		
+		event.put(GOLEM.get(), EntityCQRGolem.createCQRAttributes().build());
+		
+		event.put(HUMAN.get(), EntityCQRHuman.createCQRAttributes().build());
+		
+		event.put(MANDRIL.get(), EntityCQRMandril.createCQRAttributes().build());
+		
+		event.put(MINOTAUR.get(), EntityCQRMinotaur.createCQRAttributes().build());
+		
+		event.put(MUMMY.get(), EntityCQRMummy.createCQRAttributes().build());
+		
+		event.put(NPC.get(), EntityCQRNPC.createCQRAttributes().build());
+		
+		event.put(OGRE.get(), EntityCQROgre.createCQRAttributes().build());
+		
+		event.put(ORC.get(), EntityCQROrc.createCQRAttributes().build());
+		
+		event.put(PIRATE.get(), EntityCQRPirate.createCQRAttributes().build());
+		
+		event.put(SKELETON.get(), EntityCQRSkeleton.createCQRAttributes().build());
+		
+		event.put(SPECTRE.get(), EntityCQRSpectre.createCQRAttributes().build());
+		
+		event.put(TRITON.get(), EntityCQRTriton.createCQRAttributes().build());
+		
+		event.put(WALKER.get(), EntityCQRWalker.createCQRAttributes().build());
+		
+		event.put(ZOMBIE.get(), EntityCQRZombie.createCQRAttributes().build());
+		
 		event.put(ILLAGER.get(), EntityCQRIllager.createCQRAttributes().build());
 		
 		event.put(GREMLIN.get(), EntityCQRGremlin.createCQRAttributes().build());
