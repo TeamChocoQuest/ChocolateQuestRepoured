@@ -8,6 +8,7 @@ import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemTier;
+import net.minecraft.item.Items;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -99,30 +100,30 @@ public class CQRItems {
 	public static final RegistryObject<ItemShieldWalkerKing> SHIELD_WALKER_KING = register("shield_walker_king", ItemShieldWalkerKing::new);
 
 	// Shields
-	public static final RegistryObject<ItemShieldCQR> SHIELD_BULL = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_CARL = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_DRAGONSLAYER = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_FIRE = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_GOBLIN = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_MONKING = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_MOON = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_MUMMY = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_PIGMAN = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE2 = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_RAINBOW = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_REFLECTIVE = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_RUSTED = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_SKELETON_FRIENDS = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_SPECTER = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_SPIDER = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_SUN = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_TOMB = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_TRITON = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_TURTLE = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_WARPED = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_WALKER = null;
-	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = null;
+	public static final RegistryObject<ItemShieldCQR> SHIELD_BULL = registerShield("bull");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_CARL = registerShield("carl");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_DRAGONSLAYER = registerShield("dragonslayer");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_FIRE = registerShield("fire");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_GOBLIN = registerShield("goblin");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MONKING = registerShield("monking");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MOON = registerShield("moon");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_MUMMY = registerShield("mummy");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIGMAN = registerShield("pigman");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE = registerShield("pirate");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_PIRATE2 = registerShield("pirate_alt");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_RAINBOW = registerShield("rainbow");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_REFLECTIVE = registerShield("reflective");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_RUSTED = registerShield("rusted");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SKELETON_FRIENDS = registerShield("skeleton_friends");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SPECTER = registerShield("specter");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SPIDER = registerShield("spider");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_SUN = registerShield("sun");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TOMB = registerShield("tomb");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TRITON = registerShield("triton");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_TURTLE = registerShield("turtle");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_WARPED = registerShield("warped");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_WALKER = registerShield("walker");
+	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = registerShield("zombie");
 
 	// Great Swords
 	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, ItemTier.IRON, 30));
@@ -257,6 +258,10 @@ public class CQRItems {
 
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier) {
 		return register(name, itemSupplier, CQRMain.CQR_ITEMS_TAB);
+	}
+
+	private static RegistryObject<ItemShieldCQR> registerShield(String string) {
+		return register("shield_" + string, prop -> new ItemShieldCQR(prop, 1024, Items.IRON_INGOT));
 	}
 
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier,
