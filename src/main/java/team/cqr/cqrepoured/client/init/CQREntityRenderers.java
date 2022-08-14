@@ -19,9 +19,27 @@ import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnde
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQREnderman;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRGoblin;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRGolem;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRGremlin;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRHuman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRIllager;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRMandril;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRMinotaur;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRMummy;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRNPC;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQROgre;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQROrc;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRPirate;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRSkeleton;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRSpectre;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRTriton;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRWalker;
+import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRZombie;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantEndermite;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfish;
 import team.cqr.cqrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
@@ -115,27 +133,27 @@ public class CQREntityRenderers
 
 	protected static void registerEntityRenderers() {
 		// Mobs
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, RenderCQRBoarman::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, RenderCQRDummy::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, RenderCQRDwarf::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BOARMAN.get(), RenderCQRBoarman::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.DUMMY.get(), RenderCQRDummy::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.DWARF.get(), RenderCQRDwarf::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ENDERMAN.get(), RenderCQREnderman::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, RenderCQRGolem::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GOLEM.get(), RenderCQRGolem::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GREMLIN.get(), RenderCQRGremlin::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRHuman.class, RenderCQRHuman::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.HUMAN.get(), RenderCQRHuman::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ILLAGER.get(), RenderCQRIllager::new);
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, RenderCQRMandril::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, RenderCQRMinotaur::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMummy.class, RenderCQRMummy::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, RenderCQRNPC::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQROgre.class, RenderCQROgre::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class, RenderCQROrc::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class, RenderCQRPirate::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class, RenderCQRSkeleton::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectre.class, RenderCQRSpectre::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class, RenderCQRTriton::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, RenderCQRGoblin::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.MANDRIL.get(), RenderCQRMandril::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.MINOTAUR.get(), RenderCQRMinotaur::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.MUMMY.get(), RenderCQRMummy::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.NPC.get(), RenderCQRNPC::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.OGRE.get(), RenderCQROgre::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ORC.get(), RenderCQROrc::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PIRATE.get(), RenderCQRPirate::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SKELETON.get(), RenderCQRSkeleton::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SPECTRE.get(), RenderCQRSpectre::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.TRITON.get(), RenderCQRTriton::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER.get(), RenderCQRWalker::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ZOMBIE.get(), RenderCQRZombie::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GOBLIN.get(), RenderCQRGoblin::new);
 	}
 
 	protected static void registerMountRenderers() {
