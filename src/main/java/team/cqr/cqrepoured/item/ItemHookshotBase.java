@@ -80,7 +80,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 				String[] latchBlocks = PropertyFileHelper.getStringArrayProperty(hookshotConfig, "latchblocks", new String[0], true);
 				for (String blockType : latchBlocks) {
-					ResourceLocation rs = new ResourceLocation(blockType);
+					ResourceLocation rs = new ResourceLocation(blockType.toLowerCase());
 					if(ForgeRegistries.BLOCKS.containsKey(rs)) {
 						this.validLatchBlocks.add(ForgeRegistries.BLOCKS.getValue(rs));
 						continue;
