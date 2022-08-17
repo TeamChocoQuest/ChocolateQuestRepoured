@@ -164,9 +164,9 @@ public class CQRItems {
 	public static final RegistryObject<ItemBubbleRifle> BUBBLE_RIFLE = register("bubble_rifle", ItemBubbleRifle::new);
 
 	// Hookers
-	public static final RegistryObject<ItemHookshot> HOOKSHOT = null;
-	public static final RegistryObject<ItemLongshot> LONGSHOT = null;
-	public static final RegistryObject<ItemSpiderHook> SPIDERHOOK = null;
+	public static final RegistryObject<ItemHookshot> HOOKSHOT = register("hookshot", ItemHookshot::new);
+	public static final RegistryObject<ItemLongshot> LONGSHOT = register("longshot", ItemLongshot::new);
+	public static final RegistryObject<ItemSpiderHook> SPIDERHOOK = register("spiderhook", ItemSpiderHook::new);
 
 	// Single Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = register("helmet_dragon", prop -> new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, EquipmentSlotType.HEAD, prop)); // #TODO Make model centered on head // Abandon for now
