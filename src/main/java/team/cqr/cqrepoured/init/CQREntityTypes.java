@@ -191,7 +191,7 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityCQRSpectre>> SPECTRE = registerSizedHumanoid(EntityCQRSpectre::new, "spectre", 1);
 	public static final RegistryObject<EntityType<EntityCQRTriton>> TRITON = registerSizedHumanoid(EntityCQRTriton::new, "triton", 1);
 	public static final RegistryObject<EntityType<EntityCQRWalker>> WALKER = registerSizedHumanoid(EntityCQRWalker::new, "walker", 1);
-	public static final RegistryObject<EntityType<EntityCQRZombie>> ZOMBIE = registerSizedHumanoid(EntityCQRZombie::new, "walker", 1);
+	public static final RegistryObject<EntityType<EntityCQRZombie>> ZOMBIE = registerSizedHumanoid(EntityCQRZombie::new, "zombie", 1);
 
 	//Ender calamity
 	public static final RegistryObject<EntityType<EntityCalamityCrystal>> CALAMITY_CRYSTAL = registerSized(EntityCalamityCrystal::new, "calamity_crystal", 2, 2, 1);
