@@ -211,7 +211,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 	private void backStabAttacker(DamageSource source) {
 		if (source.getEntity() != null && source.getEntity() instanceof LivingEntity) {
 			if (this.teleportBehindEntity(source.getEntity())) {
-				this.canAttack((LivingEntity) source.getEntity());
+				this.doHurtTarget((LivingEntity) source.getEntity());
 			}
 		}
 	}
