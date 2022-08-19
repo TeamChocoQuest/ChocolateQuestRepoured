@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -188,6 +189,15 @@ public class DungeonPlacement {
 	@SuppressWarnings("deprecation")
 	public static BlockState transform(BlockState state, Mirror mirror, Rotation rotation) {
 		return state.mirror(mirror).rotate(rotation);
+	}
+
+	public void transform(TileEntity blockEntity) {
+		transform(blockEntity, this.mirror, this.rotation);
+	}
+
+	public static void transform(TileEntity blockEntity, Mirror mirror, Rotation rotation) {
+		blockEntity.mirror(mirror);
+		blockEntity.rotate(rotation);
 	}
 
 }
