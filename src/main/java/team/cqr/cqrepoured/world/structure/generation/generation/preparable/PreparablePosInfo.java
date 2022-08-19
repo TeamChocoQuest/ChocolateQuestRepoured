@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
@@ -10,98 +15,56 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StructureVoidBlock;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import team.cqr.cqrepoured.block.*;
+import net.minecraftforge.common.util.LazyOptional;
+import team.cqr.cqrepoured.block.BlockBossBlock;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.BlockForceFieldNexus;
+import team.cqr.cqrepoured.block.BlockMapPlaceholder;
+import team.cqr.cqrepoured.block.BlockNull;
+import team.cqr.cqrepoured.block.BlockSpawner;
+import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
+public abstract class PreparablePosInfo {
 
-public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInfo> {
-
-	private final int x;
-	private final int y;
-	private final int z;
-
-	protected PreparablePosInfo(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	@Override
-	public GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement) {
-		BlockPos pos = placement.transform(this.x, this.y, this.z);
-		if (world.isOutsideBuildHeight(pos)) {
-			return null;
+	public void prepare(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		if (CQRConfig.SERVER_CONFIG.advanced.structureImportMode.get()) {
+			this.prepareDebug(level, pos, placement);
+		} else {
+			this.prepareNormal(level, pos, placement);
 		}
-		return this.prepare(world, placement, pos);
 	}
 
-	@Override
-	public GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement) {
-		BlockPos pos = placement.transform(this.x, this.y, this.z);
-		if (world.isOutsideBuildHeight(pos)) {
-			return null;
-		}
-		return this.prepareDebug(world, placement, pos);
-	}
+	protected abstract void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement);
 
-	protected abstract GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos);
-
-	protected abstract GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos);
-
-	public int getX() {
-		return this.x;
-	}
-
-	public int getY() {
-		return this.y;
-	}
-
-	public int getZ() {
-		return this.z;
-	}
-
-	public int getChunkX() {
-		return this.x >> 4;
-	}
-
-	public int getChunkY() {
-		return this.y >> 4;
-	}
-
-	public int getChunkZ() {
-		return this.z >> 4;
-	}
+	protected abstract void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement);
 
 	public static class Registry {
 
 		public interface IFactory<T extends TileEntity> {
 
-			@SuppressWarnings("unchecked")
-			default PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, BlockState state) {
-				return this.create(world, x, y, z, state, () -> state.getBlock().hasTileEntity(state) ? (T) world.getTileEntity(pos) : null);
+			default PreparablePosInfo create(World level, BlockPos pos, BlockState state) {
+				return this.create(level, pos, state, LazyOptional.of(state.hasTileEntity() ? () -> level.getBlockEntity(pos) : null).cast());
 			}
 
-			PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<T> tileEntitySupplier);
+			PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<T> blockEntityLazy);
 
+			@Nullable
 			static CompoundNBT writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
 				if (tileEntity == null) {
 					return null;
 				}
-				CompoundNBT compound = tileEntity.writeToNBT(new CompoundNBT());
-				compound.removeTag("x");
-				compound.removeTag("y");
-				compound.removeTag("z");
+				CompoundNBT compound = tileEntity.save(new CompoundNBT());
+				compound.remove("x");
+				compound.remove("y");
+				compound.remove("z");
 				return compound;
 			}
 
@@ -111,10 +74,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 
 			void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
 
-			T read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
-
-			@Deprecated
-			T read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList);
+			T read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
 
 		}
 
@@ -146,15 +106,21 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			register(PreparableTNTCQRInfo.class, new PreparableTNTCQRInfo.Serializer());
 		}
 
-		private static void register(Class<? extends Block> blockClass, IFactory<?> func) {
+		private static void register(Class<? extends Block> blockClass, IFactory<?> factory) {
 			if (BLOCK_CLASS_2_EXPORTER.containsKey(blockClass)) {
 				throw new IllegalArgumentException("Duplicate entry for class: " + blockClass.getSimpleName());
 			}
-			BLOCK_CLASS_2_EXPORTER.put(blockClass, func);
+			BLOCK_CLASS_2_EXPORTER.put(blockClass, factory);
+		}
+
+		public static <T extends TileEntity> PreparablePosInfo create(World level, BlockPos pos, BlockState state) {
+			Class<? extends Block> blockClass = state.getBlock().getClass();
+			IFactory<T> factory = getFactory(blockClass);
+			return factory.create(level, pos, state);
 		}
 
 		@SuppressWarnings("unchecked")
-		public static <T extends TileEntity> IFactory<T> getFactory(Class<? extends Block> blockClass) {
+		private static <T extends TileEntity> IFactory<T> getFactory(Class<? extends Block> blockClass) {
 			IFactory<T> factory = (IFactory<T>) BLOCK_CLASS_2_EXPORTER.get(blockClass);
 			if (factory == null && blockClass != Block.class) {
 				factory = getFactory((Class<? extends Block>) blockClass.getSuperclass());
@@ -164,12 +130,6 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 				throw new NullPointerException();
 			}
 			return factory;
-		}
-
-		public static <T extends TileEntity> PreparablePosInfo create(World world, BlockPos pos, int x, int y, int z, BlockState state) {
-			Class<? extends Block> blockClass = state.getBlock().getClass();
-			IFactory<T> factory = getFactory(blockClass);
-			return factory.create(world, pos, x, y, z, state);
 		}
 
 		private static <T extends PreparablePosInfo> void register(Class<T> clazz, ISerializer<T> serializer) {
@@ -192,27 +152,13 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
+		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
 			}
 			ISerializer<?> serializer = ID_2_SERIALIZER.get(id);
-			return serializer.read(x, y, z, buf, palette, compoundList);
-		}
-
-		@Deprecated
-		public static PreparablePosInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT compoundList) {
-			int[] intArray = nbtIntArray.getIntArray();
-			if (intArray.length == 0) {
-				return new PreparableEmptyInfo(x, y, z);
-			}
-			byte id = (byte) intArray[0];
-			if (!ID_2_SERIALIZER.containsKey(id)) {
-				throw new IllegalArgumentException("No serializer registered for id: " + id);
-			}
-			ISerializer<?> serializer = ID_2_SERIALIZER.get(id);
-			return serializer.read(x, y, z, nbtIntArray, palette, compoundList);
+			return serializer.read(buf, palette, compoundList);
 		}
 
 	}

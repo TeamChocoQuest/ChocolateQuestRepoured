@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.HangingEntity;
 import net.minecraft.entity.item.PaintingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -9,30 +9,29 @@ import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableEntityInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
-public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> {
+public class PreparableEntityInfo {
 
 	private final CompoundNBT entityData;
 
-	public PreparableEntityInfo(BlockPos structurePos, Entity entity) {
-		this.entityData = new CompoundNBT();
-		entity.writeToNBTOptional(this.entityData);
-		this.entityData.removeTag("UUIDMost");
-		this.entityData.removeTag("UUIDLeast");
-		ListNBT nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
-		nbtTagList.set(0, new DoubleNBT(entity.posX - structurePos.getX()));
-		nbtTagList.set(1, new DoubleNBT(entity.posY - structurePos.getY()));
-		nbtTagList.set(2, new DoubleNBT(entity.posZ - structurePos.getZ()));
+	public PreparableEntityInfo(BlockPos templatePos, Entity entity) {
+		this.entityData = IEntityFactory.save(entity);
+		this.entityData.remove("UUIDMost");
+		this.entityData.remove("UUIDLeast");
+		ListNBT nbtTagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
+		nbtTagList.set(0, DoubleNBT.valueOf(entity.getX() - templatePos.getX()));
+		nbtTagList.set(1, DoubleNBT.valueOf(entity.getY() - templatePos.getY()));
+		nbtTagList.set(2, DoubleNBT.valueOf(entity.getZ() - templatePos.getZ()));
 		if (entity instanceof HangingEntity) {
-			BlockPos blockpos = ((HangingEntity) entity).getHangingPosition();
-			this.entityData.setInteger("TileX", blockpos.getX() - structurePos.getX());
-			this.entityData.setInteger("TileY", blockpos.getY() - structurePos.getY());
-			this.entityData.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
+			BlockPos blockpos = ((HangingEntity) entity).getPos();
+			this.entityData.putInt("TileX", blockpos.getX() - templatePos.getX());
+			this.entityData.putInt("TileY", blockpos.getY() - templatePos.getY());
+			this.entityData.putInt("TileZ", blockpos.getZ() - templatePos.getZ());
 		}
 	}
 
@@ -40,20 +39,19 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 		this.entityData = entityData;
 	}
 
-	@Override
-	public GeneratableEntityInfo prepareNormal(World world, DungeonPlacement placement) {
-		Entity entity = EntityList.createEntityFromNBT(this.entityData, world);
+	public void prepare(ICQRLevel level, DungeonPlacement placement) {
+		Entity entity = placement.getEntityFactory().createEntity(this.entityData);
 		double x;
 		double y;
 		double z;
 
 		if (entity instanceof HangingEntity) {
-			x = this.entityData.getInteger("TileX");
-			y = this.entityData.getInteger("TileY");
-			z = this.entityData.getInteger("TileZ");
+			x = this.entityData.getInt("TileX");
+			y = this.entityData.getInt("TileY");
+			z = this.entityData.getInt("TileZ");
 			if (entity instanceof PaintingEntity && placement.getMirror() != Mirror.NONE) {
-				int n = ((((PaintingEntity) entity).art.sizeX >> 4) + 1) & 1;
-				switch (((PaintingEntity) entity).facingDirection.rotateYCCW()) {
+				int n = ((((PaintingEntity) entity).motive.getWidth() >> 4) + 1) & 1;
+				switch (((PaintingEntity) entity).getDirection().getCounterClockWise()) {
 				case NORTH:
 					z -= n;
 					break;
@@ -75,23 +73,21 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 			y = pos.getY();
 			z = pos.getZ();
 		} else {
-			ListNBT tagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
-			MutableVec3d vec = placement.transform(tagList.getDoubleAt(0), tagList.getDoubleAt(1), tagList.getDoubleAt(2));
+			ListNBT tagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
+			MutableVec3d vec = placement.transform(tagList.getDouble(0), tagList.getDouble(1), tagList.getDouble(2));
 			x = vec.x;
 			y = vec.y;
 			z = vec.z;
 		}
 
 		float transformedYaw = placement.transform(entity);
-		entity.setLocationAndAngles(x, y, z, transformedYaw, entity.rotationPitch);
-		entity.setRenderYawOffset(transformedYaw);
-		entity.setRotationYawHead(transformedYaw);
-		return new GeneratableEntityInfo(entity);
-	}
+		entity.moveTo(x, y, z, transformedYaw, entity.xRot);
+		if (entity instanceof LivingEntity) {
+			((LivingEntity) entity).setYBodyRot(transformedYaw);
+			((LivingEntity) entity).setYHeadRot(transformedYaw);
+		}
 
-	@Override
-	public GeneratableEntityInfo prepareDebug(World world, DungeonPlacement placement) {
-		return this.prepareNormal(world, placement);
+		level.addEntity(entity);
 	}
 
 	public CompoundNBT getEntityData() {

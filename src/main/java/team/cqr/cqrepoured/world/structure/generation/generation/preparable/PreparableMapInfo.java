@@ -5,24 +5,20 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalBlock;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
+import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableBlockInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableMapInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
-
-import java.util.function.Supplier;
 
 public class PreparableMapInfo extends PreparablePosInfo {
 
@@ -37,20 +33,12 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public PreparableMapInfo(BlockPos pos, Direction facing, TileEntityMap tileEntityMap) {
-		this(pos.getX(), pos.getY(), pos.getZ(), facing, tileEntityMap);
+	public PreparableMapInfo(Direction facing, TileEntityMap tileEntityMap) {
+		this(facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(), tileEntityMap.getOriginZ(),
+				tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
 	}
 
-	public PreparableMapInfo(int x, int y, int z, Direction facing, TileEntityMap tileEntityMap) {
-		this(x, y, z, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(), tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
-	}
-
-	public PreparableMapInfo(BlockPos pos, Direction facing, byte scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
-		this(pos.getX(), pos.getY(), pos.getZ(), facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
-	}
-
-	public PreparableMapInfo(int x, int y, int z, Direction facing, byte scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
-		super(x, y, z);
+	public PreparableMapInfo(Direction facing, byte scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
 		this.facing = facing;
 		this.scale = scale;
 		this.orientation = orientation;
@@ -64,18 +52,19 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
 		Direction transformedFacing = placement.getRotation().rotate(placement.getMirror().mirror(this.facing));
-		ItemFrameEntity entity = new ItemFrameEntity(world, pos.toImmutable(), transformedFacing);
+		ItemFrameEntity entity = placement.getEntityFactory().createEntity(world -> new ItemFrameEntity(world, transformedPos.immutable(), transformedFacing));
 		switch (this.orientation) {
 		case EAST:
-			entity.setItemRotation(entity.getRotation() + 3);
+			entity.setRotation(entity.getRotation() + 3);
 			break;
 		case SOUTH:
-			entity.setItemRotation(entity.getRotation() + 2);
+			entity.setRotation(entity.getRotation() + 2);
 			break;
 		case WEST:
-			entity.setItemRotation(entity.getRotation() + 1);
+			entity.setRotation(entity.getRotation() + 1);
 			break;
 		default:
 			break;
@@ -89,7 +78,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		case LEFT_RIGHT:
 			if (!this.lockOrientation) {
 				if (this.orientation.getAxis() == Axis.Z) {
-					entity.setItemRotation(entity.getRotation() + 2);
+					entity.setRotation(entity.getRotation() + 2);
 				}
 				z1 = -z1;
 			} else {
@@ -105,7 +94,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		case FRONT_BACK:
 			if (!this.lockOrientation) {
 				if (this.orientation.getAxis() == Axis.X) {
-					entity.setItemRotation(entity.getRotation() + 2);
+					entity.setRotation(entity.getRotation() + 2);
 				}
 				x1 = -x1;
 			} else {
@@ -129,7 +118,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		switch (placement.getRotation()) {
 		case COUNTERCLOCKWISE_90:
 			if (!this.lockOrientation) {
-				entity.setItemRotation(entity.getRotation() + 1);
+				entity.setRotation(entity.getRotation() + 1);
 				x1 = z3;
 				z1 = -x3;
 			}
@@ -138,7 +127,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		case CLOCKWISE_90:
 			if (!this.lockOrientation) {
-				entity.setItemRotation(entity.getRotation() + 3);
+				entity.setRotation(entity.getRotation() + 3);
 				x1 = -z3;
 				z1 = x3;
 			}
@@ -147,7 +136,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		case CLOCKWISE_180:
 			if (!this.lockOrientation) {
-				entity.setItemRotation(entity.getRotation() + 2);
+				entity.setRotation(entity.getRotation() + 2);
 				x1 = -x3;
 				z1 = -z3;
 			}
@@ -158,17 +147,19 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			break;
 		}
 
-		return new GeneratableMapInfo(pos, entity, pos.getX() + x2, pos.getZ() + z2, pos.getX() + x1 + x2, pos.getZ() + z1 + z2, this.scale, this.fillMap, this.fillRadius);
+		level.addEntity(entity);
+		// TODO generate map
 	}
 
 	@Override
-	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		BlockState state = CQRBlocks.MAP_PLACEHOLDER.getDefaultState().withProperty(HorizontalBlock.FACING, this.facing);
-		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
-		TileEntityMap tileEntity = new TileEntityMap();
-		// TODO tile entity data does not get rotated/mirrored
-		tileEntity.set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap, this.fillRadius);
-		return new GeneratableBlockInfo(pos, state, tileEntity);
+	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
+		BlockState transformedState = placement.transform(CQRBlocks.MAP_PLACEHOLDER.get().defaultBlockState().setValue(HorizontalBlock.FACING, this.facing));
+		level.setBlockState(transformedPos, transformedState, blockEntity -> {
+			if (blockEntity instanceof TileEntityMap) {
+				((TileEntityMap) blockEntity).set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap, this.fillRadius);
+			}
+		});
 	}
 
 	public Direction getFacing() {
@@ -214,8 +205,8 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityMap> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntityMap> tileEntitySupplier) {
-			return new PreparableMapInfo(x, y, z, state.getValue(HorizontalBlock.FACING), tileEntitySupplier.get());
+		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntityLazy) {
+			return new PreparableMapInfo(state.getValue(HorizontalBlock.FACING), blockEntityLazy.orElseThrow(NullPointerException::new));
 		}
 
 	}
@@ -225,26 +216,26 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		@Override
 		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
 			CompoundNBT compound = new CompoundNBT();
-			compound.setByte("facing", (byte) preparable.facing.getHorizontalIndex());
-			compound.setByte("scale", preparable.scale);
-			compound.setByte("orientation", (byte) preparable.orientation.getHorizontalIndex());
-			compound.setBoolean("lockOrientation", preparable.lockOrientation);
-			compound.setByte("originX", (byte) preparable.originX);
-			compound.setByte("originZ", (byte) preparable.originZ);
-			compound.setByte("offsetX", (byte) preparable.offsetX);
-			compound.setByte("offsetZ", (byte) preparable.offsetZ);
-			compound.setBoolean("fillMap", preparable.fillMap);
-			compound.setShort("fillRadius", (short) preparable.fillRadius);
-			ByteBufUtils.writeVarInt(buf, nbtList.tagCount(), 5);
-			nbtList.appendTag(compound);
+			compound.putByte("facing", (byte) preparable.facing.get2DDataValue());
+			compound.putByte("scale", preparable.scale);
+			compound.putByte("orientation", (byte) preparable.orientation.get2DDataValue());
+			compound.putBoolean("lockOrientation", preparable.lockOrientation);
+			compound.putByte("originX", (byte) preparable.originX);
+			compound.putByte("originZ", (byte) preparable.originZ);
+			compound.putByte("offsetX", (byte) preparable.offsetX);
+			compound.putByte("offsetZ", (byte) preparable.offsetZ);
+			compound.putBoolean("fillMap", preparable.fillMap);
+			compound.putShort("fillRadius", (short) preparable.fillRadius);
+			ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
+			nbtList.add(compound);
 		}
 
 		@Override
-		public PreparableMapInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
-			CompoundNBT compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
-			Direction facing = Direction.byHorizontalIndex(compound.getInteger("facing"));
+		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+			CompoundNBT compound = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
+			Direction facing = Direction.from2DDataValue(compound.getInt("facing"));
 			byte scale = compound.getByte("scale");
-			Direction orientation = Direction.byHorizontalIndex(compound.getInteger("orientation"));
+			Direction orientation = Direction.from2DDataValue(compound.getInt("orientation"));
 			boolean lockOrientation = compound.getBoolean("lockOrientation");
 			byte originX = compound.getByte("originX");
 			byte originZ = compound.getByte("originZ");
@@ -252,25 +243,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			byte offsetZ = compound.getByte("offsetZ");
 			boolean fillMap = compound.getBoolean("fillMap");
 			short fillRadius = compound.getShort("fillRadius");
-			return new PreparableMapInfo(x, y, z, facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
-		}
-
-		@Override
-		@Deprecated
-		public PreparableMapInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
-			int[] intArray = nbtIntArray.getIntArray();
-			CompoundNBT compound = nbtList.getCompoundTagAt(intArray[0]);
-			Direction facing = Direction.byHorizontalIndex(compound.getInteger("facing"));
-			byte scale = compound.getByte("scale");
-			Direction orientation = Direction.byHorizontalIndex(compound.getInteger("orientation"));
-			boolean lockOrientation = compound.getBoolean("lockOrientation");
-			byte originX = compound.getByte("originX");
-			byte originZ = compound.getByte("originZ");
-			byte offsetX = compound.getByte("offsetX");
-			byte offsetZ = compound.getByte("offsetZ");
-			boolean fillMap = compound.getBoolean("fillMap");
-			short fillRadius = compound.getShort("fillRadius");
-			return new PreparableMapInfo(x, y, z, facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+			return new PreparableMapInfo(facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		}
 
 	}

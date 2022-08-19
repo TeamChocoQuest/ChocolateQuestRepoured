@@ -3,51 +3,44 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableBlockInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
-import java.util.function.Supplier;
-
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
-	public PreparableForceFieldNexusInfo(BlockPos pos) {
-		this(pos.getX(), pos.getY(), pos.getZ());
-	}
-
-	public PreparableForceFieldNexusInfo(int x, int y, int z) {
-		super(x, y, z);
-	}
-
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
+
 		if (placement.getProtectedRegionBuilder() == null) {
-			return new GeneratableBlockInfo(pos, Blocks.AIR.getDefaultState(), null);
+			level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState());
+		} else {
+			level.setBlockState(transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.get().defaultBlockState());
+			placement.getProtectedRegionBuilder().addBlock(transformedPos);
 		}
-
-		placement.getProtectedRegionBuilder().addBlock(pos);
-		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
 	}
 
 	@Override
-	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
+	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
+
+		level.setBlockState(transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.get().defaultBlockState());
 	}
 
 	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
+		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntityForceFieldNexus> blockEntityLazy) {
+			return new PreparableForceFieldNexusInfo();
 		}
 
 	}
@@ -60,14 +53,8 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
-		}
-
-		@Override
-		@Deprecated
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
+		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+			return new PreparableForceFieldNexusInfo();
 		}
 
 	}

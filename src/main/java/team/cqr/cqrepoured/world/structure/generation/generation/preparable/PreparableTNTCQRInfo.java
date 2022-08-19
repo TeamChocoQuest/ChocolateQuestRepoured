@@ -2,43 +2,40 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableBlockInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
-import java.util.function.Supplier;
-
 public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
-	public PreparableTNTCQRInfo(int x, int y, int z) {
-		super(x, y, z);
+	@Override
+	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
+
+		level.setBlockState(transformedPos, CQRBlocks.TNT.get().defaultBlockState().setValue(BlockTNTCQR.HIDDEN, true));
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
-		return new GeneratableBlockInfo(pos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.HIDDEN, true), null);
-	}
+	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+		BlockPos transformedPos = placement.transform(pos);
 
-	@Override
-	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
-		return new GeneratableBlockInfo(pos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.HIDDEN, false), null);
+		level.setBlockState(transformedPos, CQRBlocks.TNT.get().defaultBlockState().setValue(BlockTNTCQR.HIDDEN, false));
 	}
 
 	public static class Factory implements IFactory<TileEntity> {
 
 		@Override
-		public PreparablePosInfo create(World world, int x, int y, int z, BlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableTNTCQRInfo(x, y, z);
+		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntity> blockEntityLazy) {
+			return new PreparableTNTCQRInfo();
 		}
 
 	}
@@ -51,14 +48,8 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableTNTCQRInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
-			return new PreparableTNTCQRInfo(x, y, z);
-		}
-
-		@Override
-		@Deprecated
-		public PreparableTNTCQRInfo read(int x, int y, int z, IntArrayNBT nbtIntArray, BlockStatePalette palette, ListNBT nbtList) {
-			return new PreparableTNTCQRInfo(x, y, z);
+		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+			return new PreparableTNTCQRInfo();
 		}
 
 	}
