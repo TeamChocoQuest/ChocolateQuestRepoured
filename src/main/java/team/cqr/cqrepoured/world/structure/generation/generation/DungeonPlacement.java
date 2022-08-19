@@ -43,14 +43,17 @@ public class DungeonPlacement {
 	private final Rotation rotation;
 	private final DungeonInhabitant inhabitant;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
+	private final ServerEntityFactory entityFactory;
 
-	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder) {
+
+	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder, ServerEntityFactory entityFactory) {
 		this.pos = pos;
 		this.partPos = partPos;
 		this.mirror = mirror;
 		this.rotation = rotation;
 		this.inhabitant = inhabitant;
 		this.protectedRegionBuilder = protectedRegionBuilder;
+		this.entityFactory = entityFactory;
 	}
 
 	public BlockPos getPos() {
@@ -75,6 +78,10 @@ public class DungeonPlacement {
 
 	public ProtectedRegion.Builder getProtectedRegionBuilder() {
 		return this.protectedRegionBuilder;
+	}
+
+	public ServerEntityFactory getEntityFactory() {
+		return entityFactory;
 	}
 
 	public BlockPos.Mutable transform(BlockPos pos) {
