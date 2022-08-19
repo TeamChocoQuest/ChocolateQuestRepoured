@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -178,6 +179,15 @@ public class DungeonPlacement {
 
 	public static float transform(Entity entity, Mirror mirror, Rotation rotation) {
 		return entity.getYHeadRot() + entity.mirror(mirror) - entity.rotate(rotation);
+	}
+
+	public BlockState transform(BlockState state) {
+		return transform(state, this.mirror, this.rotation);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static BlockState transform(BlockState state, Mirror mirror, Rotation rotation) {
+		return state.mirror(mirror).rotate(rotation);
 	}
 
 }
