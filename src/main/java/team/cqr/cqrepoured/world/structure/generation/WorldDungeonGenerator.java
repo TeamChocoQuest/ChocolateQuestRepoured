@@ -1,13 +1,20 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicates;
 
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonGenerationHelper;
@@ -15,21 +22,14 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.function.Predicate;
-
 /**
  * Copyright (c) 29.04.2019<br>
  * Developed by DerToaster98<br>
  * GitHub: https://github.com/DerToaster98
  */
-public class WorldDungeonGenerator implements IWorldGenerator {
+public class WorldDungeonGenerator {
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, ServerWorld world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider) {
 		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
 			DungeonGenerationHelper.addDelayedChunk(world, chunkX, chunkZ);
 			return;
@@ -51,7 +51,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 * @return the dungeon that will be generated in this chunk
 	 */
 	@Nullable
-	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
+	public static DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ) {
 		return getDungeonAt(world, chunkX, chunkZ, Predicates.alwaysTrue());
 	}
 
@@ -59,7 +59,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 * @return the dungeon that will be generated in this chunk
 	 */
 	@Nullable
-	public static DungeonBase getDungeonAt(World world, int chunkX, int chunkZ, Predicate<DungeonGrid> gridPredicate) {
+	public static DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, Predicate<DungeonGrid> gridPredicate) {
 		if (!canSpawnDungeonsInWorld(world)) {
 			return null;
 		}
@@ -76,16 +76,16 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	 * @return true when structure genration is enabled for this world and either the world is no flat world or dungeons can
 	 *         generate in flat worlds
 	 */
-	public static boolean canSpawnDungeonsInWorld(World world) {
+	public static boolean canSpawnDungeonsInWorld(ServerWorld world) {
 		// Check if structures are enabled for this world
-		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
+		if (!world.getServer().getWorldData().worldGenSettings().generateFeatures()) {
 			return false;
 		}
 		// Check for flat world type and if dungeons may spawn there
-		if (world.getWorldType() != WorldType.FLAT) {
+		if (!(world.getChunkSource().getGenerator() instanceof FlatChunkGenerator)) {
 			return true;
 		}
-		return CQRConfig.general.dungeonsInFlat;
+		return CQRConfig.SERVER_CONFIG.general.dungeonsInFlat.get();
 	}
 
 	/**
