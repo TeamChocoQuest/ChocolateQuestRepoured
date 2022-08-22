@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -11,16 +16,11 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
 public class GearedMobFactory {
 
@@ -47,8 +47,8 @@ public class GearedMobFactory {
 		this.random = rng;
 	}
 
-	public Entity getGearedEntityByFloor(int floor, World world) {
-		Entity entity = ForgeRegistries.ENTITIES.getValue(this.entityID).create(world);
+	public Entity getGearedEntityByFloor(int floor, IEntityFactory entityFactory) {
+		Entity entity = entityFactory.createEntity(entityID);
 
 		EArmorType armorType = this.getGearTier(floor);
 		EWeaponType weaponType = this.getHandEquipment();
@@ -211,8 +211,8 @@ public class GearedMobFactory {
 		return entity;
 	}
 
-	public Entity getGearedEntity(World world) {
-		return this.getGearedEntityByFloor(this.random.nextInt(this.floorCount + 1), world);
+	public Entity getGearedEntity(IEntityFactory entityFactory) {
+		return this.getGearedEntityByFloor(this.random.nextInt(this.floorCount + 1), entityFactory);
 	}
 
 	private boolean enchantGear(int floor) {
