@@ -10,6 +10,7 @@ import java.util.zip.GZIPInputStream;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.NBTTypes;
 import net.minecraft.nbt.StringNBT;
 import net.minecraftforge.common.util.Constants.NBT;
 
@@ -25,7 +26,7 @@ public class NBTHelper {
 
 			while ((id = input.readByte()) != 0) {
 				String key = input.readUTF();
-				INBT nbtbase = CompoundNBT.readNBT(id, key, input, 0, NBTSizeTracker.UNLIMITED);
+				INBT nbtbase = CompoundNBT.readNamedTagData(NBTTypes.getType(id), key, input, 0, NBTSizeTracker.UNLIMITED);
 
 				if (key.equals("cqr_file_version")) {
 					return nbtbase instanceof StringNBT ? ((StringNBT) nbtbase).getAsString() : null;
