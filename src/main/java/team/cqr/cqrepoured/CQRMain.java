@@ -52,6 +52,7 @@ import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
+import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
 @Mod(CQRMain.MODID)
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
@@ -272,7 +273,7 @@ public class CQRMain {
 	 */
 
 	public void init(final FMLCommonSetupEvent event) {
-		//DungeonInhabitantManager.instance().loadDungeonInhabitants();
+		DungeonInhabitantManager.instance().loadDungeonInhabitants();
 		CQRCapabilities.registerCapabilities();
 		CQRMessages.registerMessages();
 		event.enqueueWork(() -> {
