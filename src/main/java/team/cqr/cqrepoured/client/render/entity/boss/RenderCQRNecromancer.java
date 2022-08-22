@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelCQRNecromancerGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRNecromancerBoneShield;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 
 public class RenderCQRNecromancer extends RenderCQRMage<EntityCQRNecromancer> {
@@ -13,7 +12,6 @@ public class RenderCQRNecromancer extends RenderCQRMage<EntityCQRNecromancer> {
 
 	public RenderCQRNecromancer(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRNecromancerGeo(CQRMain.prefix("geo/entity/boss/mage/biped_mage_necromancer.geo.json"), TEXTURE, "boss/necromancer"));
-		this.addLayer(new LayerCQRNecromancerBoneShield(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 }
