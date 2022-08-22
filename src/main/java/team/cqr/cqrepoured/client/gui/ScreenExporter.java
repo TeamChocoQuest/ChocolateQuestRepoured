@@ -101,9 +101,7 @@ public class ScreenExporter extends Screen {
 
 				this.tileEntity.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.selected(), this.chbxIgnoreEntities.selected(), new BlockPos[0]);
 
-				if (this.saveStructOnExit) {
-					this.tileEntity.saveStructure(this.minecraft.player);
-				}
+				this.tileEntity.saveStructure(this.minecraft.player);
 			} catch (Exception e) {
 				this.minecraft.player.sendMessage(new StringTextComponent("Invalid exporter arguments"), this.minecraft.player.getUUID());
 			}

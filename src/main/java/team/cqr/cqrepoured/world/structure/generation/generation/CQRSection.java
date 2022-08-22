@@ -71,7 +71,10 @@ public class CQRSection implements ICQRSection {
 				continue;
 			}
 
-			mutable.set(sectionPos.relativeToBlockX(i), sectionPos.relativeToBlockY(i), sectionPos.relativeToBlockZ(i));
+			mutable.set(
+					(sectionPos.x() << 4) | (i & 15),
+					(sectionPos.y() << 4) | ((i >> 8) & 15),
+					(sectionPos.z() << 4) | ((i >> 4) & 15));
 			pLevel.setBlock(mutable, state, 0);
 			TileEntity tileEntity = this.blockEntities.get(i);
 			if (tileEntity != null) {

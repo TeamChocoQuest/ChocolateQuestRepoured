@@ -1,5 +1,24 @@
 package team.cqr.cqrepoured.world.structure.generation.structurefile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
+
+import org.apache.commons.io.FileUtils;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
@@ -8,7 +27,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -16,31 +39,23 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import org.apache.commons.io.FileUtils;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
-import team.cqr.cqrepoured.util.NBTHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.EntityDungeonPart;
+import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
-import java.io.*;
-import java.util.*;
-import java.util.stream.IntStream;
-
 public class CQStructure {
 
-	private static final Comparator<PreparablePosInfo> DEFAULT_COMPARATOR = Comparator.comparingInt(PreparablePosInfo::getX).thenComparingInt(PreparablePosInfo::getY).thenComparingInt(PreparablePosInfo::getZ);
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
-	public static final String CQR_FILE_VERSION = "1.2.0";
+	public static final String CQR_FILE_VERSION = "2.0.0";
 	private static final Set<ResourceLocation> SPECIAL_ENTITIES = new HashSet<>();
 	private final List<PreparablePosInfo> blockInfoList = new ArrayList<>();
 	private final List<PreparableEntityInfo> entityInfoList = new ArrayList<>();
@@ -168,13 +183,7 @@ public class CQStructure {
 	private void readFromNBT(CompoundNBT compound) {
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals(CQR_FILE_VERSION)) {
-			if (cqrFileVersion.equals("1.1.0")) {
-				CQRMain.logger.warn("Structure nbt is deprecated! Expected {} but got {}.", CQR_FILE_VERSION, cqrFileVersion);
-				this.readFromDeprecatedNBT(compound);
-				return;
-			} else {
-				throw new IllegalArgumentException(String.format("Structure nbt is too old! Expected %s but got %s.", CQR_FILE_VERSION, cqrFileVersion));
-			}
+			throw new IllegalArgumentException(String.format("Structure nbt is deprecated! Expected %s but got %s.", CQR_FILE_VERSION, cqrFileVersion));
 		}
 
 		this.author = compound.getString("author");
@@ -196,25 +205,8 @@ public class CQStructure {
 
 		// Load normal blocks
 		ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("blockInfoList"));
-		for (int x = 0; x < this.size.getX(); x++) {
-			for (int y = 0; y < this.size.getY(); y++) {
-				for (int z = 0; z < this.size.getZ(); z++) {
-					this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
-				}
-			}
-		}
-
-		// Load special blocks
-		if (compound.contains("specialBlockInfoList", Constants.NBT.TAG_BYTE_ARRAY)) {
-			buf = Unpooled.wrappedBuffer(compound.getByteArray("specialBlockInfoList"));
-			int specialBlockCount = buf.readInt();
-			for (int i = 0; i < specialBlockCount; i++) {
-				int x = buf.readShort();
-				int y = buf.readShort();
-				int z = buf.readShort();
-				int index = ((x * this.size.getY()) + y) * this.size.getZ() + z;
-				this.blockInfoList.set(index, PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
-			}
+		for (int i = 0; i < this.size.getX() * this.size.getY() * this.size.getZ(); i++) {
+			this.blockInfoList.add(PreparablePosInfo.Registry.read(buf, blockStatePalette, compoundTagList));
 		}
 
 		// Load entities
@@ -265,13 +257,8 @@ public class CQStructure {
 				CQRMain.logger.warn("Exporting unbreakable block: {} from {}", state, pos);
 			}
 
-			int x = pos.getX() - minPos.getX();
-			int y = pos.getY() - minPos.getY();
-			int z = pos.getZ() - minPos.getZ();
-			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, x, y, z, state));
+			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, state));
 		}
-
-		this.blockInfoList.sort(DEFAULT_COMPARATOR);
 	}
 
 	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
@@ -309,115 +296,32 @@ public class CQStructure {
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset) {
-		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
+		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
-		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
+		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
-		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
+		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
-		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
+		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, DungeonPlacement placement) {
-		builder.add(new BlockDungeonPart.Builder().addAll(this.blockInfoList), placement);
-		builder.add(new EntityDungeonPart.Builder().addAll(this.entityInfoList), placement);
+	public void addAll(ICQRLevel level, DungeonPlacement placement) {
+		int i = 0;
+		for (BlockPos pos : BlockPos.betweenClosed(BlockPos.ZERO, this.size.offset(-1, -1, -1))) {
+			this.blockInfoList.get(i++).prepare(level, pos, placement);
+		}
 	}
 
 	public static void updateSpecialEntities() {
 		CQStructure.SPECIAL_ENTITIES.clear();
 		for (String s : CQRConfig.SERVER_CONFIG.advanced.specialEntities.get()) {
 			CQStructure.SPECIAL_ENTITIES.add(new ResourceLocation(s));
-		}
-	}
-
-	@Deprecated
-	public static void checkAndUpdateStructureFiles() {
-		if (!CQRConfig.SERVER_CONFIG.advanced.checkAndUpdateDeprecatedStructureFiles.get()) {
-			return;
-		}
-		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true);
-		CQRMain.logger.info("Checking {} structure files", files.size());
-		long lastTimeLogged = System.currentTimeMillis();
-		long checkedFiles = 0;
-		int updatedFiles = 0;
-		for (File file : files) {
-			if (!NBTHelper.getVersionOfStructureFile(file).equals(CQStructure.CQR_FILE_VERSION)) {
-				CQStructure structure = CQStructure.createFromFile(file);
-				if (!structure.isEmpty()) {
-					structure.writeToFile(file);
-					updatedFiles++;
-				}
-			}
-			checkedFiles++;
-			if (System.currentTimeMillis() - lastTimeLogged > 2000) {
-				lastTimeLogged = System.currentTimeMillis();
-				CQRMain.logger.info("{}/{}", checkedFiles, files.size());
-			}
-		}
-		CQRMain.logger.info("Updated {} structure files", updatedFiles);
-	}
-
-	@Deprecated
-	private void readFromDeprecatedNBT(CompoundNBT compound) {
-		String cqrFileVersion = compound.getString("cqr_file_version");
-		if (!cqrFileVersion.equals("1.1.0")) {
-			throw new IllegalArgumentException(String.format("Structure nbt is too old! Expected %s but got %s.", "1.1.0", cqrFileVersion));
-		}
-
-		this.author = compound.getString("author");
-		this.size = NBTUtil.readBlockPos(compound.getCompound("size"));
-
-		this.blockInfoList.clear();
-		this.entityInfoList.clear();
-
-		BlockStatePalette blockStatePalette = new BlockStatePalette();
-
-		// Load compound tags
-		ListNBT compoundTagList = compound.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
-
-		// Load block states
-		int blockStateIndex = 0;
-		for (INBT nbt : compound.getList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
-		}
-
-		// Load normal blocks
-		int x = 0;
-		int y = 0;
-		int z = 0;
-		for (INBT nbt : compound.getList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (IntArrayNBT) nbt, blockStatePalette, compoundTagList));
-			if (x < this.size.getX() - 1) {
-				x++;
-			} else if (y < this.size.getY() - 1) {
-				x = 0;
-				y++;
-			} else if (z < this.size.getZ() - 1) {
-				x = 0;
-				y = 0;
-				z++;
-			}
-		}
-		this.blockInfoList.sort(DEFAULT_COMPARATOR);
-
-		// Load special blocks
-		for (INBT nbt : compound.getList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
-			CompoundNBT tag = (CompoundNBT) nbt;
-			if (tag.contains("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
-				ListNBT pos = tag.getList("pos", Constants.NBT.TAG_INT);
-				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getInt(0), pos.getInt(1), pos.getInt(2), (IntArrayNBT) tag.get("blockInfo"), blockStatePalette, compoundTagList));
-			}
-		}
-
-		// Load entities
-		for (INBT nbt : compound.getList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
 		}
 	}
 
