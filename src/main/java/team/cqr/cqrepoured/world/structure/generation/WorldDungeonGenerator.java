@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.world.ISeedReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -44,7 +43,7 @@ public class WorldDungeonGenerator {
 
 		int x = (chunkX << 4) + 8;
 		int z = (chunkZ << 4) + 8;
-		dungeon.generate(world, x, z, getRandomForCoords(world, x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+		dungeon.generate(world, x, z, getRandomForCoords(world.getSeed(), x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 	}
 
 	/**
@@ -104,17 +103,17 @@ public class WorldDungeonGenerator {
 		return locationSpecificDungeons.get(0);
 	}
 
-	public static Random getRandomForCoords(World world, int x, int z) {
-		return new Random(getSeed((ISeedReader) world, x, z));
+	public static Random getRandomForCoords(long seed, int x, int z) {
+		return new Random(getSeed(seed, x, z));
 	}
 
 	// This is needed to calculate the seed, cause we need a new seed for every
 	// generation OR we'll have the same dungeon generating every time
-	public static long getSeed(ISeedReader world, int chunkX, int chunkZ) {
+	public static long getSeed(long seed, int chunkX, int chunkZ) {
 		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1_094_792_450L;
 		long result = xorShift64(mix);
 
-		return world.getSeed() + result;
+		return seed + result;
 	}
 
 	// Needed for seed calculation and randomization
