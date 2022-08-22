@@ -1,22 +1,23 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.StringNBT;
-import net.minecraftforge.common.util.Constants;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.NBTSizeTracker;
+import net.minecraft.nbt.StringNBT;
+import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTHelper {
 
 	public static String getVersionOfStructureFile(File file) {
 		try (DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new FileInputStream(file))))) {
-			if (input.readByte() != Constants.NBT.TAG_COMPOUND) {
+			if (input.readByte() != NBT.TAG_COMPOUND) {
 				return null;
 			}
 			input.readUTF();
@@ -34,6 +35,11 @@ public class NBTHelper {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends INBT> Stream<T> stream(CompoundNBT nbt, String key) {
+		return (Stream<T>) nbt.getList(key, NBT.TAG_COMPOUND).stream();
 	}
 
 }
