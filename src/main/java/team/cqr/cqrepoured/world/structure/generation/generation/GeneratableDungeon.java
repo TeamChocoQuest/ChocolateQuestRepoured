@@ -137,7 +137,7 @@ public class GeneratableDungeon extends StructurePiece {
 			return entityFactory;
 		}
 
-		public CQRLevel getLevel() {
+		public ICQRLevel getLevel() {
 			return level;
 		}
 
