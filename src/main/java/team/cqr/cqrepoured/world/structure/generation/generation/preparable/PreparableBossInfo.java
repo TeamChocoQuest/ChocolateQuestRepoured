@@ -84,7 +84,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 			if (blockEntity instanceof TileEntityBoss && this.bossTag != null) {
 				ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE.get());
 				stack.addTagElement(ItemSoulBottle.ENTITY_IN_TAG, this.bossTag);
-				((TileEntityBoss) blockEntity).inventory.setItem(0, stack);
+				((TileEntityBoss) blockEntity).getInventory().setItem(0, stack);
 			}
 		});
 	}

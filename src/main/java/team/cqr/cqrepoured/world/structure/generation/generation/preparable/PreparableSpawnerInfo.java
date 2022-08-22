@@ -55,9 +55,9 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 
 	private static CompoundNBT getNBTTagCompoundFromEntityList(Entity... entities) {
 		TileEntitySpawner tileEntitySpawner = new TileEntitySpawner();
-		for (int i = 0; i < entities.length && i < tileEntitySpawner.inventory.getContainerSize(); i++) {
+		for (int i = 0; i < entities.length && i < tileEntitySpawner.getInventory().getContainerSize(); i++) {
 			if (entities[i] != null) {
-				tileEntitySpawner.inventory.setItem(i, SpawnerFactory.getSoulBottleItemStackForEntity(entities[i]));
+				tileEntitySpawner.getInventory().setItem(i, SpawnerFactory.getSoulBottleItemStackForEntity(entities[i]));
 			}
 		}
 		return tileEntitySpawner.save(new CompoundNBT());
@@ -146,7 +146,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	private void cqrSpawnerReadFromNBT(ICQRLevel level, BlockPos pos, DungeonPlacement placement, TileEntitySpawner tileEntity) {
 		ListNBT items = this.tileEntityData.getCompound("inventory").getList("Items", Constants.NBT.TAG_COMPOUND);
 
-		for (int i = 0; i < items.size() && i < tileEntity.inventory.getContainerSize(); i++) {
+		for (int i = 0; i < items.size() && i < tileEntity.getInventory().getContainerSize(); i++) {
 			CompoundNBT itemTag = items.getCompound(i);
 			CompoundNBT entityTag = itemTag.getCompound("tag").getCompound("EntityIn");
 			Entity entity = createEntityFromTag(placement, pos, entityTag);
@@ -162,7 +162,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 				CompoundNBT stackTag = new CompoundNBT();
 				stackTag.put("EntityIn", newEntityTag);
 				stack.setTag(stackTag);
-				tileEntity.inventory.setItem(i, stack);
+				tileEntity.getInventory().setItem(i, stack);
 			}
 		}
 	}
