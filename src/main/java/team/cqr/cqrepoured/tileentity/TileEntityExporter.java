@@ -239,7 +239,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 		if (!this.level.isClientSide) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = CQStructure.createFromWorld(this.level, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName().toString());
+			CQStructure structure = CQStructure.createFromWorld(this.level, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName().getString());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
 					author.sendMessage(new StringTextComponent("Successfully exported structure: " + this.structureName.get()), null);
