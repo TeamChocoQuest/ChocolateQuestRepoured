@@ -1,8 +1,14 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Random;
+import java.util.UUID;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.DoubleNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.IntNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.LongNBT;
 import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
@@ -13,7 +19,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -24,9 +31,6 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
-
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -275,15 +279,11 @@ public class DungeonGenUtils {
 		return flag ? new BlockPos(x, y, z) : startPos;
 	}
 
-	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
-		Chunk chunk = world.getChunk(x >> 4, z >> 4);
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable(x, chunk.getHighestSectionPosition() + 15, z);
-		Material material = chunk.getBlockState(mutablePos).getMaterial();
-		while (mutablePos.getY() > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANT || (ignoreWater && material == Material.WATER))) {
-			mutablePos.setY(mutablePos.getY() - 1);
-			material = chunk.getBlockState(mutablePos).getMaterial();
+	public static int getYForPos(ChunkGenerator chunkGenerator, int x, int z, boolean ignoreWater) {
+		if (ignoreWater) {
+			return chunkGenerator.getBaseHeight(x, z, Heightmap.Type.OCEAN_FLOOR_WG);
 		}
-		return mutablePos.getY() + 1;
+		return chunkGenerator.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
 	}
 
 	public static Vector3d transformedVec3d(Vector3d vec, PlacementSettings settings) {
