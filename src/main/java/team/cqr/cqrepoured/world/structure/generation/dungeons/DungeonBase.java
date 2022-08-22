@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
@@ -24,24 +23,25 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.util.StructureHelper;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
-import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 
 /**
@@ -188,13 +188,16 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return this.name;
 	}
 
-	public abstract AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType);
+	public abstract StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random);
 
-	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
+	public StructurePiece generate(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
+		int x = pos.getX();
+		int z = pos.getZ();
+		BlockPos pos1 = new BlockPos(x, this.getYForPos(chunkGenerator, x, z, random), z);
+		return this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos1, random, spawnType);
 	}
 
-	public int getYForPos(World world, int x, int z, Random rand) {
+	public int getYForPos(ChunkGenerator chunkGenerator, int x, int z, Random rand) {
 		int y = 0;
 		if (!this.fixedY) {
 			// TODO make this a dungeon config option?
@@ -202,7 +205,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 			int[] arr = new int[(r * 2 + 1) * (r * 2 + 1)];
 			for (int ix = -r; ix <= r; ix++) {
 				for (int iz = -r; iz <= r; iz++) {
-					arr[(ix + r) * (r * 2 + 1) + (iz + r)] = DungeonGenUtils.getYForPos(world, x + ix, z + iz, this.treatWaterAsAir);
+					arr[(ix + r) * (r * 2 + 1) + (iz + r)] = DungeonGenUtils.getYForPos(chunkGenerator, x + ix, z + iz, this.treatWaterAsAir);
 				}
 			}
 			Arrays.sort(arr);
@@ -212,29 +215,20 @@ public abstract class DungeonBase implements IFeatureConfig {
 		} else {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
-		y -= this.getUnderGroundOffset();
+		//y -= this.getUnderGroundOffset();
 		return y;
 	}
 
-	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		AbstractDungeonGenerator<?> generator = this.createDungeonGenerator(world, x, y, z, rand, spawnType);
-
-		if (generateImmediately) {
-			DungeonGenerationManager.generateNow(world, generator.get(), this, spawnType);
-		} else if (!CQRConfig.SERVER_CONFIG.advanced.multithreadedDungeonPreparation.get()) {
-			DungeonGenerationManager.generate(world, generator.get(), this, spawnType);
-		} else {
-			CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, generator);
-			DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, this, spawnType));
-		}
+	public StructurePiece generateAt(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
+		return this.runGenerator(dynamicRegistries, chunkGenerator, templateManager, pos, random);
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+	public StructurePiece generateWithOffsets(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
 		if (!this.fixedY) {
-			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
+			pos = pos.above(DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, random));
 		}
-		y -= this.getUnderGroundOffset();
-		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
+		pos = pos.below(this.getUnderGroundOffset());
+		return this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos, random, spawnType);
 	}
 
 	@Nullable
