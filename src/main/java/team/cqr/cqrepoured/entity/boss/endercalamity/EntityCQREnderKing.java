@@ -119,6 +119,8 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss {
 			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.getPosition();
 			cs.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			cs.setFaction(this.getFaction().getName());
+			cs.setHealthScaling(this.getHealthScale());
+			cs.setSizeScaling(this.getSizeVariation());
 
 			this.world.spawnEntity(cs);
 

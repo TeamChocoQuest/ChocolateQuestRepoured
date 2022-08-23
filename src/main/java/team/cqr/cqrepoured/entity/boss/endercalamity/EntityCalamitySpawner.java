@@ -19,7 +19,10 @@ import team.cqr.cqrepoured.util.VectorUtil;
 public class EntityCalamitySpawner extends Entity {
 
 	private int timer;
+	
 	private String faction;
+	private float sizeScaling;
+	private double healthScaling;
 
 	private static final int CALAMITY_SPAWN_DURATION = 800;
 
@@ -152,6 +155,8 @@ public class EntityCalamitySpawner extends Entity {
 		EntityCQREnderCalamity calamity = new EntityCQREnderCalamity(this.world);
 		calamity.setFaction(this.faction, false);
 		calamity.setHomePositionCQR(this.getPosition());
+		calamity.setHealthScale(this.healthScaling);
+		calamity.setSizeVariation(this.sizeScaling);
 		calamity.setPosition(calamity.getHomePositionCQR().getX(), calamity.getHomePositionCQR().getY(), calamity.getHomePositionCQR().getZ());
 
 		this.world.spawnEntity(calamity);
@@ -200,6 +205,14 @@ public class EntityCalamitySpawner extends Entity {
 
 	public void setFaction(String faction) {
 		this.faction = faction;
+	}
+
+	public void setSizeScaling(float sizeScaling) {
+		this.sizeScaling = sizeScaling;
+	}
+
+	public void setHealthScaling(double healthScaling) {
+		this.healthScaling = healthScaling;
 	}
 
 	static {

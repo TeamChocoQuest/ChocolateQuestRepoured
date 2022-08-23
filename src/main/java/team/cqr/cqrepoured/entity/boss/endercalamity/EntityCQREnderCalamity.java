@@ -184,7 +184,6 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	public EntityCQREnderCalamity(World worldIn) {
 		super(worldIn);
-		this.setSizeVariation(2.0F);
 	}
 
 	@Override
@@ -244,12 +243,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	public float getDefaultHeight() {
-		return 2F;
+		return 4F;
 	}
 
 	@Override
 	public float getDefaultWidth() {
-		return 2F;
+		return 4F;
 	}
 
 	public static final String ANIM_NAME_PREFIX = "animation.ender_calamity.";
