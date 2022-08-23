@@ -49,7 +49,7 @@ public class CQRLoottables {
 	public static final ResourceLocation ENTITIES_DRAGON_NETHER = createEntityLootTable("bosses/dragon_nether");
 	public static final ResourceLocation ENTITIES_DRAGON = createEntityLootTable("bosses/dragon_normal");
 	public static final ResourceLocation ENTITIES_DWARF_ENGINEER = createEntityLootTable("bosses/dwarf_engineer");
-	public static final ResourceLocation ENTITIES_ENDERMAN_BOSS = createEntityLootTable("bosses/enderman_boss");
+	public static final ResourceLocation ENTITIES_ENDER_CALAMITY = createEntityLootTable("bosses/ender_calamity");
 	public static final ResourceLocation ENTITIES_TURTLE = createEntityLootTable("bosses/giant_turtle");
 	public static final ResourceLocation ENTITIES_GOBLIN_SHAMAN = createEntityLootTable("bosses/goblin_shaman");
 	public static final ResourceLocation ENTITIES_EXTERMINATOR = createEntityLootTable("bosses/golem_bosses");

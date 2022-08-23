@@ -505,7 +505,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLoottables.ENTITIES_ENDERMAN_BOSS;
+		return CQRLoottables.ENTITIES_ENDER_CALAMITY;
 	}
 
 	@Override
@@ -1133,7 +1133,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 		// LOOTVOLCANO
 		if (this.deathTime % 2 == 0 && this.deathCause != null) {
-			this.dropSingleItemFromLoottable(CQRLoottables.CHESTS_TREASURE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
+			this.dropSingleItemFromLoottable(LOOT_DROP_LOOTTABLE, this.recentlyHit > 0, net.minecraftforge.common.ForgeHooks.getLootingLevel(this, this.deathCause.getTrueSource(), this.deathCause), this.deathCause);
 		}
 
 		if (!this.dataManager.get(IS_DEAD_AND_ON_THE_GROUND)) {
@@ -1192,6 +1192,13 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public int tickTimer() {
 		return this.ticksExisted;
+	}
+	
+	private static ResourceLocation LOOT_DROP_LOOTTABLE = CQRLoottables.CHESTS_TREASURE;
+
+	public static void reloadLootDropLoottable() {
+		String configValue = CQRConfig.bosses.enderCalamityLootPool;
+		LOOT_DROP_LOOTTABLE = new ResourceLocation(configValue);
 	}
 
 }

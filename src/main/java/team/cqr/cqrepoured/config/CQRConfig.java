@@ -12,8 +12,10 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
@@ -189,6 +191,8 @@ public class CQRConfig {
 		public boolean calamityBlockEquipParticles = true;
 		public int netherDragonLength = 28;
 		public int enderCalamityHealingCrystalAbsorbAmount = 40;
+		@RequiresMcRestart
+		public String enderCalamityLootPool = CQRLoottables.CHESTS_TREASURE.toString();
 		public boolean enableWalkerKingFog = true;
 
 	}
@@ -453,6 +457,7 @@ public class CQRConfig {
 				}
 				EntityCQRNetherDragon.reloadBreakableBlocks();
 				EntityCQRGiantTortoise.realoadHardBlocks();
+				EntityCQREnderCalamity.reloadLootDropLoottable();
 			}
 		}
 
