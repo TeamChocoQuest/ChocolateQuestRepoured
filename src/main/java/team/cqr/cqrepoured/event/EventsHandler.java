@@ -56,6 +56,7 @@ import team.cqr.cqrepoured.item.crafting.RecipeCrownDetach;
 import team.cqr.cqrepoured.item.crafting.RecipesArmorDyes;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;
+import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
 @EventBusSubscriber
 public class EventsHandler {
@@ -245,6 +246,9 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
 		if (CQRConfig.bosses.preventBlockPlacingNearBosses && event.getEntity() != null && (!(event.getEntity() instanceof EntityPlayer) || !((EntityPlayer) event.getEntity()).isCreative())) {
+			if (ProtectedRegionHelper.isBlockPlacingWhitelisted(event.getPlacedBlock())) {
+				return;
+			}
 			BlockPos pos = new BlockPos(event.getEntity());
 			int radius = CQRConfig.bosses.antiCowardRadius;
 			AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-radius, -radius / 2, -radius), pos.add(radius, radius / 2, radius));

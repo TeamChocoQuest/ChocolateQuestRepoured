@@ -170,7 +170,7 @@ public class ProtectedRegionHelper {
 		return isPlacingPrevented;
 	}
 
-	private static boolean isBlockPlacingWhitelisted(IBlockState state) {
+	public static boolean isBlockPlacingWhitelisted(IBlockState state) {
 		if (PLACEABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
 			return true;
 		}
