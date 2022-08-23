@@ -1,73 +1,57 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
+import java.util.Random;
+import java.util.stream.StreamSupport;
+
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
+import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Supplier;
+public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements IDungeonGenerator<T> {
 
-public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements Supplier<GeneratableDungeon> {
+	protected BlockPos pos;
+	protected T dungeon;
+	protected Random random;
+	protected GeneratableDungeon.Builder dungeonBuilder;
 
-	protected final World world;
-	protected final Random random;
-	protected final BlockPos pos;
-	protected final T dungeon;
-	protected final GeneratableDungeon.Builder dungeonBuilder;
-
-	private final Map<File, CQStructure> cachedStructures = new HashMap<>();
-
-	protected AbstractDungeonGenerator(World world, BlockPos pos, T dungeon, Random random) {
-		this.world = world;
+	public AbstractDungeonGenerator(ChunkGenerator chunkGenerator, BlockPos pos, T dungeon, Random random) {
 		this.pos = pos;
 		this.dungeon = dungeon;
 		this.random = random;
-		this.dungeonBuilder = new GeneratableDungeon.Builder(this.world, this.pos, this.dungeon);
+		ServerWorld level = StreamSupport.stream(ServerLifecycleHooks.getCurrentServer().getAllLevels().spliterator(), false).filter(serverWorld -> serverWorld.getChunkSource().getGenerator() == chunkGenerator).findFirst().get();
+		this.dungeonBuilder = new GeneratableDungeon.Builder(level, pos, dungeon);
 	}
 
+	@Deprecated
 	@Override
-	public GeneratableDungeon get() {
-		try {
-			this.preProcess();
-			this.buildStructure();
-			this.postProcess();
-			return this.dungeonBuilder.build(this.world);
-		} catch (Throwable e) {
-			// TODO handle this elsewhere, DungeonPreparationHelper maybe?
-			CQRMain.logger.error("Failed to prepare dungeon {} for generation at {}", this.dungeon, this.pos, e);
-			throw new RuntimeException(e);
-		}
+	public StructurePiece prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config) {
+		return prepare();
 	}
 
-	// Actually having 3 methods here is useless as they are just called one after another
+	@Deprecated
+	@Override
+	public void prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config, Builder dungeonBuilder) {
+
+	}
+
+	public StructurePiece prepare() {
+		this.preProcess();
+		this.buildStructure();
+		this.postProcess();
+		return this.dungeonBuilder.build();
+	}
 
 	protected abstract void preProcess();
 
 	protected abstract void buildStructure();
 
 	protected abstract void postProcess();
-
-	public CQStructure loadStructureFromFile(File file) {
-		if (this.cachedStructures.containsKey(file)) {
-			return this.cachedStructures.get(file);
-		}
-		CQStructure structure = CQStructure.createFromFile(file);
-		this.cachedStructures.put(file, structure);
-		return structure;
-	}
-
-	public World getWorld() {
-		return this.world;
-	}
-
-	public T getDungeon() {
-		return this.dungeon;
-	}
 
 }
