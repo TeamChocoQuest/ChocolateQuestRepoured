@@ -1,21 +1,22 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
+import java.util.Properties;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EnumMCWoodType;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorRandomizedCastle;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.RandomCastleConfigOptions;
 import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.EnumRoomType;
-
-import java.util.Properties;
-import java.util.Random;
 
 /**
  * Copyright (c) 20.04.2020 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
@@ -130,8 +131,8 @@ public class DungeonRandomizedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonRandomizedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorRandomizedCastle(world, new BlockPos(x, y, z), this, rand);
+	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		return new GeneratorRandomizedCastle(chunkGenerator, pos, this, random).prepare();
 	}
 
 	public BlockState getMainBlockState() {

@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import team.cqr.cqrepoured.util.PropertyFileHelper;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorGuardedStructure;
-
 import java.io.File;
 import java.util.Properties;
 import java.util.Random;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
+import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorGuardedStructure;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -39,8 +40,8 @@ public class DungeonGuardedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonGuardedCastle> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorGuardedStructure(world, new BlockPos(x, y, z), this, rand);
+	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		return new GeneratorGuardedStructure(chunkGenerator, pos, this, random).prepare();
 	}
 
 	public int getMinDistance() {

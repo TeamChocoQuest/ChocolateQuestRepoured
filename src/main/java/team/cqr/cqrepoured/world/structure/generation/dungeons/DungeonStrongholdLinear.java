@@ -1,19 +1,21 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.ESkyDirection;
-import team.cqr.cqrepoured.util.PropertyFileHelper;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
-import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.util.Properties;
 import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.util.ESkyDirection;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
+import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
+import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -100,8 +102,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorStronghold(world, new BlockPos(x, y, z), this, rand);
+	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		return new GeneratorStronghold(chunkGenerator, pos, this, random).prepare();
 	}
 
 	public int getMinFloors() {

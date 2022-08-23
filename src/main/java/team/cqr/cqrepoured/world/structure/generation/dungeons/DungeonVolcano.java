@@ -1,22 +1,24 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
+import java.io.File;
+import java.util.Properties;
+import java.util.Random;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.GeneratorVolcano;
-
-import java.io.File;
-import java.util.Properties;
-import java.util.Random;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -128,8 +130,8 @@ public class DungeonVolcano extends DungeonBase {
 	}
 
 	@Override
-	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
-		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
+	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		return new GeneratorVolcano(chunkGenerator, pos, this, random).prepare();
 	}
 
 	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {
