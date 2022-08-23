@@ -592,7 +592,7 @@ description.gui_button_trade.out_of_stock.name=Out of stock! If possible buy som
 
 #Enchantments
 enchantment.lightning_protection=Lightning Protection
-enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet.
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
 enchantment.spectral=Spectral Balsam
 enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
 
