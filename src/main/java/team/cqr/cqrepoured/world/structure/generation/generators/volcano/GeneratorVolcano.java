@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDun
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableLootChestInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableSpawnerInfo;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.EntranceBuilderHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.StrongholdBuilder;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper.EStairSection;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
+public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 	private final int volcanoHeight;
 	private final double steepness;

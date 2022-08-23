@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVegetatedCave> {
+public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegetatedCave> {
 
 	private List<BlockPos> spawners = new ArrayList<>();
 	private List<BlockPos> chests = new ArrayList<>();

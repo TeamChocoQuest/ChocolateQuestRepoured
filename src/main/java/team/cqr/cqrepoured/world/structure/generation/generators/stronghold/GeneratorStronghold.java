@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.linear.StrongholdFloor;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -20,7 +20,7 @@ import java.util.Random;
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongholdLinear> {
+public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStrongholdLinear> {
 
 	private int dunX;
 	private int dunZ;

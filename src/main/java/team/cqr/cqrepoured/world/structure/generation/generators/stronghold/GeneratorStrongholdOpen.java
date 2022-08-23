@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open.StrongholdFloorOpen;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -29,7 +29,7 @@ import java.util.Random;
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStrongholdOpen> {
+public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStrongholdOpen> {
 
 	private List<String> blacklistedRooms = new ArrayList<>();
 	private Tuple<Integer, Integer> structureBounds;

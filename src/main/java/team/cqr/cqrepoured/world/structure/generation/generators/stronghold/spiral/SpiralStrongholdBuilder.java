@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
@@ -20,7 +20,7 @@ import java.util.Random;
 public class SpiralStrongholdBuilder {
 
 	private final Random random;
-	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private LegacyDungeonGenerator<DungeonVolcano> generator;
 	private GeneratableDungeon.Builder dungeonBuilder;
 	// Direction the entryway is facing (beginning from the volcano center)
 	private ESkyDirection allowedDirection;
@@ -32,7 +32,7 @@ public class SpiralStrongholdBuilder {
 	private boolean buildDownwards = true;
 	private boolean buildInwards = true;
 
-	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rand) {
+	public SpiralStrongholdBuilder(LegacyDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.allowedDirection = expansionDirection;

@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 import java.io.File;
 import java.util.*;
 
-public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity> {
+public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 
 	private int longestSide;
 	private int distanceBetweenBuildings;

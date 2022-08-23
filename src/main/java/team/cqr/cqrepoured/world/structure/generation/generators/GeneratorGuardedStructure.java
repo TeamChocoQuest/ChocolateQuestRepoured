@@ -23,7 +23,7 @@ import java.util.Random;
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonGuardedCastle> {
+public class GeneratorGuardedStructure extends LegacyDungeonGenerator<DungeonGuardedCastle> {
 
 	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it
 	// should atm...

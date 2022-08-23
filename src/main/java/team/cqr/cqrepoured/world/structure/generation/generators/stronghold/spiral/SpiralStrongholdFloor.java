@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
@@ -16,7 +16,7 @@ import java.util.Random;
 public class SpiralStrongholdFloor {
 
 	private final Random random;
-	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private LegacyDungeonGenerator<DungeonVolcano> generator;
 	private GeneratableDungeon.Builder dungeonBuilder;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
@@ -28,7 +28,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 
-	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
+	public SpiralStrongholdFloor(LegacyDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.entranceCoordinates = entrancePos;

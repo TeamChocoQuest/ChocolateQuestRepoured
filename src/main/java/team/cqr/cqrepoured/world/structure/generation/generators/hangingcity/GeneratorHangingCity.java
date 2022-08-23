@@ -5,14 +5,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 import java.util.*;
 
-public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangingCity> {
+public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingCity> {
 
 	// DONE: Air bubble around the whole thing
 

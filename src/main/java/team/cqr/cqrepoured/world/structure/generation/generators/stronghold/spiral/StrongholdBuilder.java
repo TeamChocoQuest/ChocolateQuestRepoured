@@ -8,14 +8,14 @@ import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 
 import java.util.Random;
 
 public class StrongholdBuilder {
 
 	private final Random random;
-	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private LegacyDungeonGenerator<DungeonVolcano> generator;
 	private GeneratableDungeon.Builder dungeonBuilder;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
@@ -23,7 +23,7 @@ public class StrongholdBuilder {
 	private Direction direction;
 	private World world;
 
-	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, World world, Random rand) {
+	public StrongholdBuilder(LegacyDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, World world, Random rand) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;

@@ -20,7 +20,7 @@ import java.util.Random;
 /**
  * Copyright (c) 25.05.2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
-public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonRandomizedCastle> {
+public class GeneratorRandomizedCastle extends LegacyDungeonGenerator<DungeonRandomizedCastle> {
 
 	private CastleRoomSelector roomHelper;
 	private BlockPos structurePos;

@@ -14,14 +14,14 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
 
-public abstract class AbstractDungeonGenerator<T extends DungeonBase> implements IDungeonGenerator<T> {
+public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements IDungeonGenerator<T> {
 
 	protected BlockPos pos;
 	protected T dungeon;
 	protected Random random;
 	protected GeneratableDungeon.Builder dungeonBuilder;
 
-	public AbstractDungeonGenerator(ChunkGenerator chunkGenerator, BlockPos pos, T dungeon, Random random) {
+	public LegacyDungeonGenerator(ChunkGenerator chunkGenerator, BlockPos pos, T dungeon, Random random) {
 		this.pos = pos;
 		this.dungeon = dungeon;
 		this.random = random;
