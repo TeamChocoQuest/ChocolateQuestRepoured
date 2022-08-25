@@ -141,9 +141,12 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 		
 	}
 
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
 	@Override
 	public AnimationFactory getFactory() {
-		return null;
+		return this.factory;
 	}
 
 	@Override
