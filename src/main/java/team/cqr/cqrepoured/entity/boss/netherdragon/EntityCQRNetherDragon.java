@@ -44,6 +44,14 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
@@ -67,7 +75,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, IRangedAttackMob, ICirclingEntity, IDontRenderFire {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, IRangedAttackMob, ICirclingEntity, IDontRenderFire, IAnimationTickable, IAnimatable {
 
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
@@ -951,6 +959,37 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<IAnimatable>(this, "mouthController", 10, this::mouthAnimPredicate));
+	}
+	
+	protected static final String ANIM_NAME_MOUTH_OPEN = "animation.netherdragon.mouth_open";
+	protected static final String ANIM_NAME_MOUTH_CLOSED = "animation.netherdragon.idle";
+	
+	protected <E extends IAnimatable> PlayState mouthAnimPredicate(AnimationEvent<E> event) {
+		if(this.isMouthOpen()) {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_MOUTH_OPEN, true));
+		} else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_MOUTH_CLOSED, true));
+		}
+
+		return PlayState.CONTINUE;
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public int tickTimer() {
+		return this.tickCount;
 	}
 
 }

@@ -19,6 +19,7 @@ import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnde
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
+import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonHead;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;
@@ -50,6 +51,7 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileFirewallPart;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderEye;
+import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHookShotHook;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
@@ -102,7 +104,7 @@ public class CQREntityRenderers
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_SPIDER_BALL.get(), RenderProjectileSpiderBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), RenderProjectileVampiricSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), RenderProjectileFirewallPart::new);
-		//RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOOKSHOT_HOOK.get(), RenderProjectileHookShotHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_WEB.get(), RenderProjectileWeb::new);
@@ -167,8 +169,8 @@ public class CQREntityRenderers
 
 	protected static void registerBossRenderers() {
 		// Nether Dragon
-		/*RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, RenderCQRNetherDragon::new);
-		RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);*/
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.NETHER_DRAGON.get(), RenderNetherDragonHead::new);
+		/*RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);*/
 
 		// Giant Tortoise
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_TORTOISE.get(), RenderCQRGiantTortoiseGecko::new);

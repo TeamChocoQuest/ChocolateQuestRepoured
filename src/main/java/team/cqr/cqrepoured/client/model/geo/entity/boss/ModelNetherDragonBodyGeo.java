@@ -16,13 +16,13 @@ public class ModelNetherDragonBodyGeo extends AbstractModelGeoCQRBase<SubEntityN
 		return null;
 	}
 	
-	protected final ResourceLocation TEXTURE_SKELETAL_DEFAULT = CQRMain.prefix("textures/entity/boss/nether_dragon_body_skeletal.png");
+	protected final ResourceLocation TEXTURE_SKELETAL_DEFAULT = CQRMain.prefix("textures/entity/boss/nether_dragon_skeletal.png");
 	
-	protected final ResourceLocation MODEL_SKELETAL_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body_skeletal.geo.json");
+	protected final ResourceLocation MODEL_SKELETAL_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_body_skeletal.geo.json");
 	
-	protected final ResourceLocation MODEL_TAIL_START_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body_tail_start.geo.json");
-	protected final ResourceLocation MODEL_TAIL_CENTER_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body_tail_center.geo.json");
-	protected final ResourceLocation MODEL_TAIL_END_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body_tail_end.geo.json");
+	protected final ResourceLocation MODEL_TAIL_START_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_tail_start.geo.json");
+	protected final ResourceLocation MODEL_TAIL_CENTER_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_tail_middle.geo.json");
+	protected final ResourceLocation MODEL_TAIL_END_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_tail_end.geo.json");
 	
 	@Override
 	public ResourceLocation getModelLocation(SubEntityNetherDragonSegment object) {
