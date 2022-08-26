@@ -115,7 +115,7 @@ public class ProtectedRegionEventHandler {
 			return;
 		}
 		World world = griefingFuck.world;
-		BlockPos pos = griefingFuck.getPosition();
+		BlockPos pos = new BlockPos(griefingFuck);
 
 		if (ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, griefingFuck, true, false)) {
 			event.setResult(Result.DENY);
