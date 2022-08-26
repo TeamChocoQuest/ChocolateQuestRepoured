@@ -214,7 +214,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 			if (intArray.length == 0) {
 				return new PreparableEmptyInfo(x, y, z);
 			}
-			byte id = (byte) intArray[0];
+			byte id = (byte) (intArray[0] + 1);
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
 			}
