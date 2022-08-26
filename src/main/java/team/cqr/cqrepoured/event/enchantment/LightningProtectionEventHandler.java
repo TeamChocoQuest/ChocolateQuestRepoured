@@ -22,7 +22,7 @@ public class LightningProtectionEventHandler {
 
 			int lvl = EnchantmentHelper.getEnchantmentLevel(CQREnchantments.LIGHTNING_PROTECTION, helmet);
 			if(lvl > 0) {
-				float percentage = 0.1F * lvl;
+				float percentage = 1.0F - 0.1F * lvl;
 				event.setCanceled(true);
 				//TODO: Replace with ASM or mixin
 				//Lightning damage is by default 5
