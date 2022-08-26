@@ -4,11 +4,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.culling.ClippingHelper;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
-import team.cqr.cqrepoured.client.render.entity.RenderMultiPartPart;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 
@@ -16,15 +16,10 @@ import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEm
  * @deprecated TODO move into {@link RenderCQRExterminator}
  */
 @Deprecated
-public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends RenderMultiPartPart<T> {
+public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends EntityRenderer<T> {
 
 	public RenderExterminatorBackpackPart(EntityRendererManager renderManager) {
 		super(renderManager);
-	}
-
-	@Override
-	public boolean shouldRender(T livingEntity, ClippingHelper camera, double camX, double camY, double camZ) {
-		return this.superShouldRender(livingEntity, camera, camX, camY, camZ);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -60,6 +55,11 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 			}
 		}
 		super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(T pEntity) {
+		return null;
 	}
 
 }

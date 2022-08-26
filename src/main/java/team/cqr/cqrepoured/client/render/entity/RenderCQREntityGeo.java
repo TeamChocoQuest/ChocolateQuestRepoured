@@ -6,10 +6,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -18,6 +21,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
+import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 @OnlyIn(Dist.CLIENT)
@@ -78,6 +82,28 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			bone.setCubesHidden(true);
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	}
+	
+	@Override
+	public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+		
+		if(entity.getParts() != null && entity.getParts().length > 0) {
+			for(PartEntity<?> part : entity.getParts()) {
+				if(part instanceof CQRPartEntity<?>) {
+					CQRPartEntity<?> cpe = (CQRPartEntity<?>)part;
+					EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer = cpe.renderer(this.entityRenderDispatcher);
+					if(renderer == null) {
+						continue;
+					}
+					stack.pushPose();
+					
+					((EntityRenderer<CQRPartEntity>)renderer).render(cpe, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+					
+					stack.popPose();
+				}
+			}
+		}
 	}
 
 }
