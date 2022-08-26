@@ -5,11 +5,14 @@ import java.util.function.Function;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -35,7 +38,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
-	
+
 	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
@@ -61,7 +64,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public float getHeightScale(T entity) {
 		return this.heightScale * entity.getSizeVariation();
 	}
-	
+
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
 		return this.TEXTURE_GETTER.apply(entity);
@@ -70,36 +73,52 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	protected T currentEntityBeingRendered;
 
 	@Override
-	public void renderLate(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue,
-			float partialTicks) {
+	public void renderLate(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		super.renderLate(animatable, stackIn, ticks, renderTypeBuffer, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		this.currentEntityBeingRendered = animatable;
 	}
-	
+
 	@Override
 	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if(this.isArmorBone(bone)) {
+		if (this.isArmorBone(bone)) {
 			bone.setCubesHidden(true);
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
-	
+
 	@Override
 	public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
 		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-		
-		if(entity.getParts() != null && entity.getParts().length > 0) {
-			for(PartEntity<?> part : entity.getParts()) {
-				if(part instanceof CQRPartEntity<?>) {
-					CQRPartEntity<?> cpe = (CQRPartEntity<?>)part;
+
+		if (entity.getParts() != null && entity.getParts().length > 0) {
+			Vector3d camPos = Minecraft.getInstance().cameraEntity.position();
+			double camX = camPos.x();
+			double camY = camPos.y();
+			double camZ = camPos.z();
+			
+			for (PartEntity<?> part : entity.getParts()) {
+				if (part instanceof CQRPartEntity<?>) {
+					CQRPartEntity<?> cpe = (CQRPartEntity<?>) part;
 					EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer = cpe.renderer(this.entityRenderDispatcher);
-					if(renderer == null) {
+					if (renderer == null) {
 						continue;
 					}
+
+					double d0 = MathHelper.lerp((double) partialTicks, cpe.xOld, cpe.getX()) - camX;
+					double d1 = MathHelper.lerp((double) partialTicks, cpe.yOld, cpe.getY()) - camY;
+					double d2 = MathHelper.lerp((double) partialTicks, cpe.zOld, cpe.getZ()) - camZ;
+					float f = MathHelper.lerp(partialTicks, cpe.yRotO, cpe.yRot);
+
 					stack.pushPose();
-					
-					((EntityRenderer<CQRPartEntity>)renderer).render(cpe, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-					
+
+					Vector3d vector3d = ((EntityRenderer<CQRPartEntity>) renderer).getRenderOffset(cpe, partialTicks);
+					double d12 = d0 + vector3d.x();
+					double d13 = d1 + vector3d.y();
+					double d10 = d2 + vector3d.z();
+					stack.translate(d12, d13, d10);
+
+					((EntityRenderer<CQRPartEntity>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
+
 					stack.popPose();
 				}
 			}
