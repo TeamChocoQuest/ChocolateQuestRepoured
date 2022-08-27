@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.entity.boss.exterminator;
 
 import java.util.function.Supplier;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
@@ -63,6 +65,11 @@ public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<En
 	@Override
 	protected Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer() {
 		return SubEntityExterminatorBackpack.class;
+	}
+	
+	@Override
+	public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
+		return null;
 	}
 
 }

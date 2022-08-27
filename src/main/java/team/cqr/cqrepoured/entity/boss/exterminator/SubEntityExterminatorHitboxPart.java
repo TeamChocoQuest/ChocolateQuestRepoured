@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,6 +27,11 @@ public class SubEntityExterminatorHitboxPart extends MultiPartEntityPartSizable<
 	@Override
 	protected Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer() {
 		return SubEntityExterminatorHitboxPart.class;
+	}
+	
+	@Override
+	public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
+		return null;
 	}
 
 }

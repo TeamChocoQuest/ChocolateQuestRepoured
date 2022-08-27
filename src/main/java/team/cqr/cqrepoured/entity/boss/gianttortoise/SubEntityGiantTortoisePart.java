@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
@@ -60,4 +62,9 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 		return SubEntityGiantTortoisePart.class;
 	}
 
+	@Override
+	public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
+		return null;
+	}
+	
 }
