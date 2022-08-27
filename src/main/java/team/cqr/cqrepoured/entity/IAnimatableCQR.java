@@ -12,8 +12,6 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.Hand;
-import net.minecraftforge.fml.network.PacketDistributor;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -21,13 +19,11 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.gun.IFireArmTwoHanded;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
+import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
@@ -50,6 +46,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 				//Bow and crossbows
 				(
 						this.getMainHandItem().getItem() instanceof ShootableItem || this.getOffhandItem().getItem() instanceof ShootableItem
+						|| this.getMainHandItem().getItem() instanceof ItemRevolver || this.getOffhandItem().getItem() instanceof ItemRevolver
 						|| this.getMainHandItem().getItem() instanceof IFireArmTwoHanded || this.getOffhandItem().getItem() instanceof IFireArmTwoHanded
 						|| this.getMainHandItem().getUseAnimation() == UseAction.BOW || this.getOffhandItem().getUseAnimation() == UseAction.BOW
 						|| this.getMainHandItem().getUseAnimation() == UseAction.CROSSBOW || this.getOffhandItem().getUseAnimation() == UseAction.CROSSBOW
@@ -57,6 +54,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 				|| //Spears
 				(
 						this.getMainHandItem().getUseAnimation() == UseAction.SPEAR || this.getOffhandItem().getUseAnimation() == UseAction.SPEAR
+						|| this.getMainHandItem().getItem() instanceof ItemSpearBase || this.getOffhandItem().getItem() instanceof ItemSpearBase
 				)
 				|| //Greatswords
 				(
