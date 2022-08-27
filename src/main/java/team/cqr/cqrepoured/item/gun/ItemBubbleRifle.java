@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.item.gun;
 
 import net.minecraft.item.ItemStack;
 
-public class ItemBubbleRifle extends ItemBubblePistol {
+public class ItemBubbleRifle extends ItemBubblePistol implements IFireArmTwoHanded {
 
 	public ItemBubbleRifle(Properties properties) {
 		super(properties.durability(400));

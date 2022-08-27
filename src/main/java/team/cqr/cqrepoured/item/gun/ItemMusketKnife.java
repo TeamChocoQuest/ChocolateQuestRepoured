@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 //#TODO tests modifiers
-public class ItemMusketKnife extends ItemMusket {
+public class ItemMusketKnife extends ItemMusket implements IFireArmTwoHanded {
 
 	private final float attackDamage;
 	private final Multimap<Attribute, AttributeModifier> attributeModifier;

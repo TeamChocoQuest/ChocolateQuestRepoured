@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.item.ItemLore;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMusket extends ItemRevolver {
+public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 
 	public ItemMusket(Properties properties)
 	{
