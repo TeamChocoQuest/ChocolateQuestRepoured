@@ -5,7 +5,6 @@ import java.util.function.Function;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -91,11 +90,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 
 		if (entity.getParts() != null && entity.getParts().length > 0) {
-			Vector3d camPos = Minecraft.getInstance().cameraEntity.position();
-			double camX = camPos.x();
-			double camY = camPos.y();
-			double camZ = camPos.z();
-			
 			for (PartEntity<?> part : entity.getParts()) {
 				if (part instanceof CQRPartEntity<?>) {
 					CQRPartEntity<?> cpe = (CQRPartEntity<?>) part;
@@ -104,18 +98,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 						continue;
 					}
 
-					double d0 = MathHelper.lerp((double) partialTicks, cpe.xOld, cpe.getX()) - camX;
-					double d1 = MathHelper.lerp((double) partialTicks, cpe.yOld, cpe.getY()) - camY;
-					double d2 = MathHelper.lerp((double) partialTicks, cpe.zOld, cpe.getZ()) - camZ;
 					float f = MathHelper.lerp(partialTicks, cpe.yRotO, cpe.yRot);
 
 					stack.pushPose();
 
-					Vector3d vector3d = ((EntityRenderer<CQRPartEntity>) renderer).getRenderOffset(cpe, partialTicks);
-					double d12 = d0 + vector3d.x();
-					double d13 = d1 + vector3d.y();
-					double d10 = d2 + vector3d.z();
-					stack.translate(d12, d13, d10);
+					Vector3d translate = cpe.position().subtract(entity.position());
+					stack.translate(translate.x(), translate.y(), translate.z());
 
 					((EntityRenderer<CQRPartEntity>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
 
