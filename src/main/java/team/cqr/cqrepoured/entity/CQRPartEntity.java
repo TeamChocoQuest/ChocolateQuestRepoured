@@ -1,10 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
@@ -161,26 +156,8 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		return true;
 	}
 	
-    @OnlyIn(Dist.CLIENT)
-    protected static Map<Class<? extends CQRPartEntity<? extends Entity>>, EntityRenderer<? extends CQRPartEntity<? extends Entity>>> RENDERERS = new HashMap<>();
-    
-    @OnlyIn(Dist.CLIENT)
-    public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
-        if(RENDERERS.containsKey(this.getClassForRenderer())) {
-            return RENDERERS.get(this.getClassForRenderer());
-        }
-        EntityRenderer<? extends CQRPartEntity<? extends Entity>> r = this.createRenderer(manager);
-        if(r == null) {
-        	return null;
-        }
-        RENDERERS.put(this.getClassForRenderer(), r);
-        return r;
-    }
-    
-    protected abstract Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer();
-    
-    protected EntityRenderer<? extends CQRPartEntity<? extends Entity>> createRenderer(EntityRendererManager manager) {
-        return null;
-    }
+	public boolean hasCustomRenderer() {
+		return false;
+	}
 	
 }
