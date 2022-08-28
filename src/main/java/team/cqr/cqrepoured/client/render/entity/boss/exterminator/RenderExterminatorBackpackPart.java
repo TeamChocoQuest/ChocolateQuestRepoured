@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -12,17 +11,12 @@ import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 
-/**
- * @deprecated TODO move into {@link RenderCQRExterminator}
- */
-@Deprecated
 public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends EntityRenderer<T> {
 
 	public RenderExterminatorBackpackPart(EntityRendererManager renderManager) {
 		super(renderManager);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void render(T pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		if (pEntity.isActive()) {
@@ -30,7 +24,6 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 
 			pMatrixStack.pushPose();
 			pMatrixStack.translate(0.0D, pEntity.getBbHeight() * 0.5D, 0.0D);
-			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 			ElectricFieldRenderUtil.renderElectricFieldWithSizeOfEntityAt(pMatrixStack, pBuffer, pEntity, 5, seed);
 			pMatrixStack.popPose();
 
@@ -50,7 +43,6 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				final Vector3d start = new Vector3d(0, pEntity.getBbHeight() * 0.5, 0);
 				final Vector3d end = new Vector3d(x2 - x1, y2 - y1, z2 - z1);
 
-				RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 5, seed);
 			}
 		}

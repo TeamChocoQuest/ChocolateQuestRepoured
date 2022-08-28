@@ -1,13 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 
 public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<EntityCQRGiantTortoise> {
@@ -55,16 +51,6 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	@Override
 	public boolean canBeTurnedToStone() {
 		return false;
-	}
-
-	@Override
-	protected Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer() {
-		return SubEntityGiantTortoisePart.class;
-	}
-
-	@Override
-	public EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer(EntityRendererManager manager) {
-		return null;
 	}
 	
 }

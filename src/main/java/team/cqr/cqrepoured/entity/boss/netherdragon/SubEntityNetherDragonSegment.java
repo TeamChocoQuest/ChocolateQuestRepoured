@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -157,10 +156,10 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 		}
 		return this.tickCount;
 	}
-
+	
 	@Override
-	protected Class<? extends CQRPartEntity<? extends Entity>> getClassForRenderer() {
-		return SubEntityNetherDragonSegment.class;
+	public boolean hasCustomRenderer() {
+		return true;
 	}
 
 }
