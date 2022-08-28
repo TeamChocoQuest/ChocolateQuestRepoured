@@ -20,6 +20,7 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
@@ -93,7 +94,10 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			for (PartEntity<?> part : entity.getParts()) {
 				if (part instanceof CQRPartEntity<?>) {
 					CQRPartEntity<?> cpe = (CQRPartEntity<?>) part;
-					EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer = cpe.renderer(this.entityRenderDispatcher);
+					if(!cpe.hasCustomRenderer()) {
+						continue;
+					}
+					EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer = CQREntityRenderers.getRendererFor(cpe, this.entityRenderDispatcher);
 					if (renderer == null) {
 						continue;
 					}
