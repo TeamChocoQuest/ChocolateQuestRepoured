@@ -40,7 +40,14 @@ license="MIT-license"
 		mandatory=true
 		ordering="NONE"
 		side="BOTH"
-		
+
+    [[dependencies.cqrepoured]]
+        modId="smartbrainlib"
+        versionRange="[1.2,)"
+        mandatory=true
+        ordering="NONE"
+        side="BOTH"
+	
 [[mods]]
 	modId="cqrepoured_structures"
 	version="${file.jarVersion}"
