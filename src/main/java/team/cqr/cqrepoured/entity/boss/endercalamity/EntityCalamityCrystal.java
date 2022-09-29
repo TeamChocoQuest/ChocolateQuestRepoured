@@ -17,7 +17,9 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,11 +116,11 @@ public class EntityCalamityCrystal extends Entity {
 			if (this.ticksExisted % 10 == 0) {
 				if (this.isAbsorbing()) {
 
-					if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 4F)) {
+					if (this.currentTarget.attackEntityFrom(DamageSource.MAGIC, 2F)) {
 						this.absorbedHealth += 2F;
 					}
 
-					if (this.absorbedHealth >= 0.5F * CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * (this.world.getDifficulty().getId() + 1)) {
+					if (this.absorbedHealth >= CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * MathHelper.clamp(this.world.getDifficulty().getId() + 1, 1, EnumDifficulty.values().length -1 /* Ignore peaceful*/)) {
 						this.setAbsorbing(false);
 						this.currentTarget = this.owningEntity;
 						if (this.owningEntity == null) {
@@ -209,7 +211,7 @@ public class EntityCalamityCrystal extends Entity {
 
 	private void onCrystalDestroyed(DamageSource source) {
 
-		// Special case when dying normally => it is out of world
+		// Special case when dying normally => it is not out of world
 		if (source != DamageSource.OUT_OF_WORLD) {
 			// DONE: Implement healing of all entities nearby
 
@@ -218,7 +220,7 @@ public class EntityCalamityCrystal extends Entity {
 			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<EntityLiving> affectedEntities = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb);
 			if (!affectedEntities.isEmpty()) {
-				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
+				final float healingAmount = (this.absorbedHealth / affectedEntities.size());
 				affectedEntities.forEach(arg0 -> arg0.heal(healingAmount));
 			}
 		}
@@ -262,7 +264,7 @@ public class EntityCalamityCrystal extends Entity {
 				 * }
 				 * }
 				 */
-				return living.getHealth() / living.getMaxHealth() >= 0.5F;
+				return living.getHealth() / living.getMaxHealth() >= 0.25F;
 			}
 		}
 		return false;
