@@ -60,12 +60,12 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
+    minecraft "net.minecraftforge:forge:$mcVersion-$forgeVersion"
 
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     // GeckoLib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.89')
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-$mcVersion:$geckolibVersion")
 
     // ReachFix
     // TODO seems to cause issues in dev? atDependencies 'curse.maven:ReachFix-556777:3648997'
@@ -75,10 +75,10 @@ dependencies {
     runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152')
 	
 	// SmartBrainLib
-	atDependencies 'curse.maven:smartbrainlib-661293:3982171'
+	atDependencies "curse.maven:smartbrainlib-661293:$smartBrainLibVersion"
 
     // Mixin
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor "org.spongepowered:mixin:$mixinVersion:processor"
 }
 
 minecraft {
