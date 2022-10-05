@@ -74,8 +74,8 @@ dependencies {
     compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152:api')
     runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152')
 	
-	// SmartBrainLib
-	atDependencies "curse.maven:smartbrainlib-661293:$smartBrainLibVersion"
+    // SmartBrainLib
+    atDependencies fg.deobf("curse.maven:smartbrainlib-661293:$smartBrainLibVersion")
 
     // Mixin
     annotationProcessor "org.spongepowered:mixin:$mixinVersion:processor"
