@@ -4,7 +4,9 @@ import java.util.Set;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -49,6 +51,11 @@ public class EntityCQRSpectre extends AbstractEntityCQR implements IAnimatableCQ
 	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
 		return null;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

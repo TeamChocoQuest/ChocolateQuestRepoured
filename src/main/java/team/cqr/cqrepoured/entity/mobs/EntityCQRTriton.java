@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -78,6 +80,11 @@ public class EntityCQRTriton extends AbstractEntityCQR implements IAnimatableCQR
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

@@ -3,10 +3,12 @@ package team.cqr.cqrepoured.entity.mobs;
 import java.util.Set;
 
 import net.minecraft.entity.EntityType;
+import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -69,6 +71,11 @@ public class EntityCQRDwarf extends AbstractEntityCQR implements IAnimatableCQR 
 	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
 		return null;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }

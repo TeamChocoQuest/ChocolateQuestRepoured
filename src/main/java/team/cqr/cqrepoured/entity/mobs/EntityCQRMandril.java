@@ -5,7 +5,9 @@ import java.util.Set;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -56,6 +58,11 @@ public class EntityCQRMandril extends AbstractEntityCQR implements IAnimatableCQ
 	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
 		return ALWAYS_PLAYING_MANDRIL;
+	}
+	
+	@Override
+	public IPacket<?> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
 }
