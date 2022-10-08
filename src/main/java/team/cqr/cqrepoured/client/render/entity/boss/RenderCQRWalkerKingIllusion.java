@@ -35,11 +35,6 @@ public class RenderCQRWalkerKingIllusion extends RenderCQRBipedBaseGeo<EntityWal
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityWalkerKingIllusion currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityWalkerKingIllusion currentEntity) {
 		
 	}

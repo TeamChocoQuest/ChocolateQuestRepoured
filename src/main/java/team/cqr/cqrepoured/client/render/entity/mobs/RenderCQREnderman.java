@@ -42,11 +42,6 @@ public class RenderCQREnderman extends RenderCQRBipedBaseGeo<EntityCQREnderman> 
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderman currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderman currentEntity) {
 		
 	}

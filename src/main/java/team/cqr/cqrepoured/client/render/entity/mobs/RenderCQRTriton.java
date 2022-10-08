@@ -36,22 +36,17 @@ public class RenderCQRTriton extends RenderCQRBipedBaseGeo<EntityCQRTriton> {
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRTriton currentEntity, IBone bone) {
-		
-	}
-
-	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
-		
-	}
-
-	@Override
 	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRTriton currentEntity, IBone bone) {
 		
 	}
 
 	@Override
 	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
+		
+	}
+
+	@Override
+	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
 		
 	}
 

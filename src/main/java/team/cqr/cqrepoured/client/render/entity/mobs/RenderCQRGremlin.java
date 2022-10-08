@@ -36,11 +36,6 @@ public class RenderCQRGremlin extends RenderCQRBipedBaseGeo<EntityCQRGremlin> {
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGremlin currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGremlin currentEntity) {
 		
 	}

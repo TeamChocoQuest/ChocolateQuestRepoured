@@ -36,22 +36,17 @@ public class RenderCQRGoblin extends RenderCQRBipedBaseGeo<EntityCQRGoblin> {
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGoblin currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGoblin currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGoblin currentEntity, IBone bone) {
+	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGoblin currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGoblin currentEntity) {
+	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGoblin currentEntity, IBone bone) {
 		
 	}
 

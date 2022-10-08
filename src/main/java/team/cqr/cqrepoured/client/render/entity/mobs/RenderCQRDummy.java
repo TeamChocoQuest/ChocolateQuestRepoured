@@ -46,11 +46,6 @@ public class RenderCQRDummy extends RenderCQRBipedBaseGeo<EntityCQRDummy> {
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRDummy currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRDummy currentEntity, IBone bone) {
 		
 	}

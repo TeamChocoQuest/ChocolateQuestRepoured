@@ -51,11 +51,6 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR>
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 		
 	}

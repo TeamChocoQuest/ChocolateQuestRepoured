@@ -36,11 +36,6 @@ public class RenderCQRMandril extends RenderCQRBipedBaseGeo<EntityCQRMandril> {
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRMandril currentEntity, IBone bone) {
-		
-	}
-
-	@Override
 	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRMandril currentEntity) {
 		
 	}
