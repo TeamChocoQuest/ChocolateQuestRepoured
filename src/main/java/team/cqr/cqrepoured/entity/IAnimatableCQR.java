@@ -65,9 +65,15 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	@Override
 	public default void registerControllers(AnimationData data) {
 		//Always playing
-		if(this.getAlwaysPlayingAnimations() != null) {
+		Set<String> alwaysPlaying = this.getAlwaysPlayingAnimations();
+		if(alwaysPlaying != null && alwaysPlaying.size() > 0) {
 			for(String animName : this.getAlwaysPlayingAnimations()) {
-				data.addAnimationController(new AnimationController<>(this, "controller_always_playing_" + animName, 0, (e) -> PlayState.CONTINUE));
+				data.addAnimationController(new AnimationController<>(this, "controller_always_playing_" + animName, 0, (e) -> {
+					if (e.getController().getCurrentAnimation() == null) {
+						e.getController().setAnimation(new AnimationBuilder().loop(animName));
+					}
+					return PlayState.CONTINUE;
+				}));
 			}
 		}
 		// Idle
@@ -92,7 +98,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 
 	default <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -104,10 +110,10 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		if (this.isTwoHandedAnimationRunning()) {
 
 		} else if (this.isPassenger() || this.isSitting()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SITTING, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SITTING));
 			return PlayState.CONTINUE;
 		} else if (this.isCrouching()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SNEAKING, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SNEAKING));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -148,11 +154,11 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 						// Eating/Drinking animation
 					} else {
 						// Normal swinging
-						event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, true));
+						event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
 					}
 					return PlayState.CONTINUE;
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT, true));
+					event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
 					return PlayState.CONTINUE;
 				}
 			} else {
@@ -176,7 +182,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		if (!handItemStack.isEmpty() && !this.isTwoHandedAnimationRunning()) {
 			Item handItem = handItemStack.getItem();
 			if (this.isBlocking() && (handItem instanceof ShieldItem || handItem.getUseAnimation(handItemStack) == UseAction.BLOCK)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHand ? ANIM_NAME_BLOCKING_LEFT : ANIM_NAME_BLOCKING_RIGHT, true));
+				event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_BLOCKING_LEFT : ANIM_NAME_BLOCKING_RIGHT));
 			} else {
 				// If the item is a small gun play the correct animation
 				// if(handItem instanceof IRangedWeapon) {
@@ -193,7 +199,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	default <E extends IAnimatable> PlayState predicateTwoHandedPose(AnimationEvent<E> event) {
 		if (this.isTwoHandedAnimationRunning()) {
 			if (this.isSpellCasting()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPELLCASTING, true));
+				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SPELLCASTING));
 				return PlayState.CONTINUE;
 			} else {
 				// First: Check for firearm, spear and greatsword in either hand
@@ -228,24 +234,24 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		Item item = itemStack.getItem();
 		// If item instanceof ItemGreatsword => Greatsword animation
 		if(item instanceof ItemGreatSword) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_GREATSWORD_POSE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_GREATSWORD_POSE));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		else if(item instanceof ItemRevolver && !(item instanceof ItemMusket)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_FIREARM_SMALL_POSE_LEFT: ANIM_NAME_FIREARM_SMALL_POSE_RIGHT, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(leftHanded ? ANIM_NAME_FIREARM_SMALL_POSE_LEFT: ANIM_NAME_FIREARM_SMALL_POSE_RIGHT));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		// If item instanceof Spear => spear animation
 		else if (item.getUseAnimation(itemStack) == UseAction.SPEAR || item instanceof ItemSpearBase) {
 			// Yes this is for tridents but we can use it anyway
 			// Spear
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_SPEAR_POSE_LEFT : ANIM_NAME_SPEAR_POSE_RIGHT, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(leftHanded ? ANIM_NAME_SPEAR_POSE_LEFT : ANIM_NAME_SPEAR_POSE_RIGHT));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		// If item instanceof Firearm/Bow/Crossbow => firearm animation
 		else if ((item instanceof IFireArmTwoHanded) || item.getUseAnimation(itemStack) == UseAction.BOW || item.getUseAnimation(itemStack) == UseAction.CROSSBOW) {
 			// Firearm
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_FIREARM_POSE_LEFT : ANIM_NAME_FIREARM_POSE_RIGHT, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(leftHanded ? ANIM_NAME_FIREARM_POSE_LEFT : ANIM_NAME_FIREARM_POSE_RIGHT));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		return Optional.empty();
@@ -259,11 +265,11 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 			// Check for greatsword & spear and play their animations
 			if (this.getMainHandItem().getItem().getUseAnimation(this.getMainHandItem()) == UseAction.SPEAR || this.getOffhandItem().getItem().getUseAnimation(this.getOffhandItem()) == UseAction.SPEAR) {
 				// Spear use animation
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPEAR_SWING, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_SPEAR_SWING));
 			}
 			// If either hand item is greatsword => greatsword animation
 			else if((this.getMainHandItem().getItem() instanceof ItemGreatSword) || (this.getOffhandItem().getItem() instanceof ItemGreatSword)) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_GREATSWORD_SWING, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_GREATSWORD_SWING));
 			}
 		}
 		return PlayState.STOP;
@@ -273,7 +279,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
 	default <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
 		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALKING, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALKING));
 			if(this instanceof LivingEntity) {
 				LivingEntity entity = (LivingEntity) this;
 				event.getController().setAnimationSpeed(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 6.0);

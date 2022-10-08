@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -29,10 +34,6 @@ import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
@@ -220,9 +221,15 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		return this.factory;
 	}
 
+	static final Set<String> ALWAYS_PLAYING_NECROMANCER = new HashSet<>();
+
+	static {
+		ALWAYS_PLAYING_NECROMANCER.add("animation.bipednecromancer.boneshield.loop");
+	}
+	
 	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
-		return null;
+		return ALWAYS_PLAYING_NECROMANCER;
 	}
 
 }
