@@ -20,21 +20,27 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.entity.model.ParrotModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnimatable> extends RenderCQREntityGeo<T> {
+	
+	protected final ParrotModel PARROT_MODEL = new ParrotModel();
 	
 	protected final static ResourceLocation STANDARD_BIPED_GEO_MODEL = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
@@ -157,7 +163,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 				this.currentTransformTypeAtBone = TransformType.THIRD_PERSON_RIGHT_HAND;
 				break;
 			case POTION_BONE:
-				this.currentItemAtBone = HEALING_POTION_FOR_DISPLAY;
+				this.currentItemAtBone = currentEntity.getHealingPotions() > 0 && !currentEntity.isHoldingPotion() ? currentEntity.getHeldItemPotion() : null;
 				this.currentTransformTypeAtBone = TransformType.NONE;
 				break;
 			default: break;
@@ -203,10 +209,22 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 		
 		return this.currentItemAtBone;
 	}
+	
+	@Override
+	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+		if(boneName.equals(POTION_BONE)) {
+			matrixStack.scale(0.5F, 0.5F, 0.5F);
+		}
+	}
 
 	@Override
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		return this.currentTransformTypeAtBone;
+	}
+	
+	@Override
+	public RenderType getRenderType(T animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+		return RenderType.entityCutoutNoCull(textureLocation);
 	}
 
 }
