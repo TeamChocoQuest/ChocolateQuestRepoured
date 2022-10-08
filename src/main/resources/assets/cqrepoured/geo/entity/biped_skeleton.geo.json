@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.biped_skeleton",
+				"identifier": "geometry.modelbipedgecko",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 2,
@@ -95,6 +95,7 @@
 					"name": "bipedHandLeft",
 					"parent": "bipedArmLeft",
 					"pivot": [5, 12, 0],
+					"rotation": [90, 0, 0],
 					"cubes": [
 						{"origin": [5, 12, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
@@ -119,6 +120,7 @@
 					"name": "bipedHandRight",
 					"parent": "bipedArmRight",
 					"pivot": [-5, 12, 0],
+					"rotation": [90, 0, 0],
 					"cubes": [
 						{"origin": [-5, 12, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
@@ -144,8 +146,9 @@
 					"name": "bipedPotionSlot",
 					"parent": "bipedBody",
 					"pivot": [4, 13, 0],
+					"rotation": [0, -90, 0],
 					"cubes": [
-						{"origin": [4.5, 13, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [4, 13, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{

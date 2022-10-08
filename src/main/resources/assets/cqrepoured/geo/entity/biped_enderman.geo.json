@@ -94,9 +94,10 @@
 				{
 					"name": "bipedHandLeft",
 					"parent": "bipedArmLeft",
-					"pivot": [5, 8, 0],
+					"pivot": [5, 9, 0],
+					"rotation": [90, 0, 0],
 					"cubes": [
-						{"origin": [5, 8, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [5, 9, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{
@@ -118,9 +119,10 @@
 				{
 					"name": "bipedHandRight",
 					"parent": "bipedArmRight",
-					"pivot": [-5, 8, 0],
+					"pivot": [-5, 9, 0],
+					"rotation": [90, 0, 0],
 					"cubes": [
-						{"origin": [-5, 8, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [-5, 9, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{
@@ -144,6 +146,7 @@
 					"name": "bipedPotionSlot",
 					"parent": "bipedBody",
 					"pivot": [4, 28, 0],
+					"rotation": [0, 90, 0],
 					"cubes": [
 						{"origin": [4.5, 28, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]

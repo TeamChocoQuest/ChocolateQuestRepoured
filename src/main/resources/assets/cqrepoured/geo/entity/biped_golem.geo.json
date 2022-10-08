@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.biped_golem",
+				"identifier": "geometry.modelbipedgecko",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,
@@ -100,9 +100,10 @@
 				{
 					"name": "bipedHandLeft",
 					"parent": "bipedArmLeft",
-					"pivot": [6, 11, 0],
+					"pivot": [6, 12, -1],
+					"rotation": [90, 0, 0],
 					"cubes": [
-						{"origin": [6, 11, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [6, 12, -1], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{
@@ -125,9 +126,10 @@
 				{
 					"name": "bipedHandRight",
 					"parent": "bipedArmRight",
-					"pivot": [-6, 11, 0],
+					"pivot": [-6, 12, -1],
+					"rotation": [90, 0, 0],
 					"cubes": [
-						{"origin": [-6, 11, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [-6, 12, -1], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{
@@ -150,9 +152,10 @@
 				{
 					"name": "bipedPotionSlot",
 					"parent": "bipedBody",
-					"pivot": [4, 13, 0],
+					"pivot": [3, 15, 0],
+					"rotation": [0, -90, 0],
 					"cubes": [
-						{"origin": [4.5, 13, 0], "size": [0, 0, 0], "uv": [0, 0]}
+						{"origin": [3.5, 15, 0], "size": [0, 0, 0], "uv": [0, 0]}
 					]
 				},
 				{
