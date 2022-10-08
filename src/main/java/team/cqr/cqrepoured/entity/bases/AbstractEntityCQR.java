@@ -1462,6 +1462,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		}
 	}
 
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public int getTextureIndex() {
 		return this.entityData.get(TEXTURE_INDEX);
