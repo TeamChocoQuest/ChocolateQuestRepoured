@@ -1,8 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
@@ -90,16 +93,21 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	@Override
 	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
-		// TODO Auto-generated method stub
-		
+		if(boneName != null && boneName.equals(HAND_IDENT_LEFT)) {
+			matrixStack.scale(1.5F, 1.5F, 1.5F);
+		}
 	}
 
 	@Override
 	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public RenderType getRenderType(EntityCQRExterminator animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+		return RenderType.entityCutoutNoCull(textureLocation);
+	}
+	
 	@Override
 	protected boolean isArmorBone(GeoBone bone) {
 		return false;
