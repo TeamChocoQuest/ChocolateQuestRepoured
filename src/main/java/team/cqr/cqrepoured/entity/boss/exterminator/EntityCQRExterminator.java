@@ -16,7 +16,6 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
@@ -345,7 +344,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	private <E extends IAnimatable> PlayState predicateSpinCoils(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_COILS, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SPIN_COILS));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -359,14 +358,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		// Death animation
 		if (this.canPlayDeathAnimation()) {
 			event.getController().transitionLengthTicks = 0.0D;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH, false));
+			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_DEATH));
 			return PlayState.CONTINUE;
 		}
 
 		// Stunned
 		if (this.isStunned()) {
 			event.getController().transitionLengthTicks = 0.0D;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_STUN, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_STUN));
 			return PlayState.CONTINUE;
 		}
 
@@ -375,7 +374,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		// Inactive animation
 		if (super.isSitting()) {
 			// if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_INACTIVE, false));
+			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_INACTIVE));
 			// }
 			return PlayState.CONTINUE;
 		}
@@ -393,9 +392,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 
 		if (this.entityData.get(CANNON_RAISED)) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_RAISED, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_CANNON_RAISED));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_LOWERED, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_CANNON_LOWERED));
 		}
 
 		return PlayState.CONTINUE;
@@ -421,15 +420,15 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			if (this.shootIndicator) {
 				event.getController().clearAnimationCache();
 				this.shootIndicator = false;
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_CANNON_SHOOT, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_CANNON_SHOOT));
 			} else if (this.throwIndicator) {
 				event.getController().clearAnimationCache();
 				this.throwIndicator = false;
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_THROW, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_THROW));
 			} else if (this.smashIndicator) {
 				event.getController().clearAnimationCache();
 				this.smashIndicator = false;
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_GROUND_SMASH, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_GROUND_SMASH));
 			}
 			return PlayState.CONTINUE;
 		}
@@ -452,7 +451,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		if (this.isSwinging(Hand.MAIN_HAND, event)) {
 			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH));
 		} else {
 			this.kickInProgressClient = false;
 			
@@ -472,9 +471,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 			if ((this.isCannonRaised() && this.isCannonArmPlayingAnimation()) || this.isExecutingThrow()) {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALK_NO_BODY_SWING, true));
+				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALK_NO_BODY_SWING));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_WALK, true));
+				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALK));
 			}
 			event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
 			return PlayState.CONTINUE;

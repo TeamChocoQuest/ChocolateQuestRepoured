@@ -599,7 +599,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		// Death animation
 		if (this.dead || this.getHealth() < 0.01 /*|| this.isDead*/ || !this.isAlive()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATION_NAME_DEATH, false));
+			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIMATION_NAME_DEATH));
 			return PlayState.CONTINUE;
 		}
 		// DONE: Idle animation
@@ -608,7 +608,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 		if (this.currentAnimationClient != this.getCurrentAnimationId()) {
 			this.currentAnimationClient = this.getCurrentAnimationId();
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIMATIONS[this.currentAnimationClient].getAnimationName()));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIMATIONS[this.currentAnimationClient].getAnimationName()));
 		}
 		return PlayState.CONTINUE;
 	}

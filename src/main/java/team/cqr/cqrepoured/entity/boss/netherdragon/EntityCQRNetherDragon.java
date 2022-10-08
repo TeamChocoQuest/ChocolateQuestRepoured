@@ -971,9 +971,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	protected <E extends IAnimatable> PlayState mouthAnimPredicate(AnimationEvent<E> event) {
 		if(this.isMouthOpen()) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_MOUTH_OPEN, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_MOUTH_OPEN));
 		} else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_MOUTH_CLOSED, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_MOUTH_CLOSED));
 		}
 
 		return PlayState.CONTINUE;

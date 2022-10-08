@@ -276,16 +276,16 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (this.dead || this.getHealth() < 0.01 || !this.isAlive()) {
 			if (this.entityData.get(IS_DEAD_AND_ON_THE_GROUND)) {
 				event.getController().transitionLengthTicks = 0;
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH_ON_GROUND, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_DEATH_ON_GROUND));
 			} else {
-				event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_DEATH_FALLING, false));
+				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_DEATH_FALLING));
 			}
 			return PlayState.CONTINUE;
 		}
 
 		if (this.entityData.get(IS_HURT)) {
 			event.getController().transitionLengthTicks = 0;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_HURT, false));
+			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_HURT));
 			return PlayState.CONTINUE;
 		} else {
 			event.getController().transitionLengthTicks = 10;
@@ -299,11 +299,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (this.currentAnimation.equalsIgnoreCase(ANIM_NAME_SHOOT_BALL)) {
 				event.getController().transitionLengthTicks = 0;
 			}
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).addAnimation(ANIM_NAME_IDLE_BODY, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(this.currentAnimation).loop(ANIM_NAME_IDLE_BODY));
 		}
 
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_IDLE_BODY, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_IDLE_BODY));
 		}
 
 		return PlayState.CONTINUE;
@@ -312,7 +312,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	
 	private <E extends IAnimatable> PlayState predicateSpinHands(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_SPIN_HANDS, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SPIN_HANDS));
 		}
 	 
 		return PlayState.CONTINUE;
@@ -351,12 +351,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_RU_IDLE));
 		}
 		if (this.updateIndicator_Hand_RU) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_RU = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).addAnimation(ANIM_NAME_ARM_RU_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RU_THROW).loop(ANIM_NAME_ARM_RU_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -371,12 +371,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_RM_IDLE));
 		}
 		if (this.updateIndicator_Hand_RM) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_RM = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_THROW).addAnimation(ANIM_NAME_ARM_RM_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RM_THROW).loop(ANIM_NAME_ARM_RM_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -391,12 +391,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_RL_IDLE));
 		}
 		if (this.updateIndicator_Hand_RL) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_RL = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_THROW).addAnimation(ANIM_NAME_ARM_RL_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_RL_THROW).loop(ANIM_NAME_ARM_RL_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -411,12 +411,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_LU_IDLE));
 		}
 		if (this.updateIndicator_Hand_LU) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_LU = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_THROW).addAnimation(ANIM_NAME_ARM_LU_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LU_THROW).loop(ANIM_NAME_ARM_LU_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -431,12 +431,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_LM_IDLE));
 		}
 		if (this.updateIndicator_Hand_LM) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_LM = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_THROW).addAnimation(ANIM_NAME_ARM_LM_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LM_THROW).loop(ANIM_NAME_ARM_LM_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
@@ -452,12 +452,12 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			return PlayState.STOP;
 		}
 		if (event.getController().getCurrentAnimation() == null) {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_ARM_LL_IDLE));
 		}
 		if (this.updateIndicator_Hand_LL) {
 			event.getController().clearAnimationCache();
 			this.updateIndicator_Hand_LL = false;
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_THROW).addAnimation(ANIM_NAME_ARM_LL_IDLE, true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_NAME_ARM_LL_THROW).loop(ANIM_NAME_ARM_LL_IDLE));
 		}
 		return PlayState.CONTINUE;
 	}
