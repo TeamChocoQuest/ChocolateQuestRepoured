@@ -235,17 +235,17 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_FIREARM_SMALL_POSE_LEFT: ANIM_NAME_FIREARM_SMALL_POSE_RIGHT, true));
 			return Optional.of(PlayState.CONTINUE);
 		}
+		// If item instanceof Spear => spear animation
+		else if (item.getUseAnimation(itemStack) == UseAction.SPEAR || item instanceof ItemSpearBase) {
+			// Yes this is for tridents but we can use it anyway
+			// Spear
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_SPEAR_POSE_LEFT : ANIM_NAME_SPEAR_POSE_RIGHT, true));
+			return Optional.of(PlayState.CONTINUE);
+		}
 		// If item instanceof Firearm/Bow/Crossbow => firearm animation
 		else if ((item instanceof IFireArmTwoHanded) || item.getUseAnimation(itemStack) == UseAction.BOW || item.getUseAnimation(itemStack) == UseAction.CROSSBOW) {
 			// Firearm
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_FIREARM_POSE_LEFT : ANIM_NAME_FIREARM_POSE_RIGHT, true));
-			return Optional.of(PlayState.CONTINUE);
-		}
-		// If item instanceof Spear => spear animation
-		else if (item.getUseAnimation(itemStack) == UseAction.SPEAR) {
-			// Yes this is for tridents but we can use it anyway
-			// Spear
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(leftHanded ? ANIM_NAME_SPEAR_POSE_LEFT : ANIM_NAME_SPEAR_POSE_RIGHT, true));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		return Optional.empty();
