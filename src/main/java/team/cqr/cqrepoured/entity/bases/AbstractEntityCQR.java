@@ -127,6 +127,7 @@ import team.cqr.cqrepoured.entity.trade.TraderOffer;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.faction.IHasFaction;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -148,7 +149,7 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 
-public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, IIsBeingRiddenHelper, IServerAnimationReceiver, IInventoryChangedListener {
+public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, IIsBeingRiddenHelper, IServerAnimationReceiver, IInventoryChangedListener, IHasFaction {
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -1264,7 +1265,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	protected abstract EDefaultFaction getDefaultFaction();
 
-	protected Faction getDefaultFactionInstance() {
+	public Faction getDefaultFactionInstance() {
 		if (this.defaultFactionInstance == null) {
 			this.defaultFactionInstance = FactionRegistry.instance(this).getFactionInstance(this.getDefaultFaction().name());
 		}
@@ -1275,9 +1276,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	public Faction getFaction() {
 		if (!this.level.isClientSide) {
 			// Leader faction is set when assigning the leader
-			/*
-			 * if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
-			 */
+			// if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
 			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
 				this.factionInstance = FactionRegistry.instance(this).getFactionInstance(this.factionName);
 			}
@@ -1322,10 +1321,6 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	@Override
 	public void setCustomTexture(@Nonnull ResourceLocation texture) {
 		this.entityData.set(TEXTURE_OVERRIDE, texture.toString());
-	}
-
-	public boolean hasFaction() {
-		return this.getFaction() != null;
 	}
 
 	public void updateReputationOnDeath(DamageSource cause) {

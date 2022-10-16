@@ -1,9 +1,8 @@
 package team.cqr.cqrepoured.faction;
 
-import net.minecraft.entity.Entity;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
 import java.util.Optional;
+
+import net.minecraft.entity.Entity;
 
 public class DummyFaction extends Faction {
 
@@ -29,7 +28,7 @@ public class DummyFaction extends Faction {
 	}
 
 	@Override
-	public boolean isEnemy(AbstractEntityCQR ent) {
+	public boolean isEnemy(IHasFaction ent) {
 		return false;
 	}
 
@@ -44,7 +43,7 @@ public class DummyFaction extends Faction {
 	}
 
 	@Override
-	public boolean isAlly(AbstractEntityCQR ent) {
+	public boolean isAlly(IHasFaction ent) {
 		return false;
 	}
 

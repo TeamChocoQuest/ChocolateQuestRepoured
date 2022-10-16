@@ -39,7 +39,6 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
@@ -268,8 +267,8 @@ public class FactionRegistry {
 			return this.getFactionOf((Entity) ((PartEntity<?>) entity).getParent());
 		}
 
-		if (entity instanceof AbstractEntityCQR) {
-			return ((AbstractEntityCQR) entity).getFaction();
+		if (entity instanceof IHasFaction) {
+			return ((IHasFaction) entity).getFaction();
 		}
 
 		return this.getFactionOf(entity.getType());

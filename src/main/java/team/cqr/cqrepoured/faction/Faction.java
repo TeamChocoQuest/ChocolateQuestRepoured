@@ -1,20 +1,25 @@
 package team.cqr.cqrepoured.faction;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class Faction {
 
@@ -120,8 +125,8 @@ public class Faction {
 		return this.isEnemy(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
 
-	public boolean isEnemy(AbstractEntityCQR ent) {
-		if (ent.level.getDifficulty() == Difficulty.PEACEFUL) {
+	public boolean isEnemy(IHasFaction ent) {
+		if (ent.getLevel().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		return this.isEnemy(ent.getFaction());
@@ -158,7 +163,7 @@ public class Faction {
 		return this.isAlly(FactionRegistry.instance(ent).getFactionOf(ent));
 	}
 
-	public boolean isAlly(AbstractEntityCQR ent) {
+	public boolean isAlly(IHasFaction ent) {
 		return this.isAlly(ent.getFaction());
 	}
 
