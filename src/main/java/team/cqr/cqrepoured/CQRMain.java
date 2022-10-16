@@ -45,6 +45,7 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRMessages;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
+import team.cqr.cqrepoured.init.CQRSensors;
 import team.cqr.cqrepoured.init.CQRStructureProcessors;
 import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.proxy.ClientProxy;
@@ -61,7 +62,7 @@ public class CQRMain {
 	public static final String MODID = "cqrepoured";
 	public static final String MODID_STRUCTURES = "cqrepoured_structures";
 	
-	public static final String VERSION = "2.6.3B";
+	public static final String VERSION = "3.0.0B";
 
 	public static final IProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
@@ -167,6 +168,7 @@ public class CQRMain {
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
+		CQRSensors.SENSORS.register(bus);
 		CQREntityTypes.registerEntityTypes();
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
