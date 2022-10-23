@@ -1,16 +1,19 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.Perlin3D;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 
 public class PlateauBuilder {
 
 	// TODO Create custom DungeonPart class because Perlin3D is to slow to calculate immediately
-	public static BlockDungeonPart.Builder makeRandomBlob(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+	public static Set<Tuple<BlockPos, BlockState>> makeRandomBlob(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
+		Set<Tuple<BlockPos, BlockState>> output = new HashSet<>();
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 
@@ -43,17 +46,16 @@ public class PlateauBuilder {
 							}
 						}
 					}
-
-					partBuilder.add(new PreparableBlockInfo(iX, iY, iZ, fillBlock.defaultBlockState(), null));
+					output.add(new Tuple<>(new BlockPos(iX, iY, iZ), fillBlock.defaultBlockState()));
 				}
 			}
 		}
 
-		return partBuilder;
+		return output;
 	}
 
-	public static BlockDungeonPart.Builder makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+	public static Set<Tuple<BlockPos, BlockState>> makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
+		Set<Tuple<BlockPos, BlockState>> output = new HashSet<>();
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 
@@ -84,12 +86,12 @@ public class PlateauBuilder {
 						}
 					}
 
-					partBuilder.add(new PreparableBlockInfo(iX, iY, iZ, fillBlock.defaultBlockState(), null));
+					output.add(new Tuple<>(new BlockPos(iX, iY, iZ), fillBlock.defaultBlockState()));
 				}
 			}
 		}
 
-		return partBuilder;
+		return output;
 	}
 
 }
