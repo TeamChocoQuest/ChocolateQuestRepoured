@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.hangingcity;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Tuple;
@@ -10,21 +15,15 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.PlateauBuilder;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.SuspensionBridgeHelper;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-public class HangingCityBuilding extends AbstractDungeonGenerationComponent<GeneratorHangingCity> {
+public class HangingCityBuilding extends AbstractDungeonGenerationComponent<DungeonHangingCity, GeneratorHangingCity> {
 
 	private final int gridPosX;
 	private final int gridPosY;
@@ -90,7 +89,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 		BlockPos bridgePosOne = this.getConnectorPointForBridgeTo(building);
 		BlockPos bridgePosTwo = building.getConnectorPointForBridgeTo(this);
 
-		this.bridges.add(new SuspensionBridgeHelper(this.generator.getDungeon(), bridgePosOne, bridgePosTwo));
+		this.bridges.add(new SuspensionBridgeHelper(this.dungeon, bridgePosOne, bridgePosTwo));
 
 		this.connectedIslands.add(building);
 		building.markAsConnected(this);
@@ -120,12 +119,16 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		// Order: Air, Island, Chains, Building
 		int rad = 2 * this.getRadius();
-		int height = this.generator.getDungeon().getYFactorHeight() > this.structure.getSize().getY() ? this.generator.getDungeon().getYFactorHeight() : this.structure.getSize().getY();
-		BlockPos start = this.worldPosition.offset(-rad, -this.generator.getDungeon().getYFactorHeight(), -rad);
+		int height = this.dungeon.getYFactorHeight() > this.structure.getSize().getY() ? this.dungeon.getYFactorHeight() : this.structure.getSize().getY();
+		BlockPos start = this.worldPosition.offset(-rad, -this.dungeon.getYFactorHeight(), -rad);
 		BlockPos end = this.worldPosition.offset(rad, height, rad);
 
-		int wall = CQRConfig.general.supportHillWallSize;
-		dungeonBuilder.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(world, this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4)), start.offset(-wall, -wall, -wall));
+		int wall = CQRConfig.SERVER_CONFIG.general.supportHillWallSize.get();
+		Set<Tuple<BlockPos, BlockState>> blob = PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(dungeonBuilder.getLevel().getSeed(), this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4));
+		final BlockPos offset = start.offset(-wall, -wall, -wall);
+		blob.forEach(tuple -> {
+			dungeonBuilder.getLevel().setBlockState(tuple.getA().offset(offset), tuple.getB());
+		});
 	}
 
 	@Override
@@ -147,7 +150,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			for (int iX = -rad; iX <= rad; iX++) {
 				for (int iZ = -rad; iZ <= rad; iZ++) {
 					if (DungeonGenUtils.isInsideCircle(iX, iZ, rad)) {
-						stateMap.put((center.offset(iX, -decrementor, iZ)), this.generator.getDungeon().getIslandBlock());
+						stateMap.put((center.offset(iX, -decrementor, iZ)), this.dungeon.getIslandBlock());
 					}
 				}
 			}
@@ -155,18 +158,16 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 			decrementor++;
 		}
 
-		if (this.generator.getDungeon().doBuildChains()) {
+		if (this.dungeon.doBuildChains()) {
 			this.buildChain(world, center.offset(radius * 0.75, -2, radius * 0.75), 0, stateMap);
 			this.buildChain(world, center.offset(-radius * 0.75, -2, -radius * 0.75), 0, stateMap);
 			this.buildChain(world, center.offset(-radius * 0.75, -2, radius * 0.75), 1, stateMap);
 			this.buildChain(world, center.offset(radius * 0.75, -2, -radius * 0.75), 1, stateMap);
 		}
 
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(center), entry.getValue(), null));
+			dungeonBuilder.getLevel().setBlockState(entry.getKey().subtract(center), entry.getValue());
 		}
-		dungeonBuilder.add(partBuilder, center);
 	}
 
 	private void buildChain(World world, BlockPos pos, int iOffset, Map<BlockPos, BlockState> stateMap) {
@@ -195,33 +196,31 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 	}
 
 	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, Map<BlockPos, BlockState> stateMap) {
-		stateMap.put(lowerCenter, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerCenter.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerCenter, this.dungeon.getChainBlock());
+		stateMap.put(lowerCenter.offset(0, 6, 0), this.dungeon.getChainBlock());
 
-		stateMap.put(lowerLeft, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerLeft.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerLeft, this.dungeon.getChainBlock());
+		stateMap.put(lowerLeft.offset(0, 6, 0), this.dungeon.getChainBlock());
 
-		stateMap.put(lowerRight, this.generator.getDungeon().getChainBlock());
-		stateMap.put(lowerRight.offset(0, 6, 0), this.generator.getDungeon().getChainBlock());
+		stateMap.put(lowerRight, this.dungeon.getChainBlock());
+		stateMap.put(lowerRight.offset(0, 6, 0), this.dungeon.getChainBlock());
 
 		for (int i = 0; i < 5; i++) {
-			stateMap.put(lowerBoundL.offset(0, i, 0), this.generator.getDungeon().getChainBlock());
-			stateMap.put(lowerBoundR.offset(0, i, 0), this.generator.getDungeon().getChainBlock());
+			stateMap.put(lowerBoundL.offset(0, i, 0), this.dungeon.getChainBlock());
+			stateMap.put(lowerBoundR.offset(0, i, 0), this.dungeon.getChainBlock());
 		}
 	}
 
 	@Override
 	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
-		if (this.generator.getDungeon().isConstructBridges()) {
+		if (this.dungeon.isConstructBridges()) {
 			for (SuspensionBridgeHelper bridge : this.bridges) {
 				Map<BlockPos, BlockState> stateMap = new HashMap<>();
 				bridge.generate(stateMap);
 
-				BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 				for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
-					partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+					dungeonBuilder.getLevel().setBlockState(entry.getKey().subtract(this.generator.getPos()), entry.getValue());
 				}
-				dungeonBuilder.add(partBuilder, this.generator.getPos());
 			}
 		}
 	}

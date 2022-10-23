@@ -5,10 +5,10 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
-public abstract class AbstractDungeonGenerationComponent<T extends AbstractDungeonGenerator<?>> {
+public abstract class AbstractDungeonGenerationComponent<D extends DungeonBase, T extends LegacyDungeonGenerator<D>> {
 
 	protected final T generator;
-	protected final DungeonBase dungeon;
+	protected final D dungeon;
 
 	protected AbstractDungeonGenerationComponent(T generator) {
 		this.generator = generator;

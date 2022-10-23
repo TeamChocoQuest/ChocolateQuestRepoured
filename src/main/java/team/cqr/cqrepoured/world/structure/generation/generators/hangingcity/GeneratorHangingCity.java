@@ -1,16 +1,21 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.hangingcity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-
-import java.util.*;
 
 public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingCity> {
 
@@ -20,13 +25,11 @@ public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingC
 	private int islandDistance = 1;
 	private HangingCityBuilding[][] buildingGrid;
 	private Set<HangingCityBuilding> buildings = new HashSet<>();
-	private final DungeonInhabitant mobType;
 
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
-		this.mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+	public GeneratorHangingCity(ChunkGenerator chunkGenerator, BlockPos pos, DungeonHangingCity dungeon, Random rand) {
+		super(chunkGenerator, pos, dungeon, rand);
 	}
 
 	@Override
@@ -43,14 +46,14 @@ public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingC
 		final int offsetXY = this.islandCount + 2;
 
 		HangingCityBuilding lastProcessed = null;
-		CQStructure structure = this.loadStructureFromFile(this.dungeon.pickCentralStructure(this.random));
+		CQStructure structure = CQStructure.createFromFile(this.dungeon.pickCentralStructure(this.random));
 		// Create grid
 		for (int i = 0; i < this.islandCount; i++) {
 			Tuple<Integer, Integer> coords = new Tuple<>(0, 0);
 			// If we are not the first (center) building we can use neighbours of existing ones
 			if (lastProcessed != null) {
 				// First we gotta choose a structure
-				structure = this.loadStructureFromFile(this.dungeon.pickStructure(this.random));
+				structure = CQStructure.createFromFile(this.dungeon.pickStructure(this.random));
 				// Then we grab a list of buildings we already processed and shuffle the list
 				List<HangingCityBuilding> buildings = new ArrayList<>(this.buildings);
 				Collections.shuffle(buildings, this.random);
@@ -73,7 +76,7 @@ public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingC
 			}
 
 			this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()] = new HangingCityBuilding(this, coords.getA(), coords.getB(), structure);
-			this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()].preProcess(this.world, this.dungeonBuilder, null);
+			this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()].preProcess(this.level, this.dungeonBuilder, null);
 			this.buildings.add(this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()]);
 			lastProcessed = this.buildingGrid[offsetXY + coords.getA()][offsetXY + coords.getB()];
 		}
@@ -113,7 +116,7 @@ public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingC
 	@Override
 	public void buildStructure() {
 		for (HangingCityBuilding building : this.buildings) {
-			building.generate(this.getWorld(), this.dungeonBuilder, this.mobType);
+			building.generate(this.level, this.dungeonBuilder, this.dungeonBuilder.getDefaultInhabitant());
 		}
 	}
 
@@ -121,7 +124,7 @@ public class GeneratorHangingCity extends LegacyDungeonGenerator<DungeonHangingC
 	public void postProcess() {
 		// Not needed
 		for (HangingCityBuilding building : this.buildings) {
-			building.generatePost(this.getWorld(), this.dungeonBuilder, this.mobType);
+			building.generatePost(this.level, this.dungeonBuilder, this.dungeonBuilder.getDefaultInhabitant());
 		}
 	}
 

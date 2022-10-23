@@ -52,8 +52,8 @@ public class DungeonGrid {
 	}
 
 	@Nullable
-	public DungeonBase getDungeonAt(World world, int chunkX, int chunkZ) {
-		Random random = WorldDungeonGenerator.getRandomForCoords(world, chunkX, chunkZ);
+	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ) {
+		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), chunkX, chunkZ);
 		if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random)) {
 			return null;
 		}
@@ -146,6 +146,9 @@ public class DungeonGrid {
 	 * @return true when a location specific dungeon, a vanilla structure or a aw2 structure is nearby
 	 */
 	public boolean isOtherStructureNearby(World world, int chunkX, int chunkZ) {
+		if(world.isClientSide) {
+			return false;
+		}
 		// Checks if this chunk is in the "wall zone", if yes, abort
 		if (DungeonGenUtils.isInWallRange(world, chunkX, chunkZ)) {
 			log(world, chunkX, chunkZ, "Nearby wall in the north structure was found");
@@ -163,7 +166,7 @@ public class DungeonGrid {
 				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 					continue;
 				}
-				if (WorldDungeonGenerator.getDungeonAt(world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority) != null) {
+				if (WorldDungeonGenerator.getDungeonAt((ServerWorld)world, chunkX + x, chunkZ + z, grid -> grid.priority < this.priority) != null) {
 					log(world, chunkX, chunkZ, "Nearby cqrepoured structure was found");
 					return true;
 				}

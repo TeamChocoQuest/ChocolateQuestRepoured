@@ -1,29 +1,38 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
-import net.minecraft.block.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.HugeMushroomBlock;
+import net.minecraft.block.VineBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap.Type;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.util.VectorUtil;
+import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVegetatedCave;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
-
-import java.io.File;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegetatedCave> {
 
@@ -37,14 +46,14 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 	private BlockState[][][] centralCaveBlocks;
 	private DungeonInhabitant mobtype;
 
-	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
+	public GeneratorVegetatedCave(ChunkGenerator world, BlockPos pos, DungeonVegetatedCave dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 	}
 
 	@Override
 	public void preProcess() {
-		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
-		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
+		this.mobtype = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.level, this.pos.getX(), this.pos.getZ());
+		Random random = new Random(WorldDungeonGenerator.getSeed(this.level.getSeed(), this.pos.getX() / 16, this.pos.getZ() / 16));
 		BlockState[][][] blocks = this.getRandomBlob(this.dungeon.getAirBlock(), this.dungeon.getCentralCaveSize(), random);
 		this.centralCaveBlocks = blocks;
 		// if (this.dungeon.placeVines()) {
@@ -52,7 +61,8 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		// }
 		this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blocks, this.pos, random));
 		this.storeBlockArrayInMap(blocks, this.pos);
-		Vector3d center = new Vector3d(this.pos.below(this.dungeon.getCentralCaveSize() / 2));
+		final BlockPos centerBP = this.pos.below(this.dungeon.getCentralCaveSize() / 2);
+		Vector3d center = new Vector3d(centerBP.getX(), centerBP.getY(), centerBP.getZ());
 		Vector3d rad = new Vector3d(this.dungeon.getCentralCaveSize() * 1.75, 0, 0);
 		int tunnelCount = this.dungeon.getTunnelCount(random);
 		double angle = 360D / tunnelCount;
@@ -67,16 +77,12 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		/*
 		 * this.ceilingBlocks.forEach(new Consumer<BlockPos>() {
 		 * 
-		 * @Override
-		 * public void accept(BlockPos t) {
-		 * GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock());
-		 * }
-		 * });
+		 * @Override public void accept(BlockPos t) { GeneratorVegetatedCave.this.blocks.put(t, GeneratorVegetatedCave.this.dungeon.getVineLatchBlock()); } });
 		 */
 
 		// Filter ceiling blocks
 		if (this.dungeon.placeVines()) {
-			this.filterCeilingBlocks(this.world);
+			this.filterCeilingBlocks(this.level);
 		}
 
 		// Flowers, Mushrooms and Weed
@@ -89,11 +95,12 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		}
 
 		// Build
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		// BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, BlockState> entry : this.blocks.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			// partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			this.dungeonBuilder.getLevel().setBlockState(entry.getKey().subtract(this.pos), entry.getValue());
 		}
-		this.dungeonBuilder.add(partBuilder);
+		// this.dungeonBuilder.add(partBuilder);
 	}
 
 	@Override
@@ -141,7 +148,7 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 	public void postProcess() {
 		// DONE: Place giant shrooms
 		Map<BlockPos, BlockState> stateMap = new HashMap<>();
-		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
+		Random random = new Random(WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.pos.getX() / 16, this.pos.getZ() / 16));
 		for (BlockPos mushroompos : this.giantMushrooms) {
 			// Place shroom
 			if (random.nextBoolean()) {
@@ -158,11 +165,12 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 				}
 			}
 		}
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		// BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			// partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			this.dungeonBuilder.getLevel().setBlockState(entry.getKey().subtract(this.pos), entry.getValue());
 		}
-		this.dungeonBuilder.add(partBuilder);
+		// this.dungeonBuilder.add(partBuilder);
 
 		this.placeSpawners();
 		this.fillChests();
@@ -171,33 +179,30 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 
 	public void fillChests() {
 		// DONE: Place and fill chests
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
-		Random random = new Random(WorldDungeonGenerator.getSeed(this.world, this.pos.getX() / 16, this.pos.getZ() / 16));
+		// BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		Random random = new Random(WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.pos.getX() / 16, this.pos.getZ() / 16));
 		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		for (BlockPos chestpos : this.chests) {
 			Block block = Blocks.CHEST;
 			BlockState state = block.defaultBlockState();
-			ChestTileEntity chest = (ChestTileEntity) block.createTileEntity(state, this.world);
-
-			if (chest != null) {
-				ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
-				if (resLoc != null) {
-					long seed = WorldDungeonGenerator.getSeed(this.world, this.pos.getX() + chestpos.getX() + chestpos.getY(), this.pos.getZ() + chestpos.getZ() + chestpos.getY());
-					chest.setLootTable(resLoc, seed);
-				}
-			}
-
-			CompoundNBT nbt = chest.save(new CompoundNBT());
-			partBuilder.add(new PreparableBlockInfo(chestpos.subtract(this.pos), state, nbt));
+			ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
+			GenerationUtil.setLootChest(this.dungeonBuilder.getLevel(), chestpos.subtract(this.pos), resLoc, Direction.Plane.HORIZONTAL.getRandomDirection(this.random));
+			/*
+			 * this.dungeonBuilder.getLevel().setBlockState(chestpos.subtract(this.pos), state, (te) -> { if(te != null && te instanceof ChestTileEntity) { ChestTileEntity chest = (ChestTileEntity)te;
+			 * 
+			 * if (chest != null) { if (resLoc != null) { long seed = WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.pos.getX() + chestpos.getX() + chestpos.getY(), this.pos.getZ() + chestpos.getZ() + chestpos.getY());
+			 * chest.setLootTable(resLoc, seed); } } } });
+			 */
+			// partBuilder.add(new PreparableBlockInfo(chestpos.subtract(this.pos), state, nbt));
 		}
-		this.dungeonBuilder.add(partBuilder);
+		// this.dungeonBuilder.add(partBuilder);
 	}
 
 	private static final int FLOORS = 100;
 
 	public void placeSpawners() {
 		// DONE: Place spawners
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		// BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 
 		GearedMobFactory mobFactory = new GearedMobFactory(FLOORS, this.mobtype.getEntityID(), this.random);
 		for (BlockPos spawnerpos : this.spawners) {
@@ -205,11 +210,10 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 			List<Entity> entityList = new ArrayList<>(entityCount);
 			for (int i = 0; i < entityCount; i++) {
 				int floor = this.random.nextInt(FLOORS);
-				entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
+				entityList.add(mobFactory.getGearedEntityByFloor(floor, this.dungeonBuilder.getEntityFactory()));
 			}
-			partBuilder.add(new PreparableSpawnerInfo(spawnerpos.subtract(this.pos), entityList));
+			GenerationUtil.setSpawner(this.dungeonBuilder.getLevel(), spawnerpos.subtract(this.pos), entityList);
 		}
-		this.dungeonBuilder.add(partBuilder);
 	}
 
 	public void generateCenterStructure() {
@@ -217,7 +221,7 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		if (this.dungeon.placeBuilding()) {
 			File file = this.dungeon.getRandomCentralBuilding(this.random);
 			if (file != null) {
-				CQStructure structure = this.loadStructureFromFile(file);
+				CQStructure structure = CQStructure.createFromFile(file);
 				int pY = this.getLowestY(this.centralCaveBlocks, structure.getSize().getX() / 2, structure.getSize().getZ() / 2, this.pos.getY());
 				// DONE: Support platform -> not needed
 				structure.addAll(this.dungeonBuilder, new BlockPos(this.pos.getX(), pY, this.pos.getZ()), Offset.CENTER);
@@ -380,7 +384,7 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 				return true;
 			}
 			if (!GeneratorVegetatedCave.this.dungeon.skipCeilingFiltering()) {
-				return world.getHeight(arg0.getX(), arg0.getZ()) <= arg0.getY() || world.getHeight(arg0).getY() <= arg0.getY() || world.canBlockSeeSky(arg0);
+				return world.getHeight(Type.WORLD_SURFACE_WG, arg0.getX(), arg0.getZ()) <= arg0.getY() || world.getHeightmapPos(Type.WORLD_SURFACE_WG, arg0).getY() <= arg0.getY() || world.canSeeSky(arg0);
 			}
 			return false;
 		});
@@ -394,7 +398,7 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 				// Giant mushroom
 				boolean flag = true;
 				for (BlockPos shroom : this.giantMushrooms) {
-					if (shroom.distSqr(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 25 /* 5^2 */) {
+					if (shroom.distSqr(floorPos.getX(), floorPos.getY(), floorPos.getZ(), true) < 25 /* 5^2 */) {
 						flag = false;
 						break;
 					}
@@ -472,115 +476,61 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 	}
 
 	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, BlockState> stateMap) {
-		// Taken from WorldGenBigMushroom
-		Block block = rand.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK;
-		int i = 6;
+		final boolean red = rand.nextBoolean();
+		int shroomHeight = rand.nextInt(3) + 4;
+		int foliageRad = red ? 2 : 3;
+		shroomHeight *= rand.nextInt(12) == 0 ? 2 : 1;
+		final BlockState stemState = Blocks.MUSHROOM_STEM.defaultBlockState();
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		for (int i = 0; i < shroomHeight; ++i) {
+			mutable.set(position).move(Direction.UP, i);
+			stateMap.put(new BlockPos(mutable), stemState);
+		}
 
-		if (position.getY() >= 1 && position.getY() + i + 1 < 256) {
+		if (red) {
+			for (int i = shroomHeight - 3; i <= shroomHeight; ++i) {
+				int j = i < shroomHeight ? foliageRad : foliageRad - 1;
+				int k = foliageRad - 2;
 
-			int k2 = position.getY() + i;
-
-			if (block == Blocks.RED_MUSHROOM_BLOCK) {
-				k2 = position.getY() + i - 3;
-			}
-
-			for (int l2 = k2; l2 <= position.getY() + i; ++l2) {
-				int j3 = 1;
-
-				if (l2 < position.getY() + i) {
-					++j3;
-				}
-
-				if (block == Blocks.BROWN_MUSHROOM_BLOCK) {
-					j3 = 3;
-				}
-
-				int k3 = position.getX() - j3;
-				int l3 = position.getX() + j3;
-				int j1 = position.getZ() - j3;
-				int k1 = position.getZ() + j3;
-
-				for (int l1 = k3; l1 <= l3; ++l1) {
-					for (int i2 = j1; i2 <= k1; ++i2) {
-						int j2 = 5;
-
-						if (l1 == k3) {
-							--j2;
-						} else if (l1 == l3) {
-							++j2;
-						}
-
-						if (i2 == j1) {
-							j2 -= 3;
-						} else if (i2 == k1) {
-							j2 += 3;
-						}
-
-						HugeMushroomBlock.EnumType blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.byMetadata(j2);
-
-						if (block == Blocks.BROWN_MUSHROOM_BLOCK || l2 < position.getY() + i) {
-							if ((l1 == k3 || l1 == l3) && (i2 == j1 || i2 == k1)) {
-								continue;
-							}
-
-							if (l1 == position.getX() - (j3 - 1) && i2 == j1) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_WEST;
-							}
-
-							if (l1 == k3 && i2 == position.getZ() - (j3 - 1)) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_WEST;
-							}
-
-							if (l1 == position.getX() + (j3 - 1) && i2 == j1) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_EAST;
-							}
-
-							if (l1 == l3 && i2 == position.getZ() - (j3 - 1)) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.NORTH_EAST;
-							}
-
-							if (l1 == position.getX() - (j3 - 1) && i2 == k1) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_WEST;
-							}
-
-							if (l1 == k3 && i2 == position.getZ() + (j3 - 1)) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_WEST;
-							}
-
-							if (l1 == position.getX() + (j3 - 1) && i2 == k1) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_EAST;
-							}
-
-							if (l1 == l3 && i2 == position.getZ() + (j3 - 1)) {
-								blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.SOUTH_EAST;
-							}
-						}
-
-						if (blockhugemushroom$enumtype == HugeMushroomBlock.EnumType.CENTER && l2 < position.getY() + i) {
-							blockhugemushroom$enumtype = HugeMushroomBlock.EnumType.ALL_INSIDE;
-						}
-
-						if (position.getY() >= position.getY() + i - 1 || blockhugemushroom$enumtype != HugeMushroomBlock.EnumType.ALL_INSIDE) {
-							BlockPos blockpos = new BlockPos(l1, l2, i2);
-							// IBlockState state = worldIn.getBlockState(blockpos);
-
-							// PUT IN MAP
-							// this.setBlockAndNotifyAdequately(worldIn, blockpos, block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT,
-							// blockhugemushroom$enumtype));
-							stateMap.put(blockpos, block.defaultBlockState().withProperty(HugeMushroomBlock.VARIANT, blockhugemushroom$enumtype));
+				for (int l = -j; l <= j; ++l) {
+					for (int i1 = -j; i1 <= j; ++i1) {
+						boolean flag = l == -j;
+						boolean flag1 = l == j;
+						boolean flag2 = i1 == -j;
+						boolean flag3 = i1 == j;
+						boolean flag4 = flag || flag1;
+						boolean flag5 = flag2 || flag3;
+						if (i >= shroomHeight || flag4 != flag5) {
+							mutable.setWithOffset(position, l, i, i1);
+							BlockState state = Blocks.RED_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false)).setValue(HugeMushroomBlock.UP, Boolean.valueOf(i >= shroomHeight - 1)).setValue(
+									HugeMushroomBlock.WEST, Boolean.valueOf(l < -k)).setValue(HugeMushroomBlock.EAST, Boolean.valueOf(l > k)).setValue(HugeMushroomBlock.NORTH, Boolean.valueOf(i1 < -k)).setValue(HugeMushroomBlock.SOUTH, Boolean
+											.valueOf(i1 > k));
+							stateMap.put(new BlockPos(mutable), state);
 						}
 					}
 				}
 			}
-
-			for (int i3 = 0; i3 < i; ++i3) {
-				// IBlockState iblockstate = worldIn.getBlockState(position.up(i3));
-				// PUT IN MAP
-				// this.setBlockAndNotifyAdequately(worldIn, position.up(i3),
-				// block.getDefaultState().withProperty(BlockHugeMushroom.VARIANT, BlockHugeMushroom.EnumType.STEM));
-				stateMap.put(position.above(i3), block.defaultBlockState().withProperty(HugeMushroomBlock.VARIANT, HugeMushroomBlock.EnumType.STEM));
+		} else {
+			for (int j = -foliageRad; j <= foliageRad; ++j) {
+				for (int k = -foliageRad; k <= foliageRad; ++k) {
+					boolean flag = j == -foliageRad;
+					boolean flag1 = j == foliageRad;
+					boolean flag2 = k == -foliageRad;
+					boolean flag3 = k == foliageRad;
+					boolean flag4 = flag || flag1;
+					boolean flag5 = flag2 || flag3;
+					if (!flag4 || !flag5) {
+						mutable.setWithOffset(position, j, shroomHeight, k);
+						boolean flag6 = flag || flag5 && j == 1 - foliageRad;
+						boolean flag7 = flag1 || flag5 && j == foliageRad - 1;
+						boolean flag8 = flag2 || flag4 && k == 1 - foliageRad;
+						boolean flag9 = flag3 || flag4 && k == foliageRad - 1;
+						BlockState state = Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState().setValue(HugeMushroomBlock.UP, Boolean.valueOf(true)).setValue(HugeMushroomBlock.DOWN, Boolean.valueOf(false)).setValue(HugeMushroomBlock.WEST, Boolean
+								.valueOf(flag6)).setValue(HugeMushroomBlock.EAST, Boolean.valueOf(flag7)).setValue(HugeMushroomBlock.NORTH, Boolean.valueOf(flag8)).setValue(HugeMushroomBlock.SOUTH, Boolean.valueOf(flag9));
+						stateMap.put(new BlockPos(mutable), state);
+					}
+				}
 			}
-
 		}
 	}
 

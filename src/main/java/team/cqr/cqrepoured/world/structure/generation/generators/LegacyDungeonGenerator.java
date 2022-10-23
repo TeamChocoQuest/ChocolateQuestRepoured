@@ -19,13 +19,17 @@ public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements I
 	protected BlockPos pos;
 	protected T dungeon;
 	protected Random random;
-	protected GeneratableDungeon.Builder dungeonBuilder;
+	protected final GeneratableDungeon.Builder dungeonBuilder;
+	protected final ServerWorld level;
+	protected final ChunkGenerator chunkGenerator;
 
 	public LegacyDungeonGenerator(ChunkGenerator chunkGenerator, BlockPos pos, T dungeon, Random random) {
 		this.pos = pos;
 		this.dungeon = dungeon;
 		this.random = random;
 		ServerWorld level = StreamSupport.stream(ServerLifecycleHooks.getCurrentServer().getAllLevels().spliterator(), false).filter(serverWorld -> serverWorld.getChunkSource().getGenerator() == chunkGenerator).findFirst().get();
+		this.level = level;
+		this.chunkGenerator = chunkGenerator;
 		this.dungeonBuilder = new GeneratableDungeon.Builder(level, pos, dungeon);
 	}
 

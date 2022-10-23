@@ -1,20 +1,23 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.world.structure.generation.PlateauBuilder;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGridCity;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
-
-import java.io.File;
-import java.util.*;
 
 public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 
@@ -41,8 +44,8 @@ public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 
 	private CQStructure[][] structures;
 
-	public GeneratorGridCity(World world, BlockPos pos, DungeonGridCity dungeon, Random rand) {
-		super(world, pos, dungeon, rand);
+	public GeneratorGridCity(ChunkGenerator cg, BlockPos pos, DungeonGridCity dungeon, Random rand) {
+		super(cg, pos, dungeon, rand);
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 				} else {
 					file = this.dungeon.getRandomBuilding(this.random);
 				}
-				CQStructure structure = this.loadStructureFromFile(file);
+				CQStructure structure = CQStructure.createFromFile(file);
 				this.structures[iX + rowsX][iZ + rowsZ] = structure;
 
 				if (structure != null) {
@@ -120,7 +123,10 @@ public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).offset(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).offset(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
-			this.dungeonBuilder.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ)), cLower);
+			Set<Tuple<BlockPos, BlockState>> blob = PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.minX, this.maxZ));
+			blob.forEach(tuple -> {
+				this.dungeonBuilder.getLevel().setBlockState(cLower.offset(tuple.getA()), tuple.getB());
+			});
 
 		}
 
@@ -191,11 +197,12 @@ public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 			}
 		}
 
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
+		//BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, BlockState> entry : this.blockMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			//partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			this.dungeonBuilder.getLevel().setBlockState(entry.getKey().subtract(this.pos), entry.getValue());
 		}
-		this.dungeonBuilder.add(partBuilder);
+		//this.dungeonBuilder.add(partBuilder);
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
 			entry.getValue().addAll(this.dungeonBuilder, entry.getKey(), Offset.CENTER);
