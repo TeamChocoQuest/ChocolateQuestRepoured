@@ -13,7 +13,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.world.structure.generation.PlateauBuilder;
+import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
@@ -124,11 +124,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Dung
 		BlockPos end = this.worldPosition.offset(rad, height, rad);
 
 		int wall = CQRConfig.SERVER_CONFIG.general.supportHillWallSize.get();
-		Set<Tuple<BlockPos, BlockState>> blob = PlateauBuilder.makeRandomBlob2(Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(dungeonBuilder.getLevel().getSeed(), this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4));
-		final BlockPos offset = start.offset(-wall, -wall, -wall);
-		blob.forEach(tuple -> {
-			dungeonBuilder.getLevel().setBlockState(tuple.getA().offset(offset), tuple.getB());
-		});
+		GenerationUtil.makeRandomBlob2(dungeonBuilder.getLevel(), Blocks.AIR, start, end, wall, WorldDungeonGenerator.getSeed(dungeonBuilder.getLevel().getSeed(), this.generator.getPos().getX() >> 4, this.generator.getPos().getZ() >> 4), start.offset(-wall, -wall, -wall));
 	}
 
 	@Override

@@ -9,11 +9,10 @@ import java.util.Set;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.gen.ChunkGenerator;
-import team.cqr.cqrepoured.world.structure.generation.PlateauBuilder;
+import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGridCity;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
@@ -123,10 +122,7 @@ public class GeneratorGridCity extends LegacyDungeonGenerator<DungeonGridCity> {
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).offset(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).offset(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
-			Set<Tuple<BlockPos, BlockState>> blob = PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.minX, this.maxZ));
-			blob.forEach(tuple -> {
-				this.dungeonBuilder.getLevel().setBlockState(cLower.offset(tuple.getA()), tuple.getB());
-			});
+			GenerationUtil.makeRandomBlob(this.dungeonBuilder.getLevel(), Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.minX, this.maxZ), cLower);
 
 		}
 
