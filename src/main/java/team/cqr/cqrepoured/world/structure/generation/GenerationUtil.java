@@ -1,16 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.util.Perlin3D;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
