@@ -9,12 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import team.cqr.cqrepoured.client.render.entity.RenderBubble;
-import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
-import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
-import team.cqr.cqrepoured.client.render.entity.RenderLaser;
-import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
-import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
+import team.cqr.cqrepoured.client.render.entity.*;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRLich;
@@ -201,6 +196,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER.get(), RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ZOMBIE.get(), RenderCQRZombie::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GOBLIN.get(), RenderCQRGoblin::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.FLYING_SKULL.get(), RenderCQRFlyingSkull::new);
 	}
 
 	protected static void registerMountRenderers() {
