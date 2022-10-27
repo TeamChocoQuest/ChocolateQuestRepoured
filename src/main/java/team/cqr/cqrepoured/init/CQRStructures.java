@@ -175,7 +175,7 @@ public class CQRStructures {
 		}
 	}
 
-	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = CQRMain.MODID)
 	public static class RegistryEvents {
 		@SubscribeEvent
 		public static void onStructureRegistration(final RegistryEvent.Register<Structure<?>> event) {
