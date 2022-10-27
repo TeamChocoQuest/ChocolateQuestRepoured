@@ -143,7 +143,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_SPIDER_BALL.get(), RenderProjectileSpiderBall::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), RenderProjectileVampiricSpell::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), RenderProjectileFirewallPart::new);
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOOKSHOT_HOOK.get(), RenderProjectileHookShotHook::new);
+//		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOOKSHOT_HOOK.get(), RenderProjectileHookShotHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_BUBBLE.get(), RenderProjectileBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), RenderProjectileHotFireball::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PROJECTILE_WEB.get(), RenderProjectileWeb::new);
