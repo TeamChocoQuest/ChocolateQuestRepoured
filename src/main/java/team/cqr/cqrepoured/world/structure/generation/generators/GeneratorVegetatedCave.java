@@ -183,8 +183,6 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		Random random = new Random(WorldDungeonGenerator.getSeed(this.dungeonBuilder.getLevel().getSeed(), this.pos.getX() / 16, this.pos.getZ() / 16));
 		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		for (BlockPos chestpos : this.chests) {
-			Block block = Blocks.CHEST;
-			BlockState state = block.defaultBlockState();
 			ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
 			GenerationUtil.setLootChest(this.dungeonBuilder.getLevel(), chestpos.subtract(this.pos), resLoc, Direction.Plane.HORIZONTAL.getRandomDirection(this.random));
 			/*
