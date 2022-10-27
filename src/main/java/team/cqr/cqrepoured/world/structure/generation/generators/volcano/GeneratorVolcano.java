@@ -1,32 +1,27 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.volcano;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import team.cqr.cqrepoured.config.CQRConfig;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
+import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.CoverDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableLootChestInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.EntranceBuilderHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.StrongholdBuilder;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper.EStairSection;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Consumer;
 
 public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
@@ -42,7 +37,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 	private final CQRWeightedRandom<BlockState> volcanoBlocks;
 	private final CQRWeightedRandom<BlockState> volcanoBlocksWithLava;
 
-	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
+	public GeneratorVolcano(ChunkGenerator world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 
 		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight(), this.random);
@@ -84,10 +79,10 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 		// Support platform
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, CQRConfig.general.supportHillWallSize);
+			/*PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getY() - this.caveDepth, this.pos.getZ() + r, CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
-			this.dungeonBuilder.add(partBuilder);
+			this.dungeonBuilder.add(partBuilder);*/
 		}
 
 		// basic volcano shape with air inside
@@ -304,18 +299,16 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		}
 
 		// Add block state array to dungeonGenerator
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < blocks.length; i++) {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						partBuilder.add(new PreparableBlockInfo(i, j, k, blocks[i][j][k], null));
+						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(i, j, k), blocks[i][j][k]);
 					}
 				}
 			}
 		}
 
-		this.dungeonBuilder.add(partBuilder, referenceLoc);
 		this.dungeonBuilder.add(entranceTunnelBlocks, referenceLoc);
 		// this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, entranceTunnelBlocks,
 		// new PlacementSettings(), mobType));
@@ -328,7 +321,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 		// Cover blocks
 		if (this.dungeon.isCoverBlockEnabled()) {
-			this.dungeonBuilder.add(new CoverDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
+			//this.dungeonBuilder.add(new CoverDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
 		}
 	}
 
@@ -383,22 +376,20 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 			ResourceLocation[] lootTables = this.dungeon.getChestIDs();
 			GearedMobFactory mobFactory = new GearedMobFactory(spawnerAndChestList.size(), this.dungeon.getRampMob(), this.random);
 			int floor = spawnerAndChestList.size();
-			BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 
 			for (BlockPos pos : spawnerAndChestList) {
 				if (this.random.nextBoolean()) {
-					partBuilder.add(new PreparableLootChestInfo(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], Direction.NORTH));
+					GenerationUtil.setLootChest(this.dungeonBuilder.getLevel(), pos, lootTables[this.random.nextInt(lootTables.length)], Direction.Plane.HORIZONTAL.getRandomDirection(this.random));
 				}
 
 				int entityCount = 2 + this.random.nextInt(3);
 				List<Entity> entityList = new ArrayList<>(entityCount);
 				for (int i = 0; i < entityCount; i++) {
-					entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
+					entityList.add(mobFactory.getGearedEntityByFloor(floor, this.dungeonBuilder.getEntityFactory()));
 				}
-				partBuilder.add(new PreparableSpawnerInfo(pos.getX(), pos.getY() + 1, pos.getZ(), entityList));
+				GenerationUtil.setSpawner(this.dungeonBuilder.getLevel(), pos.above(), entityList);
 				floor--;
 			}
-			this.dungeonBuilder.add(partBuilder);
 		}
 	}
 
