@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold;
 
+import java.util.Random;
+
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -15,8 +17,6 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
-import java.util.Random;
-
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
@@ -27,7 +27,7 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 
 	private StrongholdFloor[] floors;
 
-	public GeneratorStronghold(World world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand) {
+	public GeneratorStronghold(ChunkGenerator world, BlockPos pos, DungeonStrongholdLinear dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 	}
 
