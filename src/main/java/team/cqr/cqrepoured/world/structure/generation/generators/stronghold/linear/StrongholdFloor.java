@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.linear;
 
+import java.io.File;
+import java.util.Random;
+
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.util.ESkyDirection;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
@@ -13,10 +17,7 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
-import java.io.File;
-import java.util.Random;
-
-public class StrongholdFloor extends AbstractDungeonGenerationComponent<GeneratorStronghold> {
+public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonStrongholdLinear, GeneratorStronghold> {
 
 	private final Random random;
 	private int sideLength;
