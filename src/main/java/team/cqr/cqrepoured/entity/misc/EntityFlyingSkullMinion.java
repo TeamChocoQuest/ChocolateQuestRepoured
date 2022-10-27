@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
@@ -19,13 +17,24 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire {
+import java.util.UUID;
+
+public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire, IAnimatable, IAnimationTickable {
 
 	protected Entity summoner;
 	protected Entity target;
@@ -80,6 +89,14 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 
 	public void setSummoner(Entity ent) {
 		this.summoner = ent;
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if(this.level.isClientSide()) {
+			this.level.addParticle(ParticleTypes.WITCH, this.position().x, this.position().y + 0.02, this.position().z, 0F, 0.5F, 0F);
+		}
 	}
 
 	@Override
@@ -241,4 +258,26 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 		}
 	}
 
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
+	}
+
+	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("controller_idle", ILoopType.EDefaultLoopTypes.LOOP));
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public int tickTimer() {
+		return 0;
+	}
 }

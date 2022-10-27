@@ -1,0 +1,18 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.flying_skull.controller_idle": {
+			"loop": true,
+			"animation_length": 0.83333,
+			"bones": {
+				"jaw": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.4167": [17.5, 0, 0],
+						"0.8333": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}
