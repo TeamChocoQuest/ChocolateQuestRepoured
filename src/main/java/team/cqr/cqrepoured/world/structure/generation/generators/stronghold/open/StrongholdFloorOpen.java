@@ -1,10 +1,18 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
@@ -14,13 +22,7 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
-import javax.annotation.Nonnull;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<GeneratorStrongholdOpen> {
+public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<DungeonStrongholdOpen, GeneratorStrongholdOpen> {
 
 	private final Random random;
 	private BlockPos[][] roomGrid;
