@@ -267,7 +267,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("controller_idle", ILoopType.EDefaultLoopTypes.LOOP));
+		event.getController().setAnimation(new AnimationBuilder().loop("animation.flying_skull.controller_idle"));
 		return PlayState.CONTINUE;
 	}
 

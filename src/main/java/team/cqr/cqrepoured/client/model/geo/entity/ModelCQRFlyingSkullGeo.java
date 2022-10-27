@@ -11,7 +11,7 @@ public class ModelCQRFlyingSkullGeo extends AbstractModelGeoCQRBase<EntityFlying
         super(model, textureDefault, entityName);
     }
 
-    protected final ResourceLocation STANDARD_FLYING_SKULL_ANIMATIONS = CQRMain.prefix("animations/biped_gremlin.animation.json");
+    protected final ResourceLocation STANDARD_FLYING_SKULL_ANIMATIONS = CQRMain.prefix("animations/flying_skull.animation.json");
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityFlyingSkullMinion animatable) {
