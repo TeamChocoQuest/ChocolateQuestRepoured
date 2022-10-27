@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -7,7 +12,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -20,11 +25,6 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -41,7 +41,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 	private int dunX;
 	private int dunZ;
 
-	public GeneratorStrongholdOpen(World world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand) {
+	public GeneratorStrongholdOpen(ChunkGenerator world, BlockPos pos, DungeonStrongholdOpen dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
 		this.structureBounds = new Tuple<>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 
