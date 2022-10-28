@@ -190,7 +190,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 							}
 
 							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance(), this.random)) {
-								spawnerAndChestList.add(new BlockPos(iX, y - this.caveDepth + 1, iZ));
+								spawnerAndChestList.add(referenceLoc.offset(iX, y - this.caveDepth + 1, iZ));
 							}
 						}
 					}
@@ -417,7 +417,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 			}
 
 			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.dungeonBuilder, this.random);
-			entranceBuilder.generate(this.pos.getX(), this.pos.getZ());
+			entranceBuilder.generate();
 		}
 	}
 

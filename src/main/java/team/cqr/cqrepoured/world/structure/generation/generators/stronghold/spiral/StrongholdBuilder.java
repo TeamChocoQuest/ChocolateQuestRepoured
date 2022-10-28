@@ -29,7 +29,7 @@ public class StrongholdBuilder {
 		this.random = rand;
 	}
 
-	public void generate(int cX, int cZ) {
+	public void generate() {
 
 		Vector3i expansionVector = new Vector3i(0, 0, 0);
 		switch (this.direction) {
@@ -61,10 +61,10 @@ public class StrongholdBuilder {
 			pos = pos.offset(expansionVector);
 		}
 
-		this.buildStronghold(pos.offset(0, -1, 0), this.builder, cX, cZ);
+		this.buildStronghold(pos.offset(0, -1, 0), this.builder);
 	}
 
-	private void buildStronghold(BlockPos pos, GeneratableDungeon.Builder builder, int cX, int cZ) {
+	private void buildStronghold(BlockPos pos, GeneratableDungeon.Builder builder) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, builder);
 		stronghold.buildFloors(pos.offset(0, -1, 0), builder);
