@@ -2,20 +2,19 @@ package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spi
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.TorchBlock;
+import net.minecraft.block.WallTorchBlock;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper;
 
 public class EntranceBuilderHelper {
 
 	public static final int SEGMENT_LENGTH = 3;
 
-	public static void buildEntranceSegment(BlockPos startPosCentered, BlockDungeonPart.Builder partBuilder, Direction direction) {
+	public static void buildEntranceSegment(BlockPos startPosCentered, GeneratableDungeon.Builder partBuilder, Direction direction) {
 		// COrner 2 is always the reference location for the part (!)
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2;
 		corner1 = null;
@@ -68,38 +67,38 @@ public class EntranceBuilderHelper {
 			 * for (BlockPos airPos : BlockPos.getAllInBox(air1, air2)) { blockInfoList.add(new PreparableBlockInfo(airPos,
 			 * Blocks.AIR.getDefaultState(), null)); }
 			 */
-			BlockPos.betweenClosed(corner1, corner2.offset(0, 6, 0)).forEach(t -> partBuilder.add(new PreparableBlockInfo(t, Blocks.AIR.defaultBlockState(), null)));
+			BlockPos.betweenClosed(corner1, corner2.offset(0, 6, 0)).forEach(t -> partBuilder.getLevel().setBlockState(t, Blocks.AIR.defaultBlockState(), null));
 
 			buildFloorAndCeiling(corner1, corner2, 5, partBuilder);
 
 			// Left torch -> Facing side: rotate right (90.0°)
 			buildPillar(pillar1, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch1, CQRBlocks.UNLIT_TORCH.defaultBlockState().setValue(TorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null));
+			partBuilder.getLevel().setBlockState(torch1, CQRBlocks.UNLIT_TORCH_WALL.get().defaultBlockState().setValue(WallTorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)), null);
 			// Right torch -> Facing side: rotate left (-90.0°)
 			buildPillar(pillar2, partBuilder);
-			partBuilder.add(new PreparableBlockInfo(torch2, CQRBlocks.UNLIT_TORCH.defaultBlockState().setValue(TorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null));
+			partBuilder.getLevel().setBlockState(torch2, CQRBlocks.UNLIT_TORCH_WALL.get().defaultBlockState().setValue(WallTorchBlock.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)), null);
 		}
 	}
 
-	private static void buildPillar(BlockPos bottom, BlockDungeonPart.Builder partBuilder) {
+	private static void buildPillar(BlockPos bottom, GeneratableDungeon.Builder partBuilder) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.offset(0, iY, 0);
-			partBuilder.add(new PreparableBlockInfo(pos, CQRBlocks.GRANITE_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), null));
+			partBuilder.getLevel().setBlockState(pos, CQRBlocks.GRANITE_PILLAR.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), null);
 		}
-		partBuilder.add(new PreparableBlockInfo(bottom.offset(0, 5, 0), CQRBlocks.GRANITE_CARVED.defaultBlockState(), null));
+		partBuilder.getLevel().setBlockState(bottom.offset(0, 5, 0), CQRBlocks.GRANITE_CARVED.get().defaultBlockState(), null);
 	}
 
-	private static void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, BlockDungeonPart.Builder partBuilder) {
+	private static void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, GeneratableDungeon.Builder partBuilder) {
 		BlockPos endP = new BlockPos(end.getX(), start.getY(), end.getZ());
 
 		// Floor
 		for (BlockPos p : BlockPos.betweenClosed(start, endP)) {
-			partBuilder.add(new PreparableBlockInfo(p, CQRBlocks.GRANITE_SMALL.defaultBlockState(), null));
+			partBuilder.getLevel().setBlockState(p, CQRBlocks.GRANITE_SMALL.get().defaultBlockState(), null);
 		}
 
 		// Ceiling
 		for (BlockPos p : BlockPos.betweenClosed(start.offset(0, ceilingHeight + 1, 0), endP.offset(0, ceilingHeight + 1, 0))) {
-			partBuilder.add(new PreparableBlockInfo(p, CQRBlocks.GRANITE_SQUARE.defaultBlockState(), null));
+			partBuilder.getLevel().setBlockState(p, CQRBlocks.GRANITE_SQUARE.get().defaultBlockState(), null);
 		}
 	}
 

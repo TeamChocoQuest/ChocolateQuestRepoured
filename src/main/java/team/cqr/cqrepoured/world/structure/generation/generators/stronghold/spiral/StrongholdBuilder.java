@@ -1,36 +1,31 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral;
 
+import java.util.Random;
+
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
-
-import java.util.Random;
 
 public class StrongholdBuilder {
 
 	private final Random random;
-	private LegacyDungeonGenerator<DungeonVolcano> generator;
 	private GeneratableDungeon.Builder dungeonBuilder;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
 	private int blocksRemainingToWall;
 	private Direction direction;
-	private World world;
+	private final GeneratableDungeon.Builder builder;
 
-	public StrongholdBuilder(LegacyDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, World world, Random rand) {
-		this.generator = generator;
+	public StrongholdBuilder(GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, GeneratableDungeon.Builder builder, Random rand) {
 		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;
 		this.dungeon = dungeon;
 		this.blocksRemainingToWall = distanceToWall;
 		this.direction = expansionDirection;
-		this.world = world;
+		this.builder = builder;
 		this.random = rand;
 	}
 
@@ -55,26 +50,24 @@ public class StrongholdBuilder {
 		}
 
 		BlockPos pos = this.startPos;
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (int i = 0; i < (this.blocksRemainingToWall / 4) + 2; i++) {
 
 			// this.buildSegment(pos.subtract(this.startPos), blockInfoList);
 			// Old way: EntranceBuilderHelper.buildEntranceSegment(pos.subtract(this.startPos), blockInfoList, this.direction);
 			// new way:
 			// this.buildSegment(pos.subtract(this.startPos), partBuilder);
-			EntranceBuilderHelper.buildEntranceSegment(pos.subtract(this.startPos), partBuilder, this.direction);
+			EntranceBuilderHelper.buildEntranceSegment(pos, this.builder, this.direction);
 
 			pos = pos.offset(expansionVector);
 		}
-		this.dungeonBuilder.add(partBuilder, this.startPos);
 
-		this.buildStronghold(pos.offset(0, -1, 0), this.world, cX, cZ);
+		this.buildStronghold(pos.offset(0, -1, 0), this.builder, cX, cZ);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
-		stronghold.calculateFloors(pos, world2);
-		stronghold.buildFloors(pos.offset(0, -1, 0), this.world);
+	private void buildStronghold(BlockPos pos, GeneratableDungeon.Builder builder, int cX, int cZ) {
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
+		stronghold.calculateFloors(pos, builder);
+		stronghold.buildFloors(pos.offset(0, -1, 0), builder);
 	}
 
 }

@@ -17,7 +17,6 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.EntranceBuilderHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.StrongholdBuilder;
@@ -150,8 +149,6 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 			}
 		}
 
-		BlockDungeonPart.Builder entranceTunnelBlocks = new BlockDungeonPart.Builder();
-
 		// Infamous nether staircase
 		if (this.dungeon.doBuildStairs()) {
 			EStairSection stairSection = this.startStairSection;
@@ -225,7 +222,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 			this.generatePillars(new BlockPos(r - innerRadiusArray[0] / 2, 0, r), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), blocks, this.dungeon.getPillarBlock());
 			this.generatePillars(new BlockPos(r, 0, r + innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), blocks, this.dungeon.getPillarBlock());
 			this.generatePillars(new BlockPos(r, 0, r - innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), blocks, this.dungeon.getPillarBlock());
-
+			
 			if (this.dungeon.constructEntranceTunnel()) {
 				EStairSection stairSectionPrev = stairSection.getPredeccessor();
 				if (stairSectionPrev != null) {
@@ -290,7 +287,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 					BlockPos segmentPos = new BlockPos(segmentCenterX + r, highestPlatformY, segmentCenterZ + r);
 
 					for (int i = 0; i < segmentCount; i++) {
-						EntranceBuilderHelper.buildEntranceSegment(segmentPos, entranceTunnelBlocks, direction);
+						EntranceBuilderHelper.buildEntranceSegment(segmentPos.offset(referenceLoc), this.dungeonBuilder, direction);
 
 						segmentPos = segmentPos.relative(direction, EntranceBuilderHelper.SEGMENT_LENGTH);
 					}
@@ -308,8 +305,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 				}
 			}
 		}
-
-		this.dungeonBuilder.add(entranceTunnelBlocks, referenceLoc);
+		
 		// this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, entranceTunnelBlocks,
 		// new PlacementSettings(), mobType));
 
@@ -420,7 +416,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 				break;
 			}
 
-			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.world, this.random);
+			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.dungeonBuilder, entranceStartPos, entranceDistToWall, this.dungeon, entranceDirection.getAsSkyDirection(), this.dungeonBuilder, this.random);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ());
 		}
 	}

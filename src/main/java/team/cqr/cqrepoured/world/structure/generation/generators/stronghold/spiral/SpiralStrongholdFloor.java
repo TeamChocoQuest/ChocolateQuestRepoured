@@ -1,22 +1,19 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral;
 
+import java.io.File;
+import java.util.Random;
+
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
-import java.io.File;
-import java.util.Random;
-
 public class SpiralStrongholdFloor {
 
 	private final Random random;
-	private LegacyDungeonGenerator<DungeonVolcano> generator;
 	private GeneratableDungeon.Builder dungeonBuilder;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
@@ -28,8 +25,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 
-	public SpiralStrongholdFloor(LegacyDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
-		this.generator = generator;
+	public SpiralStrongholdFloor(GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
 		this.dungeonBuilder = dungeonBuilder;
 		this.entranceCoordinates = entrancePos;
 		this.entranceIndex = new Tuple<>(entranceX, entranceZ);
@@ -224,16 +220,16 @@ public class SpiralStrongholdFloor {
 		return this.roomGrid;
 	}
 
-	public void buildRooms(DungeonVolcano dungeon, World world) {
+	public void buildRooms(DungeonVolcano dungeon, GeneratableDungeon.Builder builder) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				if ((iX == 0 || iX == (this.sideLength - 1)) || (iZ == 0 || iZ == (this.sideLength - 1))) {
 					EStrongholdRoomType type = this.roomGrid[iX][iZ];
 					if (type != null && type != EStrongholdRoomType.NONE) {
-						if (dungeon != null && world != null) {
+						if (dungeon != null && builder != null) {
 							File file = dungeon.getRoomNBTFileForType(type, this.random);
 							if (file != null) {
-								CQStructure room = this.generator.loadStructureFromFile(file);
+								CQStructure room = CQStructure.createFromFile(file);
 								room.addAll(this.dungeonBuilder, this.coordinateGrid[iX][iZ], Offset.CENTER);
 							}
 						}
