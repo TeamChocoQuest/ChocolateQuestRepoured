@@ -63,6 +63,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:$mcVersion-$forgeVersion"
 
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
+    includedDependencies 'meldexun:RandomUtil:1.0.0@jar'
 
     // GeckoLib
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-$mcVersion:$geckolibVersion")
