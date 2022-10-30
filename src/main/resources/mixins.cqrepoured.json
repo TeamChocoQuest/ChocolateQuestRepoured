@@ -5,6 +5,7 @@
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
 		"structure.MixinChunkStatus",
+		"structure.MixinNoiseChunkGenerator",
 		"structure.MixinStructure",
 		"structure.MixinStructureManager",
 		"structure.MixinWorldLoadProgressScreen",
