@@ -12,6 +12,7 @@ import org.lwjgl.system.MemoryUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.datafixers.util.Pair;
 
+import meldexun.randomutil.FastRandom;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.BufferBuilder.DrawState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -29,24 +30,7 @@ import team.cqr.cqrepoured.util.VectorUtil;
 
 public class ElectricFieldRenderUtil {
 
-	@SuppressWarnings("serial")
-	private static final Random RANDOM = new Random() {
-		private static final long MULTIPLIER = 0x5_DEEC_E66DL;
-		private static final long ADDEND = 0xBL;
-		private static final long MASK = (1L << 48) - 1;
-		private long seed = 0L;
-
-		@Override
-		public void setSeed(long seed) {
-			this.seed = (seed ^ MULTIPLIER) & MASK;
-		}
-
-		@Override
-		protected int next(int bits) {
-			this.seed = (this.seed * MULTIPLIER + ADDEND) & MASK;
-			return (int) (this.seed >>> (48 - bits));
-		}
-	};
+	private static final Random RANDOM = new FastRandom();
 	private static final Tessellator TESSELATOR = Tessellator.getInstance();
 	private static final BufferBuilder VERTEX_BUFFER = TESSELATOR.getBuilder();
 	private static final IntBuffer FIRST_BUFFER = ByteBuffer.allocateDirect(64).order(ByteOrder.nativeOrder()).asIntBuffer();
