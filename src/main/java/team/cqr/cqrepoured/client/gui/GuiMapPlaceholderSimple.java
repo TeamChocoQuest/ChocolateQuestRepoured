@@ -1,20 +1,19 @@
 package team.cqr.cqrepoured.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiMapPlaceholder.GuiButtonOrientation;
-import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
-
-import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMapPlaceholderSimple extends Screen {
@@ -23,97 +22,93 @@ public class GuiMapPlaceholderSimple extends Screen {
 	private final Direction facing;
 	private TextFieldWidget scale;
 	private GuiButtonOrientation orientation;
-	private GuiCheckBox lockOrientation;
+	private CheckboxButton lockOrientation;
 	private TextFieldWidget sizeUp;
 	private TextFieldWidget sizeDown;
 	private TextFieldWidget sizeRight;
 	private TextFieldWidget sizeLeft;
-	private GuiCheckBox fillMap;
+	private CheckboxButton fillMap;
 	private TextFieldWidget fillRadius;
 
 	public GuiMapPlaceholderSimple(BlockPos pos, Direction facing) {
+		super(new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.title"));
 		this.pos = pos;
 		this.facing = facing;
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
+	public void init() {
+		super.init();
 
-		this.scale = new TextFieldWidget(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
-		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, Direction.NORTH);
-		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation", false);
-		this.sizeUp = new TextFieldWidget(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
-		this.sizeDown = new TextFieldWidget(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
-		this.sizeRight = new TextFieldWidget(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
-		this.sizeLeft = new TextFieldWidget(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
-		this.fillMap = new GuiCheckBox(7, this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, "Fill Map", false);
-		this.fillRadius = new TextFieldWidget(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
+		this.scale = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.scale"));
+		this.orientation = this.addButton(new GuiButtonOrientation(this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, Direction.NORTH, new TranslationTextComponent("")));
+		this.lockOrientation = this.addButton(new CheckboxButton(this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32,  20, 20, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.lock_orientation"), false));
+		this.sizeUp = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.size_up"));
+		this.sizeDown = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.size_down"));
+		this.sizeRight = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.size_right"));
+		this.sizeLeft = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.size_left"));
+		this.fillMap = this.addButton(new CheckboxButton(this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, 20, 20, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.fill_map"), false));
+		this.fillRadius = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12, new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.fill_radius"));
 
-		this.scale.setText("0");
-		this.sizeUp.setText("0");
-		this.sizeDown.setText("0");
-		this.sizeRight.setText("0");
-		this.sizeLeft.setText("0");
-		this.fillRadius.setText("64");
+		this.scale.setValue("0");
+		this.sizeUp.setValue("0");
+		this.sizeDown.setValue("0");
+		this.sizeRight.setValue("0");
+		this.sizeLeft.setValue("0");
+		this.fillRadius.setValue("64");
 
-		this.buttonList.add(this.orientation);
-		this.buttonList.add(this.lockOrientation);
-		this.buttonList.add(this.fillMap);
+		this.children.add(this.scale);
+		this.children.add(this.sizeUp);
+		this.children.add(this.sizeDown);
+		this.children.add(this.sizeRight);
+		this.children.add(this.sizeLeft);
+		this.children.add(this.fillRadius);
+
 	}
 
 	@Override
-	public void onGuiClosed() {
-		int scale = this.parseInt(this.scale.getText(), 0, 4, 0, "Invalid argument: scale");
+	public void onClose() {
+		onDone();
+		super.onClose();
+	}
+
+	private void onDone() {
+		int scale = this.parseInt(this.scale.getValue(), 0, 4, 0, "Invalid argument: scale");
 		Direction orientation = this.orientation.getDirection();
-		boolean lockOrientation = this.lockOrientation.isChecked();
-		int sizeUp = this.parseInt(this.sizeUp.getText(), 0, 16, 0, "Invalid argument: sizeUp");
-		int sizeDown = this.parseInt(this.sizeDown.getText(), 0, 16, 0, "Invalid argument: sizeDown");
-		int sizeRight = this.parseInt(this.sizeRight.getText(), 0, 16, 0, "Invalid argument: sizeRight");
-		int sizeLeft = this.parseInt(this.sizeLeft.getText(), 0, 16, 0, "Invalid argument: sizeLeft");
-		boolean fillMap = this.fillMap.isChecked();
-		int fillRadius = this.parseInt(this.fillRadius.getText(), 0, 1024, 64, "Invalid argument: fillRadius");
+		boolean lockOrientation = this.lockOrientation.selected();
+		int sizeUp = this.parseInt(this.sizeUp.getValue(), 0, 16, 0, "Invalid argument: sizeUp");
+		int sizeDown = this.parseInt(this.sizeDown.getValue(), 0, 16, 0, "Invalid argument: sizeDown");
+		int sizeRight = this.parseInt(this.sizeRight.getValue(), 0, 16, 0, "Invalid argument: sizeRight");
+		int sizeLeft = this.parseInt(this.sizeLeft.getValue(), 0, 16, 0, "Invalid argument: sizeLeft");
+		boolean fillMap = this.fillMap.selected();
+		int fillRadius = this.parseInt(this.fillRadius.getValue(), 0, 1024, 64, "Invalid argument: fillRadius");
 
 		CQRMain.NETWORK.sendToServer(new CPacketCloseMapPlaceholderGuiSimple(this.pos, this.facing, scale, orientation, lockOrientation, sizeUp, sizeDown, sizeRight, sizeLeft, fillMap, fillRadius));
-		super.onGuiClosed();
 	}
 
 	private int parseInt(String s, int min, int max, int defaultValue, String warning) {
 		try {
 			return MathHelper.clamp(Integer.parseInt(s), min, max);
 		} catch (Exception e) {
-			this.mc.player.sendMessage(new StringTextComponent(warning));
+			this.minecraft.player.sendMessage(new StringTextComponent(warning), this.minecraft.player.getUUID());
 		}
 		return defaultValue;
 	}
 
-	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (this.scale.isFocused() || this.sizeUp.isFocused() || this.sizeDown.isFocused() || this.sizeRight.isFocused() || this.sizeLeft.isFocused() || this.fillRadius.isFocused()) {
-			if (keyCode == 1) {
-				this.scale.setFocused(false);
-				this.sizeUp.setFocused(false);
-				this.sizeDown.setFocused(false);
-				this.sizeRight.setFocused(false);
-				this.sizeLeft.setFocused(false);
-				this.fillRadius.setFocused(false);
-			} else if (GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, true, false)) {
-				this.scale.textboxKeyTyped(typedChar, keyCode);
-				this.sizeUp.textboxKeyTyped(typedChar, keyCode);
-				this.sizeDown.textboxKeyTyped(typedChar, keyCode);
-				this.sizeRight.textboxKeyTyped(typedChar, keyCode);
-				this.sizeLeft.textboxKeyTyped(typedChar, keyCode);
-				this.fillRadius.textboxKeyTyped(typedChar, keyCode);
-			}
-		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
-			this.mc.player.closeScreen();
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+		if (super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+			return true;
+		} else if (pKeyCode != 257 && pKeyCode != 335) {
+			return false;
 		} else {
-			super.keyTyped(typedChar, keyCode);
+			this.onDone();
+			return true;
 		}
 	}
 
+
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.scale.mouseClicked(mouseX, mouseY, mouseButton);
@@ -123,52 +118,52 @@ public class GuiMapPlaceholderSimple extends Screen {
 		this.sizeLeft.mouseClicked(mouseX, mouseY, mouseButton);
 		this.fillRadius.mouseClicked(mouseX, mouseY, mouseButton);
 
-		if (this.orientation.isMouseOver() && (mouseButton == 0 || mouseButton == 1)) {
+		if (this.orientation.isMouseOver(mouseX, mouseY) && (mouseButton == 0 || mouseButton == 1)) {
 			if (mouseButton == 1) {
-				this.orientation.playPressSound(this.mc.getSoundHandler());
+				this.orientation.playDownSound(this.minecraft.getSoundManager());
 			}
 			this.orientation.onMouseClick(mouseButton == 0);
 		}
+		return true;
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 
-		this.scale.updateCursorCounter();
-		this.sizeUp.updateCursorCounter();
-		this.sizeDown.updateCursorCounter();
-		this.sizeRight.updateCursorCounter();
-		this.sizeLeft.updateCursorCounter();
-		this.fillRadius.updateCursorCounter();
+		this.scale.tick();
+		this.sizeUp.tick();
+		this.sizeDown.tick();
+		this.sizeRight.tick();
+		this.sizeLeft.tick();
+		this.fillRadius.tick();
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
-		this.scale.drawTextBox();
-		this.sizeUp.drawTextBox();
-		this.sizeDown.drawTextBox();
-		this.sizeRight.drawTextBox();
-		this.sizeLeft.drawTextBox();
-		this.fillRadius.drawTextBox();
 
-		GuiHelper.drawString(this.fontRenderer, "Scale", this.width / 2 + 4, this.height / 2 - 72 + 3, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Orientation", this.width / 2 + 4, this.height / 2 - 72 + 3 + 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Size Up", this.width / 2 + 4, this.height / 2 - 72 + 3 + 48, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Size Down", this.width / 2 + 4, this.height / 2 - 72 + 3 + 64, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Size Right", this.width / 2 + 4, this.height / 2 - 72 + 3 + 80, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Size Left", this.width / 2 + 4, this.height / 2 - 72 + 3 + 96, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Fill Radius", this.width / 2 + 4, this.height / 2 - 72 + 3 + 128, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Map", this.width / 2, this.height / 2 - 96, 0xFFFFFF, true, true);
-		GuiHelper.drawString(this.fontRenderer, "Simple Mode", this.width / 2, this.height / 2 - 86, 0x0FFF0F, true, true);
+		drawString(pMatrixStack, this.font, "Scale", this.width / 2 + 4, this.height / 2 - 72 + 3, 0xE0E0E0);
+		this.scale.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Orientation", this.width / 2 + 4, this.height / 2 - 72 + 3 + 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Size Up", this.width / 2 + 4, this.height / 2 - 72 + 3 + 48, 0xE0E0E0);
+		this.sizeUp.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Size Down", this.width / 2 + 4, this.height / 2 - 72 + 3 + 64, 0xE0E0E0);
+		this.sizeDown.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Size Right", this.width / 2 + 4, this.height / 2 - 72 + 3 + 80, 0xE0E0E0);
+		this.sizeRight.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Size Left", this.width / 2 + 4, this.height / 2 - 72 + 3 + 96, 0xE0E0E0);
+		this.sizeLeft.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Fill Radius", this.width / 2 + 4, this.height / 2 - 72 + 3 + 128, 0xE0E0E0);
+		this.fillRadius.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Map", this.width / 2, this.height / 2 - 96, 0xFFFFFF);
+		drawString(pMatrixStack, this.font, "Simple Mode", this.width / 2, this.height / 2 - 86, 0x0FFF0F);
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
-
 }

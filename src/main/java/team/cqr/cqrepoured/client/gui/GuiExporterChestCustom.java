@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
-
-import java.io.IOException;
 
 public class GuiExporterChestCustom extends Screen {
 
@@ -14,57 +13,62 @@ public class GuiExporterChestCustom extends Screen {
 	private TextFieldWidget lootTableTextField;
 
 	public GuiExporterChestCustom(TileEntityExporterChestCustom tileEntity) {
+		super(new TranslationTextComponent("gui.cqrepoured.map_placeholder_simple.title"));
 		this.tileEntity = tileEntity;
 	}
 
 	@Override
-	public void initGui() {
-		this.lootTableTextField = new TextFieldWidget(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
-		this.lootTableTextField.setText(this.tileEntity.getLootTable().toString());
+	public void init() {
+		this.lootTableTextField = new TextFieldWidget(this.font, this.width / 2 - 70, this.height / 2 - 70, 140, 20, new TranslationTextComponent("gui.cqrepoured.exporter_chest_custom.loot_table"));
+		this.lootTableTextField.setValue(this.tileEntity.getLootTable().toString());
+		this.children.add(this.lootTableTextField);
 	}
 
 	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		this.tileEntity.setLootTable(new ResourceLocation(this.lootTableTextField.getText()));
+	public void onClose() {
+		super.onClose();
+		this.tileEntity.setLootTable(new ResourceLocation(this.lootTableTextField.getValue()));
+	}
+
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+		if (super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+			return true;
+		} else if (pKeyCode != 257 && pKeyCode != 335) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		super.keyTyped(typedChar, keyCode);
-
-		this.lootTableTextField.textboxKeyTyped(typedChar, keyCode);
-	}
-
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.lootTableTextField.mouseClicked(mouseX, mouseY, mouseButton);
+		return true;
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 
-		this.lootTableTextField.updateCursorCounter();
+		this.lootTableTextField.tick();
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter_chest_custom.name"), this.width / 2, 20, 0xFFFFFF);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		this.drawCenteredString(pMatrixStack, this.font, new TranslationTextComponent("gui.cqrepoured.exporter_chest_custom.name"), this.width / 2, 20, 0xFFFFFF);
 
-		this.drawString(this.fontRenderer, "Loot Table", this.width / 2 - 70, this.height / 2 - 80, 0xA0A0A0);
-		this.lootTableTextField.drawTextBox();
+		this.drawString(pMatrixStack, this.font, "Loot Table", this.width / 2 - 70, this.height / 2 - 80, 0xA0A0A0);
+		this.lootTableTextField.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
-
 }

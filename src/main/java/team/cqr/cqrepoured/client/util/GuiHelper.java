@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
+import net.minecraft.client.util.InputMappings;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -53,6 +54,7 @@ public class GuiHelper {
 	public static boolean isValidCharForNumberTextField(char typedChar, int keyCode, boolean allowNegative, boolean allowDouble) {
 		return Character.isDigit(typedChar) || (allowNegative && typedChar == '-') || (allowDouble && typedChar == '.') || keyCode == 14 || keyCode == 211 || keyCode == 203 || keyCode == 205 || keyCode == 199 || keyCode == 207;
 	}
+
 
 	public static boolean isMouseOver(int mouseX, int mouseY, TextFieldWidget inStockTextField) {
 		return inStockTextField.isMouseOver(mouseX, mouseY);

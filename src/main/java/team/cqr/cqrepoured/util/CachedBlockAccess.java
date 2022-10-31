@@ -9,8 +9,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.integration.cubicchunks.CubicChunks;
 
 import javax.annotation.Nullable;
 
@@ -51,14 +49,14 @@ public class CachedBlockAccess implements IBlockReader {
 		if (World.isOutsideBuildHeight(pos)) {
 			return null;
 		}
-		if (CQRMain.isCubicChunksInstalled && CubicChunks.isCubicWorld(this.level)) {
-			this.cachedSection = CubicChunks.getBlockStorage(this.level, pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
-		} else {
+//		if (CQRMain.isCubicChunksInstalled && CubicChunks.isCubicWorld(this.level)) {
+//			this.cachedSection = CubicChunks.getBlockStorage(this.level, pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
+//		} else {
 			Chunk chunk = this.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
 			if (this.cachedSection == null || this.cachedSection.bottomBlockY() >> 4 != pos.getY() >> 4) {
 				this.cachedSection = chunk.getSections()[pos.getY() >> 4];
 			}
-		}
+//		}
 		return this.cachedSection;
 	}
 

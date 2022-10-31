@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
-import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
-
-import java.io.IOException;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiMapPlaceholder extends Screen {
@@ -20,99 +21,103 @@ public class GuiMapPlaceholder extends Screen {
 
 	private TextFieldWidget scale;
 	private GuiButtonOrientation orientation;
-	private GuiCheckBox lockOrientation;
+	private CheckboxButton lockOrientation;
 	private TextFieldWidget originX;
 	private TextFieldWidget originZ;
 	private TextFieldWidget offsetX;
 	private TextFieldWidget offsetZ;
-	private GuiCheckBox fillMap;
+	private CheckboxButton fillMap;
 	private TextFieldWidget fillRadius;
 
 	public GuiMapPlaceholder(TileEntityMap tileEntity) {
-		this.mc = Minecraft.getMinecraft();
+		super(new StringTextComponent("Map Placeholder"));
+		this.minecraft = Minecraft.getInstance();
 		this.tileEntity = tileEntity;
 	}
 
-	public void sync() {
-		this.scale.setText(String.valueOf(this.tileEntity.getScale()));
+	@Override
+	public void init() {
+		this.scale = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12, new TranslationTextComponent("map_placeholder.scale"));
+		this.scale.setValue(Integer.toString(this.tileEntity.getScale()));
+		this.children.add(this.scale);
+		this.orientation = this.addButton(new GuiButtonOrientation(this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, this.tileEntity.getOrientation(), new TranslationTextComponent("")));
 		this.orientation.setDisplayString(this.tileEntity.getOrientation());
-		this.lockOrientation.setIsChecked(this.tileEntity.lockOrientation());
-		this.originX.setText(String.valueOf(this.tileEntity.getOriginX()));
-		this.originZ.setText(String.valueOf(this.tileEntity.getOriginZ()));
-		this.offsetX.setText(String.valueOf(this.tileEntity.getOffsetX()));
-		this.offsetZ.setText(String.valueOf(this.tileEntity.getOffsetZ()));
-		this.fillMap.setIsChecked(this.tileEntity.fillMap());
-		this.fillRadius.setText(String.valueOf(this.tileEntity.getFillRadius()));
+		this.lockOrientation = this.addButton(new CheckboxButton(this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, 20, 20,new TranslationTextComponent("map_placeholder.lock_orientation"), this.tileEntity.lockOrientation()));
+		this.originX = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12, new TranslationTextComponent("map_placeholder.origin_x"));
+		this.originX.setValue(Integer.toString(this.tileEntity.getOriginX()));
+		this.children.add(this.originX);
+		this.originZ = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12, new TranslationTextComponent("map_placeholder.origin_z"));
+		this.originZ.setValue(Integer.toString(this.tileEntity.getOriginZ()));
+		this.children.add(this.originZ);
+		this.offsetX = new TextFieldWidget( this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12, new TranslationTextComponent("map_placeholder.offset_x"));
+		this.offsetX.setValue(Integer.toString(this.tileEntity.getOffsetX()));
+		this.children.add(this.offsetX);
+		this.offsetZ = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12, new TranslationTextComponent("map_placeholder.offset_z"));
+		this.offsetZ.setValue(Integer.toString(this.tileEntity.getOffsetZ()));
+		this.children.add(this.offsetZ);
+		this.fillMap = this.addButton(new CheckboxButton(this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, 20, 20, new TranslationTextComponent("map_placeholder.fill_map"), this.tileEntity.fillMap()));
+		this.fillRadius = new TextFieldWidget(this.font, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12, new TranslationTextComponent("map_placeholder.fill_radius"));
+		this.fillRadius.setValue(Integer.toString(this.tileEntity.getFillRadius()));
+		this.children.add(this.fillRadius);
 	}
 
-	@Override
-	public void initGui() {
-		this.scale = new TextFieldWidget(0, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72, 38, 12);
-		this.orientation = new GuiButtonOrientation(1, this.width / 2 - 38, this.height / 2 - 72 + 16, 40, 14, this.tileEntity.getOrientation());
-		this.lockOrientation = new GuiCheckBox(2, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 32, "Lock Orientation", this.tileEntity.lockOrientation());
-		this.originX = new TextFieldWidget(3, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 48, 38, 12);
-		this.originZ = new TextFieldWidget(4, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 64, 38, 12);
-		this.offsetX = new TextFieldWidget(5, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 80, 38, 12);
-		this.offsetZ = new TextFieldWidget(6, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 96, 38, 12);
-		this.fillMap = new GuiCheckBox(7, this.width / 2 - 1 - 38, this.height / 2 + 1 - 72 + 112, "Fill Map", this.tileEntity.fillMap());
-		this.fillRadius = new TextFieldWidget(8, this.fontRenderer, this.width / 2 + 1 - 38, this.height / 2 + 1 - 72 + 128, 38, 12);
 
-		this.sync();
-
-		this.buttonList.add(this.orientation);
-		this.buttonList.add(this.lockOrientation);
-		this.buttonList.add(this.fillMap);
-	}
 
 	@Override
-	public void onGuiClosed() {
+	public void onClose() {
 		try {
-			int scale = Integer.parseInt(this.scale.getText());
+			int scale = Integer.parseInt(this.scale.getMessage().getString());
 			Direction orientation = this.orientation.getDirection();
-			boolean lockOrientation = this.lockOrientation.isChecked();
-			int originX = Integer.parseInt(this.originX.getText());
-			int originZ = Integer.parseInt(this.originZ.getText());
-			int offsetX = Integer.parseInt(this.offsetX.getText());
-			int offsetZ = Integer.parseInt(this.offsetZ.getText());
-			boolean fillMap = this.fillMap.isChecked();
-			int fillRadius = Integer.parseInt(this.fillRadius.getText());
+			boolean lockOrientation = this.lockOrientation.selected();
+			int originX = Integer.parseInt(this.originX.getMessage().getString());
+			int originZ = Integer.parseInt(this.originZ.getMessage().getString());
+			int offsetX = Integer.parseInt(this.offsetX.getMessage().getString());
+			int offsetZ = Integer.parseInt(this.offsetZ.getMessage().getString());
+			boolean fillMap = this.fillMap.selected();
+			int fillRadius = Integer.parseInt(this.fillRadius.getMessage().getString());
 
 			this.tileEntity.set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		} catch (IllegalArgumentException e) {
-			Minecraft.getMinecraft().player.sendMessage(new StringTextComponent("Invalid arguments"));
+			Minecraft.getInstance().player.sendMessage(new StringTextComponent("Invalid arguments"), Minecraft.getInstance().player.getUUID());
 		}
 
-		super.onGuiClosed();
+		super.onClose();
 	}
 
+
+
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+		InputMappings.Input keyInput = InputMappings.getKey(pKeyCode, pScanCode);
 		if (this.scale.isFocused() || this.originX.isFocused() || this.originZ.isFocused() || this.offsetX.isFocused() || this.offsetZ.isFocused() || this.fillRadius.isFocused()) {
-			if (keyCode == 1) {
-				this.scale.setFocused(false);
-				this.originX.setFocused(false);
-				this.originZ.setFocused(false);
-				this.offsetX.setFocused(false);
-				this.offsetZ.setFocused(false);
-				this.fillRadius.setFocused(false);
-			} else if (GuiHelper.isValidCharForNumberTextField(typedChar, keyCode, true, false)) {
-				this.scale.textboxKeyTyped(typedChar, keyCode);
-				this.originX.textboxKeyTyped(typedChar, keyCode);
-				this.originZ.textboxKeyTyped(typedChar, keyCode);
-				this.offsetX.textboxKeyTyped(typedChar, keyCode);
-				this.offsetZ.textboxKeyTyped(typedChar, keyCode);
-				this.fillRadius.textboxKeyTyped(typedChar, keyCode);
+			if (pKeyCode == 0) {
+				this.scale.setFocus(false);
+				this.originX.setFocus(false);
+				this.originZ.setFocus(false);
+				this.offsetX.setFocus(false);
+				this.offsetZ.setFocus(false);
+				this.fillRadius.setFocus(false);
+			} else if (pKeyCode == 14 || pKeyCode == 211 || pKeyCode == 203 || pKeyCode == 205 || pKeyCode == 199 || pKeyCode == 207) {
+				this.scale.keyPressed(pKeyCode, pScanCode, pModifiers);
+				this.originX.keyPressed(pKeyCode, pScanCode, pModifiers);
+				this.originZ.keyPressed(pKeyCode, pScanCode, pModifiers);
+				this.offsetX.keyPressed(pKeyCode, pScanCode, pModifiers);
+				this.offsetZ.keyPressed(pKeyCode, pScanCode, pModifiers);
+				this.fillRadius.keyPressed(pKeyCode, pScanCode, pModifiers);
 			}
-		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
-			this.mc.player.closeScreen();
+		} else if (pKeyCode == 1 || this.minecraft.options.keyInventory.isActiveAndMatches(keyInput)) {
+			this.minecraft.player.closeContainer();
 		} else {
-			super.keyTyped(typedChar, keyCode);
+			if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+		boolean sr = super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.scale.mouseClicked(mouseX, mouseY, mouseButton);
 		this.originX.mouseClicked(mouseX, mouseY, mouseButton);
@@ -121,60 +126,63 @@ public class GuiMapPlaceholder extends Screen {
 		this.offsetZ.mouseClicked(mouseX, mouseY, mouseButton);
 		this.fillRadius.mouseClicked(mouseX, mouseY, mouseButton);
 
-		if (this.orientation.isMouseOver() && (mouseButton == 0 || mouseButton == 1)) {
+		if (this.orientation.isMouseOver(mouseX, mouseY) && (mouseButton == 0 || mouseButton == 1)) {
 			if (mouseButton == 1) {
-				this.orientation.playPressSound(this.mc.getSoundHandler());
+				this.orientation.playDownSound(this.minecraft.getSoundManager());
 			}
 			this.orientation.onMouseClick(mouseButton == 0);
 		}
+
+		return sr;
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 
-		this.scale.updateCursorCounter();
-		this.originX.updateCursorCounter();
-		this.originZ.updateCursorCounter();
-		this.offsetX.updateCursorCounter();
-		this.offsetZ.updateCursorCounter();
-		this.fillRadius.updateCursorCounter();
+		this.scale.tick();
+		this.originX.tick();
+		this.originZ.tick();
+		this.offsetX.tick();
+		this.offsetZ.tick();
+		this.fillRadius.tick();
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		drawString(pMatrixStack, this.font, "Scale", this.width / 2 + 4, this.height / 2 - 72 + 3, 0xE0E0E0);
+		this.scale.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Orientation", this.width / 2 + 4, this.height / 2 - 72 + 3 + 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Origin X", this.width / 2 + 4, this.height / 2 - 72 + 3 + 48, 0xE0E0E0);
+		this.originX.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Origin Z", this.width / 2 + 4, this.height / 2 - 72 + 3 + 64, 0xE0E0E0);
+		this.originZ.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Offset X", this.width / 2 + 4, this.height / 2 - 72 + 3 + 80, 0xE0E0E0);
+		this.offsetX.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Offset Z", this.width / 2 + 4, this.height / 2 - 72 + 3 + 96, 0xE0E0E0);
+		this.offsetZ.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Fill Radius", this.width / 2 + 4, this.height / 2 - 72 + 3 + 128, 0xE0E0E0);
+		this.fillRadius.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
+		drawString(pMatrixStack, this.font, "Map", this.width / 2, this.height / 2 - 96, 0xFFFFFF);
+		drawString(pMatrixStack, this.font, "Advanced Mode", this.width / 2, this.height / 2 - 86, 0xFF0F0F);
 
-		this.scale.drawTextBox();
-		this.originX.drawTextBox();
-		this.originZ.drawTextBox();
-		this.offsetX.drawTextBox();
-		this.offsetZ.drawTextBox();
-		this.fillRadius.drawTextBox();
-
-		GuiHelper.drawString(this.fontRenderer, "Scale", this.width / 2 + 4, this.height / 2 - 72 + 3, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Orientation", this.width / 2 + 4, this.height / 2 - 72 + 3 + 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Origin X", this.width / 2 + 4, this.height / 2 - 72 + 3 + 48, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Origin Z", this.width / 2 + 4, this.height / 2 - 72 + 3 + 64, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Offset X", this.width / 2 + 4, this.height / 2 - 72 + 3 + 80, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Offset Z", this.width / 2 + 4, this.height / 2 - 72 + 3 + 96, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Fill Radius", this.width / 2 + 4, this.height / 2 - 72 + 3 + 128, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Map", this.width / 2, this.height / 2 - 96, 0xFFFFFF, true, true);
-		GuiHelper.drawString(this.fontRenderer, "Advanced Mode", this.width / 2, this.height / 2 - 86, 0xFF0F0F, true, true);
 	}
 
+
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
-	public static class GuiButtonOrientation extends GuiButtonCustom {
+	public static class GuiButtonOrientation extends Button {
 		private final String[] displayStrings = { "North", "East", "South", "West" };
 		private int index = 0;
 
-		public GuiButtonOrientation(int buttonId, int x, int y, int width, int height, Direction orientation) {
-			super(buttonId, x, y, width, height, "");
+		public GuiButtonOrientation(int x, int y, int width, int height, Direction orientation, TranslationTextComponent pMessage) {
+			super(x, y, width, height, pMessage, (p_214283_1_) -> {
+			});
 			this.setDisplayString(orientation);
 		}
 
@@ -184,7 +192,7 @@ public class GuiMapPlaceholder extends Screen {
 			} else {
 				this.index = this.index > 0 ? this.index - 1 : this.displayStrings.length - 1;
 			}
-			this.displayString = this.displayStrings[this.index];
+			this.setMessage(new StringTextComponent(this.displayStrings[this.index]));
 		}
 
 		public void setDisplayString(Direction orientation) {
@@ -202,7 +210,7 @@ public class GuiMapPlaceholder extends Screen {
 				this.index = 0;
 				break;
 			}
-			this.displayString = this.displayStrings[this.index];
+			this.setMessage(new StringTextComponent(this.displayStrings[this.index]));
 		}
 
 		public Direction getDirection() {
