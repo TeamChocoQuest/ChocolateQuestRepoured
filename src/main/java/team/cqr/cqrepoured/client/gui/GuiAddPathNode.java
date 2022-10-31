@@ -1,22 +1,23 @@
 package team.cqr.cqrepoured.client.gui;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector2f;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.config.GuiButtonExt;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
@@ -25,7 +26,6 @@ import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,18 +37,18 @@ public class GuiAddPathNode extends Screen {
 	private final BlockPos pos;
 	private final List<TextFieldWidget> textFieldList = new ArrayList<>();
 
-	private GuiButtonExt buttonConfirm;
-	private GuiButtonExt buttonCancel;
-	private GuiNumberTextField textFieldX;
-	private GuiNumberTextField textFieldY;
-	private GuiNumberTextField textFieldZ;
-	private GuiNumberTextField textFieldWaitingTimeMin;
-	private GuiNumberTextField textFieldWaitingTimeMax;
-	private GuiNumberTextField textFieldWaitingRotation;
-	private GuiNumberTextField textFieldWeight;
-	private GuiNumberTextField textFieldTimeMin;
-	private GuiNumberTextField textFieldTimeMax;
-	private GuiCheckBox checkBoxBidirectional;
+	private Button buttonConfirm;
+	private Button buttonCancel;
+	private TextFieldWidget textFieldX;
+	private TextFieldWidget textFieldY;
+	private TextFieldWidget textFieldZ;
+	private TextFieldWidget textFieldWaitingTimeMin;
+	private TextFieldWidget textFieldWaitingTimeMax;
+	private TextFieldWidget textFieldWaitingRotation;
+	private TextFieldWidget textFieldWeight;
+	private TextFieldWidget textFieldTimeMin;
+	private TextFieldWidget textFieldTimeMax;
+	private CheckboxButton checkBoxBidirectional;
 	private final IntList blacklistedPrevNodes = new IntArrayList();
 
 	private int x;
@@ -68,46 +68,55 @@ public class GuiAddPathNode extends Screen {
 	private float mouseOverheadY;
 
 	public GuiAddPathNode(Hand hand, int rootNode, BlockPos pos) {
+		super(new TranslationTextComponent("gui.cqrepoured.add_path_node"));
 		this.hand = hand;
 		this.rootNodeIndex = rootNode;
 		this.pos = pos;
 	}
 
 	@Override
-	public void initGui() {
+	public void init() {
 		this.textFieldList.clear();
-		super.initGui();
+		super.init();
 		int id = 0;
 
 		int xOffset = -43;
 		int yOffset = 10 * 16 / 2 * -1; // elementCount * elementOffset / 2 * -1
 		int i = 0;
-		this.textFieldX = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldY = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldZ = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, true, false);
-		this.textFieldWaitingTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWaitingTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWaitingRotation = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldWeight = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldTimeMin = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.textFieldTimeMax = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, false, false);
-		this.checkBoxBidirectional = new GuiCheckBox(id++, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, "Bidirectional", true);
+		this.textFieldX = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.x"));
+		this.textFieldY = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.y"));
+		this.textFieldZ = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.z"));
+		this.textFieldWaitingTimeMin = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.waiting_time_min"));
+		this.textFieldWaitingTimeMax = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.waiting_time_max"));
+		this.textFieldWaitingRotation = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.waiting_rotation"));
+		this.textFieldWeight = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.weight"));
+		this.textFieldTimeMin = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.time_min"));
+		this.textFieldTimeMax = new TextFieldWidget(this.font, this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 40, 12, new TranslationTextComponent("add_path_node.text_field.time_max"));
+		this.checkBoxBidirectional = this.addButton(new CheckboxButton(this.width / 2 + 1 + xOffset, this.height / 2 + 1 + yOffset + i++ * 16, 20, 20, new TranslationTextComponent("add_path_node.bidirectional"), true));
 
-		this.buttonConfirm = new GuiButtonExt(id++, this.width / 2 - 102, this.height - 36, 100, 16, "Confirm");
-		this.buttonCancel = new GuiButtonExt(id++, this.width / 2 + 2, this.height - 36, 100, 16, "Cancel");
+		this.buttonConfirm = this.addButton(new Button(this.width / 2 - 102, this.height - 36, 100, 16, new TranslationTextComponent("add_path_node.confirm"), (p_214271_1_) -> this.performConfirm()));
+		this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, this.height - 36, 100, 16, new TranslationTextComponent("add_path_node.cancel"), (p_214271_1_) -> this.minecraft.setScreen((Screen)null)));
 
-		this.textFieldX.setText(String.valueOf(this.pos.getX()));
-		this.textFieldY.setText(String.valueOf(this.pos.getY()));
-		this.textFieldZ.setText(String.valueOf(this.pos.getZ()));
-		this.textFieldWaitingTimeMin.setText("0");
-		this.textFieldWaitingTimeMax.setText("0");
-		this.textFieldWaitingRotation.setText("0");
-		this.textFieldWeight.setText("10");
-		this.textFieldTimeMin.setText("0");
-		this.textFieldTimeMax.setText("24000");
+		this.textFieldX.setValue(String.valueOf(this.pos.getX()));
+		this.textFieldY.setValue(String.valueOf(this.pos.getY()));
+		this.textFieldZ.setValue(String.valueOf(this.pos.getZ()));
+		this.textFieldWaitingTimeMin.setValue("0");
+		this.textFieldWaitingTimeMax.setValue("0");
+		this.textFieldWaitingRotation.setValue("0");
+		this.textFieldWeight.setValue("10");
+		this.textFieldTimeMin.setValue("0");
+		this.textFieldTimeMax.setValue("24000");
 
-		this.buttonList.add(this.buttonConfirm);
-		this.buttonList.add(this.buttonCancel);
+		this.children.add(this.textFieldX);
+		this.children.add(this.textFieldY);
+		this.children.add(this.textFieldZ);
+		this.children.add(this.textFieldWaitingTimeMin);
+		this.children.add(this.textFieldWaitingTimeMax);
+		this.children.add(this.textFieldWaitingRotation);
+		this.children.add(this.textFieldWeight);
+		this.children.add(this.textFieldTimeMin);
+		this.children.add(this.textFieldTimeMax);
+
 		this.textFieldList.add(this.textFieldX);
 		this.textFieldList.add(this.textFieldY);
 		this.textFieldList.add(this.textFieldZ);
@@ -117,7 +126,6 @@ public class GuiAddPathNode extends Screen {
 		this.textFieldList.add(this.textFieldWeight);
 		this.textFieldList.add(this.textFieldTimeMin);
 		this.textFieldList.add(this.textFieldTimeMax);
-		this.buttonList.add(this.checkBoxBidirectional);
 		this.blacklistedPrevNodes.clear();
 
 		this.x = this.pos.getX();
@@ -127,7 +135,7 @@ public class GuiAddPathNode extends Screen {
 		this.pathMapY = this.height / 2 - 80;
 		this.pathMapWidth = 130;
 		this.pathMapHeight = 130;
-		ItemStack stack = this.mc.player.getHeldItem(this.hand);
+		ItemStack stack = this.minecraft.player.getItemInHand(this.hand);
 		CQRNPCPath path = ItemPathTool.getPath(stack);
 		if (path != null) {
 			CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
@@ -144,8 +152,28 @@ public class GuiAddPathNode extends Screen {
 		}
 	}
 
+	private void performConfirm() {
+		try {
+			int posX = Integer.parseInt(this.textFieldX.getValue());
+			int posY = Integer.parseInt(this.textFieldY.getValue());
+			int posZ = Integer.parseInt(this.textFieldZ.getValue());
+			int waitingTimeMin = Integer.parseInt(this.textFieldWaitingTimeMin.getValue());
+			int waitingTimeMax = Integer.parseInt(this.textFieldWaitingTimeMax.getValue());
+			float waitingRotation = Integer.parseInt(this.textFieldWaitingRotation.getValue());
+			int weight = Integer.parseInt(this.textFieldWeight.getValue());
+			int timeMin = Integer.parseInt(this.textFieldTimeMin.getValue());
+			int timeMax = Integer.parseInt(this.textFieldTimeMax.getValue());
+			boolean bidirectional = this.checkBoxBidirectional.selected();
+			CQRMain.NETWORK.sendToServer(new CPacketAddPathNode(this.hand, this.rootNodeIndex, new BlockPos(posX, posY, posZ), waitingTimeMin, waitingTimeMax, waitingRotation, weight, timeMin, timeMax, bidirectional, this.blacklistedPrevNodes));
+		} catch (NumberFormatException e) {
+			this.minecraft.player.sendMessage(new StringTextComponent("Invalid path node arguments!"), this.minecraft.player.getUUID());
+		}
+		this.minecraft.setScreen((Screen)null);
+	}
+
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+		InputMappings.Input keyInput = InputMappings.getKey(pKeyCode, pScanCode);
 		boolean textFieldFocused = false;
 		for (TextFieldWidget textField : this.textFieldList) {
 			if (textField.isFocused()) {
@@ -154,122 +182,122 @@ public class GuiAddPathNode extends Screen {
 			}
 		}
 		if (textFieldFocused) {
-			if (keyCode == 1) {
+			if (pKeyCode == 1) {
 				for (TextFieldWidget textField : this.textFieldList) {
-					textField.setFocused(false);
+					textField.setFocus(false);
 				}
 			} else {
 				for (TextFieldWidget textField : this.textFieldList) {
-					textField.textboxKeyTyped(typedChar, keyCode);
+					textField.keyPressed(pKeyCode, pScanCode, pModifiers);
 				}
 				if (this.textFieldX.isFocused()) {
 					try {
-						this.x = Integer.parseInt(this.textFieldX.getText());
+						this.x = Integer.parseInt(this.textFieldX.getMessage().getString());
 					} catch (NumberFormatException e) {
 						// ignore
 					}
 				}
 				if (this.textFieldY.isFocused()) {
 					try {
-						this.y = Integer.parseInt(this.textFieldY.getText());
+						this.y = Integer.parseInt(this.textFieldY.getMessage().getString());
 					} catch (NumberFormatException e) {
 						// ignore
 					}
 				}
 				if (this.textFieldZ.isFocused()) {
 					try {
-						this.z = Integer.parseInt(this.textFieldZ.getText());
+						this.z = Integer.parseInt(this.textFieldZ.getMessage().getString());
 					} catch (NumberFormatException e) {
 						// ignore
 					}
 				}
 			}
-		} else if (keyCode == 1 || this.mc.gameSettings.keyBindInventory.isActiveAndMatches(keyCode)) {
-			this.mc.player.closeScreen();
+		} else if (pKeyCode == 1 || this.minecraft.options.keyInventory.isActiveAndMatches(keyInput)) {
+			this.minecraft.setScreen((Screen)null);
 		} else {
-			super.keyTyped(typedChar, keyCode);
+			super.keyPressed(pKeyCode, pScanCode, pModifiers);
 		}
+		return true;
 	}
 
 	@Override
-	public void handleMouseInput() throws IOException {
-		super.handleMouseInput();
-
-		int deltaWheel = Mouse.getEventDWheel();
-		if (deltaWheel != 0) {
-			int scrollAmount = deltaWheel / 120;
-			int i = new ScaledResolution(this.mc).getScaleFactor();
-			int mouseX = Mouse.getX() / i;
-			int mouseY = this.height - Mouse.getY() / i;
-			if (mouseX >= this.textFieldX.x && mouseX <= this.textFieldX.x + this.textFieldX.width && mouseY >= this.textFieldX.y && mouseY <= this.textFieldX.y + this.textFieldX.height) {
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+		if (pDelta != 0) {
+			int scrollAmount = (int) pDelta / 120;
+			if (this.textFieldX.isMouseOver(pMouseX, pMouseY)) {
 				try {
-					int number = Integer.parseInt(this.textFieldX.getText()) + scrollAmount;
-					this.textFieldX.setText(String.valueOf(number));
+					int number = Integer.parseInt(this.textFieldX.getMessage().getString()) + scrollAmount;
+					this.textFieldX.setValue(String.valueOf(number));
 					this.x = number;
+					return true;
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
-			if (mouseX >= this.textFieldY.x && mouseX <= this.textFieldY.x + this.textFieldY.width && mouseY >= this.textFieldY.y && mouseY <= this.textFieldY.y + this.textFieldY.height) {
+			if (this.textFieldY.isMouseOver(pMouseX, pMouseY)) {
 				try {
-					int number = Integer.parseInt(this.textFieldY.getText()) + scrollAmount;
-					this.textFieldY.setText(String.valueOf(number));
+					int number = Integer.parseInt(this.textFieldY.getMessage().getString()) + scrollAmount;
+					this.textFieldY.setValue(String.valueOf(number));
 					this.y = number;
+					return true;
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
-			if (mouseX >= this.textFieldZ.x && mouseX <= this.textFieldZ.x + this.textFieldZ.width && mouseY >= this.textFieldZ.y && mouseY <= this.textFieldZ.y + this.textFieldZ.height) {
+			if (this.textFieldZ.isMouseOver(pMouseX, pMouseY)) {
 				try {
-					int number = Integer.parseInt(this.textFieldZ.getText()) + scrollAmount;
-					this.textFieldZ.setText(String.valueOf(number));
+					int number = Integer.parseInt(this.textFieldZ.getMessage().getString()) + scrollAmount;
+					this.textFieldZ.setValue(String.valueOf(number));
 					this.z = number;
+					return true;
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
 		}
+		return super.mouseScrolled(pMouseX, pMouseY, pDelta);
 	}
 
 	@Override
-	protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-		super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+	public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
 
-		if (this.pathMapClicked && clickedMouseButton == 0) {
-			float deltaX = (mouseX - this.lastMouseX) * 0.5F + this.mouseOverheadX;
-			float deltaY = (mouseY - this.lastMouseY) * 0.5F + this.mouseOverheadY;
+		if (this.pathMapClicked && pButton == 0) {
+			double deltaX = (pMouseX - this.lastMouseX) * 0.5F + this.mouseOverheadX;
+			double deltaY = (pMouseY - this.lastMouseY) * 0.5F + this.mouseOverheadY;
 			this.centerOffsetX -= (int) deltaX;
 			this.centerOffsetY -= (int) deltaY;
-			this.mouseOverheadX = deltaX % 1.0F;
-			this.mouseOverheadY = deltaY % 1.0F;
-			this.lastMouseX = mouseX;
-			this.lastMouseY = mouseY;
+			this.mouseOverheadX = (float) deltaX % 1.0F;
+			this.mouseOverheadY = (float) deltaY % 1.0F;
+			this.lastMouseX = (int) pMouseX;
+			this.lastMouseY = (int) pMouseY;
+			return true;
 		}
+		return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+	public boolean mouseClicked(double pMouseX, double pMouseY, int mouseButton){
+		super.mouseClicked(pMouseX, pMouseY, mouseButton);
 
 		for (TextFieldWidget textField : this.textFieldList) {
-			textField.mouseClicked(mouseX, mouseY, mouseButton);
+			textField.mouseClicked(pMouseX, pMouseY, mouseButton);
 		}
 
 		int minX = this.pathMapX;
 		int minY = this.pathMapY;
 		int maxX = this.pathMapX + this.pathMapWidth;
 		int maxY = this.pathMapY + this.pathMapHeight;
-		if (mouseButton == 0 && mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY) {
+		if (mouseButton == 0 && pMouseX >= minX && pMouseX <= maxX && pMouseY >= minY && pMouseY <= maxY) {
 			this.pathMapClicked = true;
-			this.lastMouseX = mouseX;
-			this.lastMouseY = mouseY;
+			this.lastMouseX = (int) pMouseX;
+			this.lastMouseY = (int) pMouseY;
 		} else {
 			this.pathMapClicked = false;
 		}
 		if (mouseButton == 0) {
-			CQRNPCPath.PathNode clickedNode = this.getNodeAt(mouseX, mouseY);
+			CQRNPCPath.PathNode clickedNode = this.getNodeAt((int) pMouseX, (int) pMouseY);
 			if (clickedNode != null) {
-				CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+				CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 				CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 				if (rootNode != null && clickedNode.getConnectedNodes().contains(this.rootNodeIndex)) {
 					if (!this.blacklistedPrevNodes.contains(clickedNode.getIndex())) {
@@ -280,125 +308,99 @@ public class GuiAddPathNode extends Screen {
 				}
 			}
 		}
+		return true;
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 
 		for (TextFieldWidget textField : this.textFieldList) {
-			textField.updateCursorCounter();
+			textField.tick();
 		}
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, "Add Path Node (Index: " + ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand)).getSize() + ")", this.width / 2, 20, 0xFFFFFF);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		drawCenteredString(pMatrixStack, this.font, "Add Path Node (Index: " + ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand)).getSize() + ")", this.width / 2, 20, 0xFFFFFF);
 
 		for (TextFieldWidget textField : this.textFieldList) {
-			textField.drawTextBox();
+			textField.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
 		}
 
 		int xOffset = 1;
 		int yOffset = 10 * 16 / 2 * -1 + 3; // elementCount * elementOffset / 2 * -1 + 3
 		int i = 0;
-		GuiHelper.drawString(this.fontRenderer, "Node X", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Node Y", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Node Z", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Waiting Time Min", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Waiting Time Max", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Waiting Rotation", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Weight", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Time Min", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
-		GuiHelper.drawString(this.fontRenderer, "Time Max", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0, false, true);
+		drawString(pMatrixStack, this.font, "Node X", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Node Y", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Node Z", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Waiting Time Min", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Waiting Time Max", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Waiting Rotation", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Weight", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Time Min", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
+		drawString(pMatrixStack, this.font, "Time Max", this.width / 2 + xOffset, this.height / 2 + yOffset + i++ * 16, 0xE0E0E0);
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
 		this.drawPathMap(this.pathMapX, this.pathMapY, this.pathMapWidth, this.pathMapHeight, this.centerOffsetX, this.centerOffsetY);
-		GuiHelper.drawString(this.fontRenderer, "Help?", this.pathMapX, this.pathMapY + this.pathMapHeight + 4, 0xE0E0E0, false, true);
+		drawString(pMatrixStack, this.font, "Help?", this.pathMapX, this.pathMapY + this.pathMapHeight + 4, 0xE0E0E0);
 
-		CQRNPCPath.PathNode selectedNode = this.getNodeAt(mouseX, mouseY);
+		CQRNPCPath.PathNode selectedNode = this.getNodeAt(pMouseX, pMouseY);
 		if (selectedNode != null) {
-			this.drawHoveringText(String.format("Index: %d, %s", selectedNode.getIndex(), selectedNode.getPos()), mouseX, mouseY);
+			this.renderTooltip(pMatrixStack, new StringTextComponent(String.format("Index: %d, %s", selectedNode.getIndex(), selectedNode.getPos())), pMouseX, pMouseY);
 		}
 
-		if (mouseX >= this.pathMapX && mouseX <= this.pathMapX + this.fontRenderer.getStringWidth("Help?") && mouseY >= this.pathMapY + this.pathMapHeight + 4 && mouseY <= this.pathMapY + this.pathMapHeight + 12) {
-			List<String> tooltip = new ArrayList<>();
-			tooltip.add("The path map shows the current path from above and visualizes the 'new node'.");
-			tooltip.add("Also it allows you to select 'blacklisted previous nodes' for the 'new node'. That means when an entity is at one of the nodes connected with the 'new node' and comes from a 'blacklisted previous node' it won't go to the 'new node'.");
-			tooltip.add("");
-			tooltip.add("Blue Node: New Node");
-			tooltip.add("Black Node: Selected Node");
-			tooltip.add("Grey Node: Normal Node");
-			tooltip.add("Red Node: Blacklisted Previous Node");
-			this.drawHoveringText(tooltip, mouseX, mouseY);
+		if (pMouseX >= this.pathMapX && pMouseX <= this.pathMapX + this.font.width("Help?") && pMouseY >= this.pathMapY + this.pathMapHeight + 4 && pMouseY <= this.pathMapY + this.pathMapHeight + 12) {
+			List<ITextComponent> tooltip = new ArrayList<>();
+			tooltip.add(new StringTextComponent("The path map shows the current path from above and visualizes the 'new node'."));
+			tooltip.add(new StringTextComponent("Also it allows you to select 'blacklisted previous nodes' for the 'new node'. That means when an entity is at one of the nodes connected with the 'new node' and comes from a 'blacklisted previous node' it won't go to the 'new node'."));
+			tooltip.add(new StringTextComponent(""));
+			tooltip.add(new StringTextComponent("Blue Node: New Node"));
+			tooltip.add(new StringTextComponent("Black Node: Selected Node"));
+			tooltip.add(new StringTextComponent("Grey Node: Normal Node"));
+			tooltip.add(new StringTextComponent("Red Node: Blacklisted Previous Node"));
+			this.renderComponentTooltip(pMatrixStack, tooltip, pMouseX, pMouseY);
 		}
 
-		if (this.textFieldWaitingTimeMin.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("When reaching this node this defines how long the entity waits at least before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		if (GuiHelper.isMouseOver(pMouseX, pMouseY, this.textFieldWaitingTimeMin)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("When reaching this node this defines how long the entity waits at least before walking to the next node. (min: 0, max: 24000 ticks)"), pMouseX, pMouseY);
 		}
-		if (this.textFieldWaitingTimeMax.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("When reaching this node this defines how long the entity waits at most before walking to the next node. (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		if (this.textFieldWaitingTimeMax.isMouseOver(pMouseX, pMouseY)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("When reaching this node this defines how long the entity waits at most before walking to the next node. (min: 0, max: 24000 ticks)"), pMouseX, pMouseY);
 		}
-		if (this.textFieldWaitingRotation.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("When waiting at this node this defines where the entity should look. (min: 0, max: 360 degree)", mouseX, mouseY);
+		if (this.textFieldWaitingRotation.isMouseOver(pMouseX, pMouseY)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("When waiting at this node this defines where the entity should look. (min: 0, max: 360 degree)"), pMouseX, pMouseY);
 		}
-		if (this.textFieldWeight.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The weight that this node is selected as the next node when there are multiple options. (min: 1, max: 10000)", mouseX, mouseY);
+		if (this.textFieldWeight.isMouseOver(pMouseX, pMouseY)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("The weight that this node is selected as the next node when there are multiple options. (min: 1, max: 10000)"), pMouseX, pMouseY);
 		}
-		if (this.textFieldTimeMin.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		if (this.textFieldTimeMin.isMouseOver(pMouseX, pMouseY)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)"), pMouseX, pMouseY);
 		}
-		if (this.textFieldTimeMax.isMouseOver(mouseX, mouseY)) {
-			this.drawHoveringText("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)", mouseX, mouseY);
+		if (this.textFieldTimeMax.isMouseOver(pMouseX, pMouseY)) {
+			this.renderTooltip(pMatrixStack, new StringTextComponent("The node can only be selected as the next node when the time is between 'Time Min' and 'Time Max'. (0=morning, 6000=noon, 12000=evening, 18000=midnight) (min: 0, max: 24000 ticks)"), pMouseX, pMouseY);
 		}
 	}
 
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean isPauseScreen() {
 		return false;
 	}
 
-	@Override
-	protected void actionPerformed(Button button) throws IOException {
-		if (button == this.buttonConfirm) {
-			try {
-				int posX = this.textFieldX.getInt();
-				int posY = this.textFieldY.getInt();
-				int posZ = this.textFieldZ.getInt();
-				int waitingTimeMin = this.textFieldWaitingTimeMin.getInt();
-				int waitingTimeMax = this.textFieldWaitingTimeMax.getInt();
-				float waitingRotation = this.textFieldWaitingRotation.getInt();
-				int weight = this.textFieldWeight.getInt();
-				int timeMin = this.textFieldTimeMin.getInt();
-				int timeMax = this.textFieldTimeMax.getInt();
-				boolean bidirectional = this.checkBoxBidirectional.isChecked();
-				CQRMain.NETWORK.sendToServer(new CPacketAddPathNode(this.hand, this.rootNodeIndex, new BlockPos(posX, posY, posZ), waitingTimeMin, waitingTimeMax, waitingRotation, weight, timeMin, timeMax, bidirectional, this.blacklistedPrevNodes));
-			} catch (NumberFormatException e) {
-				this.mc.player.sendMessage(new StringTextComponent("Invalid path node arguments!"));
-			}
-
-			this.mc.player.closeScreen();
-		} else if (button == this.buttonCancel) {
-			this.mc.player.closeScreen();
-		} else {
-			super.actionPerformed(button);
-		}
-	}
-
 	@Nullable
-	private CQRNPCPath.PathNode getNodeAt(int mouseX, int mouseY) {
-		if (mouseX < this.pathMapX || mouseX > this.pathMapX + this.pathMapWidth) {
+	private CQRNPCPath.PathNode getNodeAt(int pMouseX, int pMouseY) {
+		if (pMouseX < this.pathMapX || pMouseX > this.pathMapX + this.pathMapWidth) {
 			return null;
 		}
-		if (mouseY < this.pathMapY || mouseY > this.pathMapY + this.pathMapHeight) {
+		if (pMouseY < this.pathMapY || pMouseY > this.pathMapY + this.pathMapHeight) {
 			return null;
 		}
-		CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+		CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 		CQRNPCPath.PathNode clickedNode = null;
-		int posX = (mouseX - this.pathMapX - (this.pathMapWidth / 2)) / 2 + this.centerOffsetX;
-		int posY = (mouseY - this.pathMapY - (this.pathMapHeight / 2)) / 2 + this.centerOffsetY;
+		int posX = (pMouseX - this.pathMapX - (this.pathMapWidth / 2)) / 2 + this.centerOffsetX;
+		int posY = (pMouseY - this.pathMapY - (this.pathMapHeight / 2)) / 2 + this.centerOffsetY;
 		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			if (node.getPos().getX() == posX && node.getPos().getZ() == posY) {
 				clickedNode = node;
@@ -421,7 +423,7 @@ public class GuiAddPathNode extends Screen {
 		height /= 2;
 		int radiusX = width / 2;
 		int radiusY = height / 2;
-		CQRNPCPath path = ItemPathTool.getPath(this.mc.player.getHeldItem(this.hand));
+		CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 		CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 
 		GL11.glPushMatrix();
@@ -447,7 +449,7 @@ public class GuiAddPathNode extends Screen {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
 		GL11.glHint(GL11.GL_LINE_SMOOTH_HINT, GL11.GL_NICEST);
-		GL11.glLineWidth(new ScaledResolution(this.mc).getScaleFactor());
+		GL11.glLineWidth((float) Minecraft.getInstance().getWindow().getGuiScale());
 		GL11.glBegin(GL11.GL_LINES);
 		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;
@@ -507,7 +509,7 @@ public class GuiAddPathNode extends Screen {
 
 		// draw nodes
 		GL11.glColor4d(1.0D, 1.0D, 1.0D, 1.0D);
-		this.mc.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/gui/path_map.png"));
+//		this.minecraft.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/gui/path_map.png"));
 		GL11.glBegin(GL11.GL_QUADS);
 		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;

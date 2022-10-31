@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.ReportedException;
+import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -45,10 +46,10 @@ public class DungeonMapTask {
 
 	private static final Object2IntMap<Biome> biomeColorCache = new Object2IntOpenHashMap<>();
 	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		IResourceManager resourceManager = mc.getResourceManager();
 		try (IResource resource = resourceManager.getResource(new ResourceLocation(CQRMain.MODID, "textures/gui/map/d" + i + ".png"))) {
-			return TextureUtil.readBufferedImage(resource.getInputStream());
+			return TextureUtil.readResource(resource.getInputStream());
 		} catch (IOException e) {
 			CrashReport crash = new CrashReport("Failed loading dungeon icons", e);
 			throw new ReportedException(crash);
@@ -84,9 +85,9 @@ public class DungeonMapTask {
 			}
 			ServerWorld world = DimensionManager.getWorld(0);
 			if (world != null) {
-				DimensionManager.setWorld(0, null, world.getMinecraftServer());
+				DimensionManager.setWorld(0, null, world.getServer());
 			}
-			hardResetIntCache();
+//			hardResetIntCache();
 			return null;
 		});
 	}
@@ -247,15 +248,15 @@ public class DungeonMapTask {
 		this.cancelled = true;
 	}
 
-	private static void hardResetIntCache() {
-		synchronized (IntCache.class) {
-			IntCache.intCacheSize = 256;
-			IntCache.freeSmallArrays.clear();
-			IntCache.freeLargeArrays.clear();
-			IntCache.inUseSmallArrays.clear();
-			IntCache.inUseLargeArrays.clear();
-		}
-	}
+//	private static void hardResetIntCache() {
+//		synchronized (IntegerCa.class) {
+//			IntCache.intCacheSize = 256;
+//			IntCache.freeSmallArrays.clear();
+//			IntCache.freeLargeArrays.clear();
+//			IntCache.inUseSmallArrays.clear();
+//			IntCache.inUseLargeArrays.clear();
+//		}
+//	}
 
 	private static int color(World world, Biome biome) {
 		return biomeColorCache.computeIfAbsent(biome, k -> {
@@ -329,11 +330,11 @@ public class DungeonMapTask {
 	}
 
 	private static int color(World world, Block block) {
-		return color(world, block.getDefaultState());
+		return color(world, block.defaultBlockState());
 	}
 
 	private static int color(World world, BlockState state) {
-		return state.getMapColor(world, BlockPos.ORIGIN).colorValue;
+		return state.getMapColor(world, BlockPos.ZERO).col;
 	}
 
 }

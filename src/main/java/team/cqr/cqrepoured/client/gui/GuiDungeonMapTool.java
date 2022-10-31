@@ -1,20 +1,19 @@
 package team.cqr.cqrepoured.client.gui;
 
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.crash.CrashReport;
-import net.minecraftforge.fml.client.config.GuiCheckBox;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.util.tool.DungeonMapTask;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GuiDungeonMapTool extends Screen {
@@ -28,14 +27,14 @@ public class GuiDungeonMapTool extends Screen {
 
 	private final Screen parent;
 	private final List<TextFieldWidget> textFieldList = new ArrayList<>();
-	private GuiNumberTextField textFieldRadius;
-	private GuiNumberTextField textFieldSeed;
+	private TextFieldWidget textFieldRadius;
+	private TextFieldWidget textFieldSeed;
 	private Button buttonRandSeed;
 	private Button buttonWorldSeed;
-	private GuiNumberTextField textFieldDistance;
-	private GuiNumberTextField textFieldSpread;
-	private GuiNumberTextField textFieldRarityDivisor;
-	private GuiCheckBox checkBoxGenerateBiomes;
+	private TextFieldWidget textFieldDistance;
+	private TextFieldWidget textFieldSpread;
+	private TextFieldWidget textFieldRarityDivisor;
+	private CheckboxButton checkBoxGenerateBiomes;
 	private Button buttonExit;
 	private Button buttonCancel;
 	private Button buttonCreateMap;
@@ -44,22 +43,22 @@ public class GuiDungeonMapTool extends Screen {
 	private DungeonMapTask task;
 
 	public GuiDungeonMapTool(Screen parent) {
+		super(new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.title"));
 		this.parent = parent;
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
-		int id = 0;
+	public void init() {
+		super.init();
 
-		this.textFieldRadius = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 30, 150, 20, false, false) {
+		this.textFieldRadius = new TextFieldWidget(this.font, this.width / 2 - 20, 30, 150, 20, new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.radius")){
 			@Override
-			public boolean textboxKeyTyped(char typedChar, int keyCode) {
-				if (!super.textboxKeyTyped(typedChar, keyCode)) {
+			public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+				if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
 					return false;
 				}
 				try {
-					GuiDungeonMapTool.lastRadius = Integer.parseInt(this.getText());
+					GuiDungeonMapTool.lastRadius = Integer.parseInt(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
@@ -67,49 +66,24 @@ public class GuiDungeonMapTool extends Screen {
 			}
 
 			@Override
-			public void setText(String textIn) {
-				super.setText(textIn);
+			public void setValue(String textIn) {
+				super.setValue(textIn);
 				try {
-					GuiDungeonMapTool.lastRadius = Integer.parseInt(this.getText());
+					GuiDungeonMapTool.lastRadius = Integer.parseInt(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
 		};
-		this.textFieldRadius.setText(Integer.toString(lastRadius));
-		this.textFieldSeed = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 60, 150, 20, true, false) {
+		this.textFieldRadius.setValue(Integer.toString(lastRadius));
+		this.textFieldSeed = new TextFieldWidget(this.font, this.width / 2 - 20, 60, 150, 20,  new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.seed")){
 			@Override
-			public boolean textboxKeyTyped(char typedChar, int keyCode) {
-				if (!super.textboxKeyTyped(typedChar, keyCode)) {
+			public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+				if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
 					return false;
 				}
 				try {
-					GuiDungeonMapTool.lastSeed = Long.parseLong(this.getText());
-				} catch (NumberFormatException e) {
-					// ignore
-				}
-				return true;
-			}
-
-			@Override
-			public void setText(String textIn) {
-				super.setText(textIn);
-				try {
-					GuiDungeonMapTool.lastSeed = Long.parseLong(this.getText());
-				} catch (NumberFormatException e) {
-					// ignore
-				}
-			}
-		};
-		this.textFieldSeed.setText(Long.toString(lastSeed));
-		this.textFieldDistance = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 90, 150, 20, false, false) {
-			@Override
-			public boolean textboxKeyTyped(char typedChar, int keyCode) {
-				if (!super.textboxKeyTyped(typedChar, keyCode)) {
-					return false;
-				}
-				try {
-					GuiDungeonMapTool.lastDistance = Integer.parseInt(this.getText());
+					GuiDungeonMapTool.lastSeed = Long.parseLong(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
@@ -117,51 +91,24 @@ public class GuiDungeonMapTool extends Screen {
 			}
 
 			@Override
-			public void setText(String textIn) {
-				super.setText(textIn);
+			public void setValue(String textIn) {
+				super.setValue(textIn);
 				try {
-					GuiDungeonMapTool.lastDistance = Integer.parseInt(this.getText());
+					GuiDungeonMapTool.lastSeed = Long.parseLong(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
 		};
-		this.textFieldDistance.setText(Integer.toString(lastDistance));
-		this.textFieldDistance.setEnabled(false);
-		this.textFieldSpread = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 120, 150, 20, false, false) {
+		this.textFieldSeed.setValue(Long.toString(lastSeed));
+		this.textFieldDistance = new TextFieldWidget(this.font, this.width / 2 - 20, 90, 150, 20,  new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.distance")){
 			@Override
-			public boolean textboxKeyTyped(char typedChar, int keyCode) {
-				if (!super.textboxKeyTyped(typedChar, keyCode)) {
+			public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+				if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
 					return false;
 				}
 				try {
-					GuiDungeonMapTool.lastSpread = Integer.parseInt(this.getText());
-				} catch (NumberFormatException e) {
-					// ignore
-				}
-				return true;
-			}
-
-			@Override
-			public void setText(String textIn) {
-				super.setText(textIn);
-				try {
-					GuiDungeonMapTool.lastSpread = Integer.parseInt(this.getText());
-				} catch (NumberFormatException e) {
-					// ignore
-				}
-			}
-		};
-		this.textFieldSpread.setText(Integer.toString(lastSpread));
-		this.textFieldSpread.setEnabled(false);
-		this.textFieldRarityDivisor = new GuiNumberTextField(id++, this.fontRenderer, this.width / 2 - 20, 150, 150, 20, false, true) {
-			@Override
-			public boolean textboxKeyTyped(char typedChar, int keyCode) {
-				if (!super.textboxKeyTyped(typedChar, keyCode)) {
-					return false;
-				}
-				try {
-					GuiDungeonMapTool.lastRarityDivisor = Double.parseDouble(this.getText());
+					GuiDungeonMapTool.lastDistance = Integer.parseInt(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
@@ -169,176 +116,156 @@ public class GuiDungeonMapTool extends Screen {
 			}
 
 			@Override
-			public void setText(String textIn) {
-				super.setText(textIn);
+			public void setValue(String textIn) {
+				super.setValue(textIn);
 				try {
-					GuiDungeonMapTool.lastRarityDivisor = Double.parseDouble(this.getText());
+					GuiDungeonMapTool.lastDistance = Integer.parseInt(this.getValue());
 				} catch (NumberFormatException e) {
 					// ignore
 				}
 			}
 		};
-		this.textFieldRarityDivisor.setText(Double.toString(lastRarityDivisor));
-		this.textFieldRarityDivisor.setEnabled(false);
+		this.textFieldDistance.setValue(Integer.toString(lastDistance));
+		this.textFieldDistance.setVisible(false);
+		this.textFieldSpread = new TextFieldWidget(this.font, this.width / 2 - 20, 120, 150, 20, new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.spread")){
+			@Override
+			public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+				if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+					return false;
+				}
+				try {
+					GuiDungeonMapTool.lastSpread = Integer.parseInt(this.getValue());
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+				return true;
+			}
 
-		this.buttonRandSeed = new Button(id++, this.width / 2 + 140, 60, 20, 20, "R") {
 			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
-					return false;
+			public void setValue(String textIn) {
+				super.setValue(textIn);
+				try {
+					GuiDungeonMapTool.lastSpread = Integer.parseInt(this.getValue());
+				} catch (NumberFormatException e) {
+					// ignore
 				}
-				GuiDungeonMapTool.this.textFieldSeed.setText(Long.toString(ThreadLocalRandom.current().nextLong()));
-				return true;
 			}
 		};
-		this.buttonWorldSeed = new Button(id++, this.width / 2 + 170, 60, 20, 20, "W") {
+		this.textFieldSpread.setValue(Integer.toString(lastSpread));
+		this.textFieldSpread.setVisible(false);
+		this.textFieldRarityDivisor = new TextFieldWidget(this.font, this.width / 2 - 20, 150, 150, 20,  new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.rarity_divisor")){
 			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
+			public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+				if (!super.keyPressed(pKeyCode, pScanCode, pModifiers)) {
 					return false;
 				}
-				GuiDungeonMapTool.this.textFieldSeed.setText(Long.toString(GuiDungeonMapTool.this.mc.getIntegratedServer().getWorld(0).getSeed()));
-				return true;
-			}
-		};
-		this.buttonWorldSeed.enabled = this.mc.isIntegratedServerRunning();
-		this.buttonExit = new Button(id++, 5, 5, 20, 20, "X") {
-			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
-					return false;
-				}
-				if (!GuiDungeonMapTool.this.canExit) {
-					return false;
-				}
-				GuiDungeonMapTool.this.mc.displayGuiScreen(GuiDungeonMapTool.this.parent);
-				return true;
-			}
-		};
-		this.buttonCancel = new Button(id++, this.width / 2 - 102, this.height - 24, 100, 20, "Cancel") {
-			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
-					return false;
-				}
-				DungeonMapTask task1 = GuiDungeonMapTool.this.task;
-				if (task1 != null) {
-					task1.cancel();
+				try {
+					GuiDungeonMapTool.lastRarityDivisor = Double.parseDouble(this.getValue());
+				} catch (NumberFormatException e) {
+					// ignore
 				}
 				return true;
 			}
-		};
-		this.buttonCancel.enabled = false;
-		this.buttonCreateMap = new Button(id++, this.width / 2 + 2, this.height - 24, 100, 20, "Create Map") {
-			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
-					return false;
-				}
-				int radius = GuiDungeonMapTool.this.textFieldRadius.getInt();
-				long seed = GuiDungeonMapTool.this.textFieldSeed.getLong();
-				boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.isChecked();
 
-				GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
-				GuiDungeonMapTool.this.canExit = false;
-				GuiDungeonMapTool.this.buttonExit.enabled = false;
-				GuiDungeonMapTool.this.buttonCancel.enabled = true;
-				GuiDungeonMapTool.this.buttonCreateMap.enabled = false;
+			@Override
+			public void setValue(String textIn) {
+				super.setValue(textIn);
+				try {
+					GuiDungeonMapTool.lastRarityDivisor = Double.parseDouble(this.getValue());
+				} catch (NumberFormatException e) {
+					// ignore
+				}
+			}
+		};
+		this.textFieldRarityDivisor.setValue(Double.toString(lastRarityDivisor));
+		this.textFieldRarityDivisor.setVisible(false);
 
-				GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
-					GuiDungeonMapTool.this.canExit = true;
-					GuiDungeonMapTool.this.buttonExit.enabled = true;
-					GuiDungeonMapTool.this.buttonCancel.enabled = false;
-					GuiDungeonMapTool.this.buttonCreateMap.enabled = true;
-					if (t != null) {
-						if (t instanceof Exception) {
-							CQRMain.logger.error("Failed creating dungeon map", t);
-						} else {
-							mc.crashed(new CrashReport("Failed generating dungeon map", t));
-						}
+		this.buttonRandSeed = this.addButton(new Button(this.width / 2 + 140, 60, 20, 20, new StringTextComponent("R"), (button) -> {
+				GuiDungeonMapTool.this.textFieldSeed.setValue(Long.toString(ThreadLocalRandom.current().nextLong()));
+		}));
+		this.buttonWorldSeed = this.addButton(new Button(this.width / 2 + 170, 60, 20, 20, new StringTextComponent("W"), (button) -> {
+			if(this.minecraft.isLocalServer()) {
+				GuiDungeonMapTool.this.textFieldSeed.setValue(Long.toString(GuiDungeonMapTool.this.minecraft.getSingleplayerServer().getWorldData().worldGenSettings().seed()));
+			}
+		}));
+		this.buttonWorldSeed.visible = this.minecraft.isLocalServer();
+		this.buttonExit = this.addButton(new Button(5, 5, 20, 20, new StringTextComponent("X"), (button) -> {
+				if (GuiDungeonMapTool.this.canExit) {
+					GuiDungeonMapTool.this.minecraft.setScreen(GuiDungeonMapTool.this.parent);
+				}
+		}));
+		this.buttonCancel = this.addButton(new Button(this.width / 2 - 102, this.height - 24, 100, 20, new StringTextComponent("Cancel"), (button) -> {
+			DungeonMapTask task1 = GuiDungeonMapTool.this.task;
+			if (task1 != null) {
+				task1.cancel();
+			}
+		}));
+		this.buttonCancel.visible = false;
+		this.buttonCreateMap = this.addButton(new Button(this.width / 2 + 2, this.height - 24, 100, 20, new StringTextComponent("Create Map"), (button) -> {
+			int radius = Integer.parseInt(GuiDungeonMapTool.this.textFieldRadius.getValue());
+			long seed = Long.parseLong(GuiDungeonMapTool.this.textFieldSeed.getValue());
+			boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.selected();
+
+			GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
+			GuiDungeonMapTool.this.canExit = false;
+			GuiDungeonMapTool.this.buttonExit.visible = false;
+			GuiDungeonMapTool.this.buttonCancel.visible = true;
+			GuiDungeonMapTool.this.buttonCreateMap.visible = false;
+
+			GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
+				GuiDungeonMapTool.this.canExit = true;
+				GuiDungeonMapTool.this.buttonExit.visible = true;
+				GuiDungeonMapTool.this.buttonCancel.visible = false;
+				GuiDungeonMapTool.this.buttonCreateMap.visible = true;
+				if (t != null) {
+					if (t instanceof Exception) {
+						CQRMain.logger.error("Failed creating dungeon map", t);
+					} else {
+						GuiDungeonMapTool.this.minecraft.delayCrash(new CrashReport("Failed generating dungeon map", t));
 					}
-					return null;
-				});
-
-				return true;
-			}
-		};
-
-		this.checkBoxGenerateBiomes = new GuiCheckBox(id++, this.width / 2 - 20, 180, "Generate Biomes", lastGenerateBiomes) {
-			@Override
-			public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-				if (!super.mousePressed(mc, mouseX, mouseY)) {
-					return false;
 				}
-				GuiDungeonMapTool.lastGenerateBiomes = this.isChecked();
-				return true;
-			}
+				return null;
+			});
+		}));
 
-			@Override
-			public void setIsChecked(boolean isChecked) {
-				super.setIsChecked(isChecked);
-				GuiDungeonMapTool.lastGenerateBiomes = this.isChecked();
-			}
-		};
+		this.checkBoxGenerateBiomes = this.addButton(new CheckboxButton(this.width / 2 - 20, 180, 20, 20, new StringTextComponent("Generate Biomes"), false));
 
-		this.textFieldList.add(this.textFieldRadius);
-		this.textFieldList.add(this.textFieldSeed);
-		this.buttonList.add(this.buttonRandSeed);
-		this.buttonList.add(this.buttonWorldSeed);
-		this.textFieldList.add(this.textFieldDistance);
-		this.textFieldList.add(this.textFieldSpread);
-		this.textFieldList.add(this.textFieldRarityDivisor);
-		this.buttonList.add(this.checkBoxGenerateBiomes);
-		this.buttonList.add(this.buttonExit);
-		this.buttonList.add(this.buttonCancel);
-		this.buttonList.add(this.buttonCreateMap);
+		this.children.add(this.textFieldRadius);
+		this.children.add(this.textFieldSeed);
+		this.children.add(this.textFieldDistance);
+		this.children.add(this.textFieldSpread);
+		this.children.add(this.textFieldRarityDivisor);
 	}
 
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		Optional<TextFieldWidget> focusedTextField = this.textFieldList.stream().filter(TextFieldWidget::isFocused).findFirst();
-		if (focusedTextField.isPresent()) {
-			if (keyCode == 1) {
-				focusedTextField.get().setFocused(false);
-			} else {
-				focusedTextField.get().textboxKeyTyped(typedChar, keyCode);
-			}
-		} else if (keyCode == 1) {
-			if (this.canExit) {
-				this.mc.displayGuiScreen(this.parent);
-			}
-		} else {
-			super.keyTyped(typedChar, keyCode);
-		}
+	public void tick() {
+		super.tick();
+		this.textFieldRadius.tick();
+		this.textFieldSeed.tick();
+		this.textFieldDistance.tick();
+		this.textFieldSpread.tick();
+		this.textFieldRarityDivisor.tick();
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		this.textFieldList.forEach(tf -> tf.mouseClicked(mouseX, mouseY, mouseButton));
-	}
-
-	@Override
-	public void updateScreen() {
-		super.updateScreen();
-		this.textFieldList.forEach(TextFieldWidget::updateCursorCounter);
-	}
-
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		this.drawBackground(0);
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		this.textFieldList.forEach(TextFieldWidget::drawTextBox);
+	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+		this.renderBackground(pMatrixStack);
+		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 		int i = 0;
-		GuiHelper.drawString(this.fontRenderer, "Radius", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Seed", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Distance (WIP)", this.width / 2 - 70, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Spread (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
-		GuiHelper.drawString(this.fontRenderer, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0, true, false);
+		drawString(pMatrixStack, this.font, "Radius", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0);
+		this.textFieldRadius.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		drawString(pMatrixStack, this.font, "Seed", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0);
+		this.textFieldSeed.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		drawString(pMatrixStack, this.font, "Distance (WIP)", this.width / 2 - 70, ++i * 30 + 6, 0xF0F0F0);
+		this.textFieldDistance.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		drawString(pMatrixStack, this.font, "Spread (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0);
+		this.textFieldSpread.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
+		drawString(pMatrixStack, this.font, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0);
+		this.textFieldRarityDivisor.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
 		DungeonMapTask task1 = this.task;
 		if (task1 != null) {
-			GuiHelper.drawString(this.fontRenderer, this.task.getProgress().toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0, false, false);
+			drawString(pMatrixStack, this.font, this.task.getProgress().toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0);
 		}
 	}
 

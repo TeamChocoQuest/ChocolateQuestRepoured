@@ -1,11 +1,8 @@
 package team.cqr.cqrepoured.client.event;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -17,7 +14,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
@@ -25,88 +21,92 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
+import static net.minecraft.client.renderer.entity.model.BipedModel.ArmPose.BOW_AND_ARROW;
+
 @OnlyIn(Dist.CLIENT)
 //@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
 	@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
-		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
-		Item itemOff = event.getEntityPlayer().getMainHandItem().getItem();
+		PlayerEntity player = event.getPlayer();
+		Item itemMain = player.getMainHandItem().getItem();
+		Item itemOff = player.getOffhandItem().getItem();
 
 		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
-			GlStateManager.pushMatrix();
+			event.getMatrixStack().pushPose();
 		}
 
 		if (itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife) {
-			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
-				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
+			if (player.getMainArm() == HandSide.LEFT) {
+				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 			} else {
-				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
+				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
-				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
+			if (player.getMainArm() == HandSide.LEFT) {
+				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 			} else {
-				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
+				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
 			}
 		}
 		if (itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife) {
-			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
-				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
+			if ((player.getMainArm() != HandSide.LEFT)) {
+				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 			} else {
-				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
+				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
-				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
+			if ((player.getMainArm() != HandSide.LEFT)) {
+				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 			} else {
-				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
+				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
-		Item itemOff = event.getEntityPlayer().getMainHandItem().getItem();
+		PlayerEntity player = event.getPlayer();
+		Item itemMain = player.getMainHandItem().getItem();
+		Item itemOff = player.getOffhandItem().getItem();
 		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
-			if (event.getEntityPlayer().getPrimaryHand() == HandSide.LEFT) {
-				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
-				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
+			if (player.getMainArm() == HandSide.LEFT) {
+				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
+//				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
-				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
-				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
+				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
+//				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
-				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
-				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
+			if ((player.getMainArm() != HandSide.LEFT)) {
+				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
+//				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
-				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
-				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
+				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
+//				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		}
 		if (itemOff instanceof ItemRevolver && (!(itemOff instanceof ItemMusket) && !(itemOff instanceof ItemMusketKnife))) {
-			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
-				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
-				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
+			if ((player.getMainArm() != HandSide.LEFT)) {
+				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
+//				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
-				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
-				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
+				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
+//				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((event.getEntityPlayer().getPrimaryHand() != HandSide.LEFT)) {
-				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
-				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
+			if ((player.getMainArm() != HandSide.LEFT)) {
+				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
+//				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
-				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
-				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
+				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
+//				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		}
 
 		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
-			GlStateManager.popMatrix();
+			event.getMatrixStack().popPose();
 		}
 	}
 
@@ -120,49 +120,49 @@ public class RenderEventHandler {
 			}
 			ItemUnprotectedPositionTool item = (ItemUnprotectedPositionTool) stack.getItem();
 
-			double x = mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * event.getPartialTicks();
-			double y = mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * event.getPartialTicks();
-			double z = mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * event.getPartialTicks();
-			double d1 = 1.0D / 1024.0D;
-			double d2 = 1.0D + d1;
-			double d3 = 1.0D / 512.0D;
-			double d4 = 1.0D + d3;
-
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder bufferbuilder = tessellator.getBuffer();
-
-			GlStateManager.glLineWidth(2.0F);
-			GlStateManager.disableTexture2D();
-			GlStateManager.depthMask(false);
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-			GlStateManager.disableTexture2D();
-			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
-			GlStateManager.color(0.0F, 0.0F, 1.0F, 0.5F);
-			bufferbuilder.setTranslation(-x, -y, -z);
-			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-			item.getPositions(stack).forEach(pos -> {
-				renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
-			});
-			tessellator.end();
-			GlStateManager.color(0.0F, 0.0F, 1.0F, 1.0F);
-			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-			item.getPositions(stack).forEach(pos -> {
-				renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
-			});
-			tessellator.end();
-			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-			GlStateManager.enableTexture2D();
-			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-			GlStateManager.disableBlend();
-			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture2D();
-			GlStateManager.glLineWidth(1.0F);
+//			double x = mc.player.lastTickPosX + (mc.player.position().x - mc.player.lastTickPosX) * event.getPartialTicks();
+//			double y = mc.player.lastTickPosY + (mc.player.position().y - mc.player.lastTickPosY) * event.getPartialTicks();
+//			double z = mc.player.lastTickPosZ + (mc.player.position().z - mc.player.lastTickPosZ) * event.getPartialTicks();
+//			double d1 = 1.0D / 1024.0D;
+//			double d2 = 1.0D + d1;
+//			double d3 = 1.0D / 512.0D;
+//			double d4 = 1.0D + d3;
+//
+//			Tessellator tessellator = Tessellator.getInstance();
+//			BufferBuilder bufferbuilder = tessellator.getBuffer();
+//
+//			GlStateManager.glLineWidth(2.0F);
+//			GlStateManager.disableTexture2D();
+//			GlStateManager.depthMask(false);
+//			GlStateManager.enableBlend();
+//			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+//			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+//			GlStateManager.disableTexture2D();
+//			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+//
+//			GlStateManager.color(0.0F, 0.0F, 1.0F, 0.5F);
+//			bufferbuilder.setTranslation(-x, -y, -z);
+//			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+//			item.getPositions(stack).forEach(pos -> {
+//				renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
+//			});
+//			tessellator.end();
+//			GlStateManager.color(0.0F, 0.0F, 1.0F, 1.0F);
+//			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
+//			item.getPositions(stack).forEach(pos -> {
+//				renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
+//			});
+//			tessellator.end();
+//			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
+//			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+//
+//			GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+//			GlStateManager.enableTexture2D();
+//			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+//			GlStateManager.disableBlend();
+//			GlStateManager.depthMask(true);
+//			GlStateManager.enableTexture2D();
+//			GlStateManager.glLineWidth(1.0F);
 		}
 
 		MagicBellRenderer.getInstance().render(event.getPartialTicks());

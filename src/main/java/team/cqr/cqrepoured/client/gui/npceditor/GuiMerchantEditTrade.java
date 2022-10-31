@@ -285,7 +285,7 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditT
 
 	@Override
 	protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
-		//this.drawDefaultBackground();
+		//this.renderBackground(pMatrixStack);
 		this.minecraft.getTextureManager().bind(BG_TEXTURE);
 		GuiHelper.drawTexture(this.leftPos, this.topPos, 0.0D, 0.0D, this.imageWidth, this.imageHeight, this.imageWidth / 512.0D, this.imageHeight / 256.0D);
 
