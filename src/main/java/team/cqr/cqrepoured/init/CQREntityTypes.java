@@ -32,6 +32,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
+import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordCurse;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordIllusion;
@@ -233,7 +234,8 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityCQRWalkerKing>> WALKER_KING = registerSizedHumanoid(EntityCQRWalkerKing::new, "walker_king", 1);
 	public static final RegistryObject<EntityType<EntityWalkerKingIllusion>> WALKER_KING_ILLUSION = registerSizedHumanoid(EntityWalkerKingIllusion::new, "walker_king_illusion", 1);
 	
-	//Drachenlord
+	//Spectrelord
+	public static final RegistryObject<EntityType<EntityCQRSpectreLord>> SPECTRE_LORD = registerSizedHumanoid(EntityCQRSpectreLord::new, "spectre_lord", 1);
 	public static final RegistryObject<EntityType<EntitySpectreLordIllusion>> SPECTRE_LORD_ILLUSION = registerSizedHumanoid(EntitySpectreLordIllusion::new, "spectre_lord_illusion", 1);
 	public static final RegistryObject<EntityType<EntitySpectreLordCurse>> SPECTRE_LORD_CURSE = registerSized(EntitySpectreLordCurse::new, "spectre_lord_curse", 1.0F, 2.0F, 1);
 	public static final RegistryObject<EntityType<EntityRotatingLaser>> LASER_ROTATING = registerLaser(EntityRotatingLaser::new, "laser_rotating");

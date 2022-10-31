@@ -9,7 +9,13 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import team.cqr.cqrepoured.client.render.entity.*;
+import team.cqr.cqrepoured.client.render.entity.RenderBubble;
+import team.cqr.cqrepoured.client.render.entity.RenderCQRFlyingSkull;
+import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
+import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
+import team.cqr.cqrepoured.client.render.entity.RenderLaser;
+import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
+import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRLich;
@@ -24,6 +30,7 @@ import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExter
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
 import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonBodyPart;
 import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonHead;
+import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDummy;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRDwarf;
@@ -55,7 +62,6 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileCannonBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileFirewallPart;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHomingEnderEye;
-import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHookShotHook;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileHotFireball;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
@@ -154,9 +160,7 @@ public class CQREntityRenderers {
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BUBBLE.get(), RenderBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SUMMONING_CIRCLE.get(), RenderSummoningCircle::new);
-		/*
-		 * RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new); RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);
-		 */
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.FLYING_SKULL.get(), RenderCQRFlyingSkull::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING_ILLUSION.get(), RenderCQRWalkerKingIllusion::new);
 		/* RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new); */
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_TORNADO.get(), RenderWalkerTornado::new);
@@ -196,7 +200,6 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER.get(), RenderCQRWalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ZOMBIE.get(), RenderCQRZombie::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GOBLIN.get(), RenderCQRGoblin::new);
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.FLYING_SKULL.get(), RenderCQRFlyingSkull::new);
 	}
 
 	protected static void registerMountRenderers() {
@@ -233,8 +236,10 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.ENDER_CALAMITY.get(), RenderCQREnderCalamity::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER_TARGETING.get(), RenderEndLaser<EntityEndLaserTargeting>::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.END_LASER.get(), RenderEndLaser<EntityEndLaser>::new);
+		
+		// Spectre Lord
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SPECTRE_LORD.get(), RenderCQRSpectreLord::new);
 
-		// GeckoLib
 		// Exterminator
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.EXTERMINATOR.get(), RenderCQRExterminator::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LASER_EXTERMINATOR.get(), RenderLaser<EntityExterminatorHandLaser>::new);
@@ -243,6 +248,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.LICH.get(), RenderCQRLich::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.NECROMANCER.get(), RenderCQRNecromancer::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.BOARMAGE.get(), RenderCQRBoarmage::new);
+		
 		// Walker King
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING.get(), RenderCQRWalkerKing::new);
 
