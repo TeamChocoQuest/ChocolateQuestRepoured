@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.entity.boss.spectrelord;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
@@ -21,6 +22,8 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordChannelHate;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordDash;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordLaser;
@@ -32,7 +35,7 @@ import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 
-public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISummoner {
+public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISummoner, IAnimatableCQR {
 
 	private static final DataParameter<Integer> SWORD_SHIELD_ACTIVE = EntityDataManager.<Integer>defineId(EntityCQRSpectreLord.class, DataSerializers.INT);
 	private static final DataParameter<Boolean> CHANNELING_LASER = EntityDataManager.<Boolean>defineId(EntityCQRSpectreLord.class, DataSerializers.BOOLEAN);
@@ -69,7 +72,7 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void applyAttributeValues() {
 		super.applyAttributeValues();
-		
+
 		this.getAttribute(Attributes.ARMOR).setBaseValue(16.0D);
 		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(8.0D);
 		this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
@@ -172,8 +175,8 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 		double oldZ = this.getZ();
 		super.teleport(x, y, z);
 		this.playSound(SoundEvents.SHULKER_TELEPORT, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
-		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, /*4,*/ 0.2D, 0.2D, 0.2D/*, 0.0D*/);
-		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, x, y + this.getBbHeight() * 0.5D, z, /*4,*/ 0.2D, 0.2D, 0.2D/*, 0.0D*/);
+		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, /* 4, */ 0.2D, 0.2D, 0.2D/* , 0.0D */);
+		((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, x, y + this.getBbHeight() * 0.5D, z, /* 4, */ 0.2D, 0.2D, 0.2D/* , 0.0D */);
 	}
 
 	@Override
@@ -195,10 +198,23 @@ public class EntityCQRSpectreLord extends AbstractEntityCQRBoss implements ISumm
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedEntities.add(summoned);
 	}
-	
+
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	// Geckolib
+	private AnimationFactory factory = new AnimationFactory(this);
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
+	}
+
+	@Override
+	public Set<String> getAlwaysPlayingAnimations() {
+		return null;
 	}
 
 }
