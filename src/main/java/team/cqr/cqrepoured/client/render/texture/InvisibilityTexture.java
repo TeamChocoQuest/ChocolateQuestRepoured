@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.util.Perlin2D;
 public class InvisibilityTexture extends AbstractTexture {
 
 	private static final Random RANDOM = new Random();
-	private static final Perlin2D PERLIN = new Perlin2D(RANDOM.nextLong(), 4.0F);
+	private static final Perlin2D PERLIN = new Perlin2D(RANDOM.nextLong(), 4);
 
 	public InvisibilityTexture(ResourceLocation originalLocation, ResourceLocation location) {
 		super(originalLocation, location);
@@ -22,7 +22,7 @@ public class InvisibilityTexture extends AbstractTexture {
 
 	@Override
 	protected boolean onLoadTexture(IResource resource, NativeImage originalImage, NativeImage newImage) {
-		PERLIN.setup(RANDOM.nextLong(), 4.0F);
+		PERLIN.setup(RANDOM.nextLong(), 4);
 		for (int x = 0; x < newImage.getWidth(); x++) {
 			for (int y = 0; y < newImage.getHeight(); y++) {
 				int abgr = newImage.getPixelRGBA(x, y);
