@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
@@ -15,10 +14,8 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open.StrongholdFloorOpen;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -47,8 +44,8 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 
 		this.settings.setMirror(Mirror.NONE);
 		this.settings.setRotation(Rotation.NONE);
-		this.settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		this.settings.setIntegrity(1.0F);
+		//this.settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
+		//this.settings.setIntegrity(1.0F);
 
 		this.floors = new StrongholdFloorOpen[dungeon.getRandomFloorCount(this.random)];
 		this.searchStructureBounds();
@@ -57,16 +54,11 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 
 	private void computeNotFittingStructures() {
 		for (File f : this.dungeon.getRoomFolder().listFiles(FileIOUtil.getNBTFileFilter())) {
-			CQStructure struct = this.loadStructureFromFile(f);
+			CQStructure struct = CQStructure.createFromFile(f);
 			if (struct != null && (struct.getSize().getX() != this.structureBounds.getA() || struct.getSize().getZ() != this.structureBounds.getB())) {
 				this.blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
-	}
-
-	@Override
-	public DungeonStrongholdOpen getDungeon() {
-		return this.dungeon;
 	}
 
 	private void searchStructureBounds() {
@@ -81,7 +73,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
 
-		int rgd = this.getDungeon().getRandomRoomCountForFloor(this.random);
+		int rgd = this.dungeon.getRandomRoomCountForFloor(this.random);
 		if (rgd < 2) {
 			rgd = 2;
 		}
@@ -106,22 +98,23 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 			if (isFirst) {
 				stair = this.dungeon.getEntranceStair(this.random);
 				if (stair == null) {
-					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: {}", this.getDungeon().getDungeonName());
+					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: {}", this.dungeon.getDungeonName());
 					return;
 				}
 			} else {
 				stair = this.dungeon.getStairRoom(this.random);
 				if (stair == null) {
-					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: {}", this.getDungeon().getDungeonName());
+					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: {}", this.dungeon.getDungeonName());
 					return;
 				}
 			}
 			floor.setIsFirstFloor(isFirst);
-			int dY = initPos.getY() - this.loadStructureFromFile(stair).getSize().getY();
+			CQStructure stairStruct = CQStructure.createFromFile(stair);
+			int dY = initPos.getY() - stairStruct.getSize().getY();
 			if (dY <= (this.dungeon.getRoomSizeY() + 2)) {
 				this.floors[i - 1].setExitIsBossRoom(true);
 			} else {
-				initPos = initPos.subtract(new Vector3i(0, this.loadStructureFromFile(stair).getSize().getY(), 0));
+				initPos = initPos.subtract(new Vector3i(0, stairStruct.getSize().getY(), 0));
 				if (!isFirst) {
 					initPos = initPos.offset(0, this.dungeon.getRoomSizeY(), 0);
 				}
@@ -135,7 +128,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getA(), initPos.getY(), prevFloor.getExitCoordinates().getB());
 				}
 
-				floor.preProcess(this.world, this.dungeonBuilder, null);
+				floor.preProcess(this.level, this.dungeonBuilder, null);
 				initPos = new BlockPos(floor.getExitCoordinates().getA(), initPos.getY(), floor.getExitCoordinates().getB());
 			}
 			prevFloor = floor;
@@ -146,14 +139,14 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 	@Override
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding(this.random);
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.level, this.pos.getX(), this.pos.getZ());
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
-			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: {}", this.getDungeon().getDungeonName());
+			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: {}", this.dungeon.getDungeonName());
 			return;
 		}
-		CQStructure structure = this.loadStructureFromFile(building);
+		CQStructure structure = CQStructure.createFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(
+			/*PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(
 					this.pos.getX() + 4 + structure.getSize().getX() / 2, 
 					this.pos.getZ() + 4 + structure.getSize().getZ() / 2, 
 					this.pos.getX() - 4 - structure.getSize().getX() / 2, 
@@ -162,7 +155,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 					CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
-			this.dungeonBuilder.add(partBuilder);
+			this.dungeonBuilder.add(partBuilder);*/
 		}
 
 		structure.addAll(this.dungeonBuilder, this.pos, Offset.CENTER);
@@ -184,7 +177,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 
 		// Structure gen information: stored in map with location and structure file
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.generate(this.world, this.dungeonBuilder, mobType);
+			floor.generate(this.level, this.dungeonBuilder, mobType);
 		}
 
 		// build all the structures in the map
@@ -193,7 +186,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
-					floor.generatePost(this.world, this.dungeonBuilder, mobType);
+					floor.generatePost(this.level, this.dungeonBuilder, mobType);
 				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X {}  Y {}  Z {}", this.pos.getX(), this.pos.getY(), this.pos.getZ());
 				}

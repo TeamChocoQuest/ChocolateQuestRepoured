@@ -24,4 +24,6 @@ public interface IDungeonGenerator<T extends DungeonBase> {
 
 	void prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config, GeneratableDungeon.Builder dungeonBuilder);
 
+	T getDungeon();
+	
 }

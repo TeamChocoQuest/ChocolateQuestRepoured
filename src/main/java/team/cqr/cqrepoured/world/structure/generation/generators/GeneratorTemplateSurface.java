@@ -37,4 +37,9 @@ public class GeneratorTemplateSurface implements IDungeonGenerator<DungeonTempla
 		template.addAll(dungeonBuilder, pos, Offset.CENTER, mirror, rotation);
 	}
 
+	@Override
+	public DungeonTemplateSurface getDungeon() {
+		return null;
+	}
+
 }

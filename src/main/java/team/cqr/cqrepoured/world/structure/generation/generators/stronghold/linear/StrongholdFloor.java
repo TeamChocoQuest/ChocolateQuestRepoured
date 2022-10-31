@@ -155,7 +155,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonS
 					BlockPos pos = new BlockPos(x, y1, z);
 					File struct = this.generator.getDungeon().getRoom(room, this.random);
 					if (struct != null) {
-						CQStructure structure = this.generator.loadStructureFromFile(struct);
+						CQStructure structure = CQStructure.createFromFile(struct);
 						structure.addAll(dungeonBuilder, pos, Offset.CENTER);
 					}
 				}

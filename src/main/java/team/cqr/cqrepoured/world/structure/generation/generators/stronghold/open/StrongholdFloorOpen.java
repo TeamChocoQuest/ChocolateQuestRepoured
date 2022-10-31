@@ -14,8 +14,6 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -140,7 +138,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Dung
 				}
 
 				if (pos != null && file != null) {
-					CQStructure structure = this.generator.loadStructureFromFile(file);
+					CQStructure structure = CQStructure.createFromFile(file);
 					structure.addAll(dungeonBuilder, pos, Offset.CENTER);
 				}
 			}
@@ -193,11 +191,9 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Dung
 			}
 		}
 
-		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, BlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+			dungeonBuilder.getLevel().setBlockState(entry.getKey(), entry.getValue());
 		}
-		dungeonBuilder.add(partBuilder);
 	}
 
 }

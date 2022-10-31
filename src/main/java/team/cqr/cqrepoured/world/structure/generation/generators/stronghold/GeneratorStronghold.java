@@ -5,11 +5,9 @@ import java.util.Random;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
-import team.cqr.cqrepoured.world.structure.generation.generation.part.PlateauDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.linear.StrongholdFloor;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -62,10 +60,10 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
 
 		int y = this.pos.getY();
-		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
+		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.level, this.pos.getX(), this.pos.getZ());
 		PlacementSettings settings = new PlacementSettings();
-		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom(this.random));
-		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding(this.random));
+		CQStructure structureStair = CQStructure.createFromFile(this.dungeon.getEntranceStairRoom(this.random));
+		CQStructure structureEntrance = CQStructure.createFromFile(this.dungeon.getEntranceBuilding(this.random));
 
 		int segCount = 0;
 		CQStructure stairSeg = null;
@@ -78,7 +76,7 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 
 			if (yTmp < ySurface) {
 				y = yTmp;
-				stairSeg = this.loadStructureFromFile(this.dungeon.getEntranceStairSegment(this.random));
+				stairSeg = CQStructure.createFromFile(this.dungeon.getEntranceStairSegment(this.random));
 				while (y < ySurface) {
 					segCount++;
 					y += stairSeg.getSize().getY();
@@ -87,7 +85,8 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(
+			//TODO: To be remade
+			/*PlateauDungeonPart.Builder partBuilder = new PlateauDungeonPart.Builder(
 					this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2,
 					this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2,
 					this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2,
@@ -96,7 +95,7 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 					CQRConfig.general.supportHillWallSize);
 			partBuilder.setSupportHillBlock(this.dungeon.getSupportBlock());
 			partBuilder.setSupportHillTopBlock(this.dungeon.getSupportTopBlock());
-			this.dungeonBuilder.add(partBuilder);
+			this.dungeonBuilder.add(partBuilder);*/
 		}
 		structureEntrance.addAll(this.dungeonBuilder, new BlockPos(this.pos.getX(), y, this.pos.getZ()), Offset.CENTER);
 
@@ -115,7 +114,7 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
 
-			floor.generateRooms(this.pos.getX(), this.pos.getZ(), yFloor, settings, this.dungeonBuilder, this.world, mobType);
+			floor.generateRooms(this.pos.getX(), this.pos.getZ(), yFloor, settings, this.dungeonBuilder, this.level, mobType);
 			yFloor -= this.dungeon.getRoomSizeY();
 			// initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
@@ -132,11 +131,6 @@ public class GeneratorStronghold extends LegacyDungeonGenerator<DungeonStronghol
 
 	public int getDunZ() {
 		return this.dunZ;
-	}
-
-	@Override
-	public DungeonStrongholdLinear getDungeon() {
-		return this.dungeon;
 	}
 
 }

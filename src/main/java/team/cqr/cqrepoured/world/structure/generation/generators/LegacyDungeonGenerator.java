@@ -57,5 +57,9 @@ public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements I
 	protected abstract void buildStructure();
 
 	protected abstract void postProcess();
+	
+	public T getDungeon() {
+		return this.dungeon;
+	}
 
 }
