@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.chunk.ChunkSection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -46,10 +46,11 @@ public class EntityRenderManager {
 			Entity entity = mc.getCameraEntity();
 			if (entity != null) {
 				double partialTick = PartialTicksUtil.getCurrentPartialTicks();
-				x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
-				y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTick;
-				z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTick;
-				Vector3d cam = ActiveRenderInfo.getCameraPosition();
+				x = entity.xOld + (entity.xo - entity.xOld) * partialTick;
+				y = entity.yOld + (entity.yo - entity.yOld) * partialTick;
+				z = entity.zOld + (entity.zo - entity.zOld) * partialTick;
+				//Previously used ActiveRenderInfo
+				Vector3d cam = mc.getCameraEntity().position();
 				camX = x + cam.x;
 				camY = y + cam.y;
 				camZ = z + cam.z;
@@ -63,10 +64,10 @@ public class EntityRenderManager {
 		if (CQRMain.isEntityCullingInstalled) {
 			return true;
 		}
-		if (!entity.isNonBoss()) {
+		if (!entity.canChangeDimensions()) {
 			return true;
 		}
-		if (!CQRConfig.advanced.skipHiddenEntityRendering) {
+		if (!CQRConfig.SERVER_CONFIG.advanced.skipHiddenEntityRendering.get()) {
 			return true;
 		}
 
@@ -139,7 +140,7 @@ public class EntityRenderManager {
 	}
 
 	private static boolean rayTraceBlocks(final double endX, final double endY, final double endZ) {
-		double threshold = CQRConfig.advanced.skipHiddenEntityRenderingDiff;
+		double threshold = CQRConfig.SERVER_CONFIG.advanced.skipHiddenEntityRenderingDiff.get();
 		final double dirX = endX - camX;
 		final double dirY = endY - camY;
 		final double dirZ = endZ - camZ;
@@ -245,11 +246,11 @@ public class EntityRenderManager {
 	}
 
 	private static boolean isOpaque(final int x, final int y, final int z) {
-		ExtendedBlockStorage section = CACHED_BLOCK_ACCESS.getChunkSection(x >> 4, y >> 4, z >> 4);
+		ChunkSection section = CACHED_BLOCK_ACCESS.getChunkSection(x >> 4, y >> 4, z >> 4);
 		if (section == null || section.isEmpty()) {
 			return false;
 		}
-		return section.get(x & 15, y & 15, z & 15).isOpaqueCube();
+		return section.getBlockState(x & 15, y & 15, z & 15).canOcclude();//Correct replacement for isOpaqueCube()?
 	}
 
 	private static int signum(final double x) {
