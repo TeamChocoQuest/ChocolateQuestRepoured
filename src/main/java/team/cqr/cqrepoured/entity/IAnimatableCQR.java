@@ -5,6 +5,7 @@ import java.util.Set;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.Hand;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -154,16 +156,26 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 						// Eating/Drinking animation
 					} else {
 						// Normal swinging
-						event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
+						event.getController().markNeedsReload();
+						event.getController().setAnimation(new AnimationBuilder().playOnce(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
 					}
 					return PlayState.CONTINUE;
 				} else {
-					event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
+					event.getController().setAnimation(new AnimationBuilder().playOnce(leftHand ? ANIM_NAME_SWING_NORMAL_LEFT : ANIM_NAME_SWING_NORMAL_RIGHT));
 					return PlayState.CONTINUE;
 				}
 			} else {
 				//event.getController().setAnimation(null);
 				//event.getController().clearAnimationCache();
+			}
+			if(event.getController().getCurrentAnimation() == null && !event.getController().getAnimationState().equals(AnimationState.Stopped)) {
+				event.getController().clearAnimationCache();
+				event.getController().markNeedsReload();
+				return PlayState.STOP;
+			} else if(event.getController().getAnimationState().equals(AnimationState.Stopped) && event.getController().getCurrentAnimation() != null) {
+				event.getController().clearAnimationCache();
+				event.getController().markNeedsReload();
+				return PlayState.STOP;
 			}
 		}
 		return PlayState.CONTINUE;
@@ -298,6 +310,9 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
 	public <E extends IAnimatable> boolean isSwinging(Hand hand, AnimationEvent<E> event);
 	public default <E extends IAnimatable> boolean isSwinging(AnimationEvent<E> event) {
+		if(this instanceof MobEntity) {
+			return ((MobEntity)this).swinging;
+		}
 		return this.isSwinging(Hand.MAIN_HAND, event);
 	}
 	
