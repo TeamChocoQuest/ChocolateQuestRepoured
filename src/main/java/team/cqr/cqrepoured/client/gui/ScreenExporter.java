@@ -35,8 +35,6 @@ public class ScreenExporter extends Screen {
 	private CheckboxButton chbxRelativeMode;
 	private CheckboxButton chbxIgnoreEntities;
 
-	private boolean saveStructOnExit = false;
-
 	public ScreenExporter(ITextComponent title, TileEntityExporter tileEntity) {
 		super(title);
 		this.tileEntity = tileEntity;
@@ -80,38 +78,39 @@ public class ScreenExporter extends Screen {
 
 		this.btnExport = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 90, 140, 20, new StringTextComponent("Export"), button -> {
 			this.minecraft.setScreen(null);
-
-			try {
-				String structName = this.edtName.getValue();
-				if (structName.isEmpty()) {
-					throw new IllegalArgumentException();
-				}
-				int startX = this.edtStartX.getNumber();
-				int startY = this.edtStartY.getNumber();
-				int startZ = this.edtStartZ.getNumber();
-				int endX = this.edtEndX.getNumber();
-				int endY = this.edtEndY.getNumber();
-				int endZ = this.edtEndZ.getNumber();
-				/*
-				BlockPos[] unprotectedBlocks = Arrays.stream(this.unprotectedBlocksConfig.getDefaults()).map(obj -> {
-					String[] arr = ((String) obj).split(" ");
-					return new BlockPos(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
-				}).toArray(BlockPos[]::new);
-				*/
-
-				this.tileEntity.setValues(structName, startX, startY, startZ, endX, endY, endZ, this.chbxRelativeMode.selected(), this.chbxIgnoreEntities.selected(), new BlockPos[0]);
-
-				this.tileEntity.saveStructure(this.minecraft.player);
-			} catch (Exception e) {
-				this.minecraft.player.sendMessage(new StringTextComponent("Invalid exporter arguments"), this.minecraft.player.getUUID());
-			}
+			this.tileEntity.saveStructure(this.minecraft.player);
 		}));
 
+		this.btnUnprotectedBlocks = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 65, 140, 20, new StringTextComponent("Unprotected Blocks (WIP)"), button -> {
+
+		}));
+		this.btnUnprotectedBlocks.active = false;
+	}
+
+	@Override
+	public void onClose() {
+		super.onClose();
+
+		String structName = this.edtName.getValue();
+		if (structName.isEmpty()) {
+			structName = "Unnamed";
+		}
+		int startX = this.edtStartX.getNumber();
+		int startY = this.edtStartY.getNumber();
+		int startZ = this.edtStartZ.getNumber();
+		int endX = this.edtEndX.getNumber();
+		int endY = this.edtEndY.getNumber();
+		int endZ = this.edtEndZ.getNumber();
 		/*
-		this.btnUnprotectedBlocks = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 60, 140, 20, new StringTextComponent("Unprotected Blocks"), button -> {
+		BlockPos[] unprotectedBlocks = Arrays.stream(this.unprotectedBlocksConfig.getDefaults()).map(obj -> {
+			String[] arr = ((String) obj).split(" ");
+			return new BlockPos(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), Integer.parseInt(arr[2]));
+		}).toArray(BlockPos[]::new);
+		 */
+		boolean relativeMode = this.chbxRelativeMode.selected();
+		boolean ignoreEntities = this.chbxIgnoreEntities.selected();
 
-		}));
-		*/
+		this.tileEntity.setValues(structName, startX, startY, startZ, endX, endY, endZ, relativeMode, ignoreEntities, this.tileEntity.getUnprotectedBlocks());
 	}
 
 	@Override
