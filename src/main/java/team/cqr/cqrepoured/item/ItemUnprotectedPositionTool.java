@@ -1,7 +1,11 @@
 package team.cqr.cqrepoured.item;
 
-import com.google.common.collect.Streams;
-import net.minecraft.entity.passive.horse.AbstractChestedHorseEntity;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -18,24 +22,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.stream.Stream;
-
 public class ItemUnprotectedPositionTool extends ItemLore {
 
 	private static final String POSITIONS_NBT_KEY = "positions";
 
-	public ItemUnprotectedPositionTool(Properties properties)
-	{
+	public ItemUnprotectedPositionTool(Properties properties) {
 		super(properties.stacksTo(1));
 	}
-
-/*	@Override
-	public int getItemStackLimit(ItemStack stack) {
-		return 1;
-	} */
 
 	@Override
 	public ActionResultType useOn(ItemUseContext context) {
@@ -112,7 +105,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 		if (tagList == null) {
 			return Stream.empty();
 		}
-		return Streams.stream(tagList).map(tag -> {
+		return tagList.stream().map(tag -> {
 			int[] data = ((IntArrayNBT) tag).getAsIntArray();
 			return new BlockPos(data[0], data[1], data[2]);
 		});
