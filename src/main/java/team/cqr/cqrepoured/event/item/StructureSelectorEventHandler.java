@@ -2,8 +2,6 @@ package team.cqr.cqrepoured.event.item;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -21,17 +19,7 @@ public class StructureSelectorEventHandler {
 
 		if (stack.getItem() instanceof ItemStructureSelector) {
 			if (!player.level.isClientSide()) {
-				ItemStructureSelector structureSelector = (ItemStructureSelector) stack.getItem();
-
-				if (player.isCrouching()) {
-					BlockPos pos = player.blockPosition();
-					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new StringTextComponent("First position set to " + pos), null);
-				} else {
-					BlockPos pos = event.getPos();
-					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new StringTextComponent("First position set to " + pos), null);
-				}
+				((ItemStructureSelector) stack.getItem()).setFirstPos(stack, player.isCrouching() ? player.blockPosition() : event.getPos(), player);
 			}
 
 			event.setCanceled(true);

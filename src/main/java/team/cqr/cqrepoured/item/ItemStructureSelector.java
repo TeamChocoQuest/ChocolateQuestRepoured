@@ -1,7 +1,9 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,43 +16,29 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.init.CQRBlocks;
+import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import java.util.List;
+import team.cqr.cqrepoured.util.Translator;
 
 public class ItemStructureSelector extends Item {
 
-	public ItemStructureSelector(Properties properties)
-	{
+	public ItemStructureSelector(Properties properties) {
 		super(properties.stacksTo(1));
-		//this.setMaxStackSize(1);
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState state, World level, BlockPos pos, PlayerEntity player) {
-		Block block = level.getBlockState(pos).getBlock();
-		return block != CQRBlocks.EXPORTER.get();
-	}
-
-	@Override
-	public ActionResultType useOn(ItemUseContext pContext) {
-		PlayerEntity player = pContext.getPlayer();
-		Hand hand = pContext.getHand();
-		World world = pContext.getLevel();
-		BlockPos pos = pContext.getClickedPos();
-
-		ItemStack stack = player.getItemInHand(hand);
+	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
+		PlayerEntity player = context.getPlayer();
+		World world = context.getLevel();
+		BlockPos pos = context.getClickedPos();
 
 		if (world.getBlockEntity(pos) instanceof TileEntityExporter) {
 			if (world.isClientSide) {
-				if (!this.hasFirstAndSecondPos(stack)) {
-					player.sendMessage(new StringTextComponent("Set both positions before using on a exporter"), player.getUUID());
+				if (!this.hasFirstPos(stack) || !this.hasSecondPos(stack)) {
+					player.sendMessage(Translator.translateItem(this, ".error_set_both_before_use").withStyle(TextFormatting.RED), null);
 					return ActionResultType.SUCCESS;
 				}
 
@@ -66,14 +54,7 @@ public class ItemStructureSelector extends Item {
 				tileEntity.setValues(tileEntity.getStructureName(), DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.isRelativeMode(), tileEntity.isIgnoreEntities(), tileEntity.getUnprotectedBlocks());
 			}
 		} else if (!world.isClientSide) {
-			if (player.isCrouching()) {
-				BlockPos pos1 = player.blockPosition();
-				this.setSecondPos(stack, pos1);
-				player.sendMessage(new StringTextComponent("Second position set to " + pos1), player.getUUID());
-			} else {
-				this.setSecondPos(stack, pos);
-				player.sendMessage(new StringTextComponent("Second position set to " + pos), player.getUUID());
-			}
+			this.setSecondPos(stack, player.isCrouching() ? player.blockPosition() : pos, player);
 		}
 
 		return ActionResultType.SUCCESS;
@@ -84,9 +65,7 @@ public class ItemStructureSelector extends Item {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (!playerIn.level.isClientSide && playerIn.isCrouching()) {
-			BlockPos pos1 = playerIn.blockPosition();
-			this.setSecondPos(stack, pos1);
-			playerIn.sendMessage(new StringTextComponent("Second position set to " + pos1), playerIn.getUUID());
+			this.setSecondPos(stack, playerIn.blockPosition(), playerIn);
 		}
 
 		return new ActionResult<>(ActionResultType.SUCCESS, stack);
@@ -94,42 +73,34 @@ public class ItemStructureSelector extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		BlockPos pos1 = this.getFirstPos(stack);
-		BlockPos pos2 = this.getSecondPos(stack);
-
-		if (pos1 != null) {
-			tooltip.add(new StringTextComponent("First position: " + pos1).withStyle(TextFormatting.BLUE));
+		if (this.hasFirstPos(stack)) {
+			BlockPos pos = this.getFirstPos(stack);
+			tooltip.add(Translator.translateItem(this, ".tooltip_first_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(TextFormatting.BLUE));
 		} else {
-			tooltip.add(new StringTextComponent("First position: not set").withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_first_unkown").withStyle(TextFormatting.BLUE));
 		}
-		if (pos2 != null) {
-			tooltip.add(new StringTextComponent("Second position: " + pos2).withStyle(TextFormatting.BLUE));
+
+		if (this.hasSecondPos(stack)) {
+			BlockPos pos = this.getSecondPos(stack);
+			tooltip.add(Translator.translateItem(this, ".tooltip_second_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(TextFormatting.BLUE));
 		} else {
-			tooltip.add(new StringTextComponent("Second position: not set").withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_second_unkown").withStyle(TextFormatting.BLUE));
 		}
 	}
 
-	public void setFirstPos(ItemStack stack, BlockPos pos) {
-		CompoundNBT compound = stack.getTag();
-		if (compound == null) {
-			compound = new CompoundNBT();
-			stack.setTag(compound);
-		}
-		compound.put("pos1", NBTUtil.writeBlockPos(pos));
+	public void setFirstPos(ItemStack stack, BlockPos pos, @Nullable PlayerEntity player) {
+		stack.addTagElement("pos1", NBTUtil.writeBlockPos(pos));
+		player.sendMessage(Translator.translateItem(this, ".set_first", pos.getX(), pos.getY(), pos.getZ()), null);
 	}
 
-	public void setSecondPos(ItemStack stack, BlockPos pos) {
-		CompoundNBT compound = stack.getTag();
-		if (compound == null) {
-			compound = new CompoundNBT();
-			stack.setTag(compound);
-		}
-		compound.put("pos2", NBTUtil.writeBlockPos(pos));
+	public void setSecondPos(ItemStack stack, BlockPos pos, @Nullable PlayerEntity player) {
+		stack.addTagElement("pos2", NBTUtil.writeBlockPos(pos));
+		player.sendMessage(Translator.translateItem(this, ".set_second", pos.getX(), pos.getY(), pos.getZ()), null);
 	}
 
 	public BlockPos getFirstPos(ItemStack stack) {
 		CompoundNBT compound = stack.getTag();
-		if (compound == null || !compound.contains("pos1", Constants.NBT.TAG_COMPOUND)) {
+		if (compound == null || !compound.contains("pos1", NBT.TAG_COMPOUND)) {
 			return null;
 		}
 		return NBTUtil.readBlockPos(compound.getCompound("pos1"));
@@ -137,7 +108,7 @@ public class ItemStructureSelector extends Item {
 
 	public BlockPos getSecondPos(ItemStack stack) {
 		CompoundNBT compound = stack.getTag();
-		if (compound == null || !compound.contains("pos2", Constants.NBT.TAG_COMPOUND)) {
+		if (compound == null || !compound.contains("pos2", NBT.TAG_COMPOUND)) {
 			return null;
 		}
 		return NBTUtil.readBlockPos(compound.getCompound("pos2"));
@@ -149,10 +120,6 @@ public class ItemStructureSelector extends Item {
 
 	public boolean hasSecondPos(ItemStack stack) {
 		return this.getSecondPos(stack) != null;
-	}
-
-	public boolean hasFirstAndSecondPos(ItemStack stack) {
-		return this.hasFirstPos(stack) && this.hasSecondPos(stack);
 	}
 
 }
