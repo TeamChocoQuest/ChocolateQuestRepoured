@@ -68,6 +68,7 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileThrownBlock;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
+import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
@@ -77,6 +78,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEm
 import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 public class CQREntityRenderers {
 	
@@ -134,7 +136,7 @@ public class CQREntityRenderers {
 
 	public static void registerTileRenderers() {
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.TABLE.get(), TileEntityTableRenderer::new);
-		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
+		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER.get(), TileEntityExporterRenderer::new);
 		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
 		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
 		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMap.class, new TileEntityMapPlaceHolderRenderer());

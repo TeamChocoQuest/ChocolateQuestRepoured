@@ -1,192 +1,109 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
+import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 @OnlyIn(Dist.CLIENT)
 public class TileEntityExporterRenderer extends TileEntityRenderer<TileEntityExporter> {
 
+	public TileEntityExporterRenderer(TileEntityRendererDispatcher blockEntityRendererDispatcher) {
+		super(blockEntityRendererDispatcher);
+	}
+
 	@Override
-	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+	public void render(TileEntityExporter pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+		BlockPos pos1 = pBlockEntity.getMinPosRelative();
+		BlockPos pos2 = pBlockEntity.getMaxPosRelative();
 
-		BlockPos tileEntityPos = te.getPos();
-		BlockPos pos1 = te.getMinPosRelative();
-		BlockPos pos2 = te.getMaxPosRelative();
+		double x1 = pos1.getX() - 0.01D;
+		double y1 = pos1.getY() - 0.01D;
+		double z1 = pos1.getZ() - 0.01D;
+		double x2 = pos2.getX() + 1.01D;
+		double y2 = pos2.getY() + 1.01D;
+		double z2 = pos2.getZ() + 1.01D;
 
-		double x1 = x + pos1.getX() - 0.01D;
-		double y1 = y + pos1.getY() - 0.01D;
-		double z1 = z + pos1.getZ() - 0.01D;
-		double x2 = x + pos2.getX() + 1.01D;
-		double y2 = y + pos2.getY() + 1.01D;
-		double z2 = z + pos2.getZ() + 1.01D;
+		WorldRenderer.renderLineBox(pMatrixStack, pBuffer.getBuffer(RenderType.lines()), x1, y1, z1, x2, y2, z2, 0.9F, 0.9F, 0.9F, 1.0F, 0.5F, 0.5F, 0.5F);
 
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		this.renderUnprotectedBlocks(pBlockEntity, pMatrixStack, pBuffer);
+	}
 
-		{
-			// render structure outline
-			GlStateManager.disableFog();
-			GlStateManager.disableLighting();
-			GlStateManager.disableTexture2D();
-			this.setLightmapDisabled(true);
+	private void renderUnprotectedBlocks(TileEntityExporter pBlockEntity, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer) {
+		BlockPos pos = pBlockEntity.getBlockPos();
+		double d1 = 1.0D / 1024.0D;
+		double d2 = 1.0D + d1;
+		double d3 = 1.0D / 512.0D;
+		double d4 = 1.0D + d3;
 
-			this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2);
-
-			this.setLightmapDisabled(false);
-			GlStateManager.enableTexture2D();
-			GlStateManager.enableLighting();
-			GlStateManager.enableFog();
+		IVertexBuilder vertexBuilder = pBuffer.getBuffer(CQRRenderTypes.overlayQuads());
+		for (BlockPos pos1 : pBlockEntity.getUnprotectedBlocks()) {
+			int dx = pos1.getX() - pos.getX();
+			int dy = pos1.getY() - pos.getY();
+			int dz = pos1.getZ() - pos.getZ();
+			renderBox(pMatrixStack, vertexBuilder, dx - d1, dy - d1, dz - d1, dx + d2, dy + d2, dz + d2, 1.0F, 0.8F, 0.0F, 0.35F);
 		}
 
-		{
-			// render unprotected blocks
-			double d1 = 1.0D / 1024.0D;
-			double d2 = 1.0D + d1;
-			double d3 = 1.0D / 512.0D;
-			double d4 = 1.0D + d1;
-
-			GlStateManager.glLineWidth(2.0F);
-			GlStateManager.disableFog();
-			GlStateManager.disableLighting();
-			GlStateManager.disableTexture2D();
-			GlStateManager.depthMask(false);
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-			this.setLightmapDisabled(true);
-
-			GlStateManager.color(1.0F, 0.8F, 0.0F, 0.35F);
-			bufferbuilder.setTranslation(x - tileEntityPos.getX(), y - tileEntityPos.getY(), z - tileEntityPos.getZ());
-			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-			for (BlockPos pos : te.getUnprotectedBlocks()) {
-				this.renderBox(bufferbuilder, pos.getX() - d1, pos.getY() - d1, pos.getZ() - d1, pos.getX() + d2, pos.getY() + d2, pos.getZ() + d2);
-			}
-			tessellator.draw();
-			GlStateManager.color(1.0F, 0.8F, 0.0F, 1.0F);
-			bufferbuilder.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-			for (BlockPos pos : te.getUnprotectedBlocks()) {
-				this.renderBoxOutline(bufferbuilder, pos.getX() - d3, pos.getY() - d3, pos.getZ() - d3, pos.getX() + d4, pos.getY() + d4, pos.getZ() + d4);
-			}
-			tessellator.draw();
-			bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-			this.setLightmapDisabled(false);
-			GlStateManager.disableBlend();
-			GlStateManager.depthMask(true);
-			GlStateManager.enableTexture2D();
-			GlStateManager.enableLighting();
-			GlStateManager.enableFog();
-			GlStateManager.glLineWidth(1.0F);
+		vertexBuilder = pBuffer.getBuffer(CQRRenderTypes.overlayLines());
+		for (BlockPos pos1 : pBlockEntity.getUnprotectedBlocks()) {
+			int dx = pos1.getX() - pos.getX();
+			int dy = pos1.getY() - pos.getY();
+			int dz = pos1.getZ() - pos.getZ();
+			renderBox(pMatrixStack, vertexBuilder, dx - d3, dy - d3, dz - d3, dx + d4, dy + d4, dz + d4, 1.0F, 0.8F, 0.0F, 1.0F);
 		}
 	}
 
-	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
-		int cl1 = 255;
-		int cl2 = 223;
-		int cl3 = 127;
-
-		GlStateManager.glLineWidth(2.0F);
-		buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(x1, y1, z1).color(cl2, cl2, cl2, 0.0F).endVertex();
-		buffer.pos(x1, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y1, z1).color(cl2, cl3, cl3, cl1).endVertex();
-		buffer.pos(x2, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y1, z1).color(cl3, cl3, cl2, cl1).endVertex();
-		buffer.pos(x1, y2, z1).color(cl3, cl2, cl3, cl1).endVertex();
-		buffer.pos(x2, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x1, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
-		buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, 0.0F).endVertex();
-		tessellator.draw();
-		GlStateManager.glLineWidth(1.0F);
-	}
-
-	private void renderBoxOutline(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y1, z1).endVertex();
-
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-	}
-
-	private void renderBox(BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+	public static void renderBox(MatrixStack matrixStack, IVertexBuilder vertexBuilder, double x1, double y1, double z1, double x2, double y2, double z2, float red, float green, float blue, float alpha) {
+		Matrix4f matrix = matrixStack.last().pose();
 		// down
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-
-		// south
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-
-		// north
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
 
 		// up
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
+
+		// north
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
+
+		// south
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
 
 		// west
-		buffer.pos(x1, y1, z1).endVertex();
-		buffer.pos(x1, y1, z2).endVertex();
-		buffer.pos(x1, y2, z2).endVertex();
-		buffer.pos(x1, y2, z1).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x1, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
 
 		// east
-		buffer.pos(x2, y1, z2).endVertex();
-		buffer.pos(x2, y1, z1).endVertex();
-		buffer.pos(x2, y2, z1).endVertex();
-		buffer.pos(x2, y2, z2).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z2).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y1, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z1).color(red, green, blue, alpha).endVertex();
+		vertexBuilder.vertex(matrix, (float) x2, (float) y2, (float) z2).color(red, green, blue, alpha).endVertex();
 	}
 
 	@Override
-	public boolean isGlobalRenderer(TileEntityExporter te) {
+	public boolean shouldRenderOffScreen(TileEntityExporter pTe) {
 		return true;
 	}
 

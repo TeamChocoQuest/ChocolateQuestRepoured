@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -8,8 +10,6 @@ import team.cqr.cqrepoured.item.ItemStructureSelector;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketStructureSelector;
 
-import java.util.function.Supplier;
-
 public class SPacketHandlerStructureSelector extends AbstractPacketHandler<CPacketStructureSelector> {
 
 	@Override
@@ -17,7 +17,7 @@ public class SPacketHandlerStructureSelector extends AbstractPacketHandler<CPack
 		ItemStack stack = player.getItemInHand(packet.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector) {
-			((ItemStructureSelector) stack.getItem()).setFirstPos(stack, player.blockPosition());
+			((ItemStructureSelector) stack.getItem()).setFirstPos(stack, player.blockPosition(), player);
 		}
 	}
 

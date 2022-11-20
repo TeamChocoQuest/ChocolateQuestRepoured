@@ -76,4 +76,20 @@ public class CQRRenderTypes extends RenderType {
 				.createCompositeState(false));
 	}
 
+	public static RenderType overlayQuads() {
+		return RenderType.create("cqrepoured_overlay_quads", DefaultVertexFormats.POSITION_COLOR, GL11.GL_QUADS, 256, State.builder()
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setCullState(NO_CULL)
+				.setWriteMaskState(COLOR_WRITE)
+				.createCompositeState(false));
+	}
+
+	public static RenderType overlayLines() {
+		return RenderType.create("cqrepoured_overlay_lines", DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256, State.builder()
+				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+				.setCullState(NO_CULL)
+				.setWriteMaskState(COLOR_WRITE)
+				.createCompositeState(false));
+	}
+
 }
