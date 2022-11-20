@@ -1,6 +1,9 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -49,14 +53,31 @@ import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
  */
 public abstract class DungeonBase implements IFeatureConfig {
 
+	// TODO: Write codec that uses the old prop file to re-create the object
+	// => Store the prop file somewhere in the object as string
 	public static final Codec<DungeonBase> CODEC = RecordCodecBuilder.create((object) -> {
 		return object.group(
-				Codec.STRING.fieldOf("name").forGetter(DungeonBase::getName)
-				).apply(object, (ident) -> {
-					return DungeonRegistry.getInstance().getDungeon(ident);
-				});
+				Codec.STRING.fieldOf("name").forGetter((obj) -> {
+					return obj.getDungeonName();
+				}),
+				Codec.STRING.fieldOf("propertyfile").forGetter((obj) -> {
+					return obj.getPropFileAsString();
+				})
+			).apply(object, (name, propString) -> {
+				Properties prop = getFromString(propString);
+				if(prop != null) {
+					return DungeonRegistry.createDungeonFromFile(prop, name);
+				}
+				return null;
+			});
 	});
+	
+	String getPropFileAsString() {
+		return this.SCANNED_PROPERTIES_FILE;
+	}
 			
+	protected final String SCANNED_PROPERTIES_FILE;
+	
 	protected String name;
 	protected boolean enabled = true;
 	protected int iconID = 0;
@@ -113,6 +134,8 @@ public abstract class DungeonBase implements IFeatureConfig {
 	protected int vanillaSpreadSeed = 1234567890;
 
 	protected DungeonBase(String name, Properties prop) {
+		this.SCANNED_PROPERTIES_FILE = DungeonBase.writePropertiesToString(prop);
+		
 		this.name = name;
 		String newName = "";
 		for(int i = 0; i < this.name.length(); i++) {
@@ -177,6 +200,45 @@ public abstract class DungeonBase implements IFeatureConfig {
 		this.preventFireSpreading = PropertyFileHelper.getBooleanProperty(prop, "preventFireSpreading", false);
 		this.preventEntitySpawning = PropertyFileHelper.getBooleanProperty(prop, "preventEntitySpawning", false);
 		this.ignoreNoBossOrNexus = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
+	}
+
+	private static final String writePropertiesToString(Properties prop) {
+		StringWriter writer = new StringWriter();
+		String text;
+		try {
+			prop.store(writer, "");
+			text = normalizeNewLines(writer.toString());
+			if(writer != null) {
+				writer.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		List<String> lines = new ArrayList<>(Arrays.asList(text.split("\n")));
+		//Remove timestamp
+		lines.remove(0);
+		return lines.stream().collect(Collectors.joining("\n"));
+	}
+	
+	private static final String normalizeNewLines(String text) {
+	    return text.replace("\r\n", "\n").replace("\r", "\n");
+	}
+	
+	public static final Properties getFromString(final String s) {
+		final Properties prop = new Properties();
+		if(s.isEmpty()) {
+			return prop;
+		}
+		try {
+			StringReader sr = new StringReader(s);
+			prop.load(sr);
+			sr.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new Properties();
+		}
+		return prop;
 	}
 
 	@Override

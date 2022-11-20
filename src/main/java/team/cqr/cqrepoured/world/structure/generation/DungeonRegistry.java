@@ -54,7 +54,7 @@ public class DungeonRegistry {
 		CQRMain.logger.info("Loading {} dungeon configuration files...", files.size());
 
 		for (File file : files) {
-			DungeonBase dungeon = this.createDungeonFromFile(file);
+			DungeonBase dungeon = DungeonRegistry.createDungeonFromFile(file);
 
 			if (dungeon != null && !this.dungeons.containsKey(dungeon.getDungeonName())) {
 				this.dungeons.put(dungeon.getDungeonName(), dungeon);
@@ -78,13 +78,21 @@ public class DungeonRegistry {
 		GridRegistry.getInstance().loadGridFiles();
 	}
 
-	private DungeonBase createDungeonFromFile(File file) {
+	public static DungeonBase createDungeonFromFile(File file) {
 		Properties prop = PropertyFileHelper.readPropFile(file);
 		if (prop == null) {
 			return null;
 		}
 
 		String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		return createDungeonFromFile(prop, name);
+	}
+	
+	public static DungeonBase createDungeonFromFile(Properties prop, String name) {
+		if (prop == null) {
+			return null;
+		}
+
 		String generatorType = prop.getProperty("generator", "");
 		EDungeonGenerator dungeonGenerator = EDungeonGenerator.getDungeonGenerator(generatorType);
 

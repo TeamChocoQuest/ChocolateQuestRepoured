@@ -60,7 +60,7 @@ public class DungeonGenerationHelper {
 					for (int z = -radius; z <= radius + 1; z++) {
 						//warning: This can cause a concurrent access modification cause this causes another chunkLoad event!
 						//player.level.getChunk(chunkX + x, chunkZ + z);
-						chunksToProcess.add(Triple.of(player.world, chunkX + x, chunkZ + z));
+						chunksToProcess.add(Triple.of(player.level, chunkX + x, chunkZ + z));
 					}
 				}
 

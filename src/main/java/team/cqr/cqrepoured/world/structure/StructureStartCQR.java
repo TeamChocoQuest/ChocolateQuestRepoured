@@ -14,6 +14,7 @@ import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.CQRJigsawManager;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> {
@@ -38,8 +39,11 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 		}
 		ResourceLocation startPool = null;
 		BlockPos centered = new BlockPos(x,y,z);
+
+		//Run the dugneon generators...
+		config.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered, random);
 		
-		CQRJigsawManager.addPieces(
+		/*CQRJigsawManager.addPieces(
 				dynamicRegistryManager, 
 				new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).get(startPool), 10),
 				config.doBuildSupportPlatform() ? StructurePieceCQR::createWithSupportHill : StructurePieceCQR::createWithoutSupportHill,
@@ -51,7 +55,7 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 				false, 
 				!config.isFixedY(),
 				Rotation.NONE
-		);
+		);*/
 		final int tmpInt = shiftOffsetY;
 		this.pieces.forEach(piece -> piece.move(0, tmpInt, 0));
 		this.pieces.forEach(piece -> piece.getBoundingBox().y0 += tmpInt);
