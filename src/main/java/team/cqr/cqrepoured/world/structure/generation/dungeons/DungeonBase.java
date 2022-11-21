@@ -64,6 +64,12 @@ public abstract class DungeonBase implements IFeatureConfig {
 					return obj.getPropFileAsString();
 				})
 			).apply(object, (name, propString) -> {
+				//If a dungeon with this name has already been registered, use the registered object
+				DungeonBase dunBase = DungeonRegistry.getInstance().getDungeon(name);
+				if(dunBase != null) {
+					return dunBase;
+				}
+				//Otherwise restore the dungeon object
 				Properties prop = getFromString(propString);
 				if(prop != null) {
 					return DungeonRegistry.createDungeonFromFile(prop, name);
