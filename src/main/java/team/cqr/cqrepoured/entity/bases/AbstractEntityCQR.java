@@ -1568,7 +1568,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	public boolean isInSightRange(Entity target) {
 		double sightRange = 32.0D;
-		sightRange *= 0.6D + 0.4D * this.level.getLightEmission(target.blockPosition()) / 15.0D;
+		sightRange *= 0.6D + 0.4D * this.level.getRawBrightness(target.blockPosition(), 0) / 15.0D;
 		sightRange *= this.hasEffect(Effects.BLINDNESS) ? 0.5D : 1.0D;
 		return this.distanceToSqr(target) <= sightRange * sightRange;
 	}
