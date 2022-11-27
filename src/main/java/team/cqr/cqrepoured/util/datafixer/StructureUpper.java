@@ -56,13 +56,14 @@ public class StructureUpper {
 			}
 		};
 		Map<ChunkPos, ChunkTileEntityContainer> chunks = new HashMap<>();
+		ChunkTileEntityContainer entityChunk = new ChunkTileEntityContainer(new Chunk(world, 0, 0));
 		ByteBuf blockBuf = Unpooled.buffer();
 		ByteBuf entityBuf = Unpooled.buffer();
 		BlockStatePalette palette = new BlockStatePalette();
 		NBTTagList compoundList = new NBTTagList();
 
 		entityBuf.writeInt(structure.getEntityInfoList().size());
-		structure.getEntityInfoList().forEach(entity -> entityBuf.writeInt(addEntity(world, chunks, entity.getEntityData())));
+		structure.getEntityInfoList().forEach(entity -> entityBuf.writeInt(addEntity(entityChunk, entity.getEntityData())));
 
 		BlockPos size = structure.getSize();
 		List<PreparablePosInfo> blocks = structure.getBlockInfoList();
@@ -121,6 +122,7 @@ public class StructureUpper {
 
 		NBTTagCompound chunkNbt = new NBTTagCompound();
 		chunks.forEach((p, c) -> chunkNbt.setTag(p.x + " " + p.z, c.save(new NBTTagCompound())));
+		chunkNbt.setTag("entityChunk", entityChunk.save(new NBTTagCompound()));
 		migratableStructureNbt.setTag("Chunk Data", chunkNbt);
 
 		NBTTagCompound cqrStructureNbt = new NBTTagCompound();
@@ -165,7 +167,10 @@ public class StructureUpper {
 		double y = entity.hasKey("TileY") ? entity.getInteger("TileY") : entity.getTagList("Pos", NBT.TAG_DOUBLE).getDoubleAt(1);
 		double z = entity.hasKey("TileZ") ? entity.getInteger("TileZ") : entity.getTagList("Pos", NBT.TAG_DOUBLE).getDoubleAt(2);
 		ChunkTileEntityContainer chunk = getChunk(world, chunks, new BlockPos(x, y, z));
-		
+		return addEntity(chunk, entity);
+	}
+
+	private static int addEntity(ChunkTileEntityContainer chunk, NBTTagCompound entity) {
 		chunk.entities.appendTag(entity);
 		return chunk.entities.tagCount() - 1;
 	}
