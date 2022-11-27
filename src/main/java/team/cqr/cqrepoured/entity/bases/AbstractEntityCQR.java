@@ -1915,6 +1915,9 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	
 	@OnlyIn(Dist.CLIENT)
 	public <E extends IAnimatable> boolean isSwinging(Hand hand, AnimationEvent<E> event) {
+		if(this.swinging) {
+			return this.swingingArm.equals(hand);
+		}
 		boolean result = false;
 		if(this.unprocessedAnimationOverridePresent != this.lastUnprocessedAnimationOverridePresent) {
 			System.out.println("We received a animation update!");
