@@ -1,7 +1,10 @@
 {
 	"processors": [
 		{
-			"processor_type": "cqrepoured:extend_lowest_to_floor"
+			"processor_type": "cqrepoured:builtin/extend_lowest_to_floor"
+		},
+		{
+			"processor_type": "cqrepoured:builtin/loot_chest_replacer"
 		}
 	]
 }
