@@ -1,5 +1,5 @@
 {
-	"name": "cqrepoured:wall/wall",
+	"name": "cqrepoured:wall/start_wall_roofed",
 	"fallback": "minecraft:empty",
 	"elements": [
 		{
