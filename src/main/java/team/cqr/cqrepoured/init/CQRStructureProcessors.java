@@ -34,7 +34,8 @@ public class CQRStructureProcessors {
 			//First, let's load our fixed processors
 			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/extend_lowest_to_floor"), PROCESSOR_EXTEND_LOWEST_TO_FLOOR);
 			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/loot_chest_replacer"), PROCESSOR_LOOT_CHEST);
-			Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/faction_adjuster"), PROCESSOR_FACTION_ADJUSTER);
+			//Not done yet and probably not needed?
+			//Registry.register(Registry.STRUCTURE_PROCESSOR, CQRMain.prefix("builtin/faction_adjuster"), PROCESSOR_FACTION_ADJUSTER);
 
 			//Then we load the customizable ones
 			loadFileBasedProcessors();
