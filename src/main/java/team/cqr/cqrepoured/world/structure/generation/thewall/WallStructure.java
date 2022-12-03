@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall;
 
 import com.mojang.serialization.Codec;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
@@ -22,6 +23,7 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.CQRJigsawManager;
 
 public class WallStructure extends Structure<NoFeatureConfig> {
@@ -42,14 +44,14 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 	
 	@Override
 	protected boolean isFeatureChunk(ChunkGenerator cg, BiomeProvider bp, long seed, SharedSeedRandom ssr, int p_230363_6_, int p_230363_7_, Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
-		/*if (!CQRConfig.wall.enabled) {
+		if (!CQRConfig.SERVER_CONFIG.wall.enabled.get()) {
 			return false;
-		}*/
+		}
 		
 		//int chunkX = chunkPos.x;
 		int chunkZ = chunkPos.z;
 		
-		return chunkZ < 0 && Math.abs(chunkZ) == Math.abs(500/*CQRConfig.wall.distance*/);
+		return chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.SERVER_CONFIG.wall.distance.get());
 	}
 	
 	public static class Start extends StructureStart<NoFeatureConfig> {
@@ -65,7 +67,7 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 		
 		@Override
 		public void generatePieces(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
-			boolean tower = (chunkX % 3/*CQRConfig.wall.towerDistance*/) == 0;
+			boolean tower = (chunkX % CQRConfig.SERVER_CONFIG.wall.towerDistance.get()) == 0;
 			BlockPos centered = new BlockPos(chunkX * 16, 140, chunkZ * 16);
 			ResourceLocation startPool;
 			boolean isSnowy = this.isSnowChunk(chunkX, chunkZ, chunkGenerator);
