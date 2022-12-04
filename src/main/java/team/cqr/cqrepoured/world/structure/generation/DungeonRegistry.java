@@ -32,7 +32,7 @@ public class DungeonRegistry {
 
 	@Nullable
 	public DungeonBase getDungeon(String name) {
-		return this.dungeons.get(name);
+		return this.dungeons.get(name.toUpperCase());
 	}
 
 	public List<DungeonBase> getLocationSpecificDungeonsForChunk(World world, int chunkX, int chunkZ) {
@@ -57,7 +57,7 @@ public class DungeonRegistry {
 			DungeonBase dungeon = DungeonRegistry.createDungeonFromFile(file);
 
 			if (dungeon != null && !this.dungeons.containsKey(dungeon.getDungeonName())) {
-				this.dungeons.put(dungeon.getDungeonName(), dungeon);
+				this.dungeons.put(dungeon.getDungeonName().toUpperCase(), dungeon);
 
 				if (dungeon.isModDependencyMissing()) {
 					CQRMain.logger.warn("{}: Dungeon is missing one or more mod dependencies!", file.getName());
