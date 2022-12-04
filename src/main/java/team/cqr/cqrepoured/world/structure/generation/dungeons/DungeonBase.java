@@ -467,11 +467,12 @@ public abstract class DungeonBase implements IFeatureConfig {
 		if (!CQRConfig.SERVER_CONFIG.advanced.generationRespectOtherStructures.get()) {
 			return false;
 		}
-		for (String structure : this.structuresPreventingGeneration) {
+		//TODO: Reimplement
+		/*for (String structure : this.structuresPreventingGeneration) {
 			if (StructureHelper.isStructureInRange(world, pos, this.structureCheckRadius, structure)) {
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 
