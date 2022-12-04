@@ -399,7 +399,10 @@ public abstract class DungeonBase implements IFeatureConfig {
 
 	public boolean isValidBiome(Biome biome) {
 		ResourceLocation biomeName = biome.getRegistryName();
-		
+		return this.isValidBiome(biomeName);
+	}
+	
+	public boolean isValidBiome(ResourceLocation biomeName) {
 		RegistryKey<Biome> biomeKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeName);
 		
 		Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biomeKey);

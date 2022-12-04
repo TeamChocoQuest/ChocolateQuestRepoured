@@ -104,7 +104,7 @@ public class CQRStructures {
 	protected static IStructurePieceType register(IStructurePieceType type, String id) {
 		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id);
 	}
-
+	
 	@SubscribeEvent
 	public static void biomeModification(final BiomeLoadingEvent event) {
 		RegistryKey<Biome> key = RegistryKey.create(Registry.BIOME_REGISTRY, event.getName());
@@ -116,22 +116,12 @@ public class CQRStructures {
 		}
 
 		// Now, parse all configured dungeon structures and add them too
-		boolean skip = false;
+		ResourceLocation biomeID = key.location(); //registryname is the registryname of the RegistryKey, here that is "minecraft/worldgen" or something like that
 		for (Map.Entry<DungeonBase, StructureFeature<?, ?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
-			for (ResourceLocation rs : entry.getKey().getDisallowedBiomes()) {
-				if (rs.equals(key.getRegistryName())) {
-					skip = true;
-					break;
-				}
-			}
-			if (skip) {
-				skip = false;
+			if(entry.getKey().isValidBiome(biomeID)) {
+				event.getGeneration().addStructureStart(entry.getValue());
+				System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
 				continue;
-			}
-			for (ResourceLocation rs : entry.getKey().getAllowedBiomes()) {
-				if (rs.equals(key.getRegistryName())) {
-					event.getGeneration().getStructures().add(entry::getValue);
-				}
 			}
 		}
 	}
@@ -193,7 +183,7 @@ public class CQRStructures {
 					if (dunConf.isUseVanillaSpreadSystem()) {
 						sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
 					} else {
-						sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+						sepSettings = new StructureSeparationSettings(1, 1, 123456789);
 					}
 					SEP_SETTINGS_QUEUE.add(Triple.of(dunConf, structure, sepSettings));
 				} catch (Exception ex) {
