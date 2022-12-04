@@ -47,6 +47,7 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.Dungeon
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
+import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -67,16 +68,29 @@ public abstract class DungeonBase implements IFeatureConfig {
 				//If a dungeon with this name has already been registered, use the registered object
 				DungeonBase dunBase = DungeonRegistry.getInstance().getDungeon(name);
 				if(dunBase != null) {
+					dunBase.tryAssignGrid();
 					return dunBase;
 				}
 				//Otherwise restore the dungeon object
 				Properties prop = getFromString(propString);
 				if(prop != null) {
-					return DungeonRegistry.createDungeonFromFile(prop, name);
+					DungeonBase db = DungeonRegistry.createDungeonFromFile(prop, name);
+					db.tryAssignGrid();
+					return db;
 				}
 				return null;
 			});
 	});
+	
+	protected final void tryAssignGrid() {
+		for(DungeonGrid grid : GridRegistry.getInstance().getGrids()) {
+			for(DungeonBase gdb : grid.getDungeons()) {
+				if(gdb.getName().equalsIgnoreCase(this.getDungeonName())) {
+					this.assignGrid(grid);
+				}
+			}
+		}
+	}
 	
 	String getPropFileAsString() {
 		return this.SCANNED_PROPERTIES_FILE;
@@ -334,7 +348,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
-		if (!this.isValidDim(world.dimension().getRegistryName())) {
+		if (!this.isValidDim(world.dimension())) {
 			return false;
 		}
 		if (this.isDungeonDependencyMissing(world)) {
@@ -359,7 +373,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
-		if (!this.isValidDim(world.dimension().getRegistryName())) {
+		if (!this.isValidDim(world.dimension().location())) {
 			return false;
 		}
 		return this.isLockedPositionInChunk(world, chunkX, chunkZ);
@@ -374,8 +388,8 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return false;
 	}
 
-	public boolean isValidDim(RegistryKey<DimensionType> dtrk) {
-		return this.isValidDim(dtrk.getRegistryName());
+	public boolean isValidDim(RegistryKey<World> registryKey) {
+		return this.isValidDim(registryKey.location());
 	}
 	
 	public boolean isValidDim(ResourceLocation dim) {

@@ -168,7 +168,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int distance) {
-		ResourceLocation dim = world.dimension().getRegistryName();
+		ResourceLocation dim = world.dimension().location();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
 			if (!dungeon.isEnabled()) {
