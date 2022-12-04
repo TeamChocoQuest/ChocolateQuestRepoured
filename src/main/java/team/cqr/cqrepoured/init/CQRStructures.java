@@ -183,7 +183,7 @@ public class CQRStructures {
 					if (dunConf.isUseVanillaSpreadSystem()) {
 						sepSettings = new StructureSeparationSettings(dunConf.getVanillaSpreadSpacing(), dunConf.getVanillaSpreadSeparation(), dunConf.getVanillaSpreadSeed());
 					} else {
-						sepSettings = new StructureSeparationSettings(1, 1, 123456789);
+						sepSettings = new StructureSeparationSettings(1, 0, 123456789);
 					}
 					SEP_SETTINGS_QUEUE.add(Triple.of(dunConf, structure, sepSettings));
 				} catch (Exception ex) {
