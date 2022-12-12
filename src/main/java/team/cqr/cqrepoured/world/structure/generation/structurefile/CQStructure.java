@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
 
+import com.mojang.datafixers.DataFixer;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
@@ -32,13 +35,20 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.datafix.DataFixesManager;
+import net.minecraft.util.datafix.DefaultTypeReferences;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.chunk.storage.ChunkSerializer;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -48,8 +58,12 @@ import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 public class CQStructure {
@@ -323,6 +337,116 @@ public class CQStructure {
 		for (String s : CQRConfig.SERVER_CONFIG.advanced.specialEntities.get()) {
 			CQStructure.SPECIAL_ENTITIES.add(new ResourceLocation(s));
 		}
+	}
+
+	private static final int V1122 = 1343;
+	private static final int V18w20c = 1493;
+	private static final int V1165 = 2586;
+
+	public void loadFromMigratableFile(File f) throws IOException {
+		DataFixer dataFixer = DataFixesManager.getDataFixer();
+		CompoundNBT migratableStructureNbt = CompressedStreamTools.readCompressed(f);
+		CompoundNBT chunkNbts = migratableStructureNbt.getCompound("Chunk Data");
+		CompoundNBT cqrStructureNbt = migratableStructureNbt.getCompound("CQR Structure Data");
+
+		// update chunk data
+		Map<ChunkPos, IChunk> chunks = new HashMap<>();
+		CompoundNBT entityChunkNbt = null;
+		for (String s : chunkNbts.getAllKeys()) {
+			CompoundNBT chunkNbt = chunkNbts.getCompound(s);
+			chunkNbt = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkNbt, V1122, V18w20c);
+			chunkNbt = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkNbt, V18w20c, V1165);
+			chunkNbt.putInt("DataVersion", V1165);
+			chunkNbts.put(s, chunkNbt);
+
+			if (s.equals("entityChunk")) {
+				entityChunkNbt = chunkNbt;
+				continue;
+			}
+			String[] a = s.split(" ");
+			if (a.length == 2) {
+				ChunkPos chunkPos = new ChunkPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]));
+				// TODO pass fake world
+				IChunk chunk = ChunkSerializer.read(null, null, null, chunkPos, chunkNbt);
+				chunks.put(chunkPos, chunk);
+				continue;
+			}
+		}
+
+		this.author = cqrStructureNbt.getString("author");
+		this.size = NBTUtil.readBlockPos(cqrStructureNbt.getCompound("size"));
+
+		this.blockInfoList.clear();
+		this.entityInfoList.clear();
+
+		BlockStatePalette blockStatePalette = new BlockStatePalette();
+
+		// Load compound tags
+		ListNBT compoundTagList = cqrStructureNbt.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+
+		// Load block states
+		int blockStateIndex = 0;
+		for (INBT nbt : cqrStructureNbt.getList("palette", Constants.NBT.TAG_COMPOUND)) {
+			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
+		}
+
+		// Load normal blocks
+		ByteBuf buf = Unpooled.wrappedBuffer(cqrStructureNbt.getByteArray("blockInfoList"));
+		for (int i = 0; i < this.size.getX() * this.size.getY() * this.size.getZ(); i++) {
+			byte id = buf.getByte(buf.readerIndex());
+			if (id == 1) {
+				// block
+				buf.readerIndex(buf.readerIndex() + 1);
+				if (buf.readBoolean()) {
+					int x = i / this.size.getZ() / this.size.getY();
+					int y = i / this.size.getZ() % this.size.getY();
+					int z = i % this.size.getZ();
+					BlockPos pos = new BlockPos(x, y, z);
+					IChunk chunk = chunks.get(new ChunkPos(pos));
+					BlockState state = chunk.getBlockState(pos);
+					TileEntity tileEntity = chunk.getBlockEntity(pos);
+					this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
+				} else {
+					this.blockInfoList.add(PreparablePosInfo.Registry.read(buf, blockStatePalette, compoundTagList));
+				}
+			} else if (id == 2) {
+				// banner
+				int x = i / this.size.getZ() / this.size.getY();
+				int y = i / this.size.getZ() % this.size.getY();
+				int z = i % this.size.getZ();
+				BlockPos pos = new BlockPos(x, y, z);
+				IChunk chunk = chunks.get(new ChunkPos(pos));
+				BlockState state = chunk.getBlockState(pos);
+				TileEntity tileEntity = chunk.getBlockEntity(pos);
+				this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
+			} else if (id == 3) {
+				// boss
+				buf.readerIndex(buf.readerIndex() + 1);
+				this.blockInfoList.add(new PreparableBossInfo(buf.readBoolean() ? entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt()) : null));
+			} else if (id == 6) {
+				// spawner
+				CompoundNBT spawnerTag = compoundTagList.getCompound(buf.readInt());
+				ListNBT items = spawnerTag.getCompound("inventory").getList("Items", NBT.TAG_COMPOUND);
+				int itemCount = buf.readByte();
+				for (int j = 0; j < itemCount; j++) {
+					items.getCompound(j).getCompound("tag").put("EntityIn", entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt()));
+				}
+				this.blockInfoList.add(new PreparableSpawnerInfo(spawnerTag));
+			} else {
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(buf, blockStatePalette, compoundTagList));
+			}
+		}
+
+		// Load entities
+		ByteBuf entityBuf = Unpooled.wrappedBuffer(cqrStructureNbt.getByteArray("entityInfoList"));
+		int entityCount = entityBuf.readInt();
+		for (int i = 0; i < entityCount; i++) {
+			this.entityInfoList.add(new PreparableEntityInfo(entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt())));
+		}
+
+		this.unprotectedBlockList.clear();
+		int[] intArray = cqrStructureNbt.getIntArray("unprotectedBlockList");
+		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2])).forEach(this.unprotectedBlockList::add);
 	}
 
 }
