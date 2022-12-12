@@ -93,7 +93,7 @@ public class StructureUpper {
 						NBTTagCompound bossTag = ((PreparableBossInfo) block).getBossTag();
 						blockBuf.writeBoolean(bossTag != null);
 						if (bossTag != null) {
-							blockBuf.writeInt(addEntity(world, chunks, bossTag));
+							blockBuf.writeInt(addEntity(entityChunk, bossTag));
 						}
 					} else if (blockClass == PreparableForceFieldNexusInfo.class) {
 						PreparablePosInfo.Registry.write(block, blockBuf, palette, compoundList);
@@ -108,7 +108,7 @@ public class StructureUpper {
 
 						NBTTagList items = spawnerTag.getCompoundTag("inventory").getTagList("Items", NBT.TAG_COMPOUND);
 						blockBuf.writeByte(items.tagCount());
-						items.forEach(item -> blockBuf.writeInt(addEntity(world, chunks, ((NBTTagCompound) item).getCompoundTag("tag").getCompoundTag("EntityIn"))));
+						items.forEach(item -> blockBuf.writeInt(addEntity(entityChunk, ((NBTTagCompound) item).getCompoundTag("tag").getCompoundTag("EntityIn"))));
 					} else if (blockClass == PreparableMapInfo.class) {
 						PreparablePosInfo.Registry.write(block, blockBuf, palette, compoundList);
 					} else if (blockClass == PreparableTNTCQRInfo.class) {
