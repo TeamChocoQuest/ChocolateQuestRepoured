@@ -79,6 +79,7 @@ public class CQRMain {
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_STRUCTURE_PROCESSOR_FOLDER = null;
+	public static File CQ_MIGRATED_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	public static File CQ_FACTION_FOLDER = null;
@@ -229,6 +230,8 @@ public class CQRMain {
 		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "2.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "2.0.0");
+
+		CQ_MIGRATED_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "_migrated_structures");
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.SERVER_CONFIG.general.reinstallDefaultConfigs.get()) {
 			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER, true);
