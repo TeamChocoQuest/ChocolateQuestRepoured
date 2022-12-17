@@ -51,6 +51,9 @@ public class CachedBlockAccess implements IBlockAccess {
 
 	@Nullable
 	public ExtendedBlockStorage getChunkSection(BlockPos pos) {
+		if(this.level == null) {
+			return null;
+		}
 		if (this.level.isOutsideBuildHeight(pos)) {
 			return null;
 		}
