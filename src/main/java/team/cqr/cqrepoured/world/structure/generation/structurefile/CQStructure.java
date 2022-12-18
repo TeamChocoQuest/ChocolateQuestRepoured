@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -384,7 +385,9 @@ public class CQStructure {
 					int z = i % this.size.getZ();
 					BlockPos pos = new BlockPos(x, y, z);
 					IChunk chunk = chunks.get(new ChunkPos(pos));
-					BlockState state = chunk.getBlockState(pos);
+					BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
+							.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
+							.orElse(Blocks.AIR.defaultBlockState());
 					TileEntity tileEntity = chunk.getBlockEntity(pos);
 					this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
 				} else {
@@ -397,7 +400,9 @@ public class CQStructure {
 				int z = i % this.size.getZ();
 				BlockPos pos = new BlockPos(x, y, z);
 				IChunk chunk = chunks.get(new ChunkPos(pos));
-				BlockState state = chunk.getBlockState(pos);
+				BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
+						.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
+						.orElse(Blocks.AIR.defaultBlockState());
 				TileEntity tileEntity = chunk.getBlockEntity(pos);
 				this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
 			} else if (id == 3) {
