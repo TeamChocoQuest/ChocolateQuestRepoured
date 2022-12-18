@@ -20,10 +20,16 @@ import net.minecraft.util.palette.UpgradeData;
 import net.minecraft.world.EmptyTickList;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.Category;
+import net.minecraft.world.biome.Biome.RainType;
+import net.minecraft.world.biome.BiomeAmbience;
 import net.minecraft.world.biome.BiomeContainer;
+import net.minecraft.world.biome.BiomeGenerationSettings;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class DataFixerUtil {
@@ -43,7 +49,7 @@ public class DataFixerUtil {
 	public static IChunk read(CompoundNBT chunkTag) {
 		CompoundNBT levelTag = chunkTag.getCompound("Level");
 		ChunkPos chunkPos = new ChunkPos(levelTag.getInt("xPos"), levelTag.getInt("zPos"));
-		BiomeContainer biomeContainer = new BiomeContainer(createFakeBiomeRegistry(), new int[BiomeContainer.BIOMES_SIZE]);
+		BiomeContainer biomeContainer = new BiomeContainer(BIOME_REGISTRY, new int[BiomeContainer.BIOMES_SIZE]);
 		UpgradeData upgradeData = levelTag.contains("UpgradeData", NBT.TAG_COMPOUND) ? new UpgradeData(levelTag.getCompound("UpgradeData")) : UpgradeData.EMPTY;
 		ListNBT sectionTagList = levelTag.getList("Sections", NBT.TAG_COMPOUND);
 		ChunkSection[] sectionArray = new ChunkSection[16];
@@ -106,26 +112,44 @@ public class DataFixerUtil {
 		}
 	}
 
-	private static IObjectIntIterable<Biome> createFakeBiomeRegistry() {
-		Biome biome = new Biome.Builder().build();
-		List<Biome> biomeList = Collections.singletonList(biome);
-		return new IObjectIntIterable<Biome>() {
+	private static final IObjectIntIterable<Biome> BIOME_REGISTRY = new IObjectIntIterable<Biome>() {
+		
+		private final Biome biome = new Biome.Builder()
+				.precipitation(RainType.NONE)
+				.biomeCategory(Category.NONE)
+				.depth(0.0F)
+				.scale(0.0F)
+				.temperature(0.0F)
+				.downfall(0.0F)
+				.specialEffects(new BiomeAmbience.Builder()
+						.fogColor(0)
+						.waterColor(0)
+						.waterFogColor(0)
+						.skyColor(0)
+						.build())
+				.mobSpawnSettings(new MobSpawnInfo.Builder()
+						.build())
+				.generationSettings(new BiomeGenerationSettings.Builder()
+						.surfaceBuilder(new ConfiguredSurfaceBuilder<>(null, null))
+						.build())
+				.build();
+		private final List<Biome> biomeList = Collections.singletonList(biome);
 
-			@Override
-			public Iterator<Biome> iterator() {
-				return biomeList.iterator();
-			}
+		@Override
+		public Iterator<Biome> iterator() {
+			return biomeList.iterator();
+		}
 
-			@Override
-			public int getId(Biome pValue) {
-				return 0;
-			}
+		@Override
+		public int getId(Biome pValue) {
+			return 0;
+		}
 
-			@Override
-			public Biome byId(int pValue) {
-				return biome;
-			}
-		};
-	}
+		@Override
+		public Biome byId(int pValue) {
+			return biome;
+		}
+
+	};
 
 }
