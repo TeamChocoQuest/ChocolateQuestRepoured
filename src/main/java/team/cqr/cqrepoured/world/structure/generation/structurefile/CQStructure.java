@@ -20,8 +20,6 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
 
-import com.mojang.datafixers.DataFixer;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.block.Block;
@@ -39,14 +37,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.datafix.DataFixesManager;
-import net.minecraft.util.datafix.DefaultTypeReferences;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.chunk.storage.ChunkSerializer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.CQRMain;
@@ -55,6 +50,7 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
+import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
@@ -339,38 +335,23 @@ public class CQStructure {
 		}
 	}
 
-	private static final int V1122 = 1343;
-	private static final int V18w20c = 1493;
-	private static final int V1165 = 2586;
-
-	public void loadFromMigratableFile(File f) throws IOException {
-		DataFixer dataFixer = DataFixesManager.getDataFixer();
-		CompoundNBT migratableStructureNbt = CompressedStreamTools.readCompressed(f);
+	public void loadFromMigratableFile(File file) throws IOException {
+		CompoundNBT migratableStructureNbt = CompressedStreamTools.readCompressed(file);
 		CompoundNBT chunkNbts = migratableStructureNbt.getCompound("Chunk Data");
 		CompoundNBT cqrStructureNbt = migratableStructureNbt.getCompound("CQR Structure Data");
 
 		// update chunk data
 		Map<ChunkPos, IChunk> chunks = new HashMap<>();
-		CompoundNBT entityChunkNbt = null;
+		CompoundNBT entityChunkNbt = DataFixerUtil.update(chunkNbts.getCompound("entityChunk"));
 		for (String s : chunkNbts.getAllKeys()) {
-			CompoundNBT chunkNbt = chunkNbts.getCompound(s);
-			chunkNbt = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkNbt, V1122, V18w20c);
-			chunkNbt = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkNbt, V18w20c, V1165);
-			chunkNbt.putInt("DataVersion", V1165);
-			chunkNbts.put(s, chunkNbt);
+			int i = s.indexOf(' ');
+			if (i == -1) {
+				continue;
+			}
 
-			if (s.equals("entityChunk")) {
-				entityChunkNbt = chunkNbt;
-				continue;
-			}
-			String[] a = s.split(" ");
-			if (a.length == 2) {
-				ChunkPos chunkPos = new ChunkPos(Integer.parseInt(a[0]), Integer.parseInt(a[1]));
-				// TODO pass fake world
-				IChunk chunk = ChunkSerializer.read(null, null, null, chunkPos, chunkNbt);
-				chunks.put(chunkPos, chunk);
-				continue;
-			}
+			ChunkPos key = new ChunkPos(Integer.parseInt(s.substring(0, i)), Integer.parseInt(s.substring(i + 1)));
+			IChunk value = DataFixerUtil.read(DataFixerUtil.update(chunkNbts.getCompound(s)));
+			chunks.put(key, value);
 		}
 
 		this.author = cqrStructureNbt.getString("author");
