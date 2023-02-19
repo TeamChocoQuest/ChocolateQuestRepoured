@@ -10,6 +10,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import team.cqr.cqrepoured.client.util.ClientWorldUtil;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
@@ -18,6 +21,7 @@ import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManag
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 public class EntityUtil {
 
@@ -36,14 +40,11 @@ public class EntityUtil {
 			double d1 = Math.sin(Math.toRadians(yaw));
 			double d2 = Math.cos(Math.toRadians(yaw));
 
-			entity.setDeltaMovement(entity.getDeltaMovement().add(
-					strafe * d2 - forward * d1,
-					0,
-					forward * d2 + strafe * d1
-			));
-			
-			/*entity.motionX += strafe * d2 - forward * d1;
-			entity.motionZ += forward * d2 + strafe * d1;*/
+			entity.setDeltaMovement(entity.getDeltaMovement().add(strafe * d2 - forward * d1, 0, forward * d2 + strafe * d1));
+
+			/*
+			 * entity.motionX += strafe * d2 - forward * d1; entity.motionZ += forward * d2 + strafe * d1;
+			 */
 		}
 	}
 
@@ -65,19 +66,15 @@ public class EntityUtil {
 			double d3 = Math.sin(Math.toRadians(pitch));
 			double d4 = Math.cos(Math.toRadians(pitch));
 
-			entity.setDeltaMovement(entity.getDeltaMovement().add(
-					strafe * d2 - forward * d1 * d4,
-					up - forward * d3,
-					forward * d2 * d4 + strafe * d1
-			));
-			/*entity.motionX += strafe * d2 - forward * d1 * d4;
-			entity.motionY += up - forward * d3;
-			entity.motionZ += forward * d2 * d4 + strafe * d1;*/
+			entity.setDeltaMovement(entity.getDeltaMovement().add(strafe * d2 - forward * d1 * d4, up - forward * d3, forward * d2 * d4 + strafe * d1));
+			/*
+			 * entity.motionX += strafe * d2 - forward * d1 * d4; entity.motionY += up - forward * d3; entity.motionZ += forward * d2 * d4 + strafe * d1;
+			 */
 		}
 	}
 
 	public static boolean isEntityFlying(Entity entity) {
-		if(entity == null) {
+		if (entity == null) {
 			return false;
 		}
 		if (entity.isOnGround()) {
@@ -99,7 +96,7 @@ public class EntityUtil {
 				if (!entity.level.isLoaded(mutablePos)) {
 					continue;
 				}
-				//TODO: Check if this is correct
+				// TODO: Check if this is correct
 				while (mutablePos.getY() > 0 && entity.level.getBlockState(mutablePos).getCollisionShape(entity.level, mutablePos) == VoxelShapes.INFINITY) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
@@ -119,14 +116,12 @@ public class EntityUtil {
 		if (!world.isClientSide) {
 			return ((ServerWorld) world).getEntity(uuid);
 		}
-		
-		for (Entity entity : world.loadedEntityList) {
-			if (entity.getUUID().equals(uuid)) {
-				return entity;
-			}
-		}
 
-		return null;
+		Entity resClient = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
+			return ClientWorldUtil.getEntityByUUID(world, uuid);
+		});
+
+		return resClient;
 	}
 
 	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
