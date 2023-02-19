@@ -1,5 +1,10 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -17,11 +22,6 @@ import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Callable;
 
 public class EntityUtil {
 
