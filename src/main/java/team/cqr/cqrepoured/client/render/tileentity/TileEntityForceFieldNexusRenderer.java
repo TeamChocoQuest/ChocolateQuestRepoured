@@ -1,12 +1,16 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.CQRMain;
+import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
+import team.cqr.cqrepoured.client.model.geo.block.ModelNexusCore;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
 /*
@@ -15,25 +19,17 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
  * Github: https://github.com/DerToaster98
  */
 @OnlyIn(Dist.CLIENT)
-public class TileEntityForceFieldNexusRenderer extends TileEntityRenderer<TileEntityForceFieldNexus> {
+public class TileEntityForceFieldNexusRenderer extends GeoBlockRenderer<TileEntityForceFieldNexus> {
 
-	private final ModelBase crystal = new ModelNexusCrystal();
-	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/nexus_crystal.png");
-
+	public TileEntityForceFieldNexusRenderer(TileEntityRendererDispatcher rendererDispatcherIn) {
+		super(rendererDispatcherIn, new ModelNexusCore());
+	}
+	
 	@Override
-	public void render(TileEntityForceFieldNexus te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-		// Crystal code
-		GlStateManager.pushMatrix();
-		GlStateManager.disableLighting();
-		GlStateManager.enableAlpha();
-		GlStateManager.translate((float) x + 0.5F, (float) y + 0.7F, (float) z + 0.5F);
-		this.bindTexture(CRYSTAL_TEXTURES);
-
-		this.crystal.render(null, 0.0F, 0.0F, partialTicks, 0.0F, 0.0F, 0.025F);
-		GlStateManager.enableLighting();
-		GlStateManager.disableAlpha();
-		GlStateManager.popMatrix();
+	public RenderType getRenderType(TileEntityForceFieldNexus animatable, float partialTicks, MatrixStack stack,
+			IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
+			ResourceLocation textureLocation) {
+		return RenderType.entityTranslucent(getTextureLocation(animatable));
 	}
 
 }

@@ -20,6 +20,7 @@ import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchantEditTrade;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRItemProperties;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
+import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
@@ -48,6 +49,7 @@ public class CQRepouredClient {
 
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CQR.get(), TileEntityExporterChestRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
+		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.FORCE_FIELD_NEXUS.get(), TileEntityForceFieldNexusRenderer::new);
 
 		event.enqueueWork(() -> {
 			SphereRenderer.init();
