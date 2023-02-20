@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,6 +11,8 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+
+import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
 public class BlockForceFieldNexus extends Block {
@@ -31,10 +34,15 @@ public class BlockForceFieldNexus extends Block {
 	public boolean hasTileEntity(BlockState state) {
 		return true;
 	}
+	
+	@Override
+	public BlockRenderType getRenderShape(BlockState state) {
+		return BlockRenderType.ENTITYBLOCK_ANIMATED;
+	}
 
 	@Override
 	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-		return new TileEntityForceFieldNexus();
+		return CQRBlockEntities.FORCE_FIELD_NEXUS.get().create();
 	}
 
 	@Override
