@@ -11,9 +11,7 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-
 import team.cqr.cqrepoured.init.CQRBlockEntities;
-import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
 public class BlockForceFieldNexus extends Block {
 
