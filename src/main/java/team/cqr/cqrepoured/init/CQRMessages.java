@@ -74,7 +74,6 @@ public class CQRMessages {
 		registerServerToClient(SPacketUpdateAnimationOfEntity.class, CPacketHandlerAnimationUpdateOfEntity.class);
 		registerServerToClient(SPacketCalamityUpdateHand.class, CPacketHandlerCalamityHandUpdateHand.class);
 		registerServerToClient(SPacketSyncCalamityRotation.class, CPacketHandlerSyncCalamityRotation.class);
-		registerServerToClient(SPacketSpawnParticles.class, CPacketHandlerSpawnParticles.class);
 		registerServerToClient(SPacketUpdateElectrocuteCapability.class, CPacketHandlerUpdateElectrocuteCapability.class);
 		registerServerToClient(SPacketUpdateEmitterTarget.class, CPacketHandlerUpdateEmitterTarget.class);
 		registerServerToClient(SPacketSyncTrades.class, CPacketHandlerSyncTrades.class);
