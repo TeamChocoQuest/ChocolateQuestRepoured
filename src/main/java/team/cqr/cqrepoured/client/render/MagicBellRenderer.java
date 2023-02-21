@@ -34,20 +34,22 @@ public class MagicBellRenderer {
 	public static int outlineColor = -1;
 
 	{
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
-		if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
+		//No longer needed?
+		/*if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
 			ShaderLinkHelper.setNewStaticShaderLinkHelper();
-		}
+		}*/
 
 		ResourceLocation resourcelocation = new ResourceLocation("shaders/post/entity_outline.json");
 
 		ShaderGroup shader = null;
 		Framebuffer framebuffer = null;
 		try {
-			shader = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), resourcelocation);
-			shader.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-			framebuffer = shader.getFramebufferRaw("final");
+			shader = new ShaderGroup(mc.getTextureManager(), mc.getResourceManager(), mc.getMainRenderTarget(), resourcelocation);
+			//OLD: shader.createBindFramebuffers(mc.screen.width, mc.screen.height);
+			shader.resize(mc.screen.width, mc.screen.height);
+			framebuffer = shader.getTempTarget("final");
 		} catch (Exception e) {
 			// ignore
 		}
@@ -147,8 +149,8 @@ public class MagicBellRenderer {
 	}
 
 	public void tick() {
-		Minecraft mc = Minecraft.getMinecraft();
-		World world = mc.world;
+		Minecraft mc = Minecraft.getInstance();
+		World world = mc.level;
 		if (world == null) {
 			this.clear();
 			return;
@@ -162,7 +164,7 @@ public class MagicBellRenderer {
 		}
 		for (Iterator<EntityInfo> iterator = this.highlightedEntities.iterator(); iterator.hasNext();) {
 			EntityInfo entityInfo = iterator.next();
-			if (entityInfo.lifetime-- <= 0 || world.getEntityByID(entityInfo.entityId) == null) {
+			if (entityInfo.lifetime-- <= 0 || world.getEntity(entityInfo.entityId) == null) {
 				iterator.remove();
 			}
 		}
@@ -173,8 +175,8 @@ public class MagicBellRenderer {
 			return;
 		}
 
-		Minecraft mc = Minecraft.getMinecraft();
-		World world = mc.world;
+		Minecraft mc = Minecraft.getInstance();
+		World world = mc.level;
 		double x = mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTicks;
 		double y = mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTicks;
 		double z = mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTicks;
@@ -217,7 +219,7 @@ public class MagicBellRenderer {
 		TileEntityRendererDispatcher.instance.drawBatch(0);
 		mc.getRenderManager().setRenderOutlines(true);
 		this.highlightedEntities.forEach(entityInfo -> {
-			Entity entity = world.getEntityByID(entityInfo.entityId);
+			Entity entity = world.getEntity(entityInfo.entityId);
 			if (entity == null) {
 				return;
 			}
