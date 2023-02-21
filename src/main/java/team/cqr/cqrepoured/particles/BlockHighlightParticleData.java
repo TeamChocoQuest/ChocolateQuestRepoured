@@ -18,9 +18,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.init.CQRParticleTypes;
 
 public class BlockHighlightParticleData implements IParticleData {
+
+	public static final int COLOR_ENTITY_HIGHLIGHT = 0xC00000;
+	public static final int BLOCK_DEPENDENCY_HIGHLIGHT = 0x4050D0;
+	public static final int BLOCK_PROTECTED_HIGHLIGHT = 0xFFFF00;
+	public static final int BLOCK_UNPROTECTED_HIGHLIGHT = 0x00FF00;
 	
 	public static class Type extends ParticleType<BlockHighlightParticleData> {
-
+		
 		public Type(boolean ignoreRenderDistance) {
 			super(ignoreRenderDistance, DESERIALIZER);
 		}
