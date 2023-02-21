@@ -1,45 +1,66 @@
 package team.cqr.cqrepoured.client.particle;
 
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+
+import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
+import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
 
 public class ParticleMagicBell extends Particle {
 
-	public ParticleMagicBell(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, BlockPos pos) {
+	public ParticleMagicBell(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, BlockPos pos) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn);
 		MagicBellRenderer.getInstance().add(color, lifetime, pos);
 	}
 
-	public ParticleMagicBell(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, int entityId) {
+	public ParticleMagicBell(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, int entityId) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn);
 		MagicBellRenderer.getInstance().add(color, lifetime, entityId);
 	}
 
-	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	@OnlyIn(Dist.CLIENT)
+	public static class Factory implements IParticleFactory<BlockHighlightParticleData> {
+		
+		public Factory(IAnimatedSprite sprite) {
+			//Ignore
+		}
+		
+		@Override
+		public Particle createParticle(BlockHighlightParticleData pType, ClientWorld pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
+			int lifetime = pType.getLifetime();
+			int color = pType.getColor();
+			Particle result = null;
+			if (pType.getBlockPos().isPresent()) {
+				BlockPos pos = pType.getBlockPos().get();
+				result = new ParticleMagicBell(pLevel, pX, pY, pZ, lifetime, color, pos);
+			} else if (pType.getEntityID().isPresent()) {
+				int entityId = pType.getEntityID().get();
+				result = new ParticleMagicBell(pLevel, pX, pY, pZ, lifetime, color, entityId);
+			}
+			if (result == null) {
+				result = new ParticleMagicBell(pLevel, pX, pY, pZ, lifetime, color, -1);
+			}
+			
+			return result;
+		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public static class Factory implements IParticleFactory {
-		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int... optionalArguments) {
-			int lifetime = optionalArguments.length >= 1 ? optionalArguments[0] : 20;
-			int color = optionalArguments.length >= 2 ? optionalArguments[1] : 0xFFFFFF;
-			if (optionalArguments.length >= 5) {
-				BlockPos pos = new BlockPos(optionalArguments[2], optionalArguments[3], optionalArguments[4]);
-				return new ParticleMagicBell(worldIn, xCoordIn, yCoordIn, zCoordIn, lifetime, color, pos);
-			} else {
-				int entityId = optionalArguments.length >= 3 ? optionalArguments[2] : -1;
-				return new ParticleMagicBell(worldIn, xCoordIn, yCoordIn, zCoordIn, lifetime, color, entityId);
-			}
-		}
+	@Override
+	public void render(IVertexBuilder var1, ActiveRenderInfo var2, float var3) {
+		
+	}
+
+	@Override
+	public IParticleRenderType getRenderType() {
+		return IParticleRenderType.NO_RENDER;
 	}
 
 }
