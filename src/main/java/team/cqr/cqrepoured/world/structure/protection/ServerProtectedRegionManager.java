@@ -1,5 +1,19 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,15 +30,14 @@ import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
-
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
 	private final World world;
-	private final File folder;
+	//private final File folder;
+
+	private static final String FOLDER_PATH = "CQR/protected_regions/";
+	private final Function<String, File> FUNC_GET_DATA_FILE;
 
 	public static class ProtectedRegionContainer {
 		public final ProtectedRegion protectedRegion;
@@ -62,12 +75,19 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	public ServerProtectedRegionManager(World world) {
 		this.world = world;
-		int dim = world.provider.getDimension();
+		if(world instanceof ServerWorld) {
+			ServerWorld sw = (ServerWorld) world;
+			this.FUNC_GET_DATA_FILE = sw.getChunkSource().getDataStorage()::getDataFile;
+		}
+		else {
+			this.FUNC_GET_DATA_FILE = (str) -> null;
+		}
+		/*int dim = world.provider.getDimension();
 		if (dim == 0) {
 			this.folder = new File(world.getSaveHandler().getWorldDirectory(), "data/CQR/protected_regions");
 		} else {
 			this.folder = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/CQR/protected_regions");
-		}
+		}*/
 	}
 
 	public void handleChunkLoad(Chunk chunk) {
@@ -154,7 +174,11 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	public void removeProtectedRegion(UUID uuid) {
 		ProtectedRegionContainer container = this.protectedRegions.remove(uuid);
 
-		File file = new File(this.folder, uuid.toString() + ".nbt");
+		//File file = new File(this.folder, uuid.toString() + ".nbt");
+		File file = this.FUNC_GET_DATA_FILE.apply(FOLDER_PATH + uuid.toString() + ".nbt");
+		if (file == null) {
+			return;
+		}
 		if (file.exists()) {
 			file.delete();
 		}
@@ -229,7 +253,11 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		for (Iterator<ProtectedRegionContainer> iterator = this.protectedRegions.values().iterator(); iterator.hasNext();) {
 			ProtectedRegionContainer container = iterator.next();
 			if (!container.protectedRegion.isValid()) {
-				File file = new File(this.folder, container.protectedRegion.getUuid() + ".nbt");
+				//File file = new File(this.folder, container.protectedRegion.getUuid() + ".nbt");
+				File file = this.FUNC_GET_DATA_FILE.apply(FOLDER_PATH + container.protectedRegion.getUuid() + ".nbt");
+				if (file == null) {
+					continue;
+				}
 				if (file.exists()) {
 					file.delete();
 				}
@@ -241,14 +269,19 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	private void saveProtectedRegionToFile(ProtectedRegion protectedRegion) {
-		File file = new File(this.folder, protectedRegion.getUuid().toString() + ".nbt");
+		//File file = new File(this.folder, protectedRegion.getUuid().toString() + ".nbt");
+		File file = this.FUNC_GET_DATA_FILE.apply(FOLDER_PATH + protectedRegion.getUuid().toString() + ".nbt");
+		if(file == null) {
+			return;
+		}
 		FileIOUtil.writeNBTToFile(protectedRegion.writeToNBT(), file);
 	}
 
 	@Nullable
 	private ProtectedRegion createProtectedRegionFromFile(UUID uuid) {
-		File file = new File(this.folder, uuid.toString() + ".nbt");
-		if (!file.exists()) {
+		//File file = new File(this.folder, uuid.toString() + ".nbt");
+		File file = this.FUNC_GET_DATA_FILE.apply(FOLDER_PATH + uuid.toString() + ".nbt");
+		if (file == null || !file.exists()) {
 			return null;
 		}
 
