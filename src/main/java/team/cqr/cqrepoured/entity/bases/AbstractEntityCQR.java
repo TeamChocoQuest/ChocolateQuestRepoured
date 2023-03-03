@@ -927,7 +927,7 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 
 	@Override
 	public void aiStep() {
-		//this.updateSwingTime(); //Already called in aiStep()
+		this.updateSwingTime();//Only called in aiStep if parent class is MonsterEntity
 		super.aiStep();
 
 		// Bossbar
