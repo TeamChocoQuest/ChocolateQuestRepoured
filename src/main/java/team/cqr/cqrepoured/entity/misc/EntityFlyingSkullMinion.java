@@ -40,7 +40,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	protected Entity target;
 	protected boolean attacking = false;
 	protected boolean isLeftSkull = false;
-	protected Vector3d direction = null;
+	protected Vector3d direction = Vector3d.ZERO;
 
 	public EntityFlyingSkullMinion(World world) {
 		this(CQREntityTypes.FLYING_SKULL.get(), world);
