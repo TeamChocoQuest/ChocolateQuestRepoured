@@ -56,10 +56,10 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 		for (int i = 0; i < this.tradeButtons.length; i++) {
 			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(this, 10 + i, this.leftPos + 8, this.topPos + 18 + i * 20, i));
 			if (i < this.tradeButtons.length - 1) {
-				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.leftPos - 12, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0,	CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_up"), this::actionPerformed, new StringTextComponent("")));
-				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.leftPos - 12, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_down"), this::actionPerformed, new StringTextComponent("")));
-				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.leftPos - 2, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_delete"), this::actionPerformed, new StringTextComponent("")));
-				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.leftPos - 2, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px"), CQRMain.prefix("textures/gui/container/icon_edit"), this::actionPerformed, new StringTextComponent("")));
+				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.leftPos - 12, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0,	CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_up.png"), this::actionPerformed, new StringTextComponent("")));
+				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.leftPos - 12, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_down.png"), this::actionPerformed, new StringTextComponent("")));
+				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.leftPos - 2, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_delete.png"), this::actionPerformed, new StringTextComponent("")));
+				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.leftPos - 2, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_edit.png"), this::actionPerformed, new StringTextComponent("")));
 			}
 		}
 		this.addNewTradeButton = this.addButton(new Button(/*0, */this.leftPos - 12, this.topPos + 138, 136, 20, new TranslationTextComponent("- Create Trade -"), this::actionPerformed));
