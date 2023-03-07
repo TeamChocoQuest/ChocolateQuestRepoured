@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EntityType.IFactory;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -355,6 +356,8 @@ public class CQREntityTypes {
 		event.put(GIANT_SILVERFISH_RED.get(), AnimalEntity.createMobAttributes().build());
 		event.put(GIANT_SILVERFISH_GREEN.get(), AnimalEntity.createMobAttributes().build());
 		event.put(POLLO.get(), AnimalEntity.createMobAttributes().build());
+		
+		event.put(FLYING_SKULL.get(), MobEntity.createMobAttributes().build());
 	}
 
 	public static void registerEntityTypes()
