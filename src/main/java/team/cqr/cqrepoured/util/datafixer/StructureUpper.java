@@ -149,7 +149,7 @@ public class StructureUpper {
 		ExtendedBlockStorage[] sections = chunk.chunk.getBlockStorageArray();
 		ExtendedBlockStorage section = sections[pos.getY() >> 4];
 		if (section == null) {
-			section = new ExtendedBlockStorage(pos.getY() >> 4, false);
+			section = new ExtendedBlockStorage(pos.getY() >> 4 << 4, false);
 			sections[pos.getY() >> 4] = section;
 		}
 		section.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, state);
