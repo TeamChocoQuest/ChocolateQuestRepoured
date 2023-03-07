@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.boss;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +19,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -220,16 +224,32 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public AnimationFactory getFactory() {
 		return this.factory;
 	}
-
-	static final Set<String> ALWAYS_PLAYING_NECROMANCER = new HashSet<>();
-
-	static {
-		ALWAYS_PLAYING_NECROMANCER.add("animation.bipednecromancer.boneshield.loop");
-	}
 	
 	@Override
+	public void registerControllers(AnimationData data) {
+		IAnimatableCQR.super.registerControllers(data);
+		
+		data.addAnimationController(new AnimationController<>(this, "controller_bone_shield", 0, this::animPredicateBoneShield));
+	}
+	
+	public static final String ANIM_NAME_BONESHIELD_LOOP = "animation.bipednecromancer.boneshield.loop";
+	
+	protected <E extends EntityCQRNecromancer> PlayState animPredicateBoneShield(AnimationEvent<E> event) {
+		if (event.getAnimatable().isIdentityHidden()) {
+			if(event.getController().getCurrentAnimation() != null) {
+				event.getController().clearAnimationCache();
+			}
+			return PlayState.STOP;
+		}
+		if (event.getController().getCurrentAnimation() == null) {
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_BONESHIELD_LOOP));
+		}
+		return PlayState.CONTINUE;
+	}
+
+	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
-		return ALWAYS_PLAYING_NECROMANCER;
+		return null;
 	}
 
 }
