@@ -395,6 +395,7 @@ public class CQStructure {
 				}
 			} else if (id == 2) {
 				// banner
+				buf.readerIndex(buf.readerIndex() + 1);
 				int x = i / this.size.getZ() / this.size.getY();
 				int y = i / this.size.getZ() % this.size.getY();
 				int z = i % this.size.getZ();
@@ -411,6 +412,7 @@ public class CQStructure {
 				this.blockInfoList.add(new PreparableBossInfo(buf.readBoolean() ? entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt()) : null));
 			} else if (id == 6) {
 				// spawner
+				buf.readerIndex(buf.readerIndex() + 1);
 				CompoundNBT spawnerTag = compoundTagList.getCompound(buf.readInt());
 				ListNBT items = spawnerTag.getCompound("inventory").getList("Items", NBT.TAG_COMPOUND);
 				int itemCount = buf.readByte();
