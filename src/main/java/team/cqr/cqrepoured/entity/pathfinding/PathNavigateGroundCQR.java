@@ -157,7 +157,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	@Override
 	public void recomputePath() {
 		if (this.hasMount()) {
-			this.getMount().getNavigation().tick();
+			this.getMount().getNavigation().recomputePath();
 		}
 		if (this.level.getGameTime() - this.lastTimeUpdated > 20L) {
 			if (this.targetPos != null) {
