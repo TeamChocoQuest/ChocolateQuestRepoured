@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.UUID;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
@@ -21,7 +23,6 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -32,15 +33,12 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-import java.util.UUID;
-
 public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire, IAnimatable, IAnimationTickable {
 
 	protected Entity summoner;
 	protected Entity target;
 	protected boolean attacking = false;
 	protected boolean isLeftSkull = false;
-	protected Vector3d direction = Vector3d.ZERO;
 
 	public EntityFlyingSkullMinion(World world) {
 		this(CQREntityTypes.FLYING_SKULL.get(), world);
@@ -111,7 +109,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			if (this.target != null && this.target.isAlive()) {
 				this.updateDirection();
 			}
-			Vector3d v = this.direction;
+			Vector3d v = this.getDeltaMovement();
 			v = v.normalize();
 			// this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			this.setDeltaMovement(v.multiply(0.4, 0.25, 0.4));
@@ -197,16 +195,16 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	private void updateDirection() {
-		this.direction = this.target.position().subtract(this.position());
+		this.setDeltaMovement(this.target.position().subtract(this.position()));
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundNBT compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("attacking", this.attacking);
-		compound.putDouble("vX", this.direction == null ? 0D : this.direction.x);
-		compound.putDouble("vY", this.direction == null ? 0D : this.direction.y);
-		compound.putDouble("vZ", this.direction == null ? 0D : this.direction.z);
+		compound.putDouble("vX", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().x);
+		compound.putDouble("vY", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().y);
+		compound.putDouble("vZ", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().z);
 		if (this.summoner != null && this.summoner.isAlive()) {
 			compound.put("summonerID", NBTUtil.createUUID(this.summoner.getUUID()));
 		}
@@ -235,7 +233,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 		x = compound.getDouble("vX");
 		y = compound.getDouble("vY");
 		z = compound.getDouble("vZ");
-		this.direction = new Vector3d(x, y, z);
+		this.setDeltaMovement(new Vector3d(x, y, z));
 		if (compound.contains("targetID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.loadUUID(compound.getCompound("targetID"));
 			if (this.level != null) {
