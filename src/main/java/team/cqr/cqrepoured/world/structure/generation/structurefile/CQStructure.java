@@ -429,7 +429,7 @@ public class CQStructure {
 		ByteBuf entityBuf = Unpooled.wrappedBuffer(cqrStructureNbt.getByteArray("entityInfoList"));
 		int entityCount = entityBuf.readInt();
 		for (int i = 0; i < entityCount; i++) {
-			this.entityInfoList.add(new PreparableEntityInfo(entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt())));
+			this.entityInfoList.add(new PreparableEntityInfo(entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(entityBuf.readInt())));
 		}
 
 		this.unprotectedBlockList.clear();
