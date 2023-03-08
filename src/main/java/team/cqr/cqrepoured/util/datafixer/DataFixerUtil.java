@@ -46,7 +46,7 @@ public class DataFixerUtil {
 		return chunkTag;
 	}
 
-	public static IChunk read(CompoundNBT chunkTag) {
+	public static IChunk read(World world, CompoundNBT chunkTag) {
 		CompoundNBT levelTag = chunkTag.getCompound("Level");
 		ChunkPos chunkPos = new ChunkPos(levelTag.getInt("xPos"), levelTag.getInt("zPos"));
 		BiomeContainer biomeContainer = new BiomeContainer(BIOME_REGISTRY, new int[BiomeContainer.BIOMES_SIZE]);
@@ -67,7 +67,7 @@ public class DataFixerUtil {
 			}
 		}
 
-		IChunk chunk = new Chunk(null, chunkPos, biomeContainer, upgradeData, EmptyTickList.empty(), EmptyTickList.empty(), 0L, sectionArray, (p_222648_1_) -> {
+		IChunk chunk = new Chunk(world, chunkPos, biomeContainer, upgradeData, EmptyTickList.empty(), EmptyTickList.empty(), 0L, sectionArray, (p_222648_1_) -> {
 			postLoadChunk(levelTag, p_222648_1_);
 		});
 

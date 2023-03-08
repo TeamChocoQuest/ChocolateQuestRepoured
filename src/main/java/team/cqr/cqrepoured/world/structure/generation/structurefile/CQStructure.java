@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
@@ -42,6 +43,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -52,6 +54,7 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
+import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
@@ -342,7 +345,7 @@ public class CQStructure {
 		CompoundNBT cqrStructureNbt = migratableStructureNbt.getCompound("CQR Structure Data");
 
 		// update chunk data
-		Map<ChunkPos, IChunk> chunks = new HashMap<>();
+		DataFixerWorld world = new DataFixerWorld();
 		CompoundNBT entityChunkNbt = DataFixerUtil.update(chunkNbts.getCompound("entityChunk"));
 		for (String s : chunkNbts.getAllKeys()) {
 			int i = s.indexOf(' ');
@@ -351,9 +354,10 @@ public class CQStructure {
 			}
 
 			ChunkPos key = new ChunkPos(Integer.parseInt(s.substring(0, i)), Integer.parseInt(s.substring(i + 1)));
-			IChunk value = DataFixerUtil.read(DataFixerUtil.update(chunkNbts.getCompound(s)));
-			chunks.put(key, value);
+			IChunk value = DataFixerUtil.read(world, DataFixerUtil.update(chunkNbts.getCompound(s)));
+			world.setChunk(key, (Chunk) value);
 		}
+		world.chunks().stream().collect(Collectors.toList()).forEach(Chunk::postProcessGeneration);
 
 		this.author = cqrStructureNbt.getString("author");
 		this.size = NBTUtil.readBlockPos(cqrStructureNbt.getCompound("size"));
@@ -384,7 +388,7 @@ public class CQStructure {
 					int y = i / this.size.getZ() % this.size.getY();
 					int z = i % this.size.getZ();
 					BlockPos pos = new BlockPos(x, y, z);
-					IChunk chunk = chunks.get(new ChunkPos(pos));
+					IChunk chunk = world.getChunk(pos);
 					BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
 							.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
 							.orElse(Blocks.AIR.defaultBlockState());
@@ -400,7 +404,7 @@ public class CQStructure {
 				int y = i / this.size.getZ() % this.size.getY();
 				int z = i % this.size.getZ();
 				BlockPos pos = new BlockPos(x, y, z);
-				IChunk chunk = chunks.get(new ChunkPos(pos));
+				IChunk chunk = world.getChunk(pos);
 				BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
 						.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
 						.orElse(Blocks.AIR.defaultBlockState());
