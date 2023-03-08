@@ -22,11 +22,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.util.palette.IPalette;
 import net.minecraft.util.palette.IdentityPalette;
-import net.minecraft.util.palette.PalettedContainer;
 import net.minecraft.world.ISeedReader;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
+import team.cqr.cqrepoured.util.palette.PalettedContainer;
 
 @SuppressWarnings("deprecation")
 public class CQRSection implements ICQRSection {
