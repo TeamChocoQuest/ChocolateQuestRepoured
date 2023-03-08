@@ -71,9 +71,7 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 
 		for (int i = 0; i < bitarray.getSize(); ++i) {
 			T t = ipalette.valueFor(bitarray.get(i));
-			if (t != null) {
-				this.set(i, t);
-			}
+			this.set(i, t);
 		}
 
 		int j = this.palette.idFor(p_onResize_2_);
