@@ -327,8 +327,12 @@ public class CQStructure {
 
 	public void addAll(ICQRLevel level, DungeonPlacement placement) {
 		int i = 0;
-		for (BlockPos pos : BlockPos.betweenClosed(BlockPos.ZERO, this.size.offset(-1, -1, -1))) {
-			this.blockInfoList.get(i++).prepare(level, pos, placement);
+		for (int x = 0; x < this.size.getX(); x++) {
+			for (int y = 0; y < this.size.getY(); y++) {
+				for (int z = 0; z < this.size.getZ(); z++) {
+					this.blockInfoList.get(i++).prepare(level, new BlockPos(x, y, z), placement);
+				}
+			}
 		}
 	}
 
