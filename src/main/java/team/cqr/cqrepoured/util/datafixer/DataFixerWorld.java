@@ -95,7 +95,7 @@ public class DataFixerWorld extends World {
 
 	@Override
 	public void levelEvent(PlayerEntity pPlayer, int pType, BlockPos pPos, int pData) {
-		throw new UnsupportedOperationException();
+		// ignore
 	}
 
 	@Override
