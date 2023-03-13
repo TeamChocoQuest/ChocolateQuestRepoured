@@ -21,18 +21,17 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 	private final ObjectIntIdentityMap<T> registry;
 	private final Function<CompoundNBT, T> reader;
 	private final Function<T, CompoundNBT> writer;
-	private final T defaultValue;
 	protected BitArray storage;
 	private IPalette<T> palette;
 	private int bits;
+	private final BooleanArray nonemptyBlocks = new BooleanArray();
 
 	public PalettedContainer(IPalette<T> pGlobalPalette, ObjectIntIdentityMap<T> pRegistry,
-			Function<CompoundNBT, T> pReader, Function<T, CompoundNBT> pWriter, T pDefaultValue) {
+			Function<CompoundNBT, T> pReader, Function<T, CompoundNBT> pWriter) {
 		this.globalPalette = pGlobalPalette;
 		this.registry = pRegistry;
 		this.reader = pReader;
 		this.writer = pWriter;
-		this.defaultValue = pDefaultValue;
 		this.setBits(4);
 	}
 
@@ -59,7 +58,6 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 					this.bits = bitsIn;
 			}
 
-			this.palette.idFor(this.defaultValue);
 			this.storage = new BitArray(this.bits, 4096);
 		}
 	}
@@ -70,6 +68,9 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		this.setBits(p_onResize_1_);
 
 		for (int i = 0; i < bitarray.getSize(); ++i) {
+			if (!this.nonemptyBlocks.get(i)) {
+				continue;
+			}
 			T t = ipalette.valueFor(bitarray.get(i));
 			this.set(i, t);
 		}
@@ -83,6 +84,11 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 	}
 
 	public void set(int pIndex, T pState) {
+		if (pState == null) {
+			this.nonemptyBlocks.set(pIndex, false);
+			return;
+		}
+		this.nonemptyBlocks.set(pIndex, true);
 		int i = this.palette.idFor(pState);
 		this.storage.set(pIndex, i);
 	}
@@ -92,11 +98,15 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 	}
 
 	public T get(int pIndex) {
+		if (!this.nonemptyBlocks.get(pIndex)) {
+			return null;
+		}
 		T t = this.palette.valueFor(this.storage.get(pIndex));
-		return (T) (t == null ? this.defaultValue : t);
+		return t;
 	}
 
 	public void read(ListNBT pPaletteNbt, long[] pData) {
+		// TODO doesn't work with null values
 		int i = Math.max(4, MathHelper.ceillog2(pPaletteNbt.size()));
 		if (i != this.bits) {
 			this.setBits(i);
@@ -125,10 +135,11 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 	}
 
 	public void write(CompoundNBT pCompound, String pPaletteName, String pPaletteDataName) {
+		// TODO doesn't work with null values
 		HashMapPalette<T> hashmappalette = new HashMapPalette<>(this.registry, this.bits, this.dummyPaletteResize,
 				this.reader, this.writer);
-		T t = this.defaultValue;
-		int i = hashmappalette.idFor(this.defaultValue);
+		T t = null;
+		int i = -1;
 		int[] aint = new int[4096];
 
 		for (int j = 0; j < 4096; ++j) {
@@ -152,6 +163,24 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		}
 
 		pCompound.putLongArray(pPaletteDataName, bitarray.getRaw());
+	}
+
+	private static class BooleanArray {
+
+		private final int[] data = new int[128];
+
+		public void set(int index, boolean value) {
+			if (value) {
+				data[index >>> 5] |= 1 << (index & 31);
+			} else {
+				data[index >>> 5] &= ~(1 << (index & 31));
+			}
+		}
+
+		public boolean get(int index) {
+			return ((data[index >>> 5] >>> (index & 31)) & 1) == 1;
+		}
+
 	}
 
 }
