@@ -149,7 +149,7 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 
-public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, IIsBeingRiddenHelper, IServerAnimationReceiver, IInventoryChangedListener, IHasFaction {
+public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, IIsBeingRiddenHelper, IInventoryChangedListener, IHasFaction {
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -1036,7 +1036,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			}
 		}
 		// End IceAndFire compatibility
-		boolean flag = entityIn.hurt(DamageSource.mobAttack(this), f);
+		//boolean flag = entityIn.hurt(DamageSource.mobAttack(this), f);
+		boolean flag = super.doHurtTarget(entityIn);
 
 		if (flag) {
 			if (i > 0 && entityIn instanceof LivingEntity) {
@@ -1074,11 +1075,12 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 			this.setLastHurtMob(entityIn);
 		}
 
-		if(flag && this instanceof IAnimatable) {
-			this.sendHandSwingPacket(Hand.MAIN_HAND);
-		}
-		
 		return flag;
+	}
+	
+	@Override
+	public void swing(Hand p_184609_1_) {
+		super.swing(p_184609_1_, !this.level.isClientSide);
 	}
 
 	@Override
@@ -1920,76 +1922,8 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 		if(this.swinging) {
 			return this.swingingArm.equals(hand);
 		}
-		boolean result = false;
-		if(this.unprocessedAnimationOverridePresent != this.lastUnprocessedAnimationOverridePresent) {
-			System.out.println("We received a animation update!");
-			if(hand == Hand.MAIN_HAND) {
-				if(this.isLeftHanded()) {
-					if(this.unprocessedAnimationOverride.equals(IAnimatableCQR.ANIM_NAME_SWING_NORMAL_LEFT)) {
-						result = true;
-					}
-				} else {
-					if(this.unprocessedAnimationOverride.equals(IAnimatableCQR.ANIM_NAME_SWING_NORMAL_RIGHT)) {
-						result = true;
-					}
-				}
-			} else {
-				if(this.isLeftHanded()) {
-					if(this.unprocessedAnimationOverride.equals(IAnimatableCQR.ANIM_NAME_SWING_NORMAL_RIGHT)) {
-						result = true;
-					}
-				} else {
-					if(this.unprocessedAnimationOverride.equals(IAnimatableCQR.ANIM_NAME_SWING_NORMAL_LEFT)) {
-						result = true;
-					}
-				}
-			}
-			this.lastUnprocessedAnimationOverridePresent = this.unprocessedAnimationOverridePresent;
-		}
-		return result;
+		return false;
 	}
-
-	@OnlyIn(Dist.CLIENT)
-	protected boolean lastUnprocessedAnimationOverridePresent;
-	@OnlyIn(Dist.CLIENT)
-	protected boolean unprocessedAnimationOverridePresent;
-	@OnlyIn(Dist.CLIENT)
-	protected String unprocessedAnimationOverride;
-	
-	@Override
-	public void processAnimationUpdate(String animationID) {
-		if(!this.level.isClientSide()) {
-			return;
-		}
-		System.out.println("Anim update!");
-		CQRMain.logger.debug("Received animation update! animationID: {}, entity-uuid: {}", animationID, this.getUUID());
-		switch(animationID) {
-			case IAnimatableCQR.ANIM_NAME_SWING_NORMAL_LEFT:
-			case IAnimatableCQR.ANIM_NAME_SWING_NORMAL_RIGHT:
-				this.unprocessedAnimationOverridePresent = !this.unprocessedAnimationOverridePresent;
-				this.unprocessedAnimationOverride = animationID;
-				break;
-			default:
-				
-		}
-	}
-	
-	protected void sendHandSwingPacket(Hand pHand) {
-		assert(this instanceof Entity);
-		assert(this instanceof IServerAnimationReceiver);
-		System.out.println("SWINGING!");
-		if(!this.level.isClientSide()) {
-			final String animation = this.isLeftHanded() ? 
-					(pHand == Hand.MAIN_HAND ? IAnimatableCQR.ANIM_NAME_SWING_NORMAL_LEFT : IAnimatableCQR.ANIM_NAME_SWING_NORMAL_RIGHT) 
-					:
-					(pHand == Hand.MAIN_HAND ? IAnimatableCQR.ANIM_NAME_SWING_NORMAL_RIGHT : IAnimatableCQR.ANIM_NAME_SWING_NORMAL_LEFT);
-			SPacketUpdateAnimationOfEntity animationPacket = SPacketUpdateAnimationOfEntity.builder((IServerAnimationReceiver)this)
-					.animate(animation).build();
-			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getSelf), animationPacket);
-			CQRMain.logger.debug("Sent animation update packet! entity-uuid: {}", this.getUUID());
-		}
-	}
-	
 
 	@Override
 	public void containerChanged(IInventory pInvBasic) {

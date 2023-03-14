@@ -991,7 +991,6 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void processAnimationUpdate(String animationID) {
-		super.processAnimationUpdate(animationID);
 		this.currentAnimationPlaying = animationID;
 		switch (animationID) {
 		// Cannon shoot animation
