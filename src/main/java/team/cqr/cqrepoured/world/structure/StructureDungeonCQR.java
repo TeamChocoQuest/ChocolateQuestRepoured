@@ -114,11 +114,14 @@ public class StructureDungeonCQR<T extends DungeonBase> extends Structure<T> {
 			if (osw.isPresent()) {
 				ServerWorld sw = osw.get();
 
-				DungeonBase gridSelected = featureConfig.getGrids().stream().map(grid -> grid.getDungeonAt(sw, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
+				return true;
+				
+				//TODO: Probably causes infinite loop, at least slows down the process A LOT
+				/*DungeonBase gridSelected = featureConfig.getGrids().stream().map(grid -> grid.getDungeonAt(sw, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
 				if(gridSelected == null) {
 					return false;
 				}
-				return gridSelected.getDungeonName().equalsIgnoreCase(featureConfig.getDungeonName());
+				return gridSelected.getDungeonName().equalsIgnoreCase(featureConfig.getDungeonName());*/
 			}
 		}
 		return true;
