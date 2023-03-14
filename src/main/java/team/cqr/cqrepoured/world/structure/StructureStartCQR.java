@@ -41,7 +41,7 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 		BlockPos centered = new BlockPos(x,y,z);
 
 		//Run the dugneon generators...
-		config.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered, random);
+		this.pieces.add(config.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered, random));
 		
 		/*CQRJigsawManager.addPieces(
 				dynamicRegistryManager, 
