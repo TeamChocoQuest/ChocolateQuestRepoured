@@ -34,6 +34,8 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 			y = chunkGenerator.getBaseHeight(x, z, Type.WORLD_SURFACE_WG);
 			shiftOffsetY = DungeonGenUtils.randomBetween(config.getYOffsetMin(), config.getYOffsetMax(), this.random);
 		}
+		shiftOffsetY -= config.getUnderGroundOffset();
+		y -= shiftOffsetY;
 		ResourceLocation startPool = null;
 		BlockPos centered = new BlockPos(x,y,z);
 
