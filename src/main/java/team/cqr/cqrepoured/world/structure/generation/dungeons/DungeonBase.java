@@ -297,7 +297,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		} else {
 			y = DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
-		//y -= this.getUnderGroundOffset();
+		y -= this.getUnderGroundOffset();
 		return y;
 	}
 
