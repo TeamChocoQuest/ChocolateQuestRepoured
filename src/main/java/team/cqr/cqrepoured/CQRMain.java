@@ -54,6 +54,7 @@ import team.cqr.cqrepoured.proxy.IProxy;
 import team.cqr.cqrepoured.proxy.ServerProxy;
 import team.cqr.cqrepoured.util.ConfigBackupHandler;
 import team.cqr.cqrepoured.util.CopyHelper;
+import team.cqr.cqrepoured.world.structure.debug.TestStructures;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
 @Mod(CQRMain.MODID)
@@ -177,6 +178,7 @@ public class CQRMain {
 		CQREnchantments.registerEnchantments();
 		CQRRecipeTypes.register(bus);
 		CQRParticleTypes.PARTICLE_TYPES.register(bus);
+		TestStructures.registerTestStructures();
 		
 		//TODO: Change so the actual values of the files get loaded LATER
 		//DungeonRegistry.getInstance().loadDungeonFiles();
@@ -286,6 +288,7 @@ public class CQRMain {
 		event.enqueueWork(() -> {
 			CQRStructures.setupStructures();
 			CQRConfiguredStructures.registerConfiguredStructures();
+			TestStructures.loadTestStructures();
 		});
 		
 	}
