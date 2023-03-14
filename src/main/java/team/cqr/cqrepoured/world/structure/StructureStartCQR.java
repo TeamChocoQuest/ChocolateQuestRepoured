@@ -35,12 +35,11 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 			shiftOffsetY = DungeonGenUtils.randomBetween(config.getYOffsetMin(), config.getYOffsetMax(), this.random);
 		}
 		shiftOffsetY -= config.getUnderGroundOffset();
-		y -= shiftOffsetY;
 		ResourceLocation startPool = null;
 		BlockPos centered = new BlockPos(x,y,z);
 
 		//Run the dugneon generators...
-		this.pieces.add(config.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered, random));
+		this.pieces.add(config.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random));
 		
 		/*CQRJigsawManager.addPieces(
 				dynamicRegistryManager, 
