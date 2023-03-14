@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -74,6 +75,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		placement.getProtectedRegionBuilder().addEntity(entity);
 		level.addEntity(entity);
+		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState());
 	}
 
 	@Override
