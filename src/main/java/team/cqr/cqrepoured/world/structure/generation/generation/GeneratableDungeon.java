@@ -2,12 +2,15 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import java.util.Random;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.ISeedReader;
@@ -24,7 +27,7 @@ import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
-public class GeneratableDungeon extends StructurePiece {
+public class GeneratableDungeon extends StructurePiece implements INoiseAffectingStructurePiece {
 
 	private static final IStructurePieceType GENERATABLE_DUNGEON = IStructurePieceType.setPieceId(GeneratableDungeon::new, "generatable_dungeon");
 
@@ -32,13 +35,15 @@ public class GeneratableDungeon extends StructurePiece {
 	private final BlockPos pos;
 	private final CQRLevel level;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
+	private final int undergroundOffset;
 
-	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder) {
+	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder, int undergroundOffset) {
 		super(GENERATABLE_DUNGEON, 0);
 		this.dungeonName = dungeonName;
 		this.pos = pos;
 		this.level = level;
 		this.protectedRegionBuilder = protectedRegionBuilder;
+		this.undergroundOffset = undergroundOffset;
 		// TODO calculate correct bounding box
 		this.boundingBox = new MutableBoundingBox(pos.offset(-64, -64, -64), pos.offset(64, 64, 64));
 	}
@@ -49,6 +54,7 @@ public class GeneratableDungeon extends StructurePiece {
 		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt);
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(nbt.getCompound("protectedRegionBuilder"));
+		this.undergroundOffset = 0;
 		this.boundingBox = new MutableBoundingBox(nbt.getInt("x0"), nbt.getInt("y0"), nbt.getInt("y0"), nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("y1"));
 	}
 
@@ -79,6 +85,59 @@ public class GeneratableDungeon extends StructurePiece {
 		return true;
 	}
 
+	static final double[] contribution;
+	static {
+		int r = 16;
+		int r1 = r * 2 + 1;
+		contribution = new double[r1 * r1 * r1];
+		for (int x = -r; x <= r; x++) {
+			for (int y = -r; y <= r; y++) {
+				for (int z = -r; z <= r; z++) {
+					int dx = Math.abs(x);
+					if (dx > 0) dx--;
+					int dy = Math.abs(y);
+					if (dy > 0) dy--;
+					int dz = Math.abs(z);
+					if (dz > 0) dz--;
+
+					double d = x * x + y * y + z * z;
+					d = MathHelper.clamp(1.0D - Math.sqrt(d) * 0.0625D, 0.0D, 1.0D);
+					d = d * d * (3.0D - 2.0D * d);
+
+					contribution[((x + r) * r1 + (y + r)) * r1 + (z + r)] = d;
+				}
+			}
+		}
+	}
+
+	@Override
+	public double getContribution(int x, int y, int z) {
+		double max = 0.0D;
+		int r = 16;
+		Mutable mutable = new Mutable();
+		int i = 0;
+		for (int ix = -r; ix <= r; ix++) {
+			mutable.setX(x + ix);
+			for (int iy = -r; iy <= r; iy++) {
+				mutable.setY(y + iy);
+				for (int iz = -r; iz <= r; iz++) {
+					mutable.setZ(z + iz);
+					if (mutable.getY() <= this.pos.getY() + this.undergroundOffset) {
+						if (this.level.getBlockState(mutable) != Blocks.AIR.defaultBlockState()) {
+							double d = contribution[i];
+							if (d >= 1)
+								return 1;
+							if (d > max)
+								max = d;
+						}
+					}
+					i++;
+				}
+			}
+		}
+		return max;
+	}
+
 	public static class Builder {
 
 		private final String dungeonName;
@@ -88,8 +147,12 @@ public class GeneratableDungeon extends StructurePiece {
 		private final CQRLevel level;
 		private final ProtectedRegion.Builder protectedRegionBuilder;
 
+		// TODO temp solution
+		private int undergroundOffset;
+
 		public Builder(ServerWorld level, BlockPos pos, DungeonBase config) {
 			this(level, pos, config.getDungeonName(), config.getDungeonMob());
+			this.undergroundOffset = config.getUnderGroundOffset();
 		}
 
 		public Builder(ServerWorld level, BlockPos pos, String dungeonName, String defaultInhabitant) {
@@ -102,7 +165,7 @@ public class GeneratableDungeon extends StructurePiece {
 		}
 
 		public GeneratableDungeon build() {
-			return new GeneratableDungeon(this.dungeonName, this.pos, this.level, this.protectedRegionBuilder);
+			return new GeneratableDungeon(this.dungeonName, this.pos, this.level, this.protectedRegionBuilder, this.undergroundOffset);
 		}
 
 		public DungeonPlacement getPlacement(BlockPos partPos) {

@@ -58,6 +58,7 @@ import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
+import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBannerInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
@@ -413,7 +414,7 @@ public class CQStructure {
 						.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
 						.orElse(Blocks.AIR.defaultBlockState());
 				TileEntity tileEntity = chunk.getBlockEntity(pos);
-				this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
+				this.blockInfoList.add(new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
 			} else if (id == 3) {
 				// boss
 				buf.readerIndex(buf.readerIndex() + 1);

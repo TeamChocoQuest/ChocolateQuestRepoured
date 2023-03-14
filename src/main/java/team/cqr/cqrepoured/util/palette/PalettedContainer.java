@@ -139,7 +139,7 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		HashMapPalette<T> hashmappalette = new HashMapPalette<>(this.registry, this.bits, this.dummyPaletteResize,
 				this.reader, this.writer);
 		T t = null;
-		int i = -1;
+		int i = 0;
 		int[] aint = new int[4096];
 
 		for (int j = 0; j < 4096; ++j) {
