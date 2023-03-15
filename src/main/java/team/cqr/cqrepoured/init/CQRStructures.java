@@ -81,6 +81,7 @@ public class CQRStructures {
 
 		if (transformSurroundingLand) {
 			Structure.NOISE_AFFECTING_FEATURES = ImmutableList.<Structure<?>>builder().addAll(Structure.NOISE_AFFECTING_FEATURES).add(structure).build();
+			INoiseAffectingStructurePiece.NOISE_AFFECTING_STRUCTURES.add(structure);
 		}
 
 		DimensionStructuresSettings.DEFAULTS = ImmutableMap.<Structure<?>, StructureSeparationSettings>builder().putAll(DimensionStructuresSettings.DEFAULTS).put(structure, structureSeparationSettings).build();
