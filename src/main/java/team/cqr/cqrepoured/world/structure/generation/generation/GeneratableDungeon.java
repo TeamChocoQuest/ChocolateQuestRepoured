@@ -78,7 +78,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 			Mutable mutable = new Mutable();
 			for (int y = 0; y < 16; y++) {
 				mutable.setY(sectionPos.minBlockY() + y);
-				if (mutable.getY() > pos.getY() + undergroundOffset) {
+				if (mutable.getY() >= pos.getY() + undergroundOffset) {
 					continue;
 				}
 				for (int x = 0; x < 16; x++) {
