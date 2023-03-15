@@ -39,6 +39,7 @@ import team.cqr.cqrepoured.world.structure.StructureDungeonCQR;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
+import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
 @EventBusSubscriber
 public class CQRStructures {
