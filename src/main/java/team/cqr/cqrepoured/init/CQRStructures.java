@@ -121,7 +121,7 @@ public class CQRStructures {
 		ResourceLocation biomeID = key.location(); //registryname is the registryname of the RegistryKey, here that is "minecraft/worldgen" or something like that
 		for (Map.Entry<DungeonBase, StructureFeature<?, ?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
 			if(entry.getKey().isValidBiome(biomeID)) {
-				event.getGeneration().addStructureStart(entry.getValue());
+				event.getGeneration().getStructures().add(() -> entry.getValue());
 				System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
 				continue;
 			}
