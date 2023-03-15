@@ -34,12 +34,15 @@ public class CQRSection implements ICQRSection {
 	private static final IPalette<BlockState> GLOBAL_BLOCKSTATE_PALETTE = new IdentityPalette<>(Block.BLOCK_STATE_REGISTRY, Blocks.AIR.defaultBlockState());
 
 	private final CQRLevel level;
+	// TODO used as workaround for GeneratableDungeon#getContribution
+	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
 	private final Int2ObjectMap<TileEntity> blockEntities;
 	private final List<EntityContainer> entities;
 
-	public CQRSection(CQRLevel level) {
+	public CQRSection(CQRLevel level, SectionPos sectionPos) {
 		this.level = level;
+		this.sectionPos = sectionPos;
 		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NBTUtil::readBlockState, NBTUtil::writeBlockState);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
@@ -47,12 +50,17 @@ public class CQRSection implements ICQRSection {
 
 	public CQRSection(CQRLevel level, CompoundNBT nbt) {
 		this.level = level;
+		this.sectionPos = SectionPos.of(0, 0, 0);
 		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NBTUtil::readBlockState, NBTUtil::writeBlockState);
 		this.blocks.read(nbt.getList("Palette", NBT.TAG_COMPOUND), nbt.getLongArray("BlockStates"));
 		this.blockEntities = NBTCollectors.<CompoundNBT, TileEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
 			return TileEntity.loadStatic(this.getBlockState(index), blockEntityNbt);
 		});
 		this.entities = NBTHelper.<CompoundNBT>stream(nbt, "Entities").map(EntityContainer::new).collect(Collectors.toList());
+	}
+
+	public SectionPos getSectionPos() {
+		return sectionPos;
 	}
 
 	public CompoundNBT save() {

@@ -56,7 +56,7 @@ public class CQRLevel implements ICQRLevel, IBlockReader {
 
 	private final SectionPos center;
 	private final long seed;
-	private final Int2ObjectMap<CQRSection> sections;
+	public final Int2ObjectMap<CQRSection> sections;
 
 	public CQRLevel(SectionPos center, long seed) {
 		this.center = center;
@@ -126,7 +126,7 @@ public class CQRLevel implements ICQRLevel, IBlockReader {
 	}
 
 	private ICQRSection getOrCreateSection(int index) {
-		return this.sections.computeIfAbsent(index, k -> new CQRSection(this));
+		return this.sections.computeIfAbsent(index, k -> new CQRSection(this, SectionPos.of(center.x() + (index >>> 20) - 512, center.y() + ((index >>> 10) & 1023) - 512, center.z() + (index & 1023) - 512)));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
@@ -20,6 +21,7 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
+import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -36,6 +38,29 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	private final CQRLevel level;
 	private final ProtectedRegion.Builder protectedRegionBuilder;
 	private final int undergroundOffset;
+	private final Cache2D<GroundData> groundData;
+
+	static class GroundData {
+
+		private int min;
+		private int max;
+
+		public GroundData(int minMax) {
+			this(minMax, minMax);
+		}
+
+		public GroundData(int min, int max) {
+			this.min = min;
+			this.max = max;
+		}
+
+		public void update(int y) {
+			if (y < min)
+				min = y;
+			if (y > max)
+				max = y;
+		}
+	}
 
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder, int undergroundOffset) {
 		super(GENERATABLE_DUNGEON, 0);
@@ -46,6 +71,35 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		this.undergroundOffset = undergroundOffset;
 		// TODO calculate correct bounding box
 		this.boundingBox = new MutableBoundingBox(pos.offset(-64, -64, -64), pos.offset(64, 64, 64));
+
+		this.groundData = new Cache2D<>(this.boundingBox.x0, this.boundingBox.z0, this.boundingBox.x1, this.boundingBox.z1, null, GroundData[]::new);
+		level.sections.values().forEach(section -> {
+			SectionPos sectionPos = section.getSectionPos();
+			Mutable mutable = new Mutable();
+			for (int y = 0; y < 16; y++) {
+				mutable.setY(sectionPos.minBlockY() + y);
+				if (mutable.getY() > pos.getY() + undergroundOffset) {
+					continue;
+				}
+				for (int x = 0; x < 16; x++) {
+					mutable.setX(sectionPos.minBlockX() + x);
+					for (int z = 0; z < 16; z++) {
+						mutable.setZ(sectionPos.minBlockZ() + z);
+						BlockState state = section.getBlockState(mutable);
+						if (state == null || state == Blocks.AIR.defaultBlockState()) {
+							continue;
+						}
+						groundData.compute(mutable, (k, v) -> {
+							if (v == null) {
+								return new GroundData(mutable.getY());
+							}
+							v.update(mutable.getY());
+							return v;
+						});
+					}
+				}
+			}
+		});
 	}
 
 	protected GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
@@ -56,6 +110,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(nbt.getCompound("protectedRegionBuilder"));
 		this.undergroundOffset = 0;
 		this.boundingBox = new MutableBoundingBox(nbt.getInt("x0"), nbt.getInt("y0"), nbt.getInt("y0"), nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("y1"));
+		this.groundData = new Cache2D<>(this.boundingBox.x0, this.boundingBox.z0, this.boundingBox.x1, this.boundingBox.z1, null, GroundData[]::new);
 	}
 
 	@Override
@@ -112,30 +167,28 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 
 	@Override
 	public double getContribution(int x, int y, int z) {
-		double max = 0.0D;
+		double noise = 0.0D;
 		int r = 16;
-		Mutable mutable = new Mutable();
-		int i = 0;
 		for (int ix = -r; ix <= r; ix++) {
-			mutable.setX(x + ix);
-			for (int iy = -r; iy <= r; iy++) {
-				mutable.setY(y + iy);
-				for (int iz = -r; iz <= r; iz++) {
-					mutable.setZ(z + iz);
-					if (mutable.getY() <= this.pos.getY() + this.undergroundOffset) {
-						if (this.level.getBlockState(mutable) != Blocks.AIR.defaultBlockState()) {
-							double d = contribution[i];
-							if (d >= 1)
-								return 1;
-							if (d > max)
-								max = d;
-						}
-					}
-					i++;
-				}
+			if (!groundData.inBoundsX(x + ix))
+				continue;
+			for (int iz = -r; iz <= r; iz++) {
+				if (!groundData.inBoundsZ(z + iz))
+					continue;
+				GroundData data = groundData.getUnchecked(x + ix, z + iz);
+				if (data == null)
+					continue;
+				if (y > data.max)
+					continue;
+				int iy = y < data.min ? data.min - y : 0;
+				if (iy > 16)
+					continue;
+				double d = contribution[((ix + 16) * 33 + (iy + 16)) * 33 + (iz + 16)];
+				if (d > noise)
+					noise = d;
 			}
 		}
-		return max;
+		return noise;
 	}
 
 	public static class Builder {
