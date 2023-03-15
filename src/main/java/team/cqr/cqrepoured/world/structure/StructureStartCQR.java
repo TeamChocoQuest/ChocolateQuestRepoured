@@ -55,7 +55,7 @@ public class StructureStartCQR<T extends DungeonBase> extends StructureStart<T> 
 				Rotation.NONE
 		);*/
 		final int tmpInt = shiftOffsetY;
-		this.pieces.forEach(piece -> piece.move(0, tmpInt, 0));
+		//this.pieces.forEach(piece -> piece.move(0, tmpInt, 0));
 		this.pieces.forEach(piece -> piece.getBoundingBox().y0 += tmpInt);
 		this.pieces.forEach(piece -> piece.getBoundingBox().y1 += tmpInt);
 		
