@@ -55,22 +55,6 @@ import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class EventsHandler {
 
-	@SubscribeEvent(priority = EventPriority.HIGH)
-	public static void onLootTableLoadPre(LootTableLoadEvent event) {
-		String ltn = event.getTable().getLootTableId().toString();
-		if (event.getTable().getLootTableId().getNamespace().equals(CQRMain.MODID) /*&& !CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()*/) {
-			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
-		}
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void onLootTableLoadPost(LootTableLoadEvent event) {
-		if (event.getTable().getLootTableId().getNamespace().equals(CQRMain.MODID) && CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
-			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
-		}
-		LootTableLoader.freezeLootTable();
-	}
-
 	//@SubscribeEvent
 	public static void onDefense(LivingAttackEvent event) {
 		boolean tep = false;
