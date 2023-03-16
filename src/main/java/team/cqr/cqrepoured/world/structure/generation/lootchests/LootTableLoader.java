@@ -31,8 +31,6 @@ public class LootTableLoader {
 
 	private static final ReflectionField<ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
 	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
-	private static final ReflectionField<Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
-	private static final ReflectionField<LoadingCache<ResourceLocation, LootTable>> FIELD_REGISTERED_LOOT_TABLES = new ReflectionField<>(LootTableManager.class, "field_186527_c", "registeredLootTables");
 
 	private static LootTable loadingLootTable;
 
@@ -151,7 +149,7 @@ public class LootTableLoader {
 				que.push(LOOT_TABLE_CONTEXT.newInstance(name, true));
 				LootTable newLootTable;
 				try {
-					newLootTable = GSON_INSTANCE.get(null).fromJson(s, LootTable.class);
+					newLootTable = LootTableManager.GSON.fromJson(s, LootTable.class);
 				} finally {
 					que.pop();
 				}
@@ -223,7 +221,7 @@ public class LootTableLoader {
 		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
 		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
 		LootTableManager lootTableManager = worldServer.getServer().getLootTables();
-		LoadingCache<ResourceLocation, LootTable> registeredLootTables = FIELD_REGISTERED_LOOT_TABLES.get(lootTableManager);
+		Map<ResourceLocation, LootTable> registeredLootTables = lootTableManager.tables;
 
 		for (File file : files) {
 			String s = file.getName();
