@@ -9,6 +9,7 @@
 		"structure.MixinStructure",
 		"structure.MixinStructureManager",
 		"structure.MixinWorldLoadProgressScreen",
+		"world.MixinLakesFeature",
 		"AccessorAbstractSpawner",
 		"MixinBipedArmorLayer",
 		"MixinChestBlock",
