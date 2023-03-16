@@ -13,8 +13,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Dimension;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -47,42 +52,43 @@ import team.cqr.cqrepoured.item.ISupportWeapon;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = CQRMain.MODID)
 public class EventsHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
-		if (event.getName().getNamespace().equals(CQRMain.MODID) && !CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
+		String ltn = event.getTable().getLootTableId().toString();
+		if (event.getTable().getLootTableId().getNamespace().equals(CQRMain.MODID) /*&& !CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()*/) {
 			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onLootTableLoadPost(LootTableLoadEvent event) {
-		if (event.getName().getNamespace().equals(CQRMain.MODID) && CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
+		if (event.getTable().getLootTableId().getNamespace().equals(CQRMain.MODID) && CQRConfig.SERVER_CONFIG.general.preventOtherModLoot.get()) {
 			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 		}
 		LootTableLoader.freezeLootTable();
 	}
 
-	/*@SubscribeEvent
+	//@SubscribeEvent
 	public static void onDefense(LivingAttackEvent event) {
 		boolean tep = false;
 
 		if (event.getEntityLiving() instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-			Entity attacker = event.getSource().getEntity(();
+			Entity attacker = event.getSource().getEntity();
 			@SuppressWarnings("unused")
 			float amount = event.getAmount();
 			World world = player.level;
 
-			if (player.getActiveItemStack().getItem() != CQRItems.SHIELD_WALKER_KING || player.getMainHandItem().getItem() != CQRItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
+			if (player.getUseItem().getItem() != CQRItems.SHIELD_WALKER_KING.get() || player.getMainHandItem().getItem() != CQRItems.SWORD_WALKER.get() || player.getVehicle() != null || attacker == null) {
 				return;
 			}
 
-			double d = attacker.getX() + (attacker.level.rand.nextDouble() - 0.5D) * 4.0D;
+			double d = attacker.getX() + (attacker.level.random.nextDouble() - 0.5D) * 4.0D;
 			double d1 = attacker.getY();
-			double d2 = attacker.getZ() + (attacker.level.rand.nextDouble() - 0.5D) * 4.0D;
+			double d2 = attacker.getZ() + (attacker.level.random.nextDouble() - 0.5D) * 4.0D;
 
 			@SuppressWarnings("unused")
 			double d3 = player.getX();
@@ -98,34 +104,36 @@ public class EventsHandler {
 			BlockPos ep = new BlockPos(i, j, k);
 			BlockPos ep1 = new BlockPos(i, j + 1, k);
 
-			if (world.getCollisionBoxes(player, player.getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(attacker.getEntityBoundingBox()) && player.isActiveItemStackBlocking() && player.getDistanceSq(attacker) >= 25.0D) {
-				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
+			if (world.getCollisions(player, player.getBoundingBox(), entity -> {
+				return entity != player;
+			}).count() == 0 && !world.containsAnyLiquid(attacker.getBoundingBox()) && player.isBlocking() && player.distanceToSqr(attacker) >= 25.0D) {
+				if (world.getBlockState(ep).getCollisionShape(world, ep).isEmpty() && world.getBlockState(ep1).getCollisionShape(world, ep1).isEmpty()) {
 					tep = true;
 				} else {
 					tep = false;
 					if (!world.isClientSide) {
-						((ServerWorld) world).spawnParticle(ParticleTypes.SMOKE_LARGE, player.getX(), player.getY() + player.height * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
+						//((ServerWorld) world).addParticle(ParticleTypes.LARGE_SMOKE, player.getX(), player.getY() + player.getBbHeight() * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
 					}
 				}
 			}
 
 			if (tep) {
-				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
+				if (world.getBlockState(ep).getCollisionShape(world, ep).isEmpty() && world.getBlockState(ep1).getCollisionShape(world, ep1).isEmpty()) {
 					if (player instanceof ServerPlayerEntity) {
 						ServerPlayerEntity playerMP = (ServerPlayerEntity) player;
 
-						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
+						playerMP.connection.teleport(d, d1, d2, playerMP.yRot, playerMP.xRot);
 						if (!world.isClientSide) {
-							((ServerWorld) world).spawnParticle(ParticleTypes.PORTAL, player.getX(), player.getY() + player.height * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
+							//((ServerWorld) world).addParticle(ParticleTypes.PORTAL, player.getX(), player.getY() + player.getBbHeight() * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
 						}
-						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
+						world.playSound(null, d, d1, d2, SoundEvents.ENDERMAN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
 					event.setCanceled(true);
 					tep = false;
 				}
 			}
 		}
-	}*/
+	}
 
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event) {
@@ -157,8 +165,10 @@ public class EventsHandler {
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
 
-		if(e.getWorld() instanceof World) {
-			if (!e.getWorld().isClientSide() && ((World)e.getWorld()).dimension().equals(DimensionType.OVERWORLD_LOCATION)) {
+		if(e.getWorld() instanceof ServerWorld) {
+			RegistryKey<World> dimRegKey = ((World)e.getWorld()).dimension();
+			DimensionType dim = ((World)e.getWorld()).dimensionType();
+			if (dimRegKey.location().equals(DimensionType.OVERWORLD_LOCATION.location())) {
 				LootTableLoader.registerCustomLootTables((ServerWorld) e.getWorld());
 			}
 		}
@@ -224,7 +234,7 @@ public class EventsHandler {
 		}
 	}
 
-	@SubscribeEvent
+	//@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if (CQRConfig.SERVER_CONFIG.bosses.antiCowardMode.get() && event.getPlayer() != null && !event.getPlayer().isCreative()) {
 			BlockPos pos = event.getPlayer().blockPosition();
@@ -234,7 +244,7 @@ public class EventsHandler {
 		}
 	}
 
-	@SubscribeEvent
+	//@SubscribeEvent
 	public static void sayNoToPlacingBlocksNearBosses(BlockEvent.EntityPlaceEvent event) {
 		if (CQRConfig.SERVER_CONFIG.bosses.preventBlockPlacingNearBosses.get() && event.getEntity() != null && (!(event.getEntity() instanceof PlayerEntity) || !((PlayerEntity) event.getEntity()).isCreative())) {
 			BlockPos pos = event.getEntity().blockPosition();
