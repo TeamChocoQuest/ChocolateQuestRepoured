@@ -42,6 +42,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
@@ -328,10 +329,14 @@ public class CQStructure {
 
 	public void addAll(ICQRLevel level, DungeonPlacement placement) {
 		int i = 0;
+		Mutable mutable = new Mutable();
 		for (int x = 0; x < this.size.getX(); x++) {
+			mutable.setX(x);
 			for (int y = 0; y < this.size.getY(); y++) {
+				mutable.setY(y);
 				for (int z = 0; z < this.size.getZ(); z++) {
-					this.blockInfoList.get(i++).prepare(level, new BlockPos(x, y, z), placement);
+					mutable.setZ(z);
+					this.blockInfoList.get(i++).prepare(level, mutable, placement);
 				}
 			}
 		}
