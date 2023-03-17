@@ -72,6 +72,9 @@ public class WeightedItemStack implements IItemProvider{
 			if (this.enchantChance > 0) {
 				enchConds = RandomChance.randomChance(this.enchantChance / 100F);
 			}
+			if(enchConds == null) {
+				enchConds = RandomChance.randomChance(1);
+			}
 			if (this.treasure) {
 				functions.add(
 						EnchantWithLevels
