@@ -106,7 +106,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		super(GENERATABLE_DUNGEON, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
 		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
-		this.level = new CQRLevel(nbt);
+		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(nbt.getCompound("protectedRegionBuilder"));
 		this.undergroundOffset = 0;
 		this.boundingBox = new MutableBoundingBox(nbt.getInt("x0"), nbt.getInt("y0"), nbt.getInt("y0"), nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("y1"));
