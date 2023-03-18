@@ -77,6 +77,9 @@ dependencies {
 	
     // SmartBrainLib
     atDependencies fg.deobf("curse.maven:smartbrainlib-661293:$smartBrainLibVersion")
+	
+	// WorldEdit
+	runtimeOnly fg.deobf("curse.maven:worldedit-225608:3283693")
 
     // Mixin
     annotationProcessor "org.spongepowered:mixin:$mixinVersion:processor"
