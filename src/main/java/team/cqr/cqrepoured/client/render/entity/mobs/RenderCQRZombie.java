@@ -14,10 +14,10 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRZombie;
 
 public class RenderCQRZombie extends RenderCQRBipedBaseGeo<EntityCQRZombie> {
 
-	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/zombie_0.png");
+	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/zombie_0.png");
 	
 	public RenderCQRZombie(EntityRendererManager renderManager) {
-		super(renderManager, new ModelCQRZombieGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "zombie"));
+		super(renderManager, new ModelCQRZombieGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "mob/zombie"));
 	}
 
 	@Override

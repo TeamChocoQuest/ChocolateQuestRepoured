@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRPirate;
 
 public class RenderCQRPirate extends RenderCQRBipedBaseGeo<EntityCQRPirate> {
 	
-	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/priate_0.png");
+	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/pirate_0.png");
 
 	public RenderCQRPirate(EntityRendererManager renderManager) {
 		super(renderManager, new ModelCQRPirateGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "mob/pirate"));
