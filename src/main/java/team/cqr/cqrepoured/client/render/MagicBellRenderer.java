@@ -5,7 +5,9 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -17,6 +19,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeRenderTypes;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashSet;
@@ -177,6 +181,7 @@ public class MagicBellRenderer {
 
 		Minecraft mc = Minecraft.getInstance();
 		World world = mc.level;
+		
 		double x = mc.player.lastTickPosX + (mc.player.posX - mc.player.lastTickPosX) * partialTicks;
 		double y = mc.player.lastTickPosY + (mc.player.posY - mc.player.lastTickPosY) * partialTicks;
 		double z = mc.player.lastTickPosZ + (mc.player.posZ - mc.player.lastTickPosZ) * partialTicks;
@@ -188,19 +193,22 @@ public class MagicBellRenderer {
 		GlStateManager.depthFunc(GL11.GL_ALWAYS);
 
 		buffer.setTranslation(-x, -y, -z);
+		
+		IRenderTypeBuffer rtb = RenderType.outline(null);
 		this.highlightedPositions.forEach(posInfo -> {
 			BlockState state = world.getBlockState(posInfo.pos);
 			if (state.getBlock() == Blocks.AIR) {
 				return;
 			}
 
-			GlStateManager.enableColorMaterial();
+			/*GlStateManager.enableColorMaterial();
 			GlStateManager.enableOutlineMode(posInfo.color);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 			mc.getBlockRendererDispatcher().renderBlock(state, posInfo.pos, mc.world, buffer);
 			tessellator.draw();
 			GlStateManager.disableOutlineMode();
-			GlStateManager.disableColorMaterial();
+			GlStateManager.disableColorMaterial();*/
+			mc.getBlockRenderer().renderBlock(state, null, rtb, outlineColor, outlineColor, null);
 		});
 		buffer.setTranslation(0.0D, 0.0D, 0.0D);
 		TileEntityRendererDispatcher.instance.preDrawBatch();
