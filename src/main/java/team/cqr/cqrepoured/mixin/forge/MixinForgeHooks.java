@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.event.events.ModdedLootTableLoadEvent;
 @Mixin(ForgeHooks.class)
 public abstract class MixinForgeHooks {
 	
-	@Accessor("lootContext")
+	@Accessor(value = "lootContext", remap = false)
 	public static ThreadLocal<Deque<LootTableContext>> getLootContext() {
 		throw new AssertionError();
 	}
@@ -31,7 +31,8 @@ public abstract class MixinForgeHooks {
 	@Inject(
 			method = "loadLootTable(Lcom/google/gson/Gson;Lnet/minecraft/util/ResourceLocation;Lcom/google/gson/JsonElement;ZLnet/minecraft/loot/LootTableManager;)Lnet/minecraft/loot/LootTable;",
 			at = @At("HEAD"),
-			cancellable = true
+			cancellable = true,
+			remap = false
 	)
 	private static void mixinLoadLootTable(Gson gson, ResourceLocation name, JsonElement data, boolean custom, LootTableManager lootTableManager, CallbackInfoReturnable<LootTable> cir) {
 		if(custom) {
