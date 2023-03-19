@@ -31,11 +31,13 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
+import team.cqr.cqrepoured.client.model.entity.ModelCQRPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.init.CQREntityTypes;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends ExtendedGeoEntityRenderer<T> implements IGeoRenderer<T> {
@@ -164,7 +166,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	private float netHeadYaw;
 	private float headPitch;
 	
-	private final ParrotModel parrotModel = new ParrotModel();
+	private final ModelCQRPirateParrot parrotModel = new ModelCQRPirateParrot();
 
 	protected void renderShoulderEntities(MatrixStack stack, IRenderTypeBuffer buffer, int packedLightIn, T entity) {
 		while (!this.SHOULDER_ENTITY_QUEUE.isEmpty()) {
@@ -178,11 +180,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			this.moveAndRotateMatrixToMatchBone(stack, bone);
 
 			EntityType.byString(entityNBT.getString("id")).filter((typeTmp) -> {
-				return typeTmp == EntityType.PARROT;
+				return typeTmp == CQREntityTypes.PIRATE_PARROT.get();
 			}).ifPresent((shoulderEntityType) -> {
 				stack.pushPose();
 				stack.translate(/*true ? (double) 0.4F : (double) -0.4F CQR entities only have a left shoulder entiy...*/0.4F, entity.isCrouching() ? (double) -1.3F : -1.5D, 0.0D);
-				IVertexBuilder ivertexbuilder = buffer.getBuffer(this.parrotModel.renderType(ParrotRenderer.PARROT_LOCATIONS[entityNBT.getInt("Variant")]));
+				IVertexBuilder ivertexbuilder = buffer.getBuffer(this.parrotModel.renderType(RenderPirateParrot.TEXTURE));
 				this.parrotModel.renderOnShoulder(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, this.limbSwing, this.limbSwingAmount, this.netHeadYaw, this.headPitch, entity.tickCount);
 				stack.popPose();
 			});

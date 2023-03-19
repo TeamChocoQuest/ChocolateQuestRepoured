@@ -14,6 +14,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQRFlyingSkull;
 import team.cqr.cqrepoured.client.render.entity.RenderColoredLightningBolt;
 import team.cqr.cqrepoured.client.render.entity.RenderElectricFieldEntity;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
+import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
@@ -78,7 +79,6 @@ import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEm
 import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 public class CQREntityRenderers {
 	
@@ -256,6 +256,7 @@ public class CQREntityRenderers {
 
 		// Pirate Captain
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PIRATE_CAPTAIN.get(), RenderCQRPirateCaptain::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.PIRATE_PARROT.get(), RenderPirateParrot::new);
 	}
 
 }
