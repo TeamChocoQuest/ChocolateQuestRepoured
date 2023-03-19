@@ -1,11 +1,29 @@
 package team.cqr.cqrepoured.world.structure.generation.grid;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import team.cqr.cqrepoured.CQRMain;
@@ -17,11 +35,39 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
-import javax.annotation.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
-
-public class DungeonGrid {
+public class DungeonGrid implements IFeatureConfig {
+	
+	// TODO: Write codec that uses the old prop file to re-create the object
+	// => Store the prop file somewhere in the object as string
+	public static final Codec<DungeonGrid> CODEC = RecordCodecBuilder.create((object) -> {
+		return object.group(
+				Codec.STRING.fieldOf("name").forGetter((obj) -> {
+					return obj.getName();
+				}),
+				Codec.STRING.fieldOf("propertyfile").forGetter((obj) -> {
+					return obj.getPropFileAsString();
+				})
+			).apply(object, (name, propString) -> {
+				//If a dungeon with this name has already been registered, use the registered object
+				DungeonGrid grid = GridRegistry.getInstance().getGrid(name);
+				if(grid != null) {
+					return grid;
+				}
+				//Otherwise restore the dungeon object
+				Properties prop = DungeonBase.getFromString(propString);
+				if(prop != null) {
+					DungeonGrid grid2 = GridRegistry.createGridFromFile(prop, name);
+					return grid2;
+				}
+				return null;
+			});
+	});
+	
+	String getPropFileAsString() {
+		return this.SCANNED_PROPERTIES_FILE;
+	}
+			
+	protected final String SCANNED_PROPERTIES_FILE;
 
 	private static final Random RANDOM = new Random();
 	private final String name;
@@ -37,6 +83,8 @@ public class DungeonGrid {
 	private int seed;
 
 	public DungeonGrid(final String name, Properties properties) {
+		this.SCANNED_PROPERTIES_FILE = DungeonBase.writePropertiesToString(properties);
+		
 		this.name = name;
 		this.distance = PropertyFileHelper.getIntProperty(properties, "distance", 20);
 		this.spread = PropertyFileHelper.getIntProperty(properties, "spread", 10);
@@ -141,6 +189,41 @@ public class DungeonGrid {
 		z += random.nextInt(dungeonSpread);
 		return x == cx && z == cz;
 	}
+	
+	public ChunkPos getPotentialChunkPosAtOrNear(World world, int chunkX, int chunkZ) {
+		int dungeonSeparation = this.getDistance();
+		// Check whether this chunk is farther north than the wall
+		if (CQRConfig.SERVER_CONFIG.wall.enabled.get() && chunkZ < -CQRConfig.SERVER_CONFIG.wall.distance.get() && CQRConfig.SERVER_CONFIG.general.moreDungeonsBehindWall.get()) {
+			dungeonSeparation = MathHelper.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
+		}
+		int dungeonSpread = Math.min(this.getSpread() + 1, dungeonSeparation);
+
+		int cx = chunkX + this.offset - (DungeonGenUtils.getSpawnX(world) >> 4);
+		int cz = chunkZ + this.offset - (DungeonGenUtils.getSpawnZ(world) >> 4);
+		if (dungeonSpread <= 1) {
+			if(cx % dungeonSeparation == 0 && cz % dungeonSeparation == 0) {
+				return new ChunkPos(cx, cz);
+			}
+		}
+
+		int x = Math.floorDiv(cx, dungeonSeparation);
+		int z = Math.floorDiv(cz, dungeonSeparation);
+		Random random = world.getRandom();//OLD: world.setRandomSeed(x, z, this.seed);
+		//New cause 1.16 removed that method:
+		long seed = 0;
+		if(world instanceof ServerWorld) {
+			seed = ((ServerWorld) world).getSeed();
+		}
+		long lTmp = (long)x * 341873128712L + (long)z * 132897987541L + seed + (long)this.seed;
+		random.setSeed(lTmp);
+		
+		x *= dungeonSeparation;
+		z *= dungeonSeparation;
+		x += random.nextInt(dungeonSpread);
+		z += random.nextInt(dungeonSpread);
+		
+		return new ChunkPos(x, z);
+	}
 
 	/**
 	 * @return true when a location specific dungeon, a vanilla structure or a aw2 structure is nearby
@@ -194,6 +277,14 @@ public class DungeonGrid {
 		}
 
 		return dungeonsForChunk;
+	}
+	
+	public Set<ResourceLocation> collectBiomes() {
+		Set<ResourceLocation> result = new HashSet<>();
+		for(DungeonBase db : this.dungeons) {
+			result.addAll(Arrays.asList(db.getAllowedBiomes()));
+		}
+		return result;
 	}
 
 	public String getName() {
@@ -272,6 +363,27 @@ public class DungeonGrid {
 
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+
+	public Set<ResourceLocation> collectAllowedDims() {
+		Set<ResourceLocation> result = new HashSet<>();
+		
+		for(DungeonBase db : this.dungeons) {
+			if(!db.isAllowedDimsAsBlacklist()) {
+				result.addAll(Arrays.asList(db.getAllowedDims()));
+			}
+		}
+		
+		return result;
+	}
+
+	public boolean isValidBiome(ResourceLocation biomeID) {
+		for(DungeonBase db : this.dungeons) {
+			if(db.isValidBiome(biomeID)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

@@ -222,7 +222,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		this.ignoreNoBossOrNexus = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
 	}
 
-	private static final String writePropertiesToString(Properties prop) {
+	public static final String writePropertiesToString(Properties prop) {
 		StringWriter writer = new StringWriter();
 		String text;
 		try {
@@ -241,7 +241,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return lines.stream().collect(Collectors.joining("\n"));
 	}
 	
-	private static final String normalizeNewLines(String text) {
+	public static final String normalizeNewLines(String text) {
 	    return text.replace("\r\n", "\n").replace("\r", "\n");
 	}
 	

@@ -42,13 +42,17 @@ public class GridRegistry {
 		IntStream.range(0, this.grids.size()).forEach(i -> this.grids.get(i).setId(i));
 	}
 
-	private DungeonGrid createGridFromFile(File file) {
+	public static DungeonGrid createGridFromFile(File file) {
 		Properties prop = PropertyFileHelper.readPropFile(file);
 		if (prop == null) {
 			return null;
 		}
 
 		String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		return createGridFromFile(prop, name);
+	}
+	
+	public static DungeonGrid createGridFromFile(Properties prop, String name) {
 		return new DungeonGrid(name, prop);
 	}
 

@@ -35,11 +35,12 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.world.structure.StructureDungeonCQR;
+import team.cqr.cqrepoured.world.structure.StructureGridCQR;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
+import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
+import team.cqr.cqrepoured.world.structure.generation.thewall.WallStructure;
 
 @EventBusSubscriber
 public class CQRStructures {
@@ -48,18 +49,33 @@ public class CQRStructures {
 
 	public static RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = DEFERRED_REGISTRY_STRUCTURE.register("wall_in_the_north", () -> (new WallStructure(NoFeatureConfig.CODEC)));
 
-	protected static final Map<DungeonBase, Structure<?>> DUNGEON_ENTRIES = new HashMap<>();
-	public static final Map<DungeonBase, StructureFeature<?, ?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
-	protected static final ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE = new ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>>();
+	//protected static final Map<DungeonBase, Structure<?>> DUNGEON_ENTRIES = new HashMap<>();
+	//public static final Map<DungeonBase, StructureFeature<?, ?>> DUNGEON_CONFIGURED_ENTRIES = new HashMap<>();
+	//protected static final ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE = new ConcurrentLinkedDeque<Triple<DungeonBase, Structure<?>, StructureSeparationSettings>>();
+	
+	protected static final Map<DungeonGrid, Structure<?>> GRID_ENTRIES = new HashMap<>();
+	public static final Map<DungeonGrid, StructureFeature<?, ?>> GRID_CONFIGURED_ENTRIES = new HashMap<>();
+	protected static final ConcurrentLinkedDeque<Triple<DungeonGrid, Structure<?>, StructureSeparationSettings>> SEP_SETTINGS_QUEUE_GRID = new ConcurrentLinkedDeque<Triple<DungeonGrid, Structure<?>, StructureSeparationSettings>>();
 
 	public static void setupStructures() {
 		setupMapSpacingAndLand(WALL_IN_THE_NORTH.get(), new StructureSeparationSettings(1, 0, 1237654789), false);
 
-		try {
+		/*try {
 			while (!SEP_SETTINGS_QUEUE.isEmpty()) {
 				Triple<DungeonBase, Structure<?>, StructureSeparationSettings> entry = SEP_SETTINGS_QUEUE.poll();
 				if (entry != null) {
 					setupMapSpacingAndLand(entry.getMiddle(), entry.getRight(), entry.getLeft().doBuildSupportPlatform());
+				}
+			}
+		} catch (Exception ex) {
+			// Yes, this is necessary. Without it the error is suppressed!
+			ex.printStackTrace();
+		}*/
+		try {
+			while (!SEP_SETTINGS_QUEUE_GRID.isEmpty()) {
+				Triple<DungeonGrid, Structure<?>, StructureSeparationSettings> entry = SEP_SETTINGS_QUEUE_GRID.poll();
+				if (entry != null) {
+					setupMapSpacingAndLand(entry.getMiddle(), entry.getRight(), true);
 				}
 			}
 		} catch (Exception ex) {
@@ -119,7 +135,14 @@ public class CQRStructures {
 
 		// Now, parse all configured dungeon structures and add them too
 		ResourceLocation biomeID = key.location(); //registryname is the registryname of the RegistryKey, here that is "minecraft/worldgen" or something like that
-		for (Map.Entry<DungeonBase, StructureFeature<?, ?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
+		/*for (Map.Entry<DungeonBase, StructureFeature<?, ?>> entry : DUNGEON_CONFIGURED_ENTRIES.entrySet()) {
+			if(entry.getKey().isValidBiome(biomeID)) {
+				event.getGeneration().getStructures().add(() -> entry.getValue());
+				System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
+				continue;
+			}
+		}*/
+		for (Map.Entry<DungeonGrid, StructureFeature<?, ?>> entry : GRID_CONFIGURED_ENTRIES.entrySet()) {
 			if(entry.getKey().isValidBiome(biomeID)) {
 				event.getGeneration().getStructures().add(() -> entry.getValue());
 				System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
@@ -145,7 +168,7 @@ public class CQRStructures {
 				tempMap.putIfAbsent(CQRStructures.WALL_IN_THE_NORTH.get(), DimensionStructuresSettings.DEFAULTS.get(CQRStructures.WALL_IN_THE_NORTH.get()));
 			}
 			boolean done = false;
-			for (Map.Entry<DungeonBase, Structure<?>> entry : DUNGEON_ENTRIES.entrySet()) {
+			/*for (Map.Entry<DungeonBase, Structure<?>> entry : DUNGEON_ENTRIES.entrySet()) {
 				for (ResourceLocation rs : entry.getKey().getAllowedDims()) {
 					if (rs.equals(serverWorld.dimension().getRegistryName())) {
 						if (entry.getKey().isAllowedDimsAsBlacklist()) {
@@ -156,6 +179,26 @@ public class CQRStructures {
 							done = true;
 							break;
 						}
+					}
+				}
+				if (done) {
+					break;
+				}
+			}*/
+			for (Map.Entry<DungeonGrid, Structure<?>> entry : GRID_ENTRIES.entrySet()) {
+				for (ResourceLocation rs : entry.getKey().collectAllowedDims()) {
+					if (rs.equals(serverWorld.dimension().getRegistryName())) {
+						tempMap.putIfAbsent(entry.getValue(), DimensionStructuresSettings.DEFAULTS.get(entry.getValue()));
+						done = true;
+						break;
+						/*if (entry.getKey().isAllowedDimsAsBlacklist()) {
+							done = true;
+							break;
+						} else {
+							tempMap.putIfAbsent(entry.getValue(), DimensionStructuresSettings.DEFAULTS.get(entry.getValue()));
+							done = true;
+							break;
+						}*/
 					}
 				}
 				if (done) {
@@ -173,7 +216,7 @@ public class CQRStructures {
 		public static void onStructureRegistration(final RegistryEvent.Register<Structure<?>> event) {
 			DungeonRegistry.getInstance().loadDungeonFiles();
 			// Now, load all dungeon configs and setup the spacing for them
-			for (DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
+			/*for (DungeonBase dunConf : DungeonRegistry.getInstance().getDungeons()) {
 				try {
 					// TODO: Create codec, it MUST NOT BE NULL!!
 					Structure<?> structure = new StructureDungeonCQR(DungeonBase.CODEC, false);
@@ -188,6 +231,19 @@ public class CQRStructures {
 						sepSettings = new StructureSeparationSettings(1, 0, 123456789);
 					}
 					SEP_SETTINGS_QUEUE.add(Triple.of(dunConf, structure, sepSettings));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}*/
+			
+			for(DungeonGrid grid : GridRegistry.getInstance().getGrids()) {
+				try {
+					Structure<?> structure = new StructureGridCQR<>(DungeonGrid.CODEC, false);
+					event.getRegistry().register(structure.setRegistryName(CQRMain.prefix("dungeon_" + grid.getName())));
+					GRID_ENTRIES.put(grid, structure);
+					StructureSeparationSettings sepSettings;
+					sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+					SEP_SETTINGS_QUEUE_GRID.add(Triple.of(grid, structure, sepSettings));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
