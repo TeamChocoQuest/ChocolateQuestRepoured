@@ -111,6 +111,7 @@ public class LootTableLoader {
 				}
 				if (tokenCount >= 9) {
 					treasure = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
+					enchChance = chance;
 					if (tokenCount >= 10) {
 						try {
 							enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
