@@ -10,7 +10,7 @@ import java.util.Properties;
 public enum EDungeonGenerator {
 
 	TEMPLATE_SURFACE(DungeonTemplateSurface::new),
-	RANDOMIZED_CASTLE(DungeonRandomizedCastle::new),
+	//RANDOMIZED_CASTLE(DungeonRandomizedCastle::new),
 	VOLCANO(DungeonVolcano::new),
 	GRID_CITY(DungeonGridCity::new),
 	HANGING_CITY(DungeonHangingCity::new),
