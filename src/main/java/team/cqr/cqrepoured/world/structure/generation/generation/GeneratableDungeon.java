@@ -22,6 +22,8 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.util.Cache2D;
+import team.cqr.cqrepoured.util.IntUtil;
+import team.cqr.cqrepoured.world.structure.debug.TestStructures;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -69,41 +71,75 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		this.level = level;
 		this.protectedRegionBuilder = protectedRegionBuilder;
 		this.undergroundOffset = undergroundOffset;
-		// TODO calculate correct bounding box
-		this.boundingBox = new MutableBoundingBox(pos.offset(-64, -64, -64), pos.offset(64, 64, 64));
+		this.boundingBox = this.calculateBoundingBox();
+		this.groundData = this.calculateGroundData();
+	}
 
-		this.groundData = new Cache2D<>(this.boundingBox.x0, this.boundingBox.z0, this.boundingBox.x1, this.boundingBox.z1, null, GroundData[]::new);
-		level.sections.values().forEach(section -> {
-			SectionPos sectionPos = section.getSectionPos();
-			Mutable mutable = new Mutable();
-			for (int y = 0; y < 16; y++) {
-				mutable.setY(sectionPos.minBlockY() + y);
-				if (mutable.getY() >= pos.getY() + undergroundOffset) {
-					continue;
+	private MutableBoundingBox calculateBoundingBox() {
+		MutableBoundingBox boundingBox = MutableBoundingBox.getUnknownBox();
+		Mutable mutablePos = new Mutable();
+		
+		level.getSections().forEach(section -> {
+			SectionPos sectionPos = section.getPos();
+			
+			IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
+				BlockState state = section.getBlockState(mutablePos);
+				if (state == null || state == Blocks.AIR.defaultBlockState()) {
+					return;
 				}
-				for (int x = 0; x < 16; x++) {
-					mutable.setX(sectionPos.minBlockX() + x);
-					for (int z = 0; z < 16; z++) {
-						mutable.setZ(sectionPos.minBlockZ() + z);
-						BlockState state = section.getBlockState(mutable);
-						if (state == null || state == Blocks.AIR.defaultBlockState()) {
-							continue;
-						}
-						groundData.compute(mutable, (k, v) -> {
-							if (v == null) {
-								return new GroundData(mutable.getY());
-							}
-							v.update(mutable.getY());
-							return v;
-						});
-					}
-				}
-			}
+
+				boundingBox.x0 = Math.min(mutablePos.getX(), boundingBox.x0);
+				boundingBox.y0 = Math.min(mutablePos.getY(), boundingBox.y0);
+				boundingBox.z0 = Math.min(mutablePos.getZ(), boundingBox.z0);
+				boundingBox.x1 = Math.max(mutablePos.getX(), boundingBox.x1);
+				boundingBox.y1 = Math.max(mutablePos.getY(), boundingBox.y1);
+				boundingBox.z1 = Math.max(mutablePos.getZ(), boundingBox.z1);
+			});
 		});
+
+		boundingBox.x0 -= 16;
+		boundingBox.y0 -= 16;
+		boundingBox.z0 -= 16;
+		boundingBox.x1 += 16;
+		boundingBox.y1 += 16;
+		boundingBox.z1 += 16;
+		return boundingBox;
+	}
+
+	private Cache2D<GroundData> calculateGroundData() {
+		Cache2D<GroundData> groundData = new Cache2D<>(boundingBox.x0, boundingBox.z0, boundingBox.x1, boundingBox.z1, null, GroundData[]::new);
+		Mutable mutablePos = new Mutable();
+		
+		level.getSections().forEach(section -> {
+			SectionPos sectionPos = section.getPos();
+			
+			IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
+				if (mutablePos.getY() >= pos.getY() + undergroundOffset) {
+					return;
+				}
+
+				BlockState state = section.getBlockState(mutablePos);
+				if (state == null || state == Blocks.AIR.defaultBlockState()) {
+					return;
+				}
+				
+				groundData.compute(mutablePos, (k, v) -> {
+					if (v == null) {
+						return new GroundData(mutablePos.getY());
+					}
+					v.update(mutablePos.getY());
+					return v;
+				});
+			});
+		});
+		
+		return groundData;
 	}
 
 	protected GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
-		super(GENERATABLE_DUNGEON, nbt);
+		super(TestStructures.GENERATABLE_DUNGEON, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
 		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));
@@ -140,55 +176,35 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		return true;
 	}
 
-	static final double[] contribution;
-	static {
-		int r = 16;
-		int r1 = r * 2 + 1;
-		contribution = new double[r1 * r1 * r1];
-		for (int x = -r; x <= r; x++) {
-			for (int y = -r; y <= r; y++) {
-				for (int z = -r; z <= r; z++) {
-					int dx = Math.abs(x);
-					if (dx > 0) dx--;
-					int dy = Math.abs(y);
-					if (dy > 0) dy--;
-					int dz = Math.abs(z);
-					if (dz > 0) dz--;
-
-					double d = x * x + y * y + z * z;
-					d = MathHelper.clamp(1.0D - Math.sqrt(d) * 0.0625D, 0.0D, 1.0D);
-					d = d * d * (3.0D - 2.0D * d);
-
-					contribution[((x + r) * r1 + (y + r)) * r1 + (z + r)] = d;
-				}
-			}
-		}
-	}
-
 	@Override
 	public double getContribution(int x, int y, int z) {
-		double noise = 0.0D;
-		int r = 16;
-		for (int ix = -r; ix <= r; ix++) {
-			if (!groundData.inBoundsX(x + ix))
+		double maxNoise = 0.0D;
+
+		for (int dx = -NoiseUtil.RADIUS; dx <= NoiseUtil.RADIUS; dx++) {
+			if (!groundData.inBoundsX(x + dx)) {
 				continue;
-			for (int iz = -r; iz <= r; iz++) {
-				if (!groundData.inBoundsZ(z + iz))
+			}
+
+			for (int dz = -NoiseUtil.RADIUS; dz <= NoiseUtil.RADIUS; dz++) {
+				if (!groundData.inBoundsZ(z + dz)) {
 					continue;
-				GroundData data = groundData.getUnchecked(x + ix, z + iz);
-				if (data == null)
+				}
+
+				GroundData data = groundData.getUnchecked(x + dx, z + dz);
+				if (data == null) {
 					continue;
-				if (y > data.max)
+				}
+
+				if (y < data.min - NoiseUtil.RADIUS || y > data.max + NoiseUtil.RADIUS) {
 					continue;
-				int iy = y < data.min ? data.min - y : 0;
-				if (iy > 16)
-					continue;
-				double d = contribution[((ix + 16) * 33 + (iy + 16)) * 33 + (iz + 16)];
-				if (d > noise)
-					noise = d;
+				}
+
+				int dy = y - MathHelper.clamp(y, data.min, data.max);
+				maxNoise = Math.max(NoiseUtil.getContribution(dx, dy, dz), maxNoise);
 			}
 		}
-		return noise;
+
+		return maxNoise;
 	}
 
 	public static class Builder {

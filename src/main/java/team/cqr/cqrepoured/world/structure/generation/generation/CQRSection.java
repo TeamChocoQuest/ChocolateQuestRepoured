@@ -19,11 +19,15 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.util.math.SectionPos;
+import net.minecraft.util.math.shapes.BitSetVoxelShapePart;
+import net.minecraft.util.math.shapes.VoxelShapePart;
 import net.minecraft.util.palette.IPalette;
 import net.minecraft.util.palette.IdentityPalette;
 import net.minecraft.world.ISeedReader;
 import net.minecraftforge.common.util.Constants.NBT;
+import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
 import team.cqr.cqrepoured.util.palette.PalettedContainer;
@@ -34,7 +38,6 @@ public class CQRSection implements ICQRSection {
 	private static final IPalette<BlockState> GLOBAL_BLOCKSTATE_PALETTE = new IdentityPalette<>(Block.BLOCK_STATE_REGISTRY, Blocks.AIR.defaultBlockState());
 
 	private final CQRLevel level;
-	// TODO used as workaround for GeneratableDungeon#getContribution
 	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
 	private final Int2ObjectMap<TileEntity> blockEntities;
@@ -50,7 +53,7 @@ public class CQRSection implements ICQRSection {
 
 	public CQRSection(CQRLevel level, CompoundNBT nbt) {
 		this.level = level;
-		this.sectionPos = SectionPos.of(0, 0, 0);
+		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
 		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NBTUtil::readBlockState, NBTUtil::writeBlockState);
 		this.blocks.read(nbt.getList("Palette", NBT.TAG_COMPOUND), nbt.getLongArray("BlockStates"));
 		this.blockEntities = NBTCollectors.<CompoundNBT, TileEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
@@ -59,42 +62,138 @@ public class CQRSection implements ICQRSection {
 		this.entities = NBTHelper.<CompoundNBT>stream(nbt, "Entities").map(EntityContainer::new).collect(Collectors.toList());
 	}
 
-	public SectionPos getSectionPos() {
-		return sectionPos;
+	public SectionPos getPos() {
+		return this.sectionPos;
 	}
 
 	public CompoundNBT save() {
 		CompoundNBT nbt = new CompoundNBT();
+		nbt.putInt("X", this.sectionPos.x());
+		nbt.putInt("Y", this.sectionPos.y());
+		nbt.putInt("Z", this.sectionPos.z());
 		this.blocks.write(nbt, "Palette", "BlockStates");
 		nbt.put("BlockEntities", NBTCollectors.toCompound(this.blockEntities, blockEntity -> blockEntity.save(new CompoundNBT())));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTCollectors.toList()));
 		return nbt;
 	}
 
-	public void generate(ISeedReader pLevel, SectionPos sectionPos, IEntityFactory entityFactory) {
-		BlockPos.Mutable mutable = new BlockPos.Mutable();
-		for (short i = 0; i < 4096; i++) {
+	public void generate(ISeedReader level, IEntityFactory entityFactory) {
+		VoxelShapePart voxelShapePart = new BitSetVoxelShapePart(16, 16, 16);
+
+		this.placeBlocks(level, voxelShapePart);
+		this.updateShapeAtEdge(level, voxelShapePart);
+		this.updateFromNeighbourShapes(level, voxelShapePart);
+		this.setBlockEntitiesChanged(level);
+		this.addEntities(level, entityFactory);
+	}
+
+	private void placeBlocks(ISeedReader level, VoxelShapePart voxelShapePart) {
+		Mutable mutablePos = new Mutable();
+
+		for (int i = 0; i < 4096; i++) {
 			BlockState state = this.getBlockState(i);
 			if (state == null) {
 				continue;
 			}
 
-			mutable.set(
-					(sectionPos.x() << 4) | (i & 15),
-					(sectionPos.y() << 4) | ((i >> 8) & 15),
-					(sectionPos.z() << 4) | ((i >> 4) & 15));
-			pLevel.setBlock(mutable, state, 0);
-			TileEntity tileEntity = this.blockEntities.get(i);
-			if (tileEntity != null) {
-				pLevel.getChunk(mutable).setBlockEntity(mutable, tileEntity);
+			int x = x(i);
+			int y = y(i);
+			int z = z(i);
+			setPos(mutablePos, this.sectionPos, x, y, z);
+			if (level.setBlock(mutablePos, state, 0)) {
+				voxelShapePart.setFull(x, y, z, true, true);
+
+				TileEntity tileEntity = this.blockEntities.get(i);
+				if (tileEntity != null) {
+					level.getChunk(mutablePos).setBlockEntity(mutablePos, tileEntity);
+				}
 			}
 		}
+	}
 
-		this.entities.stream().map(entityContainer -> entityContainer.getEntity(entityFactory)).forEach(pLevel::addFreshEntity);
+	private void updateShapeAtEdge(ISeedReader level, VoxelShapePart voxelShapePart) {
+		Mutable mutablePos = new Mutable();
+		Mutable mutablePosNeighbour = new Mutable();
+
+		voxelShapePart.forAllFaces((direction, x, y, z) -> {
+			setPos(mutablePos, this.sectionPos, x, y, z);
+			mutablePosNeighbour.setWithOffset(mutablePos, direction);
+			BlockState state = level.getBlockState(mutablePos);
+			BlockState stateNeighbour = level.getBlockState(mutablePosNeighbour);
+
+			BlockState updatedState = state.updateShape(direction, stateNeighbour, level, mutablePos, mutablePosNeighbour);
+			if (state != updatedState) {
+				level.setBlock(mutablePos, updatedState, 0);
+			}
+
+			BlockState updatedStateNeighbour = stateNeighbour.updateShape(direction.getOpposite(), updatedState, level, mutablePosNeighbour, mutablePos);
+			if (stateNeighbour != updatedStateNeighbour) {
+				level.setBlock(mutablePosNeighbour, updatedStateNeighbour, 0);
+			}
+		});
+	}
+
+	private void updateFromNeighbourShapes(ISeedReader level, VoxelShapePart voxelShapePart) {
+		Mutable mutablePos = new Mutable();
+
+		IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+			if (!voxelShapePart.isFull(x, y, z)) {
+				return;
+			}
+
+			setPos(mutablePos, this.sectionPos, x, y, z);
+			BlockState state = level.getBlockState(mutablePos);
+			BlockState updatedState = Block.updateFromNeighbourShapes(state, level, mutablePos);
+			if (state != updatedState) {
+				level.setBlock(mutablePos, updatedState, 16);
+			}
+
+			level.blockUpdated(mutablePos, updatedState.getBlock());
+		});
+	}
+
+	private void setBlockEntitiesChanged(ISeedReader level) {
+		Mutable mutablePos = new Mutable();
+
+		this.blockEntities.int2ObjectEntrySet().forEach(entry -> {
+			setPos(mutablePos, this.sectionPos, entry.getIntKey());
+			TileEntity blockEntity = level.getBlockEntity(mutablePos);
+			if (blockEntity != null) {
+				blockEntity.setChanged();
+			}
+		});
+	}
+
+	private void addEntities(ISeedReader level, IEntityFactory entityFactory) {
+		this.entities.stream().map(entityContainer -> entityContainer.getEntity(entityFactory)).forEach(level::addFreshEntity);
+	}
+
+	private static Mutable setPos(Mutable mutablePos, SectionPos sectionPos, int index) {
+		return setPos(mutablePos, sectionPos, x(index), y(index), z(index));
+	}
+
+	public static Mutable setPos(Mutable mutablePos, SectionPos sectionPos, int x, int y, int z) {
+		return mutablePos.set(sectionPos.minBlockX() | x, sectionPos.minBlockY() | y, sectionPos.minBlockZ() | z);
 	}
 
 	private static int index(BlockPos pos) {
-		return PalettedContainer.getIndex(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+		return index(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+	}
+
+	private static int index(int x, int y, int z) {
+		return y << 8 | z << 4 | x;
+	}
+
+	private static int x(int i) {
+		return i & 15;
+	}
+
+	private static int y(int i) {
+		return i >> 8;
+	}
+
+	private static int z(int i) {
+		return (i >> 4) & 15;
 	}
 
 	@Override
@@ -116,7 +215,7 @@ public class CQRSection implements ICQRSection {
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<TileEntity> blockEntityCallback) {
 		this.blocks.set(index, state);
 		if (state != null && state.hasTileEntity()) {
-			TileEntity blockEntity = state.createTileEntity(this.level);
+			TileEntity blockEntity = state.createTileEntity(this.level.asBlockReader());
 			this.blockEntities.put(index, blockEntity);
 			if (blockEntityCallback != null) {
 				blockEntityCallback.accept(blockEntity);
