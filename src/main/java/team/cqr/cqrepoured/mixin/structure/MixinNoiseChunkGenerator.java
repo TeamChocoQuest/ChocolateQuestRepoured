@@ -18,8 +18,6 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructureStart;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.world.structure.debug.NoiseProfiler;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
 @Mixin(NoiseChunkGenerator.class)
@@ -36,8 +34,6 @@ public abstract class MixinNoiseChunkGenerator {
 
 	@Inject(method = "fillFromNoise", at = @At("HEAD"))
 	private void pre_fillFromNoise(IWorld level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
-		NoiseProfiler.INSTANCE.set(new NoiseProfiler());
-
 		ChunkPos chunkPos = chunk.getPos();
 		SectionPos sectionPos = SectionPos.of(chunkPos, 0);
 		noiseAffectingStructurePieces = INoiseAffectingStructurePiece.NOISE_AFFECTING_STRUCTURES.stream()
@@ -69,27 +65,15 @@ public abstract class MixinNoiseChunkGenerator {
 
 	@ModifyVariable(method = "fillFromNoise", at = @At(value = "INVOKE", target = "back", remap = false, ordinal = 1, shift = Shift.AFTER), index = 68, ordinal = 18, name = "d18")
 	private double set_d18(double d18) {
-		NoiseProfiler profiler = NoiseProfiler.INSTANCE.get();
 		for (INoiseAffectingStructurePiece structure : noiseAffectingStructurePieces) {
-			profiler.start();
 			d18 += structure.getContribution(x, y, z);
-			profiler.end();
 		}
 		return d18;
-//		return d18 + noiseAffectingStructurePieces.stream()
-//				.mapToDouble(structurePiece -> structurePiece.getContribution(x, y, z))
-//				.sum();
 	}
 
 	@Inject(method = "fillFromNoise", at = @At("RETURN"))
 	private void post_fillFromNoise(IWorld level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
 		noiseAffectingStructurePieces = null;
-
-		NoiseProfiler profiler = NoiseProfiler.INSTANCE.get();
-		if (!profiler.results.isEmpty()) {
-			CQRMain.logger.info(profiler.getData());
-		}
-		NoiseProfiler.INSTANCE.set(null);
 	}
 
 }
