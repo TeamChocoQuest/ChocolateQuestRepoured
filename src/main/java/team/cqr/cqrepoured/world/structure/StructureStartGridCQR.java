@@ -12,6 +12,7 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 
 public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart<T> {
@@ -19,9 +20,9 @@ public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart
 	private final DungeonBase dungeonObj;
 	
 	public StructureStartGridCQR(Structure<T> structureIn, int chunkX, int chunkZ, MutableBoundingBox mutableBoundingBox, int referenceIn, long seedIn, final DungeonBase dungeonObj) {
-        super(structureIn, chunkX, chunkZ, mutableBoundingBox, referenceIn, seedIn);
+        	super(structureIn, chunkX, chunkZ, mutableBoundingBox, referenceIn, seedIn);
         
-        this.dungeonObj = dungeonObj;
+        	this.dungeonObj = dungeonObj;
 	}
 
 	@Override
@@ -48,7 +49,8 @@ public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart
 		BlockPos centered = new BlockPos(x,y,z);
 
 		//Run the dugneon generators...
-		this.pieces.add(this.dungeonObj.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random));
+		//this.pieces.add(this.dungeonObj.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random));
+		this.pieces.add(this.dungeonObj.generate(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random, DungeonSpawnType.DUNGEON_GENERATION));
 		
 		/*CQRJigsawManager.addPieces(
 				dynamicRegistryManager, 
