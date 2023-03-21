@@ -139,8 +139,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
-    add sourceSets.main, 'mixins.cqrepoured.refmap.json'
-    config 'mixins.cqrepoured.json'
+    add sourceSets.main, 'cqrepoured.refmap.json'
+    config 'cqrepoured.mixins.json'
 }
 
 // Generate a fixed tsrg file after generating the default tsrg file
