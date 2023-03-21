@@ -22,12 +22,20 @@ public class MixinChunkStatus {
 	@Shadow
 	private static List<ChunkStatus> STATUS_BY_RANGE;
 
-	@Inject(method = "<clinit>", at = @At(value = "INVOKE_ASSIGN", target = "register", ordinal = 0, shift = Shift.AFTER))
+	@Inject(method = "<clinit>", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/chunk/ChunkStatus;register(Ljava/lang/String;Lnet/minecraft/world/chunk/ChunkStatus;ILjava/util/EnumSet;Lnet/minecraft/world/chunk/ChunkStatus$Type;Lnet/minecraft/world/chunk/ChunkStatus$IGenerationWorker;)Lnet/minecraft/world/chunk/ChunkStatus;", ordinal = 0, shift = Shift.AFTER))
 	private static void clinit(CallbackInfo info) {
 		CQRChunkStatus.CQR_STRUCTURE_STARTS = ChunkStatus.registerSimple(CQRMain.MODID + ":cqr_structure_starts", ChunkStatus.STRUCTURE_STARTS, 0, ChunkStatus.PRE_FEATURES, ChunkStatus.Type.PROTOCHUNK, CQRChunkStatus::executeCQRStructureStarts);
 	}
 
-	@Inject(method = "<clinit>", at = @At(value = "INVOKE_ASSIGN", target = "of", ordinal = 2, shift = Shift.AFTER))
+	/*@Inject(
+			method = "<clinit>",
+			at = @At(
+					value = "INVOKE_ASSIGN",
+					target = "Lcom/Lcom/google/common/collect/ImmutableList;of(Ljava/lang/Object;)Lcom/google/common/collect/ImmutableList;",
+					ordinal = 2,
+					shift = Shift.AFTER
+			)
+	)
 	private static void clinit_STATUS_BY_RANGE(CallbackInfo info) {
 		STATUS_BY_RANGE = ImmutableList.of(
 				ChunkStatus.FULL,
@@ -41,9 +49,9 @@ public class MixinChunkStatus {
 				CQRChunkStatus.CQR_STRUCTURE_STARTS,
 				CQRChunkStatus.CQR_STRUCTURE_STARTS,
 				CQRChunkStatus.CQR_STRUCTURE_STARTS);
-	}
+	}*/
 
-	@ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "registerSimple", ordinal = 1), index = 1)
+	@ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/chunk/ChunkStatus;registerSimple(Ljava/lang/String;Lnet/minecraft/world/chunk/ChunkStatus;ILjava/util/EnumSet;Lnet/minecraft/world/chunk/ChunkStatus$Type;Lnet/minecraft/world/chunk/ChunkStatus$ISelectiveWorker;)Lnet/minecraft/world/chunk/ChunkStatus;", ordinal = 1), index = 1)
 	private static ChunkStatus parent(ChunkStatus original) {
 		return CQRChunkStatus.CQR_STRUCTURE_STARTS;
 	}

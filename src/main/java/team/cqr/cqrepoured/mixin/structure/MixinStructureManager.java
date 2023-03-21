@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.util.CQRChunkStatus;
 @Mixin(StructureManager.class)
 public class MixinStructureManager {
 
-	@ModifyArg(method = "lambda$startsForFeature$1", at = @At(value = "INVOKE", target = "getChunk"), index = 2)
+	@ModifyArg(method = "lambda$startsForFeature$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/IWorld;getChunk(IILnet/minecraft/world/chunk/ChunkStatus;)Lnet/minecraft/world/chunk/IChunk;"), index = 2)
 	public ChunkStatus chunkStatus(ChunkStatus original) {
 		return CQRChunkStatus.CQR_STRUCTURE_STARTS;
 	}

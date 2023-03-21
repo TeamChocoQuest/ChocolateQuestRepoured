@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.util.CQRChunkStatus;
 @Mixin(Structure.class)
 public class MixinStructure {
 
-	@ModifyArg(method = "getNearestGeneratedFeature", at = @At(value = "INVOKE", target = "getChunk"), index = 2)
+	@ModifyArg(method = "getNearestGeneratedFeature", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/IWorldReader;getChunk(IILnet/minecraft/world/chunk/ChunkStatus;)Lnet/minecraft/world/chunk/IChunk;"), index = 2)
 	public ChunkStatus chunkStatus(ChunkStatus original) {
 		return CQRChunkStatus.CQR_STRUCTURE_STARTS;
 	}

@@ -25,14 +25,20 @@ public class MixinBipedArmorLayer<T extends LivingEntity, M extends BipedModel<T
 	@Unique
 	private ResourceLocation armorResource;
 
-	@Inject(method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V", at = @At("HEAD"))
+	@Inject(remap = false, method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V", at = @At("HEAD"))
 	public void preRenderModel(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int packedLight, boolean glint, A model, float r, float g, float b,
 			ResourceLocation armorResource, CallbackInfo info) {
 		this.model = model;
 		this.armorResource = armorResource;
 	}
 
-	@Redirect(method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V", at = @At(value = "INVOKE", target = "armorCutoutNoCull"))
+	@Redirect(
+			method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/client/renderer/RenderType;armorCutoutNoCull(Lnet/minecraft/util/ResourceLocation;)Lnet/minecraft/client/renderer/RenderType;"
+			)
+	)
 	public RenderType getRenderType(ResourceLocation armorResource) {
 		if (model instanceof IRenderTypeProvider) {
 			return ((IRenderTypeProvider) model).getRenderType(armorResource);
@@ -40,7 +46,7 @@ public class MixinBipedArmorLayer<T extends LivingEntity, M extends BipedModel<T
 		return RenderType.armorCutoutNoCull(armorResource);
 	}
 
-	@Inject(method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V", at = @At("RETURN"))
+	@Inject(remap = false, method = "renderModel(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/client/renderer/IRenderTypeBuffer;IZLnet/minecraft/client/renderer/entity/model/BipedModel;FFFLnet/minecraft/util/ResourceLocation;)V", at = @At("RETURN"))
 	public void postRenderModel(MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int packedLight, boolean glint, A model, float r, float g, float b,
 			ResourceLocation armorResource, CallbackInfo info) {
 		this.model = null;
