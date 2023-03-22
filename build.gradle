@@ -1,39 +1,21 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-		maven {url='https://repo.spongepowered.org/repository/maven-public'}
-        mavenCentral()
-        // Parchment
-        maven { url = 'https://maven.parchmentmc.org' }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        // Mixin
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
-        // Parchment
-        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
-    }
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
+    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
+    id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-// Mixin
-apply plugin: 'org.spongepowered.mixin'
-// Parchment
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
-version = "$mcVersion-$modVersion"
-group = 'team.cqr.cqrepoured'
-archivesBaseName = "$modName"
+version = "${mc_version}-${mod_version}"
+group = "${mod_group}"
+archivesBaseName = "${mod_name}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 configurations {
     includedDependencies
-    atDependencies
-    buildDependencies
-
     implementation.extendsFrom(includedDependencies)
-    implementation.extendsFrom(atDependencies)
+
+    buildDependencies
 }
 
 repositories {
@@ -60,74 +42,64 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:$mcVersion-$forgeVersion"
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
-    includedDependencies 'meldexun:RandomUtil:1.0.0@jar'
+    includedDependencies "meldexun:ReflectionUtil:${reflectionutil_version}@jar"
+    includedDependencies "meldexun:RandomUtil:${randomutil_version}@jar"
 
     // GeckoLib
-    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-$mcVersion:$geckolibVersion")
-
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     // ReachFix
-    // TODO seems to cause issues in dev? atDependencies 'curse.maven:ReachFix-556777:3648997'
+    implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
+    // SmartBrainLib
+    implementation fg.deobf("curse.maven:SmartBrainLib-661293:${smartbrainlib_version}")
 
     // JEI
-    compileOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152:api')
-    runtimeOnly fg.deobf('mezz.jei:jei-1.16.5:7.7.1.152')
-	
-    // SmartBrainLib
-    atDependencies fg.deobf("curse.maven:smartbrainlib-661293:$smartBrainLibVersion")
-	
-	// WorldEdit
-	runtimeOnly fg.deobf("curse.maven:worldedit-225608:3283693")
-
-    // Mixin
-    annotationProcessor "org.spongepowered:mixin:$mixinVersion:processor"
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    // WorldEdit
+    runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
 }
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.03.06-1.16.5'
+    mappings channel: "${mappings_channel}", version: "${mappings_version}"
 
-    def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
-    accessTransformer = files(
-        'src/main/resources/META-INF/accesstransformer.cfg',
-        // TODO is this needed? atDepFileTree.matching { include 'META-INF/jei_at.cfg' },
-        // TODO is this needed? atDepFileTree.matching { include 'META-INF/accesstransformer.cfg' }
-    )
+    accessTransformer = 'src/main/resources/META-INF/accesstransformer.cfg'
 
     runs {
         client {
-            taskName 'runClient CQR 1.16'
+            taskName "runClient ${mod_name} ${mc_version}"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
 
             mods {
-                cqrepoured {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
         }
 
         server {
-            taskName 'runServer CQR 1.16'
+            taskName "runServer ${mod_name} ${mc_version}"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
 
             mods {
-                cqrepoured {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
         }
 
         data {
-            taskName 'runData CQR 1.16'
+            taskName "runData ${mod_name} ${mc_version}"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
-            args '--mod', 'cqrepoured', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                cqrepoured {
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
@@ -139,48 +111,8 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
-    add sourceSets.main, 'cqrepoured.refmap.json'
-    config 'cqrepoured.mixins.json'
-}
-
-// Generate a fixed tsrg file after generating the default tsrg file
-createMcpToSrg {
-    outputs.upToDateWhen {false}
-    doLast {
-        fixFG5TsrgForMixinAP(output.get().asFile, file("${buildDir}/fixMcpToSrg/output.tsrg"))
-    }
-}
-
-// Tell mixin to use the fixed TSRG file
-mixin {
-    reobfSrgFile = file("${buildDir}/fixMcpToSrg/output.tsrg")
-}
-
-// Function that actually fixes the TSRG file
-static def fixFG5TsrgForMixinAP(File inFile, File outFile) {
-    // Make directory if needed
-    outFile.parentFile.mkdirs()
-
-    try (Scanner scanner = new Scanner(inFile); PrintWriter out = new PrintWriter(outFile)) {
-        boolean firstLine = true
-        while (scanner.hasNextLine()) {
-            String next = scanner.nextLine()
-
-            // Skip first 'tsrg left right' header line
-            if (firstLine) {
-                firstLine = false
-                continue
-            }
-
-            // Skip 'static' indicators
-            if (next.trim() == "static") {
-                continue
-            }
-
-            // Export line otherwise
-            out.println(next)
-        }
-    }
+    add sourceSets.main, "${mod_id}.refmap.json"
+    config "${mod_id}.mixins.json"
 }
 
 jar {
@@ -188,23 +120,17 @@ jar {
         configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
-    // TODO update this
-
-    classifier = 'universal'
-
     manifest {
         attributes([
-            'FMLCorePlugin': 'team.cqr.cqrepoured.asm.CQRPlugin',
-            'FMLCorePluginContainsFMLMod': 'true',
-            
-            "Specification-Title": "$modName",
-            "Specification-Vendor": "CQ-Repoured Team",
-            "Specification-Version": "$modVersion", // We are version 1 of ourselves
-            "Implementation-Title": "$modName",
-            "Implementation-Version": "$modVersion",
-            "Implementation-Vendor" :"CQ-Repoured Team",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "cqrepoured.mixins.json"
+            "MixinConfigs": "${mod_id}.mixins.json",
+
+            "Specification-Title": "${mod_name}",
+            "Specification-Vendor": "${mod_vendor}",
+            "Specification-Version": "${mod_version}",
+            "Implementation-Title": "${mod_name}",
+            "Implementation-Version": "${mod_version}",
+            "Implementation-Vendor" :"${mod_vendor}",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
