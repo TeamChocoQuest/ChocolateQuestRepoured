@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity;
+/*package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -58,7 +58,7 @@ public class RenderCalamityCrystal extends EntityRenderer<EntityCalamityCrystal>
 		if (blockpos != null) {
 			this.bindTexture(EnderDragonRenderer.ENDERCRYSTAL_BEAM_TEXTURES);
 			float targetX = blockpos.getX() + 0.5F;
-			float targetY = blockpos.getY() /* + 0.5F */;
+			float targetY = blockpos.getY(); // + 0.5F;
 			float targetZ = blockpos.getZ() + 0.5F;
 			double targetVectorX = targetX - entity.posX;
 			double targetVectorY = targetY - entity.posY;
@@ -71,4 +71,4 @@ public class RenderCalamityCrystal extends EntityRenderer<EntityCalamityCrystal>
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
-}
+}*/

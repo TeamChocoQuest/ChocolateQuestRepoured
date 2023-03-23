@@ -139,7 +139,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 					Vector3d translate = cpe.position().subtract(entity.position());
 					stack.translate(translate.x(), translate.y(), translate.z());
 
-					((EntityRenderer<CQRPartEntity>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
+					((EntityRenderer<CQRPartEntity<?>>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
 
 					stack.popPose();
 				}
