@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer.EModelRenderCycle;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
+import software.bernie.geckolib3.util.EModelRenderCycle;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ISizable;
 
@@ -47,14 +47,14 @@ public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjecti
 		this.heightScale = heightScale;
 	}
 	
-	protected float getWidthScale(T entity) {
+	public float getWidthScale(T entity) {
 		if(entity instanceof ISizable) {
 			return this.widthScale * ((ISizable)entity).getSizeVariation();
 		}
 		return this.widthScale;
 	}
 
-	protected float getHeightScale(T entity) {
+	public float getHeightScale(T entity) {
 		if(entity instanceof ISizable) {
 			return this.heightScale * ((ISizable)entity).getSizeVariation();
 		}
