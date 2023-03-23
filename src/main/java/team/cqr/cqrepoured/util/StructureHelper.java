@@ -1,23 +1,19 @@
 package team.cqr.cqrepoured.util;
 
+import javax.annotation.Nullable;
+
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.server.ServerWorld;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.integration.ancientwarfare.AW2Integration;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class StructureHelper {
 
 	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(Structure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
 	public static boolean isStructureInRange(World world, BlockPos pos, int radius, String name) {
-		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
+		return false;
+		/*if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return false;
 		}
 
@@ -62,12 +58,12 @@ public class StructureHelper {
 			// ignore
 		}
 
-		return false;
+		return false;*/
 	}
 
 	@Nullable
 	private static Structure getStructureGenerator(World world, String name) {
-		ChunkGenerator chunkGenerator = ((ServerWorld) world).getChunkProvider().chunkGenerator;
+		/*ChunkGenerator chunkGenerator = ((ServerWorld) world).getChunkProvider().chunkGenerator;
 
 		if (chunkGenerator instanceof OverworldChunkGenerator) {
 			if (!((OverworldChunkGenerator) chunkGenerator).mapFeaturesEnabled) {
@@ -124,7 +120,7 @@ public class StructureHelper {
 			}
 		} else if (chunkGenerator instanceof FlatChunkGenerator) {
 			return ((FlatChunkGenerator) chunkGenerator).structureGenerators.get(name);
-		}
+		}*/
 
 		return null;
 	}
@@ -132,7 +128,7 @@ public class StructureHelper {
 	private static boolean isStructureInRange(World world, Structure structureType, BlockPos pos, int radius) {
 		int x = pos.getX() >> 4;
 		int z = pos.getZ() >> 4;
-		Random random = structureType.rand;
+		/*Random random = structureType.rand;
 
 		structureType.world = world;
 		for (int r = 0; r <= radius; ++r) {
@@ -157,7 +153,7 @@ public class StructureHelper {
 					}
 				}
 			}
-		}
+		}*/
 
 		return false;
 	}

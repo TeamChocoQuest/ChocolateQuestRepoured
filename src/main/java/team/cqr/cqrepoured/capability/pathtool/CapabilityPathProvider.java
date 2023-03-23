@@ -22,7 +22,7 @@ public class CapabilityPathProvider extends BasicCapabilityProvider<CapabilityPa
 	}
 
 	public static void register() {
-		CapabilityManager.INSTANCE.register(CapabilityPath.class, new CapabilityPathStorage(), () -> new CapabilityPath(new ItemStack(CQRItems.PATH_TOOL.get())));
+		//CapabilityManager.INSTANCE.register(CapabilityPath.class, new CapabilityPathStorage(), () -> new CapabilityPath(new ItemStack(CQRItems.PATH_TOOL.get())));
 	}
 
 	public static CapabilityPathProvider createProvider(ItemStack stack) {

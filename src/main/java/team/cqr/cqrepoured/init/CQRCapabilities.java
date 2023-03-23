@@ -13,7 +13,7 @@ public class CQRCapabilities {
 		CapabilityCooldownHandlerProvider.register();
 		CapabilityExtraItemHandlerProvider.register();
 		CapabilityDynamicCrownProvider.register();
-		CapabilityPathProvider.register();
+		//CapabilityPathProvider.register();
 		CapabilityProtectedRegionDataProvider.register();
 		CapabilityElectricShockProvider.register();
 	}

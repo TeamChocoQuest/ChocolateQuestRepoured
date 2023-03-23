@@ -1,9 +1,13 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.Model;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
@@ -14,7 +18,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 public class RenderEnergyOrb extends EntityRenderer<ProjectileEnergyOrb> {
 
 	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/energy_orb.png");
-	private final Model modelEnderCrystal = new ModelEnergyOrb(0.0F);
+	private final Model modelEnderCrystal = new ModelEnergyOrb();
 	private final BossDeathRayHelper rayHelper;
 
 	public RenderEnergyOrb(EntityRendererManager renderManager) {
@@ -28,49 +32,31 @@ public class RenderEnergyOrb extends EntityRenderer<ProjectileEnergyOrb> {
 	}
 
 	@Override
-	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
-	}
-
-	@Override
-	public void doRender(ProjectileEnergyOrb entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void render(ProjectileEnergyOrb entity, float pEntityYaw, float partialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
 		float f = entity.innerRotation + partialTicks;
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		this.bindTexture(ENDER_CRYSTAL_TEXTURES);
+		pMatrixStack.pushPose();
+		//GlStateManager.translate((float) x, (float) y, (float) z);
+		//this.bindTexture(ENDER_CRYSTAL_TEXTURES);
 		float f1 = MathHelper.sin(f * 0.2F) / 2.0F + 0.5F;
 		f1 = f1 * f1 + f1;
 
-		if (this.renderOutlines) {
+		/*if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-		}
+		}*/
 
-		this.modelEnderCrystal.render(entity, 0.0F, f * 3.0F, f1 * 0.2F, 0.0F, 0.0F, 0.0625F);
+		float color = 0.5F + (float) (0.25F * (1 + Math.sin(entity.tickCount / Math.PI)));
 
-		if (this.renderOutlines) {
+		this.modelEnderCrystal.renderToBuffer(pMatrixStack, pBuffer.getBuffer(RenderType.entityCutout(ENDER_CRYSTAL_TEXTURES)), pPackedLight, OverlayTexture.NO_OVERLAY, color, color, 0, 0);
+		
+		/*if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
-		}
-		GlStateManager.popMatrix();
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		}*/
+		pMatrixStack.popPose();
+		super.render(entity, pEntityYaw, partialTicks, pMatrixStack, pBuffer, pPackedLight);
+		int ticks = entity.tickCount + 200;
+		this.rayHelper.renderRays(pMatrixStack, pBuffer.getBuffer(RenderType.lightning()), ticks, partialTicks);
 	}
 
-	@Override
-	public boolean isMultipass() {
-		return true;
-	}
-
-	@Override
-	public void renderMultipass(ProjectileEnergyOrb entityIn, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-		GlStateManager.pushAttrib();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		GlStateManager.translate(0.0F, 0.5F, 0.0F);
-		int ticks = entityIn.ticksExisted + 200;
-		if (ticks > 0) {
-			this.rayHelper.renderRays(ticks, partialTicks);
-		}
-		GlStateManager.popAttrib();
-		GlStateManager.popMatrix();
-	}
 }

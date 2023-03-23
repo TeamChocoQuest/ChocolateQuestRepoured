@@ -21,9 +21,9 @@ import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
-import team.cqr.cqrepoured.world.structure.debug.TestStructures;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -33,7 +33,7 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 public class GeneratableDungeon extends StructurePiece implements INoiseAffectingStructurePiece {
 
-	private static final IStructurePieceType GENERATABLE_DUNGEON = IStructurePieceType.setPieceId(GeneratableDungeon::new, "generatable_dungeon");
+	private static final IStructurePieceType GENERATABLE_DUNGEON = IStructurePieceType.setPieceId(GeneratableDungeon::new, CQRMain.prefix("generatable_dungeon").toString());
 
 	private final String dungeonName;
 	private final BlockPos pos;
@@ -139,7 +139,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 
 	protected GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
-		super(TestStructures.GENERATABLE_DUNGEON, nbt);
+		super(GeneratableDungeon.GENERATABLE_DUNGEON, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
 		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));

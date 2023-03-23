@@ -28,7 +28,6 @@ public class GuiButtonTextured extends ImageButton implements INumericIDButton {
 	
 	@Override
 	public void renderButton(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
-		super.renderButton(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 		if(this.icon != null) {
 			ResourceLocation origResLoc = this.resourceLocation;
 			this.resourceLocation = this.icon;
@@ -37,6 +36,7 @@ public class GuiButtonTextured extends ImageButton implements INumericIDButton {
 			
 			this.resourceLocation = origResLoc;
 		}
+		super.renderButton(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 	}
 	
 

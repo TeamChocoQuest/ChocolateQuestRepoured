@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render;
+/*package team.cqr.cqrepoured.client.render;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -41,9 +41,9 @@ public class MagicBellRenderer {
 		Minecraft mc = Minecraft.getInstance();
 
 		//No longer needed?
-		/*if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
-			ShaderLinkHelper.setNewStaticShaderLinkHelper();
-		}*/
+		//if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
+		//	ShaderLinkHelper.setNewStaticShaderLinkHelper();
+		//}
 
 		ResourceLocation resourcelocation = new ResourceLocation("shaders/post/entity_outline.json");
 
@@ -201,13 +201,13 @@ public class MagicBellRenderer {
 				return;
 			}
 
-			/*GlStateManager.enableColorMaterial();
-			GlStateManager.enableOutlineMode(posInfo.color);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-			mc.getBlockRendererDispatcher().renderBlock(state, posInfo.pos, mc.world, buffer);
-			tessellator.draw();
-			GlStateManager.disableOutlineMode();
-			GlStateManager.disableColorMaterial();*/
+			//GlStateManager.enableColorMaterial();
+			//GlStateManager.enableOutlineMode(posInfo.color);
+			//buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+			//mc.getBlockRendererDispatcher().renderBlock(state, posInfo.pos, mc.world, buffer);
+			//tessellator.draw();
+			//GlStateManager.disableOutlineMode();
+			//GlStateManager.disableColorMaterial();
 			mc.getBlockRenderer().renderBlock(state, null, rtb, outlineColor, outlineColor, null);
 		});
 		buffer.setTranslation(0.0D, 0.0D, 0.0D);
@@ -261,4 +261,4 @@ public class MagicBellRenderer {
 		GlStateManager.enableAlpha();
 	}
 
-}
+}*/

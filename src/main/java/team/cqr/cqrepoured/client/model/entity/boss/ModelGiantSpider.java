@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.client.model.entity.boss;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 
 /**
  * SpiderBoss - TheFunnyFace Created using Tabula 7.0.1
  */
-public class ModelGiantSpider extends ModelBase {
+public class ModelGiantSpider extends SegmentedModel<EntityCQRGiantSpider> {
 	public ModelRenderer BodyMiddle;
 	public ModelRenderer back;
 	public ModelRenderer head;
@@ -45,7 +45,7 @@ public class ModelGiantSpider extends ModelBase {
 	}
 
 	public ModelGiantSpider(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		this.textureWidth = textureWidthIn;
+		/*this.textureWidth = textureWidthIn;
 		this.textureHeight = textureHeightIn;
 		this.legright1 = new ModelRenderer(this, 3, 0);
 		this.legright1.setRotationPoint(-4.0F, 1.0F, -1.5F);
@@ -168,22 +168,22 @@ public class ModelGiantSpider extends ModelBase {
 		this.legright1.addChild(this.legright11);
 		this.legleft1.addChild(this.legleft11);
 		this.legright3.addChild(this.legright31);
-		this.armright1.addChild(this.armright11);
+		this.armright1.addChild(this.armright11);*/
 	}
 
-	@Override
+	/*@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.BodyMiddle.render(f5);
-	}
+	}*/
 
 	/**
 	 * This is a helper function from Tabula to set the rotation of model parts
 	 */
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	/*public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
-	}
+	}*/
 
 	/**
 	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and
@@ -191,7 +191,7 @@ public class ModelGiantSpider extends ModelBase {
 	 * that arms and legs swing back and forth) and par2 represents how "far" arms and legs
 	 * can swing at most.
 	 */
-	@Override
+	/*@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		this.head.rotateAngleX = headPitch * 0.017453292F;
@@ -215,5 +215,17 @@ public class ModelGiantSpider extends ModelBase {
 		this.legleft2.rotateAngleY += -f5;
 		this.legright1.rotateAngleY += f6;
 		this.legleft1.rotateAngleY += -f6;
+	}*/
+
+	@Override
+	public Iterable<ModelRenderer> parts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setupAnim(EntityCQRGiantSpider pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		// TODO Auto-generated method stub
+		
 	}
 }

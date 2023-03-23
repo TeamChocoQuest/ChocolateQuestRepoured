@@ -1,6 +1,14 @@
 package team.cqr.cqrepoured.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.Minecraft;
@@ -18,16 +26,10 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.util.GuiHelper;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
-import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiAddPathNode extends Screen {
@@ -136,7 +138,7 @@ public class GuiAddPathNode extends Screen {
 		this.pathMapWidth = 130;
 		this.pathMapHeight = 130;
 		ItemStack stack = this.minecraft.player.getItemInHand(this.hand);
-		CQRNPCPath path = ItemPathTool.getPath(stack);
+		CQRNPCPath path = null;//ItemPathTool.getPath(stack);
 		if (path != null) {
 			CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 			if (rootNode != null) {
@@ -297,7 +299,7 @@ public class GuiAddPathNode extends Screen {
 		if (mouseButton == 0) {
 			CQRNPCPath.PathNode clickedNode = this.getNodeAt((int) pMouseX, (int) pMouseY);
 			if (clickedNode != null) {
-				CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
+				CQRNPCPath path = null;//ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 				CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 				if (rootNode != null && clickedNode.getConnectedNodes().contains(this.rootNodeIndex)) {
 					if (!this.blacklistedPrevNodes.contains(clickedNode.getIndex())) {
@@ -323,7 +325,7 @@ public class GuiAddPathNode extends Screen {
 	@Override
 	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
-		drawCenteredString(pMatrixStack, this.font, "Add Path Node (Index: " + ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand)).getSize() + ")", this.width / 2, 20, 0xFFFFFF);
+		//drawCenteredString(pMatrixStack, this.font, "Add Path Node (Index: " + ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand)).getSize() + ")", this.width / 2, 20, 0xFFFFFF);
 
 		for (TextFieldWidget textField : this.textFieldList) {
 			textField.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
@@ -397,7 +399,7 @@ public class GuiAddPathNode extends Screen {
 		if (pMouseY < this.pathMapY || pMouseY > this.pathMapY + this.pathMapHeight) {
 			return null;
 		}
-		CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
+		CQRNPCPath path = null;//ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 		CQRNPCPath.PathNode clickedNode = null;
 		int posX = (pMouseX - this.pathMapX - (this.pathMapWidth / 2)) / 2 + this.centerOffsetX;
 		int posY = (pMouseY - this.pathMapY - (this.pathMapHeight / 2)) / 2 + this.centerOffsetY;
@@ -423,7 +425,7 @@ public class GuiAddPathNode extends Screen {
 		height /= 2;
 		int radiusX = width / 2;
 		int radiusY = height / 2;
-		CQRNPCPath path = ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
+		CQRNPCPath path = null;//ItemPathTool.getPath(this.minecraft.player.getItemInHand(this.hand));
 		CQRNPCPath.PathNode rootNode = path.getNode(this.rootNodeIndex);
 
 		GL11.glPushMatrix();

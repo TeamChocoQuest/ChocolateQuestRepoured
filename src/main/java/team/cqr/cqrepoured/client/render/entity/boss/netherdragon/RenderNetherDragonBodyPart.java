@@ -20,5 +20,5 @@ public class RenderNetherDragonBodyPart extends RenderEntityGeo<SubEntityNetherD
 	public RenderNetherDragonBodyPart(EntityRendererManager renderManager, AnimatedGeoModel<SubEntityNetherDragonSegment> modelProvider) {
 		super(renderManager, modelProvider);
 	}
-
+	
 }

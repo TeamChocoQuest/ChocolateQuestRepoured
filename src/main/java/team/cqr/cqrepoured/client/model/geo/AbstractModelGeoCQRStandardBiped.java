@@ -86,7 +86,7 @@ public abstract class AbstractModelGeoCQRStandardBiped<T extends AbstractEntityC
 	public void setLivingAnimations(T entity, Integer uniqueID, AnimationEvent customPredicate) {
 		IBone head = this.getAnimationProcessor().getBone(this.getHeadBoneIdent());
 		if (head != null) {
-			this.rotateHead(entity, head, customPredicate.getPartialTick(), this.getNetHeadYaw(customPredicate.getPartialTick(), entity), this.getHeadPitch(customPredicate.getPartialTick(), entity));
+			//this.rotateHead(entity, head, customPredicate.getPartialTick(), this.getNetHeadYaw(customPredicate.getPartialTick(), entity), this.getHeadPitch(customPredicate.getPartialTick(), entity));
 		}
 
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

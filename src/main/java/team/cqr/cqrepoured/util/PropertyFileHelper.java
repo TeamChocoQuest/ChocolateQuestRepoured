@@ -209,7 +209,7 @@ public class PropertyFileHelper {
 		return retFile;
 	}
 
-	public static EnumMCWoodType getWoodTypeProperty(Properties prop, String key, EnumMCWoodType defVal) {
+	/*public static EnumMCWoodType getWoodTypeProperty(Properties prop, String key, EnumMCWoodType defVal) {
 		String s = prop.getProperty(key);
 		if (s == null) {
 			return defVal;
@@ -226,7 +226,7 @@ public class PropertyFileHelper {
 		}
 
 		return retType;
-	}
+	}*/
 
 	public static String[] getStringArrayProperty(Properties prop, String key, String[] defVal, boolean allowEmpty) {
 		String s = prop.getProperty(key);

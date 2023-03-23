@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.tileentity;
+/*package team.cqr.cqrepoured.client.render.tileentity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -79,4 +79,4 @@ public class TileEntityMapPlaceHolderRenderer extends FastTESR<TileEntityMap> {
 		}
 	}
 
-}
+}*/

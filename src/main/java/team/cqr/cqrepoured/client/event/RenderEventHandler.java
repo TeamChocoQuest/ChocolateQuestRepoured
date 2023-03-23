@@ -21,7 +21,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
-import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
@@ -160,7 +159,7 @@ public class RenderEventHandler {
 	//@SubscribeEvent
 	public static void onClientTickEvent(TickEvent.ClientTickEvent event) {
 		if (event.phase == Phase.START) {
-			MagicBellRenderer.getInstance().tick();
+			//MagicBellRenderer.getInstance().tick();
 		}
 	}
 

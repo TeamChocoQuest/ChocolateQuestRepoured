@@ -61,7 +61,7 @@ public class CQRMessages {
 		registerServerToClient(SPacketItemStackSync.class, CPacketHandlerItemStackSync.class);
 		registerServerToClient(SPacketHookShotPlayerStop.class, CPacketHandlerHookShotPlayerStop.class);
 		registerServerToClient(SPacketSyncProtectedRegions.class, CPacketHandlerSyncProtectedRegions.class);
-		registerServerToClient(SPacketSyncProtectionConfig.class, CPacketHandlerSyncProtectionConfig.class);
+		//registerServerToClient(SPacketSyncProtectionConfig.class, CPacketHandlerSyncProtectionConfig.class);
 		registerServerToClient(SPacketUpdateProtectedRegion.class, CPacketHandlerUpdateProtectedRegion.class);
 		registerServerToClient(SPacketUnloadProtectedRegion.class, CPacketHandlerUnloadProtectedRegion.class);
 		registerServerToClient(SPacketAddOrResetProtectedRegionIndicator.class, CPacketHandlerAddOrResetProtectedRegionIndicator.class);
@@ -87,7 +87,7 @@ public class CQRMessages {
 		registerClientToServer(CPacketOpenMerchantGui.class, SPacketHandlerOpenMerchantGui.class);
 		registerClientToServer(CPacketSyncTileEntity.class, SPacketHandlerSyncTileEntity.class);
 		registerClientToServer(CPacketAddPathNode.class, SPacketHandlerAddPathNode.class);
-		registerClientToServer(CPacketCloseMapPlaceholderGuiSimple.class, SPacketHandlerCloseMapPlaceholderGuiSimple.class);
+		//registerClientToServer(CPacketCloseMapPlaceholderGuiSimple.class, SPacketHandlerCloseMapPlaceholderGuiSimple.class);
 		registerClientToServer(CPacketContainerClickButton.class, SPacketHandlerContainerClickButton.class);
 	}
 	

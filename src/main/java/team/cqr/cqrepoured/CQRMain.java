@@ -43,6 +43,7 @@ import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMessages;
 import team.cqr.cqrepoured.init.CQRParticleTypes;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
@@ -179,6 +180,7 @@ public class CQRMain {
 		CQRRecipeTypes.register(bus);
 		CQRParticleTypes.PARTICLE_TYPES.register(bus);
 		TestStructures.registerTestStructures();
+		//CQRLoottables.registerLootTables();
 		
 		//TODO: Change so the actual values of the files get loaded LATER
 		//DungeonRegistry.getInstance().loadDungeonFiles();

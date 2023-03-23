@@ -1,17 +1,13 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
-import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
-import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
-
-import java.util.function.Supplier;
 
 public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddPathNode> {
 
@@ -19,7 +15,7 @@ public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddP
 	protected void execHandlePacket(CPacketAddPathNode packet, Supplier<Context> context, World world, PlayerEntity player) {
 		ItemStack stack = player.getItemInHand(packet.getHand());
 
-		if (stack.getItem() instanceof ItemPathTool) {
+		/*if (stack.getItem() instanceof ItemPathTool) {
 			CQRNPCPath path = ItemPathTool.getPath(stack);
 
 			if (path != null) {
@@ -45,7 +41,7 @@ public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddP
 					player.sendMessage(new StringTextComponent("Added node!"), null);
 				}
 			}
-		}
+		}*/
 	}
 
 }

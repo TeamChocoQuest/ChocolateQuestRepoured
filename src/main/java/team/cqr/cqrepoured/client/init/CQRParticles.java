@@ -23,8 +23,8 @@ public class CQRParticles {
 		
 		ParticleManager pm = mc.particleEngine;
 		
-		pm.register(CQRParticleTypes.BEAM.get(), ParticleBeam.Factory::new);
-		pm.register(CQRParticleTypes.BLOCK_HIGHLIGHT.get(), ParticleMagicBell.Factory::new);
+		//pm.register(CQRParticleTypes.BEAM.get(), ParticleBeam.Factory::new);
+		//pm.register(CQRParticleTypes.BLOCK_HIGHLIGHT.get(), ParticleMagicBell.Factory::new);
 	}
 
 }

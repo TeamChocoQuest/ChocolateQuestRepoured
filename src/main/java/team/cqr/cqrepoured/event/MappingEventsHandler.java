@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 
-@EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = CQRMain.MODID)
 public class MappingEventsHandler {
 
 	@SubscribeEvent
@@ -25,7 +25,7 @@ public class MappingEventsHandler {
 			return;
 		}
 		entries.forEach(mapping -> {
-			switch(mapping.key.toString().split(":")[0]) {
+			switch(mapping.key.toString().split(":")[1]) {
 			case "null_block" :
 				mapping.remap(CQRBlocks.NULL_BLOCK.get());
 				break;
@@ -46,6 +46,7 @@ public class MappingEventsHandler {
 			switch(mapping.key.toString().split(":")[1]) {
 			case "tileentityspawner":
 			case "TileEntitySpawner":
+				System.out.println("HI!");
 				mapping.remap(CQRBlockEntities.SPAWNER.get());
 				break;
 			case "tileentitytable":

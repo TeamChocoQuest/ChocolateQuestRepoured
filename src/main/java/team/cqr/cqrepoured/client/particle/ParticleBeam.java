@@ -46,7 +46,7 @@ public class ParticleBeam extends Particle {
 
 	@Override
 	public void render(IVertexBuilder buffer, ActiveRenderInfo pRenderInfo, float partialTicks) {
-		float f = 0.0F;
+		/*float f = 0.0F;
 		float f1 = 1.0F;
 		float f2 = 0.0F;
 		float f3 = 1.0F;
@@ -93,7 +93,7 @@ public class ParticleBeam extends Particle {
 		buffer.vertex(f5 + avec3d[1].x, f6 + avec3d[1].y, f7 + avec3d[1].z).uv(f1, f2).color(this.rCol, this.gCol, this.bCol, this.alpha).lightmap(j, k).endVertex();
 		buffer.vertex(f5 + avec3d[2].x, f6 + avec3d[2].y, f7 + avec3d[2].z).uv(f, f2).color(this.rCol, this.gCol, this.bCol, this.alpha).lightmap(j, k).endVertex();
 		buffer.vertex(f5 + avec3d[3].x, f6 + avec3d[3].y, f7 + avec3d[3].z).uv(f, f3).color(this.rCol, this.gCol, this.bCol, this.alpha).lightmap(j, k).endVertex();
-		Tessellator.getInstance().end();
+		Tessellator.getInstance().end();*/
 	}
 
 	@Override

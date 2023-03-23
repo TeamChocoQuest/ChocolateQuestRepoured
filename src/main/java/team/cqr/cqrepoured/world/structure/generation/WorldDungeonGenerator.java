@@ -16,7 +16,6 @@ import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.event.world.structure.generation.DungeonGenerationHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
@@ -29,10 +28,10 @@ import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 public class WorldDungeonGenerator {
 
 	public void generate(Random random, int chunkX, int chunkZ, ServerWorld world, ChunkGenerator chunkGenerator, AbstractChunkProvider chunkProvider) {
-		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
+		/*if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
 			DungeonGenerationHelper.addDelayedChunk(world, chunkX, chunkZ);
 			return;
-		}
+		}*/
 
 		// setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor,
 		// true);
@@ -43,7 +42,7 @@ public class WorldDungeonGenerator {
 
 		int x = (chunkX << 4) + 8;
 		int z = (chunkZ << 4) + 8;
-		dungeon.generate(world, x, z, getRandomForCoords(world.getSeed(), x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
+		//dungeon.generate(world, x, z, getRandomForCoords(world.getSeed(), x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationHelper.shouldGenerateDungeonImmediately(world));
 	}
 
 	/**

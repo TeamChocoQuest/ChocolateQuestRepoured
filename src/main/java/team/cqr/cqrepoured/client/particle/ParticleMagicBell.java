@@ -11,19 +11,18 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
 
 public class ParticleMagicBell extends Particle {
 
 	public ParticleMagicBell(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, BlockPos pos) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn);
-		MagicBellRenderer.getInstance().add(color, lifetime, pos);
+		//MagicBellRenderer.getInstance().add(color, lifetime, pos);
 	}
 
 	public ParticleMagicBell(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int lifetime, int color, int entityId) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn);
-		MagicBellRenderer.getInstance().add(color, lifetime, entityId);
+		//MagicBellRenderer.getInstance().add(color, lifetime, entityId);
 	}
 
 	@OnlyIn(Dist.CLIENT)

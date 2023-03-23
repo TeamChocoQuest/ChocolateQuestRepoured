@@ -92,7 +92,7 @@ public class BlockStateGenArray {
 			BlockState state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing);
 			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(state, world);
 			if (chest != null) {
-				long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
+				long seed = WorldDungeonGenerator.getSeed(0, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
 				CompoundNBT nbt = chest.save(new CompoundNBT());
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
@@ -109,15 +109,18 @@ public class BlockStateGenArray {
 	}
 
 	public boolean addBlockState(BlockPos pos, BlockState blockState, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
+		return false;
+		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
 	}
 
 	public boolean addBlockState(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
+		return false;
+		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addSpawner(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
+		return false;
+		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
@@ -127,7 +130,7 @@ public class BlockStateGenArray {
 	public boolean addInternal(GenerationPhase phase, PreparablePosInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
-		BlockPos p = new BlockPos(blockInfo.getX(), blockInfo.getY(), blockInfo.getZ());
+		BlockPos p = BlockPos.ZERO;//new BlockPos(blockInfo.getX(), blockInfo.getY(), blockInfo.getZ());
 		PriorityBlockInfo old = mapToAdd.get(p);
 
 		if (old == null || (priority.getValue() > old.getPriority().getValue())) {

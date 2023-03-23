@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.projectile;
+/*package team.cqr.cqrepoured.client.render.projectile;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -132,4 +132,4 @@ public class RenderProjectileHookShotHook extends EntityRenderer<ProjectileHookS
 		return TEXTURE;
 	}
 
-}
+}*/

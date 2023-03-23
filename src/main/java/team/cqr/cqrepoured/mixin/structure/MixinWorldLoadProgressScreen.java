@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.mixin.structure;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +16,7 @@ import team.cqr.cqrepoured.util.CQRChunkStatus;
 public class MixinWorldLoadProgressScreen {
 
 	@Shadow
+	@Final
 	private static Object2IntMap<ChunkStatus> COLORS;
 
 	@Inject(method = "<clinit>", at = @At("RETURN"))

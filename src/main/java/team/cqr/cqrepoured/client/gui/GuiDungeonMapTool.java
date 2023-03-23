@@ -1,20 +1,19 @@
 package team.cqr.cqrepoured.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
+
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
-import net.minecraft.crash.CrashReport;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.tool.DungeonMapTask;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class GuiDungeonMapTool extends Screen {
 
@@ -40,7 +39,7 @@ public class GuiDungeonMapTool extends Screen {
 	private Button buttonCreateMap;
 	private boolean canExit = true;
 	@Nullable
-	private DungeonMapTask task;
+	//private DungeonMapTask task;
 
 	public GuiDungeonMapTool(Screen parent) {
 		super(new TranslationTextComponent("gui.cqrepoured.dungeon_map_tool.title"));
@@ -195,10 +194,10 @@ public class GuiDungeonMapTool extends Screen {
 				}
 		}));
 		this.buttonCancel = this.addButton(new Button(this.width / 2 - 102, this.height - 24, 100, 20, new StringTextComponent("Cancel"), (button) -> {
-			DungeonMapTask task1 = GuiDungeonMapTool.this.task;
+			/*DungeonMapTask task1 = GuiDungeonMapTool.this.task;
 			if (task1 != null) {
 				task1.cancel();
-			}
+			}*/
 		}));
 		this.buttonCancel.visible = false;
 		this.buttonCreateMap = this.addButton(new Button(this.width / 2 + 2, this.height - 24, 100, 20, new StringTextComponent("Create Map"), (button) -> {
@@ -206,13 +205,13 @@ public class GuiDungeonMapTool extends Screen {
 			long seed = Long.parseLong(GuiDungeonMapTool.this.textFieldSeed.getValue());
 			boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.selected();
 
-			GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
+			//GuiDungeonMapTool.this.task = new DungeonMapTask(radius, seed, generateBiomes);
 			GuiDungeonMapTool.this.canExit = false;
 			GuiDungeonMapTool.this.buttonExit.visible = false;
 			GuiDungeonMapTool.this.buttonCancel.visible = true;
 			GuiDungeonMapTool.this.buttonCreateMap.visible = false;
 
-			GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
+			/*GuiDungeonMapTool.this.task.run().handleAsync((v, t) -> {
 				GuiDungeonMapTool.this.canExit = true;
 				GuiDungeonMapTool.this.buttonExit.visible = true;
 				GuiDungeonMapTool.this.buttonCancel.visible = false;
@@ -225,7 +224,7 @@ public class GuiDungeonMapTool extends Screen {
 					}
 				}
 				return null;
-			});
+			});*/
 		}));
 
 		this.checkBoxGenerateBiomes = this.addButton(new CheckboxButton(this.width / 2 - 20, 180, 20, 20, new StringTextComponent("Generate Biomes"), false));
@@ -263,10 +262,10 @@ public class GuiDungeonMapTool extends Screen {
 		drawString(pMatrixStack, this.font, "Rarity Divisor (WIP)", this.width / 2 - 75, ++i * 30 + 6, 0xF0F0F0);
 		this.textFieldRarityDivisor.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
-		DungeonMapTask task1 = this.task;
+		/*DungeonMapTask task1 = this.task;
 		if (task1 != null) {
 			drawString(pMatrixStack, this.font, this.task.getProgress().toString(), this.width / 2 + 120, this.height - 18, 0xF0F0F0);
-		}
+		}*/
 	}
 
 }

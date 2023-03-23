@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity.boss;
+/*package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -32,4 +32,4 @@ public class RenderCQRGiantSpider extends MobRenderer<EntityCQRGiantSpider> {
 		return 180F;
 	}
 
-}
+}*/

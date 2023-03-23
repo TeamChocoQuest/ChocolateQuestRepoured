@@ -104,7 +104,8 @@ public class BlockHighlightParticleData implements IParticleData {
 
 	@Override
 	public ParticleType<?> getType() {
-		return CQRParticleTypes.BLOCK_HIGHLIGHT.get();
+		return null;
+		//return CQRParticleTypes.BLOCK_HIGHLIGHT.get();
 	}
 
 	@Override

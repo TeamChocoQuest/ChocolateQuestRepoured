@@ -24,7 +24,6 @@ import team.cqr.cqrepoured.item.ItemHookshot;
 import team.cqr.cqrepoured.item.ItemLongshot;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.item.ItemMobToSpawner;
-import team.cqr.cqrepoured.item.ItemPathTool;
 import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.ItemShieldDummy;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
@@ -251,7 +250,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemMobToSpawner> MOB_TO_SPAWNER_TOOL = register("mob_to_spawner_tool", ItemMobToSpawner::new);
 	public static final RegistryObject<ItemSpawnerConverter> SPAWNER_CONVERTER = register("spawner_converter", ItemSpawnerConverter::new);
 	public static final RegistryObject<ItemBadge> BADGE = register("badge", ItemBadge::new);
-	public static final RegistryObject<ItemPathTool> PATH_TOOL = null;
+	//public static final RegistryObject<ItemPathTool> PATH_TOOL = null;
 	public static final RegistryObject<ItemShieldDummy> DUMMY_SHIELD = null;
 	public static final RegistryObject<ItemAlchemyBag> ALCHEMY_BAG = register("alchemy_bag", ItemAlchemyBag::new);
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = register("unprotected_positions_tool", ItemUnprotectedPositionTool::new);

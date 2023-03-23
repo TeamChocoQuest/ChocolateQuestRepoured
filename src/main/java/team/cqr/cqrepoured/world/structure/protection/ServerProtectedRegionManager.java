@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
@@ -48,9 +47,9 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			this.protectedRegion = protectedRegion;
 			this.lastTickForceLoaded = protectedRegion.getWorld().getGameTime();
 
-			boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
-			ForgeModContainer.logCascadingWorldGeneration = false;
-			((ServerWorld) protectedRegion.getWorld()).addScheduledTask(() -> {
+			//boolean logCascadingWorldGeneration = ForgeModContainer.logCascadingWorldGeneration;
+			//ForgeModContainer.logCascadingWorldGeneration = false;
+			/*((ServerWorld) protectedRegion.getWorld()).addScheduledTask(() -> {
 				BlockPos p1 = protectedRegion.getStartPos();
 				BlockPos p2 = protectedRegion.getEndPos();
 				for (int x = p1.getX() >> 4; x <= p2.getX() >> 4; x++) {
@@ -69,7 +68,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 					}
 				}
 			});
-			ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;
+			ForgeModContainer.logCascadingWorldGeneration = logCascadingWorldGeneration;*/
 		}
 	}
 

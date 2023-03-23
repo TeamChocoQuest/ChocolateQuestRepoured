@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.render.entity;
+/*package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -52,4 +52,4 @@ public class RenderSpiderEgg extends EntityRenderer<EntitySpiderEgg> {
 		// Should be empty!!
 	}
 
-}
+}*/
