@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.command;
+/*package team.cqr.cqrepoured.command;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -60,4 +60,4 @@ public class CommandDeleteProtectedRegion extends CommandBase {
 		}
 	}
 
-}
+}*/
