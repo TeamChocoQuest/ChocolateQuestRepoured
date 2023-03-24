@@ -210,7 +210,7 @@ public class CQRMain {
 	 * CQRMessages.registerMessages(); CQRCapabilities.registerCapabilities(); CQRLoottables.registerLootTables(); }
 	 */
 	private void initConfigFolder(final Path configFolderPath) {
-		CQ_CONFIG_FOLDER = new File(configFolderPath.toAbsolutePath().getFileName().toString(), "CQR");
+		CQ_CONFIG_FOLDER = new File(configFolderPath.toFile(), "CQR");
 		File[] subfolders = new File[] {
 				CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons"),
 				CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs"),
