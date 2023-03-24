@@ -15,10 +15,8 @@ import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 
 public class CQRConfiguredStructures {
 
+	//public static StructureFeature<?, ?> CONFIGURED_CQR_ANY_DUNGEON = CQRStructures.CQR_ANY_DUNGEON.get().configured(IFeatureConfig.NONE);
 	public static StructureFeature<?, ?> CONFIGURED_WALL_IN_THE_NORTH = CQRStructures.WALL_IN_THE_NORTH.get().configured(IFeatureConfig.NONE);
-	/*
-	 * public static StructureFeature<?, ?> CONFIGURED_SKY_BATTLE_TOWER = BTStructures .SKY_BATTLE_TOWER.get().configured(IFeatureConfig.NONE);
-	 */
 
 	// Config holds data that will be available to the structure class during generation => Use custom class for this!
 	// Codec => Used to save and load the config
@@ -27,6 +25,7 @@ public class CQRConfiguredStructures {
 		Registry<StructureFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE;
 
 		Registry.register(registry, new ResourceLocation(CQRMain.MODID, "wall_in_the_north"), CONFIGURED_WALL_IN_THE_NORTH);
+		//Registry.register(registry, new ResourceLocation(CQRMain.MODID, "cqr_dungeon"), CONFIGURED_CQR_ANY_DUNGEON);
 
 		/*
 		 * Ok so, this part may be hard to grasp but basically, just add your structure to this to prevent any sort of crash or issue with other mod's custom ChunkGenerators. If they use FlatGenerationSettings.STRUCTURE_FEATURES in it and you don't
@@ -40,21 +39,16 @@ public class CQRConfiguredStructures {
 		 * Requires AccessTransformer ( see resources/META-INF/accesstransformer.cfg )
 		 */
 		FlatGenerationSettings.STRUCTURE_FEATURES.put(CQRStructures.WALL_IN_THE_NORTH.get(), CONFIGURED_WALL_IN_THE_NORTH);
-		// FlatGenerationSettings.STRUCTURE_FEATURES.put(BTStructures.SKY_BATTLE_TOWER.get(), CONFIGURED_SKY_BATTLE_TOWER);
+		//FlatGenerationSettings.STRUCTURE_FEATURES.put(CQRStructures.CQR_ANY_DUNGEON.get(), CONFIGURED_CQR_ANY_DUNGEON);
 
 		// Now, parse all structures (dungeons) in CQRSTructures.DUNGEON_STRUCTURES and register those, the dungeon class will receive a method to generate teh structure feature to be registered as well as a getter for the structure object
-		/*for (Map.Entry<DungeonBase, Structure<?>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) {
-			// TODO: Check if we need that featureconfig at all, if yes => properly implement it!
-			if (entry.getValue() instanceof StructureDungeonCQR) {
-				StructureDungeonCQR sdcqr = (StructureDungeonCQR) entry.getValue();
-				final DungeonBase featureConfig = entry.getKey();
-				StructureFeature<?, ?> sf = sdcqr.configured(featureConfig);
-
-				Registry.register(registry, CQRMain.prefix(entry.getValue().getRegistryName().getPath()), sf);
-				FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue(), sf);
-				CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf);
-			}
-		}*/
+		/*
+		 * for (Map.Entry<DungeonBase, Structure<?>> entry : CQRStructures.DUNGEON_ENTRIES.entrySet()) { // TODO: Check if we need that featureconfig at all, if yes => properly implement it! if (entry.getValue() instanceof StructureDungeonCQR) {
+		 * StructureDungeonCQR sdcqr = (StructureDungeonCQR) entry.getValue(); final DungeonBase featureConfig = entry.getKey(); StructureFeature<?, ?> sf = sdcqr.configured(featureConfig);
+		 * 
+		 * Registry.register(registry, CQRMain.prefix(entry.getValue().getRegistryName().getPath()), sf); FlatGenerationSettings.STRUCTURE_FEATURES.put(entry.getValue(), sf); CQRStructures.DUNGEON_CONFIGURED_ENTRIES.putIfAbsent(entry.getKey(), sf); }
+		 * }
+		 */
 		for (Map.Entry<DungeonGrid, Structure<?>> entry : CQRStructures.GRID_ENTRIES.entrySet()) {
 			// TODO: Check if we need that featureconfig at all, if yes => properly implement it!
 			if (entry.getValue() instanceof StructureGridCQR) {

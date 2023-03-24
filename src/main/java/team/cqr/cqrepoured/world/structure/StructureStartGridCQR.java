@@ -1,18 +1,25 @@
 package team.cqr.cqrepoured.world.structure;
 
+import com.google.common.base.Optional;
+
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 
 public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart<T> {
@@ -50,6 +57,11 @@ public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart
 
 		//Run the dugneon generators...
 		//this.pieces.add(this.dungeonObj.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random));
+		Optional<ServerWorld> osw = StructureGridCQR.tryFindWorldForChunkGenerator(chunkGenerator);
+		if(!FMLEnvironment.production && osw.isPresent()) {
+			ServerWorld sw = osw.get();
+			sw.getServer().getPlayerList().broadcastMessage(new StringTextComponent("Generated dungeon at: " + centered.toString()), ChatType.SYSTEM, Util.NIL_UUID);
+		}
 		this.pieces.add(this.dungeonObj.generate(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random, DungeonSpawnType.DUNGEON_GENERATION));
 		
 		/*CQRJigsawManager.addPieces(
