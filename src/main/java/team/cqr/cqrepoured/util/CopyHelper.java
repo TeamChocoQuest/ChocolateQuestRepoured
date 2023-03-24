@@ -14,6 +14,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import net.minecraftforge.fml.loading.FMLLoader;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CopyHelper {
@@ -30,15 +31,23 @@ public class CopyHelper {
 			Path source;
 
 			URL url = CQRMain.class.getResource("");
+			CQRMain.logger.debug("URI resource: {}", url.toString());
 			if (url.getProtocol().equals("jar")) {
 				JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
 				try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader())) {
 					source = fileSystem.getPath(sourceName);
 					copyFiles(source, target);
 				}
-			} else {
+			} 
+			else if (url.getProtocol().equals("modjar")) {
+				source = FMLLoader.getLoadingModList().getModFileById(CQRMain.MODID).getFile().findResource(sourceName);
+				//TODO: Will currently throw a java.nio.file.ProviderMismatchException thrown by preVisitDirectory
+				copyFiles(source, target);
+			} 
+			else {
 				URL resource = CQRMain.class.getResource(sourceName);
 				if (resource != null) {
+					CQRMain.logger.debug("URI resource: {}", resource.toString());
 					source = Paths.get(resource.toURI());
 					copyFiles(source, target);
 				}
