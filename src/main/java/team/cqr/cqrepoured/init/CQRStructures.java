@@ -74,11 +74,10 @@ public class CQRStructures {
 		}
 		int dist = gcd(valsDist);
 		int spread = gcd(valsSpread);
-		if (dist == spread) {
-			spread--;
-		}
+		int minDistInChunks = dist;
+		int maxDistInChunks = dist + spread;
 
-		//setupMapSpacingAndLand(CQR_ANY_DUNGEON.get(), new StructureSeparationSettings(Math.max(dist, spread), Math.min(dist, spread), 446854348), true);
+		//setupMapSpacingAndLand(CQR_ANY_DUNGEON.get(), new StructureSeparationSettings(Math.max(maxDistInChunks, minDistInChunks), Math.min(maxDistInChunks, minDistInChunks), 446854348), true);
 
 		/*
 		 * try { while (!SEP_SETTINGS_QUEUE.isEmpty()) { Triple<DungeonBase, Structure<?>, StructureSeparationSettings> entry = SEP_SETTINGS_QUEUE.poll(); if (entry != null) { setupMapSpacingAndLand(entry.getMiddle(), entry.getRight(),
@@ -158,7 +157,7 @@ public class CQRStructures {
 		for (Map.Entry<DungeonGrid, StructureFeature<?, ?>> entry : GRID_CONFIGURED_ENTRIES.entrySet()) {
 			if (entry.getKey().isValidBiome(biomeID)) {
 				event.getGeneration().getStructures().add(() -> entry.getValue());
-				System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
+				//System.out.println("Added dungeon <" + entry.getKey().getName() + "> to biome " + biomeID.toString());
 				continue;
 			}
 		}
@@ -247,7 +246,12 @@ public class CQRStructures {
 					event.getRegistry().register(structure.setRegistryName(CQRMain.prefix("dungeon_" + grid.getName())));
 					GRID_ENTRIES.put(grid, structure);
 					StructureSeparationSettings sepSettings;
-					sepSettings = new StructureSeparationSettings(1, 0, 123456789);
+					int maxDistInChunks = grid.getDistance() + grid.getSpread();
+					int minDistInChunks = grid.getDistance();
+					if(maxDistInChunks == minDistInChunks) {
+						minDistInChunks--;
+					}
+					sepSettings = new StructureSeparationSettings(Math.max(maxDistInChunks, minDistInChunks), Math.min(maxDistInChunks, minDistInChunks), grid.getSeed());
 					SEP_SETTINGS_QUEUE_GRID.add(Triple.of(grid, structure, sepSettings));
 				} catch (Exception ex) {
 					ex.printStackTrace();

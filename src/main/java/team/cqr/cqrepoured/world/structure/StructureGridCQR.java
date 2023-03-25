@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.mojang.serialization.Codec;
+import com.sk89q.worldedit.history.changeset.ArrayListHistory;
 
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.ChunkPos;
@@ -57,53 +58,69 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 	private T config = null;
 	private DungeonBase selectedCurrently = null;
 	private ChunkGenerator chunkGeneratorTmp = null;
+	private Biome currentBiome = null;
 
 	@Override
 	public StructureStart<?> generate(DynamicRegistries p_242785_1_, ChunkGenerator p_242785_2_, BiomeProvider p_242785_3_, TemplateManager p_242785_4_, long p_242785_5_, ChunkPos p_242785_7_, Biome p_242785_8_, int p_242785_9_,
 			SharedSeedRandom p_242785_10_, StructureSeparationSettings p_242785_11_, T p_242785_12_) {
+		//return StructureStart.INVALID_START;
 		this.config = p_242785_12_;
 		this.chunkGeneratorTmp = p_242785_2_;
+		this.selectedCurrently = null;
+		this.currentBiome = p_242785_8_;
+		try {
+			int pX = p_242785_7_.x;
+			int pZ = p_242785_7_.z;
+			
+			Optional<ServerWorld> sw = StructureGridCQR.tryFindWorldForChunkGenerator(this.chunkGeneratorTmp);
+			if (sw.isPresent()) {
+				boolean noFeatureChunk = !this.isFeatureChunk(p_242785_2_, p_242785_3_, p_242785_9_, p_242785_10_, pX, pZ, p_242785_8_, p_242785_7_, p_242785_12_);
+				if(noFeatureChunk) {
+					return StructureStart.INVALID_START;
+				}
+			}
+			
+			if(this.selectedCurrently == null) {
+				
+				return StructureStart.INVALID_START;
+			}
+			
+			StructureStart<?> start = super.generate(p_242785_1_, p_242785_2_, p_242785_3_, p_242785_4_, p_242785_5_, p_242785_7_, p_242785_8_, p_242785_9_, p_242785_10_, p_242785_11_, p_242785_12_);
+			
+			return start;
+		} finally {
+			this.config = null;
+			this.chunkGeneratorTmp = null;
+			this.currentBiome = null;
+		}
 		
-		StructureStart<?> start = super.generate(p_242785_1_, p_242785_2_, p_242785_3_, p_242785_4_, p_242785_5_, p_242785_7_, p_242785_8_, p_242785_9_, p_242785_10_, p_242785_11_, p_242785_12_);
-		
-		this.config = null;
-		this.chunkGeneratorTmp = null;
-		return start;
 	}
 
 	@Override
 	public ChunkPos getPotentialFeatureChunk(StructureSeparationSettings pSeparationSettings, long pSeed, SharedSeedRandom pRandom, int pX, int pZ) {
+		ChunkPos parentResult = super.getPotentialFeatureChunk(pSeparationSettings, pSeed, pRandom, pX, pZ);
 		if (this.config != null && this.chunkGeneratorTmp != null) {
 			Optional<ServerWorld> sw = StructureGridCQR.tryFindWorldForChunkGenerator(this.chunkGeneratorTmp);
 			if (sw.isPresent()) {
-				if(this.config.isChunkOnGrid(sw.get(), pX, pZ)) {
+				if(getDungeonAt(this.config, sw.get(), pX, pZ, this.currentBiome) != null) {
+					//System.out.println("pos valid");
 					return new ChunkPos(pX, pZ);
 				}
-				return this.config.getPotentialChunkPosAtOrNear(sw.get(), pX, pZ);
+				if(getDungeonAt(this.config, sw.get(), parentResult.x, parentResult.z, this.currentBiome) != null) {
+					//System.out.println("parentpos valid");
+					return parentResult;
+				}
+				//System.out.println("pos invalid");
+				//return new ChunkPos(pX +1, pZ +1);
 			}
 			
 		}
-		int i = pSeparationSettings.spacing();
-		int j = pSeparationSettings.separation();
-		int k = Math.floorDiv(pX, i);
-		int l = Math.floorDiv(pZ, i);
-		pRandom.setLargeFeatureWithSalt(pSeed, k, l, pSeparationSettings.salt());
-		int i1;
-		int j1;
-		if (this.linearSeparation()) {
-			i1 = pRandom.nextInt(i - j);
-			j1 = pRandom.nextInt(i - j);
-		} else {
-			i1 = (pRandom.nextInt(i - j) + pRandom.nextInt(i - j)) / 2;
-			j1 = (pRandom.nextInt(i - j) + pRandom.nextInt(i - j)) / 2;
-		}
-
-		return new ChunkPos(k * i + i1, l * i + j1);
+		return parentResult;
 	}
 	
 	@Nullable
-	protected static DungeonBase getDungeonAt(DungeonGrid myGrid, ServerWorld world, int chunkX, int chunkZ) {
-		if(!canSpawnDungeonsInWorld(world)) {
+	protected static DungeonBase getDungeonAt(DungeonGrid myGrid, ServerWorld world, int chunkX, int chunkZ, Biome biome) {
+		if(!canSpawnDungeonsInWorld(world) || myGrid == null) {
 			return null;
 		}
 		
@@ -112,17 +129,17 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 			return locationSpecificDungeon;
 		}
 		
-		DungeonBase myDungeon = myGrid.getDungeonAt(world, chunkX, chunkZ);
-		DungeonBase selected = GridRegistry.getInstance().getGrids().stream().map(grid -> grid.getDungeonAt(world, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
-		
+		DungeonBase myDungeon = myGrid.getDungeonAt(world, chunkX, chunkZ, true, biome);
+		//DungeonBase selected = GridRegistry.getInstance().getGrids().stream().map(grid -> grid.getDungeonAt(world, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
+		/*
 		if(myDungeon == null || selected == null) {
 			return null;
 		}
 		
 		if(myDungeon.getDungeonName().equalsIgnoreCase(selected.getDungeonName())) {
 			return myDungeon;
-		}
-		return null;
+		}*/
+		return myDungeon;
 	}
 	
 	public static boolean canSpawnDungeonsInWorld(ServerWorld world) {
@@ -142,6 +159,7 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 		if (!super.isFeatureChunk(chunkGenerator, biomeProvider, p_230363_3_, p_230363_5_, p_230363_6_, p_230363_7_, biome, chunkPos, featureConfig)) {
 			return false;
 		}
+		//return false;
 		int chunkX = chunkPos.x;
 		int chunkZ = chunkPos.z;
 		
@@ -149,12 +167,15 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 		if (osw.isPresent()) {
 			ServerWorld sw = osw.get();
 			
-			if(!this.config.isChunkOnGrid(sw, chunkX, chunkZ)) {
-				return false;
-			}
+			// if(!this.config.isChunkOnGrid(sw, chunkX, chunkZ)) {
+			// 	 return false;
+			// }
 
-			if(this.config.canSpawnDungeonAtCoords(sw, chunkX, chunkZ, p_230363_5_)) {
-				this.selectedCurrently = getDungeonAt(this.config, sw, chunkX, chunkZ);
+			if(this.config.canSpawnDungeonAtCoordsIgnoreGridCheck(sw, chunkX, chunkZ, p_230363_5_)) {
+				if(this.selectedCurrently == null) {
+					this.selectedCurrently = getDungeonAt(this.config, sw, chunkX, chunkZ, biome);
+					
+				}
 				return this.selectedCurrently != null;
 			}
 			
