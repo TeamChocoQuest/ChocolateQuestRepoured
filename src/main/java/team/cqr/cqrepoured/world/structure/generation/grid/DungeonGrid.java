@@ -23,6 +23,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
@@ -90,6 +91,7 @@ public class DungeonGrid implements IFeatureConfig {
 		this.spread = PropertyFileHelper.getIntProperty(properties, "spread", 10);
 		this.rarityFactor = PropertyFileHelper.getDoubleProperty(properties, "rarityFactor", 0.0D);
 		this.checkRadiusInChunks = PropertyFileHelper.getIntProperty(properties, "checkRadius", 4);
+		this.seed = PropertyFileHelper.getIntProperty(properties, "seed", 1234567890);
 		this.chance = PropertyFileHelper.getIntProperty(properties, "chance", 100);
 		this.priority = PropertyFileHelper.getIntProperty(properties, "priority", 10);
 		this.offset = PropertyFileHelper.getIntProperty(properties, "offset", 0);
@@ -101,13 +103,35 @@ public class DungeonGrid implements IFeatureConfig {
 
 	@Nullable
 	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ) {
-		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), chunkX, chunkZ);
-		if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random)) {
+		return this.getDungeonAt(world, chunkX, chunkZ, false);
+	}
+	
+	@Nullable
+	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, boolean ignoreGridCheck) {
+		BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
+		
+		Biome biome = world.getBiome(pos);
+		return this.getDungeonAt(world, chunkX, chunkZ, ignoreGridCheck, biome);
+	}
+	
+	@Nullable
+	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, boolean ignoreGridCheck, Biome biome) {
+		if(biome == null) {
 			return null;
+		}
+		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), chunkX, chunkZ);
+		if(ignoreGridCheck) {
+			if (!this.canSpawnDungeonAtCoordsIgnoreGridCheck(world, chunkX, chunkZ, random)) {
+				return null;
+			}
+		} else {
+			if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random)) {
+				return null;
+			}
 		}
 
 		BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-		Biome biome = world.getBiome(pos);
+		
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
@@ -142,6 +166,10 @@ public class DungeonGrid implements IFeatureConfig {
 			return false;
 		}
 
+		return this.canSpawnDungeonAtCoordsIgnoreGridCheck(world, chunkX, chunkZ, random);
+	}
+	
+	public boolean canSpawnDungeonAtCoordsIgnoreGridCheck(World world, int chunkX, int chunkZ, Random random) {
 		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
 			log(world, chunkX, chunkZ, "Too near to spawn point");
 			return false;
@@ -261,9 +289,9 @@ public class DungeonGrid implements IFeatureConfig {
 
 	private static void log(World world, int chunkX, int chunkZ, String message, Object... params) {
 		if (!CQRConfig.SERVER_CONFIG.advanced.debugDungeonGen.get()) {
-			return;
+			//return;
 		}
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));
+		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.dimension().location().toString(), String.format(message, params));
 	}
 
 	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, BlockPos pos) {
