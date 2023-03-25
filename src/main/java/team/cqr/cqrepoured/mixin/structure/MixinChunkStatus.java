@@ -32,7 +32,7 @@ public class MixinChunkStatus {
 			)
 	)
 	private static void clinit(CallbackInfo info) {
-		CQRChunkStatus.CQR_STRUCTURE_STARTS = ChunkStatus.registerSimple(CQRMain.MODID + ":cqr_structure_starts", ChunkStatus.STRUCTURE_STARTS, 0, ChunkStatus.PRE_FEATURES, ChunkStatus.Type.PROTOCHUNK, CQRChunkStatus::executeCQRStructureStarts);
+		CQRChunkStatus.CQR_STRUCTURE_STARTS = ChunkStatus.registerSimple("minecraft:cqr_structure_starts", ChunkStatus.STRUCTURE_STARTS, 0, ChunkStatus.PRE_FEATURES, ChunkStatus.Type.PROTOCHUNK, CQRChunkStatus::executeCQRStructureStarts);
 	}
 
 	@Inject(method = "<clinit>", remap = false, at = @At(value = "INVOKE_ASSIGN", target = "Lcom/google/common/collect/ImmutableList;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableList;", shift = Shift.AFTER))
