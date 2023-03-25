@@ -240,14 +240,14 @@ public class CQRMain {
 		CQ_MIGRATED_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "_migrated_structures");
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.SERVER_CONFIG.general.reinstallDefaultConfigs.get()) {
-			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER.toPath(), true);
+			CopyHelper.copyFromJarOrWorkspace("/data/cqrepoured/default_config", CQ_CONFIG_FOLDER.toPath(), true);
 		} else {
 			ConfigBackupHandler.checkAndBackupConfigs();
 		}
 
 		int i = CQ_CONFIG_FOLDER.getAbsolutePath().length();
 		for (File folder : subfolders) {
-			CopyHelper.copyFromJarOrWorkspace("/assets/cqrepoured/defaultConfigs" + folder.getAbsolutePath().substring(i), folder.toPath(), false);
+			CopyHelper.copyFromJarOrWorkspace("/data/cqrepoured/default_config" + folder.getAbsolutePath().substring(i), folder.toPath(), false);
 		}
 	}
 	/*
