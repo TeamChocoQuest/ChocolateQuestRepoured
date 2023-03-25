@@ -38,13 +38,10 @@ public class CopyHelper {
 					source = fileSystem.getPath(sourceName);
 					copyFiles(source, target);
 				}
-			} 
-			else if (url.getProtocol().equals("modjar")) {
+			} else if (url.getProtocol().equals("modjar")) {
 				source = FMLLoader.getLoadingModList().getModFileById(CQRMain.MODID).getFile().findResource(sourceName);
-				//TODO: Will currently throw a java.nio.file.ProviderMismatchException thrown by preVisitDirectory
 				copyFiles(source, target);
-			} 
-			else {
+			} else {
 				URL resource = CQRMain.class.getResource(sourceName);
 				if (resource != null) {
 					CQRMain.logger.debug("URI resource: {}", resource.toString());
@@ -62,13 +59,13 @@ public class CopyHelper {
 
 			@Override
 			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-				Files.createDirectories(target.resolve(source.relativize(dir)));
+				Files.createDirectories(target.resolve(source.relativize(dir).toString()));
 				return FileVisitResult.CONTINUE;
 			}
 
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				Files.copy(file, target.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(file, target.resolve(source.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
 				return FileVisitResult.CONTINUE;
 			}
 
