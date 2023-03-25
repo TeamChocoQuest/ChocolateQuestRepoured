@@ -10,10 +10,6 @@
 		{
 			"state": "minecraft:mossy_stone_brick_slab",
 			"weight": 40
-		},
-		{
-			"state": "minecraft:cracked_stone_brick_slab",
-			"weight": 30
 		}
 	]
 }
