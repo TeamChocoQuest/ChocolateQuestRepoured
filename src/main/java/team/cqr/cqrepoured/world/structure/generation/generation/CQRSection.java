@@ -136,7 +136,7 @@ public class CQRSection implements ICQRSection {
 	private void updateFromNeighbourShapes(ISeedReader level, VoxelShapePart voxelShapePart) {
 		Mutable mutablePos = new Mutable();
 
-		IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+		IntUtil.forEachSectionCoord((x, y, z) -> {
 			if (!voxelShapePart.isFull(x, y, z)) {
 				return;
 			}

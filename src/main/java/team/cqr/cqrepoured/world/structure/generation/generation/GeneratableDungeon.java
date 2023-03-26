@@ -82,7 +82,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		level.getSections().forEach(section -> {
 			SectionPos sectionPos = section.getPos();
 			
-			IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+			IntUtil.forEachSectionCoord((x, y, z) -> {
 				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
 				BlockState state = section.getBlockState(mutablePos);
 				if (state == null || state == Blocks.AIR.defaultBlockState()) {
@@ -114,7 +114,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		level.getSections().forEach(section -> {
 			SectionPos sectionPos = section.getPos();
 			
-			IntUtil.forEachXYZ(16, 16, 16, (x, y, z) -> {
+			IntUtil.forEachSectionCoord((x, y, z) -> {
 				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
 				if (mutablePos.getY() >= pos.getY() + undergroundOffset) {
 					return;

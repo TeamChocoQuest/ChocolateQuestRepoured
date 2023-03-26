@@ -9,7 +9,7 @@ public class NoiseUtil {
 	public static final int RADIUS = 16;
 	private static final int DIAMETER = RADIUS * 2 + 1;
 	private static final double[] BEARD_KERNEL = Util.make(new double[DIAMETER * DIAMETER * DIAMETER], array -> {
-		IntUtil.forEachXYZ(-RADIUS, RADIUS + 1, -RADIUS, RADIUS + 1, -RADIUS, RADIUS + 1, (x, y, z) -> {
+		IntUtil.forEachXYZClosed(-RADIUS, -RADIUS, -RADIUS, RADIUS, RADIUS, RADIUS, (x, y, z) -> {
 			array[index(x, y, z)] = computeContribution(x, y, z);
 		});
 	});
