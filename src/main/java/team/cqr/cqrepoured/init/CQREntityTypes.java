@@ -216,7 +216,7 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityCQRNetherDragon>> NETHER_DRAGON = registerSized(EntityCQRNetherDragon::new, "nether_dragon", 2F, 2F, 1);
 
 	//Shelob
-	public static final RegistryObject<EntityType<EntityCQRGiantSpider>> GIANT_SPIDER = registerSized(EntityCQRGiantSpider::new, "giant_spider", 2.3F, 1F, 1);
+	//public static final RegistryObject<EntityType<EntityCQRGiantSpider>> GIANT_SPIDER = registerSized(EntityCQRGiantSpider::new, "giant_spider", 2.3F, 1F, 1);
 	
 	//Boarmage
 	public static final RegistryObject<EntityType<EntityCQRBoarmage>> BOARMAGE = registerSizedHumanoid(EntityCQRBoarmage::new, "boar_mage", 1);
@@ -331,7 +331,7 @@ public class CQREntityTypes {
 		
 		event.put(EXTERMINATOR.get(), EntityCQRExterminator.createCQRAttributes().build());
 		
-		event.put(GIANT_SPIDER.get(), EntityCQRGiantSpider.createCQRAttributes().build());
+		//event.put(GIANT_SPIDER.get(), EntityCQRGiantSpider.createCQRAttributes().build());
 		
 		event.put(GIANT_TORTOISE.get(), EntityCQRGiantTortoise.createCQRAttributes().build());
 		
@@ -355,7 +355,7 @@ public class CQREntityTypes {
 		event.put(GIANT_SILVERFISH.get(), AnimalEntity.createMobAttributes().build());
 		event.put(GIANT_SILVERFISH_RED.get(), AnimalEntity.createMobAttributes().build());
 		event.put(GIANT_SILVERFISH_GREEN.get(), AnimalEntity.createMobAttributes().build());
-		event.put(POLLO.get(), AnimalEntity.createMobAttributes().build());
+		//event.put(POLLO.get(), AnimalEntity.createMobAttributes().build());
 		
 		event.put(FLYING_SKULL.get(), MobEntity.createMobAttributes().build());
 	}
