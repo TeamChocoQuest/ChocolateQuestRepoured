@@ -27,11 +27,11 @@ public class MixinLakesFeature {
     )
 	private void cqr_noLakesInStructures(ISeedReader serverWorldAccess, ChunkGenerator chunkGenerator, Random random, BlockPos blockPos, BlockStateFeatureConfig singleStateFeatureConfig, CallbackInfoReturnable<Boolean> cir) {
 		SectionPos sectionPos = SectionPos.of(blockPos);
-		for(RegistryObject<Structure<?>> regObj : CQRStructures.DEFERRED_REGISTRY_STRUCTURE.getEntries()) {
+		for(RegistryObject<Structure<?>> regObj : CQRStructures.STRUCTURES.getEntries()) {
 			Structure<?> structure = regObj.get();
 			if (serverWorldAccess.startsForFeature(sectionPos, structure).findAny().isPresent()) {
 				cir.setReturnValue(false);
-				break;
+				return;
 			}
 		}
 	}

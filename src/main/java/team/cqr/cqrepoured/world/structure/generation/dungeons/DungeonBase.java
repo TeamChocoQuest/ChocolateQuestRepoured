@@ -27,9 +27,10 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -41,7 +42,6 @@ import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
-import team.cqr.cqrepoured.util.StructureHelper;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
@@ -366,17 +366,17 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return !this.isStructureNearby(world, pos);
 	}
 
-	public boolean canSpawnInChunkWithLockedPosition(World world, int chunkX, int chunkZ) {
+	public boolean canSpawnInChunkWithLockedPosition(World level, ChunkPos chunkPos) {
 		if (!this.enabled) {
 			return false;
 		}
 		if (this.isModDependencyMissing()) {
 			return false;
 		}
-		if (!this.isValidDim(world.dimension().location())) {
+		if (!this.isValidDim(level.dimension().location())) {
 			return false;
 		}
-		return this.isLockedPositionInChunk(world, chunkX, chunkZ);
+		return this.isLockedPositionInChunk(level, chunkPos);
 	}
 
 	public boolean isModDependencyMissing() {
@@ -476,23 +476,8 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return false;
 	}
 
-	public boolean isLockedPositionInChunk(World world, int chunkX, int chunkZ) {
-		for (DungeonSpawnPos dungeonSpawnPos : this.lockedPositions) {
-			if (dungeonSpawnPos.isInChunk(world, chunkX, chunkZ)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public List<DungeonSpawnPos> getLockedPositionsInChunk(World world, int chunkX, int chunkZ) {
-		List<DungeonSpawnPos> list = new ArrayList<>();
-		for (DungeonSpawnPos dungeonSpawnPos : this.lockedPositions) {
-			if (dungeonSpawnPos.isInChunk(world, chunkX, chunkZ)) {
-				list.add(dungeonSpawnPos);
-			}
-		}
-		return list;
+	public boolean isLockedPositionInChunk(IWorld level, ChunkPos chunkPos) {
+		return Arrays.stream(this.lockedPositions).anyMatch(spawnPosition -> spawnPosition.isInChunk(level, chunkPos));
 	}
 
 	public String getDungeonName() {

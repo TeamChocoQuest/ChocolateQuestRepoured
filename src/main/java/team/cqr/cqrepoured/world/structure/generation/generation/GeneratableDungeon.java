@@ -16,12 +16,11 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -32,8 +31,6 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 public class GeneratableDungeon extends StructurePiece implements INoiseAffectingStructurePiece {
-
-	private static final IStructurePieceType GENERATABLE_DUNGEON = IStructurePieceType.setPieceId(GeneratableDungeon::new, CQRMain.prefix("generatable_dungeon").toString());
 
 	private final String dungeonName;
 	private final BlockPos pos;
@@ -65,7 +62,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder, int undergroundOffset) {
-		super(GENERATABLE_DUNGEON, 0);
+		super(CQRStructures.GENERATABLE_DUNGEON, 0);
 		this.dungeonName = dungeonName;
 		this.pos = pos;
 		this.level = level;
@@ -138,8 +135,8 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		return groundData;
 	}
 
-	protected GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
-		super(GeneratableDungeon.GENERATABLE_DUNGEON, nbt);
+	public GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
+		super(CQRStructures.GENERATABLE_DUNGEON, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
 		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));

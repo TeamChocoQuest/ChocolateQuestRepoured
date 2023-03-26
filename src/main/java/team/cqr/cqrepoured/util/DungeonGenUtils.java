@@ -15,9 +15,11 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
@@ -141,7 +143,7 @@ public class DungeonGenUtils {
 		return BannerHelper.isCQBanner(banner);
 	}
 
-	public static boolean isInWallRange(World world, int chunkX, int chunkZ) {
+	public static boolean isInWallRange(World world, ChunkPos chunkPos) {
 		// Check if the wall is enabled
 		if (!CQRConfig.SERVER_CONFIG.wall.enabled.get()) {
 			return false;
@@ -151,23 +153,23 @@ public class DungeonGenUtils {
 			return false;
 		}
 		// Check the coordinates
-		if (chunkZ < -CQRConfig.SERVER_CONFIG.wall.distance.get() - 12) {
+		if (chunkPos.z < -CQRConfig.SERVER_CONFIG.wall.distance.get() - 12) {
 			return false;
 		}
-		return chunkZ <= -CQRConfig.SERVER_CONFIG.wall.distance.get() + 12;
+		return chunkPos.z <= -CQRConfig.SERVER_CONFIG.wall.distance.get() + 12;
 	}
 
-	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
+	public static boolean isFarAwayEnoughFromSpawn(IWorld world, ChunkPos chunkPos) {
 		//Correct replacement?
 		if (!world.dimensionType().respawnAnchorWorks()) {
 			return true;
 		}
-		int x = chunkX - (getSpawnX(world) >> 4);
-		int z = chunkZ - (getSpawnZ(world) >> 4);
+		int x = chunkPos.x - (getSpawnX(world) >> 4);
+		int z = chunkPos.z - (getSpawnZ(world) >> 4);
 		return x * x + z * z >= CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get() * CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get();
 	}
 
-	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int distance) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, ChunkPos chunkPos, int distance) {
 		ResourceLocation dim = world.dimension().location();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
@@ -181,8 +183,8 @@ public class DungeonGenUtils {
 				continue;
 			}
 			for (DungeonSpawnPos dungeonSpawnPos : dungeon.getLockedPositions()) {
-				int x = chunkX - (dungeonSpawnPos.getX(world) >> 4);
-				int z = chunkZ - (dungeonSpawnPos.getZ(world) >> 4);
+				int x = chunkPos.x - (dungeonSpawnPos.getX(world) >> 4);
+				int z = chunkPos.z - (dungeonSpawnPos.getZ(world) >> 4);
 				if (x * x + z * z < distance * distance) {
 					return false;
 				}
@@ -369,16 +371,16 @@ public class DungeonGenUtils {
 		return pos.offset(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
-	public static int getSpawnX(World world) {
+	public static int getSpawnX(IWorld world) {
 		int x = world.getLevelData().getXSpawn();
 		return x >= world.getWorldBorder().getMinX() && x < world.getWorldBorder().getMaxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
 	}
 
-	public static int getSpawnY(World world) {
+	public static int getSpawnY(IWorld world) {
 		return world.getLevelData().getYSpawn();
 	}
 
-	public static int getSpawnZ(World world) {
+	public static int getSpawnZ(IWorld world) {
 		int z = world.getLevelData().getYSpawn();
 		return z >= world.getWorldBorder().getMinZ() && z < world.getWorldBorder().getMaxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
 	}
