@@ -28,6 +28,7 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
@@ -59,6 +60,7 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 	private DungeonBase selectedCurrently = null;
 	private ChunkGenerator chunkGeneratorTmp = null;
 	private Biome currentBiome = null;
+	private long currentSeed = -1;
 
 	@Override
 	public StructureStart<?> generate(DynamicRegistries p_242785_1_, ChunkGenerator p_242785_2_, BiomeProvider p_242785_3_, TemplateManager p_242785_4_, long p_242785_5_, ChunkPos p_242785_7_, Biome p_242785_8_, int p_242785_9_,
@@ -92,11 +94,13 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 			this.config = null;
 			this.chunkGeneratorTmp = null;
 			this.currentBiome = null;
+			this.currentSeed = -1;
 		}
 		
 	}
 
-	@Override
+	//TODO: Currently causes problems, leading to literal littering of structures
+	/*@Override
 	public ChunkPos getPotentialFeatureChunk(StructureSeparationSettings pSeparationSettings, long pSeed, SharedSeedRandom pRandom, int pX, int pZ) {
 		ChunkPos parentResult = super.getPotentialFeatureChunk(pSeparationSettings, pSeed, pRandom, pX, pZ);
 		if (this.config != null && this.chunkGeneratorTmp != null) {
@@ -116,20 +120,22 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 			
 		}
 		return parentResult;
-	}
+	}*/
 	
 	@Nullable
-	protected static DungeonBase getDungeonAt(DungeonGrid myGrid, ServerWorld world, int chunkX, int chunkZ, Biome biome) {
-		if(!canSpawnDungeonsInWorld(world) || myGrid == null) {
+	protected DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, Biome biome, SharedSeedRandom seedRandom) {
+		if(!canSpawnDungeonsInWorld(world) || this.config == null) {
 			return null;
 		}
+		long seed = WorldDungeonGenerator.getSeed(world.getSeed(), chunkX, chunkZ);
+		seedRandom.setLargeFeatureSeed(this.currentSeed, chunkX, chunkZ);
 		
 		DungeonBase locationSpecificDungeon = getLocationSpecificDungeon(world, chunkX, chunkZ);
 		if (locationSpecificDungeon != null) {
 			return locationSpecificDungeon;
 		}
 		
-		DungeonBase myDungeon = myGrid.getDungeonAt(world, chunkX, chunkZ, true, biome);
+		DungeonBase myDungeon = this.config.getDungeonAt(world, chunkX, chunkZ, true, biome, seedRandom);
 		//DungeonBase selected = GridRegistry.getInstance().getGrids().stream().map(grid -> grid.getDungeonAt(world, chunkX, chunkZ)).filter(Objects::nonNull).findFirst().orElse(null);
 		/*
 		if(myDungeon == null || selected == null) {
@@ -156,6 +162,7 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 
 	@Override
 	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeProvider, long p_230363_3_, SharedSeedRandom p_230363_5_, int p_230363_6_, int p_230363_7_, Biome biome, ChunkPos chunkPos, T featureConfig) {
+		this.currentSeed = p_230363_3_;
 		if (!super.isFeatureChunk(chunkGenerator, biomeProvider, p_230363_3_, p_230363_5_, p_230363_6_, p_230363_7_, biome, chunkPos, featureConfig)) {
 			return false;
 		}
@@ -171,9 +178,9 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 			// 	 return false;
 			// }
 
-			if(this.config.canSpawnDungeonAtCoordsIgnoreGridCheck(sw, chunkX, chunkZ, p_230363_5_)) {
+			if(this.config.canSpawnDungeonAtCoordsIgnoreGridCheck(sw, chunkX, chunkZ, p_230363_5_, biome)) {
 				if(this.selectedCurrently == null) {
-					this.selectedCurrently = getDungeonAt(this.config, sw, chunkX, chunkZ, biome);
+					this.selectedCurrently = getDungeonAt(sw, chunkX, chunkZ, biome, p_230363_5_);
 					
 				}
 				return this.selectedCurrently != null;
@@ -183,7 +190,7 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 		return false;
 	}
 
-	protected static Optional<ServerWorld> tryFindWorldForChunkGenerator(ChunkGenerator cg) {
+	public static Optional<ServerWorld> tryFindWorldForChunkGenerator(ChunkGenerator cg) {
 		ServerWorld sw = null;
 		for (ServerWorld world : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
 			if (world.getChunkSource().generator == cg) {
@@ -214,8 +221,8 @@ public class StructureGridCQR<T extends DungeonGrid> extends Structure<T> {
 		return new IStartFactory<T>() {
 
 			@Override
-			public StructureStart<T> create(Structure<T> p_create_1_, int p_create_2_, int p_create_3_, MutableBoundingBox p_create_4_, int p_create_5_, long p_create_6_) {
-				return new StructureStartGridCQR<T>(p_create_1_, p_create_2_, p_create_3_, p_create_4_, p_create_5_, p_create_6_, StructureGridCQR.this.selectedCurrently);
+			public StructureStart<T> create(Structure<T> structureObj, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int referenceIn, long seedIn) {
+				return new StructureStartGridCQR<T>(structureObj, chunkX, chunkZ, boundingBox, referenceIn, seedIn, StructureGridCQR.this.selectedCurrently);
 			}
 			
 		};

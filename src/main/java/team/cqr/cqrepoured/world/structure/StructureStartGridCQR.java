@@ -18,6 +18,7 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
@@ -59,8 +60,8 @@ public class StructureStartGridCQR<T extends DungeonGrid> extends StructureStart
 		//this.pieces.add(this.dungeonObj.runGenerator(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random));
 		Optional<ServerWorld> osw = StructureGridCQR.tryFindWorldForChunkGenerator(chunkGenerator);
 		if(!FMLEnvironment.production && osw.isPresent()) {
-			ServerWorld sw = osw.get();
-			sw.getServer().getPlayerList().broadcastMessage(new StringTextComponent("Generated dungeon at: " + centered.toString()), ChatType.SYSTEM, Util.NIL_UUID);
+			//ServerWorld sw = osw.get();
+			//sw.getServer().getPlayerList().broadcastMessage(new StringTextComponent("Generated dungeon at: " + centered.toString()), ChatType.SYSTEM, Util.NIL_UUID);
 		}
 		this.pieces.add(this.dungeonObj.generate(dynamicRegistryManager, chunkGenerator, templateManagerIn, centered.offset(0, shiftOffsetY, 0), random, DungeonSpawnType.DUNGEON_GENERATION));
 		
