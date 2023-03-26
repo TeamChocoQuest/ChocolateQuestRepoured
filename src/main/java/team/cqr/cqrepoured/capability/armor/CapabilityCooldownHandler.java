@@ -11,7 +11,7 @@ public class CapabilityCooldownHandler {
 	public void tick() {
 		this.itemCooldownMap.object2IntEntrySet().forEach(e -> {
 			if (e.getIntValue() > 0) {
-				e.setValue(e.getIntValue() - 1);
+				//e.setValue(e.getIntValue() - 1);
 			}
 		});
 	}
