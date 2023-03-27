@@ -1,21 +1,22 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.lang3.ArrayUtils;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.processor.IReplaceBlocksProcessor;
+import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -539,32 +540,14 @@ public class PropertyFileHelper {
 	}
 
 	/*
-	 * TODO: Change to fit the new system with square bracket stuff...
+	 * DONE: Change to fit the new system with square bracket stuff...
 	 */
 	private static BlockState getBlockStateFromString(String s, BlockState defVal) {
-		String[] splitStr = s.split(":");
-		Block block = null;
-		int meta = 0;
-
-		if (splitStr.length >= 3) {
-			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splitStr[0].trim(), splitStr[1].trim()));
-			try {
-				meta = Integer.parseInt(splitStr[2].trim());
-			} catch (NumberFormatException e) {
-				// ignore
-			}
-		} else if (splitStr.length == 2) {
-			try {
-				meta = Integer.parseInt(splitStr[1].trim());
-				block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splitStr[0].trim()));
-			} catch (NumberFormatException e) {
-				block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splitStr[0].trim(), splitStr[1].trim()));
-			}
-		} else {
-			block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(splitStr[0].trim()));
+		BlockState parsed = IReplaceBlocksProcessor.parseBlockState(s);
+		if(parsed != null) {
+			return parsed;
 		}
-
-		return block != null ? Block.stateById(meta) : defVal;
+		return defVal;
 	}
 
 	public static BlockPos getBlockPosFromString(String s, BlockPos defVal) {
