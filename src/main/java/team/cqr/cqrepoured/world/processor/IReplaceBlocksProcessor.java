@@ -23,7 +23,7 @@ public interface IReplaceBlocksProcessor {
 	Set<BlockStateInput> getFilters();
 	
 	@Nullable
-	default BlockStateInput createInputFromString(final String input) {
+	public static BlockStateInput createInputFromString(final String input) {
 		if(input == null) {
 			return null;
 		}
@@ -41,8 +41,8 @@ public interface IReplaceBlocksProcessor {
 	}
 	
 	@Nullable
-	default BlockState parseBlockState(final String input) {
-		BlockStateInput bsi = this.createInputFromString(input);
+	public static BlockState parseBlockState(final String input) {
+		BlockStateInput bsi = createInputFromString(input);
 		if(bsi != null) {
 			return bsi.getState();
 		}
@@ -50,7 +50,7 @@ public interface IReplaceBlocksProcessor {
 	}
 	
 	public default boolean tryAddFilter(final String input) {
-		BlockStateInput tmp = this.createInputFromString(input);
+		BlockStateInput tmp = createInputFromString(input);
 		if(tmp != null) {
 			return this.getFilters().add(tmp);
 		}
@@ -100,7 +100,7 @@ public interface IReplaceBlocksProcessor {
 		if(weight < 0 ) {
 			return false;
 		}
-		BlockState replacement = this.parseBlockState(state);
+		BlockState replacement = parseBlockState(state);
 		if(replacement == null) {
 			return false;
 		}
