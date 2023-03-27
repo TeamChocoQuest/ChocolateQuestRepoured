@@ -9,14 +9,18 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap.Type;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
+import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.EntranceBuilderHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral.StrongholdBuilder;
@@ -38,6 +42,9 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 	public GeneratorVolcano(ChunkGenerator world, BlockPos pos, DungeonVolcano dungeon, Random rand) {
 		super(world, pos, dungeon, rand);
+		
+		int yTmp = world.getFirstFreeHeight(this.pos.getX(), this.pos.getZ(), Type.WORLD_SURFACE_WG);
+		this.pos = new BlockPos(this.pos.getX(), yTmp, this.pos.getZ());
 
 		this.volcanoHeight = DungeonGenUtils.randomBetween(dungeon.getMinHeight(), dungeon.getMaxHeight(), this.random);
 		this.steepness = dungeon.getSteepness();
@@ -49,6 +56,8 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		this.volcanoBlocks = this.dungeon.getVolcanoBlocks().copy();
 		this.volcanoBlocksWithLava = this.dungeon.getVolcanoBlocks().copy();
 		this.volcanoBlocksWithLava.add(new CQRWeightedRandom.WeightedObject<>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
+		DungeonPlacement dp = this.dungeonBuilder.getPlacement(pos);
+		GenerationUtil.init(dp);
 	}
 
 	@Override
@@ -390,7 +399,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 	}
 
 	private void generateStronghold(int radius) {
-		if (this.dungeon.doBuildStronghold()) {
+		if (false && this.dungeon.doBuildStronghold()) {
 			EStairSection entranceDirection = this.startStairSection.getSuccessor();
 			int entranceDistToWall = radius / 3;
 			int wideness = radius - entranceDistToWall;
