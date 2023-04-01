@@ -282,6 +282,25 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		public ProtectedRegion.Builder getProtectedRegionBuilder() {
 			return protectedRegionBuilder;
 		}
+
+		public void write3DArray(BlockState[][][] blocks, BlockPos referenceLoc) {
+			this.write3DArray(blocks, referenceLoc, false);
+		}
+		
+		public void write3DArray(BlockState[][][] blocks, BlockPos referenceLoc, boolean resetDataInArray) {
+			for (int i = 0; i < blocks.length; i++) {
+				for (int j = 0; j < blocks[i].length; j++) {
+					for (int k = 0; k < blocks[i][j].length; k++) {
+						if (blocks[i][j][k] != null) {
+							this.getLevel().setBlockState(referenceLoc.offset(i, j, k), blocks[i][j][k]);
+							if(resetDataInArray) {
+								blocks[i][j][k] = null;
+							}
+						}
+					}
+				}
+			}
+		}
 		
 	}
 
