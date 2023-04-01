@@ -199,7 +199,9 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 							}
 
 							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance(), this.random)) {
-								spawnerAndChestList.add(referenceLoc.offset(iX, y - this.caveDepth + 1, iZ));
+								//spawnerAndChestList.add(referenceLoc.offset(iX, y - this.caveDepth + 1, iZ));
+								//TODO: Generates too high up
+								spawnerAndChestList.add(new BlockPos(iX, y + 1, iZ));
 							}
 						}
 					}
@@ -322,7 +324,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		this.generateSpawnersAndChests(spawnerAndChestList);
 
 		// Stronghold
-		this.generateStronghold(innerRadiusArray[0]);
+		//this.generateStronghold(innerRadiusArray[0]);
 
 		// Cover blocks
 		if (this.dungeon.isCoverBlockEnabled()) {
@@ -399,7 +401,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 	}
 
 	private void generateStronghold(int radius) {
-		if (false && this.dungeon.doBuildStronghold()) {
+		if (this.dungeon.doBuildStronghold()) {
 			EStairSection entranceDirection = this.startStairSection.getSuccessor();
 			int entranceDistToWall = radius / 3;
 			int wideness = radius - entranceDistToWall;
