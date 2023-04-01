@@ -244,7 +244,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 			// Second: Place the segments
 			int segmentCount = tunnelLength / EntranceBuilderHelper.SEGMENT_LENGTH;
 			BlockPos segmentPos = new BlockPos(endX, highestPlatformY - this.caveDepth, endZ);
-			segmentPos = segmentPos.relative(direction.getOpposite(), -EntranceBuilderHelper.SEGMENT_LENGTH);
+			segmentPos = segmentPos.relative(direction.getOpposite(), (int) -Math.round(EntranceBuilderHelper.SEGMENT_LENGTH * 1.5D));
 
 			for (int i = 0; i < segmentCount; i++) {
 				EntranceBuilderHelper.buildEntranceSegment(this.pos.offset(segmentPos), this.dungeonBuilder, direction);
