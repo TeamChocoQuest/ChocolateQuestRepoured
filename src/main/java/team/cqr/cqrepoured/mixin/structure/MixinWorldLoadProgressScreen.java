@@ -21,7 +21,7 @@ public class MixinWorldLoadProgressScreen {
 
 	@Inject(method = "<clinit>", at = @At("RETURN"))
 	private static void clinit(CallbackInfo info) {
-		COLORS.put(CQRChunkStatus.CQR_STRUCTURE_STARTS, 0xB0B0B0);
+		COLORS.put(CQRChunkStatus.CQR_STRUCTURE_STARTS, 11731199);
 	}
 
 }
