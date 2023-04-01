@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
@@ -29,8 +31,10 @@ public class DungeonTemplateSurface extends DungeonBase {
 	}
 
 	@Override
-	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
-		return new GeneratorTemplateSurface().prepare(dynamicRegistries, chunkGenerator, templateManager, pos, random, this);
+	public Collection<StructurePiece> runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		Collection<StructurePiece> pieces = new ArrayList<>();
+		pieces.add(new GeneratorTemplateSurface().prepare(dynamicRegistries, chunkGenerator, templateManager, pos, random, this));
+		return pieces;
 	}
 
 	public File getStructureFolderPath() {

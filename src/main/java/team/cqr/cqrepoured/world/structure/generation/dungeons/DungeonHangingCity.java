@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
@@ -74,8 +76,10 @@ public class DungeonHangingCity extends DungeonBase implements IBridgeDataSuppli
 	}
 
 	@Override
-	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
-		return new GeneratorHangingCity(chunkGenerator, pos, this, random).prepare();
+	public Collection<StructurePiece> runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		Collection<StructurePiece> pieces = new ArrayList<>();
+		pieces.add(new GeneratorHangingCity(chunkGenerator, pos, this, random).prepare());
+		return pieces;
 	}
 
 	// Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!

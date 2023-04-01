@@ -255,15 +255,13 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return this.name;
 	}
 
-	public abstract StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random);
+	public abstract Collection<StructurePiece> runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random);
 
 	public Collection<StructurePiece> generate(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
 		int x = pos.getX();
 		int z = pos.getZ();
 		//BlockPos pos1 = new BlockPos(x, this.getYForPos(chunkGenerator, x, z, random), z);
-		Collection<StructurePiece> pieces = new ArrayList<>();
-		pieces.add(this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos, random, spawnType));
-		return pieces;
+		return this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos, random, spawnType);
 	}
 
 	public int getYForPos(ChunkGenerator chunkGenerator, int x, int z, Random rand) {
@@ -288,11 +286,11 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return y;
 	}
 
-	public StructurePiece generateAt(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
+	public Collection<StructurePiece> generateAt(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
 		return this.runGenerator(dynamicRegistries, chunkGenerator, templateManager, pos, random);
 	}
 
-	public StructurePiece generateWithOffsets(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
+	public Collection<StructurePiece> generateWithOffsets(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
 		if (!this.fixedY) {
 			pos = pos.above(DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, random));
 		}

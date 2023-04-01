@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.dungeons;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
@@ -60,8 +62,10 @@ public class DungeonGridCity extends DungeonBase {
 	}
 
 	@Override
-	public StructurePiece runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
-		return new GeneratorGridCity(chunkGenerator, pos, this, random).prepare();
+	public Collection<StructurePiece> runGenerator(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random) {
+		Collection<StructurePiece> pieces = new ArrayList<>();
+		pieces.add(new GeneratorGridCity(chunkGenerator, pos, this, random).prepare());
+		return pieces;
 	}
 
 	public int getCaveHeight() {
