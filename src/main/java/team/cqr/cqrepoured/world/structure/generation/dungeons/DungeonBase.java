@@ -131,8 +131,6 @@ public abstract class DungeonBase implements IFeatureConfig {
 	protected boolean replaceBanners = true;
 
 	protected boolean buildSupportPlatform = true;
-	protected BlockState supportBlock = null;
-	protected BlockState supportTopBlock = null;
 
 	protected boolean useCoverBlock;
 	protected BlockState coverBlock;
@@ -194,8 +192,6 @@ public abstract class DungeonBase implements IFeatureConfig {
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", this.replaceBanners);
 
 		this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", this.buildSupportPlatform);
-		this.supportBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblock", this.supportBlock);
-		this.supportTopBlock = PropertyFileHelper.getBlockStateProperty(prop, "supportblocktop", this.supportTopBlock);
 
 		this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 		this.coverBlock = PropertyFileHelper.getBlockStateProperty(prop, "coverblock", Blocks.AIR.defaultBlockState());
@@ -563,14 +559,6 @@ public abstract class DungeonBase implements IFeatureConfig {
 
 	public boolean doBuildSupportPlatform() {
 		return this.buildSupportPlatform;
-	}
-
-	public BlockState getSupportBlock() {
-		return this.supportBlock;
-	}
-
-	public BlockState getSupportTopBlock() {
-		return this.supportTopBlock;
 	}
 
 	public boolean isCoverBlockEnabled() {
