@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.mixin.structure;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +19,8 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructureStart;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
 @Mixin(NoiseChunkGenerator.class)
@@ -41,6 +44,18 @@ public abstract class MixinNoiseChunkGenerator {
 				.map(StructureStart::getPieces)
 				.flatMap(List::stream)
 				.filter(INoiseAffectingStructurePiece.class::isInstance)
+				.filter(structurePiece -> {
+					//Ignore structures that don't have support hills enabled
+					if(structurePiece instanceof GeneratableDungeon) {
+						GeneratableDungeon gd = (GeneratableDungeon) structurePiece;
+						Optional<DungeonBase> optDunBase = gd.getDungeonConfig();
+						
+						if(optDunBase.isPresent()) {
+							return optDunBase.get().doBuildSupportPlatform();
+						}
+					}
+					return true;
+				})
 				.map(INoiseAffectingStructurePiece.class::cast)
 				.collect(Collectors.toList());
 	}

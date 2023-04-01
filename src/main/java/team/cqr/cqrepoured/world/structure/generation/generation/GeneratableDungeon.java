@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.block.BlockState;
@@ -23,6 +24,7 @@ import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
+import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
@@ -60,7 +62,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 				max = y;
 		}
 	}
-
+	
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder, int undergroundOffset) {
 		super(CQRStructures.GENERATABLE_DUNGEON, 0);
 		this.dungeonName = dungeonName;
@@ -203,6 +205,13 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 
 		return maxNoise;
 	}
+	
+	public Optional<DungeonBase> getDungeonConfig() {
+		if(this.dungeonName.isEmpty()) {
+			return Optional.empty();
+		}
+		return Optional.ofNullable(DungeonRegistry.getInstance().getDungeon(this.dungeonName));
+	}
 
 	public static class Builder {
 
@@ -273,7 +282,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		public ProtectedRegion.Builder getProtectedRegionBuilder() {
 			return protectedRegionBuilder;
 		}
-
+		
 	}
 
 }
