@@ -52,7 +52,7 @@ public class TestStructure extends Structure<NoFeatureConfig> {
 			DungeonRegistry dungeonRegistry = DungeonRegistry.getInstance();
 			DungeonBase dungeon = dungeonRegistry.getDungeon("Castle");
 
-			pieces.add(dungeon.generate(registries, chunkGenerator, templateManager,
+			pieces.addAll(dungeon.generate(registries, chunkGenerator, templateManager,
 					new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8), random,
 					DungeonSpawnType.DUNGEON_GENERATION));
 

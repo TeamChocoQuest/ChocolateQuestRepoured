@@ -63,7 +63,7 @@ public class StructureCQR extends Structure<NoFeatureConfig> {
 			BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
 			Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
 
-			this.pieces.add(dungeon.generate(registries, chunkGenerator, templateManager, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
+			this.pieces.addAll(dungeon.generate(registries, chunkGenerator, templateManager, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
 
 			this.calculateBoundingBox();
 		}
