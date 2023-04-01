@@ -63,103 +63,55 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 	@Override
 	public void buildStructure() {
-		int[] outerRadiusArray = new int[this.volcanoHeight + this.caveDepth];
-		int[] innerRadiusArray = new int[this.volcanoHeight + this.caveDepth];
-		double d = Math.cbrt((this.volcanoHeight + 80.0D) / this.steepness);
-		int baseRadius = this.minRadius * 2 + (int) (d - Math.cbrt((80.0D - 20.0D) / this.steepness));
-		for (int iY = -this.caveDepth; iY < this.volcanoHeight; iY++) {
-			if (iY > -20) {
-				outerRadiusArray[iY + this.caveDepth] = this.minRadius * 2 + (int) (d - Math.cbrt((iY + 80.0D) / this.steepness));
-			} else {
-				outerRadiusArray[iY + this.caveDepth] = baseRadius + (-20 - iY) / 5;
-			}
-			innerRadiusArray[iY + this.caveDepth] = this.minRadius + (int) Math.sqrt(((double) this.caveHeight - (double) iY) / (3000.0D * this.steepness));
-		}
+		final int[] outerRadiusArray = new int[this.volcanoHeight + this.caveDepth];
+		final int[] innerRadiusArray = new int[this.volcanoHeight + this.caveDepth];
+		//Calculates the inner and outer bounds for the base shape and the cave later
+		this.calcInnerAndOutherRadii(outerRadiusArray, innerRadiusArray);
 
+		//Biggest radius of the overall shape (not counting the added rougness via spheres)
 		final int r = outerRadiusArray[0];
-		BlockPos referenceLoc = this.pos.offset(-r, -this.caveDepth, -r);
-		DungeonPlacement dp = this.dungeonBuilder.getPlacement(referenceLoc);
+		//Location in the middle of the lava lake
+		final BlockPos referenceLoc = this.pos.offset(-r, -this.caveDepth, -r);
+		final DungeonPlacement dp = this.dungeonBuilder.getPlacement(referenceLoc);
 		GenerationUtil.init(dp);
 		final int sizeX = r * 2 + 1;
 		final int sizeY = this.volcanoHeight + this.caveHeight + 2;
 		final int sizeZ = r * 2 + 1;
-		List<BlockPos> spawnerAndChestList = new ArrayList<>();
+		final List<BlockPos> spawnerAndChestList = new ArrayList<>();
 
 		// basic volcano shape with air inside
-		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
-			int outerRadius = outerRadiusArray[iY];
-			int innerRadius = innerRadiusArray[iY];
-
-			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
-				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), Blocks.AIR.defaultBlockState());
-					} else if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius)) {
-						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
-							this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.getRandomVolcanoBlockWithLava());
-						} else {
-							this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.getRandomVolcanoBlock());
-						}
-					}
-				}
-			}
-		}
+		this.generateBaseShape(outerRadiusArray, innerRadiusArray, referenceLoc, r);
 
 		// add spheres at the outer radius
-		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
-			int outerRadius = outerRadiusArray[iY];
-
-			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
-				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadiusArray[iY])))) {
-						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
-							forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
-								this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r), this.getRandomVolcanoBlockWithLava());
-							});
-						}
-					}
-				}
-			}
-		}
-
-		// Holes
-		this.generateHoles(referenceLoc, sizeX, sizeY, sizeZ);
+		this.roughenOuterWalls(outerRadiusArray, innerRadiusArray, referenceLoc, r);
 
 		// add lava and spheres at the inner radius
-		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
-			int innerRadius = innerRadiusArray[iY];
-
-			for (int iX = -innerRadius; iX <= innerRadius; iX++) {
-				for (int iZ = -innerRadius; iZ <= innerRadius; iZ++) {
-					if (iY < 2 && DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.dungeon.getLavaBlock());
-					}
-
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
-						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
-							forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
-								BlockState stateAt = this.dungeonBuilder.getLevel().getBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r));
-								if(stateAt == Blocks.AIR.defaultBlockState()) {
-									this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r), this.getRandomVolcanoBlock());
-								}
-							});
-						}
-					}
-				}
-			}
-		}
+		this.roughenInnerWalls(innerRadiusArray, referenceLoc, r);
+		
+		// Holes
+		this.damageBaseShape(referenceLoc, sizeX, sizeY, sizeZ);
 
 		// Infamous nether staircase
-		EStairSection stairSection = this.startStairSection;
-		int sectionMinX = 0;
-		int sectionMaxX = 0;
-		int sectionMinZ = 0;
-		int sectionMaxZ = 0;
-		final int highestPlatformY = (int) (((this.caveHeight + this.caveDepth) * 0.9D) - 1);
+		this.decorateInnerCave(innerRadiusArray, outerRadiusArray, referenceLoc, spawnerAndChestList, r);
 		
+		// Spawners and Chests
+		this.generateSpawnersAndChests(spawnerAndChestList);
+
+		// Stronghold
+		this.generateStronghold(innerRadiusArray[0]);
+	}
+
+	protected void decorateInnerCave(int[] innerRadiusArray, int[] outerRadiusArray, BlockPos referenceLoc, final List<BlockPos> spawnerAndChestList, final int r) {
 		if (this.dungeon.doBuildStairs()) {
+			EStairSection stairSection = this.startStairSection;
+			int sectionMinX = 0;
+			int sectionMaxX = 0;
+			int sectionMinZ = 0;
+			int sectionMaxZ = 0;
+			final int highestPlatformY = (int) (((this.caveHeight + this.caveDepth) * 0.9D) - 1);
 			for (int iY = -1; iY <= highestPlatformY; iY++) {
 				int y = Math.max(iY, 1);
+				//Grab inner border of baseshape as our outer radius
 				int outerStairRadius = innerRadiusArray[y];
 				int innerStairRadius = outerStairRadius / 2;
 
@@ -187,7 +139,9 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 							if (iZ > sectionMaxZ) {
 								sectionMaxZ = iZ;
 							}
+							//TODO: Allow for some decorations?
 
+							//TODO: Move magic numbers to config option
 							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance(), this.random)) {
 								spawnerAndChestList.add(new BlockPos(iX + r, y + 1, iZ + r));
 							}
@@ -196,104 +150,180 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 				}
 
 				stairSection = stairSection.getSuccessor();
-			}
-
-			this.generatePillars(new BlockPos(r + innerRadiusArray[0] / 2, 0, r), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
-			this.generatePillars(new BlockPos(r - innerRadiusArray[0] / 2, 0, r), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
-			this.generatePillars(new BlockPos(r, 0, r + innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
-			this.generatePillars(new BlockPos(r, 0, r - innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
-		}
-
-		if (this.dungeon.doBuildStairs() && this.dungeon.constructEntranceTunnel()) {
-//			System.out.println("Highestplatform y: " + highestPlatformY);
-//			System.out.println("Cave depth: " + caveDepth);
-//			System.out.println("Cave height: " + caveHeight);
-//			System.out.println("Y: " + this.pos.getY());
-			EStairSection stairSectionPrev = stairSection.getPredeccessor();
-			if (stairSectionPrev != null) {
-				Direction direction = stairSectionPrev.getAsSkyDirection();
-				// direction = direction.rotateYCCW();
-				int segmentCenterX = (sectionMaxX - sectionMinX) / 2 + sectionMinX;
-				int segmentCenterZ = (sectionMaxZ - sectionMinZ) / 2 + sectionMinZ;
-				switch (direction) {
-				case EAST:
-					segmentCenterX += 6;
-					break;
-				case NORTH:
-					segmentCenterZ -= 6;
-					break;
-				case SOUTH:
-					segmentCenterZ += 6;
-					break;
-				case WEST:
-					segmentCenterX -= 6;
-					break;
-				default:
-					break;
-				}
-				int endX = segmentCenterX;
-				int endZ = segmentCenterZ;
-
-				int tunnelLength = outerRadiusArray[highestPlatformY] - innerRadiusArray[highestPlatformY];
-				tunnelLength *= 1.5D;
-				// System.out.println("TL before modification: " + tunnelLength);
-				switch (direction) {
-				case EAST:
-					endX += tunnelLength;
-					break;
-				case NORTH:
-					endZ -= tunnelLength;
-					break;
-				case SOUTH:
-					endZ += tunnelLength;
-					break;
-				case WEST:
-					endX -= tunnelLength;
-					break;
-				default:
-					break;
-				}
-				/*
-				 * System.out.println("Direction: " + direction.name());
-				 * System.out.println("px: " + segmentCenterX + "  pz: " + segmentCenterZ);
-				 * System.out.println("ex: " + endX + "  ez: " + endZ);
-				 * System.out.println("R: " + r);
-				 */
-
-				// First: air sphere around the entrance
-				forEachSpherePosition(new BlockPos(endX, highestPlatformY + 3, endZ), 4 + this.random.nextInt(2), p -> {
-					BlockState stateAt = this.dungeonBuilder.getLevel().getBlockState(referenceLoc.offset(p.offset(r, 0 , r)));
-					if(stateAt != Blocks.AIR.defaultBlockState()) {
-						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.offset(r, 0 , r)), Blocks.AIR.defaultBlockState());
+				
+				//If we built the last section, let's see if we should construct the entrance tunnel
+				if(iY == highestPlatformY) {
+					//And after that generate a small tunnel to enter the volcano
+					if (this.dungeon.constructEntranceTunnel()) {
+						int segmentCenterX = (sectionMaxX - sectionMinX) / 2 + sectionMinX;
+						int segmentCenterZ = (sectionMaxZ - sectionMinZ) / 2 + sectionMinZ;
+						this.generateEntranceTunnel(stairSection, segmentCenterX, segmentCenterZ, outerRadiusArray, innerRadiusArray, highestPlatformY, referenceLoc, r);
 					}
-				});
+				}
+			}
+			//Finally, place the pillars
+			this.generatePillars(innerRadiusArray, referenceLoc, r);
+		}
+	}
 
-				// Second: Place the segments
-				int segmentCount = tunnelLength / EntranceBuilderHelper.SEGMENT_LENGTH;
-				BlockPos segmentPos = new BlockPos(endX, highestPlatformY - this.caveDepth, endZ);
-				segmentPos = segmentPos.relative(direction.getOpposite(), -EntranceBuilderHelper.SEGMENT_LENGTH);
+	protected void calcInnerAndOutherRadii(int[] outerRadiusArray, int[] innerRadiusArray) {
+		final double d = Math.cbrt((this.volcanoHeight + 80.0D) / this.steepness);
+		final int baseRadius = this.minRadius * 2 + (int) (d - Math.cbrt((80.0D - 20.0D) / this.steepness));
+		for (int iY = -this.caveDepth; iY < this.volcanoHeight; iY++) {
+			if (iY > -20) {
+				outerRadiusArray[iY + this.caveDepth] = this.minRadius * 2 + (int) (d - Math.cbrt((iY + 80.0D) / this.steepness));
+			} else {
+				outerRadiusArray[iY + this.caveDepth] = baseRadius + (-20 - iY) / 5;
+			}
+			innerRadiusArray[iY + this.caveDepth] = this.minRadius + (int) Math.sqrt(((double) this.caveHeight - (double) iY) / (3000.0D * this.steepness));
+		}
+	}
 
-				for (int i = 0; i < segmentCount; i++) {
-					EntranceBuilderHelper.buildEntranceSegment(this.pos.offset(segmentPos), this.dungeonBuilder, direction);
+	protected void generateEntranceTunnel(EStairSection stairSection, int segmentCenterX, int segmentCenterZ, int[] outerRadiusArray, int[] innerRadiusArray, int highestPlatformY, BlockPos referenceLoc, int r) {
+//		System.out.println("Highestplatform y: " + highestPlatformY);
+//		System.out.println("Cave depth: " + caveDepth);
+//		System.out.println("Cave height: " + caveHeight);
+//		System.out.println("Y: " + this.pos.getY());
+		EStairSection stairSectionPrev = stairSection.getPredeccessor();
+		if (stairSectionPrev != null) {
+			Direction direction = stairSectionPrev.getAsSkyDirection();
+			// direction = direction.rotateYCCW();
+			switch (direction) {
+			case EAST:
+				segmentCenterX += 6;
+				break;
+			case NORTH:
+				segmentCenterZ -= 6;
+				break;
+			case SOUTH:
+				segmentCenterZ += 6;
+				break;
+			case WEST:
+				segmentCenterX -= 6;
+				break;
+			default:
+				break;
+			}
+			int endX = segmentCenterX;
+			int endZ = segmentCenterZ;
 
-					segmentPos = segmentPos.relative(direction.getOpposite(), EntranceBuilderHelper.SEGMENT_LENGTH);
+			int tunnelLength = outerRadiusArray[highestPlatformY] - innerRadiusArray[highestPlatformY];
+			tunnelLength *= 1.5D;
+			// System.out.println("TL before modification: " + tunnelLength);
+			switch (direction) {
+			case EAST:
+				endX += tunnelLength;
+				break;
+			case NORTH:
+				endZ -= tunnelLength;
+				break;
+			case SOUTH:
+				endZ += tunnelLength;
+				break;
+			case WEST:
+				endX -= tunnelLength;
+				break;
+			default:
+				break;
+			}
+			/*
+			 * System.out.println("Direction: " + direction.name());
+			 * System.out.println("px: " + segmentCenterX + "  pz: " + segmentCenterZ);
+			 * System.out.println("ex: " + endX + "  ez: " + endZ);
+			 * System.out.println("R: " + r);
+			 */
+
+			// First: air sphere around the entrance
+			forEachSpherePosition(new BlockPos(endX, highestPlatformY + 3, endZ), 4 + this.random.nextInt(2), p -> {
+				BlockState stateAt = this.dungeonBuilder.getLevel().getBlockState(referenceLoc.offset(p.offset(r, 0 , r)));
+				if(stateAt != Blocks.AIR.defaultBlockState()) {
+					this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.offset(r, 0 , r)), Blocks.AIR.defaultBlockState());
+				}
+			});
+
+			// Second: Place the segments
+			int segmentCount = tunnelLength / EntranceBuilderHelper.SEGMENT_LENGTH;
+			BlockPos segmentPos = new BlockPos(endX, highestPlatformY - this.caveDepth, endZ);
+			segmentPos = segmentPos.relative(direction.getOpposite(), -EntranceBuilderHelper.SEGMENT_LENGTH);
+
+			for (int i = 0; i < segmentCount; i++) {
+				EntranceBuilderHelper.buildEntranceSegment(this.pos.offset(segmentPos), this.dungeonBuilder, direction);
+
+				segmentPos = segmentPos.relative(direction.getOpposite(), EntranceBuilderHelper.SEGMENT_LENGTH);
+			}
+		}
+	}
+
+	protected void generatePillars(int[] innerRadiusArray, BlockPos referenceLoc, int r) {
+		this.generatePillar(new BlockPos(r + innerRadiusArray[0] / 2, 0, r), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
+		this.generatePillar(new BlockPos(r - innerRadiusArray[0] / 2, 0, r), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
+		this.generatePillar(new BlockPos(r, 0, r + innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());
+		this.generatePillar(new BlockPos(r, 0, r - innerRadiusArray[0] / 2), 2, (int) ((this.caveHeight + this.caveDepth) * 0.95D), referenceLoc, this.dungeon.getPillarBlock());		
+	}
+
+	protected void generateBaseShape(int[] outerRadiusArray, int[] innerRadiusArray, BlockPos referenceLoc, final int r) {
+		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
+			int outerRadius = outerRadiusArray[iY];
+			int innerRadius = innerRadiusArray[iY];
+
+			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
+				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
+						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), Blocks.AIR.defaultBlockState());
+					} else if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius)) {
+						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2)) {
+							this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.getRandomVolcanoBlockWithLava());
+						} else {
+							this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.getRandomVolcanoBlock());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	protected void roughenOuterWalls(int[] outerRadiusArray, int[] innerRadiusArray, BlockPos referenceLoc, final int r) {
+		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
+			int outerRadius = outerRadiusArray[iY];
+
+			for (int iX = -outerRadius; iX <= outerRadius; iX++) {
+				for (int iZ = -outerRadius; iZ <= outerRadius; iZ++) {
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius) && (!DungeonGenUtils.isInsideCircle(iX, iZ, outerRadius - 2) || (iY == this.volcanoHeight + this.caveDepth - 1 && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadiusArray[iY])))) {
+						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
+							forEachSpherePosition(new BlockPos(iX, iY, iZ), 2 + this.random.nextInt(3), p -> {
+								this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r), this.getRandomVolcanoBlockWithLava());
+							});
+						}
+					}
+				}
+			}
+		}
+	}
+
+	protected void roughenInnerWalls(int[] innerRadiusArray, BlockPos referenceLoc, final int r) {
+		for (int iY = 0; iY < this.volcanoHeight + this.caveDepth; iY++) {
+			int innerRadius = innerRadiusArray[iY];
+
+			for (int iX = -innerRadius; iX <= innerRadius; iX++) {
+				for (int iZ = -innerRadius; iZ <= innerRadius; iZ++) {
+					if (iY < 2 && DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
+						this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(iX + r, iY, iZ + r), this.dungeon.getLavaBlock());
+					}
+
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius)) {
+						if (DungeonGenUtils.percentageRandom(0.05D, this.random)) {
+							forEachSpherePosition(new BlockPos(iX, iY, iZ), 1 + this.random.nextInt(3), p -> {
+								BlockState stateAt = this.dungeonBuilder.getLevel().getBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r));
+								if(stateAt == Blocks.AIR.defaultBlockState()) {
+									this.dungeonBuilder.getLevel().setBlockState(referenceLoc.offset(p.getX() + r, p.getY(), p.getZ() + r), this.getRandomVolcanoBlock());
+								}
+							});
+						}
+					}
 				}
 			}
 		}
 		
-		// this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, referenceLoc, entranceTunnelBlocks,
-		// new PlacementSettings(), mobType));
-
-		// Spawners and Chests
-		this.generateSpawnersAndChests(spawnerAndChestList);
-
-		// Stronghold
-		this.generateStronghold(innerRadiusArray[0]);
-
-		// Cover blocks
-		if (this.dungeon.isCoverBlockEnabled()) {
-			//this.dungeonBuilder.add(new CoverDungeonPart.Builder(this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.pos.getZ() + r, this.dungeon.getCoverBlock()));
-		}
 	}
 
 	@Override
@@ -301,7 +331,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 	}
 	
-	private void generateHoles(BlockPos referenceLoc, int sizeX, int sizeY, int sizeZ) {
+	protected void damageBaseShape(BlockPos referenceLoc, int sizeX, int sizeY, int sizeZ) {
 		if (this.dungeon.isVolcanoDamaged()) {
 			List<BlockPos> list = new ArrayList<>((int) (this.volcanoHeight * 1.6D));
 
@@ -329,7 +359,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generatePillars(BlockPos pos, int radius, int height, BlockPos referenceLoc, BlockState pillarBlock) {
+	protected void generatePillar(BlockPos pos, int radius, int height, BlockPos referenceLoc, BlockState pillarBlock) {
 		for (int iY = 0; iY < height; iY++) {
 			for (int iX = -radius; iX <= radius; iX++) {
 				for (int iZ = -radius; iZ <= radius; iZ++) {
@@ -343,7 +373,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList) {
+	protected void generateSpawnersAndChests(List<BlockPos> spawnerAndChestList) {
 		if (!spawnerAndChestList.isEmpty()) {
 			ResourceLocation[] lootTables = this.dungeon.getChestIDs();
 			GearedMobFactory mobFactory = new GearedMobFactory(spawnerAndChestList.size(), this.dungeon.getRampMob(), this.random);
@@ -365,7 +395,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		}
 	}
 	
-	private void generateStronghold(int radius) {
+	protected void generateStronghold(int radius) {
 		if (this.dungeon.doBuildStronghold()) {
 			EStairSection entranceDirection = this.startStairSection.getSuccessor();
 			int entranceDistToWall = radius / 3;
@@ -405,12 +435,12 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		}
 	}
 
-	private BlockState getRandomVolcanoBlock() {
+	protected BlockState getRandomVolcanoBlock() {
 		BlockState state = this.volcanoBlocks.next(this.random);
 		return state != null ? state : Blocks.STONE.defaultBlockState();
 	}
 
-	private BlockState getRandomVolcanoBlockWithLava() {
+	protected BlockState getRandomVolcanoBlockWithLava() {
 		BlockState state = this.volcanoBlocksWithLava.next(this.random);
 		return state != null ? state : Blocks.STONE.defaultBlockState();
 	}
