@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-import com.google.common.base.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -31,26 +30,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.Registry;
-<<<<<<< HEAD
-=======
 import net.minecraft.world.IWorld;
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
-<<<<<<< HEAD
-import team.cqr.cqrepoured.world.structure.StructureGridCQR;
-=======
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
@@ -311,10 +302,6 @@ public abstract class DungeonBase implements IFeatureConfig {
 	}
 
 	public StructurePiece generateAt(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
-		Optional<ServerWorld> osw = StructureGridCQR.tryFindWorldForChunkGenerator(chunkGenerator);
-		if(osw.isPresent()) {
-			DungeonDataManager.addDungeonEntry(osw.get(), this, pos, spawnType);
-		}
 		return this.runGenerator(dynamicRegistries, chunkGenerator, templateManager, pos, random);
 	}
 

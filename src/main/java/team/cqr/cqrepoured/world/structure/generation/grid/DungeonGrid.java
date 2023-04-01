@@ -102,53 +102,18 @@ public class DungeonGrid implements IFeatureConfig {
 	}
 
 	@Nullable
-<<<<<<< HEAD
-	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ) {
-		return this.getDungeonAt(world, chunkX, chunkZ, false);
-	}
-	
-	@Nullable
-	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, boolean ignoreGridCheck) {
-		BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-		
-		Biome biome = world.getBiome(pos);
-		return this.getDungeonAt(world, chunkX, chunkZ, ignoreGridCheck, biome);
-	}
-	
-	@Nullable
-	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, boolean ignoreGridCheck, Biome biome) {
-		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), chunkX, chunkZ);
-		return this.getDungeonAt(world, chunkX, chunkZ, ignoreGridCheck, biome, random);
-	}
-	
-	@Nullable
-	public DungeonBase getDungeonAt(ServerWorld world, int chunkX, int chunkZ, boolean ignoreGridCheck, Biome biome, Random random) {
-		if(biome == null) {
-=======
 	public DungeonBase getDungeonAt(ServerWorld world, ChunkPos chunkPos) {
 		BlockPos pos = new BlockPos((chunkPos.x << 4) + 8, 0, (chunkPos.z << 4) + 8);
 		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), pos.getX(), pos.getZ());
 		if (!this.canSpawnDungeonAtCoords(world, chunkPos, random)) {
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 			return null;
 		}
 		
-		if(ignoreGridCheck) {
-			if (!this.canSpawnDungeonAtCoordsIgnoreGridCheck(world, chunkX, chunkZ, random, biome)) {
-				return null;
-			}
-		} else {
-			if (!this.canSpawnDungeonAtCoords(world, chunkX, chunkZ, random, biome)) {
-				return null;
-			}
+		if (!this.canSpawnDungeonAtCoords(world, chunkPos, random)) {
+			return null;
 		}
 
-<<<<<<< HEAD
-		BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-		
-=======
 		Biome biome = world.getNoiseBiome(pos.getX(), pos.getY(), pos.getZ());
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
@@ -178,45 +143,24 @@ public class DungeonGrid implements IFeatureConfig {
 	 * 
 	 * @return true when dungeon can be spawned in this chunk
 	 */
-<<<<<<< HEAD
-	public boolean canSpawnDungeonAtCoords(World world, int chunkX, int chunkZ, Random random, Biome biome) {
-=======
 	public boolean canSpawnDungeonAtCoords(World world, ChunkPos chunkPos, Random random) {
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 		// Check if the chunk is on the grid
 		if (!this.isChunkOnGrid(world, chunkPos)) {
 			return false;
 		}
 
-<<<<<<< HEAD
-		return this.canSpawnDungeonAtCoordsIgnoreGridCheck(world, chunkX, chunkZ, random, biome);
-	}
-	
-	public boolean canSpawnDungeonAtCoordsIgnoreGridCheck(World world, int chunkX, int chunkZ, Random random, Biome biome) {
-		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
-			log(world, chunkX, chunkZ, "Too near to spawn point");
-=======
 		if (!DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkPos)) {
 			log(world, chunkPos, "Too near to spawn point");
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 			return false;
 		}
 
 		//TODO: Currently always returns false?
 		if (!DungeonGenUtils.percentageRandom(this.chance, random)) {
-<<<<<<< HEAD
-			log(world, chunkX, chunkZ, "Grid dungeon generation chance check failed for grid %s", this.getName());
-			return false;
-		}
-
-		return !this.isOtherStructureNearby(world, chunkX, chunkZ, biome);
-=======
 			log(world, chunkPos, "Grid dungeon generation chance check failed");
 			return false;
 		}
 
 		return !this.isOtherStructureNearby(world, chunkPos);
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 	}
 
 	/**
@@ -292,11 +236,7 @@ public class DungeonGrid implements IFeatureConfig {
 	/**
 	 * @return true when a location specific dungeon, a vanilla structure or a aw2 structure is nearby
 	 */
-<<<<<<< HEAD
-	public boolean isOtherStructureNearby(World world, int chunkX, int chunkZ, Biome biome) {
-=======
 	public boolean isOtherStructureNearby(World world, ChunkPos chunkPos) {
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 		if(world.isClientSide) {
 			return false;
 		}
@@ -317,20 +257,10 @@ public class DungeonGrid implements IFeatureConfig {
 				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 					continue;
 				}
-<<<<<<< HEAD
-				for(DungeonGrid grid : GridRegistry.getInstance().getGrids()) {
-					if(grid == this || grid.getPriority() >= this.getPriority()) {
-						continue;
-					}
-					if(grid.getDungeonAt((ServerWorld) world, chunkX, chunkZ, false, biome) != null) {
-						log(world, chunkX, chunkZ, "Nearby cqrepoured structure was found");
-						return true;
-					}
-=======
+
 				if (WorldDungeonGenerator.getDungeonAt((ServerWorld)world, new ChunkPos(chunkPos.x + x, chunkPos.z + z), grid -> grid.priority < this.priority) != null) {
 					log(world, chunkPos, "Nearby cqrepoured structure was found");
 					return true;
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 				}
 			}
 		}
@@ -342,11 +272,7 @@ public class DungeonGrid implements IFeatureConfig {
 		if (!CQRConfig.SERVER_CONFIG.advanced.debugDungeonGen.get()) {
 			//return;
 		}
-<<<<<<< HEAD
-		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkX << 4) + 8, (chunkZ << 4) + 8, world.dimension().location().toString(), String.format(message, params));
-=======
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkPos.x << 4) + 8, (chunkPos.z << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));
->>>>>>> df484bb50200a1011000c214dee9168780b48c41
 	}
 
 	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, BlockPos pos) {
