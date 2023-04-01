@@ -19,10 +19,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap.Type;
+import software.bernie.geckolib3.core.util.Axis;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -69,7 +71,12 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		for (int i = 0; i < tunnelCount; i++) {
 			Vector3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
 			Vector3d startPos = center.add(v);
-			this.createTunnel(startPos, angle * i, this.dungeon.getTunnelStartSize(), this.dungeon.getCaveSegmentCount(), random);
+			//DONE: Add some variation to the tunnels so they can also go up and down in different angles
+			//TODO: Add option to generate one single larger tunnel that leads to the surface (WIP)
+			//TODO: Add possibility to add decorations (ceiling, wall, floor) to the tunnels
+			//TODO: Remove mushrooms and ceiling vines and replace them with decorations
+			double upAngle = DungeonGenUtils.randomBetween(this.dungeon.minUpAngle() / 2, this.dungeon.maxUpAngle() / 2, random);
+			this.createTunnel(startPos, angle * i, this.dungeon.getTunnelStartSize(), this.dungeon.getCaveSegmentCount(), random, (i == tunnelCount - 1) && this.dungeon.isGenerateTunnelToSurface(), upAngle);
 		}
 		// Filter floorblocks
 		this.filterFloorBlocks();
@@ -227,27 +234,33 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		}
 	}
 
-	private void createTunnel(Vector3d startPos, double initAngle, int startSize, int initLength, Random random) {
+	private void createTunnel(Vector3d startPos, double initAngle, int startSize, int initLength, Random random, boolean isTunnelToSurface, double upAngle) {
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
-		Vector3d expansionDir = VectorUtil.rotateVectorAroundY(new Vector3d(startSize, 0, 0), initAngle);
+		
+		upAngle = MathHelper.clamp(upAngle, this.dungeon.minUpAngle(), this.dungeon.maxUpAngle());
+		
+		Vector3d expansionDir = VectorUtil.rotateVectorAroundY(new Vector3d(startSize, 0, 0).xRot((float) Math.toRadians(upAngle)), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			BlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
 			// if (this.dungeon.placeVines()) {
 			this.ceilingBlocks.addAll(this.getCeilingBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 			// }
+			//TODO: Smooth out the floor
 			this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 
+			//TODO: Replace with direct setting from ILevelQCR
 			this.storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
 			startPos = startPos.add(expansionDir);
 		}
 		int szTmp = startSize;
 		startSize -= 2;
+		upAngle += DungeonGenUtils.randomBetween(this.dungeon.minUpAngle(), this.dungeon.maxUpAngle(), random);
 		if (startSize > 3) {
-			this.createTunnel(startPos, initAngle + angle * initLength - 90, startSize, initLength * (szTmp / startSize), random);
-			this.createTunnel(startPos, initAngle + angle * initLength, startSize, initLength * (szTmp / startSize), random);
+			this.createTunnel(startPos, initAngle + angle * initLength - 90, startSize, initLength * (szTmp / startSize), random, isTunnelToSurface, upAngle);
+			this.createTunnel(startPos, initAngle + angle * initLength, startSize, initLength * (szTmp / startSize), random, false, upAngle);
 		}
 	}
 

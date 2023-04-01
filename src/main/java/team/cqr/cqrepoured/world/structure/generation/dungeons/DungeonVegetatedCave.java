@@ -37,6 +37,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int tunnelStartSize = 8;
 	private int caveSegmentCount = 8;
 	private int vineChance = 20;
+	private int minUpAngle = 0;
+	private int maxUpAngle = 0;
 	private ResourceLocation[] chestIDs;
 	private double vineLengthModifier = 2;
 	private boolean placeVines;
@@ -44,6 +46,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private boolean placeVegetation;
 	private boolean placeBuilding;
 	private boolean skipCeilingFiltering = false;
+	private boolean generateTunnelToSurface = false;
 	private File buildingFolder;
 
 	public DungeonVegetatedCave(String name, Properties prop) {
@@ -71,6 +74,9 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTables.ABANDONED_MINESHAFT, LootTables.NETHER_BRIDGE, CQRLoottables.CHESTS_FOOD }, false);
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
+		this.generateTunnelToSurface = PropertyFileHelper.getBooleanProperty(prop, "generateTunnelToSurface", false);
+		this.minUpAngle = PropertyFileHelper.getIntProperty(prop, "minUpAngle", 0);
+		this.maxUpAngle = PropertyFileHelper.getIntProperty(prop, "maxUpAngle", 0);
 	}
 
 	@Override
@@ -162,6 +168,18 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public int getVineChance() {
 		return this.vineChance;
+	}
+
+	public boolean isGenerateTunnelToSurface() {
+		return generateTunnelToSurface;
+	}
+
+	public int minUpAngle() {
+		return this.minUpAngle;
+	}
+	
+	public int maxUpAngle() {
+		return this.maxUpAngle;
 	}
 
 }
