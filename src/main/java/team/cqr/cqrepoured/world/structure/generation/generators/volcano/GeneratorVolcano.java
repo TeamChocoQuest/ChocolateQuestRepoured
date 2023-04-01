@@ -7,11 +7,12 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.LockableLootTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap.Type;
@@ -56,8 +57,6 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 		this.volcanoBlocks = this.dungeon.getVolcanoBlocks().copy();
 		this.volcanoBlocksWithLava = this.dungeon.getVolcanoBlocks().copy();
 		this.volcanoBlocksWithLava.add(new CQRWeightedRandom.WeightedObject<>(this.dungeon.getLavaBlock(), this.dungeon.getLavaWeight()));
-		DungeonPlacement dp = this.dungeonBuilder.getPlacement(pos);
-		GenerationUtil.init(dp);
 	}
 
 	@Override
@@ -82,6 +81,8 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 
 		final int r = outerRadiusArray[0];
 		BlockPos referenceLoc = this.pos.offset(-r, -this.caveDepth, -r);
+		DungeonPlacement dp = this.dungeonBuilder.getPlacement(referenceLoc);
+		GenerationUtil.init(dp);
 		BlockState[][][] blocks = new BlockState[r * 2 + 1][this.volcanoHeight + this.caveDepth + 2][r * 2 + 1];
 		List<BlockPos> spawnerAndChestList = new ArrayList<>();
 
@@ -199,9 +200,7 @@ public class GeneratorVolcano extends LegacyDungeonGenerator<DungeonVolcano> {
 							}
 
 							if (DungeonGenUtils.isInsideCircle(iX, iZ, outerStairRadius - 2) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerStairRadius + 2) && DungeonGenUtils.percentageRandom(this.dungeon.getChestChance(), this.random)) {
-								//spawnerAndChestList.add(referenceLoc.offset(iX, y - this.caveDepth + 1, iZ));
-								//TODO: Generates too high up
-								spawnerAndChestList.add(new BlockPos(iX, y + 1, iZ));
+								spawnerAndChestList.add(new BlockPos(iX + r, y + 1, iZ + r));
 							}
 						}
 					}
