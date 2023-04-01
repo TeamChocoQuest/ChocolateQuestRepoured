@@ -1,15 +1,21 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import net.minecraft.world.World;
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
+
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -35,16 +41,14 @@ public class DungeonRegistry {
 		return this.dungeons.get(name.toUpperCase());
 	}
 
-	public List<DungeonBase> getLocationSpecificDungeonsForChunk(World world, int chunkX, int chunkZ) {
-		List<DungeonBase> dungeonsForChunk = new ArrayList<>();
-
+	@Nullable
+	public DungeonBase getLocationSpecificDungeon(World level, ChunkPos chunkPos) {
 		for (DungeonBase dungeon : this.dungeons.values()) {
-			if (dungeon.canSpawnInChunkWithLockedPosition(world, chunkX, chunkZ)) {
-				dungeonsForChunk.add(dungeon);
+			if (dungeon.canSpawnInChunkWithLockedPosition(level, chunkPos)) {
+				return dungeon;
 			}
 		}
-
-		return dungeonsForChunk;
+		return null;
 	}
 
 	public void loadDungeonFiles() {
@@ -74,6 +78,8 @@ public class DungeonRegistry {
 				}
 			}
 		}
+
+		// TODO validate locked positions
 
 		GridRegistry.getInstance().loadGridFiles();
 	}

@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall;
 
-import com.mojang.serialization.Codec;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
@@ -28,8 +26,8 @@ import team.cqr.cqrepoured.world.CQRJigsawManager;
 
 public class WallStructure extends Structure<NoFeatureConfig> {
 
-	public WallStructure(Codec<NoFeatureConfig> pCodec) {
-		super(pCodec);
+	public WallStructure() {
+		super(NoFeatureConfig.CODEC);
 	}
 
 	@Override

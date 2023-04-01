@@ -38,12 +38,10 @@ import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.init.CQRConfiguredStructures;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQREnchantments;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.init.CQRMessages;
 import team.cqr.cqrepoured.init.CQRParticleTypes;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
@@ -289,7 +287,6 @@ public class CQRMain {
 		CQRMessages.registerMessages();
 		event.enqueueWork(() -> {
 			CQRStructures.setupStructures();
-			CQRConfiguredStructures.registerConfiguredStructures();
 			TestStructures.loadTestStructures();
 		});
 		
