@@ -9,6 +9,8 @@ import java.util.zip.GZIPInputStream;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.INBTType;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTypes;
 import net.minecraft.nbt.StringNBT;
@@ -39,8 +41,17 @@ public class NBTHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends INBT> Stream<T> stream(CompoundNBT nbt, String key) {
-		return (Stream<T>) nbt.getList(key, NBT.TAG_COMPOUND).stream();
+	public static <T extends INBT> Stream<T> stream(INBT tag, INBTType<T> expectedElementType) {
+		INBTType<?> type = tag.getType();
+		if (type != ListNBT.TYPE) {
+			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListNBT.TYPE.getName() + ", but found " + type.getName() + ".");
+		}
+		ListNBT listNbt = (ListNBT) tag;
+		INBTType<?> elementType = NBTTypes.getType(listNbt.getElementType());
+		if (elementType != expectedElementType) {
+			throw new IllegalArgumentException("Expected List-Tag elements to be of type " + expectedElementType.getName() + ", but found " + elementType.getName() + ".");
+		}
+		return (Stream<T>) listNbt.stream();
 	}
 
 }

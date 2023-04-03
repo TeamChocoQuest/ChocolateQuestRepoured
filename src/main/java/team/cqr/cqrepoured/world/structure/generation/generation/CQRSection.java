@@ -59,7 +59,7 @@ public class CQRSection implements ICQRSection {
 		this.blockEntities = NBTCollectors.<CompoundNBT, TileEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
 			return TileEntity.loadStatic(this.getBlockState(index), blockEntityNbt);
 		});
-		this.entities = NBTHelper.<CompoundNBT>stream(nbt, "Entities").map(EntityContainer::new).collect(Collectors.toList());
+		this.entities = NBTHelper.stream(nbt.get("Entities"), CompoundNBT.TYPE).map(EntityContainer::new).collect(Collectors.toList());
 	}
 
 	public SectionPos getPos() {
