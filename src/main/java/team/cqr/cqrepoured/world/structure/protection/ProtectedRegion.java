@@ -1,26 +1,25 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import io.netty.buffer.Unpooled;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
+import team.cqr.cqrepoured.util.NBTHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 public class ProtectedRegion {
 
@@ -49,7 +48,6 @@ public class ProtectedRegion {
 	private boolean isGenerating = true;
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
-	// Save handling
 	private boolean needsSaving = false;
 	private boolean needsSyncing = false;
 
@@ -111,10 +109,11 @@ public class ProtectedRegion {
 		compound.putString("version", PROTECTED_REGION_VERSION);
 		compound.put("uuid", NBTUtil.createUUID(this.uuid));
 		compound.putString("name", this.name);
-		compound.put("pos", NBTUtil.writeBlockPos(this.pos));
-		compound.put("startPos", NBTUtil.writeBlockPos(this.startPos));
-		compound.put("endPos", NBTUtil.writeBlockPos(this.endPos));
+		compound.put("pos", NBTHelper.createBlockPos(this.pos));
+		compound.put("startPos", NBTHelper.createBlockPos(this.startPos));
+		compound.put("endPos", NBTHelper.createBlockPos(this.endPos));
 		compound.putByteArray("protectionStates", this.protectionStates);
+
 		compound.putBoolean("preventBlockBreaking", this.preventBlockBreaking);
 		compound.putBoolean("preventBlockPlacing", this.preventBlockPlacing);
 		compound.putBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
@@ -123,16 +122,14 @@ public class ProtectedRegion {
 		compound.putBoolean("preventEntitySpawning", this.preventEntitySpawning);
 		compound.putBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
 		compound.putBoolean("isGenerating", this.isGenerating);
-		ListNBT nbtTagList1 = new ListNBT();
-		for (UUID entityUuid : this.entityDependencies) {
-			nbtTagList1.add(NBTUtil.createUUID(entityUuid));
-		}
-		compound.put("entityDependencies", nbtTagList1);
-		ListNBT nbtTagList2 = new ListNBT();
-		for (BlockPos blockPos : this.blockDependencies) {
-			nbtTagList2.add(NBTUtil.writeBlockPos(blockPos));
-		}
-		compound.put("blockDependencies", nbtTagList2);
+
+		compound.put("entityDependencies", this.entityDependencies.stream()
+				.map(NBTUtil::createUUID)
+				.collect(NBTCollectors.toList()));
+
+		compound.put("blockDependencies", this.blockDependencies.stream()
+				.map(NBTHelper::createBlockPos)
+				.collect(NBTCollectors.toList()));
 	}
 
 	public void readFromNBT(CompoundNBT compound) {
@@ -141,20 +138,17 @@ public class ProtectedRegion {
 			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
 		}
 
-		this.uuid = NBTUtil.loadUUID(compound.getCompound("uuid"));
+		this.uuid = NBTUtil.loadUUID(compound.get("uuid"));
 		this.name = compound.getString("name");
-		this.pos = NBTUtil.readBlockPos(compound.getCompound("pos"));
-		this.startPos = NBTUtil.readBlockPos(compound.getCompound("startPos"));
-		this.endPos = NBTUtil.readBlockPos(compound.getCompound("endPos"));
+		this.pos = NBTHelper.loadBlockPos(compound.getCompound("pos"));
+		this.startPos = NBTHelper.loadBlockPos(compound.getCompound("startPos"));
+		this.endPos = NBTHelper.loadBlockPos(compound.getCompound("endPos"));
 		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
 		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		if (compound.contains("protectionStates", Constants.NBT.TAG_BYTE_ARRAY)) {
-			this.protectionStates = compound.getByteArray("protectionStates");
-		} else {
-			this.protectionStates = new byte[sizeX * sizeY * sizeZ];
-		}
+		this.protectionStates = compound.getByteArray("protectionStates");
+
 		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 		this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
 		this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
@@ -163,34 +157,26 @@ public class ProtectedRegion {
 		this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
 		this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
 		this.isGenerating = compound.getBoolean("isGenerating");
+
 		this.entityDependencies.clear();
-		ListNBT nbtTagList1 = compound.getList("entityDependencies", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < nbtTagList1.size(); i++) {
-			this.entityDependencies.add(NBTUtil.loadUUID(nbtTagList1.getCompound(i)));
-		}
+		NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
+				.map(NBTUtil::loadUUID)
+				.forEach(this.entityDependencies::add);
+
 		this.blockDependencies.clear();
-		ListNBT nbtTagList2 = compound.getList("blockDependencies", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < nbtTagList2.size(); i++) {
-			this.blockDependencies.add(NBTUtil.readBlockPos(nbtTagList2.getCompound(i)));
-		}
+		NBTHelper.stream(compound.get("blockDependencies"), IntArrayNBT.TYPE)
+				.map(NBTHelper::loadBlockPos)
+				.forEach(this.blockDependencies::add);
 
 		this.markDirty();
 	}
 
 	public void writeToByteBuf(PacketBuffer buf) {
-		/*ByteBufUtil.writeUuid(buf, this.uuid);
-		ByteBufUtils.writeUTF8String(buf, this.name);
-		ByteBufUtil.writeBlockPos(buf, this.pos);
-		ByteBufUtil.writeBlockPos(buf, this.startPos);
-		ByteBufUtil.writeBlockPos(buf, this.endPos);*/
-		
 		buf.writeUUID(this.uuid);
 		buf.writeUtf(this.name);
 		buf.writeBlockPos(this.pos);
 		buf.writeBlockPos(this.startPos);
 		buf.writeBlockPos(this.endPos);
-		
-		
 		buf.writeBytes(this.protectionStates);
 
 		byte flags = 0;
@@ -204,12 +190,12 @@ public class ProtectedRegion {
 		flags |= this.isGenerating ? (1 << 7) : 0;
 		buf.writeByte(flags);
 
-		buf.writeShort(this.entityDependencies.size());
+		buf.writeInt(this.entityDependencies.size());
 		for (UUID entityUuid : this.entityDependencies) {
 			buf.writeUUID(entityUuid);
 		}
 
-		buf.writeShort(this.blockDependencies.size());
+		buf.writeInt(this.blockDependencies.size());
 		for (BlockPos blockPos : this.blockDependencies) {
 			buf.writeBlockPos(blockPos);
 		}
@@ -238,13 +224,13 @@ public class ProtectedRegion {
 		this.ignoreNoBossOrNexus = ((flags >> 6) & 1) == 1;
 		this.isGenerating = ((flags >> 7) & 1) == 1;
 
-		short entityDependenciesCount = buf.readShort();
-		for (int i = 0; i < entityDependenciesCount; i++) {
+		this.entityDependencies.clear();
+		for (int i = buf.readInt(); i > 0; i--) {
 			this.entityDependencies.add(buf.readUUID());
 		}
 
-		short blockDependenciesCount = buf.readShort();
-		for (int i = 0; i < blockDependenciesCount; i++) {
+		this.blockDependencies.clear();
+		for (int i = buf.readInt(); i > 0; i--) {
 			this.blockDependencies.add(buf.readBlockPos());
 		}
 
@@ -514,9 +500,9 @@ public class ProtectedRegion {
 
 		public Builder(CompoundNBT compound) {
 			this.dungeonName = compound.getString("dungeonName");
-			this.dungeonPos = NBTUtil.readBlockPos(compound.getCompound("dungeonPos"));
-			this.min = NBTUtil.readBlockPos(compound.getCompound("min"));
-			this.max = NBTUtil.readBlockPos(compound.getCompound("max"));
+			this.dungeonPos = NBTHelper.loadBlockPos(compound.getCompound("dungeonPos"));
+			this.min = NBTHelper.loadBlockPos(compound.getCompound("min"));
+			this.max = NBTHelper.loadBlockPos(compound.getCompound("max"));
 			this.protectionSystemEnabled = compound.getBoolean("protectionSystemEnabled");
 			this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 			this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
@@ -525,26 +511,23 @@ public class ProtectedRegion {
 			this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
 			this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
 			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
-			PacketBuffer buf = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("entityDependencies")));
-			while (buf.readerIndex() < buf.writerIndex()) {
-				this.entityDependencies.add(buf.readUUID());
-			}
-			PacketBuffer buf1 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("blockDependencies")));
-			while (buf1.readerIndex() < buf1.writerIndex()) {
-				this.blockDependencies.add(buf1.readBlockPos());
-			}
-			PacketBuffer buf2 = new PacketBuffer(Unpooled.wrappedBuffer(compound.getByteArray("unprotectedBlocks")));
-			while (buf2.readerIndex() < buf2.writerIndex()) {
-				this.unprotectedBlocks.add(buf2.readBlockPos());
-			}
+			NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
+					.map(NBTUtil::loadUUID)
+					.forEach(this.entityDependencies::add);
+			NBTHelper.stream(compound.get("blockDependencies"), IntArrayNBT.TYPE)
+					.map(NBTHelper::loadBlockPos)
+					.forEach(this.blockDependencies::add);
+			NBTHelper.stream(compound.get("unprotectedBlocks"), IntArrayNBT.TYPE)
+					.map(NBTHelper::loadBlockPos)
+					.forEach(this.unprotectedBlocks::add);
 		}
 
 		public CompoundNBT writeToNBT() {
 			CompoundNBT compound = new CompoundNBT();
 			compound.putString("dungeonName", this.dungeonName);
-			compound.put("dungeonPos", NBTUtil.writeBlockPos(this.dungeonPos));
-			compound.put("min", NBTUtil.writeBlockPos(this.min));
-			compound.put("max", NBTUtil.writeBlockPos(this.max));
+			compound.put("dungeonPos", NBTHelper.createBlockPos(this.dungeonPos));
+			compound.put("min", NBTHelper.createBlockPos(this.min));
+			compound.put("max", NBTHelper.createBlockPos(this.max));
 			compound.putBoolean("protectionSystemEnabled", this.protectionSystemEnabled);
 			compound.putBoolean("preventBlockBreaking", this.preventBlockBreaking);
 			compound.putBoolean("preventBlockPlacing", this.preventBlockPlacing);
@@ -553,9 +536,15 @@ public class ProtectedRegion {
 			compound.putBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
 			compound.putBoolean("preventFireSpreading", this.preventFireSpreading);
 			compound.putBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
-			compound.put("entityDependencies", this.entityDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeUuid)));
-			compound.put("blockDependencies", this.blockDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeBlockPos)));
-			compound.put("unprotectedBlocks", this.blockDependencies.stream().collect(NBTCollectors.toNBTByteArray(ByteBufUtil::writeBlockPos)));
+			compound.put("entityDependencies", this.entityDependencies.stream()
+					.map(NBTUtil::createUUID)
+					.collect(NBTCollectors.toList()));
+			compound.put("blockDependencies", this.blockDependencies.stream()
+					.map(NBTHelper::createBlockPos)
+					.collect(NBTCollectors.toList()));
+			compound.put("unprotectedBlocks", this.unprotectedBlocks.stream()
+					.map(NBTHelper::createBlockPos)
+					.collect(NBTCollectors.toList()));
 			return compound;
 		}
 
