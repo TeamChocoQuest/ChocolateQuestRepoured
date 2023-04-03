@@ -32,11 +32,6 @@ public class ProtectedRegion {
 	private BlockPos startPos;
 	private BlockPos endPos;
 	private BlockPos size;
-	/**
-	 * 0=protected
-	 * 1=unprotected
-	 * 2=unprotected player placed block
-	 */
 	private byte[] protectionStates;
 	private boolean preventBlockBreaking = false;
 	private boolean preventBlockPlacing = false;
@@ -256,36 +251,35 @@ public class ProtectedRegion {
 		return pos.getZ() <= this.endPos.getZ();
 	}
 
-	public boolean isBreakable(BlockPos pos) {
-		if (!this.isInsideProtectedRegion(pos)) {
-			return true;
-		}
-		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
-		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
-		int z = pos.getZ() - this.startPos.getZ();
-		return this.protectionStates[x + y + z] != 0;
-	}
-
-	public int getProtectionState(BlockPos pos) {
+	private int index(BlockPos pos) {
 		if (!this.isInsideProtectedRegion(pos)) {
 			return -1;
 		}
-		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
-		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
+		int x = pos.getX() - this.startPos.getX();
+		int y = pos.getY() - this.startPos.getY();
 		int z = pos.getZ() - this.startPos.getZ();
-		return this.protectionStates[x + y + z];
+		return (x * this.size.getY() + y) * this.size.getZ() + z;
 	}
 
-	public void setProtectionState(BlockPos pos, int i) {
-		if (!this.isInsideProtectedRegion(pos)) {
+	public boolean isBreakable(BlockPos pos) {
+		return this.getProtectionState(pos) != ProtectionState.PROTECTED;
+	}
+
+	public ProtectionState getProtectionState(BlockPos pos) {
+		int index = index(pos);
+		if (index == -1) {
+			return ProtectionState.UNPROTECTED;
+		}
+		return ProtectionState.byId(this.protectionStates[index]);
+	}
+
+	public void setProtectionState(BlockPos pos, ProtectionState state) {
+		int index = index(pos);
+		if (index == -1) {
 			return;
 		}
-		int x = (pos.getX() - this.startPos.getX()) * this.size.getY() * this.size.getZ();
-		int y = (pos.getY() - this.startPos.getY()) * this.size.getZ();
-		int z = pos.getZ() - this.startPos.getZ();
-		byte newState = (byte) (i & 255);
-		if (this.protectionStates[x + y + z] != newState) {
-			this.protectionStates[x + y + z] = newState;
+		if (this.protectionStates[index] != state.getId()) {
+			this.protectionStates[index] = state.getId();
 			this.markDirty();
 		}
 	}
@@ -593,7 +587,7 @@ public class ProtectedRegion {
 			protectedRegion.isGenerating = false;
 			protectedRegion.blockDependencies.addAll(this.blockDependencies);
 			protectedRegion.entityDependencies.addAll(this.entityDependencies);
-			this.unprotectedBlocks.forEach(p -> protectedRegion.setProtectionState(p, 1));
+			this.unprotectedBlocks.forEach(p -> protectedRegion.setProtectionState(p, ProtectionState.UNPROTECTED));
 			return protectedRegion;
 		}
 
