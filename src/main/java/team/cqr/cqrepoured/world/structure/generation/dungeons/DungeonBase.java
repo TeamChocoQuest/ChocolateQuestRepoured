@@ -301,6 +301,9 @@ public abstract class DungeonBase implements IFeatureConfig {
 	@Nullable
 	public File getStructureFileFromDirectory(File parentDir, Random rand) {
 		Collection<File> files = FileUtils.listFiles(parentDir, new String[] { "nbt" }, true);
+		if (files.isEmpty()) {
+			return null;
+		}
 		return files.stream().skip(rand.nextInt(files.size())).findFirst().get();
 	}
 
