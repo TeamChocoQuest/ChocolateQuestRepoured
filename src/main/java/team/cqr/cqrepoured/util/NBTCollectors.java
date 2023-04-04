@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.util;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -25,104 +26,56 @@ public class NBTCollectors {
 	private static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
 
 	public static <T extends INBT> Collector<T, ListNBT, ListNBT> toList() {
-		return new Collector<T, ListNBT, ListNBT>() {
-			@Override
-			public Supplier<ListNBT> supplier() {
-				return ListNBT::new;
-			}
-
-			@Override
-			public BiConsumer<ListNBT, T> accumulator() {
-				return ListNBT::add;
-			}
-
-			@Override
-			public BinaryOperator<ListNBT> combiner() {
-				return (list1, list2) -> {
-					list1.addAll(list2);
-					return list1;
-				};
-			}
-
-			@Override
-			public Function<ListNBT, ListNBT> finisher() {
-				return Function.identity();
-			}
-
-			@Override
-			public Set<Characteristics> characteristics() {
-				return CH_ID;
-			}
-		};
+		return new CollectorImpl<>(ListNBT::new, ListNBT::add, (list1, list2) -> {
+			list1.addAll(list2);
+			return list1;
+		}, CH_ID);
 	}
 
 	public static <T> Collector<T, ?, ByteArrayNBT> toNBTByteArray(BiConsumer<ByteBuf, T> accumulator) {
-		return new Collector<T, ByteBuf, ByteArrayNBT>() {
-			@Override
-			public Supplier<ByteBuf> supplier() {
-				return Unpooled::buffer;
-			}
-
-			@Override
-			public BiConsumer<ByteBuf, T> accumulator() {
-				return accumulator;
-			}
-
-			@Override
-			public BinaryOperator<ByteBuf> combiner() {
-				return ByteBuf::writeBytes;
-			}
-
-			@Override
-			public Function<ByteBuf, ByteArrayNBT> finisher() {
-				return buf -> new ByteArrayNBT(Arrays.copyOf(buf.array(), buf.writerIndex()));
-			}
-
-			@Override
-			public Set<Characteristics> characteristics() {
-				return CH_NOID;
-			}
-		};
+		return toNBTByteArray(Unpooled::buffer, accumulator);
 	}
 
-	public static <T> Collector<T, CompoundNBT, CompoundNBT> toCompound(Function<T, String> keyFunc, Function<T, INBT> valueFunc) {
-		return toCompound((compound, t) -> compound.put(keyFunc.apply(t), valueFunc.apply(t)));
+	public static <T> Collector<T, ?, ByteArrayNBT> toNBTByteArray(Supplier<ByteBuf> supplier, BiConsumer<ByteBuf, T> accumulator) {
+		return new CollectorImpl<>(supplier, accumulator, ByteBuf::writeBytes, buf -> {
+			return new ByteArrayNBT(Arrays.copyOf(buf.array(), buf.writerIndex()));
+		}, CH_NOID);
+	}
+
+	public static <T> Collector<T, CompoundNBT, CompoundNBT> toCompound(Function<T, ?> keyFunc, Function<T, INBT> valueFunc) {
+		return toCompound((compound, t) -> compound.put(String.valueOf(keyFunc.apply(t)), valueFunc.apply(t)));
 	}
 
 	public static <T> Collector<T, CompoundNBT, CompoundNBT> toCompound(BiConsumer<CompoundNBT, T> accumulator) {
-		return new Collector<T, CompoundNBT, CompoundNBT>() {
-			@Override
-			public Supplier<CompoundNBT> supplier() {
-				return CompoundNBT::new;
-			}
-
-			@Override
-			public BiConsumer<CompoundNBT, T> accumulator() {
-				return accumulator;
-			}
-
-			@Override
-			public BinaryOperator<CompoundNBT> combiner() {
-				return (compound1, compound2) -> {
-					compound2.getAllKeys().forEach(k -> compound1.put(k, compound2.get(k)));
-					return compound1;
-				};
-			}
-
-			@Override
-			public Function<CompoundNBT, CompoundNBT> finisher() {
-				return Function.identity();
-			}
-
-			@Override
-			public Set<Characteristics> characteristics() {
-				return CH_ID;
-			}
-		};
+		return new CollectorImpl<>(CompoundNBT::new, accumulator, (compound1, compound2) -> {
+			Set<String> keys = compound2.getAllKeys();
+			keys.forEach(k -> compound1.put(k, compound2.get(k)));
+			return compound1;
+		}, CH_ID);
 	}
 
-	public static <V> CompoundNBT toCompound(Int2ObjectMap<V> map, Function<V, INBT> valueFunc) {
-		return map.int2ObjectEntrySet().stream().collect(toCompound(entry -> Integer.toString(entry.getIntKey()), entry -> valueFunc.apply(entry.getValue())));
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundNBT, CompoundNBT> entryToCompound(Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
+		return toCompound(keyFunc.compose(Map.Entry::getKey), valueFunc.compose(Map.Entry::getValue));
+	}
+
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundNBT, CompoundNBT> entryToCompound(Function<V, INBT> valueFunc) {
+		return entryToCompound(Function.identity(), valueFunc);
+	}
+
+	public static <K, V> CompoundNBT collect(Map<K, V> map, Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
+		return map.entrySet()
+				.stream()
+				.collect(entryToCompound(keyFunc, valueFunc));
+	}
+
+	public static <K, V> CompoundNBT collect(Map<K, V> map, Function<V, INBT> valueFunc) {
+		return collect(map, Function.identity(), valueFunc);
+	}
+
+	public static <V> CompoundNBT collect(Int2ObjectMap<V> map, Function<V, INBT> valueFunc) {
+		return map.int2ObjectEntrySet()
+				.stream()
+				.collect(toCompound(Int2ObjectMap.Entry::getIntKey, valueFunc.compose(Int2ObjectMap.Entry::getValue)));
 	}
 
 	@FunctionalInterface
@@ -136,42 +89,64 @@ public class NBTCollectors {
 		return toInt2ObjectMap(nbt, (int k, T t) -> valueFunc.apply(t));
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends INBT, V> Int2ObjectMap<V> toInt2ObjectMap(CompoundNBT nbt, IntObjectFunction<T, V> valueFunc) {
-		return nbt.getAllKeys().stream().collect(new Collector<String, Int2ObjectMap<V>, Int2ObjectMap<V>>() {
-
-			@Override
-			public Supplier<Int2ObjectMap<V>> supplier() {
-				return Int2ObjectOpenHashMap::new;
-			}
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public BiConsumer<Int2ObjectMap<V>, String> accumulator() {
-				return (map, key) -> {
+		return nbt.getAllKeys()
+				.stream()
+				.collect(new CollectorImpl<>(Int2ObjectOpenHashMap::new, (map, key) -> {
 					int k = Integer.parseInt(key);
 					map.put(k, valueFunc.apply(k, (T) nbt.get(key)));
-				};
-			}
-
-			@Override
-			public BinaryOperator<Int2ObjectMap<V>> combiner() {
-				return (map1, map2) -> {
+				}, (map1, map2) -> {
 					map1.putAll(map2);
 					return map1;
-				};
-			}
+				}, CH_ID));
+	}
 
-			@Override
-			public Function<Int2ObjectMap<V>, Int2ObjectMap<V>> finisher() {
-				return Function.identity();
-			}
+	private static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
 
-			@Override
-			public Set<Characteristics> characteristics() {
-				return CH_ID;
-			}
+		private final Supplier<A> supplier;
+		private final BiConsumer<A, T> accumulator;
+		private final BinaryOperator<A> combiner;
+		private final Function<A, R> finisher;
+		private final Set<Characteristics> characteristics;
 
-		});
+		private CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner, Function<A, R> finisher, Set<Characteristics> characteristics) {
+			this.supplier = supplier;
+			this.accumulator = accumulator;
+			this.combiner = combiner;
+			this.finisher = finisher;
+			this.characteristics = characteristics;
+		}
+
+		@SuppressWarnings("unchecked")
+		private CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner, Set<Characteristics> characteristics) {
+			this(supplier, accumulator, combiner, a -> (R) a, characteristics);
+		}
+
+		@Override
+		public BiConsumer<A, T> accumulator() {
+			return accumulator;
+		}
+
+		@Override
+		public Supplier<A> supplier() {
+			return supplier;
+		}
+
+		@Override
+		public BinaryOperator<A> combiner() {
+			return combiner;
+		}
+
+		@Override
+		public Function<A, R> finisher() {
+			return finisher;
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+			return characteristics;
+		}
 	}
 
 }

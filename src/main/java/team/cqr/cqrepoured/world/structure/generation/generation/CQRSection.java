@@ -72,7 +72,7 @@ public class CQRSection implements ICQRSection {
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
 		this.blocks.write(nbt, "Palette", "BlockStates");
-		nbt.put("BlockEntities", NBTCollectors.toCompound(this.blockEntities, blockEntity -> blockEntity.save(new CompoundNBT())));
+		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.save(new CompoundNBT())));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTCollectors.toList()));
 		return nbt;
 	}

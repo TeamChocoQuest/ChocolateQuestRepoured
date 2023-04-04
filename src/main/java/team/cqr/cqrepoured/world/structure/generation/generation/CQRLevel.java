@@ -94,7 +94,7 @@ public class CQRLevel implements ICQRLevel {
 		nbt.putInt("CenterY", this.center.y());
 		nbt.putInt("CenterZ", this.center.z());
 		nbt.putLong("Seed", this.seed);
-		nbt.put("Sections", NBTCollectors.toCompound(this.sections, CQRSection::save));
+		nbt.put("Sections", NBTCollectors.collect(this.sections, CQRSection::save));
 		return nbt;
 	}
 
