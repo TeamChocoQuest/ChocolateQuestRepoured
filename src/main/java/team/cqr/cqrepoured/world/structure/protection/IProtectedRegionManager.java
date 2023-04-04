@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import net.minecraft.util.math.BlockPos;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.UUID;
+
+import net.minecraft.util.math.BlockPos;
 
 public interface IProtectedRegionManager {
 
@@ -13,13 +14,15 @@ public interface IProtectedRegionManager {
 
 	void addProtectedRegion(ProtectedRegion protectedRegion);
 
-	void removeProtectedRegion(ProtectedRegion protectedRegion);
+	default void removeProtectedRegion(ProtectedRegion protectedRegion) {
+		this.removeProtectedRegion(protectedRegion.getUuid());
+	}
 
 	void removeProtectedRegion(UUID uuid);
 
-	Iterable<ProtectedRegion> getProtectedRegions();
+	Stream<ProtectedRegion> getProtectedRegions();
 
-	List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos);
+	Stream<ProtectedRegion> getProtectedRegionsAt(BlockPos pos);
 
 	void clearProtectedRegions();
 

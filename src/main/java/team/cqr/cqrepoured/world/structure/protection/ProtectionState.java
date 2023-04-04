@@ -11,7 +11,7 @@ public enum ProtectionState {
 	}
 
 	public byte getId() {
-		return id;
+		return this.id;
 	}
 
 	public static ProtectionState byId(byte id) {

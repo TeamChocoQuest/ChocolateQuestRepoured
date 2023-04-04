@@ -28,4 +28,9 @@ public class CapabilityProtectedRegionDataProvider extends SerializableCapabilit
 		return new CapabilityProtectedRegionDataProvider(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, () -> new CapabilityProtectedRegionData(chunk));
 	}
 
+	public static CapabilityProtectedRegionData get(Chunk chunk) {
+		return chunk.getCapability(PROTECTED_REGION_DATA)
+				.orElseThrow(NullPointerException::new);
+	}
+
 }

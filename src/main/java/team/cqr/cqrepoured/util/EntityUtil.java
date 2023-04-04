@@ -143,6 +143,14 @@ public class EntityUtil {
 		entity.setHealth((float) (oldHealth / (1.0D + oldAmount) * (1.0D + amount) + 1e-7D));
 	}
 
+	/**
+	 * @deprecated This is usually a janky workaround for situations when the actual protected region target is unknown.
+	 * 
+	 *             TODO Whenever this is used instead try to make sure that the actual protected region is known (for
+	 *             example when a boss enters a new stage and spawns a new entity the protected region UUID should be saved
+	 *             within the parent entity)
+	 */
+	@Deprecated
 	public static boolean addEntityToAllRegionsAt(BlockPos position, Entity entity) {
 		if (entity == null || position == null) {
 			return false;
@@ -168,6 +176,13 @@ public class EntityUtil {
 		return false;
 	}
 
+	/**
+	 * @deprecated This is usually a janky workaround for situations when the actual protected region target is unknown.
+	 * 
+	 *             TODO Whenever this is used instead try to make sure the actual protected region is known (for example the
+	 *             protected region UUID should be saved within the entity)
+	 */
+	@Deprecated
 	public static boolean removeEntityFromAllRegionsAt(BlockPos position, Entity entity) {
 		if (entity == null || position == null) {
 			return false;

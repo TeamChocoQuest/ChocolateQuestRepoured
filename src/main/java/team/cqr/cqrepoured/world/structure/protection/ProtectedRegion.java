@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +13,7 @@ import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
@@ -266,7 +267,7 @@ public class ProtectedRegion {
 	}
 
 	public ProtectionState getProtectionState(BlockPos pos) {
-		int index = index(pos);
+		int index = this.index(pos);
 		if (index == -1) {
 			return ProtectionState.UNPROTECTED;
 		}
@@ -274,7 +275,7 @@ public class ProtectedRegion {
 	}
 
 	public void setProtectionState(BlockPos pos, ProtectionState state) {
-		int index = index(pos);
+		int index = this.index(pos);
 		if (index == -1) {
 			return;
 		}
@@ -332,6 +333,10 @@ public class ProtectedRegion {
 		return this.endPos;
 	}
 
+	public Stream<ChunkPos> chunkArea() {
+		return ChunkPos.rangeClosed(new ChunkPos(this.startPos), new ChunkPos(this.endPos));
+	}
+
 	public boolean preventBlockBreaking() {
 		return this.preventBlockBreaking;
 	}
@@ -371,17 +376,8 @@ public class ProtectedRegion {
 	}
 
 	public void removeEntityDependency(UUID uuid) {
-		boolean flag = this.entityDependencies.remove(uuid);
-
-		if (flag && this.world != null && !this.world.isClientSide) {
+		if (this.entityDependencies.remove(uuid)) {
 			this.markDirty();
-
-			if (!this.isValid()) {
-				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
-				if (protectedRegionManager != null) {
-					protectedRegionManager.removeProtectedRegion(this);
-				}
-			}
 		}
 	}
 
@@ -389,8 +385,8 @@ public class ProtectedRegion {
 		return this.entityDependencies.contains(uuid);
 	}
 
-	public Set<UUID> getEntityDependencies() {
-		return Collections.unmodifiableSet(this.entityDependencies);
+	public Stream<UUID> getEntityDependencies() {
+		return this.entityDependencies.stream();
 	}
 
 	public void addBlockDependency(BlockPos pos) {
@@ -406,13 +402,6 @@ public class ProtectedRegion {
 	public void removeBlockDependency(BlockPos pos) {
 		if (this.blockDependencies.remove(pos)) {
 			this.markDirty();
-
-			if (!this.isValid()) {
-				IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
-				if (protectedRegionManager != null) {
-					protectedRegionManager.removeProtectedRegion(this);
-				}
-			}
 		}
 	}
 
@@ -420,8 +409,8 @@ public class ProtectedRegion {
 		return this.blockDependencies.contains(pos);
 	}
 
-	public Set<BlockPos> getBlockDependencies() {
-		return Collections.unmodifiableSet(this.blockDependencies);
+	public Stream<BlockPos> getBlockDependencies() {
+		return this.blockDependencies.stream();
 	}
 
 	public void finishGenerating() {

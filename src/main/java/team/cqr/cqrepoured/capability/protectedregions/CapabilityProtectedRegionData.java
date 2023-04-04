@@ -1,11 +1,15 @@
 package team.cqr.cqrepoured.capability.protectedregions;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.world.chunk.Chunk;
-
-import java.util.*;
-import java.util.function.Predicate;
 
 public class CapabilityProtectedRegionData {
 
@@ -16,8 +20,8 @@ public class CapabilityProtectedRegionData {
 		this.chunk = chunk;
 	}
 
-	public Set<UUID> getProtectedRegionUuids() {
-		return Collections.unmodifiableSet(this.protectedRegionUuids);
+	public Stream<UUID> getProtectedRegionUuids() {
+		return this.protectedRegionUuids.stream();
 	}
 
 	public void removeIf(Predicate<UUID> predicate) {

@@ -1,84 +1,86 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.util.RegistryKey;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.server.ServerWorld;
 
 public class ProtectedRegionManager {
 
 	private static final ClientProtectedRegionManager CLIENT_INSTANCE = new ClientProtectedRegionManager();
-	private static final Map<DimensionType, ServerProtectedRegionManager> INSTANCES = new ConcurrentHashMap<>();
-
-	private ProtectedRegionManager() {
-
-	}
+	private static final Map<RegistryKey<World>, ServerProtectedRegionManager> SERVER_INSTANCES = new ConcurrentHashMap<>();
 
 	@Nullable
-	public static IProtectedRegionManager getInstance(World world) {
-		if (world == null) {
+	public static IProtectedRegionManager getInstance(IWorld level) {
+		if (level == null) {
 			return null;
 		}
-		if (world.isClientSide) {
+		if (level.isClientSide()) {
 			return CLIENT_INSTANCE;
 		}
-		return INSTANCES.get(world.dimensionType());
+		if (!(level instanceof ServerWorld)) {
+			return null;
+		}
+		return SERVER_INSTANCES.get(((World) level).dimension());
 	}
 
-	public static void handleWorldLoad(World world) {
-		if (world.isClientSide) {
+	public static void handleLevelLoad(IWorld level) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		INSTANCES.computeIfAbsent(world.dimensionType(), key -> new ServerProtectedRegionManager(world));
+		SERVER_INSTANCES.computeIfAbsent(((World) level).dimension(), key -> new ServerProtectedRegionManager((ServerWorld) level));
 	}
 
-	public static void handleWorldSave(World world) {
-		if (world.isClientSide) {
+	public static void handleLevelSave(IWorld level) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		ServerProtectedRegionManager manager = INSTANCES.get(world.dimensionType());
+		ServerProtectedRegionManager manager = SERVER_INSTANCES.get(((World) level).dimension());
 		if (manager != null) {
-			manager.saveProtectedRegions();
+			manager.handleLevelSave();
 		}
 	}
 
-	public static void handleWorldUnload(World world) {
-		if (world.isClientSide) {
+	public static void handleLevelUnload(IWorld level) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		INSTANCES.remove(world.dimensionType());
+		SERVER_INSTANCES.remove(((World) level).dimension());
 	}
 
-	public static void handleChunkLoad(World world, Chunk chunk) {
-		if (world.isClientSide) {
+	public static void handleChunkLoad(IWorld level, Chunk chunk) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		ServerProtectedRegionManager manager = INSTANCES.get(world.dimensionType());
+		ServerProtectedRegionManager manager = SERVER_INSTANCES.get(((World) level).dimension());
 		if (manager != null) {
 			manager.handleChunkLoad(chunk);
 		}
 	}
 
-	public static void handleChunkUnload(World world, Chunk chunk) {
-		if (world.isClientSide) {
+	public static void handleChunkUnload(IWorld level, Chunk chunk) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		ServerProtectedRegionManager manager = INSTANCES.get(world.dimensionType());
+		ServerProtectedRegionManager manager = SERVER_INSTANCES.get(((World) level).dimension());
 		if (manager != null) {
 			manager.handleChunkUnload(chunk);
 		}
 	}
 
-	public static void handleWorldTick(World world) {
-		if (world.isClientSide) {
+	public static void handleLevelTick(IWorld level) {
+		if (!(level instanceof ServerWorld)) {
 			return;
 		}
-		ServerProtectedRegionManager manager = INSTANCES.get(world.dimensionType());
+		ServerProtectedRegionManager manager = SERVER_INSTANCES.get(((World) level).dimension());
 		if (manager != null) {
-			manager.handleWorldTick();
+			manager.handleLevelTick();
 		}
 	}
 

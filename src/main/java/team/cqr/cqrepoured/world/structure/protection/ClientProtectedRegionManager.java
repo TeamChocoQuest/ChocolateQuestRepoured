@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.CQRMain;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-import java.util.*;
+
+import net.minecraft.util.math.BlockPos;
+import team.cqr.cqrepoured.CQRMain;
 
 public class ClientProtectedRegionManager implements IProtectedRegionManager {
 
@@ -31,29 +35,21 @@ public class ClientProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	@Override
-	public void removeProtectedRegion(ProtectedRegion protectedRegion) {
-		this.removeProtectedRegion(protectedRegion.getUuid());
-	}
-
-	@Override
 	public void removeProtectedRegion(UUID uuid) {
 		this.protectedRegions.remove(uuid);
 	}
 
 	@Override
-	public Iterable<ProtectedRegion> getProtectedRegions() {
-		return Collections.unmodifiableCollection(this.protectedRegions.values());
+	public Stream<ProtectedRegion> getProtectedRegions() {
+		return this.protectedRegions.values()
+				.stream()
+				.filter(ProtectedRegion::isValid);
 	}
 
 	@Override
-	public List<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
-		List<ProtectedRegion> list = new ArrayList<>();
-		for (ProtectedRegion protectedRegion : this.protectedRegions.values()) {
-			if (protectedRegion.isInsideProtectedRegion(pos)) {
-				list.add(protectedRegion);
-			}
-		}
-		return list;
+	public Stream<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
+		return this.getProtectedRegions()
+				.filter(protectedRegion -> protectedRegion.isInsideProtectedRegion(pos));
 	}
 
 	@Override
