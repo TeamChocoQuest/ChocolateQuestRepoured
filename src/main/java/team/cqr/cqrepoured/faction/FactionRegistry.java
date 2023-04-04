@@ -30,6 +30,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -393,10 +394,9 @@ public class FactionRegistry {
 		CQRMain.logger.info("Loading player reputation...");
 
 		UUID uuid = player.getUUID();
-		File folder = new File(FileIOUtil.getWorldRootFolder(player.level), "data/CQR/reputation");
-		File file = new File(folder, uuid + ".nbt");
+		File file = FileIOUtil.getCQRDataFile((ServerWorld) player.level, "reputation/" + uuid + ".nbt");
 		if (file.exists()) {
-			CompoundNBT root = FileIOUtil.readNBTFromFile(file);
+			CompoundNBT root = FileIOUtil.readNBT(file);
 			Map<String, Integer> mapping = this.playerFactionRepuMap.computeIfAbsent(uuid, key -> new Object2IntOpenHashMap<>());
 			for (String factionName : root.getAllKeys()) {
 				int value = root.getInt(factionName);
@@ -437,9 +437,8 @@ public class FactionRegistry {
 			root.putInt(entry.getKey(), entry.getValue());
 		}
 
-		File folder = new File(FileIOUtil.getWorldRootFolder(world), "data/CQR/reputation");
-		File file = new File(folder, playerID + ".nbt");
-		FileIOUtil.writeNBTToFile(root, file);
+		File file = FileIOUtil.getCQRDataFile((ServerWorld) world, "reputation/" + playerID + ".nbt");
+		FileIOUtil.writeNBT(file, root);
 
 		if (removeFromMap) {
 			this.playerFactionRepuMap.remove(playerID);

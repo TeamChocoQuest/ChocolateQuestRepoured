@@ -213,7 +213,7 @@ public class Faction {
 
 				// Save file
 				File file = new File(folder, this.getName() + ".properties");
-				FileIOUtil.writePropToFile(prop, file);
+				FileIOUtil.writeProperties(file, prop);
 			});
 			t.setDaemon(true);
 			t.start();

@@ -153,7 +153,7 @@ public class DungeonDataManager {
 					root.put(data.getKey(), nbtTagList);
 				}
 			}
-			FileIOUtil.writeNBTToFile(root, this.file);
+			FileIOUtil.writeNBT(this.file, root);
 
 			this.modifiedSinceLastSave = false;
 		}
@@ -166,7 +166,7 @@ public class DungeonDataManager {
 			return;
 		}
 
-		CompoundNBT root = FileIOUtil.readNBTFromFile(this.file);
+		CompoundNBT root = FileIOUtil.readNBT(this.file);
 
 		for (String key : root.getAllKeys()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
