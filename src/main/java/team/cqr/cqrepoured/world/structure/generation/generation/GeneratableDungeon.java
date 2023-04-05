@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -19,6 +21,8 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.StructureProcessorList;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.init.CQRStructures;
@@ -40,6 +44,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	private final ProtectedRegion.Builder protectedRegionBuilder;
 	private final int undergroundOffset;
 	private final Cache2D<GroundData> groundData;
+	private final StructureProcessorList processors = null;
 
 	static class GroundData {
 
@@ -171,7 +176,13 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 			protectedRegionManager.addProtectedRegion(protectedRegion);
 		}
 
-		this.level.generate(pLevel, pBox, new ServerEntityFactory(pLevel.getLevel()));
+		//Structure processors...
+		List<StructureProcessor> processorList = new ArrayList<>();
+		if(this.processors != null) {
+			processorList.addAll(this.processors.list());
+		}
+		
+		this.level.generate(pLevel, pBox, new ServerEntityFactory(pLevel.getLevel()), processorList);
 		return true;
 	}
 

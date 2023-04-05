@@ -2,8 +2,10 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
 import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class CQRLevel implements ICQRLevel {
@@ -98,11 +101,11 @@ public class CQRLevel implements ICQRLevel {
 		return nbt;
 	}
 
-	public void generate(ISeedReader level, MutableBoundingBox box, IEntityFactory entityFactory) {
+	public void generate(ISeedReader level, MutableBoundingBox box, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
 		SectionPos.betweenClosedStream(box.x0 >> 4, box.y0 >> 4, box.z0 >> 4, box.x1 >> 4, box.y1 >> 4, box.z1 >> 4).forEach(sectionPos -> {
 			CQRSection section = this.sections.get(this.index(sectionPos));
 			if (section != null) {
-				section.generate(level, entityFactory);
+				section.generate(level, entityFactory, processors);
 			}
 		});
 	}

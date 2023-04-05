@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -26,6 +27,8 @@ import net.minecraft.util.math.shapes.VoxelShapePart;
 import net.minecraft.util.palette.IPalette;
 import net.minecraft.util.palette.IdentityPalette;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.Template.BlockInfo;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.util.NBTCollectors;
@@ -77,17 +80,17 @@ public class CQRSection implements ICQRSection {
 		return nbt;
 	}
 
-	public void generate(ISeedReader level, IEntityFactory entityFactory) {
+	public void generate(ISeedReader level, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
 		VoxelShapePart voxelShapePart = new BitSetVoxelShapePart(16, 16, 16);
 
-		this.placeBlocks(level, voxelShapePart);
+		this.placeBlocks(level, voxelShapePart, processors);
 		this.updateShapeAtEdge(level, voxelShapePart);
 		this.updateFromNeighbourShapes(level, voxelShapePart);
 		this.setBlockEntitiesChanged(level);
 		this.addEntities(level, entityFactory);
 	}
 
-	private void placeBlocks(ISeedReader level, VoxelShapePart voxelShapePart) {
+	private void placeBlocks(ISeedReader level, VoxelShapePart voxelShapePart, @Nonnull List<StructureProcessor> processors) {
 		Mutable mutablePos = new Mutable();
 
 		for (int i = 0; i < 4096; i++) {
@@ -95,11 +98,23 @@ public class CQRSection implements ICQRSection {
 			if (state == null) {
 				continue;
 			}
-
+			
 			int x = x(i);
 			int y = y(i);
 			int z = z(i);
 			setPos(mutablePos, this.sectionPos, x, y, z);
+			
+			final BlockPos worldPos = mutablePos.immutable();
+			
+			BlockInfo biIn = new BlockInfo(mutablePos, state, this.blockEntities.get(i) != null ? this.blockEntities.get(i).getTileData() : null);
+			BlockInfo biWorld = new BlockInfo(worldPos, level.getBlockState(mutablePos), level.getBlockEntity(mutablePos) != null ? level.getBlockEntity(mutablePos).getTileData() : null);
+			//TODO: Calculate local position and pass that to it
+			for(StructureProcessor sp : processors) {
+				biIn = sp.process(level, mutablePos, mutablePos, biIn, biWorld, null, null);
+			}
+			
+			state = biIn.state;
+			
 			if (level.setBlock(mutablePos, state, 0)) {
 				voxelShapePart.setFull(x, y, z, true, true);
 
