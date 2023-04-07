@@ -113,7 +113,7 @@ public class DungeonGrid implements IFeatureConfig {
 			return null;
 		}
 
-		Biome biome = world.getNoiseBiome(pos.getX(), pos.getY(), pos.getZ());
+		Biome biome = world.getBiomeManager().getNoiseBiomeAtPosition(pos);
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
