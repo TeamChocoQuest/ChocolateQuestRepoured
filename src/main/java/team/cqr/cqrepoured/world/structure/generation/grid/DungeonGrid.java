@@ -23,7 +23,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
@@ -108,10 +107,6 @@ public class DungeonGrid implements IFeatureConfig {
 		if (!this.canSpawnDungeonAtCoords(world, chunkPos, random)) {
 			return null;
 		}
-		
-		if (!this.canSpawnDungeonAtCoords(world, chunkPos, random)) {
-			return null;
-		}
 
 		Biome biome = world.getBiomeManager().getNoiseBiomeAtPosition(pos);
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
@@ -125,7 +120,6 @@ public class DungeonGrid implements IFeatureConfig {
 		int weight = dungeon.getWeight();
 		int totalWeight = possibleDungeons.getTotalWeight();
 		double chanceModifier = 1.0D / Math.pow((double) weight / (double) totalWeight, this.rarityFactor);
-		//TODO: Currently always returns false?
 		if (!DungeonGenUtils.percentageRandom(dungeon.getChance() / 100.0D * chanceModifier, random)) {
 			log(world, chunkPos, "Specific dungeon generation chance check failed for dungeon: %s", dungeon);
 			return null;
@@ -154,7 +148,6 @@ public class DungeonGrid implements IFeatureConfig {
 			return false;
 		}
 
-		//TODO: Currently always returns false?
 		if (!DungeonGenUtils.percentageRandom(this.chance, random)) {
 			log(world, chunkPos, "Grid dungeon generation chance check failed");
 			return false;
@@ -257,7 +250,6 @@ public class DungeonGrid implements IFeatureConfig {
 				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 					continue;
 				}
-
 				if (WorldDungeonGenerator.getDungeonAt((ServerWorld)world, new ChunkPos(chunkPos.x + x, chunkPos.z + z), grid -> grid.priority < this.priority) != null) {
 					log(world, chunkPos, "Nearby cqrepoured structure was found");
 					return true;
@@ -270,7 +262,7 @@ public class DungeonGrid implements IFeatureConfig {
 
 	private static void log(World world, ChunkPos chunkPos, String message, Object... params) {
 		if (!CQRConfig.SERVER_CONFIG.advanced.debugDungeonGen.get()) {
-			//return;
+			return;
 		}
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkPos.x << 4) + 8, (chunkPos.z << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));
 	}
