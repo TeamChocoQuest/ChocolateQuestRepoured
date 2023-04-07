@@ -260,8 +260,8 @@ public abstract class DungeonBase implements IFeatureConfig {
 	public Collection<StructurePiece> generate(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, DungeonSpawnType spawnType) {
 		int x = pos.getX();
 		int z = pos.getZ();
-		//BlockPos pos1 = new BlockPos(x, this.getYForPos(chunkGenerator, x, z, random), z);
-		return this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos, random, spawnType);
+		BlockPos pos1 = new BlockPos(x, this.getYForPos(chunkGenerator, x, z, random), z);
+		return this.generateAt(dynamicRegistries, chunkGenerator, templateManager, pos1, random, spawnType);
 	}
 
 	public int getYForPos(ChunkGenerator chunkGenerator, int x, int z, Random rand) {
