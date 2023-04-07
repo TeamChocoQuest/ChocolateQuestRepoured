@@ -136,9 +136,9 @@ public class ProtectedRegion {
 
 		this.uuid = NBTUtil.loadUUID(compound.get("uuid"));
 		this.name = compound.getString("name");
-		this.pos = NBTHelper.loadBlockPos(compound.getCompound("pos"));
-		this.startPos = NBTHelper.loadBlockPos(compound.getCompound("startPos"));
-		this.endPos = NBTHelper.loadBlockPos(compound.getCompound("endPos"));
+		this.pos = NBTHelper.loadBlockPos(compound.get("pos"));
+		this.startPos = NBTHelper.loadBlockPos(compound.get("startPos"));
+		this.endPos = NBTHelper.loadBlockPos(compound.get("endPos"));
 		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
 		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
 		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
@@ -483,9 +483,9 @@ public class ProtectedRegion {
 
 		public Builder(CompoundNBT compound) {
 			this.dungeonName = compound.getString("dungeonName");
-			this.dungeonPos = NBTHelper.loadBlockPos(compound.getCompound("dungeonPos"));
-			this.min = NBTHelper.loadBlockPos(compound.getCompound("min"));
-			this.max = NBTHelper.loadBlockPos(compound.getCompound("max"));
+			this.dungeonPos = NBTHelper.loadBlockPos(compound.get("dungeonPos"));
+			this.min = NBTHelper.loadBlockPos(compound.get("min"));
+			this.max = NBTHelper.loadBlockPos(compound.get("max"));
 			this.protectionSystemEnabled = compound.getBoolean("protectionSystemEnabled");
 			this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 			this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
