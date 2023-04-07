@@ -49,6 +49,9 @@ public class NBTHelper {
 			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListNBT.TYPE.getName() + ", but found " + type.getName() + ".");
 		}
 		ListNBT listNbt = (ListNBT) tag;
+		if (listNbt.isEmpty()) {
+			return Stream.empty();
+		}
 		INBTType<?> elementType = NBTTypes.getType(listNbt.getElementType());
 		if (elementType != expectedElementType) {
 			throw new IllegalArgumentException("Expected List-Tag elements to be of type " + expectedElementType.getName() + ", but found " + elementType.getName() + ".");
