@@ -8,13 +8,15 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.ParrotRenderer;
-import net.minecraft.client.renderer.entity.model.ParrotModel;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -193,6 +195,24 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 		}
 		;
+	}
+	
+	protected BipedModel<?> currentArmorModel = null;
+	
+	@Override
+	protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
+		this.currentArmorModel = armorModel;
+		return super.getArmorPartForBone(name, armorModel);
+	}
+	
+	@Override
+	protected void renderArmorPart(MatrixStack stack, ModelRenderer sourceLimb, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, ItemStack armorForBone, ResourceLocation armorResource) {
+		if(this.currentArmorModel != null && this.currentArmorModel.renderType(armorResource) != null) {
+			IVertexBuilder ivb = ItemRenderer.getArmorFoilBuffer(this.getCurrentRTB(),
+					this.currentArmorModel.renderType(armorResource), false, armorForBone.hasFoil());
+			sourceLimb.render(stack, ivb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		}
+		super.renderArmorPart(stack, sourceLimb, packedLightIn, packedOverlayIn, red, green, blue, alpha, armorForBone, armorResource);
 	}
 
 }
