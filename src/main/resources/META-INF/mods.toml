@@ -36,14 +36,14 @@ license="MIT-license"
 		
 	[[dependencies.cqrepoured]]
 		modId="geckolib3"
-		versionRange="[3.0.86,)"
+		versionRange="[3.0.106,)"
 		mandatory=true
 		ordering="NONE"
 		side="BOTH"
 
     [[dependencies.cqrepoured]]
         modId="smartbrainlib"
-        versionRange="[1.2,)"
+        versionRange="[1.5,)"
         mandatory=true
         ordering="NONE"
         side="BOTH"
