@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProtectedRegionHelper {
 
@@ -87,7 +88,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos);
+		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos).collect(Collectors.toList());
 
 		if (protectedRegions.isEmpty()) {
 			return false;
@@ -141,7 +142,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos);
+		List<ProtectedRegion> protectedRegions = manager.getProtectedRegionsAt(pos).collect(Collectors.toList());
 
 		if (protectedRegions.isEmpty()) {
 			return false;
@@ -214,7 +215,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			if (protectedRegion.preventExplosionsTNT()) {
 				if (protectedRegion.isInsideProtectedRegion(pos)) {
 					return true;
@@ -239,7 +240,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			if (protectedRegion.preventExplosionsOther()) {
 				if (protectedRegion.isInsideProtectedRegion(pos)) {
 					return true;
@@ -278,7 +279,7 @@ public class ProtectedRegionHelper {
 		if (flag2) {
 			BlockPos pos = new BlockPos(explosion.getPosition());
 
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 				if ((flag && protectedRegion.preventExplosionsTNT()) || (!flag && protectedRegion.preventExplosionsOther())) {
 					if (checkForOrigin && protectedRegion.isInsideProtectedRegion(pos)) {
 						affectedBlockPositions.clear();
@@ -298,7 +299,7 @@ public class ProtectedRegionHelper {
 			}
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			for (BlockPos pos1 : affectedBlockPositions) {
 				protectedRegion.setProtectionState(pos1, 0);
 			}
@@ -316,7 +317,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			if (protectedRegion.preventFireSpreading()) {
 				if (protectedRegion.isInsideProtectedRegion(pos)) {
 					return true;
@@ -341,7 +342,7 @@ public class ProtectedRegionHelper {
 			return false;
 		}
 
-		for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
 				return true;
 			}
@@ -356,7 +357,7 @@ public class ProtectedRegionHelper {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager != null && manager instanceof ServerProtectedRegionManager) {
-			for (ProtectedRegion region : manager.getProtectedRegionsAt(position)) {
+			for (ProtectedRegion region : manager.getProtectedRegionsAt(position).collect(Collectors.toList())) {
 				AxisAlignedBB regionAABB = new AxisAlignedBB(region.getStartPos(), region.getEndPos());
 				set.addAll(world.getEntitiesOfClass(entityClass, regionAABB));
 			}

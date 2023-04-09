@@ -284,6 +284,11 @@ public class ProtectedRegion {
 			this.markDirty();
 		}
 	}
+	
+	@Deprecated
+	public void setProtectionState(BlockPos pos, int value) {
+		this.setProtectionState(pos, ProtectionState.byId((byte)value));
+	}
 
 	public byte[] getProtectionStates() {
 		return this.protectionStates;
