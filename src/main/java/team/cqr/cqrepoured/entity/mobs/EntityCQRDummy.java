@@ -6,7 +6,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -44,7 +46,7 @@ public class EntityCQRDummy extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 
 	// Geckolib
-	private AnimationFactory factory = new AnimationFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	@Override
 	public AnimationFactory getFactory() {
@@ -59,6 +61,11 @@ public class EntityCQRDummy extends AbstractEntityCQR implements IAnimatableCQR 
 	@Override
 	public IPacket<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data) {
+		this.registerControllers(this, data);
 	}
 
 }

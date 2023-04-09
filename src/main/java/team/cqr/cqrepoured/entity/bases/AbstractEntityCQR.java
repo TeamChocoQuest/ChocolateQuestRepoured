@@ -1918,9 +1918,14 @@ public abstract class AbstractEntityCQR extends CreatureEntity implements IMob, 
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public <E extends IAnimatable> boolean isSwinging(Hand hand, AnimationEvent<E> event) {
-		if(this.swinging) {
-			return this.swingingArm.equals(hand);
+	public  <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(Hand hand, AnimationEvent<E> event) {
+		return this.isSwinging(hand, event.getAnimatable());
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public  boolean isSwinging(Hand hand, AbstractEntityCQR instance) {
+		if(instance.swinging) {
+			return instance.swingingArm.equals(hand);
 		}
 		return false;
 	}

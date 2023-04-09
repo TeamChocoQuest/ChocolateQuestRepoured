@@ -1,5 +1,9 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -13,7 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
+import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -28,10 +34,6 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
@@ -184,7 +186,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	// Geckolib
-	private AnimationFactory factory = new AnimationFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
 	@Override
 	public AnimationFactory getFactory() {
@@ -194,6 +196,11 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	@Override
 	public Set<String> getAlwaysPlayingAnimations() {
 		return null;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data) {
+		this.registerControllers(this, data);
 	}
 
 }

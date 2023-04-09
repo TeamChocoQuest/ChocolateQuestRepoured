@@ -25,6 +25,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -218,7 +219,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	// Geckolib
-	private AnimationFactory factory = new AnimationFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	@Override
 	public AnimationFactory getFactory() {
@@ -227,7 +228,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	
 	@Override
 	public void registerControllers(AnimationData data) {
-		IAnimatableCQR.super.registerControllers(data);
+		this.registerControllers(this, data);
 		
 		data.addAnimationController(new AnimationController<>(this, "controller_bone_shield", 0, this::animPredicateBoneShield));
 	}
@@ -251,5 +252,5 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public Set<String> getAlwaysPlayingAnimations() {
 		return null;
 	}
-
+	
 }

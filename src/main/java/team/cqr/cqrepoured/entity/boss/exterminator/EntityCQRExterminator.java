@@ -44,6 +44,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -106,7 +107,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
 
 	// Geckolib
-	private AnimationFactory factory = new AnimationFactory(this);
+	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	private boolean partSoundFlag;
 
 	public EntityCQRExterminator(World world) {
@@ -342,7 +343,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	public static final String ANIM_NAME_SPIN_COILS = ANIM_NAME_PREFIX + "spin_tesla_coils";
 
-	private <E extends IAnimatable> PlayState predicateSpinCoils(AnimationEvent<E> event) {
+	private <E extends EntityCQRExterminator> PlayState predicateSpinCoils(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SPIN_COILS));
 		}
@@ -354,16 +355,17 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public static final String ANIM_NAME_STUN = ANIM_NAME_PREFIX + "stun";
 
 	@SuppressWarnings("unchecked")
-	private <E extends IAnimatable> PlayState predicateAnimationMain(AnimationEvent<E> event) {
+	private <E extends EntityCQRExterminator> PlayState predicateAnimationMain(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
 		// Death animation
-		if (this.canPlayDeathAnimation()) {
+		if (animatable.canPlayDeathAnimation()) {
 			event.getController().transitionLengthTicks = 0.0D;
 			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_DEATH));
 			return PlayState.CONTINUE;
 		}
 
 		// Stunned
-		if (this.isStunned()) {
+		if (animatable.isStunned()) {
 			event.getController().transitionLengthTicks = 0.0D;
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_STUN));
 			return PlayState.CONTINUE;
@@ -372,7 +374,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		event.getController().transitionLengthTicks = 30;
 
 		// Inactive animation
-		if (super.isSitting()) {
+		if (animatable.isSitting()) {
 			// if(event.getController().getCurrentAnimation() == null || event.getController().isJustStarting) {
 			event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_INACTIVE));
 			// }
@@ -386,12 +388,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public static final String ANIM_NAME_CANNON_RAISED = ANIM_NAME_PREFIX + "raised_cannon";
 	public static final String ANIM_NAME_CANNON_LOWERED = ANIM_NAME_PREFIX + "lowered_cannon";
 
-	private <E extends IAnimatable> PlayState predicateCannonArmPosition(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive() || super.isSitting()) {
+	private <E extends EntityCQRExterminator> PlayState predicateCannonArmPosition(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.dead || animatable.getHealth() < 0.01 || /*this.isDead ||*/ !animatable.isAlive() || animatable.isSitting()) {
 			return PlayState.STOP;
 		}
 
-		if (this.entityData.get(CANNON_RAISED)) {
+		if (animatable.entityData.get(CANNON_RAISED)) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_CANNON_RAISED));
 		} else {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_CANNON_LOWERED));
@@ -404,30 +407,31 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public static final String ANIM_NAME_THROW = ANIM_NAME_PREFIX + "throw";
 	public static final String ANIM_NAME_GROUND_SMASH = ANIM_NAME_PREFIX + "ground_slam";
 	@OnlyIn(Dist.CLIENT)
-	private boolean shootIndicator;// = false; Default value for boolean field is false, for boolean wrapper object it is null (cause it is an object...)
+	protected boolean shootIndicator;// = false; Default value for boolean field is false, for boolean wrapper object it is null (cause it is an object...)
 	@OnlyIn(Dist.CLIENT)
-	private boolean throwIndicator;// = false;
+	protected boolean throwIndicator;// = false;
 	@OnlyIn(Dist.CLIENT)
-	private boolean smashIndicator;// = false;
+	protected boolean smashIndicator;// = false;
 
-	private <E extends IAnimatable> PlayState predicateBigAnimations(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
+	private <E extends EntityCQRExterminator> PlayState predicateBigAnimations(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.dead || animatable.getHealth() < 0.01 || /*this.isDead ||*/ !animatable.isAlive()) {
 			return PlayState.STOP;
 		}
 
 		// Second condition: XOR Operator "^"
-		if (this.entityData.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
-			if (this.shootIndicator) {
+		if (animatable.entityData.get(ARMS_BLOCKED_BY_LONG_ANIMATION)) {
+			if (animatable.shootIndicator) {
 				event.getController().clearAnimationCache();
-				this.shootIndicator = false;
+				animatable.shootIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_CANNON_SHOOT));
-			} else if (this.throwIndicator) {
+			} else if (animatable.throwIndicator) {
 				event.getController().clearAnimationCache();
-				this.throwIndicator = false;
+				animatable.throwIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_THROW));
-			} else if (this.smashIndicator) {
+			} else if (animatable.smashIndicator) {
 				event.getController().clearAnimationCache();
-				this.smashIndicator = false;
+				animatable.smashIndicator = false;
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_GROUND_SMASH));
 			}
 			return PlayState.CONTINUE;
@@ -439,8 +443,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public static final String ANIM_NAME_PUNCH = ANIM_NAME_PREFIX + "punch";
 	public static final String ANIM_NAME_KICK = ANIM_NAME_PREFIX + "kick";
 
-	private <E extends IAnimatable> PlayState predicateSimpleAttack(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
+	private <E extends EntityCQRExterminator> PlayState predicateSimpleAttack(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.dead || animatable.getHealth() < 0.01 || /*this.isDead ||*/ !animatable.isAlive()) {
 			return PlayState.STOP;
 		}
 
@@ -448,12 +453,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return PlayState.STOP;
 		}
 
-		if (this.isSwinging(Hand.MAIN_HAND, event)) {
-			boolean isKicking = this.entityData.get(PUNCH_IS_KICK);
+		if (animatable.isSwinging(Hand.MAIN_HAND, animatable)) {
+			boolean isKicking = animatable.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().loop(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH));
 		} else {
-			this.kickInProgressClient = false;
+			animatable.kickInProgressClient = false;
 			
 			//event.getController().setAnimation(null);
 			//event.getController().clearAnimationCache();
@@ -464,18 +469,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	public static final String ANIM_NAME_WALK_NO_BODY_SWING = ANIM_NAME_PREFIX + "walk_legs_only";
 	public static final String ANIM_NAME_WALK = ANIM_NAME_PREFIX + "walk";
 	
-	private <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
-		if (this.dead || this.getHealth() < 0.01 || /*this.isDead ||*/ !this.isAlive()) {
+	private <E extends EntityCQRExterminator> PlayState predicateWalking(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.dead || animatable.getHealth() < 0.01 || /*this.isDead ||*/ !animatable.isAlive()) {
 			return PlayState.STOP;
 		}
 
 		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
-			if ((this.isCannonRaised() && this.isCannonArmPlayingAnimation()) || this.isExecutingThrow()) {
+			if ((animatable.isCannonRaised() && animatable.isCannonArmPlayingAnimation()) || animatable.isExecutingThrow()) {
 				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALK_NO_BODY_SWING));
 			} else {
 				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALK));
 			}
-			event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
+			event.getController().setAnimationSpeed(animatable.isSprinting() ? 2.0D : 1.0D);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -980,7 +986,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	// Kick stuff
 	@OnlyIn(Dist.CLIENT)
-	private boolean kickInProgressClient;
+	protected boolean kickInProgressClient;
 
 	@OnlyIn(Dist.CLIENT)
 	public boolean isUsingKickAnimation() {
