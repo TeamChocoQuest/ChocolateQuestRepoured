@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.util;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -159,7 +160,7 @@ public class EntityUtil {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
-			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
+			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position).collect(Collectors.toList());
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
 					regions.forEach(t -> {
@@ -191,7 +192,7 @@ public class EntityUtil {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
-			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position);
+			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position).collect(Collectors.toList());
 			if (regions != null && !regions.isEmpty()) {
 				if (!regions.isEmpty()) {
 					regions.forEach(t -> t.removeEntityDependency(entity.getUUID()));
