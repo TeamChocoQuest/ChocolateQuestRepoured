@@ -207,7 +207,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	
 	@Override
 	protected void renderArmorPart(MatrixStack stack, ModelRenderer sourceLimb, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, ItemStack armorForBone, ResourceLocation armorResource) {
-		if(this.currentArmorModel != null && this.currentArmorModel.renderType(armorResource) != null) {
+		if(this.currentArmorModel != null) {
 			IVertexBuilder ivb = ItemRenderer.getArmorFoilBuffer(this.getCurrentRTB(),
 					this.currentArmorModel.renderType(armorResource), false, armorForBone.hasFoil());
 			sourceLimb.render(stack, ivb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
