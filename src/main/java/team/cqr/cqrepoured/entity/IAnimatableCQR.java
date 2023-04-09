@@ -4,7 +4,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Item;
@@ -21,6 +20,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.gun.IFireArmTwoHanded;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
@@ -39,38 +39,37 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 
 	public Set<String> getAlwaysPlayingAnimations();
 	
-	public default boolean isTwoHandedAnimationRunning() {
-		return this.isSpellCasting() || this.isSpinToWinActive() || this.isWieldingTwoHandedWeapon();
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isTwoHandedAnimationRunning(E animatable) {
+		return animatable.isSpellCasting() || animatable.isSpinToWinActive() || animatable.isWieldingTwoHandedWeapon(animatable);
 	}
 
-	public default boolean isWieldingTwoHandedWeapon() {
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isWieldingTwoHandedWeapon(E animatable) {
 		return 
 				//Bow and crossbows
 				(
-						this.getMainHandItem().getItem() instanceof ShootableItem || this.getOffhandItem().getItem() instanceof ShootableItem
-						|| this.getMainHandItem().getItem() instanceof ItemRevolver || this.getOffhandItem().getItem() instanceof ItemRevolver
-						|| this.getMainHandItem().getItem() instanceof IFireArmTwoHanded || this.getOffhandItem().getItem() instanceof IFireArmTwoHanded
-						|| this.getMainHandItem().getUseAnimation() == UseAction.BOW || this.getOffhandItem().getUseAnimation() == UseAction.BOW
-						|| this.getMainHandItem().getUseAnimation() == UseAction.CROSSBOW || this.getOffhandItem().getUseAnimation() == UseAction.CROSSBOW
+						animatable.getMainHandItem().getItem() instanceof ShootableItem || animatable.getOffhandItem().getItem() instanceof ShootableItem
+						|| animatable.getMainHandItem().getItem() instanceof ItemRevolver || animatable.getOffhandItem().getItem() instanceof ItemRevolver
+						|| animatable.getMainHandItem().getItem() instanceof IFireArmTwoHanded || animatable.getOffhandItem().getItem() instanceof IFireArmTwoHanded
+						|| animatable.getMainHandItem().getUseAnimation() == UseAction.BOW || animatable.getOffhandItem().getUseAnimation() == UseAction.BOW
+						|| animatable.getMainHandItem().getUseAnimation() == UseAction.CROSSBOW || animatable.getOffhandItem().getUseAnimation() == UseAction.CROSSBOW
 				)
 				|| //Spears
 				(
-						this.getMainHandItem().getUseAnimation() == UseAction.SPEAR || this.getOffhandItem().getUseAnimation() == UseAction.SPEAR
-						|| this.getMainHandItem().getItem() instanceof ItemSpearBase || this.getOffhandItem().getItem() instanceof ItemSpearBase
+						animatable.getMainHandItem().getUseAnimation() == UseAction.SPEAR || animatable.getOffhandItem().getUseAnimation() == UseAction.SPEAR
+						|| animatable.getMainHandItem().getItem() instanceof ItemSpearBase || animatable.getOffhandItem().getItem() instanceof ItemSpearBase
 				)
 				|| //Greatswords
 				(
-						this.getMainHandItem().getItem() instanceof ItemGreatSword || this.getOffhandItem().getItem() instanceof ItemGreatSword
+						animatable.getMainHandItem().getItem() instanceof ItemGreatSword || animatable.getOffhandItem().getItem() instanceof ItemGreatSword
 				);
 	}
-
-	@Override
-	public default void registerControllers(AnimationData data) {
+	
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> void registerControllers(E animatable, AnimationData data) {
 		//Always playing
-		Set<String> alwaysPlaying = this.getAlwaysPlayingAnimations();
+		Set<String> alwaysPlaying = animatable.getAlwaysPlayingAnimations();
 		if(alwaysPlaying != null && alwaysPlaying.size() > 0) {
-			for(String animName : this.getAlwaysPlayingAnimations()) {
-				data.addAnimationController(new AnimationController<>(this, "controller_always_playing_" + animName, 0, (e) -> {
+			for(String animName : animatable.getAlwaysPlayingAnimations()) {
+				data.addAnimationController(new AnimationController<>(animatable, "controller_always_playing_" + animName, 0, (e) -> {
 					if (e.getController().getCurrentAnimation() == null) {
 						e.getController().setAnimation(new AnimationBuilder().loop(animName));
 					}
@@ -79,26 +78,26 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 			}
 		}
 		// Idle
-		data.addAnimationController(new AnimationController<>(this, "controller_idle", 0, this::predicateIdle));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_idle", 0, this::predicateIdle));
 		// Body pose
-		data.addAnimationController(new AnimationController<>(this, "controller_body_pose", 20, this::predicateBodyPose));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_body_pose", 20, this::predicateBodyPose));
 		// Walking
-		data.addAnimationController(new AnimationController<>(this, "controller_walk", 10, this::predicateWalking));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_walk", 10, this::predicateWalking));
 		// Arms
-		data.addAnimationController(new AnimationController<>(this, "controller_left_hand_pose", 10, this::predicateLeftArmPose));
-		data.addAnimationController(new AnimationController<>(this, "controller_right_hand_pose", 10, this::predicateRightArmPose));
-		data.addAnimationController(new AnimationController<>(this, "controller_left_hand", 0, this::predicateLeftArmSwing));
-		data.addAnimationController(new AnimationController<>(this, "controller_right_hand", 0, this::predicateRightArmSwing));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_left_hand_pose", 10, this::predicateLeftArmPose));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_right_hand_pose", 10, this::predicateRightArmPose));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_left_hand", 0, this::predicateLeftArmSwing));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_right_hand", 0, this::predicateRightArmSwing));
 		// TwoHanded
-		data.addAnimationController(new AnimationController<>(this, "controller_twohanded_pose", 10, this::predicateTwoHandedPose));
-		data.addAnimationController(new AnimationController<>(this, "controller_twohanded", 10, this::predicateTwoHandedSwing));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_twohanded_pose", 10, this::predicateTwoHandedPose));
+		data.addAnimationController(new AnimationController<>(animatable, "controller_twohanded", 10, this::predicateTwoHandedSwing));
 	}
 
 	public String ANIM_NAME_PREFIX = "animation.biped.";
 
 	public String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
 
-	default <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_IDLE));
 		}
@@ -108,13 +107,14 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public String ANIM_NAME_SITTING = ANIM_NAME_PREFIX + "sit";
 	public String ANIM_NAME_SNEAKING = ANIM_NAME_PREFIX + "body.sneak";
 
-	default <E extends IAnimatable> PlayState predicateBodyPose(AnimationEvent<E> event) {
-		if (this.isTwoHandedAnimationRunning()) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateBodyPose(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.isTwoHandedAnimationRunning(animatable)) {
 
-		} else if (this.isPassenger() || this.isSitting()) {
+		} else if (animatable.isPassenger() || animatable.isSitting()) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SITTING));
 			return PlayState.CONTINUE;
-		} else if (this.isCrouching()) {
+		} else if (animatable.isCrouching()) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SNEAKING));
 			return PlayState.CONTINUE;
 		}
@@ -124,29 +124,32 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public String ANIM_NAME_BLOCKING_LEFT = ANIM_NAME_PREFIX + "arms.left.block";
 	public String ANIM_NAME_BLOCKING_RIGHT = ANIM_NAME_PREFIX + "arms.right.block";
 
-	public default Hand getLeftHand() {
-		return this.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> Hand getLeftHand(E animatable) {
+		return animatable.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 	}
 
-	public default Hand getRightHand() {
-		return !this.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> Hand getRightHand(E animatable) {
+		return !animatable.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 	}
 
-	default <E extends IAnimatable> PlayState predicateRightArmSwing(AnimationEvent<E> event) {
-		return this.predicateHandSwing(this.getRightHand(), false, event);
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateRightArmSwing(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		return animatable.predicateHandSwing(animatable.getRightHand(animatable), false, event);
 	}
 
-	default <E extends IAnimatable> PlayState predicateLeftArmSwing(AnimationEvent<E> event) {
-		return this.predicateHandSwing(this.getLeftHand(), true, event);
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateLeftArmSwing(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		return animatable.predicateHandSwing(animatable.getLeftHand(animatable), true, event);
 	}
 
 	public String ANIM_NAME_SWING_NORMAL_LEFT = ANIM_NAME_PREFIX + "arms.left.item-use";
 	public String ANIM_NAME_SWING_NORMAL_RIGHT = ANIM_NAME_PREFIX + "arms.right.item-use";
 	
-	default <E extends IAnimatable> PlayState predicateHandSwing(Hand hand, boolean leftHand, AnimationEvent<E> event) {
-		if (!this.isTwoHandedAnimationRunning()) {
-			if (this.isSwinging(hand, event)) {
-				ItemStack handItemStack = this.getItemInHand(hand);
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandSwing(Hand hand, boolean leftHand, AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (!animatable.isTwoHandedAnimationRunning(animatable)) {
+			if (animatable.isSwinging(hand, event)) {
+				ItemStack handItemStack = animatable.getItemInHand(hand);
 				/*if(event.getController().getAnimationState() != AnimationState.Running) {
 					event.getController().clearAnimationCache();
 					event.getController().markNeedsReload();
@@ -181,19 +184,22 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.CONTINUE;
 	}
 
-	default <E extends IAnimatable> PlayState predicateRightArmPose(AnimationEvent<E> event) {
-		return this.predicateHandPose(this.getRightHand(), false, event);
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateRightArmPose(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		return animatable.predicateHandPose(animatable.getRightHand(animatable), false, event);
 	}
 
-	default <E extends IAnimatable> PlayState predicateLeftArmPose(AnimationEvent<E> event) {
-		return this.predicateHandPose(this.getLeftHand(), true, event);
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateLeftArmPose(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		return animatable.predicateHandPose(animatable.getLeftHand(animatable), true, event);
 	}
 
-	default <E extends IAnimatable> PlayState predicateHandPose(Hand hand, boolean leftHand, AnimationEvent<E> event) {
-		ItemStack handItemStack = this.getItemInHand(hand);
-		if (!handItemStack.isEmpty() && !this.isTwoHandedAnimationRunning()) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandPose(Hand hand, boolean leftHand, AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		ItemStack handItemStack = animatable.getItemInHand(hand);
+		if (!handItemStack.isEmpty() && !animatable.isTwoHandedAnimationRunning(animatable)) {
 			Item handItem = handItemStack.getItem();
-			if (this.isBlocking() && (handItem instanceof ShieldItem || handItem.getUseAnimation(handItemStack) == UseAction.BLOCK)) {
+			if (animatable.isBlocking() && (handItem instanceof ShieldItem || handItem.getUseAnimation(handItemStack) == UseAction.BLOCK)) {
 				event.getController().setAnimation(new AnimationBuilder().loop(leftHand ? ANIM_NAME_BLOCKING_LEFT : ANIM_NAME_BLOCKING_RIGHT));
 			} else {
 				// If the item is a small gun play the correct animation
@@ -208,17 +214,18 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 
 	public String ANIM_NAME_SPELLCASTING = ANIM_NAME_PREFIX + "arms.cast-spell";
 
-	default <E extends IAnimatable> PlayState predicateTwoHandedPose(AnimationEvent<E> event) {
-		if (this.isTwoHandedAnimationRunning()) {
-			if (this.isSpellCasting()) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateTwoHandedPose(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.isTwoHandedAnimationRunning(animatable)) {
+			if (animatable.isSpellCasting()) {
 				event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_SPELLCASTING));
 				return PlayState.CONTINUE;
 			} else {
 				// First: Check for firearm, spear and greatsword in either hand
 				// Main hand has priority
-				Optional<PlayState> resultState = performTwoHandedLogicPerHand(this.getMainHandItem(), this.isLeftHanded(), event);
+				Optional<PlayState> resultState = performTwoHandedLogicPerHand(animatable.getMainHandItem(), animatable.isLeftHanded(), event);
 				if (!resultState.isPresent()) {
-					resultState = performTwoHandedLogicPerHand(this.getOffhandItem(), !this.isLeftHanded(), event);
+					resultState = performTwoHandedLogicPerHand(animatable.getOffhandItem(), !animatable.isLeftHanded(), event);
 				}
 				if (resultState.isPresent()) {
 					return resultState.get();
@@ -239,7 +246,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 
 	public String ANIM_NAME_GREATSWORD_POSE = ANIM_NAME_PREFIX + "arms.greatsword";
 
-	default <E extends IAnimatable> Optional<PlayState> performTwoHandedLogicPerHand(ItemStack itemStack, boolean leftHanded, AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> Optional<PlayState> performTwoHandedLogicPerHand(ItemStack itemStack, boolean leftHanded, AnimationEvent<E> event) {
 		if (itemStack.isEmpty()) {
 			return Optional.empty();
 		}
@@ -272,15 +279,16 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public String ANIM_NAME_GREATSWORD_SWING = ANIM_NAME_PREFIX + "arms.attack-greatsword";
 	public String ANIM_NAME_SPEAR_SWING = ANIM_NAME_PREFIX + "arms.attack-spear";
 
-	default <E extends IAnimatable> PlayState predicateTwoHandedSwing(AnimationEvent<E> event) {
-		if (this.isTwoHandedAnimationRunning() && this.isSwinging(event)) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateTwoHandedSwing(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if (animatable.isTwoHandedAnimationRunning(animatable) && animatable.isSwinging(event)) {
 			// Check for greatsword & spear and play their animations
-			if (this.getMainHandItem().getItem().getUseAnimation(this.getMainHandItem()) == UseAction.SPEAR || this.getOffhandItem().getItem().getUseAnimation(this.getOffhandItem()) == UseAction.SPEAR) {
+			if (animatable.getMainHandItem().getItem().getUseAnimation(animatable.getMainHandItem()) == UseAction.SPEAR || animatable.getOffhandItem().getItem().getUseAnimation(animatable.getOffhandItem()) == UseAction.SPEAR) {
 				// Spear use animation
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_SPEAR_SWING));
 			}
 			// If either hand item is greatsword => greatsword animation
-			else if((this.getMainHandItem().getItem() instanceof ItemGreatSword) || (this.getOffhandItem().getItem() instanceof ItemGreatSword)) {
+			else if((animatable.getMainHandItem().getItem() instanceof ItemGreatSword) || (animatable.getOffhandItem().getItem() instanceof ItemGreatSword)) {
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_GREATSWORD_SWING));
 			}
 		}
@@ -289,49 +297,27 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	
 	public String ANIM_NAME_WALKING = ANIM_NAME_PREFIX + "legs.walk";
 	
-	default <E extends IAnimatable> PlayState predicateWalking(AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateWalking(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
 		if (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALKING));
-			if(this instanceof LivingEntity) {
-				LivingEntity entity = (LivingEntity) this;
-				event.getController().setAnimationSpeed(entity.getAttributeValue(Attributes.MOVEMENT_SPEED) * 6.0);
-			} else {
-				event.getController().setAnimationSpeed(this.isSprinting() ? 2.0D : 1.0D);
-			}
+			event.getController().setAnimationSpeed(animatable.getAttributeValue(Attributes.MOVEMENT_SPEED) * 6.0);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
-
-	//Access to entity stuff
-	public boolean isSitting();
 	
-	public boolean isLeftHanded();
-	
-	public <E extends IAnimatable> boolean isSwinging(Hand hand, AnimationEvent<E> event);
-	public default <E extends IAnimatable> boolean isSwinging(AnimationEvent<E> event) {
-		if(this instanceof MobEntity) {
-			return ((MobEntity)this).swinging;
+	public <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(Hand hand, AnimationEvent<E> event);
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(AnimationEvent<E> event) {
+		E animatable = event.getAnimatable();
+		if(animatable instanceof MobEntity) {
+			return ((MobEntity)animatable).swinging;
 		}
-		return this.isSwinging(Hand.MAIN_HAND, event);
+		return animatable.isSwinging(Hand.MAIN_HAND, event);
 	}
-	
-	public boolean isCrouching();
-
-	public boolean isPassenger();
-
-	public boolean isBlocking();
 
 	public boolean isSpinToWinActive();
 
 	public boolean isSpellCasting();
-	
-	public ItemStack getItemInHand(Hand hand);
-
-	public ItemStack getOffhandItem();
-
-	public ItemStack getMainHandItem();	
-	
-	public boolean isSprinting();
 	
 }
