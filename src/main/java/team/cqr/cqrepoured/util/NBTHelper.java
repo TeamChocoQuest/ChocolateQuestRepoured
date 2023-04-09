@@ -66,11 +66,11 @@ public class NBTHelper {
 	public static BlockPos loadBlockPos(INBT tag) {
 		INBTType<?> type = tag.getType();
 		if (type != IntArrayNBT.TYPE) {
-			throw new IllegalArgumentException("Expected UUID-Tag to be of type " + IntArrayNBT.TYPE.getName() + ", but found " + type.getName() + ".");
+			throw new IllegalArgumentException("Expected Int-Tag to be of type " + IntArrayNBT.TYPE.getName() + ", but found " + type.getName() + ".");
 		}
 		int[] data = ((IntArrayNBT) tag).getAsIntArray();
-		if (data.length != 4) {
-			throw new IllegalArgumentException("Expected UUID-Array to be of length 4, but found " + data.length + ".");
+		if (data.length != 3) {
+			throw new IllegalArgumentException("Expected Int-Array to be of length 4, but found " + data.length + ".");
 		}
 		return new BlockPos(data[0], data[1], data[2]);
 	}
