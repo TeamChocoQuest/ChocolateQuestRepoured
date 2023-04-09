@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import team.cqr.cqrepoured.client.render.entity.RenderBubble;
@@ -164,6 +165,7 @@ public class CQREntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SUMMONING_CIRCLE.get(), RenderSummoningCircle::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.FLYING_SKULL.get(), RenderCQRFlyingSkull::new);
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_KING_ILLUSION.get(), RenderCQRWalkerKingIllusion::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.SMALL_SLIME.get(), SlimeRenderer::new);
 		/* RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new); */
 		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.WALKER_TORNADO.get(), RenderWalkerTornado::new);
 		/*
