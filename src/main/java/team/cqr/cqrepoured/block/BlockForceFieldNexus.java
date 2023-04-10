@@ -25,7 +25,7 @@ public class BlockForceFieldNexus extends Block {
 				.strength(45.0F, 10.0F)
 				.noDrops()
 				.noOcclusion()
-				.lightLevel(state -> 15));
+			);
 	}
 
 	@Override

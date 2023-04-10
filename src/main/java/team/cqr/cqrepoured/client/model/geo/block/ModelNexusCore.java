@@ -7,9 +7,9 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
 public class ModelNexusCore extends AnimatedGeoModel<TileEntityForceFieldNexus>{
 	
-	protected static final ResourceLocation ANIM_RESLOC = CQRMain.prefix("animations/nexus_block.animation.json");
-	protected static final ResourceLocation MODEL_RESLOC = CQRMain.prefix("geo/block/nexus_block.geo.json");
-	protected static final ResourceLocation TEXTURE_RESLOC = CQRMain.prefix("textures/block/nexus_core.png");
+	protected static final ResourceLocation ANIM_RESLOC = CQRMain.prefix("animations/force_field_nexus.animation.json");
+	protected static final ResourceLocation MODEL_RESLOC = CQRMain.prefix("geo/block/force_field_nexus.geo.json");
+	protected static final ResourceLocation TEXTURE_RESLOC = CQRMain.prefix("textures/entity/force_field_nexus/force_field_nexus.png");
 
 	@Override
 	public ResourceLocation getAnimationFileLocation(TileEntityForceFieldNexus animatable) {

@@ -9,18 +9,19 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 
 public class TileEntityForceFieldNexus extends TileEntity implements IAnimatable {
 
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public TileEntityForceFieldNexus() {
 		super(CQRBlockEntities.FORCE_FIELD_NEXUS.get());
 	}
 
 	private <E extends TileEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.nexusblock.spin", EDefaultLoopTypes.LOOP));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle.loop", EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 
