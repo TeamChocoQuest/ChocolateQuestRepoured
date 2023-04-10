@@ -5,14 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Queues;
@@ -54,21 +53,13 @@ public class LootTableLoader {
 			.findFirst()
 			.orElse(null));
 
-	private static LootTable loadingLootTable;
-
 	private static List<WeightedItemStack> getItemList(Properties propFile) {
-		List<WeightedItemStack> items = new ArrayList<>();
-		Enumeration<Object> fileEntries = propFile.elements();
-		while (fileEntries.hasMoreElements()) {
-			String entry = (String) fileEntries.nextElement();
-			if (!entry.startsWith("#")) {
-				WeightedItemStack stack = createWeightedItemStack(entry);
-				if (stack != null) {
-					items.add(stack);
-				}
-			}
-		}
-		return items;
+		return propFile.values()
+				.stream()
+				.filter(String.class::isInstance)
+				.map(String.class::cast)
+				.map(LootTableLoader::createWeightedItemStack)
+				.collect(Collectors.toList());
 	}
 
 	private static WeightedItemStack createWeightedItemStack(String entry) {
@@ -177,9 +168,6 @@ public class LootTableLoader {
 					que.pop();
 				}
 
-				if (newLootTable != null) {
-					loadingLootTable = newLootTable;
-				}
 				return newLootTable;
 			} catch (IOException | JsonSyntaxException e) {
 				CQRMain.logger.error("Failed to read json loot table {}", jsonFile.getName(), e);
@@ -231,13 +219,6 @@ public class LootTableLoader {
 		}
 
 		return defaultLootTable;
-	}
-
-	public static void freezeLootTable() {
-		if (loadingLootTable != null) {
-			loadingLootTable.freeze();
-			loadingLootTable = null;
-		}
 	}
 
 }
