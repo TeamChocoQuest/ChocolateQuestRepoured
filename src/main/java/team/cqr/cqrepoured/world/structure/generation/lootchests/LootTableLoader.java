@@ -1,28 +1,32 @@
 package team.cqr.cqrepoured.world.structure.generation.lootchests;
 
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Queues;
-import com.google.common.io.Files;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import meldexun.reflectionutil.ReflectionConstructor;
-import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.loot.*;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.ForgeEventFactory;
-import org.apache.commons.io.FileUtils;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.init.CQRLoottables;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+import com.google.common.collect.Queues;
+import com.google.common.io.Files;
+import com.google.gson.JsonSyntaxException;
+
+import meldexun.reflectionutil.ReflectionConstructor;
+import meldexun.reflectionutil.ReflectionField;
+import net.minecraft.loot.LootPool;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTableManager;
+import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.StandaloneLootEntry;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.ForgeHooks;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -215,26 +219,6 @@ public class LootTableLoader {
 		if (loadingLootTable != null) {
 			loadingLootTable.freeze();
 			loadingLootTable = null;
-		}
-	}
-
-	public static void registerCustomLootTables(ServerWorld worldServer) {
-		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
-		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
-		LootTableManager lootTableManager = worldServer.getServer().getLootTables();
-		Map<ResourceLocation, LootTable> registeredLootTables = lootTableManager.tables;
-
-		for (File file : files) {
-			String s = file.getName();
-			ResourceLocation name = new ResourceLocation(CQRMain.MODID, "chests/" + s.substring(0, s.lastIndexOf('.')));
-
-			if (cqrChestLootTables.contains(name)) {
-				continue;
-			}
-
-			LootTable table = LootTable.EMPTY;
-			table = ForgeEventFactory.loadLootTable(name, table, lootTableManager);
-			registeredLootTables.put(name, table);
 		}
 	}
 

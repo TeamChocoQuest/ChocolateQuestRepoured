@@ -13,18 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -35,7 +31,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -148,14 +143,6 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
-
-		if(e.getWorld() instanceof ServerWorld) {
-			RegistryKey<World> dimRegKey = ((World)e.getWorld()).dimension();
-			DimensionType dim = ((World)e.getWorld()).dimensionType();
-			if (dimRegKey.location().equals(DimensionType.OVERWORLD_LOCATION.location())) {
-				LootTableLoader.registerCustomLootTables((ServerWorld) e.getWorld());
-			}
-		}
 	}
 
 	@SubscribeEvent
