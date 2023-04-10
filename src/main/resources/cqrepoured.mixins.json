@@ -16,6 +16,7 @@
 		"MixinChestBlock",
 		"MixinEndermanEntity",
 		"MixinFireBlock",
+		"MixinResourcePackList",
 		"MixinShulkerEntity",
 		"MixinEnderdragonEntity",
 		"MixinLivingEntity"
