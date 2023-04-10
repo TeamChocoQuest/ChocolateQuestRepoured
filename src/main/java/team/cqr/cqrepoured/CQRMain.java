@@ -168,11 +168,11 @@ public class CQRMain {
 		GeckoLib.initialize();
 		
 		CQRBlocks.registerBlocks();
+		CQREntityTypes.registerEntityTypes();
 		CQRItems.registerItems();
 		CQRBlockEntities.registerBlockEntities();
 		CQRContainerTypes.registerContainerTypes();
 		CQRSensors.SENSORS.register(bus);
-		CQREntityTypes.registerEntityTypes();
 		CQRStructures.registerStructures();
 		CQRStructureProcessors.registerStructureProcessors();
 		CQREnchantments.registerEnchantments();
