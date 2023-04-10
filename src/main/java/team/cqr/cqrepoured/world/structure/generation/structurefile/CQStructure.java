@@ -41,8 +41,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.BlockPos.Mutable;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
@@ -58,7 +58,6 @@ import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
 import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBannerInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
@@ -312,22 +311,22 @@ public class CQStructure {
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset) {
-		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
-		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
-		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
-		this.addAll(builder.getLevel(), builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
+		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
 	}
 
-	public void addAll(ICQRLevel level, DungeonPlacement placement) {
+	public void addAll(GeneratableDungeon.Builder builder, DungeonPlacement placement) {
 		int i = 0;
 		Mutable mutable = new Mutable();
 		for (int x = 0; x < this.size.getX(); x++) {
@@ -336,10 +335,13 @@ public class CQStructure {
 				mutable.setY(y);
 				for (int z = 0; z < this.size.getZ(); z++) {
 					mutable.setZ(z);
-					this.blockInfoList.get(i++).prepare(level, mutable, placement);
+					this.blockInfoList.get(i++).prepare(builder.getLevel(), mutable, placement);
 				}
 			}
 		}
+
+		this.entityInfoList.forEach(entityInfo -> entityInfo.prepare(builder.getLevel(), placement));
+		this.unprotectedBlockList.forEach(builder.getProtectedRegionBuilder()::excludePos);
 	}
 
 	public static void updateSpecialEntities() {
