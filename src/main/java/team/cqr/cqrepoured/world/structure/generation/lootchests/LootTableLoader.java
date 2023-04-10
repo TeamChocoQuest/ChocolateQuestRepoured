@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Queues;
 import com.google.common.io.Files;
@@ -34,7 +37,22 @@ import team.cqr.cqrepoured.config.CQRConfig;
 public class LootTableLoader {
 
 	private static final ReflectionField<ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
-	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
+	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>(Stream.of("net.minecraftforge.common.ForgeHooks$LootTableContext")
+			.map(className -> {
+				try {
+					return Class.forName(className);
+				} catch (ClassNotFoundException e) {
+					return null;
+				}
+			})
+			.filter(Objects::nonNull)
+			.map(Class::getDeclaredConstructors)
+			.flatMap(Arrays::stream)
+			.filter(constructor -> constructor.getParameterCount() == 2)
+			.filter(constructor -> "net.minecraft.util.ResourceLocation".equals(constructor.getParameterTypes()[0].getTypeName()))
+			.filter(constructor -> "boolean".equals(constructor.getParameterTypes()[1].getTypeName()))
+			.findFirst()
+			.orElse(null));
 
 	private static LootTable loadingLootTable;
 
