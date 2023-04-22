@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.entity.boss.netherdragon;
 
 import javax.annotation.Nullable;
 
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
+import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
