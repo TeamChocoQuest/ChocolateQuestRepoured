@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity;
 
-import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
+import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
