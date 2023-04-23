@@ -3,8 +3,6 @@ package team.cqr.cqrepoured.init;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -20,6 +18,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
+import team.cqr.cqrepoured.item.CQRSpawnEggItem;
 import team.cqr.cqrepoured.item.ItemAlchemyBag;
 import team.cqr.cqrepoured.item.ItemBadge;
 import team.cqr.cqrepoured.item.ItemBullBattleAxe;
@@ -261,53 +260,53 @@ public class CQRItems {
 	public static final RegistryObject<ItemUnprotectedPositionTool> UNPROTECTED_POSITIONS_TOOL = register("unprotected_positions_tool", ItemUnprotectedPositionTool::new);
 	
 	// Spawneggs
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_DUMMY = registerSpawnEgg(CQREntityTypes.DUMMY, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_DWARF = registerSpawnEgg(CQREntityTypes.DWARF, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDERMAN = registerSpawnEgg(CQREntityTypes.ENDERMAN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GREMLIN = registerSpawnEgg(CQREntityTypes.GREMLIN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GOBLIN = registerSpawnEgg(CQREntityTypes.GOBLIN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GOLEM = registerSpawnEgg(CQREntityTypes.GOLEM, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_HUMAN = registerSpawnEgg(CQREntityTypes.HUMAN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ILLAGER = registerSpawnEgg(CQREntityTypes.ILLAGER, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NPC = registerSpawnEgg(CQREntityTypes.NPC, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MINOTAUR = registerSpawnEgg(CQREntityTypes.MINOTAUR, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MANDRIL = registerSpawnEgg(CQREntityTypes.MANDRIL, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MUMMY = registerSpawnEgg(CQREntityTypes.MUMMY, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_OGRE = registerSpawnEgg(CQREntityTypes.OGRE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ORC = registerSpawnEgg(CQREntityTypes.ORC, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_BOARMAN = registerSpawnEgg(CQREntityTypes.BOARMAN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE = registerSpawnEgg(CQREntityTypes.PIRATE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SKELETON = registerSpawnEgg(CQREntityTypes.SKELETON, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE = registerSpawnEgg(CQREntityTypes.SPECTRE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_TRITON = registerSpawnEgg(CQREntityTypes.TRITON, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER = registerSpawnEgg(CQREntityTypes.WALKER, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ZOMBIE = registerSpawnEgg(CQREntityTypes.ZOMBIE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_DUMMY = registerSpawnEgg(CQREntityTypes.DUMMY, 0xB8945F, 0x7E6237, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_DWARF = registerSpawnEgg(CQREntityTypes.DWARF, 0xB4846D, 0x5A5754, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDERMAN = registerSpawnEgg(CQREntityTypes.ENDERMAN, 0x161616, 0xE079FA, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GREMLIN = registerSpawnEgg(CQREntityTypes.GREMLIN, 0x606060, 0xE42E2E, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GOBLIN = registerSpawnEgg(CQREntityTypes.GOBLIN, 0x6A8A3E, 0x513430, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GOLEM = registerSpawnEgg(CQREntityTypes.GOLEM, 0xD2CECC, 0xC0A189, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_HUMAN = registerSpawnEgg(CQREntityTypes.HUMAN, 0xFFD4A8, 0xEDBE7D, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ILLAGER = registerSpawnEgg(CQREntityTypes.ILLAGER, 0x959B9B, 0x505656, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NPC = registerSpawnEgg(CQREntityTypes.NPC, 0xFFE5D2, 0x5DD345, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MINOTAUR = registerSpawnEgg(CQREntityTypes.MINOTAUR, 0xC69680, 0x3F3024, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MANDRIL = registerSpawnEgg(CQREntityTypes.MANDRIL, 0x505050, 0x8A552E, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_MUMMY = registerSpawnEgg(CQREntityTypes.MUMMY, 0x846737, 0x5E5546, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_OGRE = registerSpawnEgg(CQREntityTypes.OGRE, 0xA67B4E, 0x4B3318, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ORC = registerSpawnEgg(CQREntityTypes.ORC, 0x637F41, 0x750732, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_BOARMAN = registerSpawnEgg(CQREntityTypes.BOARMAN, 0xE68583, 0x385226, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE = registerSpawnEgg(CQREntityTypes.PIRATE, 0xAEAEAE, 0x5E1717, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SKELETON = registerSpawnEgg(CQREntityTypes.SKELETON, 0xA1A1A1, 0x797979, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE = registerSpawnEgg(CQREntityTypes.SPECTRE, 0x848484, 0x226767, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_TRITON = registerSpawnEgg(CQREntityTypes.TRITON, 0x385265, 0xFFD57D, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER = registerSpawnEgg(CQREntityTypes.WALKER, 0x483255, 0x00C2E0, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ZOMBIE = registerSpawnEgg(CQREntityTypes.ZOMBIE, 0x35226, 0x00A8A8, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDER_KING = registerSpawnEgg(CQREntityTypes.ENDER_KING, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDER_CALAMITY = registerSpawnEgg(CQREntityTypes.ENDER_CALAMITY, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDER_KING = registerSpawnEgg(CQREntityTypes.ENDER_KING, 0x161616, 0xE079FA, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_ENDER_CALAMITY = registerSpawnEgg(CQREntityTypes.ENDER_CALAMITY, 0x161616, 0xE079FA, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_EXTERMINATOR = registerSpawnEgg(CQREntityTypes.EXTERMINATOR, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_EXTERMINATOR = registerSpawnEgg(CQREntityTypes.EXTERMINATOR, 0xDBCDC1, 0x2F42E6, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GIANT_TORTOISE = registerSpawnEgg(CQREntityTypes.GIANT_TORTOISE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GIANT_TORTOISE = registerSpawnEgg(CQREntityTypes.GIANT_TORTOISE, 0x875B31, 0x388D3A, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NETHER_DRAGON = registerSpawnEgg(CQREntityTypes.NETHER_DRAGON, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NETHER_DRAGON = registerSpawnEgg(CQREntityTypes.NETHER_DRAGON, 0xFFEDDD, 0x7F0000, CQRMain.CQR_SPAWN_EGG_TAB);
 	
 	//public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_GIANT_SPIDER = registerSpawnEgg(CQREntityTypes.GIANT_SPIDER, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_BOARMAGE = registerSpawnEgg(CQREntityTypes.BOARMAGE, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_BOARMAGE = registerSpawnEgg(CQREntityTypes.BOARMAGE, 0x2C2B2A, 0xE67973, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_LICH = registerSpawnEgg(CQREntityTypes.LICH, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_LICH = registerSpawnEgg(CQREntityTypes.LICH, 0x751515, 0xA3A3A3, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NECROMANCER = registerSpawnEgg(CQREntityTypes.NECROMANCER, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_NECROMANCER = registerSpawnEgg(CQREntityTypes.NECROMANCER, 0x2C2B2A, 0x29512C, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE_CAPTAIN = registerSpawnEgg(CQREntityTypes.PIRATE_CAPTAIN, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE_PARROT = registerSpawnEgg(CQREntityTypes.PIRATE_PARROT, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE_CAPTAIN = registerSpawnEgg(CQREntityTypes.PIRATE_CAPTAIN, 0x5E1717, 0xE6D578, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_PIRATE_PARROT = registerSpawnEgg(CQREntityTypes.PIRATE_PARROT, 0xB10039, 0x5C5CFF, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER_KING = registerSpawnEgg(CQREntityTypes.WALKER_KING, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER_KING_ILLUSION = registerSpawnEgg(CQREntityTypes.WALKER_KING_ILLUSION, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER_KING = registerSpawnEgg(CQREntityTypes.WALKER_KING, 0x483255, 0x00C2E0, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_WALKER_KING_ILLUSION = registerSpawnEgg(CQREntityTypes.WALKER_KING_ILLUSION, 0x483255, 0x00C2E0, CQRMain.CQR_SPAWN_EGG_TAB);
 	
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE_LORD = registerSpawnEgg(CQREntityTypes.SPECTRE_LORD, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
-	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE_LORD_ILLUSION = registerSpawnEgg(CQREntityTypes.SPECTRE_LORD_ILLUSION, 0x751515, 0x44A595, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE_LORD = registerSpawnEgg(CQREntityTypes.SPECTRE_LORD, 0x848484, 0x226767, CQRMain.CQR_SPAWN_EGG_TAB);
+	public static final RegistryObject<ForgeSpawnEggItem> SPAWN_EGG_SPECTRE_LORD_ILLUSION = registerSpawnEgg(CQREntityTypes.SPECTRE_LORD_ILLUSION, 0x848484, 0x226767, CQRMain.CQR_SPAWN_EGG_TAB);
 	
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier) {
 		return register(name, itemSupplier, CQRMain.CQR_ITEMS_TAB);
@@ -333,7 +332,7 @@ public class CQRItems {
 	
 	@SuppressWarnings("unchecked")
 	public static <T extends ForgeSpawnEggItem> RegistryObject<T> registerSpawnEgg(RegistryObject<? extends EntityType<? extends Entity>> entityType, int colorMain, int colorSecondary, ItemGroup tab) {
-		return (RegistryObject<T>) ITEMS.register("cqr_" + entityType.getId().getPath() + "_spawnegg" , () -> new ForgeSpawnEggItem(
+		return (RegistryObject<T>) ITEMS.register("cqr_" + entityType.getId().getPath() + "_spawnegg" , () -> new CQRSpawnEggItem(
 				entityType, 
 				colorMain, 
 				colorSecondary, 

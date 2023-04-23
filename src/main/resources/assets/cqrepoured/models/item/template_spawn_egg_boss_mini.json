@@ -1,0 +1,6 @@
+{
+    "parent": "item/template_spawn_egg",
+    "textures": {
+        "layer2": "cqrepoured:item/spawn_egg_crown/bronze"
+    }
+}
