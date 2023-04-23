@@ -1203,19 +1203,21 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 			ItemStack rolledItem = loot.get(0);
 			ItemEntity item = this.spawnAtLocation(rolledItem, 0.0F);
+			if(item != null) {
 
-			double vy = 0.25D + 0.5D * this.getRandom().nextDouble();
-			double vx = -0.25D + 0.5D * this.getRandom().nextDouble();
-			double vz = -0.25D + 0.5D * this.getRandom().nextDouble();
+				double vy = 0.25D + 0.5D * this.getRandom().nextDouble();
+				double vx = -0.25D + 0.5D * this.getRandom().nextDouble();
+				double vz = -0.25D + 0.5D * this.getRandom().nextDouble();
 
-			/*item.motionX = vx;
-			item.motionY = vy;
-			item.motionZ = vz;
-			item.velocityChanged = true;*/
-			item.setDeltaMovement(vx, vy, vz);
-			item.hasImpulse = true;
+				/*item.motionX = vx;
+				item.motionY = vy;
+				item.motionZ = vz;
+				item.velocityChanged = true;*/
+				item.setDeltaMovement(vx, vy, vz);
+				item.hasImpulse = true;
 
-			item.setInvulnerable(true);
+				item.setInvulnerable(true);
+			}
 		}
 	}
 
