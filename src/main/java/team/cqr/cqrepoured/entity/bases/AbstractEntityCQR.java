@@ -1194,7 +1194,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setFaction(String newFac) {
 		this.setFaction(newFac, false);
 	}
-
+	
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
 		if (!this.world.isRemote) {

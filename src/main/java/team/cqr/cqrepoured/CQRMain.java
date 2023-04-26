@@ -65,7 +65,7 @@ import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
-	public static final String VERSION = "2.6.12B";
+	public static final String VERSION = "2.6.13B";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
 	@Instance
@@ -210,10 +210,10 @@ public class CQRMain {
 				CQ_DUNGEON_GRID_FOLDER = new File(CQ_CONFIG_FOLDER, "grids") };
 
 		ConfigBackupHandler.registerConfig(CQ_DUNGEON_FOLDER.getName(), "1.2.0");
-		ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "1.0.0");
+		ConfigBackupHandler.registerConfig(CQ_DUNGEON_GRID_FOLDER.getName(), "1.0.1");
 		ConfigBackupHandler.registerConfig(CQ_CHEST_FOLDER.getName(), "1.0.0");
-		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.3.1");
-		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.1");
+		ConfigBackupHandler.registerConfig(CQ_STRUCTURE_FILES_FOLDER.getName(), "1.4.0");
+		ConfigBackupHandler.registerConfig(CQ_FACTION_FOLDER.getName(), "1.0.2");
 		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "1.1.0");
