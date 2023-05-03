@@ -12,17 +12,34 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Difficulty;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
+import team.cqr.cqrepoured.init.CQRRegistries;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
-public class Faction {
+public class Faction implements IForgeRegistryEntry<Faction> {
+	
+	/*public static final Codec<Faction> CODEC = RecordCodecBuilder.create(instance -> {
+		return instance.group(
+				Codec.STRING.fieldOf("name").forGetter(Faction::getName),
+				Codec.BOOL.fieldOf("reputation_can_change").forGetter(Faction::canRepuChange),
+				CQRRegistries.FACTION,
+				Faction.CODEC.listOf().fieldOf("enemies").forGetter(Faction::getEnemies)
+		).apply(instance, Faction::new);
+	});*/
 
+	private ResourceLocation id;
+	
 	private boolean savedGlobally = true;
 	private boolean repuMayChange = true;
 	private String name;
@@ -235,5 +252,21 @@ public class Faction {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.name);
+	}
+
+	@Override
+	public Faction setRegistryName(ResourceLocation name) {
+		this.id = name;
+		return this;
+	}
+
+	@Override
+	public ResourceLocation getRegistryName() {
+		return this.id;
+	}
+
+	@Override
+	public Class<Faction> getRegistryType() {
+		return Faction.class;
 	}
 }
