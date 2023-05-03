@@ -21,7 +21,10 @@ public interface IServerAnimationReceiver {
 
 	default void sendAnimationUpdate(final String animationName) {
 		SPacketUpdateAnimationOfEntity message = SPacketUpdateAnimationOfEntity.builder(this).animate(animationName).build();
-		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getSelf), message);
+		LivingEntity entity = this.getSelf();
+		if(entity != null) {
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
+		}
 	}
 
 }

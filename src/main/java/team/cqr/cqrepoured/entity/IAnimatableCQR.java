@@ -93,9 +93,9 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		data.addAnimationController(new AnimationController<>(animatable, "controller_twohanded", 10, this::predicateTwoHandedSwing));
 	}
 
-	public String ANIM_NAME_PREFIX = "animation.biped.";
+	public static String ANIM_NAME_PREFIX = "animation.biped.";
 
-	public String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
+	public static String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
 
 	default <E extends AbstractEntityCQR & IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
@@ -104,8 +104,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.CONTINUE;
 	}
 
-	public String ANIM_NAME_SITTING = ANIM_NAME_PREFIX + "sit";
-	public String ANIM_NAME_SNEAKING = ANIM_NAME_PREFIX + "body.sneak";
+	public static String ANIM_NAME_SITTING = ANIM_NAME_PREFIX + "sit";
+	public static String ANIM_NAME_SNEAKING = ANIM_NAME_PREFIX + "body.sneak";
 
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateBodyPose(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
@@ -121,8 +121,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.STOP;
 	}
 
-	public String ANIM_NAME_BLOCKING_LEFT = ANIM_NAME_PREFIX + "arms.left.block";
-	public String ANIM_NAME_BLOCKING_RIGHT = ANIM_NAME_PREFIX + "arms.right.block";
+	public static String ANIM_NAME_BLOCKING_LEFT = ANIM_NAME_PREFIX + "arms.left.block";
+	public static String ANIM_NAME_BLOCKING_RIGHT = ANIM_NAME_PREFIX + "arms.right.block";
 
 	public default <E extends AbstractEntityCQR & IAnimatableCQR> Hand getLeftHand(E animatable) {
 		return animatable.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
@@ -142,8 +142,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return animatable.predicateHandSwing(animatable.getLeftHand(animatable), true, event);
 	}
 
-	public String ANIM_NAME_SWING_NORMAL_LEFT = ANIM_NAME_PREFIX + "arms.left.item-use";
-	public String ANIM_NAME_SWING_NORMAL_RIGHT = ANIM_NAME_PREFIX + "arms.right.item-use";
+	public static String ANIM_NAME_SWING_NORMAL_LEFT = ANIM_NAME_PREFIX + "arms.left.item-use";
+	public static String ANIM_NAME_SWING_NORMAL_RIGHT = ANIM_NAME_PREFIX + "arms.right.item-use";
 	
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandSwing(Hand hand, boolean leftHand, AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
@@ -212,7 +212,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.STOP;
 	}
 
-	public String ANIM_NAME_SPELLCASTING = ANIM_NAME_PREFIX + "arms.cast-spell";
+	public static String ANIM_NAME_SPELLCASTING = ANIM_NAME_PREFIX + "arms.cast-spell";
+	public static String ANIM_NAME_WALKING_ARMS = ANIM_NAME_PREFIX + "arms.walk";
 
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateTwoHandedPose(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
@@ -231,20 +232,23 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 					return resultState.get();
 				}
 			}
+		} else if(cqrIsWalking(event)) {
+			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALKING_ARMS));
+			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 
-	public String ANIM_NAME_SPEAR_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.spear";
-	public String ANIM_NAME_SPEAR_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.spear";
+	public static String ANIM_NAME_SPEAR_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.spear";
+	public static String ANIM_NAME_SPEAR_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.spear";
 
-	public String ANIM_NAME_FIREARM_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.firearm";
-	public String ANIM_NAME_FIREARM_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.firearm";
+	public static String ANIM_NAME_FIREARM_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.firearm";
+	public static String ANIM_NAME_FIREARM_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.firearm";
 	
-	public String ANIM_NAME_FIREARM_SMALL_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.firearm-small";
-	public String ANIM_NAME_FIREARM_SMALL_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.firearm-small";
+	public static String ANIM_NAME_FIREARM_SMALL_POSE_LEFT = ANIM_NAME_PREFIX + "arms.left.firearm-small";
+	public static String ANIM_NAME_FIREARM_SMALL_POSE_RIGHT = ANIM_NAME_PREFIX + "arms.right.firearm-small";
 
-	public String ANIM_NAME_GREATSWORD_POSE = ANIM_NAME_PREFIX + "arms.greatsword";
+	public static String ANIM_NAME_GREATSWORD_POSE = ANIM_NAME_PREFIX + "arms.greatsword";
 
 	default <E extends AbstractEntityCQR & IAnimatableCQR> Optional<PlayState> performTwoHandedLogicPerHand(ItemStack itemStack, boolean leftHanded, AnimationEvent<E> event) {
 		if (itemStack.isEmpty()) {
@@ -276,8 +280,8 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return Optional.empty();
 	}
 
-	public String ANIM_NAME_GREATSWORD_SWING = ANIM_NAME_PREFIX + "arms.attack-greatsword";
-	public String ANIM_NAME_SPEAR_SWING = ANIM_NAME_PREFIX + "arms.attack-spear";
+	public static String ANIM_NAME_GREATSWORD_SWING = ANIM_NAME_PREFIX + "arms.attack-greatsword";
+	public static String ANIM_NAME_SPEAR_SWING = ANIM_NAME_PREFIX + "arms.attack-spear";
 
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateTwoHandedSwing(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
@@ -295,7 +299,11 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.STOP;
 	}
 	
-	public String ANIM_NAME_WALKING = ANIM_NAME_PREFIX + "legs.walk";
+	public static String ANIM_NAME_WALKING = ANIM_NAME_PREFIX + "legs.walk";
+	
+	public static <E extends MobEntity & IAnimatable> boolean cqrIsWalking(AnimationEvent<E> event) {
+		return (!(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F));
+	}
 	
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateWalking(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
