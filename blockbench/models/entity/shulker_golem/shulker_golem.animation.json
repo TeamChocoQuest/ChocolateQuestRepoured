@@ -1,0 +1,364 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.shulkergolem.idle": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"root": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -1, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"bodyMain": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -1, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"shoulderLeft": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, -12.5]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"shoulderRight": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 12.5]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"legRightUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-12.5, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"legRightLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [20, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"legLeftUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-12.5, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"legLeftLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [20, 0, 0]
+						},
+						"2.0": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.shulkergolem.walk.legs": {
+			"loop": true
+		},
+		"animation.shulkergolem.walk.arms": {
+			"loop": true
+		},
+		"animation.shulkergolem.ground_smash": {
+			"loop": true
+		},
+		"animation.shulkergolem.ground_smash.prepare": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.68,
+			"bones": {
+				"bodyMain": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [-35, 0, 0]
+						}
+					}
+				},
+				"armLeftUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, 22.5]
+						}
+					}
+				},
+				"armLeftLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, 22.5]
+						}
+					}
+				},
+				"armRightUpper": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, -22.5]
+						}
+					}
+				},
+				"armRightLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [0, 0, -22.5]
+						}
+					}
+				},
+				"shoulders": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.68": {
+							"vector": [-180, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.shulkergolem.ground_smash.prepare_pose": {
+			"loop": true,
+			"bones": {
+				"bodyMain": {
+					"rotation": {
+						"vector": [-35, 0, 0]
+					}
+				},
+				"armLeftUpper": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armLeftLower": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armRightUpper": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"armRightLower": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"shoulders": {
+					"rotation": {
+						"vector": [-180, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.shulkergolem.ground_smash.smash": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.32,
+			"bones": {
+				"root": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [0, -10, 0]
+						}
+					}
+				},
+				"bodyMain": {
+					"rotation": {
+						"0.0": {
+							"vector": [-35, 0, 0]
+						},
+						"0.32": {
+							"vector": [65, 0, 0]
+						}
+					}
+				},
+				"armLeftUpper": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armLeftLower": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armRightUpper": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"armRightLower": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"legRightLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [70, 0, 0]
+						}
+					}
+				},
+				"legLeftLower": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [70, 0, 0]
+						}
+					}
+				},
+				"shoulders": {
+					"rotation": {
+						"0.0": {
+							"vector": [-180, 0, 0]
+						},
+						"0.32": {
+							"vector": [-72.5, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.shulkergolem.ground_smash.reset": {
+			"loop": true
+		},
+		"animation.shulkergolem.ground_smash.smash_pose": {
+			"loop": true,
+			"bones": {
+				"root": {
+					"position": {
+						"vector": [0, -10, 0]
+					}
+				},
+				"bodyMain": {
+					"rotation": {
+						"vector": [65, 0, 0]
+					}
+				},
+				"armLeftUpper": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armLeftLower": {
+					"rotation": {
+						"vector": [0, 0, 22.5]
+					}
+				},
+				"armRightUpper": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"armRightLower": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"legRightLower": {
+					"rotation": {
+						"vector": [70, 0, 0]
+					}
+				},
+				"legLeftLower": {
+					"rotation": {
+						"vector": [70, 0, 0]
+					}
+				},
+				"shoulders": {
+					"rotation": {
+						"vector": [-72.5, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.shulkergolem.shulker.pickup": {
+			"loop": true
+		},
+		"animation.shulkergolem.shulker.hold_pose": {
+			"loop": true
+		},
+		"animation.shulkergolem.shulker.put_on_head": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}
