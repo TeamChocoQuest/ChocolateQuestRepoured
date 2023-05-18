@@ -47,7 +47,7 @@ import team.cqr.cqrepoured.item.armor.ItemArmorSpider;
 import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.item.armor.ItemBootsCloud;
-import team.cqr.cqrepoured.item.armor.ItemCrown;
+import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 import team.cqr.cqrepoured.item.armor.ItemHelmetDragon;
 import team.cqr.cqrepoured.item.gun.ItemBubblePistol;
 import team.cqr.cqrepoured.item.gun.ItemBubbleRifle;
@@ -176,7 +176,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = register("boots_cloud", prop -> new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, EquipmentSlotType.FEET, prop));
 	public static final RegistryObject<ItemBackpack> BACKPACK = register("backpack", prop -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, prop));
 	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = register("spiked_glove", ItemSpikedGlove::new);
-	public static final RegistryObject<ItemCrown> KING_CROWN = register("king_crown", prop -> new ItemCrown(CQRMaterials.ArmorMaterials.ARMOR_CROWN, prop));
+	public static final RegistryObject<ItemArmorCrown> KING_CROWN = register("king_crown", prop -> new ItemArmorCrown(CQRMaterials.ArmorMaterials.ARMOR_CROWN, prop));
 
 	// Slime Armor RegistryObject<Item>s
 	public static final RegistryObject<ItemArmorSlime> HELMET_SLIME = register("helmet_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlotType.HEAD, prop));

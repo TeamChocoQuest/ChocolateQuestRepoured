@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.item.armor;
 
-import net.minecraft.client.renderer.entity.model.BipedModel;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,33 +14,26 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.item.GeoArmorItem;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
-import team.cqr.cqrepoured.client.init.CQRArmorModels;
 import team.cqr.cqrepoured.item.ItemLore;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
-public class ItemCrown extends ArmorItem {
+public class ItemArmorCrown extends GeoArmorItem implements IAnimatable {
 
 	public static final String NBT_KEY_CROWN = "CQR Crown";
 
-	public ItemCrown(IArmorMaterial materialIn, Properties props) {
+	public ItemArmorCrown(IArmorMaterial materialIn, Properties props) {
 		super(materialIn, EquipmentSlotType.HEAD, props);
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@Override
-	public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-		return (A)CQRArmorModels.CROWN;
-	}
-	
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
 		return CapabilityDynamicCrownProvider.createProvider();
@@ -86,6 +80,18 @@ public class ItemCrown extends ArmorItem {
 
 	public static boolean hasCrown(ItemStack stack) {
 		return stack.hasTag() && stack.getTag().contains(NBT_KEY_CROWN, Constants.NBT.TAG_COMPOUND);
+	}
+	
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+	@Override
+	public void registerControllers(AnimationData data) {
+		
+	}
+
+	@Override
+	public AnimationFactory getFactory() {
+		return this.factory;
 	}
 
 }

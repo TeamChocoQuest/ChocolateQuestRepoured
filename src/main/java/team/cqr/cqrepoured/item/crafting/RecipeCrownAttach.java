@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
-import team.cqr.cqrepoured.item.armor.ItemCrown;
+import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
 public class RecipeCrownAttach implements IRecipe<IInventory> {
 	
@@ -43,7 +43,7 @@ public class RecipeCrownAttach implements IRecipe<IInventory> {
 					} else {
 						return false;
 					}
-				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && !ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -66,7 +66,7 @@ public class RecipeCrownAttach implements IRecipe<IInventory> {
 					} else {
 						return ItemStack.EMPTY;
 					}
-				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && !ItemCrown.hasCrown(stack)) {
+				} else if (helmet == ItemStack.EMPTY && stack.getMaxStackSize() == 1 && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && !ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
@@ -83,7 +83,7 @@ public class RecipeCrownAttach implements IRecipe<IInventory> {
 			nbt = new CompoundNBT();
 			copy.setTag(nbt);
 		}
-		nbt.put(ItemCrown.NBT_KEY_CROWN, crown.save(new CompoundNBT()));
+		nbt.put(ItemArmorCrown.NBT_KEY_CROWN, crown.save(new CompoundNBT()));
 		return copy;
 	}
 

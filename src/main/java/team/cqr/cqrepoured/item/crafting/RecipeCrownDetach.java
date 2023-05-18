@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
-import team.cqr.cqrepoured.item.armor.ItemCrown;
+import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
 public class RecipeCrownDetach implements IRecipe<IInventory> {
 	
@@ -35,7 +35,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -51,7 +51,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
@@ -62,7 +62,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 			return ItemStack.EMPTY;
 		}
 
-		return ItemStack.of(helmet.getOrCreateTag().getCompound(ItemCrown.NBT_KEY_CROWN));
+		return ItemStack.of(helmet.getOrCreateTag().getCompound(ItemArmorCrown.NBT_KEY_CROWN));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty() && stack.hasTag()) {
 				ItemStack copy = stack.copy();
-				copy.getOrCreateTag().remove(ItemCrown.NBT_KEY_CROWN);
+				copy.getOrCreateTag().remove(ItemArmorCrown.NBT_KEY_CROWN);
 				if (copy.getOrCreateTag().isEmpty()) {
 					copy.setTag(null);
 				}
