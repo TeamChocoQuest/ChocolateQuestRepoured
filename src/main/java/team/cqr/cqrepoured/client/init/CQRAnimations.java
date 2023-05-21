@@ -15,7 +15,7 @@ public class CQRAnimations {
 	
 	public static class Entity {
 		private static ResourceLocation humanoid(final String path) {
-			return CQRMain.prefixEntityAnimation("humanoid" + path);
+			return CQRMain.prefixEntityAnimation("humanoid/" + path);
 		}
 		
 		// Misc
