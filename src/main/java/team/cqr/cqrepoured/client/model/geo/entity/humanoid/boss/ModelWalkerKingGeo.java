@@ -9,7 +9,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 public class ModelWalkerKingGeo<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelHumanoidGeo<T> {
 
 	public ModelWalkerKingGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.WALKER_KING);
 	}
 
 	@Override

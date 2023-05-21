@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRMinotaur;
 public class ModelCQRMinotaurGeo extends AbstractModelHumanoidGeo<EntityCQRMinotaur> {
 
 	public ModelCQRMinotaurGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.MINOTAUR);
 	}
 	
 	@Override

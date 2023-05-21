@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
 public class ModelCQRNPCGeo extends AbstractModelHumanoidGeo<EntityCQRNPC> {
 
 	public ModelCQRNPCGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.NPC);
 	}
 	
 	@Override

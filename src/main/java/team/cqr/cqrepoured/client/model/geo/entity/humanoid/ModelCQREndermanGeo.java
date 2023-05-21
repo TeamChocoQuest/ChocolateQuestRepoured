@@ -12,7 +12,7 @@ public class ModelCQREndermanGeo<T extends AbstractEntityCQR & IAnimatableCQR> e
 	protected final ResourceLocation STANDARD_ENDERMAN_ANIMATIONS = CQRMain.prefix("animations/biped_enderman.animation.json");
 
 	public ModelCQREndermanGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.ENDERMAN);
 	}
 
 	@Override

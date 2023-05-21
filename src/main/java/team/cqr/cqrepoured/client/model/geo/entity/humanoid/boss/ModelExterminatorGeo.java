@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 public class ModelExterminatorGeo extends AbstractModelGeoCQRBase<EntityCQRExterminator> {
 
 	public ModelExterminatorGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.EXTERMINATOR, CQRAnimations.Entity._GENERIC_HUMANOID);
 	}
 
 	@Override

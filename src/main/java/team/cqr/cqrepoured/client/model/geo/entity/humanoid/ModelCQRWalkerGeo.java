@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
 public class ModelCQRWalkerGeo extends AbstractModelHumanoidGeo<EntityCQRWalker> {
 
 	public ModelCQRWalkerGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.WALKER);
 	}
 	
 	@Override

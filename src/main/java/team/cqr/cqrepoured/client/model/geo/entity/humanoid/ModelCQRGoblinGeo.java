@@ -11,7 +11,7 @@ public class ModelCQRGoblinGeo extends AbstractModelHumanoidGeo<EntityCQRGoblin>
 	protected final ResourceLocation STANDARD_GOBLIN_ANIMATIONS = CQRMain.prefix("animations/biped_goblin.animation.json");
 
 	public ModelCQRGoblinGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.GOBLIN);
 	}
 	
 	@Override

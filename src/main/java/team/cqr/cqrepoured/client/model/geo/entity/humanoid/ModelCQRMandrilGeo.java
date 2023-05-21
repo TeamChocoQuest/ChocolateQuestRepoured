@@ -11,7 +11,7 @@ public class ModelCQRMandrilGeo extends AbstractModelHumanoidGeo<EntityCQRMandri
 	protected final ResourceLocation STANDARD_MANDRIL_ANIMATIONS = CQRMain.prefix("animations/biped_mandril.animation.json");
 
 	public ModelCQRMandrilGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.MANDRIL);
 	}
 
 	@Override

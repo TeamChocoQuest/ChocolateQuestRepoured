@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 public class ModelPirateCaptainGeo extends AbstractModelHumanoidGeo<EntityCQRPirateCaptain> {
 
 	public ModelPirateCaptainGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.PIRATE_CAPTAIN);
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRSpectre;
 public class ModelCQRSpectreGeo extends AbstractModelHumanoidGeo<EntityCQRSpectre> {
 
 	public ModelCQRSpectreGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.SPECTRE);
 	}
 	
 	@Override

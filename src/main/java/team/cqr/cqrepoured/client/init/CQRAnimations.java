@@ -22,7 +22,7 @@ public class CQRAnimations {
 		public static final ResourceLocation FLYING_SKULL = CQRMain.prefixEntityAnimation("flying_skull");
 		
 		// Humanoid
-		public static final ResourceLocation _GENERIC_HUMANOID = CQRMain.prefixEntityAnimation("generic_humanoid");
+		public static final ResourceLocation _GENERIC_HUMANOID = CQRMain.prefixEntityAnimation("_generic_humanoid");
 		
 		public static final ResourceLocation BOARMAN = humanoid("boarman");
 		public static final ResourceLocation DUMMY = humanoid("dummy");
@@ -65,5 +65,7 @@ public class CQRAnimations {
 	public static class Item {
 		
 	}
+
+	public static final ResourceLocation _EMPTY = CQRMain.prefixAnimation("_empty");
 
 }

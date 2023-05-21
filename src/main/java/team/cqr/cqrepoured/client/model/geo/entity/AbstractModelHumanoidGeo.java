@@ -14,10 +14,10 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 	
 	protected static final String STANDARD_HEAD_IDENT = "bipedHead";
 	
-	public AbstractModelHumanoidGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+	public AbstractModelHumanoidGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName, final ResourceLocation... animationFile) {
+		super(model, textureDefault, entityName, merge(CQRAnimations.Entity._GENERIC_HUMANOID, animationFile));
 	}
-
+	
 	protected abstract String getHeadBoneIdent();
 
 	protected float getNetHeadYaw(final float partialTicks, T entity) {
@@ -93,7 +93,7 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
 	}
-
+	
 	@Override
 	public ResourceLocation getAnimationFileLocation(T animatable) {
 		return CQRAnimations.Entity._GENERIC_HUMANOID;

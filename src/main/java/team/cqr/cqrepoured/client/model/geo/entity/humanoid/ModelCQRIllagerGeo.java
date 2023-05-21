@@ -8,14 +8,14 @@ import team.cqr.cqrepoured.entity.mobs.EntityCQRIllager;
 public class ModelCQRIllagerGeo extends AbstractModelHumanoidGeo<EntityCQRIllager> {
 
 	public ModelCQRIllagerGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.ILLAGER);
 	}
-	
+
 	@Override
 	protected String getHeadBoneIdent() {
 		return STANDARD_HEAD_IDENT;
 	}
-	
+
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQRIllager animatable) {
 		return CQRAnimations.Entity.ILLAGER;

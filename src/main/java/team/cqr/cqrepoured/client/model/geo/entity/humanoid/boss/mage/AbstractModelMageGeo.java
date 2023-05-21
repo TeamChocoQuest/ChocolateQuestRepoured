@@ -15,8 +15,8 @@ public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimata
 	protected final ResourceLocation MODEL_HIDDEN;
 	protected final ResourceLocation TEXTURE_HIDDEN;
 	
-	public AbstractModelMageGeo(ResourceLocation model, ResourceLocation textureDefault, ResourceLocation modelHidden, ResourceLocation texHidden, String entityName) {
-		super(model, textureDefault, entityName);
+	public AbstractModelMageGeo(ResourceLocation model, ResourceLocation textureDefault, ResourceLocation modelHidden, ResourceLocation texHidden, String entityName, final ResourceLocation... hierarchy) {
+		super(model, textureDefault, entityName, merge(CQRAnimations.Entity.MAGE_HIDDEN, hierarchy));
 		
 		this.MODEL_HIDDEN = modelHidden;
 		this.TEXTURE_HIDDEN = texHidden;

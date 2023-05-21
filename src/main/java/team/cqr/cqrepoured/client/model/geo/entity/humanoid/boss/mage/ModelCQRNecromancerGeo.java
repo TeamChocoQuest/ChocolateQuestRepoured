@@ -7,7 +7,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 public class ModelCQRNecromancerGeo extends AbstractModelMageGeo<EntityCQRNecromancer> {
 
 	public ModelCQRNecromancerGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, STANDARD_MODEL_HIDDEN_MAGE, STANDARD_TEXTURE_HIDDEN_MAGE, entityName);
+		super(model, textureDefault, STANDARD_MODEL_HIDDEN_MAGE, STANDARD_TEXTURE_HIDDEN_MAGE, entityName, CQRAnimations.Entity.NECROMANCER);
 	}
 	
 	@Override

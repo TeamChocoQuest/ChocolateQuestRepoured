@@ -11,7 +11,7 @@ public class ModelCQRGremlinGeo extends AbstractModelHumanoidGeo<EntityCQRGremli
 	protected final ResourceLocation STANDARD_GREMLIN_ANIMATIONS = CQRMain.prefix("animations/biped_gremlin.animation.json");
 
 	public ModelCQRGremlinGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
-		super(model, textureDefault, entityName);
+		super(model, textureDefault, entityName, CQRAnimations.Entity.GREMLIN);
 	}
 
 	@Override
