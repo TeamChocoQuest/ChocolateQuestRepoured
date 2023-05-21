@@ -1,5 +1,14 @@
 {
 	"format_version": "1.8.0",
+	"includes": [
+		{
+			"file_id": "id",
+			"animations": [
+				"animName1",
+				"animName2"
+			]
+		}
+	],
 	"animations": {
 		"animation.biped.idle": {
 			"loop": true,
