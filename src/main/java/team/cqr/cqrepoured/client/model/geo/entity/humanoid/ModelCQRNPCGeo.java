@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRNPC;
 
@@ -13,6 +14,11 @@ public class ModelCQRNPCGeo extends AbstractModelHumanoidGeo<EntityCQRNPC> {
 	@Override
 	protected String getHeadBoneIdent() {
 		return STANDARD_HEAD_IDENT;
+	}
+	
+	@Override
+	public ResourceLocation getAnimationFileLocation(EntityCQRNPC animatable) {
+		return CQRAnimations.Entity.NPC;
 	}
 
 }

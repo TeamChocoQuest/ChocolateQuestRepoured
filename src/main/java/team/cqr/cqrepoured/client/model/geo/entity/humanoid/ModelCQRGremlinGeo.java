@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
 
@@ -20,7 +21,7 @@ public class ModelCQRGremlinGeo extends AbstractModelHumanoidGeo<EntityCQRGremli
 	
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQRGremlin animatable) {
-		return STANDARD_GREMLIN_ANIMATIONS;
+		return CQRAnimations.Entity.GREMLIN;
 	}
 
 }

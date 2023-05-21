@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -21,7 +22,7 @@ public class ModelCQREndermanGeo<T extends AbstractEntityCQR & IAnimatableCQR> e
 	
 	@Override
 	public ResourceLocation getAnimationFileLocation(T animatable) {
-		return STANDARD_ENDERMAN_ANIMATIONS;
+		return CQRAnimations.Entity.ENDERMAN;
 	}
 
 }
