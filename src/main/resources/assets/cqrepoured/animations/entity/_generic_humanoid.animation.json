@@ -56,16 +56,10 @@
 		},
 		"animation.biped.sit": {
 			"loop": true,
-			"animation_length": 8.64,
 			"bones": {
 				"root": {
 					"position": {
-						"0.0": {
-							"vector": [0, -10, 0]
-						},
-						"8.64": {
-							"vector": [0, -10, 0]
-						}
+						"vector": [0, -10, 0]
 					}
 				},
 				"bipedLegs": {

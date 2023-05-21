@@ -1,59 +1,6 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.biped.idle": {
-			"loop": true,
-			"animation_length": 2,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.52": {
-							"vector": [-2.5, 0, -3.9]
-						},
-						"1.0": {
-							"vector": [0, 0, -7.5],
-							"easing": "linear"
-						},
-						"1.52": {
-							"vector": [2.5, 0, -3.6]
-						},
-						"2.0": {
-							"vector": [0, 0, 0],
-							"easing": "linear"
-						}
-					}
-				},
-				"bipedArmRight": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.52": {
-							"vector": [2.5, 0, 2.03],
-							"easing": "linear"
-						},
-						"1.0": {
-							"vector": [0, 0, 7.5],
-							"easing": "linear"
-						},
-						"1.52": {
-							"vector": [-2.5, 0, 5.47],
-							"easing": "linear"
-						},
-						"2.0": {
-							"vector": [0, 0, 0],
-							"easing": "linear"
-						}
-					}
-				}
-			}
-		},
-		"animation.biped.arms.right.greatsword": {
-			"loop": true
-		},
 		"animation.biped.sit": {
 			"loop": true,
 			"bones": {
@@ -140,49 +87,6 @@
 						"2.08": {
 							"vector": [0, 0, 0]
 						}
-					}
-				}
-			}
-		},
-		"animation.biped.body.sneak": {
-			"loop": true,
-			"bones": {
-				"bipedBody": {
-					"rotation": {
-						"vector": [22.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, -1, 0]
-					}
-				},
-				"bipedArms": {
-					"position": {
-						"vector": [0, 0, -1]
-					}
-				},
-				"bipedHeadBaseRotator": {
-					"rotation": {
-						"vector": [-22.5, 0, 0]
-					}
-				}
-			}
-		},
-		"animation.biped.arms.left.block": {
-			"loop": true,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"vector": [-54.68626, 17.38772, 18.2489]
-					}
-				}
-			}
-		},
-		"animation.biped.arms.right.block": {
-			"loop": true,
-			"bones": {
-				"bipedArmRight": {
-					"rotation": {
-						"vector": [-54.68626, -17.38772, -18.2489]
 					}
 				}
 			}
@@ -304,68 +208,6 @@
 				}
 			}
 		},
-		"animation.biped.arms.left.firearm-small": {
-			"loop": true,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				}
-			}
-		},
-		"animation.biped.arms.right.firearm-small": {
-			"loop": true,
-			"bones": {
-				"bipedArmRight": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				}
-			}
-		},
-		"animation.biped.arms.left.item-use": {
-			"animation_length": 0.36,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.12": {
-							"vector": [-60, 0, 0]
-						},
-						"0.24": {
-							"vector": [-25.31123, 16.66577, 31.23252]
-						},
-						"0.36": {
-							"vector": [0, 0, 0]
-						}
-					}
-				}
-			}
-		},
-		"animation.biped.arms.right.item-use": {
-			"animation_length": 0.4,
-			"bones": {
-				"bipedArmRight": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.12": {
-							"vector": [-60, 0, 0]
-						},
-						"0.24": {
-							"vector": [-26.69087, -22.3718, -37.12826]
-						},
-						"0.36": {
-							"vector": [0, 0, 0]
-						}
-					}
-				}
-			}
-		},
 		"animation.biped.arms.cast-spell": {
 			"loop": true,
 			"animation_length": 2.68,
@@ -445,89 +287,6 @@
 				"1.04": {
 					"effect": "magic_particles",
 					"locator": "hands"
-				}
-			}
-		},
-		"animation.biped.arms.spin-to-win": {
-			"loop": true,
-			"animation_length": 0.48,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"vector": [0, 0, -90]
-					},
-					"position": {
-						"vector": [1, -1, 0]
-					}
-				},
-				"bipedArmRight": {
-					"rotation": {
-						"vector": [0, 180, 90]
-					},
-					"position": {
-						"vector": [-1, 1, 0]
-					}
-				},
-				"root": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.48": {
-							"vector": [0, 360, 0]
-						}
-					}
-				}
-			}
-		},
-		"animation.biped.arms.attack-greatsword": {
-			"animation_length": 0.32,
-			"bones": {
-				"bipedArms": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.12": {
-							"vector": [-60, 0, 0],
-							"easing": "easeOutCubic"
-						},
-						"0.32": {
-							"vector": [0, 0, 0],
-							"easing": "easeInQuad"
-						}
-					}
-				}
-			}
-		},
-		"animation.biped.arms.attack-spear": {
-			"animation_length": 0.44,
-			"bones": {
-				"bipedArmLeft": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.16": {
-							"vector": [-22.25, 0, 0]
-						},
-						"0.44": {
-							"vector": [0, 0, 0]
-						}
-					}
-				},
-				"bipedArmRight": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"0.16": {
-							"vector": [-22.25, 0, 0]
-						},
-						"0.44": {
-							"vector": [0, 0, 0]
-						}
-					}
 				}
 			}
 		}
