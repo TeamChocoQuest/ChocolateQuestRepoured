@@ -1,26 +1,24 @@
-package team.cqr.cqrepoured.client.model.geo.entity.boss;
+package team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.mage;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRStandardBiped;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
+import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
-public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimatableCQR> extends AbstractModelGeoCQRStandardBiped<T> {
+public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimatableCQR> extends AbstractModelHumanoidGeo<T> {
 	
-	static final ResourceLocation STANDARD_ANIMATIONS_HIDDEN_MAGE = CQRMain.prefix("animations/biped_standard.animation.json");
 	static final ResourceLocation STANDARD_MODEL_HIDDEN_MAGE = CQRMain.prefix("geo/entity/boss/mage/biped_mage_base.geo.json");
 	static final ResourceLocation STANDARD_TEXTURE_HIDDEN_MAGE = CQRMain.prefix("textures/entity/boss/mage_hidden.png");
 	
 	protected final ResourceLocation MODEL_HIDDEN;
-	protected final ResourceLocation ANIMATIONS_HIDDEN;
 	protected final ResourceLocation TEXTURE_HIDDEN;
 	
-	public AbstractModelMageGeo(ResourceLocation model, ResourceLocation textureDefault, ResourceLocation modelHidden, ResourceLocation animsHidden, ResourceLocation texHidden, String entityName) {
+	public AbstractModelMageGeo(ResourceLocation model, ResourceLocation textureDefault, ResourceLocation modelHidden, ResourceLocation texHidden, String entityName) {
 		super(model, textureDefault, entityName);
 		
 		this.MODEL_HIDDEN = modelHidden;
-		this.ANIMATIONS_HIDDEN = animsHidden;
 		this.TEXTURE_HIDDEN = texHidden;
 	}
 	
@@ -34,10 +32,7 @@ public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimata
 	
 	@Override
 	public ResourceLocation getAnimationFileLocation(T animatable) {
-		if(animatable.isIdentityHidden()) {
-			return ANIMATIONS_HIDDEN;
-		}
-		return super.getAnimationFileLocation(animatable);
+		return CQRAnimations.Entity.MAGE_HIDDEN;
 	}
 	
 	@Override

@@ -4,21 +4,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 
-public class ModelEnderCalamity extends AbstractModelGeoCQRBase<EntityCQREnderCalamity> {
+public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnderCalamity> {
 
-	public ModelEnderCalamity(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
+	public ModelEnderCalamityGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
 
-	private static final ResourceLocation ANIMATION_RESLOC = new ResourceLocation(CQRMain.MODID, "animations/ender_calamity.animation.json");
-
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQREnderCalamity animatable) {
-		return ANIMATION_RESLOC;
+		return CQRAnimations.Entity.ENDER_CALAMITY;
 	}
 
 	private static final String BONE_IDENT_ROOT = "root";

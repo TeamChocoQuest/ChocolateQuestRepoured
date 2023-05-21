@@ -28,7 +28,7 @@ import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamity;
+import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamityGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.StandardBipedBones;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
@@ -90,7 +90,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/ender_calamity.geo.json");
 
 	public RenderCQREnderCalamity(EntityRendererManager renderManager) {
-		super(renderManager, new ModelEnderCalamity(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
+		super(renderManager, new ModelEnderCalamityGeo(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
 
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}

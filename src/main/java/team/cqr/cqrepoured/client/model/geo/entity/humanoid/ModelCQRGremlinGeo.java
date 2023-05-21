@@ -1,11 +1,11 @@
-package team.cqr.cqrepoured.client.model.geo.entity;
+package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRStandardBiped;
+import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGremlin;
 
-public class ModelCQRGremlinGeo extends AbstractModelGeoCQRStandardBiped<EntityCQRGremlin> {
+public class ModelCQRGremlinGeo extends AbstractModelHumanoidGeo<EntityCQRGremlin> {
 	
 	protected final ResourceLocation STANDARD_GREMLIN_ANIMATIONS = CQRMain.prefix("animations/biped_gremlin.animation.json");
 

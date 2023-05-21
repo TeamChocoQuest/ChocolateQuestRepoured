@@ -1,12 +1,12 @@
-package team.cqr.cqrepoured.client.model.geo.entity;
+package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRStandardBiped;
+import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class ModelCQREndermanGeo<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelGeoCQRStandardBiped<T> {
+public class ModelCQREndermanGeo<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelHumanoidGeo<T> {
 	
 	protected final ResourceLocation STANDARD_ENDERMAN_ANIMATIONS = CQRMain.prefix("animations/biped_enderman.animation.json");
 

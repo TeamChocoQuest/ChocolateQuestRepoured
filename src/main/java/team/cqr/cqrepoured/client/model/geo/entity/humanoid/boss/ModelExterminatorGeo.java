@@ -1,21 +1,19 @@
-package team.cqr.cqrepoured.client.model.geo.entity.boss;
+package team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss;
 
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
-public class ModelExterminator extends AbstractModelGeoCQRBase<EntityCQRExterminator> {
+public class ModelExterminatorGeo extends AbstractModelGeoCQRBase<EntityCQRExterminator> {
 
-	public ModelExterminator(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
+	public ModelExterminatorGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
 
-	static final ResourceLocation ANIMATION_RESLOC = new ResourceLocation(CQRMain.MODID, "animations/exterminator.animation.json");
-
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQRExterminator animatable) {
-		return ANIMATION_RESLOC;
+		return CQRAnimations.Entity.EXTERMINATOR;
 	}
 	/* No longer needed, handled by animation now!
 	private static final String BONE_IDENT_LEFT_LEG = "leg_left";

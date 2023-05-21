@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.core.util.Color;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelSpectrelordGeo;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelSpectrelordGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 

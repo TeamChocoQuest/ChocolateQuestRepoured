@@ -2,12 +2,11 @@ package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class ModelNetherDragonHeadGeo extends AbstractModelGeoCQRBase<EntityCQRNetherDragon> {
-	
-	static final ResourceLocation ANIMATION_IDENT = CQRMain.prefix("animations/nether_dragon.animation.json");
 	
 	static final ResourceLocation TEXTURE_SKELETAL = CQRMain.prefix("textures/entity/boss/nether_dragon_skeletal_head.png");
 	public static final ResourceLocation TEXTURE_NORMAL = CQRMain.prefix("textures/entity/boss/nether_dragon_head.png");
@@ -21,7 +20,7 @@ public class ModelNetherDragonHeadGeo extends AbstractModelGeoCQRBase<EntityCQRN
 
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQRNetherDragon animatable) {
-		return ANIMATION_IDENT;
+		return CQRAnimations.Entity.NETHER_DRAGON;
 	}
 	
 	@Override

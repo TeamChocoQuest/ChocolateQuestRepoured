@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.ModelCQREndermanGeo;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQREndermanGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderKing;

@@ -1,10 +1,10 @@
-package team.cqr.cqrepoured.client.model.geo.entity;
+package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
 import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRStandardBiped;
+import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRGolem;
 
-public class ModelCQRGolemGeo extends AbstractModelGeoCQRStandardBiped<EntityCQRGolem> {
+public class ModelCQRGolemGeo extends AbstractModelHumanoidGeo<EntityCQRGolem> {
 
 	public ModelCQRGolemGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);

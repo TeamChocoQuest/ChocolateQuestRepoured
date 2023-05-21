@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelExterminator;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelExterminatorGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.StandardBipedBones;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
@@ -26,7 +26,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/exterminator.geo.json");
 
 	public RenderCQRExterminator(EntityRendererManager renderManager) {
-		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
+		super(renderManager, new ModelExterminatorGeo(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
 		
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQRExterminator>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}

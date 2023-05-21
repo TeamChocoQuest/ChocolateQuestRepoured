@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelWalkerKingGeo;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelWalkerKingGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerBossDeathGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;

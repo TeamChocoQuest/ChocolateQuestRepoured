@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.ModelCQRTritonGeo;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQRTritonGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRTriton;
 

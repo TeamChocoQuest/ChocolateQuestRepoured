@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.core.processor.IBone;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelWalkerKingGeo;
+import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelWalkerKingGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;

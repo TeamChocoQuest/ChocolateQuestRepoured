@@ -4,20 +4,19 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
-public class ModelGiantTortoiseGecko extends AbstractModelGeoCQRBase<EntityCQRGiantTortoise> {
+public class ModelGiantTortoiseGeo extends AbstractModelGeoCQRBase<EntityCQRGiantTortoise> {
 
-	public ModelGiantTortoiseGecko(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
+	public ModelGiantTortoiseGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
 
-	static final ResourceLocation ANIMATION_RESLOC = new ResourceLocation(CQRMain.MODID, "animations/giant_tortoise.animation.json");
-
 	@Override
 	public ResourceLocation getAnimationFileLocation(EntityCQRGiantTortoise animatable) {
-		return ANIMATION_RESLOC;
+		return CQRAnimations.Entity.GIANT_TORTOISE;
 	}
 
 	private static final String BONE_IDENT_HEAD = "head";

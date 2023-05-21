@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelGiantTortoiseGecko;
+import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelGiantTortoiseGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
@@ -21,7 +21,7 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/giant_tortoise.geo.json");
 
 	public RenderCQRGiantTortoiseGecko(EntityRendererManager renderManager) {
-		super(renderManager, new ModelGiantTortoiseGecko(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
+		super(renderManager, new ModelGiantTortoiseGeo(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
 	}
 
 	// we do not hold items, so we can ignore this

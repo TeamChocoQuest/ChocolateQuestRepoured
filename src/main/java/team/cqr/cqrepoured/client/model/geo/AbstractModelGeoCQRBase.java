@@ -4,7 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.builder.Animation;
+import software.bernie.geckolib3.file.AnimationFile;
+import software.bernie.geckolib3.geo.exception.GeckoLibException;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
+import software.bernie.geckolib3.resource.GeckoLibCache;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ITextureVariants;
@@ -16,8 +20,6 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & IAnimatable & I
 	protected final String ENTITY_REGISTRY_PATH_NAME;
 
 	protected ResourceLocation[] textureVariantCache = null;
-	
-	protected final ResourceLocation STANDARD_BIPED_ANIMATIONS = CQRMain.prefix("animations/biped_standard.animation.json");
 
 	public AbstractModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
 		super();
@@ -26,7 +28,6 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & IAnimatable & I
 		this.ENTITY_REGISTRY_PATH_NAME = entityName;
 	}
 
-	
 	@Override
 	public ResourceLocation getTextureLocation(T entity) {
 		if (entity instanceof IHasTextureOverride) {
@@ -54,6 +55,20 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & IAnimatable & I
 	@Override
 	public ResourceLocation getModelLocation(T object) {
 		return this.MODEL_RESLOC;
+	}
+
+	// Support hierarchical aniamtion loading
+	@Override
+	public Animation getAnimation(String name, IAnimatable animatable) {
+		ResourceLocation animationID = this.getAnimationFileLocation((T) animatable);
+		AnimationFile bakedAnimations = GeckoLibCache.getInstance().getAnimations().get(animationID);
+		if (bakedAnimations == null) {
+			throw new GeckoLibException(this.getAnimationFileLocation((T) animatable), "Could not find animation file. Please double check name.");
+		}
+		if (!bakedAnimations.getAllAnimations().contains(name)) {
+			return super.getAnimation(name, animatable);
+		}
+		return bakedAnimations.getAnimation(name);
 	}
 
 }

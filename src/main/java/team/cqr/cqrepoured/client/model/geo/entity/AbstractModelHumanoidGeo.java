@@ -1,18 +1,20 @@
-package team.cqr.cqrepoured.client.model.geo;
+package team.cqr.cqrepoured.client.model.geo.entity;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
+import team.cqr.cqrepoured.client.init.CQRAnimations;
+import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public abstract class AbstractModelGeoCQRStandardBiped<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelGeoCQRBase<T> {
+public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAnimatableCQR> extends AbstractModelGeoCQRBase<T> {
 	
 	protected static final String STANDARD_HEAD_IDENT = "bipedHead";
-
-	public AbstractModelGeoCQRStandardBiped(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
+	
+	public AbstractModelHumanoidGeo(ResourceLocation model, ResourceLocation textureDefault, String entityName) {
 		super(model, textureDefault, entityName);
 	}
 
@@ -94,7 +96,7 @@ public abstract class AbstractModelGeoCQRStandardBiped<T extends AbstractEntityC
 
 	@Override
 	public ResourceLocation getAnimationFileLocation(T animatable) {
-		return STANDARD_BIPED_ANIMATIONS;
+		return CQRAnimations.Entity._GENERIC_HUMANOID;
 	}
-
+	
 }
