@@ -301,6 +301,28 @@ public class CQRMain {
 	public static final ResourceLocation prefixStructureTemplateId(final String path) {
 		return new ResourceLocation(MODID_STRUCTURES, path);
 	}
+	
+	static final String ANIMATION_SUFFIX = ".animation.json";
+	public static final ResourceLocation prefixAnimation(final String path) {
+		String pathToUse = path;
+		if(!path.endsWith(ANIMATION_SUFFIX)) {
+			pathToUse = path + ANIMATION_SUFFIX;
+		}
+		return new ResourceLocation(MODID, "animations/" + pathToUse);
+	}
+	
+	public static final ResourceLocation prefixEntityAnimation(final String path) {
+		return prefixAnimation("entity/" + path);
+	}
+	
+	public static final ResourceLocation prefixBlockAnimation(final String path) {
+		return prefixAnimation("block/" + path);
+	}
+	
+
+	public static ResourceLocation prefixArmorAnimation(final String path) {
+		return prefixAnimation("armor/" + path);
+	}
 
 	public static <T extends IForgeRegistryEntry<T>> T register(IForgeRegistry<T> registry, T entry, String registryKey) {
 		entry.setRegistryName(new ResourceLocation(CQRMain.MODID, registryKey));
