@@ -22,13 +22,13 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public Level getWorld(Context context) {
-		return context.getSender().level;
+		return context.getSender().level();
 	}
 
 	@Override
 	public Advancement getAdvancement(Player player, ResourceLocation id) {
 		if (player instanceof ServerPlayer) {
-			return ((ServerPlayer) player).getLevel().getServer().getAdvancements().getAdvancement(id);
+			return ((ServerPlayer) player).level().getServer().getAdvancements().getAdvancement(id);
 		}
 		return null;
 	}

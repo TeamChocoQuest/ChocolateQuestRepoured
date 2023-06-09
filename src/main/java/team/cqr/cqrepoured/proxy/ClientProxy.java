@@ -3,15 +3,15 @@ package team.cqr.cqrepoured.proxy;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.multiplayer.ClientAdvancementManager;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientAdvancements;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.server.IntegratedServer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.integrated.IntegratedServer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent.Context;
@@ -60,8 +60,8 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public Advancement getAdvancement(Player player, ResourceLocation id) {
-		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+		if (player instanceof LocalPlayer) {
+			ClientAdvancements manager = ((LocalPlayer) player).connection.getAdvancements();
 			return manager.getAdvancements().get(id);
 		}
 		return null;
@@ -69,8 +69,8 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public boolean hasAdvancement(Player player, ResourceLocation id) {
-		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+		if (player instanceof LocalPlayer) {
+			ClientAdvancements manager = ((LocalPlayer) player).connection.getAdvancements();
 			Advancement advancement = manager.getAdvancements().get(id);
 			if (advancement != null) {
 				AdvancementProgress prog = manager.progress.get(advancement);

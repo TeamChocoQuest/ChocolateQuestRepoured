@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.core.Direction;
@@ -89,11 +90,11 @@ public class BlockStateGenArray {
 		if (lootTable != null) {
 			Block chestBlock = Blocks.CHEST;
 			BlockState state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing);
-			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(state, world);
+			ChestBlockEntity chest = (ChestBlockEntity) chestBlock.newBlockEntity(state, world);
 			if (chest != null) {
 				long seed = WorldDungeonGenerator.getSeed(0, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
-				CompoundTag nbt = chest.save(new CompoundTag());
+				CompoundTag nbt = chest.serializeNBT();
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
 			}
 		} else {

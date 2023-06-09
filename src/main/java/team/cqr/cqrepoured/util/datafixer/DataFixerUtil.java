@@ -11,25 +11,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.IObjectIntIterable;
-import net.minecraft.util.datafix.DataFixesManager;
-import net.minecraft.util.datafix.DefaultTypeReferences;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.util.palette.UpgradeData;
-import net.minecraft.world.EmptyTickList;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.biome.Biome.RainType;
-import net.minecraft.world.biome.BiomeAmbience;
-import net.minecraft.world.biome.BiomeContainer;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class DataFixerUtil {

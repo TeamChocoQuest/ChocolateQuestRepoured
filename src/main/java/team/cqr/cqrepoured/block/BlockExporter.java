@@ -11,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -22,7 +22,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 public class BlockExporter extends Block {
 
-	private static final TextComponent SCREEN_TITLE = new TranslationTextComponent("tile.exporter.name");
+	private static final Component SCREEN_TITLE = new TranslationTextComponent("tile.exporter.name");
 
 	public BlockExporter() {
 		super(Properties.of(Material.STONE)

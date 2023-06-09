@@ -74,7 +74,7 @@ public class FactionRegistry {
 	}
 
 	public static FactionRegistry instance(Entity entity) {
-		return instance(entity.level);
+		return instance(entity.level());
 	}
 
 	public void loadFactions() {
@@ -127,7 +127,7 @@ public class FactionRegistry {
 				continue;
 			}
 			ResourceLocation registryName = new ResourceLocation(s.substring(0, i).trim());
-			EntityType<?> entry = ForgeRegistries.ENTITIES.getValue(registryName);
+			EntityType<?> entry = ForgeRegistries.ENTITY_TYPES.getValue(registryName);
 			if (entry == null) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
 				continue;
@@ -387,14 +387,14 @@ public class FactionRegistry {
 	}
 
 	private boolean canRepuChange(Player player) {
-		return player.level.getDifficulty() != Difficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
+		return player.level().getDifficulty() != Difficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
 	}
 
 	public void loadPlayerReputationData(Player player) {
 		CQRMain.logger.info("Loading player reputation...");
 
 		UUID uuid = player.getUUID();
-		File file = FileIOUtil.getCQRDataFile((ServerLevel) player.level, "reputation/" + uuid + ".nbt");
+		File file = FileIOUtil.getCQRDataFile((ServerLevel) player.level(), "reputation/" + uuid + ".nbt");
 		if (file.exists()) {
 			CompoundTag root = FileIOUtil.readNBT(file);
 			Map<String, Integer> mapping = this.playerFactionRepuMap.computeIfAbsent(uuid, key -> new Object2IntOpenHashMap<>());
@@ -413,7 +413,7 @@ public class FactionRegistry {
 	public void savePlayerReputationData(ServerPlayer player) {
 		if (this.playerFactionRepuMap.containsKey(player.getUUID())) {
 			CQRMain.logger.info("Saving player reputation...");
-			this.savePlayerReputation(player.getUUID(), true, player.level);
+			this.savePlayerReputation(player.getUUID(), true, player.level());
 		}
 	}
 

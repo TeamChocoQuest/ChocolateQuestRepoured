@@ -28,7 +28,7 @@ public interface IHasFaction {
 	@Nullable
 	public default Level getLevel() {
 		if(this instanceof Entity) {
-			return ((Entity)this).level;
+			return ((Entity)this).level();
 		}
 		return null;
 	}

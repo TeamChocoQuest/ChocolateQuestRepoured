@@ -1,13 +1,14 @@
 package net.minecraft.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-
-import javax.annotation.Nullable;
 
 public class EntityList {
 
@@ -39,11 +40,11 @@ public class EntityList {
 	}
 	
 	public static Entity createEntityByIDFromName(ResourceLocation id, Level world) {
-		return ForgeRegistries.ENTITIES.getValue(id).create(world);
+		return ForgeRegistries.ENTITY_TYPES.getValue(id).create(world);
 	}
 
 	public static ResourceLocation getKey(Entity ent) {
-		return ent.getType().getRegistryName();
+		return EntityType.getKey(ent.getType());
 	}
 
 }

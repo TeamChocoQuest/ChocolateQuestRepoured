@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TNTBlock;
+import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.sounds.SoundSource;
@@ -15,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 
-public class BlockTNTCQR extends TNTBlock {
+public class BlockTNTCQR extends TntBlock {
 
 	/**
 	 * To distinguish it from normal TNT, it has a boolean field that gets set to false. This field indicates whether or not

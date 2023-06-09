@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
@@ -17,6 +18,7 @@ import net.minecraft.tileentity.BannerTileEntity;
 import net.minecraft.util.Mirror;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.vector.Vector3i;
@@ -55,7 +57,7 @@ public class DungeonGenUtils {
 	}
 
 	// Center of spheroid is (0/0/0)
-	public static boolean isInsideSpheroid(Vector3i pointOnSphere, double radX, double radY, double radZ) {
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radX, double radY, double radZ) {
 		double axisX = pointOnSphere.getX();
 		axisX *= axisX;
 		axisX /= (radX * radX);
@@ -68,15 +70,15 @@ public class DungeonGenUtils {
 		return axisX + axisY + axisZ == 1.0D;
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointInSpace, Vector3i spheroidCenter, double radX, double radY, double radZ) {
-		return isInsideSpheroid(new Vector3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radX, double radY, double radZ) {
+		return isInsideSpheroid(new Vec3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointOnSphere, double radWidth, double radHeight) {
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radWidth, double radHeight) {
 		return isInsideSpheroid(pointOnSphere, radWidth, radHeight, radWidth);
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointInSpace, Vector3i spheroidCenter, double radWidth, double radHeight) {
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radWidth, double radHeight) {
 		return isInsideSpheroid(pointInSpace, spheroidCenter, radWidth, radHeight, radWidth);
 	}
 
@@ -138,7 +140,7 @@ public class DungeonGenUtils {
 		return b instanceof BlockExporterChest;
 	}
 
-	public static boolean isCQBanner(BannerTileEntity banner) {
+	public static boolean isCQBanner(BannerBlockEntity banner) {
 		return BannerHelper.isCQBanner(banner);
 	}
 
@@ -196,31 +198,31 @@ public class DungeonGenUtils {
 	/*
 	 * Rotate a vec3i to align with the given side. Assumes that the vec3i is default +x right, +z down coordinate system
 	 */
-	public static Vector3i rotateVec3i(Vector3i vec, Direction side) {
+	public static Vec3i rotateVec3i(Vec3i vec, Direction side) {
 		if (side == Direction.SOUTH) {
-			return new Vector3i(-vec.getX(), vec.getY(), -vec.getZ());
+			return new Vec3i(-vec.getX(), vec.getY(), -vec.getZ());
 		} else if (side == Direction.WEST) {
-			return new Vector3i(vec.getZ(), vec.getY(), -vec.getX());
+			return new Vec3i(vec.getZ(), vec.getY(), -vec.getX());
 		} else if (side == Direction.EAST) {
-			return new Vector3i(-vec.getZ(), vec.getY(), vec.getX());
+			return new Vec3i(-vec.getZ(), vec.getY(), vec.getX());
 		} else {
 			// North side, or some other invalid side
 			return vec;
 		}
 	}
 
-	public static Vector3i rotateMatrixOffsetCW(Vector3i offset, int sizeX, int sizeZ, int numRotations) {
+	public static Vec3i rotateMatrixOffsetCW(Vec3i offset, int sizeX, int sizeZ, int numRotations) {
 		final int maxXIndex = sizeX - 1;
 		final int maxZIndex = sizeZ - 1;
 
 		if (numRotations % 4 == 0) {
-			return new Vector3i(offset.getX(), offset.getY(), offset.getZ());
+			return new Vec3i(offset.getX(), offset.getY(), offset.getZ());
 		} else if (numRotations % 4 == 1) {
-			return new Vector3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
+			return new Vec3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
 		} else if (numRotations % 4 == 2) {
-			return new Vector3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
+			return new Vec3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
 		} else {
-			return new Vector3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
+			return new Vec3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
 		}
 	}
 

@@ -1,25 +1,28 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 
 public class BlockPosUtil {
 
 	public interface BlockInfoConsumer {
-		void accept(BlockPos.Mutable mutablePos, BlockState state);
+		void accept(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
 	public interface BlockInfoPredicate {
-		boolean test(BlockPos.Mutable mutablePos, BlockState state);
+		boolean test(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
 	public static void forEach(Level world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
@@ -48,7 +51,7 @@ public class BlockPosUtil {
 		int chunkEndY = y2 >> 4;
 		int chunkEndZ = z2 >> 4;
 
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
 		for (int chunkX = chunkStartX; chunkX <= chunkEndX; chunkX++) {
 			for (int chunkZ = chunkStartZ; chunkZ <= chunkEndZ; chunkZ++) {
@@ -56,12 +59,12 @@ public class BlockPosUtil {
 					continue;
 				}
 
-				Chunk chunk = world.getChunk(chunkX, chunkZ);
-				ChunkSection[] blockStorageArray = chunk.getSections();
+				LevelChunk chunk = world.getChunk(chunkX, chunkZ);
+				LevelChunkSection[] blockStorageArray = chunk.getSections();
 				for (int chunkY = chunkStartY; chunkY <= chunkEndY; chunkY++) {
-					ChunkSection extendedBlockStorage = blockStorageArray[chunkY];
+					LevelChunkSection extendedBlockStorage = blockStorageArray[chunkY];
 
-					if (skipAirBlocks && extendedBlockStorage == Chunk.EMPTY_SECTION) {
+					if (skipAirBlocks && extendedBlockStorage == LevelChunk.EMPTY_SECTION) {
 						continue;
 					}
 
@@ -127,7 +130,7 @@ public class BlockPosUtil {
 
 	private static class BlockPosDistInfo {
 
-		private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		private double dist;
 		private boolean empty = true;
 

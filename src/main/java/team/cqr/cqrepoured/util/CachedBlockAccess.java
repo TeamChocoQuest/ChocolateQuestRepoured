@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.util;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkSection;
-
-import javax.annotation.Nullable;
 
 public class CachedBlockAccess implements BlockGetter {
 
-	private final BlockPos.Mutable mutable = new BlockPos.Mutable();
+	private final BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 	private Level level;
-	private Chunk cachedChunk;
-	private ChunkSection cachedSection;
+	private LevelChunk cachedChunk;
+	private LevelChunkSection cachedSection;
 
 	public void setupCached(Level level) {
 		this.level = level;
@@ -31,7 +31,7 @@ public class CachedBlockAccess implements BlockGetter {
 		this.cachedSection = null;
 	}
 
-	public Chunk getChunk(int chunkX, int chunkZ) {
+	public LevelChunk getChunk(int chunkX, int chunkZ) {
 		if (this.cachedChunk == null || this.cachedChunk.getPos().x != chunkX || this.cachedChunk.getPos().z != chunkZ) {
 			this.cachedChunk = this.level.getChunk(chunkX, chunkZ);
 			this.cachedSection = null;
@@ -40,19 +40,19 @@ public class CachedBlockAccess implements BlockGetter {
 	}
 
 	@Nullable
-	public ChunkSection getChunkSection(int chunkX, int chunkY, int chunkZ) {
+	public LevelChunkSection getChunkSection(int chunkX, int chunkY, int chunkZ) {
 		return this.getChunkSection(this.mutable.set(chunkX << 4, chunkY << 4, chunkZ << 4));
 	}
 
 	@Nullable
-	public ChunkSection getChunkSection(BlockPos pos) {
-		if (Level.isOutsideBuildHeight(pos)) {
+	public LevelChunkSection getChunkSection(BlockPos pos) {
+		if (this.level.isOutsideBuildHeight(pos)) {
 			return null;
 		}
 //		if (CQRMain.isCubicChunksInstalled && CubicChunks.isCubicWorld(this.level)) {
 //			this.cachedSection = CubicChunks.getBlockStorage(this.level, pos.getX() >> 4, pos.getY() >> 4, pos.getZ() >> 4);
 //		} else {
-			Chunk chunk = this.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+			LevelChunk chunk = this.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
 			if (this.cachedSection == null || this.cachedSection.bottomBlockY() >> 4 != pos.getY() >> 4) {
 				this.cachedSection = chunk.getSections()[pos.getY() >> 4];
 			}
@@ -71,7 +71,7 @@ public class CachedBlockAccess implements BlockGetter {
 
 	@Override
 	public BlockState getBlockState(BlockPos pos) {
-		ChunkSection section = this.getChunkSection(pos);
+		LevelChunkSection section = this.getChunkSection(pos);
 		if (section == null) {
 			return Blocks.AIR.defaultBlockState();
 		}
@@ -112,11 +112,21 @@ public class CachedBlockAccess implements BlockGetter {
 
 	@Override
 	public FluidState getFluidState(BlockPos pos) {
-		ChunkSection section = this.getChunkSection(pos);
+		LevelChunkSection section = this.getChunkSection(pos);
 		if (section == null) {
 			return null;
 		}
 		return section.getFluidState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+	}
+
+	@Override
+	public int getHeight() {
+		return this.level.getHeight();
+	}
+
+	@Override
+	public int getMinBuildHeight() {
+		return this.level.getMinBuildHeight();
 	}
 
 }

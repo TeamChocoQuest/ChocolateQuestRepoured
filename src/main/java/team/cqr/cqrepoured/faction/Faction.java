@@ -16,13 +16,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.Difficulty;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
-public class Faction implements IForgeRegistryEntry<Faction> {
+public class Faction implements IForgeRegistry<Faction> {
 	
 	/*public static final Codec<Faction> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -127,7 +128,7 @@ public class Faction implements IForgeRegistryEntry<Faction> {
 				return false;
 			}
 		}
-		if (ent.level.getDifficulty() == Difficulty.PEACEFUL) {
+		if (ent.level().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
 		if (ent instanceof Player) {
