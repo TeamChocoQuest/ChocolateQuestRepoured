@@ -32,11 +32,34 @@ repositories {
     }
 
     // GeckoLib
-    maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' }
+    maven {
+		name = "GeckoLib (Glib) Maven Repo" 
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven' 
+	}
 
+
+	// SBL
+	maven {
+		name = "SmartBrainLib (SBL) Maven Repo"
+		url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+	}
+	
     // JEI
-    maven { url 'https://dvs1.progwml6.com/files/maven' }
-    maven { url 'https://modmaven.dev' }
+    maven {
+		// location of the maven that hosts JEI files before January 2023
+		name = "Progwml6's maven"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
+	maven {
+		// location of the maven that hosts JEI files since January 2023
+		name = "Jared's maven"
+		url = "https://maven.blamejared.com/"
+	}
+	maven {
+		// location of a maven mirror for JEI files, as a fallback
+		name = "ModMaven"
+		url = "https://modmaven.dev"
+	}
 
     // CurseForge
     maven { url 'https://www.cursemaven.com' }
@@ -55,12 +78,15 @@ dependencies {
 	// Not on 1.20 yet
     // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
     // SmartBrainLib
-    implementation fg.deobf("curse.maven:SmartBrainLib-661293:${smartbrainlib_version}")
+    implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-${mc_version}:${smartbrainlib_version}")
 
     // JEI
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    // WorldEdit
+    compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}"))
+	compileOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}"))
+	// at runtime, use the full JEI jar for Forge
+	runtimeOnly(fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}"))
+    
+	// WorldEdit
     // runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
 }
 
