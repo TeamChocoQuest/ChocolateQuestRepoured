@@ -17,7 +17,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.EntitySlimePart;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
-import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 import team.cqr.cqrepoured.entity.boss.EntityCQRLich;
 import team.cqr.cqrepoured.entity.boss.EntityCQRNecromancer;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
