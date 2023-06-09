@@ -233,7 +233,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 				}
 			}
 		} else if(cqrIsWalking(event)) {
-			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALKING_ARMS));
+			//event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_WALKING_ARMS));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
