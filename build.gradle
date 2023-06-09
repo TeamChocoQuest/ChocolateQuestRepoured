@@ -1,5 +1,6 @@
 plugins {
     id 'eclipse'
+	id 'idea'
     id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
     id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
     id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
@@ -9,7 +10,7 @@ version = "${mc_version}-${mod_version}"
 group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 configurations {
     includedDependencies
@@ -51,7 +52,8 @@ dependencies {
     // GeckoLib
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     // ReachFix
-    implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
+	// Not on 1.20 yet
+    // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
     // SmartBrainLib
     implementation fg.deobf("curse.maven:SmartBrainLib-661293:${smartbrainlib_version}")
 
@@ -59,7 +61,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     // WorldEdit
-    runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
+    // runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
 }
 
 minecraft {
