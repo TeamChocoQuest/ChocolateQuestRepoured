@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.network.FriendlyByteBuf;
-
 import javax.annotation.Nonnull;
+
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryInt extends DataEntry<Integer> {
 
@@ -16,14 +16,14 @@ public class DataEntryInt extends DataEntry<Integer> {
 	}
 
 	@Override
-	public INBT write() {
-		return IntNBT.valueOf(this.value);
+	public Tag write() {
+		return IntTag.valueOf(this.value);
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
-		if (nbt instanceof IntNBT) {
-			this.value = ((IntNBT) nbt).getAsInt();
+	protected void readInternal(Tag nbt) {
+		if (nbt instanceof IntTag) {
+			this.value = ((IntTag) nbt).getAsInt();
 		}
 	}
 

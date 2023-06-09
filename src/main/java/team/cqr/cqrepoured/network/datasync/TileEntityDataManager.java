@@ -1,18 +1,24 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.TargetPoint;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
 import team.cqr.cqrepoured.tileentity.ITileEntitySyncable;
-
-import javax.annotation.Nonnull;
-import java.util.*;
 
 public class TileEntityDataManager {
 

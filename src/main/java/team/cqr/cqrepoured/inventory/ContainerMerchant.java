@@ -4,13 +4,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.network.CQRNetworkHooks;
 import team.cqr.cqrepoured.util.CraftingHelper;
 
-public class ContainerMerchant extends Container implements IInteractable {
+public class ContainerMerchant extends AbstractContainerMenu implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;

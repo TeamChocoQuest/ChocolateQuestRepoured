@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -27,16 +28,16 @@ import team.cqr.cqrepoured.item.gun.ItemRevolver;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
 
-public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
+public interface IAnimatableCQR extends GeoAnimatable {
 	
 	@Override
-	default int tickTimer() {
-		if(this instanceof Entity) {
-			return ((Entity)this).tickCount;
+	default double getTick(Object arg0) {
+		if(arg0 instanceof Entity ent) {
+			return ent.tickCount;
 		}
 		return 0;
 	}
-
+	
 	public Set<String> getAlwaysPlayingAnimations();
 	
 	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isTwoHandedAnimationRunning(E animatable) {

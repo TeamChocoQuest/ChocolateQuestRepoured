@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -33,7 +33,7 @@ public class CapabilityHandler {
 	}
 
 	@SubscribeEvent
-	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<Chunk> event) {
+	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<LevelChunk> event) {
 		event.addCapability(CapabilityProtectedRegionDataProvider.LOCATION, CapabilityProtectedRegionDataProvider.createProvider(event.getObject()));
 	}
 

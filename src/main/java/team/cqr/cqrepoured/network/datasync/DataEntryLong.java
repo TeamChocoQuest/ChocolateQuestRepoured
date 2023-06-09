@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.network.FriendlyByteBuf;
-
 import javax.annotation.Nonnull;
+
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryLong extends DataEntry<Long> {
 
@@ -16,14 +16,14 @@ public class DataEntryLong extends DataEntry<Long> {
 	}
 
 	@Override
-	public INBT write() {
-		return LongNBT.valueOf(this.value);
+	public Tag write() {
+		return LongTag.valueOf(this.value);
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
-		if (nbt instanceof LongNBT) {
-			this.value = ((LongNBT) nbt).getAsLong();
+	protected void readInternal(Tag nbt) {
+		if (nbt instanceof LongTag) {
+			this.value = ((LongTag) nbt).getAsLong();
 		}
 	}
 

@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -81,7 +82,7 @@ public class EntityCQRBoarman extends AbstractEntityCQR implements IAnimatableCQ
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

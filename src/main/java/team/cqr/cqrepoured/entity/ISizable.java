@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.EntitySize;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraftforge.entity.PartEntity;
 
 public interface ISizable {
@@ -13,7 +13,7 @@ public interface ISizable {
 	void applySizeVariation(float value);
 
 	// Has to be called in getDimensions, performs the actual scaling
-	default EntitySize callOnGetDimensions(EntitySize parentResult) {
+	default EntityDimensions callOnGetDimensions(EntityDimensions parentResult) {
 		if(parentResult != null) {
 			return parentResult.scale(this.getSizeVariation());
 		}

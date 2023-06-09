@@ -19,6 +19,7 @@ public class CPacketHandlerUpdateEntityPrevPos extends AbstractPacketHandler<SPa
 		entity.xOld = entity.getX();
 		entity.yOld = entity.getY();
 		entity.zOld = entity.getZ();
+		
 		entity.yRot = message.getYaw();
 		entity.yRotO = entity.yRot;
 	}

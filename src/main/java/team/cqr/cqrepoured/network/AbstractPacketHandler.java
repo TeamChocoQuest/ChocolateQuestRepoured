@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.network;
 
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.play.ServerPlayNetHandler;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent.Context;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
+
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ServerPacketListener;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public abstract class AbstractPacketHandler<P extends Object> implements IMessageHandler<P> {
 
@@ -20,13 +21,13 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 		context.get().enqueueWork(() -> {
 			Player sender = null;
 			Level world = null;
-			if(context.get().getNetworkManager().getPacketListener() instanceof ServerPlayNetHandler) {
+			if(context.get().getNetworkManager().getPacketListener() instanceof ServerPacketListener) {
 				sender = context.get().getSender();
 				if(sender != null) {
-					world = sender.level;
+					world = sender.level();
 				}
 			}
-			if(context.get().getNetworkManager().getPacketListener() instanceof ClientPlayNetHandler) {
+			if(context.get().getNetworkManager().getPacketListener() instanceof ClientPacketListener) {
 				sender = ClientOnlyMethods.getClientPlayer();
 				world = ClientOnlyMethods.getWorld();
 			}

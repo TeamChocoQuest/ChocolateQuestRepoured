@@ -1,26 +1,26 @@
 package team.cqr.cqrepoured.entity.trade;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListTag;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.faction.FactionRegistry;
-import team.cqr.cqrepoured.util.CraftingHelper;
-
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.util.CraftingHelper;
 
 public class Trade {
 
@@ -80,7 +80,7 @@ public class Trade {
 	private void readFromNBT(CompoundTag nbt) {
 		this.inputs.clear();
 		ListTag inItems = nbt.getList("inputs", Constants.NBT.TAG_COMPOUND);
-		for (INBT tag : inItems) {
+		for (Tag tag : inItems) {
 			this.inputs.add(new TradeInput((CompoundTag) tag));
 		}
 		this.output = ItemStack.of(nbt.getCompound("output"));
@@ -271,7 +271,7 @@ public class Trade {
 				}
 			}
 
-			if (!player.level.isClientSide) {
+			if (!player.level().isClientSide) {
 				this.decStock();
 			}
 

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.ByteNBT;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.inventory.InventoryBlockEntity;
 
@@ -16,13 +16,13 @@ public class DataEntryInventory extends DataEntryObject<InventoryBlockEntity> {
 	}
 
 	@Override
-	public INBT write() {
+	public Tag write() {
 		// nothing to write here
-		return ByteNBT.ZERO;
+		return ByteTag.ZERO;
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
+	protected void readInternal(Tag nbt) {
 		// nothing to read here
 	}
 

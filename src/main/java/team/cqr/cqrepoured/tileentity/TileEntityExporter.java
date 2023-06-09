@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
@@ -86,7 +87,7 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 	};
 	private final DataEntryObject<BlockPos[]> unprotectedBlocks = new DataEntryObject<BlockPos[]>("UnprotectedBlocks", new BlockPos[0], true) {
 		@Override
-		public INBT write() {
+		public Tag write() {
 			int[] data = new int[this.value.length * 3];
 			for (int i = 0; i < this.value.length; i++) {
 				data[i * 3] = this.value[i].getX();
@@ -97,7 +98,7 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 		}
 
 		@Override
-		protected void readInternal(INBT nbt) {
+		protected void readInternal(Tag nbt) {
 			if (nbt instanceof IntArrayNBT) {
 				int[] data = ((IntArrayNBT) nbt).getAsIntArray();
 				this.value = new BlockPos[data.length / 3];

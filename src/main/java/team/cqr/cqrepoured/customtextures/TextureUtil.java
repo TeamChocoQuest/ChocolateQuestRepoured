@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.customtextures;
 import java.io.File;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 

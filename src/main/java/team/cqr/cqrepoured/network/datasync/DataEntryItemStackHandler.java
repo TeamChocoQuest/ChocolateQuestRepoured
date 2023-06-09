@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.datasync;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
@@ -18,12 +18,12 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	}
 
 	@Override
-	public INBT write() {
+	public Tag write() {
 		return this.value.serializeNBT();
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
+	protected void readInternal(Tag nbt) {
 		this.canMarkDirty = false;
 		if (nbt instanceof CompoundTag) {
 			this.value.deserializeNBT((CompoundTag) nbt);

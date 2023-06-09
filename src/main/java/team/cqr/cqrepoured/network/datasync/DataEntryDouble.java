@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.FriendlyByteBuf;
-
 import javax.annotation.Nonnull;
+
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryDouble extends DataEntry<Double> {
 
@@ -16,14 +16,14 @@ public class DataEntryDouble extends DataEntry<Double> {
 	}
 
 	@Override
-	public INBT write() {
-		return DoubleNBT.valueOf(this.value);
+	public Tag write() {
+		return DoubleTag.valueOf(this.value);
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
-		if (nbt instanceof DoubleNBT) {
-			this.value = ((DoubleNBT) nbt).getAsDouble();
+	protected void readInternal(Tag nbt) {
+		if (nbt instanceof DoubleTag) {
+			this.value = ((DoubleTag) nbt).getAsDouble();
 		}
 	}
 

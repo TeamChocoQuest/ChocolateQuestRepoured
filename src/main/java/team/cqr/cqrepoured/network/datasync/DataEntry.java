@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.INBT;
+import javax.annotation.Nonnull;
+
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
 
 public abstract class DataEntry<T> {
 
@@ -18,14 +18,14 @@ public abstract class DataEntry<T> {
 		this.name = name;
 		this.isClientModificationAllowed = isClientModificationAllowed;
 	}
+	
+	public abstract Tag write();
 
-	public abstract INBT write();
-
-	public void read(INBT nbt) {
+	public void read(Tag nbt) {
 		this.readInternal(nbt);
 	}
 
-	protected abstract void readInternal(INBT nbt);
+	protected abstract void readInternal(Tag nbt);
 
 	public abstract void writeChanges(FriendlyByteBuf buf);
 

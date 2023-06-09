@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.entity;
 
+import java.util.UUID;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.SlimeEntity;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
-import java.util.UUID;
-
-public class EntitySlimePart extends SlimeEntity {
+public class EntitySlimePart extends Slime {
 
 	private UUID ownerUuid;
 
@@ -33,10 +33,10 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.availableGoals.clear();
+		this.targetSelector.getAvailableGoals().clear();
 	}
 
-	public static AttributeSupplier.MutableAttribute createMobAttributes() {
+	public static AttributeSupplier.Builder createMobAttributes() {
 		return LivingEntity
 			.createLivingAttributes()
 			.add(Attributes.FOLLOW_RANGE, 16.0D)
@@ -47,7 +47,7 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	public void tick() {
 		if (this.tickCount > 400) {
-			this.remove();
+			this.discard();;
 		}
 
 		super.tick();
@@ -62,7 +62,7 @@ public class EntitySlimePart extends SlimeEntity {
 	public void push(Entity entityIn) {
 		if (entityIn instanceof LivingEntity && entityIn.getUUID().equals(this.ownerUuid)) {
 			((LivingEntity) entityIn).heal(2.0F);
-			this.remove();
+			this.discard();
 		}
 	}
 

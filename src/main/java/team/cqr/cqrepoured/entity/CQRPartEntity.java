@@ -4,8 +4,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.Pose;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -13,7 +13,7 @@ import net.minecraftforge.entity.PartEntity;
 
 public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	
-	protected EntitySize size;
+	protected EntityDimensions size;
 
 	protected int newPosRotationIncrements;
 	protected double interpTargetX;
@@ -86,11 +86,11 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		setPositionAndRotationDirect(vec.x, vec.y, vec.z, buffer.readFloat(), buffer.readFloat(), 3);
 		final float w = buffer.readFloat();
 		final float h = buffer.readFloat();
-		this.setSize(buffer.readBoolean() ? EntitySize.fixed(w, h) : EntitySize.scalable(w, h));
+		this.setSize(buffer.readBoolean() ? EntityDimensions.fixed(w, h) : EntityDimensions.scalable(w, h));
 		this.refreshDimensions();
 	}
 	
-	private void setSize(EntitySize size) {
+	private void setSize(EntityDimensions size) {
 		this.size = size;
 	}
 
@@ -126,19 +126,19 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 		super.setPos(pX, pY, pZ);
 	}*/
 	
-	public EntitySize getSize() {
+	public EntityDimensions getSize() {
 		return this.size;
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose pPose) {
+	public EntityDimensions getDimensions(Pose pPose) {
 		return this.size;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean hurt(DamageSource pSource, float pAmount) {
-		if(this.level.isClientSide) {
+		if(this.level().isClientSide) {
 			//return false;
 		}
 		if(this.isInvulnerableTo(pSource)) {

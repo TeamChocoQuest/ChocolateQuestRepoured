@@ -17,7 +17,6 @@ import org.apache.commons.io.FileUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

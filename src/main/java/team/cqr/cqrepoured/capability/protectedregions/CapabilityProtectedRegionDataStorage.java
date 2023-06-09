@@ -6,7 +6,7 @@ import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
-public class CapabilityProtectedRegionDataStorage implements IStorage<CapabilityProtectedRegionData> {
+public class CapabilityProtectedRegionDataStorage implements Storage<CapabilityProtectedRegionData> {
 
 	@Override
 	public INBT writeNBT(Capability<CapabilityProtectedRegionData> capability, CapabilityProtectedRegionData instance, Direction side) {
