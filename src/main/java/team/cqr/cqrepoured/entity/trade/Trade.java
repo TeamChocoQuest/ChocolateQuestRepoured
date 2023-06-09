@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.trade;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.ListTag;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -70,18 +70,18 @@ public class Trade {
 		this.holder = holder;
 	}
 
-	public static Trade createFromNBT(TraderOffer holder, CompoundNBT nbt) {
+	public static Trade createFromNBT(TraderOffer holder, CompoundTag nbt) {
 		Trade trade = new Trade(holder);
 		trade.readFromNBT(nbt);
 		trade.updateInputItemsCompressed();
 		return trade;
 	}
 
-	private void readFromNBT(CompoundNBT nbt) {
+	private void readFromNBT(CompoundTag nbt) {
 		this.inputs.clear();
-		ListNBT inItems = nbt.getList("inputs", Constants.NBT.TAG_COMPOUND);
+		ListTag inItems = nbt.getList("inputs", Constants.NBT.TAG_COMPOUND);
 		for (INBT tag : inItems) {
-			this.inputs.add(new TradeInput((CompoundNBT) tag));
+			this.inputs.add(new TradeInput((CompoundTag) tag));
 		}
 		this.output = ItemStack.of(nbt.getCompound("output"));
 		this.isSimple = nbt.getBoolean("isSimple");
@@ -95,15 +95,15 @@ public class Trade {
 		this.maxStock = nbt.getInt("maxStock");
 	}
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag writeToNBT() {
+		CompoundTag nbt = new CompoundTag();
 
-		ListNBT inItems = new ListNBT();
+		ListTag inItems = new ListTag();
 		for (TradeInput input : this.inputs) {
 			inItems.add(input.writeToNBT());
 		}
 		nbt.put("inputs", inItems);
-		nbt.put("output", this.output.save(new CompoundNBT()));
+		nbt.put("output", this.output.save(new CompoundTag()));
 		nbt.putBoolean("isSimple", this.isSimple);
 
 		nbt.putBoolean("hasLimitedStock", this.hasLimitedStock);
@@ -252,7 +252,7 @@ public class Trade {
 		}
 	}
 
-	public boolean doTransaction(PlayerEntity player, ItemStack[] input) {
+	public boolean doTransaction(Player player, ItemStack[] input) {
 		if (!this.isInStock()) {
 			return false;
 		}
@@ -371,7 +371,7 @@ public class Trade {
 		return list;
 	}
 
-	public boolean isUnlockedFor(PlayerEntity player) {
+	public boolean isUnlockedFor(Player player) {
 		if (this.requiredReputation != Integer.MIN_VALUE && FactionRegistry.instance(player).getExactReputationOf(player.getUUID(), this.holder.getTraderFaction()) < this.requiredReputation) {
 			return false;
 		}

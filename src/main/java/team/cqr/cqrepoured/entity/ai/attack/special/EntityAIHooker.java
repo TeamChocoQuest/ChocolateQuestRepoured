@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
@@ -59,7 +59,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vector3d v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
+				Vec3 v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
 				v = v.add(this.entity.position());
 				this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.3);
 			}
@@ -95,7 +95,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.state = STATE.PREPARING_LAUNCH;
 			} else {
 				// We are too close to our target
-				Vector3d v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
+				Vec3 v = this.entity.position().subtract(this.entity.getTarget().position()).normalize().scale(6);
 				v = v.add(this.entity.position());
 				this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.3);
 			}
@@ -106,7 +106,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 			ItemStack hookItem = this.entity.getMainHandItem();
 			if (hookItem.getItem() instanceof ItemHookshotBase) {
-				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getTarget(), Hand.OFF_HAND);
+				this.hook = ((ItemHookshotBase) hookItem.getItem()).entityAIshoot(this.world, this.entity, this.entity.getTarget(), InteractionHand.OFF_HAND);
 				this.state = STATE.HOOK_FLYING;
 			}
 

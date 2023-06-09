@@ -2,24 +2,23 @@ package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
 import java.util.EnumSet;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion.Mode;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
-import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRSounds;
 
 public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 
-	private Vector3d movementVector;
+	private Vec3 movementVector;
 
 	private static final int COOLDOWN = 2;
 	private int cooldown = COOLDOWN / 2;
@@ -180,7 +179,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			if (this.getBoss().getCurrentAnimationTick() % 5 == 0) {
 				this.getBoss().playSound(CQRSounds.BUBBLE_BUBBLE, 1, 0.75F + (0.5F * this.getBoss().getRandom().nextFloat()));
 			}
-			Vector3d v = new Vector3d(this.entity.getRandom().nextDouble() - 0.5D, 0.125D * (this.entity.getRandom().nextDouble() - 0.5D), this.entity.getRandom().nextDouble() - 0.5D);
+			Vec3 v = new Vec3(this.entity.getRandom().nextDouble() - 0.5D, 0.125D * (this.entity.getRandom().nextDouble() - 0.5D), this.entity.getRandom().nextDouble() - 0.5D);
 			v = v.normalize();
 			v = v.scale(1.4);
 			this.entity.getLookControl().setLookAt(this.entity.getTarget(), 30, 30);
@@ -200,20 +199,20 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 	}
 
 	private boolean hitHardBlock(double vx, double vy, double vz) {
-		Vector3d velocity = new Vector3d(vx, vy, vz);
-		AxisAlignedBB aabb = this.getBoss().getBoundingBox();
+		Vec3 velocity = new Vec3(vx, vy, vz);
+		AABB aabb = this.getBoss().getBoundingBox();
 		if (aabb == null) {
 			return false;
 		}
 		aabb = aabb.inflate(0.5).move(velocity.normalize().scale(this.getBoss().getBbWidth() / 2));
-		World world = this.getBoss().getWorld();
+		Level world = this.getBoss().getWorld();
 
-		int x1 = MathHelper.floor(aabb.minX);
-		int y1 = MathHelper.floor(aabb.minY);
-		int z1 = MathHelper.floor(aabb.minZ);
-		int x2 = MathHelper.floor(aabb.maxX);
-		int y2 = MathHelper.floor(aabb.maxY);
-		int z2 = MathHelper.floor(aabb.maxZ);
+		int x1 = Mth.floor(aabb.minX);
+		int y1 = Mth.floor(aabb.minY);
+		int z1 = Mth.floor(aabb.minZ);
+		int x2 = Mth.floor(aabb.maxX);
+		int y2 = Mth.floor(aabb.maxY);
+		int z2 = Mth.floor(aabb.maxZ);
 
 		for (int k1 = x1; k1 <= x2; ++k1) {
 			for (int l1 = y1; l1 <= y2; ++l1) {

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.item.sword;
 
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemSwordTurtle extends ItemCQRWeapon {
 

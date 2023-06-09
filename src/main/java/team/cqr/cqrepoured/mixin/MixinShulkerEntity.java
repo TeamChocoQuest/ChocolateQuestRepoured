@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.mixin;
 
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.monster.ShulkerEntity;
 import net.minecraft.entity.passive.GolemEntity;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 @Mixin(ShulkerEntity.class)
 public abstract class MixinShulkerEntity extends GolemEntity {
 
-	protected MixinShulkerEntity(EntityType<? extends GolemEntity> p_i48569_1_, World p_i48569_2_) {
+	protected MixinShulkerEntity(EntityType<? extends GolemEntity> p_i48569_1_, Level p_i48569_2_) {
 		super(p_i48569_1_, p_i48569_2_);
 	}
 	

@@ -12,17 +12,17 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.resources.IResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.SimpleReloadableResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
 
@@ -84,7 +84,7 @@ public class TextureSetManager {
 			CQRMain.logger.info("Loaded {} texture Sets!", loadedSets);
 			
 			//Now, register the pack...
-			IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+			ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 			if(resourceManager instanceof SimpleReloadableResourceManager) {
 				((SimpleReloadableResourceManager)resourceManager).add(CTResourcepack.getInstance());
 			} else {
@@ -108,7 +108,7 @@ public class TextureSetManager {
 		}
 	}
 
-	public static void sendTexturesToClient(ServerPlayerEntity joiningPlayer) {
+	public static void sendTexturesToClient(ServerPlayer joiningPlayer) {
 		try {
 			getInstance().sendTexturesToClientImpl(joiningPlayer);
 		} catch (NoSuchMethodError ex) {
@@ -116,7 +116,7 @@ public class TextureSetManager {
 		}
 	}
 
-	private void sendTexturesToClientImpl(ServerPlayerEntity joiningPlayer) {
+	private void sendTexturesToClientImpl(ServerPlayer joiningPlayer) {
 		SPacketCustomTextures packet = new SPacketCustomTextures();
 		/*
 		 * for (File texture : TextureSet.getLoadedTextures()) { String base64 = CompressionUtil.encodeFileToBase64(texture);

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 
 public class Capes {

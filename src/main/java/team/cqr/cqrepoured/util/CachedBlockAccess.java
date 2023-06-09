@@ -1,25 +1,25 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
 
 import javax.annotation.Nullable;
 
-public class CachedBlockAccess implements IBlockReader {
+public class CachedBlockAccess implements BlockGetter {
 
 	private final BlockPos.Mutable mutable = new BlockPos.Mutable();
-	private World level;
+	private Level level;
 	private Chunk cachedChunk;
 	private ChunkSection cachedSection;
 
-	public void setupCached(World level) {
+	public void setupCached(Level level) {
 		this.level = level;
 		this.cachedChunk = null;
 		this.cachedSection = null;
@@ -46,7 +46,7 @@ public class CachedBlockAccess implements IBlockReader {
 
 	@Nullable
 	public ChunkSection getChunkSection(BlockPos pos) {
-		if (World.isOutsideBuildHeight(pos)) {
+		if (Level.isOutsideBuildHeight(pos)) {
 			return null;
 		}
 //		if (CQRMain.isCubicChunksInstalled && CubicChunks.isCubicWorld(this.level)) {
@@ -106,7 +106,7 @@ public class CachedBlockAccess implements IBlockReader {
 	}*/
 
 	@Override
-	public TileEntity getBlockEntity(BlockPos pPos) {
+	public BlockEntity getBlockEntity(BlockPos pPos) {
 		throw new UnsupportedOperationException();
 	}
 

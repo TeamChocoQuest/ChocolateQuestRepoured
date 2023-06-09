@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -32,7 +32,7 @@ public class SPacketUpdateElectrocuteCapability extends AbstractPacket<SPacketUp
 	}
 
 	@Override
-	public SPacketUpdateElectrocuteCapability fromBytes(PacketBuffer buf) {
+	public SPacketUpdateElectrocuteCapability fromBytes(FriendlyByteBuf buf) {
 		SPacketUpdateElectrocuteCapability result = new SPacketUpdateElectrocuteCapability();
 		
 		result.entityId = buf.readInt();
@@ -47,7 +47,7 @@ public class SPacketUpdateElectrocuteCapability extends AbstractPacket<SPacketUp
 	}
 
 	@Override
-	public void toBytes(SPacketUpdateElectrocuteCapability packet, PacketBuffer buf) {
+	public void toBytes(SPacketUpdateElectrocuteCapability packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		// buf.writeInt(this.electroCharge);
 		buf.writeBoolean(packet.electroCuted);

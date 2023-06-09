@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
@@ -70,7 +70,7 @@ public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnde
 	}
 
 	protected float interpolateRotation(float prevRotation, float rotation, float partialTicks) {
-		return prevRotation + MathHelper.wrapDegrees(rotation - prevRotation) * partialTicks;
+		return prevRotation + Mth.wrapDegrees(rotation - prevRotation) * partialTicks;
 	}
 
 }

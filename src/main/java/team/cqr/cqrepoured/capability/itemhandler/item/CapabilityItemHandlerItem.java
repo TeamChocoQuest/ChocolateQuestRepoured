@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.capability.itemhandler.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.capability.itemhandler.CapabilityItemHandlerProvider;
 
@@ -18,7 +18,7 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 		super(size);
 		this.stack = stack;
 		if (!this.stack.hasTag()) {
-			this.stack.setTag(new CompoundNBT());
+			this.stack.setTag(new CompoundTag());
 		}
 		if (this.stack.getTag().contains(CapabilityItemHandlerProvider.REGISTRY_NAME.toString())) {
 			this.deserializeNBT(null);
@@ -36,7 +36,7 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 	}
 
 	@Override
-	public CompoundNBT serializeNBT() {
+	public CompoundTag serializeNBT() {
 		if (this.stack.hasTag()) {
 			this.stack.getTag().put(CapabilityItemHandlerProvider.REGISTRY_NAME.toString(), super.serializeNBT());
 		}
@@ -44,7 +44,7 @@ public class CapabilityItemHandlerItem extends ItemStackHandler {
 	}
 
 	@Override
-	public void deserializeNBT(CompoundNBT nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		if (this.stack.hasTag()) {
 			super.deserializeNBT(this.stack.getTag().getCompound(CapabilityItemHandlerProvider.REGISTRY_NAME.toString()));
 			this.hasBeenDeserialized = true;

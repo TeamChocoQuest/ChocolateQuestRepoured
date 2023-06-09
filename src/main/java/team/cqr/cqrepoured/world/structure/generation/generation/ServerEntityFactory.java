@@ -4,21 +4,21 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 public class ServerEntityFactory implements IEntityFactory {
 
-	private final ServerWorld level;
+	private final ServerLevel level;
 
-	public ServerEntityFactory(ServerWorld level) {
+	public ServerEntityFactory(ServerLevel level) {
 		this.level = level;
 	}
 
@@ -28,12 +28,12 @@ public class ServerEntityFactory implements IEntityFactory {
 	}
 
 	@Override
-	public <T extends Entity> T createEntity(Function<World, T> entityConstructor) {
+	public <T extends Entity> T createEntity(Function<Level, T> entityConstructor) {
 		return entityConstructor.apply(level);
 	}
 
 	@Nullable
-	public ILivingEntityData finalizeSpawn(MobEntity entity, BlockPos pos, SpawnReason pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundNBT pDataTag) {
+	public ILivingEntityData finalizeSpawn(MobEntity entity, BlockPos pos, MobSpawnType pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundTag pDataTag) {
 		return entity.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), pReason, pSpawnData, pDataTag);
 	}
 

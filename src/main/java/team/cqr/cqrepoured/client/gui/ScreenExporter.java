@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +34,7 @@ public class ScreenExporter extends Screen {
 	private CheckboxButton chbxRelativeMode;
 	private CheckboxButton chbxIgnoreEntities;
 
-	public ScreenExporter(ITextComponent title, TileEntityExporter tileEntity) {
+	public ScreenExporter(TextComponent title, TileEntityExporter tileEntity) {
 		super(title);
 		this.tileEntity = tileEntity;
 		/*
@@ -60,7 +59,7 @@ public class ScreenExporter extends Screen {
 		this.edtStartY = this.addButton(NumberTextField.integerTextField(this.font, this.width / 2 - 70 + 50, this.height / 2 - 30, 40, 20, this.tileEntity.getStartY()));
 		this.edtStartZ = this.addButton(NumberTextField.integerTextField(this.font, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20, this.tileEntity.getStartZ()));
 
-		this.chbxRelativeMode = this.addButton(new CheckboxButton(this.width / 2 + 30, this.height / 2 + 40, 20, 20, new StringTextComponent("Use Relative Mode"), this.tileEntity.isRelativeMode()) {
+		this.chbxRelativeMode = this.addButton(new CheckboxButton(this.width / 2 + 30, this.height / 2 + 40, 20, 20, new TextComponent("Use Relative Mode"), this.tileEntity.isRelativeMode()) {
 			@Override
 			public void onPress() {
 				super.onPress();
@@ -74,14 +73,14 @@ public class ScreenExporter extends Screen {
 				edtEndZ.setNumber(edtEndZ.getNumber() + (flag ? -pos.getZ() : pos.getZ()));
 			}
 		});
-		this.chbxIgnoreEntities = this.addButton(new CheckboxButton(this.width / 2 - 70, this.height / 2 + 40, 20, 20, new StringTextComponent("Ignore Entities"), this.tileEntity.isIgnoreEntities()));
+		this.chbxIgnoreEntities = this.addButton(new CheckboxButton(this.width / 2 - 70, this.height / 2 + 40, 20, 20, new TextComponent("Ignore Entities"), this.tileEntity.isIgnoreEntities()));
 
-		this.btnExport = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 90, 140, 20, new StringTextComponent("Export"), button -> {
+		this.btnExport = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 90, 140, 20, new TextComponent("Export"), button -> {
 			this.minecraft.setScreen(null);
 			this.tileEntity.saveStructure(this.minecraft.player);
 		}));
 
-		this.btnUnprotectedBlocks = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 65, 140, 20, new StringTextComponent("Unprotected Blocks (WIP)"), button -> {
+		this.btnUnprotectedBlocks = this.addButton(new Button(this.width / 2 - 70, this.height / 2 + 65, 140, 20, new TextComponent("Unprotected Blocks (WIP)"), button -> {
 
 		}));
 		this.btnUnprotectedBlocks.active = false;
@@ -114,7 +113,7 @@ public class ScreenExporter extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 

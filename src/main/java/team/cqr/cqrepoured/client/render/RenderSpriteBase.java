@@ -1,24 +1,24 @@
 package team.cqr.cqrepoured.client.render;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
 
 public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 {
 	protected final ResourceLocation TEXTURE;
 
-	protected RenderSpriteBase(EntityRendererManager manager, ResourceLocation sprite)
+	protected RenderSpriteBase(Context manager, ResourceLocation sprite)
 	{
 		super(manager);
 		this.TEXTURE = sprite;
@@ -31,7 +31,7 @@ public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 	}
 
 	@Override
-	public void render(T entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+	public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
 		matrixStack.pushPose();
 		//this.bindEntityTexture(entity); RenderSystem.bindTexture()???
 		//matrixStack.translate((float) x, (float) y, (float) z);
@@ -43,8 +43,8 @@ public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 		matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
 		//GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
-		IVertexBuilder bufferBuilder = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity)));
-		MatrixStack.Entry entry = matrixStack.last();
+		VertexConsumer bufferBuilder = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity)));
+		PoseStack.Entry entry = matrixStack.last();
 		Matrix4f matrix4f = entry.pose();
 		Matrix3f matrix3f = entry.normal();
 

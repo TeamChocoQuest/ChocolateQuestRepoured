@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.world.processor;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -29,7 +29,7 @@ public class ProcessorExtendLowestBlocksToFloor extends StructureProcessor {
 	}
 
 	@Override
-	public BlockInfo process(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
+	public BlockInfo process(BlockGetter worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
 		if (!(blockInfoGlobal.state.is(Blocks.AIR) || blockInfoGlobal.state.is(Blocks.CAVE_AIR) || blockInfoGlobal.state.is(Blocks.STRUCTURE_VOID) || blockInfoGlobal.state.is(CQRBlocks.NULL_BLOCK.get())) && blockInfoLocal.pos.getY() == 0) {
 			ChunkPos currentChunkPos = new ChunkPos(blockInfoGlobal.pos);
 			IChunk currentChunk = worldReader.getChunk(currentChunkPos.x, currentChunkPos.z);

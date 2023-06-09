@@ -6,26 +6,26 @@ import java.util.List;
 import java.util.Map;
 
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.profiler.EmptyProfiler;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.tags.ITagCollectionSupplier;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.EmptyTickList;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.ITickList;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.AbstractChunkProvider;
 import net.minecraft.world.chunk.Chunk;
@@ -35,20 +35,20 @@ import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.lighting.WorldLightManager;
 import net.minecraft.world.storage.MapData;
 
-public class DataFixerWorld extends World {
+public class DataFixerWorld extends Level {
 
 	public static class DataFixerChunkSource extends AbstractChunkProvider {
 
-		private final World world;
+		private final Level world;
 		private final Map<ChunkPos, Chunk> chunks = new HashMap<>();
 		private final WorldLightManager lightEngine = new WorldLightManager(this, false, false);
 
-		public DataFixerChunkSource(World world) {
+		public DataFixerChunkSource(Level world) {
 			this.world = world;
 		}
 
 		@Override
-		public IBlockReader getLevel() {
+		public BlockGetter getLevel() {
 			return world;
 		}
 
@@ -94,7 +94,7 @@ public class DataFixerWorld extends World {
 	}
 
 	@Override
-	public void levelEvent(PlayerEntity pPlayer, int pType, BlockPos pPos, int pData) {
+	public void levelEvent(Player pPlayer, int pType, BlockPos pPos, int pData) {
 		// ignore
 	}
 
@@ -104,7 +104,7 @@ public class DataFixerWorld extends World {
 	}
 
 	@Override
-	public List<? extends PlayerEntity> players() {
+	public List<? extends Player> players() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -124,14 +124,14 @@ public class DataFixerWorld extends World {
 	}
 
 	@Override
-	public void playSound(PlayerEntity pPlayer, double pX, double pY, double pZ, SoundEvent pSound,
-			SoundCategory pCategory, float pVolume, float pPitch) {
+	public void playSound(Player pPlayer, double pX, double pY, double pZ, SoundEvent pSound,
+                          SoundSource pCategory, float pVolume, float pPitch) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void playSound(PlayerEntity pPlayer, Entity pEntity, SoundEvent pEvent, SoundCategory pCategory,
-			float pVolume, float pPitch) {
+	public void playSound(Player pPlayer, Entity pEntity, SoundEvent pEvent, SoundSource pCategory,
+                          float pVolume, float pPitch) {
 		throw new UnsupportedOperationException();
 	}
 

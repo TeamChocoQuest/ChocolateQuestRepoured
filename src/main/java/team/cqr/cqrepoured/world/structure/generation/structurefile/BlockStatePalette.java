@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.world.structure.generation.structurefile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.ObjectIntIdentityMap;
 
 import javax.annotation.Nullable;
@@ -20,8 +20,8 @@ public class BlockStatePalette implements Iterable<BlockState> {
 
 	}
 
-	public BlockStatePalette(ListNBT nbtList) {
-		nbtList.forEach(nbt -> this.idFor(NBTUtil.readBlockState((CompoundNBT) nbt)));
+	public BlockStatePalette(ListTag nbtList) {
+		nbtList.forEach(nbt -> this.idFor(NbtUtils.readBlockState((CompoundTag) nbt)));
 	}
 
 	public int idFor(BlockState state) {
@@ -54,9 +54,9 @@ public class BlockStatePalette implements Iterable<BlockState> {
 		return this.ids.size();
 	}
 
-	public ListNBT writeToNBT() {
-		ListNBT nbtList = new ListNBT();
-		this.ids.forEach(state -> nbtList.add(NBTUtil.writeBlockState((BlockState) state)));
+	public ListTag writeToNBT() {
+		ListTag nbtList = new ListTag();
+		this.ids.forEach(state -> nbtList.add(NbtUtils.writeBlockState((BlockState) state)));
 		return nbtList;
 	}
 

@@ -1,12 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.*;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -130,7 +133,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 	protected void checkAndPerformAttack(LivingEntity attackTarget) {
 		if (this.entity.tickCount > this.prevTimeAttacked + this.getAttackCooldown()) {
 			if (this.getAttackChargeTicks() > 0) {
-				this.entity.startUsingItem(Hand.MAIN_HAND);
+				this.entity.startUsingItem(InteractionHand.MAIN_HAND);
 				this.entity.swinging = true;
 			}
 
@@ -156,12 +159,12 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					if (!this.entity.onGround) {
 						arrow.motionY += this.entity.motionY;
 					}*/
-					Vector3d shooterVec = this.entity.getDeltaMovement();
+					Vec3 shooterVec = this.entity.getDeltaMovement();
 					arrow.setDeltaMovement(arrow.getDeltaMovement().add(shooterVec.x(), this.entity.isOnGround() ? 0 : shooterVec.y(), shooterVec.z()));
 					this.world.addFreshEntity(arrow);
 					this.entity.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				} else if (item instanceof IRangedWeapon) {
-					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, Hand.MAIN_HAND);
+					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, InteractionHand.MAIN_HAND);
 					if (((IRangedWeapon) item).getShootSound() != null) {
 						this.entity.playSound(((IRangedWeapon) item).getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
@@ -172,7 +175,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					this.entity.stopUsingItem();
 					this.entity.swinging = false;
 				} else {
-					this.entity.startUsingItem(Hand.MAIN_HAND);
+					this.entity.startUsingItem(InteractionHand.MAIN_HAND);
 				}
 			}
 		}

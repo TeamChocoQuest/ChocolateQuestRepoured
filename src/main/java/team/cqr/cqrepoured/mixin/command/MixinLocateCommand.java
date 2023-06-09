@@ -11,10 +11,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.command.impl.LocateCommand;
-import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 @Mixin(LocateCommand.class)
@@ -40,7 +39,7 @@ public class MixinLocateCommand {
 			),
 			ordinal = 3
 	)
-	private static LiteralArgumentBuilder<CommandSource> mixinArgumentBuilder(LiteralArgumentBuilder<CommandSource> lab) {
+	private static LiteralArgumentBuilder<CommandSourceStack> mixinArgumentBuilder(LiteralArgumentBuilder<CommandSourceStack> lab) {
 		List<CommandNode<?>> nodes = lab.getArguments().stream().collect(Collectors.toList());
 		CommandNode<?> node = nodes.get(nodes.size());
 		if(node instanceof LiteralCommandNode<?>) {
@@ -53,7 +52,7 @@ public class MixinLocateCommand {
 		return lab;
 	}
 
-	private static int locateCQR(CommandSource sender, DungeonBase dungeon) {
+	private static int locateCQR(CommandSourceStack sender, DungeonBase dungeon) {
 		return 0;
 	}
 

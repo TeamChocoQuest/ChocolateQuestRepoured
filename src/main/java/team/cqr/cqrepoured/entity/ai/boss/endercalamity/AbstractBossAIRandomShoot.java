@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 
 import javax.annotation.Nullable;

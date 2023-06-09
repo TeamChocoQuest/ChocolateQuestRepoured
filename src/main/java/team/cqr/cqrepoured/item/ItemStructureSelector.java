@@ -4,20 +4,20 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -30,16 +30,16 @@ public class ItemStructureSelector extends Item {
 	}
 
 	@Override
-	public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-		PlayerEntity player = context.getPlayer();
-		World world = context.getLevel();
+	public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+		Player player = context.getPlayer();
+		Level world = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 
 		if (world.getBlockEntity(pos) instanceof TileEntityExporter) {
 			if (world.isClientSide) {
 				if (!this.hasFirstPos(stack) || !this.hasSecondPos(stack)) {
-					player.sendMessage(Translator.translateItem(this, ".error_set_both_before_use").withStyle(TextFormatting.RED), null);
-					return ActionResultType.SUCCESS;
+					player.sendMessage(Translator.translateItem(this, ".error_set_both_before_use").withStyle(ChatFormatting.RED), null);
+					return InteractionResult.SUCCESS;
 				}
 
 				TileEntityExporter tileEntity = (TileEntityExporter) world.getBlockEntity(pos);
@@ -57,61 +57,61 @@ public class ItemStructureSelector extends Item {
 			this.setSecondPos(stack, player.isCrouching() ? player.blockPosition() : pos, player);
 		}
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (!playerIn.level.isClientSide && playerIn.isCrouching()) {
 			this.setSecondPos(stack, playerIn.blockPosition(), playerIn);
 		}
 
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		if (this.hasFirstPos(stack)) {
 			BlockPos pos = this.getFirstPos(stack);
-			tooltip.add(Translator.translateItem(this, ".tooltip_first_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_first_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(ChatFormatting.BLUE));
 		} else {
-			tooltip.add(Translator.translateItem(this, ".tooltip_first_unkown").withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_first_unkown").withStyle(ChatFormatting.BLUE));
 		}
 
 		if (this.hasSecondPos(stack)) {
 			BlockPos pos = this.getSecondPos(stack);
-			tooltip.add(Translator.translateItem(this, ".tooltip_second_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_second_set", pos.getX(), pos.getY(), pos.getZ()).withStyle(ChatFormatting.BLUE));
 		} else {
-			tooltip.add(Translator.translateItem(this, ".tooltip_second_unkown").withStyle(TextFormatting.BLUE));
+			tooltip.add(Translator.translateItem(this, ".tooltip_second_unkown").withStyle(ChatFormatting.BLUE));
 		}
 	}
 
-	public void setFirstPos(ItemStack stack, BlockPos pos, @Nullable PlayerEntity player) {
-		stack.addTagElement("pos1", NBTUtil.writeBlockPos(pos));
+	public void setFirstPos(ItemStack stack, BlockPos pos, @Nullable Player player) {
+		stack.addTagElement("pos1", NbtUtils.writeBlockPos(pos));
 		player.sendMessage(Translator.translateItem(this, ".set_first", pos.getX(), pos.getY(), pos.getZ()), null);
 	}
 
-	public void setSecondPos(ItemStack stack, BlockPos pos, @Nullable PlayerEntity player) {
-		stack.addTagElement("pos2", NBTUtil.writeBlockPos(pos));
+	public void setSecondPos(ItemStack stack, BlockPos pos, @Nullable Player player) {
+		stack.addTagElement("pos2", NbtUtils.writeBlockPos(pos));
 		player.sendMessage(Translator.translateItem(this, ".set_second", pos.getX(), pos.getY(), pos.getZ()), null);
 	}
 
 	public BlockPos getFirstPos(ItemStack stack) {
-		CompoundNBT compound = stack.getTag();
+		CompoundTag compound = stack.getTag();
 		if (compound == null || !compound.contains("pos1", NBT.TAG_COMPOUND)) {
 			return null;
 		}
-		return NBTUtil.readBlockPos(compound.getCompound("pos1"));
+		return NbtUtils.readBlockPos(compound.getCompound("pos1"));
 	}
 
 	public BlockPos getSecondPos(ItemStack stack) {
-		CompoundNBT compound = stack.getTag();
+		CompoundTag compound = stack.getTag();
 		if (compound == null || !compound.contains("pos2", NBT.TAG_COMPOUND)) {
 			return null;
 		}
-		return NBTUtil.readBlockPos(compound.getCompound("pos2"));
+		return NbtUtils.readBlockPos(compound.getCompound("pos2"));
 	}
 
 	public boolean hasFirstPos(ItemStack stack) {

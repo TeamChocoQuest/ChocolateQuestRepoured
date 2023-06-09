@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.faction;
 
 import java.util.Optional;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 
 public class DummyFaction extends Faction {
 

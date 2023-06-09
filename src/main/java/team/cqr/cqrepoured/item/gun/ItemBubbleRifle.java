@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.item.gun;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemBubbleRifle extends ItemBubblePistol implements IFireArmTwoHanded {
 

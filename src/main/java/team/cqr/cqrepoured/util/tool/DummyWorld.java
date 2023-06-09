@@ -5,7 +5,7 @@
 //import net.minecraft.block.Blocks;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.server.integrated.IntegratedServer;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.math.ChunkPos;
 //import net.minecraft.world.GameType;
 //import net.minecraft.world.WorldSettings;

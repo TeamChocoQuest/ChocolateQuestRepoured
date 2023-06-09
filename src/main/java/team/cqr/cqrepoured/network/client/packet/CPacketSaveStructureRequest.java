@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketSaveStructureRequest extends AbstractPacket<CPacketSaveStructureRequest> {
@@ -17,14 +17,14 @@ public class CPacketSaveStructureRequest extends AbstractPacket<CPacketSaveStruc
 	}
 
 	@Override
-	public CPacketSaveStructureRequest fromBytes(PacketBuffer buf) {
+	public CPacketSaveStructureRequest fromBytes(FriendlyByteBuf buf) {
 		CPacketSaveStructureRequest result = new CPacketSaveStructureRequest();
 		result.pos = buf.readBlockPos();
 		return result;
 	}
 
 	@Override
-	public void toBytes(CPacketSaveStructureRequest packet, PacketBuffer buf) {
+	public void toBytes(CPacketSaveStructureRequest packet, FriendlyByteBuf buf) {
 		buf.writeBlockPos(packet.pos);
 	}
 

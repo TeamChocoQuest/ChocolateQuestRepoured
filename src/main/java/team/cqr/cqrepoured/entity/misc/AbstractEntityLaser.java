@@ -6,25 +6,25 @@ import java.util.Map;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceContext.BlockMode;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ClipContext.BlockMode;
+import net.minecraft.world.level.ClipContext.FluidMode;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -53,11 +53,11 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	}
 
-	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, World worldIn) {
+	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, Level worldIn) {
 		this(type, worldIn, null, 4.0F);
 	}
 
-	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, World worldIn, LivingEntity caster, float length) {
+	protected AbstractEntityLaser(EntityType<? extends AbstractEntityLaser> type, Level worldIn, LivingEntity caster, float length) {
 		super(type, worldIn);
 		this.caster = caster;
 		this.length = length;
@@ -65,9 +65,9 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.noPhysics = true;
 	}
 
-	public Vector3d getOffsetVector() {
-		if (this.caster == null) return Vector3d.ZERO;
-		Vector3d v = new Vector3d(0.0D, this.caster.getBbHeight() * 0.6D / (caster instanceof ISizable ? ((ISizable) caster).getSizeVariation() : 1), 0.0D);
+	public Vec3 getOffsetVector() {
+		if (this.caster == null) return Vec3.ZERO;
+		Vec3 v = new Vec3(0.0D, this.caster.getBbHeight() * 0.6D / (caster instanceof ISizable ? ((ISizable) caster).getSizeVariation() : 1), 0.0D);
 		v = v.add(this.caster.getLookAngle().scale(0.25D));
 		return v;
 	}
@@ -79,21 +79,21 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+	protected void addAdditionalSaveData(CompoundTag pCompound) {
 		
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+	protected void readAdditionalSaveData(CompoundTag pCompound) {
 		
 	}
 	
 	@Override
-	public void load(CompoundNBT pCompound) {
+	public void load(CompoundTag pCompound) {
 	}
 	
 	@Override
-	public boolean save(CompoundNBT pCompound) {
+	public boolean save(CompoundTag pCompound) {
 		return false;
 	}
 
@@ -121,10 +121,10 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 
 		if (!this.level.isClientSide) {
-			Vector3d start = this.position();
-			Vector3d end = start.add(Vector3d.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
-			RayTraceContext rtc = new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
-			RayTraceResult result = this.level.clip(rtc);//this.level.rayTraceBlocks(start, end, false, false, false);
+			Vec3 start = this.position();
+			Vec3 end = start.add(Vec3.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
+			ClipContext rtc = new ClipContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
+			HitResult result = this.level.clip(rtc);//this.level.rayTraceBlocks(start, end, false, false, false);
 			double d = result != null ? (float) result.getLocation().subtract(this.position()).length() : this.length;
 
 			if (result != null) {
@@ -167,8 +167,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				}
 			}
 
-			Vector3d vec1 = new Vector3d(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
-			Vector3d vec2 = new Vector3d(this.laserEffectRadius(), this.laserEffectRadius(), d);
+			Vec3 vec1 = new Vec3(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
+			Vec3 vec2 = new Vec3(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
 			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.level, this.caster, LivingEntity.class, bb)) {
 				if (this.canHitEntity(entity) && this.tickCount - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
@@ -193,9 +193,9 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		}
 		int ticks;
 		if (hardness <= 2.0F) {
-			ticks = 40 + MathHelper.ceil(hardness * 20.0F);
+			ticks = 40 + Mth.ceil(hardness * 20.0F);
 		} else {
-			ticks = MathHelper.ceil(20.0F * (8.0F * hardness) / (hardness + 2.0F));
+			ticks = Mth.ceil(20.0F * (8.0F * hardness) / (hardness + 2.0F));
 		}
 		return 1.0F / ticks + 1.0E-7F;
 	}
@@ -256,7 +256,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}*/
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.caster.getId());
 		buffer.writeFloat(this.length);
 		buffer.writeFloat(this.rotationYawCQR);
@@ -264,7 +264,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData) {
+	public void readSpawnData(FriendlyByteBuf additionalData) {
 		this.caster = (LivingEntity) this.level.getEntity(additionalData.readInt());
 		this.length = additionalData.readFloat();
 		this.rotationYawCQR = additionalData.readFloat();
@@ -286,7 +286,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

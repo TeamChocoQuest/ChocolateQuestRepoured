@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.entity.CreatureEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import team.cqr.cqrepoured.config.CQRConfig;
 
 public class EntityAIPanicFire extends PanicGoal {
 
-	public EntityAIPanicFire(CreatureEntity creature, double speedIn) {
+	public EntityAIPanicFire(PathfinderMob creature, double speedIn) {
 		super(creature, speedIn);
 	}
 

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.potion;
 
-import net.minecraft.potion.Effect;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.potion.EffectType;
-import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 
-public class PotionCQR extends Effect {
+public class PotionCQR extends MobEffect {
 
 	private final ResourceLocation texture;
 

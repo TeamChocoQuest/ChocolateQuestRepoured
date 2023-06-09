@@ -2,23 +2,23 @@ package team.cqr.cqrepoured.item.sword;
 
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.ItemLore;
@@ -31,7 +31,7 @@ public class ItemDaggerNinja extends ItemDagger {
 	
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (playerIn.isCrouching()) {
@@ -51,11 +51,11 @@ public class ItemDaggerNinja extends ItemDagger {
 
 			BlockPos pos = playerIn.blockPosition().offset(x * dist, y * dist + 1, z * dist);
 
-			if (worldIn.getBlockState(pos).getBlock().getCollisionShape(worldIn.getBlockState(pos), worldIn, pos, ISelectionContext.of(playerIn)).isEmpty() && pos.getY() > 0) {
+			if (worldIn.getBlockState(pos).getBlock().getCollisionShape(worldIn.getBlockState(pos), worldIn, pos, CollisionContext.of(playerIn)).isEmpty() && pos.getY() > 0) {
 				playerIn.setPos(playerIn.position().x + x * dist, playerIn.position().y + y * dist + 1, playerIn.position().z + z * dist);
-				playerIn.addEffect(new EffectInstance(Effects.INVISIBILITY, 40, 5, false, false));
+				playerIn.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40, 5, false, false));
 			} else {
-				return new ActionResult<>(ActionResultType.FAIL, stack);
+				return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
 			}
 
 			stack.hurtAndBreak(1, playerIn, (p_220040_1_) -> {
@@ -68,13 +68,13 @@ public class ItemDaggerNinja extends ItemDagger {
 		} else {
 			return super.use(worldIn, playerIn, handIn);
 		}
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 	}
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.rear_damage.tooltip", "200%").withStyle(TextFormatting.BLUE));
+	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.rear_damage.tooltip", "200%").withStyle(ChatFormatting.BLUE));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 	}

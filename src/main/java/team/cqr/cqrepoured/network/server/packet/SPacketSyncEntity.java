@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.EquipmentSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -24,12 +24,12 @@ public class SPacketSyncEntity extends AbstractPacket<SPacketSyncEntity> {
 	public SPacketSyncEntity(AbstractEntityCQR entity) {
 		this.entityId = entity.getId();
 		this.healthScaling = entity.getHealthScale();
-		this.dropChanceHelm = entity.getDropChance(EquipmentSlotType.HEAD);
-		this.dropChanceChest = entity.getDropChance(EquipmentSlotType.CHEST);
-		this.dropChanceLegs = entity.getDropChance(EquipmentSlotType.LEGS);
-		this.dropChanceFeet = entity.getDropChance(EquipmentSlotType.FEET);
-		this.dropChanceMainhand = entity.getDropChance(EquipmentSlotType.MAINHAND);
-		this.dropChanceOffhand = entity.getDropChance(EquipmentSlotType.OFFHAND);
+		this.dropChanceHelm = entity.getDropChance(EquipmentSlot.HEAD);
+		this.dropChanceChest = entity.getDropChance(EquipmentSlot.CHEST);
+		this.dropChanceLegs = entity.getDropChance(EquipmentSlot.LEGS);
+		this.dropChanceFeet = entity.getDropChance(EquipmentSlot.FEET);
+		this.dropChanceMainhand = entity.getDropChance(EquipmentSlot.MAINHAND);
+		this.dropChanceOffhand = entity.getDropChance(EquipmentSlot.OFFHAND);
 		this.sizeScaling = entity.getSizeVariation();
 	}
 
@@ -75,7 +75,7 @@ public class SPacketSyncEntity extends AbstractPacket<SPacketSyncEntity> {
 	}
 
 	@Override
-	public SPacketSyncEntity fromBytes(PacketBuffer buffer) {
+	public SPacketSyncEntity fromBytes(FriendlyByteBuf buffer) {
 		SPacketSyncEntity result = new SPacketSyncEntity();
 		result.entityId = buffer.readInt();
 		result.healthScaling = buffer.readDouble();
@@ -90,7 +90,7 @@ public class SPacketSyncEntity extends AbstractPacket<SPacketSyncEntity> {
 	}
 
 	@Override
-	public void toBytes(SPacketSyncEntity packet, PacketBuffer buffer) {
+	public void toBytes(SPacketSyncEntity packet, FriendlyByteBuf buffer) {
 		buffer.writeInt(packet.entityId);
 		buffer.writeDouble(packet.healthScaling);
 		buffer.writeFloat(packet.dropChanceHelm);

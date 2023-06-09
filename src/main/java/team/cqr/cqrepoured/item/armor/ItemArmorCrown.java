@@ -4,16 +4,15 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -31,11 +30,11 @@ public class ItemArmorCrown extends GeoArmorItem implements IAnimatable {
 	public static final String NBT_KEY_CROWN = "CQR Crown";
 
 	public ItemArmorCrown(IArmorMaterial materialIn, Properties props) {
-		super(materialIn, EquipmentSlotType.HEAD, props);
+		super(materialIn, EquipmentSlot.HEAD, props);
 	}
 
 	@Override
-	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt) {
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
 		return CapabilityDynamicCrownProvider.createProvider();
 	}
 
@@ -66,10 +65,10 @@ public class ItemArmorCrown extends GeoArmorItem implements IAnimatable {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		LazyOptional<CapabilityDynamicCrown> lOpCap = stack.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null);
 		if (lOpCap.isPresent()) {
-			tooltip.add(new StringTextComponent("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).getHoverName().getString()));
+			tooltip.add(new TextComponent("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).getHoverName().getString()));
 		}
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());

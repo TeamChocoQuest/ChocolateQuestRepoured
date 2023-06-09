@@ -4,19 +4,19 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
@@ -28,23 +28,23 @@ import team.cqr.cqrepoured.network.CQRNetworkHooks;
 public class ContainerMerchantEditTrade extends Container implements IInteractable {
 
 	private final AbstractEntityCQR entity;
-	private final IInventory tradeInventory;
+	private final Container tradeInventory;
 	private final int tradeIndex;
 
 	public int getTradeIndex() {
 		return this.tradeIndex;
 	}
 	
-	public ContainerMerchantEditTrade(int id, PlayerInventory playerInv, PacketBuffer buf) {
+	public ContainerMerchantEditTrade(int id, Inventory playerInv, FriendlyByteBuf buf) {
 		this(CQRContainerTypes.MERCHANT_EDIT_TRADE.get(), id, ContainerMerchant.tryGetCQREntity(buf), playerInv.player, tryGetTradeIndex(buf));
 	}
 
-	private static int tryGetTradeIndex(PacketBuffer data) {
+	private static int tryGetTradeIndex(FriendlyByteBuf data) {
 		int id = data.readInt();
 		return id;
 	}
 
-	public ContainerMerchantEditTrade(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerEntity player, int tradeIndex) {
+	public ContainerMerchantEditTrade(MenuType<?> type, final int containerID, AbstractEntityCQR entity, Player player, int tradeIndex) {
 		super(type, containerID);
 		this.entity = entity;
 		this.tradeIndex = tradeIndex;
@@ -77,7 +77,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		if (!playerIn.isCreative()) {
 			return false;
 		}
@@ -88,7 +88,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		Slot slot = this.slots.get(index);
 
 		if (slot != null && slot.hasItem()) {
@@ -110,7 +110,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void removed(PlayerEntity playerIn) {
+	public void removed(Player playerIn) {
 		super.removed(playerIn);
 
 		/*
@@ -132,9 +132,9 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Override
-	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
-		if (player instanceof ServerPlayerEntity) {
-			ServerPlayerEntity spe = (ServerPlayerEntity) player;
+	public void onClickButton(Player player, int button, FriendlyByteBuf extraData) {
+		if (player instanceof ServerPlayer) {
+			ServerPlayer spe = (ServerPlayer) player;
 			if (button == 0) {
 				// player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, player.level, this.entity.getId(), 0, 0);
 				CQRNetworkHooks.openGUI(spe, this.entity.getDisplayName(), buf -> buf.writeInt(this.entity.getId()), CQRContainerTypes.MERCHANT.get());
@@ -153,7 +153,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 
 				TraderOffer trades = this.entity.getTrades();
 				int reputation = this.getRequriedReputation(reputationName);
-				ResourceLocation advancement = this.getRequiredAdvancement((ServerWorld) player.level, advancementName);
+				ResourceLocation advancement = this.getRequiredAdvancement((ServerLevel) player.level, advancementName);
 				ItemStack output = this.getOutput();
 				TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
 				Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);
@@ -186,7 +186,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 	}
 
 	@Nullable
-	private ResourceLocation getRequiredAdvancement(ServerWorld world, String advancement) {
+	private ResourceLocation getRequiredAdvancement(ServerLevel world, String advancement) {
 		ResourceLocation requiredAdvancement = new ResourceLocation(advancement);
 		if (world.getServer().getAdvancements().getAdvancement(requiredAdvancement) != null) {
 			return requiredAdvancement;

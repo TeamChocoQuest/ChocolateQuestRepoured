@@ -4,7 +4,7 @@
 //import net.minecraft.command.CommandException;
 //import net.minecraft.command.ICommandSender;
 //import net.minecraft.server.MinecraftServer;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.text.StringTextComponent;
 //import net.minecraft.world.World;
 //import org.apache.commons.io.FileUtils;

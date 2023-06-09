@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.item.gun;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
@@ -34,13 +34,13 @@ public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		//tooltip.add(new StringTextComponent("7.5 " + new TranslationTextComponent("description.bullet_damage.name")).withStyle(TextFormatting.BLUE));
 		//tooltip.add(new StringTextComponent("-60 " + new TranslationTextComponent("description.fire_rate.name")).withStyle(TextFormatting.RED));
 		//tooltip.add(new StringTextComponent("-10" + "% " + new TranslationTextComponent("description.accuracy.name")).withStyle(TextFormatting.RED));
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 7.5).withStyle(TextFormatting.BLUE));
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -60).withStyle(TextFormatting.RED));
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -10 + "%").withStyle(TextFormatting.RED));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 7.5).withStyle(ChatFormatting.BLUE));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -60).withStyle(ChatFormatting.RED));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -10 + "%").withStyle(ChatFormatting.RED));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}
@@ -51,7 +51,7 @@ public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 	}
 
 	@Override
-	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
+	public void shoot(ItemStack stack, Level worldIn, Player player) {
 		boolean flag = player.abilities.instabuild;
 		ItemStack itemstack = this.findAmmo(player);
 
@@ -71,7 +71,7 @@ public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 				}
 			}
 
-			worldIn.playLocalSound(player.position().x, player.position().y + player.getEyeHeight(), player.position().z, this.getShootSound(), SoundCategory.MASTER, 1.0F, 0.9F + random.nextFloat() * 0.2F, false);
+			worldIn.playLocalSound(player.position().x, player.position().y + player.getEyeHeight(), player.position().z, this.getShootSound(), SoundSource.MASTER, 1.0F, 0.9F + random.nextFloat() * 0.2F, false);
 			player.xRot -= worldIn.random.nextFloat() * 10;
 
 			if (!flag) {
@@ -90,7 +90,7 @@ public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!(entityIn instanceof LivingEntity)) {
 			return;
 		}
@@ -100,7 +100,7 @@ public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 		LivingEntity entityLiving = (LivingEntity) entityIn;
 		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
-			entityLiving.addEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
+			entityLiving.addEffect(new MobEffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}
 	}
 

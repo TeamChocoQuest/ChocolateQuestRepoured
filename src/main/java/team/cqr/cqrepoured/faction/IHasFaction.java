@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.faction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public interface IHasFaction {
 
@@ -26,7 +26,7 @@ public interface IHasFaction {
 	}
 
 	@Nullable
-	public default IWorld getLevel() {
+	public default Level getLevel() {
 		if(this instanceof Entity) {
 			return ((Entity)this).level;
 		}

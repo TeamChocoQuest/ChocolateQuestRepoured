@@ -4,24 +4,25 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.function.Function;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -49,13 +50,13 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;
 
-	protected final Queue<Tuple<GeoBone, CompoundNBT>> SHOULDER_ENTITY_QUEUE = new ArrayDeque<>();
+	protected final Queue<Tuple<GeoBone, CompoundTag>> SHOULDER_ENTITY_QUEUE = new ArrayDeque<>();
 
-	public RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderCQREntityGeo(Context renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
 
-	protected RenderCQREntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
+	protected RenderCQREntityGeo(Context renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
@@ -87,7 +88,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	@Override
-	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if (this.isArmorBone(bone)) {
 			bone.setCubesHidden(true);
 		}
@@ -95,21 +96,21 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	@Override
-	protected void handleArmorRenderingForBone(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, ResourceLocation currentTexture) {
+	protected void handleArmorRenderingForBone(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, ResourceLocation currentTexture) {
 		super.handleArmorRenderingForBone(bone, stack, bufferIn, packedLightIn, packedOverlayIn, currentTexture);
 		handleShoulderEntityBone(bone);
 	}
 
 	protected void handleShoulderEntityBone(GeoBone bone) {
 		if (bone.getName().startsWith("shoulderEntity")) {
-			CompoundNBT data = this.getShoulderEntityDataFor(this.currentEntityBeingRendered, bone);
+			CompoundTag data = this.getShoulderEntityDataFor(this.currentEntityBeingRendered, bone);
 			if (data != null) {
 				this.SHOULDER_ENTITY_QUEUE.add(new Tuple<>(bone, data));
 			}
 		}
 	}
 
-	protected CompoundNBT getShoulderEntityDataFor(T currentEntityBeingRendered, GeoBone bone) {
+	protected CompoundTag getShoulderEntityDataFor(T currentEntityBeingRendered, GeoBone bone) {
 		switch (bone.name) {
 		case "shoulderEntityLeft":
 			return currentEntityBeingRendered.getLeftShoulderEntity();
@@ -119,7 +120,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	@Override
-	public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
 		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 
 		if (entity.getParts() != null && entity.getParts().length > 0) {
@@ -134,11 +135,11 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 						continue;
 					}
 
-					float f = MathHelper.lerp(partialTicks, cpe.yRotO, cpe.yRot);
+					float f = Mth.lerp(partialTicks, cpe.yRotO, cpe.yRot);
 
 					stack.pushPose();
 
-					Vector3d translate = cpe.position().subtract(entity.position());
+					Vec3 translate = cpe.position().subtract(entity.position());
 					stack.translate(translate.x(), translate.y(), translate.z());
 
 					((EntityRenderer<CQRPartEntity<?>>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
@@ -153,8 +154,8 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 	
 	@Override
-	protected void renderLayer(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float rotFloat, float netHeadYaw, float headPitch, IRenderTypeBuffer bufferIn2,
-			GeoLayerRenderer<T> layerRenderer) {
+	protected void renderLayer(PoseStack stack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float rotFloat, float netHeadYaw, float headPitch, MultiBufferSource bufferIn2,
+                               GeoLayerRenderer<T> layerRenderer) {
 		super.renderLayer(stack, bufferIn, packedLightIn, entity, limbSwing, limbSwingAmount, partialTicks, rotFloat, netHeadYaw, headPitch, bufferIn2, layerRenderer);
 		
 		this.limbSwing = limbSwing;
@@ -170,12 +171,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	
 	private final ModelCQRPirateParrot parrotModel = new ModelCQRPirateParrot();
 
-	protected void renderShoulderEntities(MatrixStack stack, IRenderTypeBuffer buffer, int packedLightIn, T entity) {
+	protected void renderShoulderEntities(PoseStack stack, MultiBufferSource buffer, int packedLightIn, T entity) {
 		while (!this.SHOULDER_ENTITY_QUEUE.isEmpty()) {
-			Tuple<GeoBone, CompoundNBT> entry = this.SHOULDER_ENTITY_QUEUE.poll();
+			Tuple<GeoBone, CompoundTag> entry = this.SHOULDER_ENTITY_QUEUE.poll();
 
 			GeoBone bone = entry.getA();
-			CompoundNBT entityNBT = entry.getB();
+			CompoundTag entityNBT = entry.getB();
 
 			stack.pushPose();
 
@@ -186,7 +187,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 			}).ifPresent((shoulderEntityType) -> {
 				stack.pushPose();
 				stack.translate(/*true ? (double) 0.4F : (double) -0.4F CQR entities only have a left shoulder entiy...*/0.4F, entity.isCrouching() ? (double) -1.3F : -1.5D, 0.0D);
-				IVertexBuilder ivertexbuilder = buffer.getBuffer(this.parrotModel.renderType(RenderPirateParrot.TEXTURE));
+				VertexConsumer ivertexbuilder = buffer.getBuffer(this.parrotModel.renderType(RenderPirateParrot.TEXTURE));
 				this.parrotModel.renderOnShoulder(stack, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, this.limbSwing, this.limbSwingAmount, this.netHeadYaw, this.headPitch, entity.tickCount);
 				stack.popPose();
 			});
@@ -197,18 +198,18 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		;
 	}
 	
-	protected BipedModel<?> currentArmorModel = null;
+	protected HumanoidModel<?> currentArmorModel = null;
 	
 	@Override
-	protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
+	protected ModelRenderer getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
 		this.currentArmorModel = armorModel;
 		return super.getArmorPartForBone(name, armorModel);
 	}
 	
 	@Override
-	protected void renderArmorPart(MatrixStack stack, ModelRenderer sourceLimb, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, ItemStack armorForBone, ResourceLocation armorResource) {
+	protected void renderArmorPart(PoseStack stack, ModelRenderer sourceLimb, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha, ItemStack armorForBone, ResourceLocation armorResource) {
 		if(this.currentArmorModel != null) {
-			IVertexBuilder ivb = ItemRenderer.getArmorFoilBuffer(this.getCurrentRTB(),
+			VertexConsumer ivb = ItemRenderer.getArmorFoilBuffer(this.getCurrentRTB(),
 					this.currentArmorModel.renderType(armorResource), false, armorForBone.hasFoil());
 			sourceLimb.render(stack, ivb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		}

@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Random;
 
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
@@ -140,7 +140,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonS
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, World world, DungeonInhabitant mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, Level world, DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];
@@ -236,17 +236,17 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonS
 	}
 
 	@Override
-	public void preProcess(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void preProcess(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 
 	@Override
-	public void generate(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generate(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 
 	@Override
-	public void generatePost(World world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generatePost(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 

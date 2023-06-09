@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 
@@ -46,7 +46,7 @@ public class BossAITeleportAroundHome extends AbstractBossAIEnderCalamity {
 	@Override
 	public void start() {
 		float angle = this.entity.getRandom().nextFloat() * 360F;
-		Vector3d vec = new Vector3d(EntityCQREnderCalamity.getArenaRadius(), 0, 0);
+		Vec3 vec = new Vec3(EntityCQREnderCalamity.getArenaRadius(), 0, 0);
 		vec = vec.yRot(angle);
 
 		BlockPos home = this.entity.getHomePositionCQR();

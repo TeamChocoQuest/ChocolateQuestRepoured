@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -49,7 +49,7 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 			double d0 = this.getX() + (this.interpTargetX - this.getX()) / (double)this.newPosRotationIncrements;
 			double d2 = this.getY() + (this.interpTargetY - this.getY()) / (double)this.newPosRotationIncrements;
 			double d4 = this.getZ() + (this.interpTargetZ - this.getZ()) / (double)this.newPosRotationIncrements;
-			double d6 = MathHelper.wrapDegrees(this.interpTargetYaw - (double)this.yRot);
+			double d6 = Mth.wrapDegrees(this.interpTargetYaw - (double)this.yRot);
 			this.yRot = (float)((double)this.yRot + d6 / (double)this.newPosRotationIncrements);
 			this.xRot = (float)((double)this.xRot + (this.interpTargetPitch - (double)this.xRot) / (double)this.newPosRotationIncrements);
 			--this.newPosRotationIncrements;
@@ -68,7 +68,7 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	}
 
 
-	public void writeData(PacketBuffer buffer) {
+	public void writeData(FriendlyByteBuf buffer) {
 		buffer.writeDouble(getX());
 		buffer.writeDouble(getY());
 		buffer.writeDouble(getZ());
@@ -81,8 +81,8 @@ public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 
 	}
 
-	public void readData(PacketBuffer buffer) {
-		Vector3d vec = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+	public void readData(FriendlyByteBuf buffer) {
+		Vec3 vec = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		setPositionAndRotationDirect(vec.x, vec.y, vec.z, buffer.readFloat(), buffer.readFloat(), 3);
 		final float w = buffer.readFloat();
 		final float h = buffer.readFloat();

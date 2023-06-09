@@ -2,9 +2,10 @@ package team.cqr.cqrepoured.world.structure;
 
 import java.util.Random;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.biome.Biome;
@@ -16,7 +17,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -40,7 +40,7 @@ public class StructureCQR extends Structure<NoFeatureConfig> {
 	@Override
 	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeProvider, long seed, SharedSeedRandom random, int chunkX, int chunkZ,
 			Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
-		ServerWorld level = WorldDungeonGenerator.getLevel(chunkGenerator);
+		ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
 		return WorldDungeonGenerator.getDungeonAt(level, chunkPos) != null;
 	}
 
@@ -58,7 +58,7 @@ public class StructureCQR extends Structure<NoFeatureConfig> {
 		@Override
 		public void generatePieces(DynamicRegistries registries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int chunkX, int chunkZ,
 				Biome biome, NoFeatureConfig config) {
-			ServerWorld level = WorldDungeonGenerator.getLevel(chunkGenerator);
+			ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
 			DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(level, new ChunkPos(chunkX, chunkZ));
 			BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
 			Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());

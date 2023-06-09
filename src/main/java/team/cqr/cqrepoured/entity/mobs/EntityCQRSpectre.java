@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.entity.mobs;
 import java.util.Set;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class EntityCQRSpectre extends AbstractEntityCQR implements IAnimatableCQR {
 
-	public EntityCQRSpectre(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRSpectre(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -56,7 +56,7 @@ public class EntityCQRSpectre extends AbstractEntityCQR implements IAnimatableCQ
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

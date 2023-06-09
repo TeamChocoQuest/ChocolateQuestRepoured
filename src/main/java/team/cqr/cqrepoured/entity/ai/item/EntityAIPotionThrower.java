@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.PotionEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.SplashPotionItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -59,7 +59,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 				proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
 				proj.hasImpulse = true;
 				this.entity.level.addFreshEntity(proj);
-				this.entity.swing(Hand.OFF_HAND);
+				this.entity.swing(InteractionHand.OFF_HAND);
 				this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
 				if (CQRConfig.SERVER_CONFIG.mobs.offhandPotionsAreSingleUse.get()) {
@@ -96,7 +96,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 						proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
 						proj.hasImpulse = true;
 						this.entity.level.addFreshEntity(proj);
-						this.entity.swing(Hand.OFF_HAND);
+						this.entity.swing(InteractionHand.OFF_HAND);
 						this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
 				}

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.model.geo.entity;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
@@ -21,15 +21,15 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 	protected abstract String getHeadBoneIdent();
 
 	protected float getNetHeadYaw(final float partialTicks, T entity) {
-		float f = MathHelper.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
-		float f1 = MathHelper.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
+		float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+		float f1 = Mth.rotLerp(partialTicks, entity.yHeadRotO, entity.yHeadRot);
 		float netHeadYaw = f1 - f;
 		boolean shouldSit = entity.isPassenger() && (entity.getVehicle() != null && entity.getVehicle().shouldRiderSit());
 		if (shouldSit && entity.getVehicle() instanceof LivingEntity) {
 			LivingEntity livingentity = (LivingEntity) entity.getVehicle();
-			f = MathHelper.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
+			f = Mth.rotLerp(partialTicks, livingentity.yBodyRotO, livingentity.yBodyRot);
 			netHeadYaw = f1 - f;
-			float f3 = MathHelper.wrapDegrees(netHeadYaw);
+			float f3 = Mth.wrapDegrees(netHeadYaw);
 			if (f3 < -85.0F) {
 				f3 = -85.0F;
 			}
@@ -50,7 +50,7 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 	}
 
 	protected float getHeadPitch(final float partialTicks, T entity) {
-		return MathHelper.lerp(partialTicks, entity.xRotO, entity.xRot);
+		return Mth.lerp(partialTicks, entity.xRotO, entity.xRot);
 	}
 
 	protected float rotlerpRad(float pAngle, float pMaxAngle, float pMul) {

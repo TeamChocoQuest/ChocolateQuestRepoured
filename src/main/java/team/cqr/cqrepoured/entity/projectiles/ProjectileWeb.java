@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.block.AirBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -20,16 +20,16 @@ public class ProjectileWeb extends ProjectileBase {
 
 	private LivingEntity shooter;
 
-	public ProjectileWeb(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileWeb(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileWeb(double pX, double pY, double pZ, World world)
+	public ProjectileWeb(double pX, double pY, double pZ, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_WEB.get(), world);
 	}
 
-	public ProjectileWeb(LivingEntity shooter, World world)
+	public ProjectileWeb(LivingEntity shooter, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_WEB.get(), shooter, world);
 		this.shooter = shooter;
@@ -69,7 +69,7 @@ public class ProjectileWeb extends ProjectileBase {
 	} */
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result)
+	protected void onHitBlock(BlockHitResult result)
 	{
 		if(DungeonGenUtils.percentageRandom(75))
 		{
@@ -85,7 +85,7 @@ public class ProjectileWeb extends ProjectileBase {
 	}
 
 	@Override
-	protected void onHitEntity(EntityRayTraceResult result)
+	protected void onHitEntity(EntityHitResult result)
 	{
 		if(result.getEntity() instanceof LivingEntity)
 		{
@@ -93,7 +93,7 @@ public class ProjectileWeb extends ProjectileBase {
 
 			if(entity == this.shooter) return;
 
-			entity.addEffect(new EffectInstance(Effects.POISON, 60, 0));
+			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
 			//entity.makeStuckInBlock(); //Dont now what about this #TODO
 			this.level.setBlockAndUpdate(entity.blockPosition(), CQRBlocks.POISONOUS_WEB.get().defaultBlockState());
 			this.remove();
@@ -112,7 +112,7 @@ public class ProjectileWeb extends ProjectileBase {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

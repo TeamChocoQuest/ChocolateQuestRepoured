@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 
 public interface IInteractable {
 
-	void onClickButton(PlayerEntity player, int button, PacketBuffer extraData);
+	void onClickButton(Player player, int button, FriendlyByteBuf extraData);
 
 }

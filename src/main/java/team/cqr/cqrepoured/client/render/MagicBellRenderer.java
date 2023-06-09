@@ -17,7 +17,7 @@ import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeRenderTypes;
 

@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.capability.pathtool;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.BasicCapabilityProvider;
-import team.cqr.cqrepoured.init.CQRItems;
 
 public class CapabilityPathProvider extends BasicCapabilityProvider<CapabilityPath> {
 

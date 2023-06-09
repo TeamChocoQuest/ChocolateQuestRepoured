@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class SPacketAddOrResetProtectedRegionIndicator extends AbstractPacket<SP
 	}
 
 	@Override
-	public SPacketAddOrResetProtectedRegionIndicator fromBytes(PacketBuffer buf) {
+	public SPacketAddOrResetProtectedRegionIndicator fromBytes(FriendlyByteBuf buf) {
 		SPacketAddOrResetProtectedRegionIndicator result = new SPacketAddOrResetProtectedRegionIndicator();
 		
 		result.uuid = buf.readUUID();
@@ -37,7 +37,7 @@ public class SPacketAddOrResetProtectedRegionIndicator extends AbstractPacket<SP
 	}
 
 	@Override
-	public void toBytes(SPacketAddOrResetProtectedRegionIndicator packet, PacketBuffer buf) {
+	public void toBytes(SPacketAddOrResetProtectedRegionIndicator packet, FriendlyByteBuf buf) {
 		buf.writeUUID(packet.uuid);
 		buf.writeBlockPos(packet.start);
 		buf.writeBlockPos(packet.end);

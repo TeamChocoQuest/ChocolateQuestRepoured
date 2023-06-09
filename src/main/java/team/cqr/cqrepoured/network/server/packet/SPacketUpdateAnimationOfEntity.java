@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -25,7 +25,7 @@ public class SPacketUpdateAnimationOfEntity extends AbstractPacket<SPacketUpdate
 	}
 
 	@Override
-	public SPacketUpdateAnimationOfEntity fromBytes(PacketBuffer buf) {
+	public SPacketUpdateAnimationOfEntity fromBytes(FriendlyByteBuf buf) {
 		SPacketUpdateAnimationOfEntity result = new SPacketUpdateAnimationOfEntity();
 		
 		result.entityId = buf.readInt();
@@ -35,7 +35,7 @@ public class SPacketUpdateAnimationOfEntity extends AbstractPacket<SPacketUpdate
 	}
 
 	@Override
-	public void toBytes(SPacketUpdateAnimationOfEntity packet, PacketBuffer buf) {
+	public void toBytes(SPacketUpdateAnimationOfEntity packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeUtf(packet.animationID);
 	}

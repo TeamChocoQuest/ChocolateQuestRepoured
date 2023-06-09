@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketSyncEntity extends AbstractPacket<CPacketSyncEntity> {
@@ -32,7 +32,7 @@ public class CPacketSyncEntity extends AbstractPacket<CPacketSyncEntity> {
 	}
 
 	@Override
-	public CPacketSyncEntity fromBytes(PacketBuffer buf) {
+	public CPacketSyncEntity fromBytes(FriendlyByteBuf buf) {
 		CPacketSyncEntity result = new CPacketSyncEntity();
 		result.entityId = buf.readInt();
 		result.healthScaling = buf.readShort();
@@ -47,7 +47,7 @@ public class CPacketSyncEntity extends AbstractPacket<CPacketSyncEntity> {
 	}
 
 	@Override
-	public void toBytes(CPacketSyncEntity packet, PacketBuffer buf) {
+	public void toBytes(CPacketSyncEntity packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeShort(packet.healthScaling);
 		buf.writeByte(packet.dropChanceHelm);

@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.world.structure.generation.lootchests;
 
-import net.minecraft.item.Item;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.StandaloneLootEntry;
-import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.EnchantWithLevels;
 import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.loot.functions.SetDamage;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class WeightedItemStack implements IItemProvider{
 	}
 
 	public LootPool getAsSingleLootPool(int indx) {
-		ILootCondition.IBuilder conditionPool = RandomChance.randomChance(this.weight / 100F);
+		LootItemConditions.IBuilder conditionPool = RandomChance.randomChance(this.weight / 100F);
 
 		//LootPool pool = new LootPool(entryA, conditionA, new RandomValueRange(1), new RandomValueRange(0), "item_" + indx);
 		LootPool.Builder lootPoolBuilder = LootPool.lootPool().setRolls(RandomValueRange.between(1, 1));
@@ -63,12 +63,12 @@ public class WeightedItemStack implements IItemProvider{
 	}
 
 	public StandaloneLootEntry.Builder<?> getAsLootEntry(int indx) {
-		ILootCondition.IBuilder condition = RandomChance.randomChance(this.weight / 100F);
+		LootItemConditions.IBuilder condition = RandomChance.randomChance(this.weight / 100F);
 		// LootCondition condition2 = new
 		List<ILootFunction.IBuilder> functions = new ArrayList<>();
 		functions.add(SetCount.setCount(RandomValueRange.between(this.minCount, this.maxCount)));
 		if (this.enchant) {
-			ILootCondition.IBuilder enchConds = null;
+			LootItemConditions.IBuilder enchConds = null;
 			if (this.enchantChance > 0) {
 				enchConds = RandomChance.randomChance(this.enchantChance / 100F);
 			}

@@ -3,28 +3,28 @@ package team.cqr.cqrepoured.entity.misc;
 import java.util.List;
 
 import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -42,30 +42,30 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	public float blue;
 	public float alpha;
 
-	public EntityColoredLightningBolt(World worldIn) {
+	public EntityColoredLightningBolt(Level worldIn) {
 		this(CQREntityTypes.COLORED_LIGHTNING.get(), worldIn, 0.0D, 0.0D, 0.0D, false, false);
 	}
 
-	public EntityColoredLightningBolt(World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire) {
+	public EntityColoredLightningBolt(Level worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire) {
 		this(CQREntityTypes.COLORED_LIGHTNING.get(), worldIn, x, y, z, hitEntities, spreadFire, 0.45F, 0.45F, 0.5F, 0.3F);
 	}
 	
-	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, World worldIn) {
+	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, Level worldIn) {
 		this(worldIn, 0.0D, 0.0D, 0.0D, false, false);
 	}
 
-	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire) {
+	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, Level worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire) {
 		this(worldIn, x, y, z, hitEntities, spreadFire, 0.45F, 0.45F, 0.5F, 0.3F);
 	}
 
 	/**
 	 * Vanilla color is: 0.45F, 0.45F, 0.5F, 0.3F
 	 */
-	public EntityColoredLightningBolt(World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
+	public EntityColoredLightningBolt(Level worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
 		this(CQREntityTypes.COLORED_LIGHTNING.get(), worldIn, x, y, z, hitEntities, spreadFire, red, green, blue, alpha);
 	}
 	
-	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
+	public EntityColoredLightningBolt(EntityType<? extends EntityColoredLightningBolt> type, Level worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
 		super(type, worldIn/*, x, y, z, true*/);
 		this.setPos(x, y, z);
 		//this.isImmuneToFire = true;
@@ -110,8 +110,8 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 		this.baseTick();
 
 		if (this.lightningState == 2) {
-			this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
-	         this.level.playSound((PlayerEntity)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
+			this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 10000.0F, 0.8F + this.random.nextFloat() * 0.2F);
+	         this.level.playSound((Player)null, this.getX(), this.getY(), this.getZ(), SoundEvents.LIGHTNING_BOLT_IMPACT, SoundSource.WEATHER, 2.0F, 0.5F + this.random.nextFloat() * 0.2F);
 		}
 
 		--this.lightningState;
@@ -138,7 +138,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 			if (this.level.isClientSide) {
 				this.level.setSkyFlashTime(2);
 			} else if (this.hitEntities) {
-				AxisAlignedBB aabb = new AxisAlignedBB(this.getX() - 3.0D, this.getY() - 3.0D, this.getZ() - 3.0D, this.getX() + 3.0D, this.getY() + 6.0D + 3.0D, this.getZ() + 3.0D);
+				AABB aabb = new AABB(this.getX() - 3.0D, this.getY() - 3.0D, this.getZ() - 3.0D, this.getX() + 3.0D, this.getY() + 6.0D + 3.0D, this.getZ() + 3.0D);
 				List<Entity> list = this.level.getEntities(this, aabb);
 
 				for (Entity entity : list) {
@@ -146,7 +146,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 						if (CQRConfig.SERVER_CONFIG.advanced.flyingCowardPenaltyEnabled.get() && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getControllingPassenger()))) {
 							entity.hurt(DamageSource.MAGIC, (float)(double)(CQRConfig.SERVER_CONFIG.advanced.flyingCowardPenaltyDamage.get()));
 						}
-						entity.thunderHit((ServerWorld)this.level, this);
+						entity.thunderHit((ServerLevel)this.level, this);
 					}
 				}
 			}
@@ -154,7 +154,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putFloat("red", this.red);
 		compound.putFloat("green", this.green);
@@ -163,7 +163,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.red = compound.getFloat("red");
 		this.green = compound.getFloat("green");
@@ -172,7 +172,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		buffer.writeFloat(this.red);
 		buffer.writeFloat(this.green);
 		buffer.writeFloat(this.blue);
@@ -180,7 +180,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData) {
+	public void readSpawnData(FriendlyByteBuf additionalData) {
 		this.red = additionalData.readFloat();
 		this.green = additionalData.readFloat();
 		this.blue = additionalData.readFloat();
@@ -188,7 +188,7 @@ public class EntityColoredLightningBolt extends LightningBoltEntity implements I
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

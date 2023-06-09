@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;

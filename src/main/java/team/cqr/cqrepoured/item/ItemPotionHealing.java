@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,21 +34,21 @@ public class ItemPotionHealing extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		if (playerIn.getHealth() < playerIn.getMaxHealth()) {
 			playerIn.startUsingItem(handIn);
-			return ActionResult.success(playerIn.getItemInHand(handIn));
+			return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 		}
-		return ActionResult.fail(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.fail(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
 		stack.shrink(1);
 
 		if (!worldIn.isClientSide) {
-			if (entityLiving instanceof PlayerEntity) {
-				PlayerEntity player = (PlayerEntity) entityLiving;
+			if (entityLiving instanceof Player) {
+				Player player = (Player) entityLiving;
 				player.heal(4.0F);
 
 				if (!player.isCreative()) {
@@ -70,7 +70,7 @@ public class ItemPotionHealing extends ItemLore {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 	/*	if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.healing_potion.name"));
 		} else {

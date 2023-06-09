@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
 import com.google.common.base.Predicate;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -82,7 +82,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 				double y = this.entity.position().y;
 				double z = this.entity.position().z;
 				double r = 6.0D;
-				AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
+				AABB aabb = new AABB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
 				List<AbstractEntityCQR> friends = this.entity.level.getEntitiesOfClass(AbstractEntityCQR.class, aabb, this.predicate);
 				if (!friends.isEmpty()) {
 					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
@@ -96,7 +96,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 					this.entity.getLookControl().setLookAt(this.talkingPartner, 15.0F, 15.0F);
 					double dx = this.talkingPartner.position().x - this.entity.position().x;
 					double dz = this.talkingPartner.position().z - this.entity.position().z;
-					this.entity.yRot = (float) Math.toDegrees(MathHelper.atan2(dz, dx)) - 90.0F;
+					this.entity.yRot = (float) Math.toDegrees(Mth.atan2(dz, dx)) - 90.0F;
 					this.entity.yBodyRot = this.entity.yRot;
 				} else {
 					this.talkingPartner = null;
@@ -114,7 +114,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		}
 		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(this.entity);
 		LivingEntity targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
-		if (!(leader instanceof PlayerEntity) && targetLeader instanceof PlayerEntity) {
+		if (!(leader instanceof Player) && targetLeader instanceof Player) {
 			return false;
 		}
 		if (!TargetUtil.isAllyCheckingLeaders(leader, targetLeader)) {

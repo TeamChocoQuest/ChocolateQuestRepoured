@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntitySpectreLordCurse extends Entity {
@@ -18,15 +18,15 @@ public class EntitySpectreLordCurse extends Entity {
 	private LivingEntity target;
 	private int lastTimeHit;
 
-	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, World worldIn) {
+	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, Level worldIn) {
 		this(type, worldIn, null, null);
 	}
 	
-	public EntitySpectreLordCurse(World worldIn, LivingEntity caster, LivingEntity target) {
+	public EntitySpectreLordCurse(Level worldIn, LivingEntity caster, LivingEntity target) {
 		this(CQREntityTypes.SPECTRE_LORD_CURSE.get(), worldIn, caster, target);
 	}
 
-	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, World worldIn, LivingEntity caster, LivingEntity target) {
+	public EntitySpectreLordCurse(EntityType<? extends EntitySpectreLordCurse> type, Level worldIn, LivingEntity caster, LivingEntity target) {
 		super(type, worldIn);
 		this.caster = caster;
 		this.target = target;
@@ -43,7 +43,7 @@ public class EntitySpectreLordCurse extends Entity {
 		super.tick();
 
 		if (!this.level.isClientSide) {
-			Vector3d vec = this.target.position().subtract(this.position()).normalize().scale(0.12F);
+			Vec3 vec = this.target.position().subtract(this.position()).normalize().scale(0.12F);
 			this.setDeltaMovement(vec);
 		}
 
@@ -72,19 +72,19 @@ public class EntitySpectreLordCurse extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+	protected void readAdditionalSaveData(CompoundTag pCompound) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+	protected void addAdditionalSaveData(CompoundTag pCompound) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		// TODO Auto-generated method stub
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

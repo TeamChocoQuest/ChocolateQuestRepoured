@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.entity.trade;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
@@ -27,16 +27,16 @@ public class TraderOffer {
 		this.entity = trader;
 	}
 
-	public void readFromNBT(CompoundNBT nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		this.trades.clear();
-		ListNBT tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
+		ListTag tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
 		for (INBT tag : tradesNBT) {
-			this.trades.add(Trade.createFromNBT(this, (CompoundNBT) tag));
+			this.trades.add(Trade.createFromNBT(this, (CompoundTag) tag));
 		}
 	}
 
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		ListNBT tradesNBT = new ListNBT();
+	public CompoundTag writeToNBT(CompoundTag nbt) {
+		ListTag tradesNBT = new ListTag();
 		for (Trade trade : this.trades) {
 			tradesNBT.add(trade.writeToNBT());
 		}

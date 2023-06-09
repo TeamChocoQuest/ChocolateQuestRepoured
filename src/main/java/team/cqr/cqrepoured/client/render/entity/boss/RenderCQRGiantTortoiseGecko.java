@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
@@ -14,13 +15,11 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
 public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/giant_tortoise.geo.json");
 
-	public RenderCQRGiantTortoiseGecko(EntityRendererManager renderManager) {
+	public RenderCQRGiantTortoiseGecko(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelGiantTortoiseGeo(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
 	}
 
@@ -37,12 +36,12 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRGiantTortoise currentEntity) {
 		// Unused
 	}
 
@@ -62,12 +61,12 @@ public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGia
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRGiantTortoise currentEntity, IBone bone) {
 		
 	}
 

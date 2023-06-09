@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.SpawnerFactory;
@@ -22,13 +22,13 @@ public class ItemSpawnerConverter extends Item {
 	}
 
 	@Override
-	public boolean canAttackBlock(BlockState state, World level, BlockPos pos, PlayerEntity player) {
+	public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
 		Block block = level.getBlockState(pos).getBlock();
 		return block != CQRBlocks.SPAWNER.get() && block != Blocks.SPAWNER;
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
+	public InteractionResult useOn(UseOnContext context) {
 		if (context.getPlayer().isCreative()) {
 			Block block = context.getLevel().getBlockState(context.getClickedPos()).getBlock();
 			if (block == CQRBlocks.SPAWNER.get() || block == Blocks.SPAWNER) {
@@ -43,10 +43,10 @@ public class ItemSpawnerConverter extends Item {
 					}
 					context.getPlayer().getCooldowns().addCooldown(this, 10);
 				}
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 	}
 
 }

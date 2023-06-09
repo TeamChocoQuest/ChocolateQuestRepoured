@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.event.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -14,7 +14,7 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		ItemStack stack = player.getItemInHand(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector) {
@@ -28,7 +28,7 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickEmptyEvent(PlayerInteractEvent.LeftClickEmpty event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		ItemStack stack = player.getItemInHand(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector && player.isCrouching()) {

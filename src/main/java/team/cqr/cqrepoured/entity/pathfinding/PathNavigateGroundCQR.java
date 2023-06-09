@@ -7,31 +7,31 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Sets;
 
 import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.DoorBlock;
 import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.WallBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.pathfinding.PathType;
 import net.minecraft.pathfinding.WalkNodeProcessor;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.Region;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.entity.ai.EntityAIOpenCloseDoor;
 import team.cqr.cqrepoured.world.ChunkCacheCQR;
 
@@ -41,8 +41,8 @@ import team.cqr.cqrepoured.world.ChunkCacheCQR;
 public class PathNavigateGroundCQR extends GroundPathNavigator {
 
 	private int ticksAtLastPos;
-	private Vector3d lastPosCheck = Vector3d.ZERO;
-	private Vector3d timeoutCachedNode = Vector3d.ZERO;
+	private Vec3 lastPosCheck = Vec3.ZERO;
+	private Vec3 timeoutCachedNode = Vec3.ZERO;
 	private long timeoutTimer;
 	@SuppressWarnings("unused")
 	private long lastTimeoutCheck;
@@ -52,7 +52,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	private PathFinder pathFinder;
 	protected float maxPathSearchRange = 256;
 
-	public PathNavigateGroundCQR(MobEntity entitylivingIn, World worldIn) {
+	public PathNavigateGroundCQR(MobEntity entitylivingIn, Level worldIn) {
 		super(entitylivingIn, worldIn);
 	}
 
@@ -61,31 +61,31 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 		this.nodeEvaluator = new WalkNodeProcessor() {
 
 			@Override
-			public PathNodeType getBlockPathTypes(IBlockReader level, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<PathNodeType> pNodeTypeEnum, PathNodeType pNodeType, BlockPos pPos) {
+			public BlockPathTypes getBlockPathTypes(BlockGetter level, int x, int y, int z, int xSize, int ySize, int zSize, boolean canOpenDoorsIn, boolean canEnterDoorsIn, EnumSet<BlockPathTypes> pNodeTypeEnum, BlockPathTypes pNodeType, BlockPos pPos) {
 				for (int i = 0; i < xSize; ++i) {
 					for (int j = 0; j < ySize; ++j) {
 						for (int k = 0; k < zSize; ++k) {
 							int l = i + x;
 							int i1 = j + y;
 							int j1 = k + z;
-							PathNodeType pathnodetype = this.getBlockPathType(level, l, i1, j1);
+							BlockPathTypes pathnodetype = this.getBlockPathType(level, l, i1, j1);
 
-							if (pathnodetype == PathNodeType.DOOR_WOOD_CLOSED && canOpenDoorsIn && canEnterDoorsIn) {
-								pathnodetype = PathNodeType.WALKABLE;
+							if (pathnodetype == BlockPathTypes.DOOR_WOOD_CLOSED && canOpenDoorsIn && canEnterDoorsIn) {
+								pathnodetype = BlockPathTypes.WALKABLE;
 							}
 
 							// TODO better method for calculating the facing from which the door will be entered
-							if (pathnodetype == PathNodeType.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
+							if (pathnodetype == BlockPathTypes.DOOR_IRON_CLOSED && canOpenDoorsIn && canEnterDoorsIn
 									&& EntityAIOpenCloseDoor.canMoveThroughDoor(level, new BlockPos(l, i1, j1), Direction.fromNormal/*Correct replacement???*/(l - pPos.getX(), i1 - pPos.getY(), j1 - pPos.getZ()).getOpposite(), true)) {
-								pathnodetype = PathNodeType.WALKABLE;
+								pathnodetype = BlockPathTypes.WALKABLE;
 							}
 
-							if (pathnodetype == PathNodeType.DOOR_OPEN && !canEnterDoorsIn) {
-								pathnodetype = PathNodeType.BLOCKED;
+							if (pathnodetype == BlockPathTypes.DOOR_OPEN && !canEnterDoorsIn) {
+								pathnodetype = BlockPathTypes.BLOCKED;
 							}
 
-							if (pathnodetype == PathNodeType.RAIL && !(level.getBlockState(pPos).getBlock() instanceof AbstractRailBlock) && !(level.getBlockState(pPos.below()).getBlock() instanceof AbstractRailBlock)) {
-								pathnodetype = PathNodeType.FENCE;
+							if (pathnodetype == BlockPathTypes.RAIL && !(level.getBlockState(pPos).getBlock() instanceof AbstractRailBlock) && !(level.getBlockState(pPos.below()).getBlock() instanceof AbstractRailBlock)) {
+								pathnodetype = BlockPathTypes.FENCE;
 							}
 
 							if (i == 0 && j == 0 && k == 0) {
@@ -101,45 +101,45 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 			}
 			
 			@Override
-			public PathNodeType getBlockPathType(IBlockReader pLevel, int pX, int pY, int pZ) {
+			public BlockPathTypes getBlockPathType(BlockGetter pLevel, int pX, int pY, int pZ) {
 				BlockPos blockpos = new BlockPos(pX, pY, pZ);
 				BlockState iblockstate = pLevel.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 				Material material = iblockstate.getMaterial();
 
-				PathNodeType type = block.getAiPathNodeType(iblockstate, pLevel, blockpos, this.mob);
+				BlockPathTypes type = block.getAiPathNodeType(iblockstate, pLevel, blockpos, this.mob);
 				if (type != null) {
 					return type;
 				}
 
 				if (material == Material.AIR) {
-					return PathNodeType.OPEN;
+					return BlockPathTypes.OPEN;
 				} else if (!block.is(BlockTags.TRAPDOORS) && !block.is(Blocks.LILY_PAD)) {
 					if (block == Blocks.FIRE) {
-						return PathNodeType.DAMAGE_FIRE;
+						return BlockPathTypes.DAMAGE_FIRE;
 					} else if (block == Blocks.CACTUS) {
-						return PathNodeType.DAMAGE_CACTUS;
+						return BlockPathTypes.DAMAGE_CACTUS;
 					} else if (block instanceof DoorBlock && material == Material.WOOD && !iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
-						return PathNodeType.DOOR_WOOD_CLOSED;
+						return BlockPathTypes.DOOR_WOOD_CLOSED;
 					} else if (block instanceof DoorBlock && material == Material.METAL && !iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
-						return PathNodeType.DOOR_IRON_CLOSED;
+						return BlockPathTypes.DOOR_IRON_CLOSED;
 					} else if (block instanceof DoorBlock && iblockstate/*.getActualState(pLevel, blockpos)*/.getValue(DoorBlock.OPEN)) {
-						return PathNodeType.DOOR_OPEN;
+						return BlockPathTypes.DOOR_OPEN;
 					} else if (block instanceof AbstractRailBlock) {
-						return PathNodeType.RAIL;
+						return BlockPathTypes.RAIL;
 					} else if (!(block instanceof FenceBlock) && !(block instanceof WallBlock) && (!(block instanceof FenceGateBlock) || iblockstate.getValue(FenceGateBlock.OPEN).booleanValue())) {
 						if (material == Material.WATER) {
-							return PathNodeType.WATER;
+							return BlockPathTypes.WATER;
 						} else if (material == Material.LAVA) {
-							return PathNodeType.LAVA;
+							return BlockPathTypes.LAVA;
 						} else {
-							return iblockstate.isPathfindable(pLevel, blockpos, PathType.LAND) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
+							return iblockstate.isPathfindable(pLevel, blockpos, PathType.LAND) ? BlockPathTypes.OPEN : BlockPathTypes.BLOCKED;
 						}
 					} else {
-						return PathNodeType.FENCE;
+						return BlockPathTypes.FENCE;
 					}
 				} else {
-					return PathNodeType.TRAPDOOR;
+					return BlockPathTypes.TRAPDOOR;
 				}
 			}
 
@@ -233,7 +233,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 			BlockPos entityPos =this.hasMount() ? this.getMount().blockPosition() : this.mob.blockPosition();
 			Region chunkcache = new ChunkCacheCQR(this.level, entityPos, pos, entityPos, 32, false);
 			MobEntity mob = (this.hasMount() ? this.getMount() : this.mob);
-			Path path = this.pathFinder.findPath(chunkcache, mob, Sets.newHashSet(pos), MathHelper.ceil(distance + 32.0F), (int) (mob.getBbWidth() / 2), 1.0F);
+			Path path = this.pathFinder.findPath(chunkcache, mob, Sets.newHashSet(pos), Mth.ceil(distance + 32.0F), (int) (mob.getBbWidth() / 2), 1.0F);
 			this.level.getProfiler().pop();
 			return path;
 		}
@@ -280,7 +280,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 	}
 
 	@Override
-	protected void doStuckDetection(Vector3d positionVec3) {
+	protected void doStuckDetection(Vec3 positionVec3) {
 		if (this.tick - this.ticksAtLastPos >= 100) {
 			double aiMoveSpeed = this.hasMount() ? this.getMount().getSpeed() : this.mob.getSpeed();
 			aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
@@ -296,7 +296,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 		currentNodeIndex = currentNodeIndex > 0 ? currentNodeIndex : 0;
 		if (this.path != null && !this.path.isDone() && currentNodeIndex < this.path.getNodeCount()) {
 			PathPoint currentNode = this.path.getNode(currentNodeIndex);
-			Vector3d vec3d = new Vector3d(currentNode.x, currentNode.y, currentNode.z);
+			Vec3 vec3d = new Vec3(currentNode.x, currentNode.y, currentNode.z);
 
 			if (!vec3d.equals(this.timeoutCachedNode)) {
 				this.timeoutCachedNode = vec3d;
@@ -306,14 +306,14 @@ public class PathNavigateGroundCQR extends GroundPathNavigator {
 				if (aiMoveSpeed > 0.0F) {
 					aiMoveSpeed = aiMoveSpeed * aiMoveSpeed * 0.98D / 0.454D;
 					double distance = positionVec3.distanceTo(this.timeoutCachedNode);
-					this.timeoutLimit = aiMoveSpeedOrig > 0.0F ? MathHelper.ceil(distance / aiMoveSpeed) : 0.0D;
+					this.timeoutLimit = aiMoveSpeedOrig > 0.0F ? Mth.ceil(distance / aiMoveSpeed) : 0.0D;
 				} else {
 					this.timeoutLimit = 0.0D;
 				}
 			}
 
 			if (this.timeoutLimit > 0.0D && this.tick - this.timeoutTimer > this.timeoutLimit * 2.0D) {
-				this.timeoutCachedNode = Vector3d.ZERO;
+				this.timeoutCachedNode = Vec3.ZERO;
 				this.timeoutTimer = 0L;
 				this.timeoutLimit = 0.0D;
 				this.stop();

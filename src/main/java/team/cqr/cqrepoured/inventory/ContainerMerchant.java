@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
@@ -24,11 +24,11 @@ public class ContainerMerchant extends Container implements IInteractable {
 	private final AbstractEntityCQR entity;
 	private final InventoryMerchant merchantInventory;
 
-	public ContainerMerchant(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
+	public ContainerMerchant(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
 		this(containerID, tryGetCQREntity(data), playerInv);
 	}
 	
-	public static AbstractEntityCQR tryGetCQREntity(PacketBuffer data) {
+	public static AbstractEntityCQR tryGetCQREntity(FriendlyByteBuf data) {
 		AbstractEntityCQR aecqr = null;
 		int id = data.readInt();
 		Entity ent = Minecraft.getInstance().level.getEntity(id);
@@ -38,15 +38,15 @@ public class ContainerMerchant extends Container implements IInteractable {
 		return aecqr;
 	}
 
-	public static ContainerMerchant fromNetwork(int id, PlayerInventory playerInv) {
+	public static ContainerMerchant fromNetwork(int id, Inventory playerInv) {
 		return new ContainerMerchant(id, null, playerInv);
 	}
 	
-	public ContainerMerchant(final int containerID, AbstractEntityCQR entity, PlayerInventory playerInv) {
+	public ContainerMerchant(final int containerID, AbstractEntityCQR entity, Inventory playerInv) {
 		this(CQRContainerTypes.MERCHANT.get(), containerID, entity, playerInv);
 	}
 	
-	private ContainerMerchant(ContainerType<?> type, final int containerID, AbstractEntityCQR entity, PlayerInventory playerInv) {
+	private ContainerMerchant(MenuType<?> type, final int containerID, AbstractEntityCQR entity, Inventory playerInv) {
 		super(type, containerID);
 		this.entity = entity;
 
@@ -69,7 +69,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public void slotsChanged(IInventory inventoryIn) {
+	public void slotsChanged(Container inventoryIn) {
 		this.merchantInventory.resetTradeAndSlots();
 		super.slotsChanged(inventoryIn);
 	}
@@ -79,7 +79,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		if (!this.entity.isAlive()) {
 			return false;
 		}
@@ -94,7 +94,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		ItemStack oldStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(index);
 
@@ -142,10 +142,10 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 	
 	@Override
-	public void removed(PlayerEntity playerIn) {
+	public void removed(Player playerIn) {
 		super.removed(playerIn);
 
-		if (!playerIn.isAlive() || playerIn instanceof ServerPlayerEntity && ((ServerPlayerEntity) playerIn).hasDisconnected()) {
+		if (!playerIn.isAlive() || playerIn instanceof ServerPlayer && ((ServerPlayer) playerIn).hasDisconnected()) {
 			for (int i = 0; i < 4; i++) {
 				playerIn.drop(this.merchantInventory.removeItemNoUpdate(i), false);
 			}
@@ -201,12 +201,12 @@ public class ContainerMerchant extends Container implements IInteractable {
 	}
 
 	@Override
-	public void onClickButton(PlayerEntity player, int button, PacketBuffer extraData) {
+	public void onClickButton(Player player, int button, FriendlyByteBuf extraData) {
 		if (button < 10) {
 			if (button == 0) {
 				// new trade
 				//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), this.entity.getTrades().size(), 0);
-				if(player instanceof ServerPlayerEntity) {
+				if(player instanceof ServerPlayer) {
 					CQRNetworkHooks.openGUI(player, this.entity.getDisplayName(), buf -> {
 						buf.writeInt(ContainerMerchant.this.entity.getId());
 						buf.writeInt(ContainerMerchant.this.entity.getTrades().size());
@@ -236,7 +236,7 @@ public class ContainerMerchant extends Container implements IInteractable {
 			// edit
 			int index = extraData.readInt();
 			//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_EDIT_TRADE_GUI_ID, player.level, this.entity.getId(), index, 0);
-			if(player instanceof ServerPlayerEntity) {
+			if(player instanceof ServerPlayer) {
 				CQRNetworkHooks.openGUI(player, this.entity.getDisplayName(), buf -> {
 					buf.writeInt(ContainerMerchant.this.entity.getId());
 					buf.writeInt(index);

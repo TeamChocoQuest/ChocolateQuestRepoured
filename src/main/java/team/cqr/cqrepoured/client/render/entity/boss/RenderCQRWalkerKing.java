@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelWalkerKingGeo;
@@ -22,7 +22,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	
 	public static final ResourceLocation TEXTURE_WALKER_KING_DEFAULT = CQRMain.prefix("textures/entity/boss/walker_king.png");
 
-	public RenderCQRWalkerKing(EntityRendererManager rendermanagerIn) {
+	public RenderCQRWalkerKing(EntityRendererProvider.Context rendermanagerIn) {
 		super(rendermanagerIn, new ModelWalkerKingGeo<>(STANDARD_BIPED_GEO_MODEL, TEXTURE_WALKER_KING_DEFAULT, "boss/walker_king"));
 
 		this.addLayer(new LayerGlowingAreasGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -33,7 +33,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	private boolean renderingDeathSecondRenderCycle = false;
 	
 	@Override
-	public void render(EntityCQRWalkerKing entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(EntityCQRWalkerKing entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
 		if(entity.deathTime > 0) {
 			this.renderingDeath = true;
 			
@@ -51,7 +51,7 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	}
 	
 	@Override
-	public RenderType getRenderType(EntityCQRWalkerKing animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+	public RenderType getRenderType(EntityCQRWalkerKing animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
 		if (this.renderingDeath) {
 			 float f2 = (float)animatable.deathTime / 200.0F;
 			if(this.renderingDeathSecondRenderCycle) {
@@ -83,17 +83,17 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRWalkerKing currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRWalkerKing currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRWalkerKing currentEntity) {
 		
 	}
 

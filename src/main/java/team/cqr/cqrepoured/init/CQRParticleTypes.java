@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.init;
 
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleType;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
 
 public class CQRParticleTypes {
 	

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,26 +16,26 @@ import team.cqr.cqrepoured.CQRMain;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CQRSerializers {
 
-	public static final IDataSerializer<Vector3d> VEC3D = new IDataSerializer<Vector3d>() {
+	public static final EntityDataSerializer<Vec3> VEC3D = new EntityDataSerializer<Vec3>() {
 		@Override
-		public void write(PacketBuffer buf, Vector3d value) {
+		public void write(FriendlyByteBuf buf, Vec3 value) {
 			buf.writeDouble(value.x);
 			buf.writeDouble(value.y);
 			buf.writeDouble(value.z);
 		}
 
 		@Override
-		public Vector3d read(PacketBuffer buf) {
-			return new Vector3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+		public Vec3 read(FriendlyByteBuf buf) {
+			return new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		}
 		
 		@Override
-		public DataParameter<Vector3d> createAccessor(int id) {
-			return new DataParameter<>(id, this);
+		public EntityDataAccessor<Vec3> createAccessor(int id) {
+			return new EntityDataAccessor<>(id, this);
 		}
 
 		@Override
-		public Vector3d copy(Vector3d value) {
+		public Vec3 copy(Vec3 value) {
 			return value;
 		}
 	};

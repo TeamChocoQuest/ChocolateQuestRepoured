@@ -4,12 +4,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.io.FileUtils;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

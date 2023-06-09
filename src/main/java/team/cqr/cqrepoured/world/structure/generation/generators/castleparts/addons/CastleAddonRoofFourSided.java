@@ -3,7 +3,7 @@
 //import net.minecraft.block.BlockState;
 //import net.minecraft.block.StairsBlock;
 //import net.minecraft.util.Direction;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 //

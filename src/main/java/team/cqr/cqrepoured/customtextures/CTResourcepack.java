@@ -8,11 +8,11 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.IPackFinder;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.IResourcePack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourcePackInfo;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.resources.ResourcePackInfo.IFactory;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
-import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 
 import java.io.File;

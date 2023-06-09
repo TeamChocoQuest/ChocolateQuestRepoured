@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generators.stronghold;
 
 import java.util.Random;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.util.DungeonGenUtils;

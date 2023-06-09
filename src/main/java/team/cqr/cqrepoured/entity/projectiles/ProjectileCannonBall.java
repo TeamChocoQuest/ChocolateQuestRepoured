@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileCannonBall extends ProjectileBase {
@@ -19,15 +19,15 @@ public class ProjectileCannonBall extends ProjectileBase {
 	private boolean isFast = false;
 	protected LivingEntity shooter;
 
-	public ProjectileCannonBall(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileCannonBall(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileCannonBall(double pX, double pY, double pZ, World world) {
+	public ProjectileCannonBall(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), world);
 	}
 
-	public ProjectileCannonBall(LivingEntity shooter, World world, boolean fast)
+	public ProjectileCannonBall(LivingEntity shooter, Level world, boolean fast)
 	{
 		super(CQREntityTypes.PROJECTILE_CANNON_BALL.get(), shooter, world);
 		this.isFast = fast;
@@ -62,7 +62,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	} */
 
 	@Override
-	protected void onHitEntity(EntityRayTraceResult result)
+	protected void onHitEntity(EntityHitResult result)
 	{
 		if(result.getEntity() == this.shooter || !(result.getEntity() instanceof LivingEntity))
 		{
@@ -89,13 +89,13 @@ public class ProjectileCannonBall extends ProjectileBase {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("isFast", this.isFast);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.isFast = compound.getBoolean("isFast");
 	}
@@ -108,7 +108,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 			this.markHurt();
 
 			if (source.getEntity() != null) {
-				Vector3d vec3d = source.getEntity().getLookAngle();
+				Vec3 vec3d = source.getEntity().getLookAngle();
 
 				if (vec3d != null) {
 					this.setDeltaMovement(vec3d);
@@ -134,7 +134,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

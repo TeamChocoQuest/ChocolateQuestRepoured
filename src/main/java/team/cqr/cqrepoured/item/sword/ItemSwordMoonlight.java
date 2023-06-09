@@ -3,21 +3,21 @@ package team.cqr.cqrepoured.item.sword;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.item.IEquipListener;
@@ -33,7 +33,7 @@ public class ItemSwordMoonlight extends ItemCQRWeapon implements IEquipListener 
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (!(entityIn instanceof LivingEntity)) {
 			return;
@@ -41,7 +41,7 @@ public class ItemSwordMoonlight extends ItemCQRWeapon implements IEquipListener 
 		if (!isSelected) {
 			return;
 		}
-		ModifiableAttributeInstance attribute = ((LivingEntity) entityIn).getAttribute(Attributes.ATTACK_DAMAGE);
+		AttributeInstance attribute = ((LivingEntity) entityIn).getAttribute(Attributes.ATTACK_DAMAGE);
 		if (!worldIn.isDay()) {
 			if (attribute.getModifier(ATTACK_DAMAGE_MODIFIER) != null) {
 				return;
@@ -53,21 +53,21 @@ public class ItemSwordMoonlight extends ItemCQRWeapon implements IEquipListener 
 	}
 
 	@Override
-	public void onUnequip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot) {
-		ModifiableAttributeInstance attribute = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+	public void onUnequip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+		AttributeInstance attribute = entity.getAttribute(Attributes.ATTACK_DAMAGE);
 		attribute.removeModifier(ATTACK_DAMAGE_MODIFIER);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.sword_moonlight.attack_damage_at_night", 3).withStyle(TextFormatting.DARK_AQUA));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.sword_moonlight.attack_damage_at_night", 3).withStyle(ChatFormatting.DARK_AQUA));
 	}
 
 	@Override
-	public void onEquip(LivingEntity entity, ItemStack stack, EquipmentSlotType slot) {
+	public void onEquip(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
 		//Ignored
 	}
 

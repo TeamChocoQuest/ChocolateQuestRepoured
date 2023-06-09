@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 	
-	public default void renderLayerLogic(T entity, MatrixStack matrix, IRenderTypeBuffer buffer, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public default void renderLayerLogic(T entity, PoseStack matrix, MultiBufferSource buffer, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
 		}
@@ -40,8 +40,8 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 					double y2 = target.yOld + (target.getY() - target.yOld) * partialTicks;
 					double z2 = target.zOld + (target.getZ() - target.zOld) * partialTicks;
 
-					final Vector3d start = new Vector3d(0, entity.getBbHeight() * 0.5, 0);
-					final Vector3d end = new Vector3d(x2 - x1, target.getBbHeight() * 0.5 + y2 - y1, z2 - z1);
+					final Vec3 start = new Vec3(0, entity.getBbHeight() * 0.5, 0);
+					final Vec3 end = new Vec3(x2 - x1, target.getBbHeight() * 0.5 + y2 - y1, z2 - z1);
 
 					matrix.pushPose();
 
@@ -55,7 +55,7 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 			}
 	}
 	
-	public default void performPreLineRenderPreparation(MatrixStack matrix) {
+	public default void performPreLineRenderPreparation(PoseStack matrix) {
 		matrix.translate(0, 1.501, 0);
 		matrix.scale(-1, -1, 1);
 	}

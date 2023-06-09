@@ -5,25 +5,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import com.mojang.blaze3d.vertex.Tesselator;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Mth;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
@@ -41,10 +41,10 @@ import team.cqr.cqrepoured.util.ArrayUtil;
 
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {
 
-	private static final VertexBuffer SPHERE_VBO = new VertexBuffer(DefaultVertexFormats.POSITION);
+	private static final VertexBuffer SPHERE_VBO = new VertexBuffer(DefaultVertexFormat.POSITION);
 	static {
-		BufferBuilder buffer = Tessellator.getInstance().getBuilder();
-		buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION);
+		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
+		buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormat.POSITION);
 
 		AtomicInteger index = new AtomicInteger();
 		SphereRenderer.getIcoSphere().flatMap(SphereRenderer.splitter(3, true)).forEach((Triangle triangle) -> {
@@ -89,14 +89,14 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/ender_calamity.geo.json");
 
-	public RenderCQREnderCalamity(EntityRendererManager renderManager) {
+	public RenderCQREnderCalamity(Context renderManager) {
 		super(renderManager, new ModelEnderCalamityGeo(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
 
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
 	@Override
-	public void render(EntityCQREnderCalamity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(EntityCQREnderCalamity entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
 		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
 
 		if (entity.isShieldActive()) {
@@ -109,7 +109,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			stack.scale(1.25F, 1.25F, 1.25F);
 			stack.mulPose(SPHERE_ROT_AXIS.rotationDegrees((entity.tickCount + partialTicks) * 4.0F));
 
-			float f = 0.7F + 0.15F * MathHelper.sin((entity.tickCount + partialTicks) * 0.1F);
+			float f = 0.7F + 0.15F * Mth.sin((entity.tickCount + partialTicks) * 0.1F);
 			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f);
 			SphereRenderer.renderSphere(stack, CQRRenderTypes.sphere(), SPHERE_VBO, GL11.GL_TRIANGLES, null, true, false);
 			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f * 0.35F);
@@ -136,12 +136,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
 		// Unused
 	}
 
@@ -164,12 +164,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
 		
 	}
 	
@@ -179,7 +179,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 	
 	@Override
-	public RenderType getRenderType(EntityCQREnderCalamity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+	public RenderType getRenderType(EntityCQREnderCalamity animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
 		return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
 

@@ -1,23 +1,21 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.INumericIDButton;
@@ -34,7 +32,7 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 	private GuiMerchant parent;
 
 	public GuiButtonTrade(GuiMerchant parent, final int id, int x, int y, int index) {
-		super(x, y, 116, 20, new StringTextComponent(""), Button::onPress);
+		super(x, y, 116, 20, new TextComponent(""), Button::onPress);
 		this.index = index;
 		this.id = id;
 		this.parent = parent;
@@ -64,7 +62,7 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 	}
 
 	@Override
-	public void renderButton(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		// Referenced from net.minecraftforge.fml.client.gui.widget.ExtendedButton:renderButton
 		if (this.visible && this.trade != null) {
 			Minecraft mc = Minecraft.getInstance();
@@ -110,7 +108,7 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 	}
 
 	@SuppressWarnings("resource")
-	public void renderHoveredToolTip(GuiMerchant parent, MatrixStack matrixStack,int mouseX, int mouseY) {
+	public void renderHoveredToolTip(GuiMerchant parent, PoseStack matrixStack, int mouseX, int mouseY) {
 		if (!this.visible || this.trade == null) {
 			return;
 		}
@@ -131,13 +129,13 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 			return;
 		}
 		if (mouseX >= x && mouseX <= x + 16 && mouseY >= y && mouseY <= y + 16) {
-			List<ITextComponent> tooltip = new ArrayList<>();
+			List<TextComponent> tooltip = new ArrayList<>();
 			boolean isUnlocked = this.trade.isUnlockedFor(parent.getMinecraft().player);
 			boolean inStock = this.trade.isInStock();
 			if (!isUnlocked) {
 				tooltip.add(new TranslationTextComponent("description.gui_button_trade.locked.name"));
 				if (this.trade.getRequiredAdvancement() != null) {
-					TextFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement()) ? TextFormatting.GREEN : TextFormatting.RED;
+					ChatFormatting formatting = CQRMain.PROXY.hasAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement()) ? ChatFormatting.GREEN : ChatFormatting.RED;
 					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement());
 					IFormattableTextComponent advancementName =
 							advancement != null ? advancement.getDisplay().getTitle().plainCopy().withStyle(formatting)
@@ -146,8 +144,8 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = FactionRegistry.instance(parent.getMinecraft().player).getExactReputationOf(parent.getMinecraft().player.getUUID(), this.trade.getHolder().getTraderFaction());
-					TextFormatting formatting = i >= this.trade.getRequiredReputation() ? TextFormatting.GREEN : TextFormatting.RED;
-					tooltip.add(new StringTextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
+					ChatFormatting formatting = i >= this.trade.getRequiredReputation() ? ChatFormatting.GREEN : ChatFormatting.RED;
+					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
 				}
 			} else if (!inStock) {
 				tooltip.add(new TranslationTextComponent("description.gui_button_trade.out_of_stock.name"));
@@ -157,12 +155,12 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 					Advancement advancement = CQRMain.PROXY.getAdvancement(parent.getMinecraft().player, this.trade.getRequiredAdvancement());
 					IFormattableTextComponent advancementName =
 							advancement != null ? advancement.getDisplay().getTitle().plainCopy()
-									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(TextFormatting.GREEN);
+									: Advancement.Builder.advancement().build(this.trade.getRequiredAdvancement()).getDisplay().getTitle().plainCopy().withStyle(ChatFormatting.GREEN);
 					tooltip.add(advancementName);
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = this.trade.getRequiredReputation();
-					tooltip.add(new StringTextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i).withStyle(TextFormatting.GREEN));
+					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i).withStyle(ChatFormatting.GREEN));
 				}
 			}
 			parent.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);

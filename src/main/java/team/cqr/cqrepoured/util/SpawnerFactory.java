@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.EntityList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
@@ -48,8 +48,8 @@ public final class SpawnerFactory {
 	 * @param world                    World in which to place spawner
 	 * @param pos                      Position at which to place spawner
 	 */
-	public static void placeSpawner(Entity[] entities, boolean multiUseSpawner, @Nullable CompoundNBT spawnerSettingsOverrides, World world, BlockPos pos) {
-		CompoundNBT[] entCompounds = new CompoundNBT[entities.length];
+	public static void placeSpawner(Entity[] entities, boolean multiUseSpawner, @Nullable CompoundTag spawnerSettingsOverrides, Level world, BlockPos pos) {
+		CompoundTag[] entCompounds = new CompoundTag[entities.length];
 		for (int i = 0; i < entities.length; i++) {
 			Entity ent = entities[i];
 			if (ent == null) {
@@ -70,15 +70,15 @@ public final class SpawnerFactory {
 	 * @param world                    World in which to place spawner
 	 * @param pos                      Position at which to place spawner
 	 */
-	public static void placeSpawner(CompoundNBT[] entities, boolean multiUseSpawner, @Nullable CompoundNBT spawnerSettingsOverrides, World world, BlockPos pos) {
-		BlockState blockState =  multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.get().defaultBlockState(); 
+	public static void placeSpawner(CompoundTag[] entities, boolean multiUseSpawner, @Nullable CompoundTag spawnerSettingsOverrides, Level world, BlockPos pos) {
+		BlockState blockState =  multiUseSpawner ? Blocks.SPAWNER.defaultBlockState() : CQRBlocks.SPAWNER.get().defaultBlockState();
 		world.setBlockAndUpdate(pos,blockState);
 
-		TileEntity tileEntity = world.getBlockEntity(pos);
+		BlockEntity tileEntity = world.getBlockEntity(pos);
 		if (multiUseSpawner) {
 			MobSpawnerTileEntity tileEntityMobSpawner = (MobSpawnerTileEntity) tileEntity;
-			CompoundNBT compound = tileEntityMobSpawner.save(new CompoundNBT());
-			ListNBT spawnPotentials = new ListNBT();
+			CompoundTag compound = tileEntityMobSpawner.save(new CompoundTag());
+			ListTag spawnPotentials = new ListTag();
 
 			// Store entity ids into NBT tag
 			for (int i = 0; i < entities.length; i++) {
@@ -89,13 +89,13 @@ public final class SpawnerFactory {
 						entities[i].remove("UUID");
 
 						entities[i].remove("Pos");
-						ListNBT passengers = entities[i].getList("Passengers", 10);
+						ListTag passengers = entities[i].getList("Passengers", 10);
 						for (INBT passenger : passengers) {
-							((CompoundNBT) passenger).remove("UUID");
-							((CompoundNBT) passenger).remove("Pos");
+							((CompoundTag) passenger).remove("UUID");
+							((CompoundTag) passenger).remove("Pos");
 						}
 					}
-					CompoundNBT spawnPotential = new CompoundNBT();
+					CompoundTag spawnPotential = new CompoundTag();
 					spawnPotential.putInt("Weight", 1);
 					spawnPotential.put("Entity", entities[i]);
 					spawnPotentials.add(spawnPotential);
@@ -135,7 +135,7 @@ public final class SpawnerFactory {
 	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for the
 	 * entity that it should spawn.
 	 */
-	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
+	public static void createSimpleMultiUseSpawner(Level world, BlockPos pos, ResourceLocation entityResLoc) {
 		world.setBlockAndUpdate(pos, Blocks.SPAWNER.defaultBlockState());
 		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
 
@@ -148,7 +148,7 @@ public final class SpawnerFactory {
 		spawner.tick();
 	}
 
-	public static MobSpawnerTileEntity getSpawnerTile(World world, ResourceLocation entity, BlockPos pos) {
+	public static MobSpawnerTileEntity getSpawnerTile(Level world, ResourceLocation entity, BlockPos pos) {
 		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
 		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entity));
 		return spawner;
@@ -158,7 +158,7 @@ public final class SpawnerFactory {
 	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a resource
 	 * location in its parameter
 	 */
-	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
+	public static void createSimpleMultiUseSpawner(Level world, BlockPos pos, Entity entity) {
 		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
 	}
 
@@ -171,20 +171,20 @@ public final class SpawnerFactory {
 	 * 
 	 * @param spawnerSettings
 	 */
-	public static void convertCQSpawnerToVanillaSpawner(World world, BlockPos pos, @Nullable CompoundNBT spawnerSettings) {
-		TileEntity tile = world.getBlockEntity(pos);
+	public static void convertCQSpawnerToVanillaSpawner(Level world, BlockPos pos, @Nullable CompoundTag spawnerSettings) {
+		BlockEntity tile = world.getBlockEntity(pos);
 		if (tile instanceof TileEntitySpawner) {
 			TileEntitySpawner spawner = (TileEntitySpawner) tile;
 
 			// Entity[] entities = new Entity[spawner.inventory.getSlots()];
-			CompoundNBT[] entities = new CompoundNBT[spawner.getInventory().getContainerSize()];
+			CompoundTag[] entities = new CompoundTag[spawner.getInventory().getContainerSize()];
 			// Random rand = new Random();
 
 			for (int i = 0; i < entities.length; i++) {
 				ItemStack stack = spawner.getInventory().removeItem(i, spawner.getInventory().getItem(i).getCount()/*, false*/);// getStackInSlot(i);
 				if (!stack.isEmpty()) {
 					try {
-						CompoundNBT tag = stack.getOrCreateTag();
+						CompoundTag tag = stack.getOrCreateTag();
 
 						// NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
 						entities[i] = tag.getCompound("EntityIn");
@@ -208,8 +208,8 @@ public final class SpawnerFactory {
 	/**
 	 * Converts the vanilla spawner at the provided World/BlockPos to a CQR spawner
 	 */
-	public static void convertVanillaSpawnerToCQSpawner(World world, BlockPos pos) {
-		TileEntity tile = world.getBlockEntity(pos);
+	public static void convertVanillaSpawnerToCQSpawner(Level world, BlockPos pos) {
+		BlockEntity tile = world.getBlockEntity(pos);
 		if (tile != null && tile instanceof MobSpawnerTileEntity) {
 			MobSpawnerTileEntity spawnerMultiUseTile = (MobSpawnerTileEntity) tile;
 
@@ -219,7 +219,7 @@ public final class SpawnerFactory {
 				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();
 
 				// Entity[] entities = new Entity[9];
-				CompoundNBT[] entityCompound = new CompoundNBT[9];
+				CompoundTag[] entityCompound = new CompoundTag[9];
 
 				int entriesRead = 0;
 				while (entriesRead < 9 && iterator.hasNext()) {
@@ -245,19 +245,19 @@ public final class SpawnerFactory {
 	 * 
 	 * @return Generated entity object
 	 */
-	public static Entity createEntityFromNBTWithoutSpawningIt(CompoundNBT tag, World worldIn) {
+	public static Entity createEntityFromNBTWithoutSpawningIt(CompoundTag tag, Level worldIn) {
 		Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
 		entity.load(tag);
 
 		return entity;
 	}
 
-	public static CompoundNBT createSpawnerNBTFromEntity(Entity entity) {
+	public static CompoundTag createSpawnerNBTFromEntity(Entity entity) {
 		return createSpawnerNBTFromEntity(entity, (!(entity instanceof AbstractEntityCQRBoss) /*&& entity.isNonBoss()*/));
 	}
 
-	public static CompoundNBT createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {
-		CompoundNBT entityCompound = new CompoundNBT();
+	public static CompoundTag createSpawnerNBTFromEntity(Entity entity, boolean removeUUID) {
+		CompoundTag entityCompound = new CompoundTag();
 		if (entity instanceof AbstractEntityCQR) {
 			// ((AbstractEntityCQR) entity).onPutInSpawner();
 		}
@@ -266,12 +266,12 @@ public final class SpawnerFactory {
 			entityCompound.remove("UUID");
 		}
 		entityCompound.remove("Pos");
-		ListNBT passengerList = entityCompound.getList("Passengers", 10);
+		ListTag passengerList = entityCompound.getList("Passengers", 10);
 		for (INBT passengerTag : passengerList) {
 			if (removeUUID) {
-				((CompoundNBT) passengerTag).remove("UUID");
+				((CompoundTag) passengerTag).remove("UUID");
 			}
-			((CompoundNBT) passengerTag).remove("Pos");
+			((CompoundTag) passengerTag).remove("Pos");
 		}
 
 		return entityCompound;
@@ -284,7 +284,7 @@ public final class SpawnerFactory {
 		if (entity == null) {
 			return null;
 		}
-		CompoundNBT entityTag = new CompoundNBT();
+		CompoundTag entityTag = new CompoundTag();
 		if (entity.save(entityTag)) {
 			return getSoulBottleItemStackForEntity(entityTag);
 		}
@@ -292,10 +292,10 @@ public final class SpawnerFactory {
 
 	}
 
-	public static ItemStack getSoulBottleItemStackForEntity(CompoundNBT entityTag) {
+	public static ItemStack getSoulBottleItemStackForEntity(CompoundTag entityTag) {
 		ItemStack bottle = new ItemStack(CQRItems.SOUL_BOTTLE.get());
 		bottle.setCount(1);
-		CompoundNBT mobToSpawnerItem = new CompoundNBT();
+		CompoundTag mobToSpawnerItem = new CompoundTag();
 
 		mobToSpawnerItem.put("EntityIn", entityTag);
 		bottle.setTag(mobToSpawnerItem);

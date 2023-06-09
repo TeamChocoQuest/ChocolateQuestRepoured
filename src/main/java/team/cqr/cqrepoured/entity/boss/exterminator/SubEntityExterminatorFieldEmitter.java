@@ -5,10 +5,10 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
@@ -105,9 +105,9 @@ public class SubEntityExterminatorFieldEmitter extends MultiPartEntityPartSizabl
 	}
 
 	@Override
-	public ActionResultType interact(PlayerEntity player, Hand hand) {
+	public InteractionResult interact(Player player, InteractionHand hand) {
 		if (this.exterminator == null || !this.exterminator.isAlive()) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		return this.exterminator.interact(player, hand);
 	}

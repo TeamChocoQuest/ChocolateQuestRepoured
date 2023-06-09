@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelBall;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
@@ -19,7 +18,7 @@ public class RenderBubble extends EntityRenderer<EntityBubble> {
 
 	private final Model model;
 
-	public RenderBubble(EntityRendererManager renderManager) {
+	public RenderBubble(Context renderManager) {
 		super(renderManager);
 		this.model = new ModelBall();
 	}
@@ -30,12 +29,12 @@ public class RenderBubble extends EntityRenderer<EntityBubble> {
 	}
 	
 	@Override
-	public EntityRendererManager getDispatcher() {
+	public Context getDispatcher() {
 		return super.getDispatcher();
 	}
 
 	@Override
-	public void render(EntityBubble entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+	public void render(EntityBubble entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
 		matrixStack.pushPose();
 		//RenderSystem.enableBlend();
 		//RenderSystem.disableCull();

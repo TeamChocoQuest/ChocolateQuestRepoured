@@ -1,21 +1,25 @@
 package team.cqr.cqrepoured.item.staff;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.WallTorchBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -46,7 +50,7 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		playerIn.swing(handIn);
@@ -54,14 +58,14 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 		this.changeTorch(worldIn, playerIn);
 		stack.hurtAndBreak(1, playerIn, p -> p.broadcastBreakEvent(handIn));
 		playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
-		return ActionResult.success(stack);
+		return InteractionResultHolder.success(stack);
 	}
 
-	public void changeTorch(World worldIn, PlayerEntity player)
+	public void changeTorch(Level worldIn, Player player)
 	{
-		Vector3d start = player.getEyePosition(1.0F);
-		Vector3d end = start.add(player.getLookAngle().scale(10.0D)); //#TODO CHECK
-		RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.VISUAL, RayTraceContext.FluidMode.NONE, player));
+		Vec3 start = player.getEyePosition(1.0F);
+		Vec3 end = start.add(player.getLookAngle().scale(10.0D)); //#TODO CHECK
+		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.VISUAL, ClipContext.FluidMode.NONE, player));
 
 		if (result != null && !worldIn.isClientSide) {
 			BlockPos pos = new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z);
@@ -79,15 +83,15 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	}
 
 	public void shootFromEntity(LivingEntity shooter) {
-		World world = shooter.level;
+		Level world = shooter.level;
 
 		if (!world.isClientSide) {
 			Random r = shooter.getRandom();
 			for (int i = 0; i < 20; i++) {
 				// TODO don't send 20 packets
-				Vector3d v = shooter.getLookAngle();
+				Vec3 v = shooter.getLookAngle();
 				v = v.add((r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D, (r.nextFloat() - 0.5D) / 3.0D);
-				((ServerWorld) world).sendParticles(ParticleTypes.FLAME, shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
+				((ServerLevel) world).sendParticles(ParticleTypes.FLAME, shooter.position().x, shooter.position().y + shooter.getEyeHeight(), shooter.position().z, 0, v.x, v.y, v.z, r.nextFloat() + 0.2D);
 			}
 
 			world.getEntitiesOfClass(LivingEntity.class, shooter.getBoundingBox().inflate(8.0D), entity -> {
@@ -95,15 +99,15 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 					return false;
 				}
 
-				double x = MathHelper.clamp(shooter.position().x, entity.position().x - entity.getBbWidth() * 0.5D, entity.position().x + entity.getBbWidth() * 0.5D) - shooter.position().x;
-				double y = MathHelper.clamp(shooter.position().y + shooter.getEyeHeight(), entity.position().y, entity.position().y + entity.getBbHeight()) - (shooter.position().y + shooter.getEyeHeight());
-				double z = MathHelper.clamp(shooter.position().z, entity.position().z - entity.getBbWidth() * 0.5D, entity.position().z + entity.getBbWidth() * 0.5D) - shooter.position().z;
+				double x = Mth.clamp(shooter.position().x, entity.position().x - entity.getBbWidth() * 0.5D, entity.position().x + entity.getBbWidth() * 0.5D) - shooter.position().x;
+				double y = Mth.clamp(shooter.position().y + shooter.getEyeHeight(), entity.position().y, entity.position().y + entity.getBbHeight()) - (shooter.position().y + shooter.getEyeHeight());
+				double z = Mth.clamp(shooter.position().z, entity.position().z - entity.getBbWidth() * 0.5D, entity.position().z + entity.getBbWidth() * 0.5D) - shooter.position().z;
 				if (x * x + y * y + z * z > 8.0D * 8.0D) {
 					return false;
 				}
 
-				Vector3d a = shooter.getLookAngle();
-				Vector3d b = new Vector3d(x, y, z);
+				Vec3 a = shooter.getLookAngle();
+				Vec3 b = new Vec3(x, y, z);
 				if (Math.toDegrees(Math.acos(a.dot(b) / (a.length() * b.length()))) > 40.0D) {
 					return false;
 				}
@@ -118,7 +122,7 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
+	public void shoot(Level worldIn, LivingEntity shooter, Entity target, InteractionHand handIn) {
 		this.shootFromEntity(shooter);
 	}
 

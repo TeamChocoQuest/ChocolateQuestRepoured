@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network.client.packet;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity> {
 
 	private BlockPos pos = BlockPos.ZERO;
-	private PacketBuffer buffer = new PacketBuffer(Unpooled.buffer(32));
+	private FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer(32));
 
 	public CPacketSyncTileEntity() {
 
@@ -29,7 +29,7 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 	}
 
 	@Override
-	public CPacketSyncTileEntity fromBytes(PacketBuffer buf) {
+	public CPacketSyncTileEntity fromBytes(FriendlyByteBuf buf) {
 		CPacketSyncTileEntity result = new CPacketSyncTileEntity();
 		result.pos = buf.readBlockPos();
 		result.buffer.writeBytes(buf);
@@ -37,7 +37,7 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 	}
 
 	@Override
-	public void toBytes(CPacketSyncTileEntity packet, PacketBuffer buf) {
+	public void toBytes(CPacketSyncTileEntity packet, FriendlyByteBuf buf) {
 		buf.writeBlockPos(packet.pos);
 		buf.writeBytes(packet.buffer);
 	}
@@ -46,7 +46,7 @@ public class CPacketSyncTileEntity extends AbstractPacket<CPacketSyncTileEntity>
 		return this.pos;
 	}
 
-	public PacketBuffer getBuffer() {
+	public FriendlyByteBuf getBuffer() {
 		return this.buffer;
 	}
 

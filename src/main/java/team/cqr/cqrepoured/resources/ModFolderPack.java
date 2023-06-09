@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,8 +22,7 @@ import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.ResourcePackFileNotFoundException;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -119,7 +119,7 @@ public class ModFolderPack implements IResourcePack {
 			return null;
 		}
 		try {
-			return pDeserializer.fromJson(JSONUtils.getAsJsonObject(json, pDeserializer.getMetadataSectionName()));
+			return pDeserializer.fromJson(GsonHelper.getAsJsonObject(json, pDeserializer.getMetadataSectionName()));
 		} catch (JsonParseException e) {
 			LOGGER.error("Couldn't load {} metadata", pDeserializer.getMetadataSectionName(), e);
 			return null;

@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.boss;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -35,11 +35,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	protected boolean startedExplodeAreaAttack = false;
 
-	public EntityCQRBoarmage(World world) {
+	public EntityCQRBoarmage(Level world) {
 		this(CQREntityTypes.BOARMAGE.get(), world);
 	}
 
-	public EntityCQRBoarmage(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRBoarmage(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -156,7 +156,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

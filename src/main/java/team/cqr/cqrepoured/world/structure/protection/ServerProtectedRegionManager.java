@@ -17,13 +17,13 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -41,7 +41,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	private final Multimap<UUID, UUID> entity2protectedRegion = MultimapBuilder.hashKeys()
 			.hashSetValues()
 			.build();
-	private final ServerWorld level;
+	private final ServerLevel level;
 	private final File entityReferenceFile;
 	private int time;
 
@@ -83,7 +83,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	}
 
-	public ServerProtectedRegionManager(ServerWorld level) {
+	public ServerProtectedRegionManager(ServerLevel level) {
 		this.level = level;
 		this.entityReferenceFile = FileIOUtil.getCQRDataFile(level, FOLDER_PATH + "/" + ENTITY_REFERENCES_FILE_NAME);
 		this.loadEntityReferences();
@@ -370,7 +370,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return null;
 		}
 
-		CompoundNBT compound = FileIOUtil.readNBT(file);
+		CompoundTag compound = FileIOUtil.readNBT(file);
 		ProtectedRegion protectedRegion = new ProtectedRegion(this.level, compound);
 
 		if (!ProtectedRegion.PROTECTED_REGION_VERSION.equals(compound.getString("version"))) {

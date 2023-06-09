@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayNBT;
 import net.minecraft.world.chunk.Chunk;
 
@@ -58,8 +58,8 @@ public class CapabilityProtectedRegionData {
 		return false;
 	}
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
+	public CompoundTag writeToNBT() {
+		CompoundTag compound = new CompoundTag();
 		int[] data = new int[this.protectedRegionUuids.size() * 4];
 		int i = 0;
 		for (UUID uuid : this.protectedRegionUuids) {
@@ -73,7 +73,7 @@ public class CapabilityProtectedRegionData {
 		return compound;
 	}
 
-	public void readFromNBT(CompoundNBT compound) {
+	public void readFromNBT(CompoundTag compound) {
 		this.protectedRegionUuids.clear();
 		int[] data = compound.getIntArray("protectedRegionUuids");
 		for (int i = 0; i < data.length / 4; i++) {

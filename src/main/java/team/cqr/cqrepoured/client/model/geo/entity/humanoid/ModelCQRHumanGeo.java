@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.model.geo.entity.humanoid;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.entity.AbstractModelHumanoidGeo;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRHuman;

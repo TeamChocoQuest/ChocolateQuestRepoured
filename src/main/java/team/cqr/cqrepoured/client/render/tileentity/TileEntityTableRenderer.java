@@ -1,30 +1,30 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.client.ForgeHooksClient;
 import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
-public class TileEntityTableRenderer extends TileEntityRenderer<TileEntityTable> {
-	public TileEntityTableRenderer(TileEntityRendererDispatcher p_i226006_1_) {
+public class TileEntityTableRenderer extends BlockEntityRenderer<TileEntityTable> {
+	public TileEntityTableRenderer(BlockEntityRenderDispatcher p_i226006_1_) {
 		super(p_i226006_1_);
 	}
 
 	@Override
-	public void render(TileEntityTable te, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+	public void render(TileEntityTable te, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay) {
 		ItemStack stack = te.getInventory().getItem(0);
 		float rotation = te.getRotationInDegree();
 
 		if (!stack.isEmpty()) {
-			IBakedModel itemModel = Minecraft.getInstance().getItemRenderer().getModel(stack, te.getLevel(), null);
+			BakedModel itemModel = Minecraft.getInstance().getItemRenderer().getModel(stack, te.getLevel(), null);
 			itemModel = ForgeHooksClient.handleCameraTransforms(pMatrixStack, itemModel, TransformType.NONE, false);
 			
 			pMatrixStack.pushPose();

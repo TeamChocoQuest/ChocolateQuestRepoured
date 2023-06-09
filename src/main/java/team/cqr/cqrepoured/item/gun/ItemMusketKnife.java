@@ -2,19 +2,19 @@ package team.cqr.cqrepoured.item.gun;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Material;
 
 //#TODO tests modifiers
 public class ItemMusketKnife extends ItemMusket implements IFireArmTwoHanded {
@@ -27,7 +27,7 @@ public class ItemMusketKnife extends ItemMusket implements IFireArmTwoHanded {
 		super(properties);
 		this.attackDamage = 3.0F + material.getAttackDamageBonus();
 		
-		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlot.MAINHAND);
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
 		modifierBuilder.putAll(attributeMap);
 		modifierBuilder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", this.attackDamage, AttributeModifier.Operation.ADDITION));
@@ -66,16 +66,16 @@ public class ItemMusketKnife extends ItemMusket implements IFireArmTwoHanded {
 	@Override
 	public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
 		pStack.hurtAndBreak(1, pAttacker, (p_220045_0_) -> {
-			p_220045_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+			p_220045_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 		});
 		return true;
 	}
 
 	@Override
-	public boolean mineBlock(ItemStack pStack, World pLevel, BlockState pState, BlockPos pPos, LivingEntity pEntityLiving) {
+	public boolean mineBlock(ItemStack pStack, Level pLevel, BlockState pState, BlockPos pPos, LivingEntity pEntityLiving) {
 		if (pState.getDestroySpeed(pLevel, pPos) != 0.0F) {
 			pStack.hurtAndBreak(2, pEntityLiving, (p_220044_0_) -> {
-				p_220044_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+				p_220044_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 			});
 		}
 
@@ -103,9 +103,9 @@ public class ItemMusketKnife extends ItemMusket implements IFireArmTwoHanded {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack)
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot equipmentSlot, ItemStack stack)
 	{
-		return equipmentSlot == EquipmentSlotType.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(equipmentSlot, stack);
+		return equipmentSlot == EquipmentSlot.MAINHAND ? this.attributeModifier : super.getAttributeModifiers(equipmentSlot, stack);
 	/*	Multimap<Attribute, AttributeModifier> multimap = super.getDefaultAttributeModifiers(equipmentSlot);
 
 		if(equipmentSlot == EquipmentSlotType.MAINHAND)

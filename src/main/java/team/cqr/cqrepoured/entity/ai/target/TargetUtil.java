@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
 import com.google.common.base.Predicate;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
@@ -134,22 +134,22 @@ public class TargetUtil {
 	}
 
 	@Nullable
-	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, BlockPos target, double minDist, double dxz, double dy) {
-		return getPositionNearTarget(world, entity, new Vector3d(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D), minDist, dxz, dy);
+	public static final Vec3 getPositionNearTarget(Level world, MobEntity entity, BlockPos target, double minDist, double dxz, double dy) {
+		return getPositionNearTarget(world, entity, new Vec3(target.getX() + 0.5D, target.getY(), target.getZ() + 0.5D), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
+	public static final Vec3 getPositionNearTarget(Level world, MobEntity entity, Entity target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target.position(), minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Vector3d target, double minDist, double dxz, double dy) {
+	public static final Vec3 getPositionNearTarget(Level world, MobEntity entity, Vec3 target, double minDist, double dxz, double dy) {
 		return getPositionNearTarget(world, entity, target, target, minDist, dxz, dy);
 	}
 
 	@Nullable
-	public static final Vector3d getPositionNearTarget(World world, MobEntity entity, Vector3d target, Vector3d vec, double minDist, double dxz, double dy) {
+	public static final Vec3 getPositionNearTarget(Level world, MobEntity entity, Vec3 target, Vec3 vec, double minDist, double dxz, double dy) {
 		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
 		int tries = 200;
 		for (int i = 0; i < tries; i++) {
@@ -160,11 +160,11 @@ public class TargetUtil {
 				continue;
 			}
 			boolean flag = false;
-			mutablePos.set(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+			mutablePos.set(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 			for (int k = 0; k < 4; k++) {
 				BlockState state = world.getBlockState(mutablePos);
 				if (state.getMaterial().blocksMotion()) {
-					AxisAlignedBB aabb = state.getShape(world, mutablePos).bounds();
+					AABB aabb = state.getShape(world, mutablePos).bounds();
 					if (y >= mutablePos.getY() + aabb.maxY) {
 						y = mutablePos.getY() + aabb.maxY;
 						flag = true;
@@ -192,7 +192,7 @@ public class TargetUtil {
 					continue;
 				}
 			}
-			return new Vector3d(x, y, z);
+			return new Vec3(x, y, z);
 		}
 		return null;
 	}
@@ -230,11 +230,11 @@ public class TargetUtil {
 
 	public static boolean isAllyCheckingLeaders(LivingEntity entity, LivingEntity target) {
 		LivingEntity leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof PlayerEntity) {
+		if (leader instanceof Player) {
 			entity = leader;
 		}
 		LivingEntity targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof PlayerEntity) {
+		if (targetLeader instanceof Player) {
 			target = targetLeader;
 		}
 
@@ -242,8 +242,8 @@ public class TargetUtil {
 			return true;
 		}
 
-		if (entity instanceof PlayerEntity) {
-			if (target instanceof PlayerEntity) {
+		if (entity instanceof Player) {
+			if (target instanceof Player) {
 				// TODO add coop/pvp mode?
 				return false;
 			} else {
@@ -263,11 +263,11 @@ public class TargetUtil {
 
 	public static boolean isEnemyCheckingLeaders(LivingEntity entity, LivingEntity target) {
 		LivingEntity leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof PlayerEntity) {
+		if (leader instanceof Player) {
 			entity = leader;
 		}
 		LivingEntity targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof PlayerEntity) {
+		if (targetLeader instanceof Player) {
 			target = targetLeader;
 		}
 
@@ -275,8 +275,8 @@ public class TargetUtil {
 			return false;
 		}
 
-		if (entity instanceof PlayerEntity) {
-			if (target instanceof PlayerEntity) {
+		if (entity instanceof Player) {
+			if (target instanceof Player) {
 				// TODO add coop/pvp mode?
 				return false;
 			} else {
@@ -288,8 +288,8 @@ public class TargetUtil {
 
 		Faction faction = FactionRegistry.instance(entity).getFactionOf(entity);
 		if(faction != null) {
-			if (target instanceof PlayerEntity && faction == FactionRegistry.DUMMY_FACTION) {
-				if (!(entity instanceof MonsterEntity)) {
+			if (target instanceof Player && faction == FactionRegistry.DUMMY_FACTION) {
+				if (!(entity instanceof Monster)) {
 					return false;
 				}
 			} else {

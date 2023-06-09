@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network;
 
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 

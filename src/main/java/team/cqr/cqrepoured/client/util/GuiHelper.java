@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.util;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.FontRenderer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 
 import net.minecraft.client.util.InputMappings;
@@ -27,7 +27,7 @@ public class GuiHelper {
 		GL11.glEnd();
 	}
 
-	public static void drawString(FontRenderer fontRenderer, MatrixStack matrixStack, String text, int x, int y, int color, boolean centered, boolean withShadow) {
+	public static void drawString(Font fontRenderer, PoseStack matrixStack, String text, int x, int y, int color, boolean centered, boolean withShadow) {
 		if (centered) {
 			x -= fontRenderer.width(text) / 2;
 		}

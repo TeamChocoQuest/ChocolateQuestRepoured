@@ -11,12 +11,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
+import net.minecraft.world.level.Level;
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.world.World;
-import net.minecraft.world.storage.IWorldInfo;
+import net.minecraft.world.level.storage.LevelData;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.faction.Faction;
@@ -113,11 +113,11 @@ public class DungeonInhabitantManager {
 		return this.getInhabitant(tmpList.get(this.random.nextInt(tmpList.size())));
 	}
 	
-	public DungeonInhabitant getInhabitantByDistance(World world, int blockX, int blockZ) {
+	public DungeonInhabitant getInhabitantByDistance(Level world, int blockX, int blockZ) {
 		return this.getInhabitantByDistance(DungeonGenUtils.getSpawnX(world), DungeonGenUtils.getSpawnZ(world), blockX, blockZ);
 	}
 	
-	public DungeonInhabitant getInhabitantByDistance(DungeonInhabitant inhabitant, IWorldInfo worldInfo, int blockX, int blockZ) {
+	public DungeonInhabitant getInhabitantByDistance(DungeonInhabitant inhabitant, LevelData worldInfo, int blockX, int blockZ) {
 		return this.getInhabitantByDistance(inhabitant, worldInfo.getXSpawn(), worldInfo.getZSpawn(), blockX, blockZ);
 	}
 	
@@ -128,7 +128,7 @@ public class DungeonInhabitantManager {
 		return inhabitant;
 	}
 
-	public DungeonInhabitant getInhabitantByDistanceIfDefault(String name, World world, int blockX, int blockZ) {
+	public DungeonInhabitant getInhabitantByDistanceIfDefault(String name, Level world, int blockX, int blockZ) {
 		DungeonInhabitant dungeonInhabitant = this.getInhabitant(name);
 		if (dungeonInhabitant != DEFAULT_DUNGEON_INHABITANT) {
 			return dungeonInhabitant;
@@ -136,7 +136,7 @@ public class DungeonInhabitantManager {
 		return this.getInhabitantByDistance(world, blockX, blockZ);
 	}
 
-	public List<DungeonInhabitant> getListOfFactionInhabitants(Faction faction, World world) {
+	public List<DungeonInhabitant> getListOfFactionInhabitants(Faction faction, Level world) {
 		List<DungeonInhabitant> result = new ArrayList<>();
 
 		for (DungeonInhabitant inha : this.inhabitantMapping.values()) {

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.init;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.item.BannerPatternItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

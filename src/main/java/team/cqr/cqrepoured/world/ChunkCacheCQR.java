@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.Region;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.chunk.Chunk;
 
 public class ChunkCacheCQR extends Region {
@@ -15,7 +15,7 @@ public class ChunkCacheCQR extends Region {
 	 *                   pos2 is clamped to be at least pos3.
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
-	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, boolean loadChunks) {
+	public ChunkCacheCQR(Level worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, boolean loadChunks) {
 		super(worldIn, pos3, pos3/*, 0*/);
 
 		this.centerX = Math.min(pos1.getX() >> 4, pos3.getX() >> 4);
@@ -47,7 +47,7 @@ public class ChunkCacheCQR extends Region {
 	 *                   get cached.
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
-	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, int blockRange, boolean loadChunks) {
+	public ChunkCacheCQR(Level worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, int blockRange, boolean loadChunks) {
 		super(worldIn, pos3, pos3/*, 0*/);
 
 		this.centerX = (Math.min(pos1.getX(), pos2.getX()) - blockRange) >> 4;

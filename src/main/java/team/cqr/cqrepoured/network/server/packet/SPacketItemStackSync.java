@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketItemStackSync extends AbstractPacket<SPacketItemStackSync> {
@@ -21,7 +21,7 @@ public class SPacketItemStackSync extends AbstractPacket<SPacketItemStackSync> {
 	}
 
 	@Override
-	public SPacketItemStackSync fromBytes(PacketBuffer buf) {
+	public SPacketItemStackSync fromBytes(FriendlyByteBuf buf) {
 		SPacketItemStackSync res = new SPacketItemStackSync();
 		res.entityId = buf.readInt();
 		res.slotIndex = buf.readInt();
@@ -30,7 +30,7 @@ public class SPacketItemStackSync extends AbstractPacket<SPacketItemStackSync> {
 	}
 
 	@Override
-	public void toBytes(SPacketItemStackSync packet, PacketBuffer buf) {
+	public void toBytes(SPacketItemStackSync packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeInt(packet.slotIndex);
 		buf.writeItem(packet.stack);

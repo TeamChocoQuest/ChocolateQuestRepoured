@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spi
 
 import java.util.Random;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;

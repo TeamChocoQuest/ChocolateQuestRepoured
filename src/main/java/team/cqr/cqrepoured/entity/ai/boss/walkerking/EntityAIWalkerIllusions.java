@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.boss.walkerking;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -25,14 +25,14 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 	@Override
 	public void startCastingSpell() {
 		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		this.entity.level.getEntities(this.entity, new AxisAlignedBB(this.entity.blockPosition().offset(-20, -10, -20), this.entity.blockPosition().offset(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
+		this.entity.level.getEntities(this.entity, new AABB(this.entity.blockPosition().offset(-20, -10, -20), this.entity.blockPosition().offset(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
 			if (t instanceof LivingEntity) {
-				((LivingEntity) t).addEffect(new EffectInstance(Effects.BLINDNESS, 40));
+				((LivingEntity) t).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40));
 			}
 		});
-		Vector3d v = new Vector3d(2.5, 0, 0);
+		Vec3 v = new Vec3(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
-			Vector3d pos = this.entity.position().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
+			Vec3 pos = this.entity.position().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
 			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.level);
 			illusion.setPos(pos.x, pos.y, pos.z);
 			this.entity.level.addFreshEntity(illusion);

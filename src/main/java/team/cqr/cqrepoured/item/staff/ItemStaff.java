@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.item.staff;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.item.ItemLore;
 
 public class ItemStaff extends ItemLore {

@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.util.palette;
 
 import java.util.function.Function;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.BitArray;
+import net.minecraft.util.Mth;
 import net.minecraft.util.ObjectIntIdentityMap;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.palette.ArrayPalette;
 import net.minecraft.util.palette.HashMapPalette;
 import net.minecraft.util.palette.IPalette;
@@ -19,15 +19,15 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		return 0;
 	};
 	private final ObjectIntIdentityMap<T> registry;
-	private final Function<CompoundNBT, T> reader;
-	private final Function<T, CompoundNBT> writer;
+	private final Function<CompoundTag, T> reader;
+	private final Function<T, CompoundTag> writer;
 	protected BitArray storage;
 	private IPalette<T> palette;
 	private int bits;
 	private final BooleanArray nonemptyBlocks = new BooleanArray();
 
 	public PalettedContainer(IPalette<T> pGlobalPalette, ObjectIntIdentityMap<T> pRegistry,
-			Function<CompoundNBT, T> pReader, Function<T, CompoundNBT> pWriter) {
+                             Function<CompoundTag, T> pReader, Function<T, CompoundTag> pWriter) {
 		this.globalPalette = pGlobalPalette;
 		this.registry = pRegistry;
 		this.reader = pReader;
@@ -53,7 +53,7 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 				this.palette = new HashMapPalette<>(this.registry, this.bits, this, this.reader, this.writer);
 			} else {
 				this.palette = this.globalPalette;
-				this.bits = MathHelper.ceillog2(this.registry.size());
+				this.bits = Mth.ceillog2(this.registry.size());
 				if (forceBits)
 					this.bits = bitsIn;
 			}
@@ -105,9 +105,9 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		return t;
 	}
 
-	public void read(ListNBT pPaletteNbt, long[] pData) {
+	public void read(ListTag pPaletteNbt, long[] pData) {
 		// TODO doesn't work with null values
-		int i = Math.max(4, MathHelper.ceillog2(pPaletteNbt.size()));
+		int i = Math.max(4, Mth.ceillog2(pPaletteNbt.size()));
 		if (i != this.bits) {
 			this.setBits(i);
 		}
@@ -134,7 +134,7 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 		}
 	}
 
-	public void write(CompoundNBT pCompound, String pPaletteName, String pPaletteDataName) {
+	public void write(CompoundTag pCompound, String pPaletteName, String pPaletteDataName) {
 		// TODO doesn't work with null values
 		HashMapPalette<T> hashmappalette = new HashMapPalette<>(this.registry, this.bits, this.dummyPaletteResize,
 				this.reader, this.writer);
@@ -152,10 +152,10 @@ public class PalettedContainer<T> implements IResizeCallback<T> {
 			aint[j] = i;
 		}
 
-		ListNBT listnbt = new ListNBT();
+		ListTag listnbt = new ListTag();
 		hashmappalette.write(listnbt);
 		pCompound.put(pPaletteName, listnbt);
-		int l = Math.max(4, MathHelper.ceillog2(listnbt.size()));
+		int l = Math.max(4, Mth.ceillog2(listnbt.size()));
 		BitArray bitarray = new BitArray(l, 4096);
 
 		for (int k = 0; k < aint.length; ++k) {

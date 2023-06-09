@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.client.handler.exterminator;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 public class CPacketHandlerUpdateEmitterTarget extends AbstractPacketHandler<SPacketUpdateEmitterTarget> {
 
 	@Override
-	protected void execHandlePacket(SPacketUpdateEmitterTarget packet, Supplier<Context> context, World world, PlayerEntity player) {
+	protected void execHandlePacket(SPacketUpdateEmitterTarget packet, Supplier<Context> context, Level world, Player player) {
 		Entity entity = world.getEntity(packet.getEntityId());
 
 		if (entity != null && entity instanceof EntityCQRExterminator) {

@@ -2,7 +2,7 @@
 //
 //import net.minecraft.block.*;
 //import net.minecraft.util.Direction;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 //import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.RandomCastleConfigOptions;

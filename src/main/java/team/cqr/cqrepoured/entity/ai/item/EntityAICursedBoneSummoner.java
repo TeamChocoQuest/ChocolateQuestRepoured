@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -95,9 +95,9 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 		ItemStack stack = this.entity.getMainHandItem();
 		if (!(stack.getItem() instanceof ItemCursedBone)) {
 			stack = this.entity.getOffhandItem();
-			this.entity.swing(Hand.OFF_HAND);
+			this.entity.swing(InteractionHand.OFF_HAND);
 		} else {
-			this.entity.swing(Hand.MAIN_HAND);
+			this.entity.swing(InteractionHand.MAIN_HAND);
 		}
 
 		if (this.chargingTicks < 0) {
@@ -105,10 +105,10 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 			int mobCount = Math.min(SUMMONS_PER_CAST, remainingEntitySlots);
 
 			if (mobCount > 0) {
-				Vector3d vector = this.entity.getLookAngle().normalize().scale(3);
+				Vec3 vector = this.entity.getLookAngle().normalize().scale(3);
 				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
 				for (int i = 0; i < mobCount; i++) {
-					Vector3d posV = this.entity.position().add(vector);
+					Vec3 posV = this.entity.position().add(vector);
 					BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
 					Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, stack, this.entity, this);
 					if (circle.isPresent()) {

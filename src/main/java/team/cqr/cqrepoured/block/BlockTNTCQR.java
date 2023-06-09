@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.TNTBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer.Builder;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 
 public class BlockTNTCQR extends TNTBlock {
@@ -35,7 +35,7 @@ public class BlockTNTCQR extends TNTBlock {
 	}
 
 	@Override
-	public void wasExploded(World pLevel, BlockPos pPos, Explosion pExplosion) {
+	public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
 		if (!pLevel.isClientSide) {
 			EntityTNTPrimedCQR entityTNT = new EntityTNTPrimedCQR(pLevel, pPos.getX() + 0.5D, pPos.getY(), pPos.getZ() + 0.5D, pExplosion.getSourceMob());
 			entityTNT.setFuse((short) (pLevel.random.nextInt(entityTNT.getLife() / 4) + entityTNT.getLife() / 8));
@@ -44,11 +44,11 @@ public class BlockTNTCQR extends TNTBlock {
 	}
 
 	@Override
-	public void catchFire(BlockState state, World worldIn, BlockPos pos, Direction face, LivingEntity igniter) {
+	public void catchFire(BlockState state, Level worldIn, BlockPos pos, Direction face, LivingEntity igniter) {
 		if (!worldIn.isClientSide) {
 			EntityTNTPrimedCQR entityTNT = new EntityTNTPrimedCQR(worldIn, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, igniter);
 			worldIn.addFreshEntity(entityTNT);
-			worldIn.playSound(null, entityTNT.getX(), entityTNT.getY(), entityTNT.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			worldIn.playSound(null, entityTNT.getX(), entityTNT.getY(), entityTNT.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 

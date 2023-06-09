@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.misc.EntitySpiderEgg;
 
 /**
@@ -53,7 +52,7 @@ public class ModelSpiderEgg extends EntityModel<EntitySpiderEgg> {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pMatrixStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -16,7 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -33,25 +33,25 @@ public class ElectricEventHandler {
 	@SubscribeEvent
 	public static void onStartTracking(PlayerEvent.StartTracking event) {
 		Entity entity = event.getTarget();
-		if (!(entity instanceof LivingEntity) || !checkForCapabilityAndServerSide((LivingEntity) entity) || !(entity instanceof ServerPlayerEntity)) {
+		if (!(entity instanceof LivingEntity) || !checkForCapabilityAndServerSide((LivingEntity) entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new SPacketUpdateElectrocuteCapability((LivingEntity) entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability((LivingEntity) entity));
 	}
 
 	@SubscribeEvent
 	public static void onLogIn(PlayerLoggedInEvent event) {
 		LivingEntity entity = event.getPlayer();
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
 	}
 
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		LivingEntity entity = event.getPlayer();
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
 		// First, reduce the ticks
@@ -65,10 +65,10 @@ public class ElectricEventHandler {
 	@SubscribeEvent
 	public static void onChangeDimension(PlayerChangedDimensionEvent event) {
 		LivingEntity entity = event.getPlayer();
-		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayerEntity)) {
+		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
 	}
 
 	private static boolean checkForCapabilityAndServerSide(LivingEntity entity) {

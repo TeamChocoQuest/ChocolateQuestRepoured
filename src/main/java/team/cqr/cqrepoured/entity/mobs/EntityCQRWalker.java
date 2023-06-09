@@ -3,15 +3,15 @@ package team.cqr.cqrepoured.entity.mobs;
 import java.util.Set;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -25,7 +25,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 
 public class EntityCQRWalker extends AbstractEntityCQR implements IAnimatableCQR {
 
-	public EntityCQRWalker(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRWalker(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -69,7 +69,7 @@ public class EntityCQRWalker extends AbstractEntityCQR implements IAnimatableCQR
 	}
 
 	@Override
-	public void thunderHit(ServerWorld serverLevel,LightningBoltEntity lightningBolt) {
+	public void thunderHit(ServerLevel serverLevel, LightningBoltEntity lightningBolt) {
 		this.heal(this.getMaxHealth() * 0.025F);
 	}
 
@@ -92,7 +92,7 @@ public class EntityCQRWalker extends AbstractEntityCQR implements IAnimatableCQR
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

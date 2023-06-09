@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.datasync;
 
 import net.minecraft.nbt.FloatNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nonnull;
 
@@ -28,12 +28,12 @@ public class DataEntryFloat extends DataEntry<Float> {
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		buf.writeFloat(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value = buf.readFloat();
 	}
 

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryFacing extends DataEntryObject<Direction> {
 
@@ -24,12 +24,12 @@ public class DataEntryFacing extends DataEntryObject<Direction> {
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		buf.writeByte(this.value.ordinal());
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value = Direction.values()[buf.readByte()];
 	}
 

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;

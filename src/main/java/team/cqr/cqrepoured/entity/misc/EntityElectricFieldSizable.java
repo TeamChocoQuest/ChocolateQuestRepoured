@@ -2,28 +2,28 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.UUID;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.ISizable;
 
 public class EntityElectricFieldSizable extends EntityElectricField implements ISizable {
 
 	private float sizeScaling = 1.0F;
 
-	public EntityElectricFieldSizable(World worldIn, int charge, UUID ownerId) {
+	public EntityElectricFieldSizable(Level worldIn, int charge, UUID ownerId) {
 		super(worldIn, charge, ownerId);
 
 		this.initializeSize();
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.callOnReadFromNBT(compound);
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		this.callOnWriteToNBT(compound);
 	}

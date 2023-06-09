@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.network.NetworkDirection;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.IMessage;
 import team.cqr.cqrepoured.network.IMessageHandler;

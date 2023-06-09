@@ -3,10 +3,7 @@ package team.cqr.cqrepoured.client.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.world.item.Item;
 
 //@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
 public class CQRItemModels {

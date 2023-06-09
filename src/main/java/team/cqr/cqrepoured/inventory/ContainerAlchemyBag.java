@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -18,13 +18,13 @@ public class ContainerAlchemyBag extends Container {
 
     //private final IInventory inventory;
     private final ItemStack stack;
-    private final Hand hand;
+    private final InteractionHand hand;
 
-    public ContainerAlchemyBag(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
-        this(containerID, playerInv, data.readInt() == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND);
+    public ContainerAlchemyBag(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
+        this(containerID, playerInv, data.readInt() == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND);
     }
 
-    public ContainerAlchemyBag(final int containerID, PlayerInventory playerInv, Hand hand) {
+    public ContainerAlchemyBag(final int containerID, Inventory playerInv, InteractionHand hand) {
         super(CQRContainerTypes.ALCHEMY_BAG.get(), containerID);
 
         this.hand = hand;
@@ -46,7 +46,7 @@ public class ContainerAlchemyBag extends Container {
             } else {
                 this.addSlot(new Slot(playerInv, k, 8 + k * 18, 109) {
                     @Override
-                    public boolean mayPickup(PlayerEntity playerIn) {
+                    public boolean mayPickup(Player playerIn) {
                         return false;
                     }
                 });
@@ -68,13 +68,13 @@ public class ContainerAlchemyBag extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         //return this.inventory.stillValid(playerIn);
         return playerIn.getItemInHand(hand).getItem() == this.stack.getItem();
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot slot = this.slots.get(index);
 
         if (slot == null) {

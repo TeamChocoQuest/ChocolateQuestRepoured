@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;

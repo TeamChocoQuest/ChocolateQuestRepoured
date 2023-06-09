@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.faction.Faction;
 
@@ -69,7 +69,7 @@ public interface ISummoner {
 					stack = new ItemStack(Items.IRON_SHOVEL);
 				}
 			}
-			living.setItemInHand(Hand.MAIN_HAND, stack);
+			living.setItemInHand(InteractionHand.MAIN_HAND, stack);
 		}
 	}
 

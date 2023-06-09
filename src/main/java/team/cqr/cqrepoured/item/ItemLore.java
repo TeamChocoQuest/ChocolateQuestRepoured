@@ -4,15 +4,15 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
@@ -36,7 +36,7 @@ public class ItemLore extends Item {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		if (this.hasLore(stack)) {
 			addHoverTextLogic(this, tooltip, flagIn);
 			appendAdditionalTooltipEntries(stack, worldIn, tooltip, flagIn, isLShiftPressed() || isRShiftPressed());
@@ -46,19 +46,19 @@ public class ItemLore extends Item {
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	protected void appendAdditionalTooltipEntries(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, boolean holdingShift) {
+	protected void appendAdditionalTooltipEntries(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn, boolean holdingShift) {
 
 	}
 
-	public static void addHoverTextLogic(Item item, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public static void addHoverTextLogic(Item item, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		addHoverTextLogic(item.getRegistryName(), tooltip, flagIn);
 	}
 
-	public static void addHoverTextLogic(ResourceLocation resourceLocation, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public static void addHoverTextLogic(ResourceLocation resourceLocation, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		addHoverTextLogic(resourceLocation.getNamespace(), resourceLocation.getPath(), tooltip, flagIn);
 	}
 
-	public static void addHoverTextLogic(String namespace, String path, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public static void addHoverTextLogic(String namespace, String path, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		if (isLShiftPressed() || isRShiftPressed()) {
 			tooltip.add(Translator.translateItem(namespace, path, ".tooltip"));
 		} else {
@@ -66,7 +66,7 @@ public class ItemLore extends Item {
 		}
 	}
 
-	public static void addHoverTextLogic(List<ITextComponent> tooltip, ITooltipFlag flagIn, String path) {
+	public static void addHoverTextLogic(List<TextComponent> tooltip, TooltipFlag flagIn, String path) {
 		addHoverTextLogic(CQRMain.MODID, path, tooltip, flagIn);
 	}
 

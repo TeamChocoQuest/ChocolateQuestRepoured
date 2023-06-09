@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
@@ -14,15 +14,15 @@ import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 public class ContainerSpawner extends Container {
 
 	private final TileEntitySpawner tileEntity;
-	private final IInventory inventory;
+	private final Container inventory;
 
 	/** Client **/
-	public ContainerSpawner(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
+	public ContainerSpawner(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
 		this(containerID, playerInv, (TileEntitySpawner) playerInv.player.level.getBlockEntity(data.readBlockPos()));
 	}
 
 	/** Server **/
-	public ContainerSpawner(final int containerID, PlayerInventory playerInv, TileEntitySpawner tileEntity) {
+	public ContainerSpawner(final int containerID, Inventory playerInv, TileEntitySpawner tileEntity) {
 		super(CQRContainerTypes.SPAWNER.get(), containerID);
 		this.tileEntity = tileEntity;
 		this.inventory = tileEntity.getInventory();
@@ -51,12 +51,12 @@ public class ContainerSpawner extends Container {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return this.inventory.stillValid(playerIn);
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		Slot slot = this.slots.get(index);
 
 		if (slot != null && slot.hasItem()) {

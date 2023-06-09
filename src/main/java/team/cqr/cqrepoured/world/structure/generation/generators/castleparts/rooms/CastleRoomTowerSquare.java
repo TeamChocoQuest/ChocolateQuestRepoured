@@ -3,7 +3,7 @@
 //import net.minecraft.block.BlockState;
 //import net.minecraft.block.Blocks;
 //import net.minecraft.util.Direction;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.math.vector.Vector3i;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //import team.cqr.cqrepoured.util.SpiralStaircaseBuilder;

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.init;
 import java.util.function.Supplier;
 
 import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;

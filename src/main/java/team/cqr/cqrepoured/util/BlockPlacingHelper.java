@@ -4,7 +4,7 @@
 //import net.minecraft.block.BlockState;
 //import net.minecraft.block.Blocks;
 //import net.minecraft.tileentity.TileEntity;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import net.minecraft.world.WorldType;
 //import net.minecraft.world.chunk.Chunk;

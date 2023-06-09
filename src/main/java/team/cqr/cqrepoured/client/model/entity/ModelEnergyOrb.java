@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
@@ -19,7 +19,7 @@ public class ModelEnergyOrb extends Model {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pMatrixStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		pMatrixStack.pushPose();
 		pMatrixStack.translate(0.0F, 0.5F, 0.0F);
 		pMatrixStack.scale(0.875F, 0.875F, 0.875F);

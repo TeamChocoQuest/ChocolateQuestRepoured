@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -68,7 +68,7 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		super.startCastingSpell();
 		this.lastHealth = this.entity.getHealth() / this.entity.getMaxHealth();
 
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
+		AABB aabb = new AABB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
 		Faction faction = this.entity.getFaction();
 		List<LivingEntity> list = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)));
 		list.sort((e1, e2) -> {
@@ -82,8 +82,8 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 					return 1;
 				}
 			}
-			boolean flag1 = e1 instanceof PlayerEntity;
-			boolean flag2 = e2 instanceof PlayerEntity;
+			boolean flag1 = e1 instanceof Player;
+			boolean flag2 = e2 instanceof Player;
 			if (flag1 && !flag2) {
 				return -1;
 			}
@@ -117,13 +117,13 @@ public class EntityAISpectreLordChannelHate extends AbstractEntityAISpell<Entity
 		this.lastHealth = f;
 
 		if (this.tick == this.chargingTicks + this.castingTicks - 1) {
-			this.entity.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, 200, 1, false, true));
-			this.entity.addEffect(new EffectInstance(Effects.DAMAGE_BOOST, 200, 1, false, true));
-			AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
+			this.entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 1, false, true));
+			this.entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 1, false, true));
+			AABB aabb = new AABB(this.entity.getX() - 32.0D, this.entity.getY() - 8.0D, this.entity.getZ() - 32.0D, this.entity.getX() + 32.0D, this.entity.getY() + this.entity.getBbHeight() + 8.0D, this.entity.getZ() + 32.0D);
 			Faction faction = this.entity.getFaction();
 			for (LivingEntity e : this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 				e.hurt(DamageSource.mobAttack(this.entity).bypassArmor(), 4.0F);
-				e.addEffect(new EffectInstance(Effects.WEAKNESS, 200, 1, false, true));
+				e.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 200, 1, false, true));
 			}
 			this.entity.playSound(SoundEvents.EVOKER_CAST_SPELL, 1.0F, 0.9F + this.random.nextFloat() * 0.2F);
 		}

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.vector.Vector3i;
 
 /**
@@ -17,11 +17,11 @@ public class VectorUtil {
 	/*
 	 * Important: Mathematical positive => turn left around
 	 */
-	public static Vector3d rotateVectorAroundY(Vector3d vector, double degrees) {
+	public static Vec3 rotateVectorAroundY(Vec3 vector, double degrees) {
 		return vector.yRot((float) Math.toRadians(degrees));
 	}
 
-	public static double getAngleBetween(final Vector3d axis, final Vector3d vector) {
+	public static double getAngleBetween(final Vec3 axis, final Vec3 vector) {
 		double cosphi = axis.dot(vector);
 		cosphi /= axis.length() * vector.length();
 		double phi = Math.acos(cosphi);
@@ -53,7 +53,7 @@ public class VectorUtil {
 	}
 
 	public static Vector3i rotateVectorAroundY(Vector3i newPos, double degrees) {
-		Vector3d res = rotateVectorAroundY(new Vector3d(newPos.getX(), newPos.getY(), newPos.getZ()), degrees);
+		Vec3 res = rotateVectorAroundY(new Vec3(newPos.getX(), newPos.getY(), newPos.getZ()), degrees);
 		return new Vector3i(Math.floor(res.x), Math.floor(res.y), Math.floor(res.z));
 	}
 
@@ -61,35 +61,35 @@ public class VectorUtil {
 		return new Vector3i(start.getX() + x, start.getY() + y, start.getZ() + z);
 	}
 
-	public static CompoundNBT createVectorNBTTag(Vector3d vector) {
-		CompoundNBT nbttagcompound = new CompoundNBT();
+	public static CompoundTag createVectorNBTTag(Vec3 vector) {
+		CompoundTag nbttagcompound = new CompoundTag();
 		nbttagcompound.putDouble("X", vector.x);
 		nbttagcompound.putDouble("Y", vector.y);
 		nbttagcompound.putDouble("Z", vector.z);
 		return nbttagcompound;
 	}
 
-	public static Vector3d getVectorFromTag(CompoundNBT tag) {
-		return new Vector3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
+	public static Vec3 getVectorFromTag(CompoundTag tag) {
+		return new Vec3(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
 	}
 
 	/**
 	 * @param axis Needs to be normalized!
 	 */
-	public static Vector3d rotateAroundAnyAxis(Vector3d axis, Vector3d toBeRotated, double rotationDegrees) {
+	public static Vec3 rotateAroundAnyAxis(Vec3 axis, Vec3 toBeRotated, double rotationDegrees) {
 		return rotate(axis, toBeRotated, Math.toRadians(rotationDegrees));
 	}
 
 	/**
 	 * @param axis Needs to be normalized!
 	 */
-	public static Vector3d rotate(Vector3d axis, Vector3d vec, double radian) {
+	public static Vec3 rotate(Vec3 axis, Vec3 vec, double radian) {
 		// setup quaternion
-		double d = MathHelper.sin((float) (radian * 0.5D));
+		double d = Mth.sin((float) (radian * 0.5D));
 		double i = d * axis.x;
 		double j = d * axis.y;
 		double k = d * axis.z;
-		double r = MathHelper.cos((float) (radian * 0.5D));
+		double r = Mth.cos((float) (radian * 0.5D));
 
 		// setup rotation matrix
 		double i2 = 2.0D * i * i;
@@ -115,7 +115,7 @@ public class VectorUtil {
 		double d22 = 1 - (i2 + j2);
 
 		// rotate vertex
-		return new Vector3d(vec.x * d00 + vec.y * d01 + vec.z * d02, vec.x * d10 + vec.y * d11 + vec.z * d12, vec.x * d20 + vec.y * d21 + vec.z * d22);
+		return new Vec3(vec.x * d00 + vec.y * d01 + vec.z * d02, vec.x * d10 + vec.y * d11 + vec.z * d12, vec.x * d20 + vec.y * d21 + vec.z * d22);
 	}
 
 }

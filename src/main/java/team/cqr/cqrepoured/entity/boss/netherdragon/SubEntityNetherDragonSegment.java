@@ -5,12 +5,12 @@ import javax.annotation.Nullable;
 
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Explosion.Mode;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Explosion.Mode;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -80,9 +80,9 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	}
 
 	@Override
-	public ActionResultType interact(PlayerEntity player, Hand hand) {
+	public InteractionResult interact(Player player, InteractionHand hand) {
 		if (this.dragon == null || !this.dragon.isAlive()) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		return this.dragon.interact(player, hand);
 	}
@@ -110,14 +110,14 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putBoolean("skeletal", this.isSkeletal());
 		compound.putInt("realID", this.realID);
 		compound.putInt("partIndex", this.partIndex);
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.realID = compound.getInt("realID");
 		this.partIndex = compound.getInt("partIndex");
 		this.isSkeletal = compound.getBoolean("skeletal");

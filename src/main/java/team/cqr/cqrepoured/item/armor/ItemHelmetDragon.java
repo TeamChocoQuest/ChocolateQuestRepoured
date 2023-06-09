@@ -3,15 +3,14 @@ package team.cqr.cqrepoured.item.armor;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemHelmetDragon extends ArmorItem {
 
@@ -19,13 +18,13 @@ public class ItemHelmetDragon extends ArmorItem {
 	//private AttributeModifier health;
 	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
-	public ItemHelmetDragon(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties props) {
+	public ItemHelmetDragon(IArmorMaterial materialIn, EquipmentSlot equipmentSlotIn, Properties props) {
 		super(materialIn, equipmentSlotIn, props);
 
 		//this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);
 		//this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, Operation.MULTIPLY_TOTAL);
 		
-		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlotType.MAINHAND);
+		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlot.MAINHAND);
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
 		modifierBuilder.putAll(attributeMap);
 		modifierBuilder.put(Attributes.MAX_HEALTH, new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION));
@@ -45,7 +44,7 @@ public class ItemHelmetDragon extends ArmorItem {
 		return multimap;
 	} */
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 		return slot == MobEntity.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
 	}
 

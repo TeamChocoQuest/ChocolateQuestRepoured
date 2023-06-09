@@ -3,16 +3,16 @@ package team.cqr.cqrepoured.init;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemTier;
-import net.minecraft.item.Items;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -84,8 +84,8 @@ public class CQRItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRMain.MODID);
 
 	// Daggers
-	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, ItemTier.IRON, 25));
-	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamond", prop -> new ItemDagger(prop, ItemTier.DIAMOND, 20));
+	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, Tiers.IRON, 25));
+	public static final RegistryObject<ItemDagger> DAGGER_DIAMOND = register("dagger_diamond", prop -> new ItemDagger(prop, Tiers.DIAMOND, 20));
 	public static final RegistryObject<ItemDaggerNinja> DAGGER_NINJA = register("dagger_ninja", prop -> new ItemDaggerNinja(prop, CQRMaterials.CQRItemTiers.TOOL_NINJA, 15));
 	public static final RegistryObject<ItemDagger> DAGGER_MONKING = register("dagger_monking", prop -> new ItemDagger(prop, CQRMaterials.CQRItemTiers.TOOL_MONKING, 10));
 
@@ -129,14 +129,14 @@ public class CQRItems {
 	public static final RegistryObject<ItemShieldCQR> SHIELD_ZOMBIE = registerShield("zombie");
 
 	// Great Swords
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, ItemTier.IRON, 30));
-	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = register("great_sword_diamond", prop -> new ItemGreatSword(prop, ItemTier.DIAMOND, 25));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_IRON = register("great_sword_iron", prop -> new ItemGreatSword(prop, Tiers.IRON, 30));
+	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_DIAMOND = register("great_sword_diamond", prop -> new ItemGreatSword(prop, Tiers.DIAMOND, 25));
 	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_BULL = register("great_sword_bull", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.TOOL_BULL, 20));
 	public static final RegistryObject<ItemGreatSword> GREAT_SWORD_MONKING = register("great_sword_monking", prop -> new ItemGreatSword(prop, CQRMaterials.CQRItemTiers.TOOL_MONKING, 20));
 
 	// Spears
-	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = register("spear_diamond", prop -> new ItemSpearBase(prop, ItemTier.DIAMOND));
-	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = register("spear_iron", prop -> new ItemSpearBase(prop, ItemTier.IRON));
+	public static final RegistryObject<ItemSpearBase> SPEAR_DIAMOND = register("spear_diamond", prop -> new ItemSpearBase(prop, Tiers.DIAMOND));
+	public static final RegistryObject<ItemSpearBase> SPEAR_IRON = register("spear_iron", prop -> new ItemSpearBase(prop, Tiers.IRON));
 
 	// Staves
 	public static final RegistryObject<ItemStaff> STAFF = register("staff", ItemStaff::new);
@@ -145,7 +145,7 @@ public class CQRItems {
 	public static final RegistryObject<ItemStaffWind> STAFF_WIND = register("staff_wind", ItemStaffWind::new); // #TODO DESCRIPTION
 	public static final RegistryObject<ItemStaffPoison> STAFF_POISON = register("staff_poison", ItemStaffPoison::new); // #TODO DESCRIPTION
 	public static final RegistryObject<ItemStaffHealing> STAFF_HEALING = register("staff_healing", ItemStaffHealing::new);
-	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = register("diamond_sword_fake_healing_staff", props -> new ItemFakeSwordHealingStaff(ItemTier.DIAMOND, props));
+	public static final RegistryObject<ItemFakeSwordHealingStaff> DIAMOND_SWORD_FAKE_HEALING_STAFF = register("diamond_sword_fake_healing_staff", props -> new ItemFakeSwordHealingStaff(Tiers.DIAMOND, props));
 	public static final RegistryObject<ItemStaffThunder> STAFF_THUNDER = register("staff_thunder", ItemStaffThunder::new);
 	public static final RegistryObject<ItemStaffSpider> STAFF_SPIDER = register("staff_spider", ItemStaffSpider::new);
 	public static final RegistryObject<ItemStaffGun> STAFF_GUN = register("staff_gun", ItemStaffGun::new); // #TODO TEXTURES
@@ -154,8 +154,8 @@ public class CQRItems {
 	public static final RegistryObject<ItemRevolver> REVOLVER = register("revolver", ItemRevolver::new);
 	public static final RegistryObject<ItemRevolver> CAPTAIN_REVOLVER = register("captain_revolver", ItemRevolver::new);
 	public static final RegistryObject<ItemMusket> MUSKET = register("musket", ItemMusket::new);
-	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = register("musket_dagger_iron", prop -> new ItemMusketKnife(ItemTier.IRON, prop)); // #TODO TEXTURES, tweak stats?
-	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = register("musket_dagger_diamond", prop -> new ItemMusketKnife(ItemTier.DIAMOND, prop)); // #TODO TEXTURES, tweak stats
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_IRON = register("musket_dagger_iron", prop -> new ItemMusketKnife(Tiers.IRON, prop)); // #TODO TEXTURES, tweak stats?
+	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_DIAMOND = register("musket_dagger_diamond", prop -> new ItemMusketKnife(Tiers.DIAMOND, prop)); // #TODO TEXTURES, tweak stats
 	public static final RegistryObject<ItemMusketKnife> MUSKET_DAGGER_MONKING = register("musket_dagger_monking", prop -> new ItemMusketKnife(CQRMaterials.CQRItemTiers.TOOL_MONKING, prop)); // #TODO TEXTURES, tweak
 	public static final RegistryObject<ItemBullet> BULLET_IRON = registerBullet("bullet_iron", ItemBullet::new, EBulletType.IRON);
 	public static final RegistryObject<ItemBullet> BULLET_GOLD = registerBullet("bullet_gold", ItemBullet::new, EBulletType.GOLD);
@@ -172,65 +172,65 @@ public class CQRItems {
 	public static final RegistryObject<ItemSpiderHook> SPIDERHOOK = register("spiderhook", ItemSpiderHook::new);
 
 	// Single Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = register("helmet_dragon", prop -> new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, EquipmentSlotType.HEAD, prop)); // #TODO Make model centered on head // Abandon for now
-	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = register("boots_cloud", prop -> new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, EquipmentSlotType.FEET, prop));
-	public static final RegistryObject<ItemBackpack> BACKPACK = register("backpack", prop -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlotType.CHEST, prop));
+	public static final RegistryObject<ItemHelmetDragon> HELMET_DRAGON = register("helmet_dragon", prop -> new ItemHelmetDragon(CQRMaterials.ArmorMaterials.ARMOR_DRAGON, EquipmentSlot.HEAD, prop)); // #TODO Make model centered on head // Abandon for now
+	public static final RegistryObject<ItemBootsCloud> BOOTS_CLOUD = register("boots_cloud", prop -> new ItemBootsCloud(CQRMaterials.ArmorMaterials.ARMOR_CLOUD, EquipmentSlot.FEET, prop));
+	public static final RegistryObject<ItemBackpack> BACKPACK = register("backpack", prop -> new ItemBackpack(CQRMaterials.ArmorMaterials.ARMOR_BACKPACK, EquipmentSlot.CHEST, prop));
 	public static final RegistryObject<ItemSpikedGlove> SPIKED_GLOVE = register("spiked_glove", ItemSpikedGlove::new);
 	public static final RegistryObject<ItemArmorCrown> KING_CROWN = register("king_crown", prop -> new ItemArmorCrown(CQRMaterials.ArmorMaterials.ARMOR_CROWN, prop));
 
 	// Slime Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorSlime> HELMET_SLIME = register("helmet_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorSlime> CHESTPLATE_SLIME = register("chestplate_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorSlime> LEGGINGS_SLIME = register("leggings_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlotType.LEGS, prop));;
-	public static final RegistryObject<ItemArmorSlime> BOOTS_SLIME = register("boots_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorSlime> HELMET_SLIME = register("helmet_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorSlime> CHESTPLATE_SLIME = register("chestplate_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorSlime> LEGGINGS_SLIME = register("leggings_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlot.LEGS, prop));;
+	public static final RegistryObject<ItemArmorSlime> BOOTS_SLIME = register("boots_slime", prop -> new ItemArmorSlime(CQRMaterials.ArmorMaterials.ARMOR_SLIME, EquipmentSlot.FEET, prop));
 
 	// Turtle Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorTurtle> HELMET_TURTLE = register("helmet_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorTurtle> CHESTPLATE_TURTLE = register("chestplate_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorTurtle> LEGGINGS_TURTLE = register("leggings_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorTurtle> BOOTS_TURTLE = register("boots_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorTurtle> HELMET_TURTLE = register("helmet_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorTurtle> CHESTPLATE_TURTLE = register("chestplate_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorTurtle> LEGGINGS_TURTLE = register("leggings_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorTurtle> BOOTS_TURTLE = register("boots_turtle", prop -> new ItemArmorTurtle(CQRMaterials.ArmorMaterials.ARMOR_TURTLE, EquipmentSlot.FEET, prop));
 
 	// Bull Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorBull> HELMET_BULL = register("helmet_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorBull> CHESTPLATE_BULL = register("chestplate_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorBull> LEGGINGS_BULL = register("leggings_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorBull> BOOTS_BULL = register("boots_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorBull> HELMET_BULL = register("helmet_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorBull> CHESTPLATE_BULL = register("chestplate_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorBull> LEGGINGS_BULL = register("leggings_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorBull> BOOTS_BULL = register("boots_bull", prop -> new ItemArmorBull(CQRMaterials.ArmorMaterials.ARMOR_BULL, EquipmentSlot.FEET, prop));
 
 	// Spider Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorSpider> HELMET_SPIDER = register("helmet_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorSpider> CHESTPLATE_SPIDER = register("chestplate_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorSpider> LEGGINGS_SPIDER = register("leggings_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorSpider> BOOTS_SPIDER = register("boots_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorSpider> HELMET_SPIDER = register("helmet_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorSpider> CHESTPLATE_SPIDER = register("chestplate_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorSpider> LEGGINGS_SPIDER = register("leggings_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorSpider> BOOTS_SPIDER = register("boots_spider", prop -> new ItemArmorSpider(CQRMaterials.ArmorMaterials.ARMOR_SPIDER, EquipmentSlot.FEET, prop));
 
 	// Inquisition Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorInquisition> HELMET_INQUISITION = register("helmet_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorInquisition> CHESTPLATE_INQUISITION = register("chestplate_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorInquisition> LEGGINGS_INQUISITION = register("leggings_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorInquisition> BOOTS_INQUISITION = register("boots_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorInquisition> HELMET_INQUISITION = register("helmet_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorInquisition> CHESTPLATE_INQUISITION = register("chestplate_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorInquisition> LEGGINGS_INQUISITION = register("leggings_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorInquisition> BOOTS_INQUISITION = register("boots_inquisition", prop -> new ItemArmorInquisition(CQRMaterials.ArmorMaterials.ARMOR_INQUISITION, EquipmentSlot.FEET, prop));
 
 	// Heavy Diamond Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_DIAMOND = register("helmet_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_DIAMOND = register("chestplate_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_DIAMOND = register("leggings_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_DIAMOND = register("boots_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_DIAMOND = register("helmet_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_DIAMOND = register("chestplate_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_DIAMOND = register("leggings_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_DIAMOND = register("boots_heavy_diamond", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, EquipmentSlot.FEET, prop));
 
 	// Heavy Iron Armor RegistryObject<Item>s
-	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_IRON = register("helmet_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_IRON = register("chestplate_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_IRON = register("leggings_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_IRON = register("boots_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorHeavy> HELMET_HEAVY_IRON = register("helmet_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorHeavy> CHESTPLATE_HEAVY_IRON = register("chestplate_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorHeavy> LEGGINGS_HEAVY_IRON = register("leggings_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorHeavy> BOOTS_HEAVY_IRON = register("boots_heavy_iron", prop -> new ItemArmorHeavy(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, EquipmentSlot.FEET, prop));
 
 	// Dyable Iron Armor
-	public static final RegistryObject<ItemArmorDyable> HELMET_IRON_DYABLE = register("helmet_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_IRON_DYABLE = register("chestplate_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorDyable> LEGGINGS_IRON_DYABLE = register("leggings_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorDyable> BOOTS_IRON_DYABLE = register("boots_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorDyable> HELMET_IRON_DYABLE = register("helmet_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_IRON_DYABLE = register("chestplate_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorDyable> LEGGINGS_IRON_DYABLE = register("leggings_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorDyable> BOOTS_IRON_DYABLE = register("boots_iron_dyable", prop -> new ItemArmorDyable(ArmorMaterial.IRON, EquipmentSlot.FEET, prop));
 
 	// Dyable Diamond Armor
-	public static final RegistryObject<ItemArmorDyable> HELMET_DIAMOND_DYABLE = register("helmet_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlotType.HEAD, prop));
-	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_DIAMOND_DYABLE = register("chestplate_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlotType.CHEST, prop));
-	public static final RegistryObject<ItemArmorDyable> LEGGINGS_DIAMOND_DYABLE = register("leggings_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlotType.LEGS, prop));
-	public static final RegistryObject<ItemArmorDyable> BOOTS_DIAMOND_DYABLE = register("boots_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlotType.FEET, prop));
+	public static final RegistryObject<ItemArmorDyable> HELMET_DIAMOND_DYABLE = register("helmet_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlot.HEAD, prop));
+	public static final RegistryObject<ItemArmorDyable> CHESTPLATE_DIAMOND_DYABLE = register("chestplate_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlot.CHEST, prop));
+	public static final RegistryObject<ItemArmorDyable> LEGGINGS_DIAMOND_DYABLE = register("leggings_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlot.LEGS, prop));
+	public static final RegistryObject<ItemArmorDyable> BOOTS_DIAMOND_DYABLE = register("boots_diamond_dyable", prop -> new ItemArmorDyable(ArmorMaterial.DIAMOND, EquipmentSlot.FEET, prop));
 
 	// Ingridients
 	public static final RegistryObject<ItemLore> SCALE_TURTLE = register("scale_turtle", ItemLore::new);
@@ -317,7 +317,7 @@ public class CQRItems {
 	}
 
 	public static <T extends Item> RegistryObject<T> register(String name, Function<Item.Properties, T> itemSupplier,
-			ItemGroup tab) {
+			CreativeModeTab tab) {
 		return ITEMS.register(name, () -> itemSupplier.apply(new Item.Properties().tab(tab)));
 	}
 	
@@ -326,12 +326,12 @@ public class CQRItems {
 	}
 
 	public static <T extends Item> RegistryObject<T> registerBullet(String name, BiFunction<Item.Properties, EBulletType, T> itemSupplier,
-			ItemGroup tab, final EBulletType type) {
+                                                                    CreativeModeTab tab, final EBulletType type) {
 		return ITEMS.register(name, () -> itemSupplier.apply(new Item.Properties().tab(tab), type));
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <T extends ForgeSpawnEggItem> RegistryObject<T> registerSpawnEgg(RegistryObject<? extends EntityType<? extends Entity>> entityType, int colorMain, int colorSecondary, ItemGroup tab) {
+	public static <T extends ForgeSpawnEggItem> RegistryObject<T> registerSpawnEgg(RegistryObject<? extends EntityType<? extends Entity>> entityType, int colorMain, int colorSecondary, CreativeModeTab tab) {
 		return (RegistryObject<T>) ITEMS.register("cqr_" + entityType.getId().getPath() + "_spawnegg" , () -> new CQRSpawnEggItem(
 				entityType, 
 				colorMain, 

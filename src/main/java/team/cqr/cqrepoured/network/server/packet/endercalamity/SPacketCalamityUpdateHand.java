@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
 import team.cqr.cqrepoured.network.AbstractPacket;
@@ -24,7 +24,7 @@ public class SPacketCalamityUpdateHand extends AbstractPacket<SPacketCalamityUpd
 	}
 
 	@Override
-	public SPacketCalamityUpdateHand fromBytes(PacketBuffer buf) {
+	public SPacketCalamityUpdateHand fromBytes(FriendlyByteBuf buf) {
 		SPacketCalamityUpdateHand result = new SPacketCalamityUpdateHand();
 		
 		result.entityId = buf.readInt();
@@ -34,7 +34,7 @@ public class SPacketCalamityUpdateHand extends AbstractPacket<SPacketCalamityUpd
 	}
 
 	@Override
-	public void toBytes(SPacketCalamityUpdateHand packet, PacketBuffer buf) {
+	public void toBytes(SPacketCalamityUpdateHand packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeBytes(packet.handStates);
 	}

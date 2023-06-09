@@ -3,7 +3,7 @@
 //import net.minecraft.block.Block;
 //import net.minecraft.block.Blocks;
 //import net.minecraft.entity.Entity;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import team.cqr.cqrepoured.init.CQRBlocks;
 //import team.cqr.cqrepoured.tileentity.TileEntitySpawner;

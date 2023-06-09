@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.event.item;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -34,7 +34,7 @@ public class TurtleArmorEventHandler {
 				double x = entity.getX();
 				double y = entity.getY() + entity.getEyeHeight();
 				double z = entity.getZ();
-				((ServerWorld) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
+				((ServerLevel) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 2, 0.5D, 0.5D, 0.5D, 1.0D);
 			}
 		}
 	}
@@ -53,16 +53,16 @@ public class TurtleArmorEventHandler {
 		}
 		event.setAmount(Math.min(event.getAmount(), entity.getHealth() - 1.0F));
 		entity.heal(entity.getMaxHealth() * 0.2F);
-		entity.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 0, false, true));
-		entity.addEffect(new EffectInstance(Effects.REGENERATION, 100, 4, false, true));
-		entity.addEffect(new EffectInstance(Effects.DAMAGE_RESISTANCE, 100, 1, false, true));
+		entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0, false, true));
+		entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 4, false, true));
+		entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 1, false, true));
 
 		double x = entity.getX();
 		double y = entity.getY() + entity.getEyeHeight();
 		double z = entity.getZ();
-		((ServerWorld) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
+		((ServerLevel) entity.level).sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
 
-		entity.level.playSound(null, x, y, z, SoundEvents.GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
+		entity.level.playSound(null, x, y, z, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 0.6F, 1.2F);
 
 		CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_TURTLE.get(), 12000);
 	}
@@ -72,8 +72,8 @@ public class TurtleArmorEventHandler {
 		LivingEntity entity = event.getEntityLiving();
 		DamageSource source = event.getSource();
 
-		if (entity.getItemBySlot(EquipmentSlotType.CHEST).getItem() == CQRItems.CHESTPLATE_TURTLE.get() && source.getSourcePosition() != null) {
-			Vector3d hitVec = source.getSourcePosition();
+		if (entity.getItemBySlot(EquipmentSlot.CHEST).getItem() == CQRItems.CHESTPLATE_TURTLE.get() && source.getSourcePosition() != null) {
+			Vec3 hitVec = source.getSourcePosition();
 			double x = entity.getX() - hitVec.x;
 			double z = entity.getZ() - hitVec.z;
 			double yaw = Math.toDegrees(Math.atan2(-x, z));
@@ -84,7 +84,7 @@ public class TurtleArmorEventHandler {
 
 				if (ItemUtil.compareRotations(0.0D, pitch, 60.0D)) {
 					if (!entity.level.isClientSide) {
-						entity.level.playSound(null, hitVec.x, hitVec.y, hitVec.z, SoundEvents.SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.5F, 0.8F);
+						entity.level.playSound(null, hitVec.x, hitVec.y, hitVec.z, SoundEvents.SHIELD_BLOCK, SoundSource.NEUTRAL, 0.5F, 0.8F);
 					}
 					event.setAmount(event.getAmount() * 0.5F);
 				}

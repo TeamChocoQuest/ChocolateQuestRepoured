@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.config;
 
 import java.util.function.Supplier;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CQRArmorMaterial implements IArmorMaterial {
@@ -43,12 +43,12 @@ public class CQRArmorMaterial implements IArmorMaterial {
 	}
 
 	@Override
-	public int getDurabilityForSlot(EquipmentSlotType slot) {
+	public int getDurabilityForSlot(EquipmentSlot slot) {
 		return HEALTH_PER_SLOT[slot.getIndex()] * config.durability.get();
 	}
 
 	@Override
-	public int getDefenseForSlot(EquipmentSlotType slot) {
+	public int getDefenseForSlot(EquipmentSlot slot) {
 		return config.defense.get().get(slot.getIndex());
 	}
 

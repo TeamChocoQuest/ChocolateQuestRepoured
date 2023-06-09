@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.Validate;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class ByteBufUtil {
 

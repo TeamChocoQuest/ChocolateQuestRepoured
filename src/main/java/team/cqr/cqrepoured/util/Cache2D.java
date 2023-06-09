@@ -4,7 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class Cache2D<V> {
 

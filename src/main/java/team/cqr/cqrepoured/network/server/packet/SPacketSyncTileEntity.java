@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network.server.packet;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity> {
 
 	private BlockPos pos = BlockPos.ZERO;
-	private PacketBuffer buffer = new PacketBuffer(Unpooled.buffer(32));
+	private FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer(32));
 
 	public SPacketSyncTileEntity() {
 
@@ -29,7 +29,7 @@ public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity>
 	}
 
 	@Override
-	public SPacketSyncTileEntity fromBytes(PacketBuffer buf) {
+	public SPacketSyncTileEntity fromBytes(FriendlyByteBuf buf) {
 		SPacketSyncTileEntity res = new SPacketSyncTileEntity();
 		res.pos = buf.readBlockPos();
 		res.buffer.writeBytes(buf);
@@ -37,7 +37,7 @@ public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity>
 	}
 
 	@Override
-	public void toBytes(SPacketSyncTileEntity packet, PacketBuffer buf) {
+	public void toBytes(SPacketSyncTileEntity packet, FriendlyByteBuf buf) {
 		buf.writeBlockPos(packet.pos);
 		buf.writeBytes(packet.buffer);
 	}
@@ -46,7 +46,7 @@ public class SPacketSyncTileEntity extends AbstractPacket<SPacketSyncTileEntity>
 		return this.pos;
 	}
 
-	public PacketBuffer getBuffer() {
+	public FriendlyByteBuf getBuffer() {
 		return this.buffer;
 	}
 

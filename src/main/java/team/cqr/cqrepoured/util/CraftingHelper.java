@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 

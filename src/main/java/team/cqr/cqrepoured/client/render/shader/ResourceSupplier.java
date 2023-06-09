@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.shader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.trade.Trade;
 
 public class SlotMerchantOutput extends Slot {
 
-	private final PlayerEntity player;
+	private final Player player;
 	private final InventoryMerchant merchantInventory;
 	private int removeCount;
 
-	public SlotMerchantOutput(PlayerEntity player, InventoryMerchant tradeInventory, int index, int xPosition, int yPosition) {
+	public SlotMerchantOutput(Player player, InventoryMerchant tradeInventory, int index, int xPosition, int yPosition) {
 		super(tradeInventory, index, xPosition, yPosition);
 		this.merchantInventory = tradeInventory;
 		this.player = player;
@@ -45,7 +45,7 @@ public class SlotMerchantOutput extends Slot {
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity thePlayer, ItemStack stack) {
+	public ItemStack onTake(Player thePlayer, ItemStack stack) {
 		this.onCrafting(stack);
 		Trade trade = this.merchantInventory.getCurrentTrade();
 

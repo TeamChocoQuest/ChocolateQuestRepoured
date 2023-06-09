@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.customtextures;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
 

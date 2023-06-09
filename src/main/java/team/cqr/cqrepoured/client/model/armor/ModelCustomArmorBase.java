@@ -2,17 +2,17 @@ package team.cqr.cqrepoured.client.model.armor;
 
 import java.util.function.Function;
 
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ModelCustomArmorBase<T extends LivingEntity> extends BipedModel<T> implements IRenderTypeProvider {
+public class ModelCustomArmorBase<T extends LivingEntity> extends HumanoidModel<T> implements IRenderTypeProvider {
 
 	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
 		this(RenderType::entityCutoutNoCull, scale, 0.0F, textureWidth, textureHeight);

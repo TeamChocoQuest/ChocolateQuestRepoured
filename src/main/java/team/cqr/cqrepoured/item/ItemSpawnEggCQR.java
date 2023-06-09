@@ -1,24 +1,26 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.material.Material;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -45,16 +47,16 @@ public class ItemSpawnEggCQR extends Item {
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context) {
+	public InteractionResult useOn(UseOnContext context) {
 		if (!context.getLevel().isClientSide) {
 			AbstractEntityCQR entity = null;
 			try {
-				entity = this.entityClass.getConstructor(World.class).newInstance(context.getLevel());
+				entity = this.entityClass.getConstructor(Level.class).newInstance(context.getLevel());
 			} catch (Exception e) {
 				CQRMain.logger.error("Failed to spawn entity from preset item!", e);
 			}
 			if (entity != null) {
-				entity.finalizeSpawn((ServerWorld) context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), SpawnReason.SPAWN_EGG, null, null );
+				entity.finalizeSpawn((ServerLevel) context.getLevel(), context.getLevel().getCurrentDifficultyAt(context.getClickedPos()), MobSpawnType.SPAWN_EGG, null, null );
 				BlockPos blockpos = context.getClickedPos().relative(context.getClickedFace());
 				double d0 = this.getYOffset(context.getLevel(), blockpos);
 				entity.setPos(blockpos.getX() + 0.5D, blockpos.getY() + d0, blockpos.getZ() + 0.5D);
@@ -65,11 +67,11 @@ public class ItemSpawnEggCQR extends Item {
 				context.getPlayer().getItemInHand(context.getHand()).shrink(1);
 			}
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
-	protected double getYOffset(World world, BlockPos blockpos) {
-		AxisAlignedBB aabb = new AxisAlignedBB(blockpos).expandTowards(0.0D, -1.0D, 0.0D);
+	protected double getYOffset(Level world, BlockPos blockpos) {
+		AABB aabb = new AABB(blockpos).expandTowards(0.0D, -1.0D, 0.0D);
 		List<VoxelShape> list = world.getBlockCollisions(null, aabb).collect(Collectors.toList());
 
 		if (list.isEmpty()) {
@@ -86,43 +88,43 @@ public class ItemSpawnEggCQR extends Item {
 	}
 
 	@Override
-	public ITextComponent getName(ItemStack stack) {
-		return new TranslationTextComponent("entity.cqr_" + this.entityName + ".name").append(new StringTextComponent(" (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")"));
+	public TextComponent getName(ItemStack stack) {
+		return new TranslationTextComponent("entity.cqr_" + this.entityName + ".name").append(new TextComponent(" (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")"));
 	}
 
 	private void setEquipment(AbstractEntityCQR entity) {
-		entity.setItemInHand(Hand.MAIN_HAND, this.mainhand.copy());
-		entity.setItemInHand(Hand.OFF_HAND, this.offhand.copy());
+		entity.setItemInHand(InteractionHand.MAIN_HAND, this.mainhand.copy());
+		entity.setItemInHand(InteractionHand.OFF_HAND, this.offhand.copy());
 		switch (this.armor) {
 		case LEATHER:
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.LEATHER_BOOTS));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.LEATHER_HELMET));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.LEATHER_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.LEATHER_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
 			break;
 		case GOLD:
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.GOLDEN_BOOTS));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.GOLDEN_HELMET));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.GOLDEN_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.GOLDEN_HELMET));
 			break;
 		case CHAIN:
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.CHAINMAIL_BOOTS));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.CHAINMAIL_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
 			break;
 		case IRON:
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 			break;
 		case DIAMOND:
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
 			break;
 		default:
 			break;

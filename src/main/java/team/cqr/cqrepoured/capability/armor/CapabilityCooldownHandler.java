@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.FastEntrySet;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class CapabilityCooldownHandler {
 

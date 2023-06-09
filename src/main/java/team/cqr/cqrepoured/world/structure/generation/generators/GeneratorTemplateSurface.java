@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Random;
 
 import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.TemplateManager;

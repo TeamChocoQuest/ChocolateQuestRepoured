@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.capability.armor;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class CapabilityCooldownHandlerHelper {

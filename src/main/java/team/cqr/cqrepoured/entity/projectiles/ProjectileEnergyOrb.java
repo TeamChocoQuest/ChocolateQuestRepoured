@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRSounds;
 
@@ -29,18 +29,18 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	public Random rand = new Random();
 	public LivingEntity shootingEntity;
 
-	public ProjectileEnergyOrb(EntityType<? extends DamagingProjectileEntity> entityType, World worldIn) {
+	public ProjectileEnergyOrb(EntityType<? extends DamagingProjectileEntity> entityType, Level worldIn) {
 		super(entityType, worldIn);
 		this.innerRotation = this.rand.nextInt(100_000);
 		//this.setSize(1.5F, 1.5F);
 	}
 
-	public ProjectileEnergyOrb(double x, double y, double z, double offsetX, double offsetY, double offsetZ, World level) {
+	public ProjectileEnergyOrb(double x, double y, double z, double offsetX, double offsetY, double offsetZ, Level level) {
 		super(CQREntityTypes.PROJECTILE_ENERGY_ORB.get(), x, y, z, offsetX, offsetY, offsetZ, level);
 		this.innerRotation = this.rand.nextInt(100_000);
 	}
 
-	public ProjectileEnergyOrb(LivingEntity shooter, double offsetX, double offsetY, double offsetZ, World level) {
+	public ProjectileEnergyOrb(LivingEntity shooter, double offsetX, double offsetY, double offsetZ, Level level) {
 		super(CQREntityTypes.PROJECTILE_ENERGY_ORB.get(), shooter, offsetX, offsetY, offsetZ, level);
 		this.innerRotation = this.rand.nextInt(100_000);
 		this.shootingEntity = shooter;
@@ -61,7 +61,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 		boolean result = super.hurt(source, amount);
 
 		if (result) {
-			if (source.getEntity() instanceof PlayerEntity) {
+			if (source.getEntity() instanceof Player) {
 				this.deflectionsByPlayer++;
 			}
 		}
@@ -72,9 +72,9 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	/*
 	 * Creates an orb that directly flies towards the target (no homing), it returns the spawned entity
 	 */
-	public static ProjectileEnergyOrb shootAt(Entity target, LivingEntity shooter, World world) {
+	public static ProjectileEnergyOrb shootAt(Entity target, LivingEntity shooter, Level world) {
 		//Vector3d vec3d = shooter.getLook(1.0F);
-		Vector3d vec3d = shooter.getLookAngle();
+		Vec3 vec3d = shooter.getLookAngle();
 		double vx = target.getX() - (shooter.getX() + vec3d.x * shooter.getBbWidth());
 		double vy = target.getBoundingBox().minY + target.getBbHeight() / 2.0F - (0.5D + shooter.getY() + shooter.getBbHeight() / 2.0F);
 		double vz = target.getZ() - (shooter.getZ() + vec3d.z * shooter.getBbWidth());
@@ -91,7 +91,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	public void redirect(Entity target, LivingEntity shooter) {
 		this.setOwner(shooter);// = shooter;
 		//float vec3d = shooter.getViewYRot(1.0F);
-		Vector3d vec3d = shooter.getLookAngle();
+		Vec3 vec3d = shooter.getLookAngle();
 		double accelX = target.getX() - (shooter.getX() + vec3d.x * shooter.getBbWidth());
 		double accelY = target.getBoundingBox().minY + target.getBbHeight() / 2.0F - (0.5D + shooter.getY() + shooter.getBbHeight() / 2.0F);
 		double accelZ = target.getZ() - (shooter.getZ() + vec3d.z * shooter.getBbWidth());
@@ -107,7 +107,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 		accelX = accelX + this.rand.nextGaussian() * 0.4D;
 		accelY = accelY + this.rand.nextGaussian() * 0.4D;
 		accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
-		double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = Mth.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.xPower = accelX / d0 * 0.1D;
 		this.yPower = accelY / d0 * 0.1D;
 		this.zPower = accelZ / d0 * 0.1D;
@@ -115,19 +115,19 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.deflectionsByPlayer = compound.getInt("deflections");
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("deflections", this.deflectionsByPlayer);
 	}
 
 	@Override
-	protected void onHitEntity(EntityRayTraceResult result)
+	protected void onHitEntity(EntityHitResult result)
 	{
 		super.onHitEntity(result);
 		if (!result.getEntity().hurt(DamageSource.indirectMagic(this, this.shootingEntity), 4)) {
@@ -137,7 +137,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	}
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result) {
+	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
 		this.level.explode(this.shootingEntity, this.getX(), this.getY(), this.getZ(), 0.0F, Explosion.Mode.NONE);
 		AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
@@ -149,7 +149,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 		entityareaeffectcloud.setRadiusOnUse(-0.125F);
 		entityareaeffectcloud.setWaitTime(20);
 		entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
-		entityareaeffectcloud.addEffect(new EffectInstance(Effects.POISON, 60, 2));
+		entityareaeffectcloud.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 2));
 
 		this.level.addFreshEntity(entityareaeffectcloud);
 

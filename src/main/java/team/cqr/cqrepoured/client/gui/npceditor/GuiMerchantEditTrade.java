@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -14,11 +14,10 @@ import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,7 +54,7 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditT
 	private TextFieldWidget advancementTextField;
 
 	
-	public GuiMerchantEditTrade(ContainerMerchantEditTrade container, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+	public GuiMerchantEditTrade(ContainerMerchantEditTrade container, Inventory pPlayerInventory, TextComponent pTitle) {
 		super(container, pPlayerInventory, pTitle);
 
 		this.entity = container.getEntity();
@@ -75,37 +74,37 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditT
 		List<TradeInput> tradeInputs = this.trade != null ? this.trade.getInputItems() : Collections.emptyList();
 		for (int i = 0; i < this.ignoreMetaCheckBoxes.length; i++) {
 			this.ignoreMetaCheckBoxes[i] = this.addButton(
-					new CheckboxButton(/*i * 2 + 2,*/ this.leftPos + i * 26 + 76, this.topPos + 31, 11, 11, new StringTextComponent(""), i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
+					new CheckboxButton(/*i * 2 + 2,*/ this.leftPos + i * 26 + 76, this.topPos + 31, 11, 11, new TextComponent(""), i < tradeInputs.size() && tradeInputs.get(i).ignoreMeta()));
 			this.ignoreNBTCheckBoxes[i] = this.addButton(
-					new CheckboxButton(/*i * 2 + 3,*/ this.leftPos + i * 26 + 76, this.topPos + 44, 11, 11, new StringTextComponent(""), i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
+					new CheckboxButton(/*i * 2 + 3,*/ this.leftPos + i * 26 + 76, this.topPos + 44, 11, 11, new TextComponent(""), i < tradeInputs.size() && tradeInputs.get(i).ignoreNBT()));
 		}
 
 		this.reputationButton = this.addButton(new GuiButtonReputation(30, this.leftPos + 7, this.topPos + 72, this::actionPerformed));
 		this.reputationButton.setReputationIndex(this.trade != null ? this.trade.getRequiredReputation() : Integer.MIN_VALUE);
-		this.advancementTextField = new TextFieldWidget(/*40, */this.font, this.leftPos + 8, this.topPos + 103, 58, 10, new StringTextComponent(""));
+		this.advancementTextField = new TextFieldWidget(/*40, */this.font, this.leftPos + 8, this.topPos + 103, 58, 10, new TextComponent(""));
 		this.advancementTextField.setValue(this.trade != null && this.trade.getRequiredAdvancement() != null ? this.trade.getRequiredAdvancement().toString() : "");
 
 		this.stockCheckBox = this.addWidget(
-				new CheckboxButton(/*20, */this.leftPos + 237, this.topPos + 17, 11, 11, new StringTextComponent(""), this.trade != null && this.trade.hasLimitedStock()) {
+				new CheckboxButton(/*20, */this.leftPos + 237, this.topPos + 17, 11, 11, new TextComponent(""), this.trade != null && this.trade.hasLimitedStock()) {
 					public void onPress() {
 						super.onPress();
 						GuiMerchantEditTrade.this.actionPerformedAbstractButton(this);
 					};
 				}
 		);
-		this.restockTextField = new TextFieldWidget(/*21, */this.font, this.leftPos + 238, this.topPos + 43, 38, 10, new StringTextComponent(""));
+		this.restockTextField = new TextFieldWidget(/*21, */this.font, this.leftPos + 238, this.topPos + 43, 38, 10, new TextComponent(""));
 		this.restockTextField.setValue(this.trade != null ? Integer.toString(this.trade.getRestockRate()) : "0");
 		this.restockTextField.setEditable(this.stockCheckBox.selected());
-		this.inStockTextField = new TextFieldWidget(/*21, */this.font, this.leftPos + 238, this.topPos + 69, 38, 10, new StringTextComponent(""));
+		this.inStockTextField = new TextFieldWidget(/*21, */this.font, this.leftPos + 238, this.topPos + 69, 38, 10, new TextComponent(""));
 		this.inStockTextField.setValue(this.trade != null ? Integer.toString(this.trade.getInStock()) : "0");
 		this.inStockTextField.setEditable(this.stockCheckBox.selected());
-		this.maxStockTextField = new TextFieldWidget(/*22, */this.font, this.leftPos + 238, this.topPos + 95, 38, 10, new StringTextComponent(""));
+		this.maxStockTextField = new TextFieldWidget(/*22, */this.font, this.leftPos + 238, this.topPos + 95, 38, 10, new TextComponent(""));
 		this.maxStockTextField.setValue(this.trade != null ? Integer.toString(this.trade.getMaxStock()) : "0");
 		this.maxStockTextField.setEditable(this.stockCheckBox.selected());
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 
 		this.advancementTextField.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);;
@@ -227,7 +226,7 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditT
 				}
 	
 				CPacketContainerClickButton packet = new CPacketContainerClickButton(inidb.getId());
-				PacketBuffer extraData = packet.getExtraData();
+				FriendlyByteBuf extraData = packet.getExtraData();
 				extraData.writeInt(this.tradeIndex);
 				IntStream.range(0, ignoreMeta.length).forEach(i -> extraData.writeBoolean(ignoreMeta[i]));
 				IntStream.range(0, ignoreNBT.length).forEach(i -> extraData.writeBoolean(ignoreNBT[i]));
@@ -284,7 +283,7 @@ public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditT
 	}
 
 	@Override
-	protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
+	protected void renderBg(PoseStack pMatrixStack, float pPartialTicks, int pX, int pY) {
 		//this.renderBackground(pMatrixStack);
 		this.minecraft.getTextureManager().bind(BG_TEXTURE);
 		GuiHelper.drawTexture(this.leftPos, this.topPos, 0.0D, 0.0D, this.imageWidth, this.imageHeight, this.imageWidth / 512.0D, this.imageHeight / 256.0D);

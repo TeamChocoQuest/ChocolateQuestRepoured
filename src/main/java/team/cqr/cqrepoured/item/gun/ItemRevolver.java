@@ -4,22 +4,22 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -42,18 +42,18 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn)
 	{
-		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 5.0).withStyle(TextFormatting.BLUE)));
-		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -30)).withStyle(TextFormatting.RED));
-		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -50)).withStyle(TextFormatting.RED));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.bullet_damage", 5.0).withStyle(ChatFormatting.BLUE)));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.fire_rate", -30)).withStyle(ChatFormatting.RED));
+		tooltip.add((new TranslationTextComponent("item.cqrepoured.tooltip.accuracy", -50)).withStyle(ChatFormatting.RED));
 
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "gun");
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		// System.out.println("Hand: " + handIn.toString());
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		boolean flag = !this.findAmmo(playerIn).isEmpty();
@@ -62,16 +62,16 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 			if (flag) {
 				this.shoot(stack, worldIn, playerIn);
 			}
-			return flag ? ActionResult.pass(stack) : new ActionResult(ActionResultType.FAIL, stack);
+			return flag ? InteractionResultHolder.pass(stack) : new InteractionResultHolder(InteractionResult.FAIL, stack);
 		}
 
 		else {
 			this.shoot(stack, worldIn, playerIn);
-			return ActionResult.success(stack);
+			return InteractionResultHolder.success(stack);
 		}
 	}
 
-	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
+	public void shoot(ItemStack stack, Level worldIn, Player player) {
 		boolean flag = player.abilities.instabuild;
 		ItemStack itemstack = this.findAmmo(player);
 
@@ -95,7 +95,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 				}
 			}
 
-			worldIn.playLocalSound(player.position().x, player.position().y + player.getEyeHeight(), player.position().z, this.getShootSound(), SoundCategory.MASTER, 1.0F, 0.9F + random.nextFloat() * 0.2F, false);
+			worldIn.playLocalSound(player.position().x, player.position().y + player.getEyeHeight(), player.position().z, this.getShootSound(), SoundSource.MASTER, 1.0F, 0.9F + random.nextFloat() * 0.2F, false);
 			player.xRot -= worldIn.random.nextFloat() * this.getRecoil();
 
 			if (!flag) {
@@ -116,11 +116,11 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 		return stack.getItem() instanceof ItemBullet;
 	}
 
-	protected ItemStack findAmmo(PlayerEntity player) {
-		if (this.isBullet(player.getItemInHand(Hand.OFF_HAND))) {
-			return player.getItemInHand(Hand.OFF_HAND);
-		} else if (this.isBullet(player.getItemInHand(Hand.MAIN_HAND))) {
-			return player.getItemInHand(Hand.MAIN_HAND);
+	protected ItemStack findAmmo(Player player) {
+		if (this.isBullet(player.getItemInHand(InteractionHand.OFF_HAND))) {
+			return player.getItemInHand(InteractionHand.OFF_HAND);
+		} else if (this.isBullet(player.getItemInHand(InteractionHand.MAIN_HAND))) {
+			return player.getItemInHand(InteractionHand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getContainerSize(); ++i) {
 				ItemStack itemstack = player.inventory.getItem(i);
@@ -134,7 +134,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 		}
 	}
 
-	protected ItemStack getBulletStack(ItemStack stack, PlayerEntity player) {
+	protected ItemStack getBulletStack(ItemStack stack, Player player) {
 		if (stack.getItem() == CQRItems.BULLET_IRON.get()) {
 			return new ItemStack(CQRItems.BULLET_IRON.get());
 		}
@@ -164,7 +164,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
+	public void shoot(Level worldIn, LivingEntity shooter, Entity target, InteractionHand handIn) {
 		if (!worldIn.isClientSide) {
 			ItemStack bulletStack = new ItemStack(CQRItems.BULLET_IRON.get(), 1);
 			if (shooter instanceof AbstractEntityCQR) {
@@ -176,7 +176,7 @@ public class ItemRevolver extends ItemLore implements IRangedWeapon {
 				}
 			}
 			ProjectileBullet bulletE = new ProjectileBullet(shooter, worldIn, this.getBulletType(bulletStack));
-			Vector3d v = target.position().subtract(shooter.position());
+			Vec3 v = target.position().subtract(shooter.position());
 			v = v.normalize();
 			v = v.scale(3.5D);
 			// bulletE.setVelocity(v.x, v.y, v.z);

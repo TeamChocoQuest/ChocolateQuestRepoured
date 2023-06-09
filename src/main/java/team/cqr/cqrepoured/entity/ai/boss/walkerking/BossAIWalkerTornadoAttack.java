@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.walkerking;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
@@ -44,11 +44,11 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	private void spawnTornadoes(int count) {
 		// System.out.println("Executing");
 		double angle = 90 / (count - 1);
-		Vector3d velocity = this.entity.getTarget().position().subtract(this.entity.position());
+		Vec3 velocity = this.entity.getTarget().position().subtract(this.entity.position());
 		velocity = VectorUtil.rotateVectorAroundY(velocity, -45);
 		for (int i = 0; i < count; i++) {
-			Vector3d v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
-			Vector3d p = this.entity.position().add(v.normalize().scale(0.5));
+			Vec3 v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
+			Vec3 p = this.entity.position().add(v.normalize().scale(0.5));
 			v = v.normalize().scale(0.25);
 			// System.out.println("V=" + v.toString());
 			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.level);

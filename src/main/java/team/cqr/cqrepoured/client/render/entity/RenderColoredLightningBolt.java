@@ -2,25 +2,25 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import java.util.Random;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 
 public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLightningBolt> {
 
-	public RenderColoredLightningBolt(EntityRendererManager renderManagerIn) {
+	public RenderColoredLightningBolt(Context renderManagerIn) {
 		super(renderManagerIn);
 	}
 	
 	@Override
-	public void render(EntityColoredLightningBolt pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
+	public void render(EntityColoredLightningBolt pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
 		float[] afloat = new float[8];
 	      float[] afloat1 = new float[8];
 	      float f = 0.0F;
@@ -34,7 +34,7 @@ public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLigh
 	         f1 += (float)(random.nextInt(11) - 5);
 	      }
 
-	      IVertexBuilder ivertexbuilder = pBuffer.getBuffer(RenderType.lightning());
+	      VertexConsumer ivertexbuilder = pBuffer.getBuffer(RenderType.lightning());
 	      Matrix4f matrix4f = pMatrixStack.last().pose();
 
 	      for(int j = 0; j < 4; ++j) {
@@ -85,7 +85,7 @@ public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLigh
 
 	   }
 
-	   private static void quad(Matrix4f matrix, IVertexBuilder builder, float x, float z, int yOffset, float x2, float z2, float cRed, float cGreen, float cBlue, float cAlpha, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
+	   private static void quad(Matrix4f matrix, VertexConsumer builder, float x, float z, int yOffset, float x2, float z2, float cRed, float cGreen, float cBlue, float cAlpha, float p_229116_10_, float p_229116_11_, boolean p_229116_12_, boolean p_229116_13_, boolean p_229116_14_, boolean p_229116_15_) {
 	      builder.vertex(matrix, x + (p_229116_12_ ? p_229116_11_ : -p_229116_11_), (float)(yOffset * 16), z + (p_229116_13_ ? p_229116_11_ : -p_229116_11_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
 	      builder.vertex(matrix, x2 + (p_229116_12_ ? p_229116_10_ : -p_229116_10_), (float)((yOffset + 1) * 16), z2 + (p_229116_13_ ? p_229116_10_ : -p_229116_10_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();
 	      builder.vertex(matrix, x2 + (p_229116_14_ ? p_229116_10_ : -p_229116_10_), (float)((yOffset + 1) * 16), z2 + (p_229116_15_ ? p_229116_10_ : -p_229116_10_)).color(cRed, cGreen, cBlue, cAlpha).endVertex();

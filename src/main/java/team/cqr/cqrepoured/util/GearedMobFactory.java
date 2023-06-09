@@ -5,17 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.item.SwordItem;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -27,10 +27,10 @@ public class GearedMobFactory {
 	private static final List<ItemStack> DEBUFF_ARROW_LIST = new ArrayList<>();
 
 	static {
-		for (Effect potion : ForgeRegistries.POTIONS.getValues()) {
+		for (MobEffect potion : ForgeRegistries.POTIONS.getValues()) {
 			if (!potion.isBeneficial()) {
-				EffectInstance potionEffect = new EffectInstance(potion, potion.isInstantenous() ? 0 : 100);
-				List<EffectInstance> effectList = new ArrayList<>(1);
+				MobEffectInstance potionEffect = new MobEffectInstance(potion, potion.isInstantenous() ? 0 : 100);
+				List<MobEffectInstance> effectList = new ArrayList<>(1);
 				effectList.add(potionEffect);
 				DEBUFF_ARROW_LIST.add(PotionUtils.setCustomEffects(new ItemStack(Items.TIPPED_ARROW), effectList));
 			}
@@ -196,13 +196,13 @@ public class GearedMobFactory {
 			EnchantmentHelper.selectEnchantment(this.random, feet, level, allowTreasure);
 		}
 
-		entity.setItemSlot(EquipmentSlotType.MAINHAND, mainHand);
-		entity.setItemSlot(EquipmentSlotType.OFFHAND, offHand);
+		entity.setItemSlot(EquipmentSlot.MAINHAND, mainHand);
+		entity.setItemSlot(EquipmentSlot.OFFHAND, offHand);
 
-		entity.setItemSlot(EquipmentSlotType.HEAD, head);
-		entity.setItemSlot(EquipmentSlotType.CHEST, chest);
-		entity.setItemSlot(EquipmentSlotType.LEGS, legs);
-		entity.setItemSlot(EquipmentSlotType.FEET, feet);
+		entity.setItemSlot(EquipmentSlot.HEAD, head);
+		entity.setItemSlot(EquipmentSlot.CHEST, chest);
+		entity.setItemSlot(EquipmentSlot.LEGS, legs);
+		entity.setItemSlot(EquipmentSlot.FEET, feet);
 
 		if (entity instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) entity).setHealingPotions(1);
@@ -221,7 +221,7 @@ public class GearedMobFactory {
 	}
 
 	private EArmorType getGearTier(int floor) {
-		int index = MathHelper.clamp((int) ((double) floor / (double) this.floorCount * 5.0D), 0, EArmorType.values().length - 1);
+		int index = Mth.clamp((int) ((double) floor / (double) this.floorCount * 5.0D), 0, EArmorType.values().length - 1);
 		return EArmorType.values()[index];
 	}
 

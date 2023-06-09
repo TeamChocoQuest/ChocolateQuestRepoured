@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntitySpiderEgg extends Entity {
@@ -19,15 +19,15 @@ public class EntitySpiderEgg extends Entity {
 	private static final int STAGE_COUNT = 5;
 	private static final ResourceLocation MINION_ID = new ResourceLocation("minecraft", "cave_spider");
 
-	protected static final DataParameter<Integer> STAGE = EntityDataManager.<Integer>defineId(EntitySpiderEgg.class, DataSerializers.INT);
+	protected static final EntityDataAccessor<Integer> STAGE = SynchedEntityData.<Integer>defineId(EntitySpiderEgg.class, EntityDataSerializers.INT);
 
 	private int currentStageDuration = 0;
 
-	public EntitySpiderEgg(World worldIn) {
+	public EntitySpiderEgg(Level worldIn) {
 		this(CQREntityTypes.SPIDER_EGG.get(), worldIn);
 	}
 	
-	public EntitySpiderEgg(EntityType<? extends EntitySpiderEgg> type, World worldIn) {
+	public EntitySpiderEgg(EntityType<? extends EntitySpiderEgg> type, Level worldIn) {
 		super(type, worldIn);
 
 	}
@@ -72,13 +72,13 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.entityData.set(STAGE, compound.getInt("stage"));
 		this.currentStageDuration = compound.getInt("stage_duration");
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("stage", this.getStage());
 		compound.putInt("stage_duration", this.currentStageDuration);
 	}
@@ -88,7 +88,7 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

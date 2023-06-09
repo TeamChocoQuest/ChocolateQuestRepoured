@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.item.ItemStack;
 
 public class InventoryItem extends Inventory {
 
 	private final ItemStack stack;
-	private final Hand hand;
+	private final InteractionHand hand;
 	private final boolean creativeOnly;
 
-	public InventoryItem(ItemStack stack, Hand hand, int size, boolean creativeOnly) {
+	public InventoryItem(ItemStack stack, InteractionHand hand, int size, boolean creativeOnly) {
 		super(size);
 		this.stack = stack;
 		this.hand = hand;
@@ -19,7 +19,7 @@ public class InventoryItem extends Inventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity pPlayer) {
+	public boolean stillValid(Player pPlayer) {
 		if (this.creativeOnly && !pPlayer.isCreative()) {
 			return false;
 		}

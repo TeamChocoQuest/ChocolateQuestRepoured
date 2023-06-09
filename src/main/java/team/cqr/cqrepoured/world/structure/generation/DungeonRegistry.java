@@ -8,10 +8,10 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.Level;
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.ChunkPos;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
@@ -42,7 +42,7 @@ public class DungeonRegistry {
 	}
 
 	@Nullable
-	public DungeonBase getLocationSpecificDungeon(World level, ChunkPos chunkPos) {
+	public DungeonBase getLocationSpecificDungeon(Level level, ChunkPos chunkPos) {
 		for (DungeonBase dungeon : this.dungeons.values()) {
 			if (dungeon.canSpawnInChunkWithLockedPosition(level, chunkPos)) {
 				return dungeon;

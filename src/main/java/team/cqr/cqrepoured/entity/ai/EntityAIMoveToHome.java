@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 import java.util.EnumSet;

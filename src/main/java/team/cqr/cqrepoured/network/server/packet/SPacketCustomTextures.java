@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -28,7 +28,7 @@ public class SPacketCustomTextures extends AbstractPacket<SPacketCustomTextures>
 	}
 
 	@Override
-	public SPacketCustomTextures fromBytes(PacketBuffer buf) {
+	public SPacketCustomTextures fromBytes(FriendlyByteBuf buf) {
 		SPacketCustomTextures result = new SPacketCustomTextures();
 		
 		int keys = buf.readInt();
@@ -65,7 +65,7 @@ public class SPacketCustomTextures extends AbstractPacket<SPacketCustomTextures>
 	}
 
 	@Override
-	public void toBytes(SPacketCustomTextures packet, PacketBuffer buf) {
+	public void toBytes(SPacketCustomTextures packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entries.size());
 		buf.writeInt(packet.textureSets.size());
 		// Textures

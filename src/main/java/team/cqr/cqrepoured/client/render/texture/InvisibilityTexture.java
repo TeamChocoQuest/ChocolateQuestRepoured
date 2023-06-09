@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.resources.IResource;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.util.Perlin2D;
 
 public class InvisibilityTexture extends AbstractTexture {

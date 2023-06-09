@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.common.util.Constants;
@@ -39,7 +39,7 @@ public abstract class MixinTemplateManager {
 			cancellable = true,
 			method = "readStructure(Lnet/minecraft/nbt/CompoundNBT;)Lnet/minecraft/world/gen/feature/template/Template;"
 	)
-	private void mixinReadStructure(CompoundNBT structureFileNBTData, CallbackInfoReturnable<Template> cir) {
+	private void mixinReadStructure(CompoundTag structureFileNBTData, CallbackInfoReturnable<Template> cir) {
 		//If this is a cqr structure file, then create a new ExtendedStructureTemplate object and return that
 		if(structureFileNBTData != null && structureFileNBTData.contains(ExtendedStructureTemplate.CQR_VERSION_KEY, Constants.NBT.TAG_STRING)) {
 			ExtendedStructureTemplate structure = new ExtendedStructureTemplate();

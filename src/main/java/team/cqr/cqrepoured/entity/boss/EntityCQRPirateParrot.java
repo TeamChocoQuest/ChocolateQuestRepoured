@@ -1,33 +1,33 @@
 package team.cqr.cqrepoured.entity.boss;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowMobGoal;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.entity.passive.ParrotEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.Explosion.Mode;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.level.Explosion.Mode;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotLandOnCaptainsShoulder;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotThrowPotions;
 import team.cqr.cqrepoured.entity.ai.target.EntityAIPetNearestAttackTarget;
@@ -39,7 +39,7 @@ import java.util.UUID;
 
 public class EntityCQRPirateParrot extends ParrotEntity {
 
-	public EntityCQRPirateParrot(EntityType<? extends EntityCQRPirateParrot> type, World worldIn) {
+	public EntityCQRPirateParrot(EntityType<? extends EntityCQRPirateParrot> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -47,7 +47,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	protected void registerGoals() {
 		// this.aiSit = new SitGoal(this);
 		// this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new RandomSwimmingGoal(this));
 		this.goalSelector.addGoal(1, new BossAIPirateParrotThrowPotions(this));
 		// this.tasks.addTask(2, this.aiSit);
 		this.goalSelector.addGoal(2, new FollowOwnerGoal(this, 1.0D, 5.0F, 1.0F, true));
@@ -59,7 +59,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	}
 
 	@Override
-	public void forceAddEffect(EffectInstance effect) {
+	public void forceAddEffect(MobEffectInstance effect) {
 		if (!effect.getEffect().isBeneficial()) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	}
 
 	@Override
-	public boolean addEffect(EffectInstance pEffectInstance) {
+	public boolean addEffect(MobEffectInstance pEffectInstance) {
 		if (pEffectInstance.getEffect().isBeneficial()) {
 			return super.addEffect(pEffectInstance);
 		}
@@ -106,11 +106,11 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 
 	private LivingEntity getOwnerInRange(UUID uuid) {
 
-		List<Entity> ents = this.level.getEntities(this, new AxisAlignedBB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input.getUUID().equals(uuid));
+		List<Entity> ents = this.level.getEntities(this, new AABB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input.getUUID().equals(uuid));
 		return ents.isEmpty() ? null : (LivingEntity) ents.get(0);
 	}
 
-	public static AttributeModifierMap.MutableAttribute createAttributes() {
+	public static AttributeSupplier.MutableAttribute createAttributes() {
 		return MobEntity
 				.createMobAttributes()
 				.add(Attributes.MAX_HEALTH, 40.0D)
@@ -123,7 +123,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	 */
 
 	public boolean setCQREntityOnShoulder(AbstractEntityCQR p_191994_1_) {
-		CompoundNBT nbttagcompound = new CompoundNBT();
+		CompoundTag nbttagcompound = new CompoundTag();
 		nbttagcompound.putString("id", this.getEncodeId()); // Correct?
 		this.saveWithoutId(nbttagcompound);
 
@@ -139,7 +139,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	protected void populateDefaultEquipmentSlots(DifficultyInstance pDifficulty) {
 		super.populateDefaultEquipmentSlots(pDifficulty);
 		// WHY TF?!
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.FIRE_CHARGE, 1));
 	}
 
 	@Override
@@ -148,20 +148,20 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	}
 
 	@Override
-	public boolean setEntityOnShoulder(ServerPlayerEntity p_213439_1_) {
+	public boolean setEntityOnShoulder(ServerPlayer p_213439_1_) {
 		return super.setEntityOnShoulder(p_213439_1_);
 	}
 
 	@Override
-	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+	public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (this.isTame() && (player == this.getOwner() || this.getOwnerUUID().equals(player.getUUID()))) {
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		return super.mobInteract(player, hand);
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

@@ -1,8 +1,9 @@
 package net.minecraft.entity;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;
 
@@ -11,7 +12,7 @@ import javax.annotation.Nullable;
 public class EntityList {
 
 	@Nullable
-	public static Entity createEntityFromNBT(CompoundNBT tag, World worldIn) {
+	public static Entity createEntityFromNBT(CompoundTag tag, Level worldIn) {
 		ResourceLocation resourcelocation = new ResourceLocation(tag.getString("id"));
 		
 		Entity entity = createEntityByIDFromName(resourcelocation, worldIn);
@@ -37,7 +38,7 @@ public class EntityList {
         return entity;
 	}
 	
-	public static Entity createEntityByIDFromName(ResourceLocation id, World world) {
+	public static Entity createEntityByIDFromName(ResourceLocation id, Level world) {
 		return ForgeRegistries.ENTITIES.getValue(id).create(world);
 	}
 

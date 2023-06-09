@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.chunk.ChunkSection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -50,7 +50,7 @@ public class EntityRenderManager {
 				y = entity.yOld + (entity.yo - entity.yOld) * partialTick;
 				z = entity.zOld + (entity.zo - entity.zOld) * partialTick;
 				//Previously used ActiveRenderInfo
-				Vector3d cam = mc.getCameraEntity().position();
+				Vec3 cam = mc.getCameraEntity().position();
 				camX = x + cam.x;
 				camY = y + cam.y;
 				camZ = z + cam.z;
@@ -71,7 +71,7 @@ public class EntityRenderManager {
 			return true;
 		}
 
-		AxisAlignedBB aabb = entity.getBoundingBoxForCulling();
+		AABB aabb = entity.getBoundingBoxForCulling();
 		double minX = aabb.minX - 0.5D;
 		double minY = aabb.minY - 0.5D;
 		double minZ = aabb.minZ - 0.5D;

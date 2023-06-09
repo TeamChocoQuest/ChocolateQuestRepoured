@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileSpiderBall extends ProjectileBase {
@@ -31,15 +31,15 @@ public class ProjectileSpiderBall extends ProjectileBase {
 		this.damage = 2.0F;
 	}
  */
-	public ProjectileSpiderBall(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileSpiderBall(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileSpiderBall(double pX, double pY, double pZ, World world) {
+	public ProjectileSpiderBall(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_SPIDER_BALL.get(), pX, pY, pZ, world);
 	}
 
-	public ProjectileSpiderBall(LivingEntity shooter, World world)
+	public ProjectileSpiderBall(LivingEntity shooter, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_SPIDER_BALL.get(), shooter, world);
 		this.shooter = shooter;
@@ -68,7 +68,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	} */
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		if(entityResult.getEntity() instanceof LivingEntity)
 		{
@@ -76,7 +76,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 
 			if(entity == this.shooter) return;
 
-			entity.addEffect(new EffectInstance(Effects.POISON, 100, 0));
+			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
 			entity.hurt(DamageSource.MAGIC, this.damage);
 			this.remove();
 		}
@@ -97,7 +97,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

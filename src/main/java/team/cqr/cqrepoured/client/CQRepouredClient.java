@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
@@ -36,7 +36,7 @@ public class CQRepouredClient {
 		CQRepouredClient.blockEntityItemStack = blockEntityItemStack;
 	}
 
-	public static BlockState getBlockEntityBlockState(TileEntity blockEntity) {
+	public static BlockState getBlockEntityBlockState(BlockEntity blockEntity) {
 		if (blockEntityItemStack != null) {
 			Item item = blockEntityItemStack.getItem();
 			return item instanceof BlockItem ? ((BlockItem) item).getBlock().defaultBlockState() : Blocks.AIR.defaultBlockState();

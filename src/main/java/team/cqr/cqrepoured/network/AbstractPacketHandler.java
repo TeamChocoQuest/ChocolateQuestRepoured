@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network;
 
 import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.play.ServerPlayNetHandler;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -18,8 +18,8 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 	@Override
 	public final void handlePacket(P packet, Supplier<Context> context) {
 		context.get().enqueueWork(() -> {
-			PlayerEntity sender = null;
-			World world = null;
+			Player sender = null;
+			Level world = null;
 			if(context.get().getNetworkManager().getPacketListener() instanceof ServerPlayNetHandler) {
 				sender = context.get().getSender();
 				if(sender != null) {
@@ -44,6 +44,6 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 	 * world: Optional, set when player is not null or the packet is received clientside, then it is the currently opened world
 	 * player: Either the sender of the packet or the local player. Is null for packets recepted during login
 	 */
-	protected abstract void execHandlePacket(P packet, Supplier<Context> context, @Nullable World world, @Nullable PlayerEntity player);
+	protected abstract void execHandlePacket(P packet, Supplier<Context> context, @Nullable Level world, @Nullable Player player);
 
 }

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEntityPrevPos> {
@@ -19,7 +19,7 @@ public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEnti
 
 	public SPacketUpdateEntityPrevPos(Entity entity) {
 		this.entityId = entity.getId();
-		Vector3d p = entity.position();
+		Vec3 p = entity.position();
 		this.x = (float) p.x;
 		this.y = (float) p.y;
 		this.z = (float) p.z;
@@ -28,7 +28,7 @@ public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEnti
 	}
 
 	@Override
-	public SPacketUpdateEntityPrevPos fromBytes(PacketBuffer buf) {
+	public SPacketUpdateEntityPrevPos fromBytes(FriendlyByteBuf buf) {
 		SPacketUpdateEntityPrevPos result = new SPacketUpdateEntityPrevPos();
 		
 		result.entityId = buf.readInt();
@@ -41,7 +41,7 @@ public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEnti
 	}
 
 	@Override
-	public void toBytes(SPacketUpdateEntityPrevPos packet, PacketBuffer buf) {
+	public void toBytes(SPacketUpdateEntityPrevPos packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeFloat(packet.x);
 		buf.writeFloat(packet.y);

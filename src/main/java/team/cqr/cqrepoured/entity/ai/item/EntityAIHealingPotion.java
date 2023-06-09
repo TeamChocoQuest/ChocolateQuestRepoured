@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -58,7 +58,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		Entity attackTarget = this.entity.getTarget();
 
 		if (this.isHealing) {
-			this.entity.swing(Hand.MAIN_HAND);
+			this.entity.swing(InteractionHand.MAIN_HAND);
 		} else {
 			if (attackTarget == null) {
 				this.startHealing();
@@ -68,9 +68,9 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		boolean flag = true;
 		if (attackTarget != null) {
 			double alertRadius = CQRConfig.SERVER_CONFIG.mobs.alertRadius.get();
-			Vector3d vec1 = this.entity.position().add(alertRadius, alertRadius * 0.5D, alertRadius);
-			Vector3d vec2 = this.entity.position().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
-			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+			Vec3 vec1 = this.entity.position().add(alertRadius, alertRadius * 0.5D, alertRadius);
+			Vec3 vec2 = this.entity.position().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
+			AABB aabb = new AABB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<Entity> possibleEnts = this.entity.level.getEntities(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 
 			if (!possibleEnts.isEmpty()) {
@@ -78,7 +78,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				int count = -1;
 				double distance = Double.MAX_VALUE;
 				for (Entity e2 : possibleEnts) {
-					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.getX() - 4, e2.getY() - 2, e2.getZ() - 4, e2.getX() + 4, e2.getY() + 2, e2.getZ() + 4);
+					AABB aabb1 = new AABB(e2.getX() - 4, e2.getY() - 2, e2.getZ() - 4, e2.getX() + 4, e2.getY() + 2, e2.getZ() + 4);
 					List<Entity> list = e2.level.getEntities(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 					double d = this.entity.distanceToSqr(e2);
 					if (list.size() > count || (list.size() == count && d < distance)) {
@@ -122,19 +122,19 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 
 		float yaw = (float) Math.toDegrees(Math.atan2(-x, z));
 		float pitch = (float) Math.toDegrees(Math.atan2(-y, d));
-		this.entity.yBodyRot += MathHelper.clamp(MathHelper.wrapDegrees(yaw - this.entity.yBodyRot), -deltaYaw, deltaYaw);
-		this.entity.yBodyRot = MathHelper.wrapDegrees(this.entity.yBodyRot);
-		this.entity.xRot += MathHelper.clamp(MathHelper.wrapDegrees(pitch - this.entity.xRot), -deltaPitch, deltaPitch);
-		this.entity.xRot = MathHelper.clamp(this.entity.xRot, -90.0F, 90.0F);
+		this.entity.yBodyRot += Mth.clamp(Mth.wrapDegrees(yaw - this.entity.yBodyRot), -deltaYaw, deltaYaw);
+		this.entity.yBodyRot = Mth.wrapDegrees(this.entity.yBodyRot);
+		this.entity.xRot += Mth.clamp(Mth.wrapDegrees(pitch - this.entity.xRot), -deltaPitch, deltaPitch);
+		this.entity.xRot = Mth.clamp(this.entity.xRot, -90.0F, 90.0F);
 		this.entity.yHeadRot = this.entity.yBodyRot;
 	}
 
 	private void checkAndPerformBlock() {
 		if (!this.entity.isBlocking()) {
-			ItemStack offhand = this.entity.getItemInHand(Hand.OFF_HAND);
+			ItemStack offhand = this.entity.getItemInHand(InteractionHand.OFF_HAND);
 
 			if (offhand.getItem().isShield(offhand, this.entity)) {
-				this.entity.startUsingItem(Hand.OFF_HAND);;
+				this.entity.startUsingItem(InteractionHand.OFF_HAND);;
 			}
 		}
 	}
@@ -154,7 +154,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				this.entity.swapWeaponAndPotionSlotItemStacks();
 			}
 			this.entity.stopUsingItem();
-			this.entity.startUsingItem(Hand.MAIN_HAND);
+			this.entity.startUsingItem(InteractionHand.MAIN_HAND);
 		}
 	}
 

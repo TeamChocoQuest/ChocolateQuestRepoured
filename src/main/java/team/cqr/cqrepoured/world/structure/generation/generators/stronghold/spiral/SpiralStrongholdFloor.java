@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Random;
 
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;

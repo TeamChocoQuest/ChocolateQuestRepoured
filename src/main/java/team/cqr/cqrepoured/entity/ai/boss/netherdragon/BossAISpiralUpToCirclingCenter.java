@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -11,9 +11,9 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 
 	private static final double MIN_DISTANCE_TO_HOME = 8;
 	private static final double MIN_DISTANCE_TO_NODE = 3;
-	private Vector3d v = new Vector3d(5, 2, 0);
-	private Vector3d center = new Vector3d(0, 0, 0);
-	private Vector3d targetPos = this.center;
+	private Vec3 v = new Vec3(5, 2, 0);
+	private Vec3 center = new Vec3(0, 0, 0);
+	private Vec3 targetPos = this.center;
 	private double angleIncrement = 45;
 
 	public BossAISpiralUpToCirclingCenter(EntityCQRNetherDragon entity) {
@@ -23,14 +23,14 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 
 	@Override
 	public boolean canUse() {
-		Vector3d center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		Vec3 center = new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5 * BossAICircleAroundLocation.DELTA_Y);
 		return this.entity.position().distanceTo(center) <= MIN_DISTANCE_TO_HOME && this.entity.getY() < yCirclingCenter;
 	}
 
 	@Override
 	public boolean canContinueToUse() {
-		Vector3d center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		Vec3 center = new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5 * BossAICircleAroundLocation.DELTA_Y);
 		return this.entity.getY() < yCirclingCenter;
 	}
@@ -39,7 +39,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 	public void start() {
 		super.start();
 		this.entity.setFlyingUp(true);
-		this.center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		this.center = new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 		this.targetPos = this.center.add(this.v);
 		this.entity.getNavigation().moveTo(this.targetPos.x, this.targetPos.y, this.targetPos.z, getSpeed());
 	}
@@ -64,7 +64,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 	public void stop() {
 		super.stop();
 		this.entity.setFlyingUp(false);
-		this.center = new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
+		this.center = new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ());
 	}
 
 }

@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -20,11 +20,11 @@ public class ContainerBackpack extends Container {
 
     private final ItemStack stack;
 
-    public ContainerBackpack(int containerID, PlayerInventory playerInv, PacketBuffer data) {
+    public ContainerBackpack(int containerID, Inventory playerInv, FriendlyByteBuf data) {
         this(containerID, playerInv, playerInv.player.getMainHandItem());
     }
 
-    public ContainerBackpack(int containerID, PlayerInventory playerInv, ItemStack stack) {
+    public ContainerBackpack(int containerID, Inventory playerInv, ItemStack stack) {
         super(CQRContainerTypes.BACKPACK.get(), containerID);
         this.stack = stack;
         LazyOptional<IItemHandler> inv = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
@@ -42,7 +42,7 @@ public class ContainerBackpack extends Container {
             } else {
                 this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142) {
                     @Override
-                    public boolean mayPickup(PlayerEntity playerIn) {
+                    public boolean mayPickup(Player playerIn) {
                         return false;
                     }
                 });
@@ -68,12 +68,12 @@ public class ContainerBackpack extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity playerIn) {
+    public boolean stillValid(Player playerIn) {
         return playerIn.getMainHandItem().getItem() == stack.getItem();
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot slot = this.slots.get(index);
 
         if (slot == null) {

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.entity.CreatureEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
@@ -8,7 +8,7 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class EntityAIPanicElectrocute extends PanicGoal {
 
-	public EntityAIPanicElectrocute(CreatureEntity creature, double speedIn) {
+	public EntityAIPanicElectrocute(PathfinderMob creature, double speedIn) {
 		super(creature, speedIn);
 	}
 

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.mage.AbstractModelMageGeo;
@@ -19,7 +19,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR>
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/mage_hidden.png");
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
-	public RenderCQRMage(EntityRendererManager rendermanagerIn, AbstractModelMageGeo<T> model) {
+	public RenderCQRMage(Context rendermanagerIn, AbstractModelMageGeo<T> model) {
 		super(rendermanagerIn, model);
 		
 		this.addLayer(new LayerGlowingAreasGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -41,17 +41,17 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR>
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, T currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, T currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, T currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, T currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 		
 	}
 

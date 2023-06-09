@@ -18,9 +18,9 @@ import java.util.Properties;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.crash.ReportedException;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 
 public class FileIOUtil {
 
@@ -28,20 +28,20 @@ public class FileIOUtil {
 		return (dir, name) -> name.endsWith(".nbt");
 	}
 
-	public static File getCQRDataFile(ServerWorld level, String fileName) {
+	public static File getCQRDataFile(ServerLevel level, String fileName) {
 		return new File(level.getDataStorage().dataFolder, "CQR/" + fileName);
 	}
 
-	public static Path getCQRDataPath(ServerWorld level, String fileName) {
+	public static Path getCQRDataPath(ServerLevel level, String fileName) {
 		return level.getDataStorage().dataFolder.toPath()
 				.resolve("CQR/" + fileName);
 	}
 
-	public static void writeNBT(File file, CompoundNBT nbt) {
+	public static void writeNBT(File file, CompoundTag nbt) {
 		writeNBT(file.toPath(), nbt);
 	}
 
-	public static CompoundNBT readNBT(File file) {
+	public static CompoundTag readNBT(File file) {
 		return readNBT(file.toPath());
 	}
 
@@ -89,12 +89,12 @@ public class FileIOUtil {
 		return read(file.toPath(), reader);
 	}
 
-	public static void writeNBT(Path file, CompoundNBT nbt) {
+	public static void writeNBT(Path file, CompoundTag nbt) {
 		write(file, out -> CompressedStreamTools.writeCompressed(nbt, out));
 	}
 
-	public static CompoundNBT readNBT(Path file) {
-		return read(file, (IOFunction<InputStream, CompoundNBT>) CompressedStreamTools::readCompressed);
+	public static CompoundTag readNBT(Path file) {
+		return read(file, (IOFunction<InputStream, CompoundTag>) CompressedStreamTools::readCompressed);
 	}
 
 	public static void writeProperties(Path file, Properties properties) {

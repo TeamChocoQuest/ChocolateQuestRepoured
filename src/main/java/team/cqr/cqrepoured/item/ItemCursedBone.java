@@ -1,21 +1,27 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.entity.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -49,12 +55,12 @@ public class ItemCursedBone extends ItemLore {
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (!worldIn.isClientSide && this.spawnEntity((PlayerEntity) entityLiving, worldIn, stack)) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+		if (!worldIn.isClientSide && this.spawnEntity((Player) entityLiving, worldIn, stack)) {
 			stack.hurtAndBreak(1, entityLiving, e -> e.broadcastBreakEvent(e.getUsedItemHand()));
 		}
-		if (entityLiving instanceof ServerPlayerEntity) {
-			((ServerPlayerEntity) entityLiving).getCooldowns().addCooldown(this, 20);
+		if (entityLiving instanceof ServerPlayer) {
+			((ServerPlayer) entityLiving).getCooldowns().addCooldown(this, 20);
 		}
 		if (stack.getDamageValue() >= stack.getMaxDamage()) {
 			return ItemStack.EMPTY;
@@ -62,14 +68,14 @@ public class ItemCursedBone extends ItemLore {
 		return super.finishUsingItem(stack, worldIn, entityLiving);
 	}
 
-	public Optional<Entity> spawnEntity(BlockPos pos, World worldIn, ItemStack item, LivingEntity summoner, ISummoner isummoner) {
+	public Optional<Entity> spawnEntity(BlockPos pos, Level worldIn, ItemStack item, LivingEntity summoner, ISummoner isummoner) {
 		if (worldIn.isEmptyBlock(pos.relative(Direction.UP, 1)) && worldIn.isEmptyBlock(pos.relative(Direction.UP, 2))) {
 			// DONE: Spawn circle
 			ResourceLocation resLoc = new ResourceLocation(CQRMain.MODID, "skeleton");
 			// Get entity id
 			if (hasCursedBoneEntityTag(item)) {
 				try {
-					CompoundNBT tag = item.getTag();// .getCompoundTag("tag");
+					CompoundTag tag = item.getTag();// .getCompoundTag("tag");
 					resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
 					if (!ForgeRegistries.ENTITIES.containsKey(resLoc)) {
 						resLoc = new ResourceLocation(CQRMain.MODID, "skeleton");
@@ -88,10 +94,10 @@ public class ItemCursedBone extends ItemLore {
 		return Optional.empty();
 	}
 
-	public boolean spawnEntity(PlayerEntity player, World worldIn, ItemStack item) {
-		Vector3d start = player.getEyePosition(1.0F);
-		Vector3d end = start.add(player.getLookAngle().scale(5.0D));
-		BlockRayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, player));
+	public boolean spawnEntity(Player player, Level worldIn, ItemStack item) {
+		Vec3 start = player.getEyePosition(1.0F);
+		Vec3 end = start.add(player.getLookAngle().scale(5.0D));
+		BlockHitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.OUTLINE, ClipContext.FluidMode.NONE, player));
 
 		if (result != null) {
 			return this.spawnEntity(result.getBlockPos(), worldIn, item, player, null).isPresent();
@@ -100,9 +106,9 @@ public class ItemCursedBone extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
@@ -111,20 +117,20 @@ public class ItemCursedBone extends ItemLore {
 	}
 
 	@Override
-	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
 		super.releaseUsing(stack, worldIn, entityLiving, timeLeft);
-		if (entityLiving instanceof PlayerEntity) {
-			((PlayerEntity) entityLiving).getCooldowns().addCooldown(this, 20);
+		if (entityLiving instanceof Player) {
+			((Player) entityLiving).getCooldowns().addCooldown(this, 20);
 		}
 		// stack.damageItem(1, entityLiving);
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		if (hasCursedBoneEntityTag(stack)) {
 			try {
-				CompoundNBT tag = stack.getTag();// .getCompoundTag("tag");
+				CompoundTag tag = stack.getTag();// .getCompoundTag("tag");
 				tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", this.getEntityName(tag.getString("entity_to_summon"))));
 				//tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
 			} catch (Exception ex) {
@@ -152,11 +158,11 @@ public class ItemCursedBone extends ItemLore {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity clickedEntity) {
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity clickedEntity) {
 		if (player.isCreative() && player.isCrouching() && !player.level.isClientSide) {
 			if (clickedEntity instanceof MobEntity && clickedEntity.isAlive()) {
 				if (!stack.hasTag()) {
-					stack.setTag(new CompoundNBT());
+					stack.setTag(new CompoundTag());
 				}
 				stack.getTag().putString("entity_to_summon", EntityList.getKey(clickedEntity).toString());
 				return true;

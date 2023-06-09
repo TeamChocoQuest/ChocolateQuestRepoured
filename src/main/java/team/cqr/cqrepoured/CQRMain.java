@@ -4,14 +4,15 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,8 +26,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import software.bernie.geckolib3.GeckoLib;
@@ -98,26 +98,26 @@ public class CQRMain {
 	public static boolean isCubicChunksInstalled;
 	public static boolean isAW2Installed;
 
-	public static final ItemGroup CQR_ITEMS_TAB = new ItemGroup(CQRMain.MODID + "_items") {
+	public static final CreativeModeTab CQR_ITEMS_TAB = new CreativeModeTab(CQRMain.MODID + "_items") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD.get());
 		}
 
 	};
-	public static final ItemGroup CQR_BLOCKS_TAB = new ItemGroup(CQRMain.MODID + "_blocks") {
+	public static final CreativeModeTab CQR_BLOCKS_TAB = new CreativeModeTab(CQRMain.MODID + "_blocks") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK.get());
 		}
 	};
-	public static final ItemGroup CQR_CREATIVE_TOOL_TAB = new ItemGroup(CQRMain.MODID + "_creative_tools") {
+	public static final CreativeModeTab CQR_CREATIVE_TOOL_TAB = new CreativeModeTab(CQRMain.MODID + "_creative_tools") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER.get());
 		}
 	};
-	public static final ItemGroup CQR_BANNERS_TAB = new ItemGroup(CQRMain.MODID + "_banners") {
+	public static final CreativeModeTab CQR_BANNERS_TAB = new CreativeModeTab(CQRMain.MODID + "_banners") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.SKULL_BANNER_PATTERN);
@@ -134,20 +134,20 @@ public class CQRMain {
 
 		}
 	};
-	public static final ItemGroup CQR_DUNGEON_PLACER_TAB = new ItemGroup(CQRMain.MODID + "_dungeon_placers") {
+	public static final CreativeModeTab CQR_DUNGEON_PLACER_TAB = new CreativeModeTab(CQRMain.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.APPLE);
 			// return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
 		}
 	};
-	public static final ItemGroup CQR_EXPORTER_CHEST_TAB = new ItemGroup(CQRMain.MODID + "_exporter_chests") {
+	public static final CreativeModeTab CQR_EXPORTER_CHEST_TAB = new CreativeModeTab(CQRMain.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE.get());
 		}
 	};
-	public static final ItemGroup CQR_SPAWN_EGG_TAB = new ItemGroup(CQRMain.MODID + "_spawn_eggs") {
+	public static final CreativeModeTab CQR_SPAWN_EGG_TAB = new CreativeModeTab(CQRMain.MODID + "_spawn_eggs") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.PILLAGER_SPAWN_EGG);

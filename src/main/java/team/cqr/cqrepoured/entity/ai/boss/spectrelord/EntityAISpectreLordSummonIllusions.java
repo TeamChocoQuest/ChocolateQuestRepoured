@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceContext.BlockMode;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ClipContext.BlockMode;
+import net.minecraft.world.level.ClipContext.FluidMode;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.server.level.ServerLevel;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -49,15 +49,15 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 	}
 
 	private void summonIllusions() {
-		Vector3d start = this.entity.getEyePosition(1.0F);
+		Vec3 start = this.entity.getEyePosition(1.0F);
 		double d = this.random.nextDouble() * 360.0D;
 
 		for (int i = 0; i < this.amount; i++) {
 			double d1 = d + ((double) i / (double) this.amount + (this.random.nextDouble() - 0.5D) * 0.1D) * 360.0D;
-			Vector3d look = Vector3d.directionFromRotation(30.0F, (float) d1);
-			Vector3d end = start.add(look.scale(8.0D));
-			RayTraceContext rtc = new RayTraceContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
-			BlockRayTraceResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(start, end, false, true, false);
+			Vec3 look = Vec3.directionFromRotation(30.0F, (float) d1);
+			Vec3 end = start.add(look.scale(8.0D));
+			ClipContext rtc = new ClipContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
+			BlockHitResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(start, end, false, true, false);
 
 			double x;
 			double y;
@@ -82,10 +82,10 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			EntitySpectreLordIllusion illusion = new EntitySpectreLordIllusion(this.world, this.entity, this.lifeTime, i == 0, i == 2);
 			illusion.setPos(x, y, z);
 			this.entity.tryEquipSummon(illusion, this.world.random);
-			illusion.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(illusion.blockPosition()), SpawnReason.EVENT, null, null);
+			illusion.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(illusion.blockPosition()), MobSpawnType.EVENT, null, null);
 			this.entity.addSummonedEntityToList(illusion);
 			this.world.addFreshEntity(illusion);
-			((ServerWorld) this.world).addParticle(ParticleTypes.EFFECT, illusion.getX(), illusion.getY() + 0.5D * illusion.getBbHeight(), illusion.getZ(), /*8,*/ 0.25D, 0.25D, 0.25D/*, 0.5D*/);
+			((ServerLevel) this.world).addParticle(ParticleTypes.EFFECT, illusion.getX(), illusion.getY() + 0.5D * illusion.getBbHeight(), illusion.getZ(), /*8,*/ 0.25D, 0.25D, 0.25D/*, 0.5D*/);
 		}
 	}
 
@@ -96,15 +96,15 @@ public class EntityAISpectreLordSummonIllusions extends AbstractEntityAISpell<En
 			if (e.distanceToSqr(this.entity) <= 32.0D * 32.0D) {
 				heal += 0.05F;
 				e.remove();
-				((ServerWorld) this.world).addParticle(ParticleTypes.INSTANT_EFFECT, e.getX(), e.getY() + e.getBbHeight() * 0.5D, e.getZ(), /*4,*/ 0.25D, 0.25D, 0.25D/*, 0.5D*/);
+				((ServerLevel) this.world).addParticle(ParticleTypes.INSTANT_EFFECT, e.getX(), e.getY() + e.getBbHeight() * 0.5D, e.getZ(), /*4,*/ 0.25D, 0.25D, 0.25D/*, 0.5D*/);
 			}
 		}
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 8.0D, this.entity.getY() - 0.5D, this.entity.getZ() - 8.0D, this.entity.getX() + 8.0D, this.entity.getY() + this.entity.getBbHeight() + 0.5D, this.entity.getZ() + 8.0D);
+		AABB aabb = new AABB(this.entity.getX() - 8.0D, this.entity.getY() - 0.5D, this.entity.getZ() - 8.0D, this.entity.getX() + 8.0D, this.entity.getY() + this.entity.getBbHeight() + 0.5D, this.entity.getZ() + 8.0D);
 		Faction faction = this.entity.getFaction();
 		for (LivingEntity e : this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> TargetUtil.PREDICATE_ATTACK_TARGET.apply(e) && (faction == null || !faction.isAlly(e)))) {
 			heal += 0.05F;
 			e.hurt(DamageSource.mobAttack(this.entity).bypassArmor(), 4.0F);
-			e.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 100, 1, false, false));
+			e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1, false, false));
 		}
 		this.entity.heal(this.entity.getMaxHealth() * heal);
 		// TODO spawn shockwave entity

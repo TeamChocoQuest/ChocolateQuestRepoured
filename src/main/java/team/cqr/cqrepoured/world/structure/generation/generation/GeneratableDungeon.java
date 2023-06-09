@@ -5,16 +5,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.Mutable;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.Mutable;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.ISeedReader;
@@ -24,7 +25,6 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.StructureProcessorList;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.init.CQRStructures;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
@@ -142,10 +142,10 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		return groundData;
 	}
 
-	public GeneratableDungeon(TemplateManager templateManager, CompoundNBT nbt) {
+	public GeneratableDungeon(TemplateManager templateManager, CompoundTag nbt) {
 		super(CQRStructures.GENERATABLE_DUNGEON, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
-		this.pos = NBTUtil.readBlockPos(nbt.getCompound("pos"));
+		this.pos = NbtUtils.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(nbt.getCompound("protectedRegionBuilder"));
 		this.undergroundOffset = 0;
@@ -154,9 +154,9 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT nbt) {
+	protected void addAdditionalSaveData(CompoundTag nbt) {
 		nbt.putString("dungeonName", this.dungeonName);
-		nbt.put("pos", NBTUtil.writeBlockPos(this.pos));
+		nbt.put("pos", NbtUtils.writeBlockPos(this.pos));
 		nbt.put("level", this.level.save());
 		nbt.put("protectedRegionBuilder", this.protectedRegionBuilder.writeToNBT());
 		nbt.putInt("x0", this.boundingBox.x0);
@@ -209,7 +209,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 					continue;
 				}
 
-				int dy = y - MathHelper.clamp(y, data.min, data.max);
+				int dy = y - Mth.clamp(y, data.min, data.max);
 				maxNoise = Math.max(NoiseUtil.getContribution(dx, dy, dz), maxNoise);
 			}
 		}
@@ -236,12 +236,12 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		// TODO temp solution
 		private int undergroundOffset;
 
-		public Builder(ServerWorld level, BlockPos pos, DungeonBase config) {
+		public Builder(ServerLevel level, BlockPos pos, DungeonBase config) {
 			this(level, pos, config.getDungeonName(), config.getDungeonMob());
 			this.undergroundOffset = config.getUnderGroundOffset();
 		}
 
-		public Builder(ServerWorld level, BlockPos pos, String dungeonName, String defaultInhabitant) {
+		public Builder(ServerLevel level, BlockPos pos, String dungeonName, String defaultInhabitant) {
 			this.dungeonName = dungeonName;
 			this.pos = pos;
 			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(defaultInhabitant, level, pos.getX(), pos.getZ());

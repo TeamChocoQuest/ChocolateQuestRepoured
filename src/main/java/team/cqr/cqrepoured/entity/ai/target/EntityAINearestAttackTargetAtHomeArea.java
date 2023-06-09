@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
 import com.google.common.base.Predicate;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
@@ -53,7 +53,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 
 	@Override
 	public void start() {
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getCirclingCenter().offset(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
+		AABB aabb = new AABB(this.entity.getCirclingCenter().offset(SIZE_VECTOR), this.entity.getCirclingCenter().subtract(SIZE_VECTOR));
 		List<LivingEntity> possibleTargets = this.entity.level.getEntitiesOfClass(LivingEntity.class, aabb, this.predicate);
 		if (!possibleTargets.isEmpty()) {
 			this.entity.setTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
@@ -128,7 +128,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 	}
 
 	private boolean isInHomeZone(LivingEntity possibleTarget) {
-		double distance = possibleTarget.position().distanceTo(new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
+		double distance = possibleTarget.position().distanceTo(new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
 		return Math.abs(distance) <= 48 + 8 * (this.world.getDifficulty().ordinal());
 	}
 

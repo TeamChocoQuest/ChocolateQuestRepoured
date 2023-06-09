@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.NonNullList;
 
 public abstract class TileEntityExporterChest extends ChestTileEntity {
 
-	public TileEntityExporterChest(TileEntityType<? extends TileEntityExporterChest> type) {
+	public TileEntityExporterChest(BlockEntityType<? extends TileEntityExporterChest> type) {
 		super(type);
 	}
 
 	public abstract ResourceLocation getLootTable();
 
 	@Override
-	public CompoundNBT save(CompoundNBT pCompound) {
+	public CompoundTag save(CompoundTag pCompound) {
 		super.save(pCompound);
 		pCompound.remove("Items");
 		return pCompound;

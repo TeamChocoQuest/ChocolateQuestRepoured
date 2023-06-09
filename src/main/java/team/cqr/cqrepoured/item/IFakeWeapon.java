@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public interface IFakeWeapon<T extends Item & ISupportWeapon<?>> {
 

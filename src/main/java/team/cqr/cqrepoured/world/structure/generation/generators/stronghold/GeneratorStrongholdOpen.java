@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
@@ -80,7 +80,7 @@ public class GeneratorStrongholdOpen extends LegacyDungeonGenerator<DungeonStron
 		if (rgd % 2 != 0) {
 			rgd++;
 		}
-		rgd = MathHelper.ceil(Math.sqrt(rgd));
+		rgd = Mth.ceil(Math.sqrt(rgd));
 		if (rgd % 2 == 0) {
 			rgd++;
 		}

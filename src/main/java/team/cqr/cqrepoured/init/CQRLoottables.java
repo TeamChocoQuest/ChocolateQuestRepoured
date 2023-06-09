@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.loot.LootTables;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTables;
 import team.cqr.cqrepoured.CQRMain;
 
 import java.util.Collections;

@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
@@ -130,7 +130,7 @@ public class DungeonPlacement {
 		}
 	}
 
-	public MutableVec3d transform(Vector3d vec) {
+	public MutableVec3d transform(Vec3 vec) {
 		return transform(vec.x, vec.y, vec.z, this.partPos, this.mirror, this.rotation);
 	}
 
@@ -138,7 +138,7 @@ public class DungeonPlacement {
 		return transform(x, y, z, this.partPos, this.mirror, this.rotation);
 	}
 
-	public static MutableVec3d transform(Vector3d vec, Mirror mirror, Rotation rotation) {
+	public static MutableVec3d transform(Vec3 vec, Mirror mirror, Rotation rotation) {
 		return transform(vec.x, vec.y, vec.z, BlockPos.ZERO, mirror, rotation);
 	}
 
@@ -146,7 +146,7 @@ public class DungeonPlacement {
 		return transform(x, y, z, BlockPos.ZERO, mirror, rotation);
 	}
 
-	public static MutableVec3d transform(Vector3d vec, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static MutableVec3d transform(Vec3 vec, BlockPos origin, Mirror mirror, Rotation rotation) {
 		return transform(vec.x, vec.y, vec.z, origin, mirror, rotation);
 	}
 
@@ -191,11 +191,11 @@ public class DungeonPlacement {
 		return state.mirror(mirror).rotate(rotation);
 	}
 
-	public void transform(TileEntity blockEntity) {
+	public void transform(BlockEntity blockEntity) {
 		transform(blockEntity, this.mirror, this.rotation);
 	}
 
-	public static void transform(TileEntity blockEntity, Mirror mirror, Rotation rotation) {
+	public static void transform(BlockEntity blockEntity, Mirror mirror, Rotation rotation) {
 		blockEntity.mirror(mirror);
 		blockEntity.rotate(rotation);
 	}

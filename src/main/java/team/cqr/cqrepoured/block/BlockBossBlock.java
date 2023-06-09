@@ -1,21 +1,21 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.inventory.container.SimpleNamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
 import team.cqr.cqrepoured.inventory.ContainerBossBlock;
 import team.cqr.cqrepoured.tileentity.BlockEntityContainer;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 
 public class BlockBossBlock extends Block {
 
-	private static final ITextComponent CONTAINER_TITLE = new TranslationTextComponent("container.boss_block");
+	private static final TextComponent CONTAINER_TITLE = new TranslationTextComponent("container.boss_block");
 
 	public BlockBossBlock() {
 		super(Properties.of(Material.STONE)
@@ -40,25 +40,25 @@ public class BlockBossBlock extends Block {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new TileEntityBoss();
 	}
 
 	@Override
-	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if (!pPlayer.isCreative()) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 		if (!pLevel.isClientSide) {
 			pPlayer.openMenu(this.getMenuProvider(pState, pLevel, pPos));
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
 	@Nullable
-	public INamedContainerProvider getMenuProvider(BlockState pState, World pLevel, BlockPos pPos) {
-		TileEntity tileEntity = pLevel.getBlockEntity(pPos);
+	public INamedContainerProvider getMenuProvider(BlockState pState, Level pLevel, BlockPos pPos) {
+		BlockEntity tileEntity = pLevel.getBlockEntity(pPos);
 		if (!(tileEntity instanceof BlockEntityContainer)) {
 			return null;
 		}

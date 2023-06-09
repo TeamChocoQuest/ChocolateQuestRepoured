@@ -2,23 +2,22 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.UUID;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FlyingEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.FlyingPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion.Mode;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -34,18 +33,18 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRenderFire, IAnimatable, IAnimationTickable {
+public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFire, IAnimatable, IAnimationTickable {
 
 	protected Entity summoner;
 	protected Entity target;
 	protected boolean attacking = false;
 	protected boolean isLeftSkull = false;
 
-	public EntityFlyingSkullMinion(World world) {
+	public EntityFlyingSkullMinion(Level world) {
 		this(CQREntityTypes.FLYING_SKULL.get(), world);
 	}
 
-	public EntityFlyingSkullMinion(EntityType<? extends EntityFlyingSkullMinion> type, World worldIn) {
+	public EntityFlyingSkullMinion(EntityType<? extends EntityFlyingSkullMinion> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
 		this.setHealth(1F);
@@ -110,7 +109,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			if (this.target != null && this.target.isAlive()) {
 				this.updateDirection();
 			}
-			Vector3d v = this.getDeltaMovement();
+			Vec3 v = this.getDeltaMovement();
 			v = v.normalize();
 			// this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			this.setDeltaMovement(v.multiply(0.4, 0.25, 0.4));
@@ -120,15 +119,15 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			}
 
 		} else if (this.summoner != null) {
-			Vector3d v = this.summoner.getLookAngle();
-			v = new Vector3d(v.x, 2.25D, v.z);
+			Vec3 v = this.summoner.getLookAngle();
+			v = new Vec3(v.x, 2.25D, v.z);
 			v = v.normalize();
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, this.isLeftSkull ? 270 : 90);
-			Vector3d targetPos = this.summoner.position().add(v);
+			Vec3 targetPos = this.summoner.position().add(v);
 			this.getLookControl().setLookAt(this.summoner, 30, 30);
 			if (this.position().distanceTo(targetPos) > 1) {
-				Vector3d velo = targetPos.subtract(this.position());
+				Vec3 velo = targetPos.subtract(this.position());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
 				// this.setVelocity(velo.x, velo.y * 1.5, velo.z);
@@ -177,7 +176,7 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 				this.level.explode(this.summoner, this.position().x(), this.position().y(), this.position().z(), 2 * strengthMultiplier, false, Mode.NONE);
 			}
 			if(!this.level.isClientSide) {
-				ServerWorld sw = (ServerWorld) this.level;
+				ServerLevel sw = (ServerLevel) this.level;
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, 0.5F, 1);
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, -0.5F, 1);
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, -0.5F, 0.0F, -0.5F, 1);
@@ -200,17 +199,17 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("attacking", this.attacking);
 		compound.putDouble("vX", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().x);
 		compound.putDouble("vY", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().y);
 		compound.putDouble("vZ", this.getDeltaMovement() == null ? 0D : this.getDeltaMovement().z);
 		if (this.summoner != null && this.summoner.isAlive()) {
-			compound.put("summonerID", NBTUtil.createUUID(this.summoner.getUUID()));
+			compound.put("summonerID", NbtUtils.createUUID(this.summoner.getUUID()));
 		}
 		if (this.target != null && this.target.isAlive()) {
-			compound.put("targetID", NBTUtil.createUUID(this.target.getUUID()));
+			compound.put("targetID", NbtUtils.createUUID(this.target.getUUID()));
 		}
 	}
 
@@ -227,18 +226,18 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.attacking = compound.getBoolean("attacking");
 		double x, y, z;
 		x = compound.getDouble("vX");
 		y = compound.getDouble("vY");
 		z = compound.getDouble("vZ");
-		this.setDeltaMovement(new Vector3d(x, y, z));
+		this.setDeltaMovement(new Vec3(x, y, z));
 		if (compound.contains("targetID")) {
-			UUID id = net.minecraft.nbt.NBTUtil.loadUUID(compound.getCompound("targetID"));
+			UUID id = NbtUtils.loadUUID(compound.getCompound("targetID"));
 			if (this.level != null) {
-				for (Entity ent : this.level.getEntities(this, new AxisAlignedBB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+				for (Entity ent : this.level.getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getUUID().equals(id)) {
 						this.target = ent;
 					}
@@ -246,9 +245,9 @@ public class EntityFlyingSkullMinion extends FlyingEntity implements IDontRender
 			}
 		}
 		if (compound.contains("summonerID")) {
-			UUID id = net.minecraft.nbt.NBTUtil.loadUUID(compound.getCompound("summonerID"));
+			UUID id = NbtUtils.loadUUID(compound.getCompound("summonerID"));
 			if (this.level != null) {
-				for (Entity ent : this.level.getEntities(this, new AxisAlignedBB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+				for (Entity ent : this.level.getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getUUID().equals(id)) {
 						this.summoner = ent;
 					}

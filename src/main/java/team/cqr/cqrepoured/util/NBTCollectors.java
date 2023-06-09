@@ -16,17 +16,17 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.nbt.ByteArrayNBT;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 
 public class NBTCollectors {
 
 	private static final Set<Collector.Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 	private static final Set<Collector.Characteristics> CH_NOID = Collections.emptySet();
 
-	public static <T extends INBT> Collector<T, ListNBT, ListNBT> toList() {
-		return new CollectorImpl<>(ListNBT::new, ListNBT::add, (list1, list2) -> {
+	public static <T extends INBT> Collector<T, ListTag, ListTag> toList() {
+		return new CollectorImpl<>(ListTag::new, ListTag::add, (list1, list2) -> {
 			list1.addAll(list2);
 			return list1;
 		}, CH_ID);
@@ -42,37 +42,37 @@ public class NBTCollectors {
 		}, CH_NOID);
 	}
 
-	public static <T> Collector<T, CompoundNBT, CompoundNBT> toCompound(Function<T, ?> keyFunc, Function<T, INBT> valueFunc) {
+	public static <T> Collector<T, CompoundTag, CompoundTag> toCompound(Function<T, ?> keyFunc, Function<T, INBT> valueFunc) {
 		return toCompound((compound, t) -> compound.put(String.valueOf(keyFunc.apply(t)), valueFunc.apply(t)));
 	}
 
-	public static <T> Collector<T, CompoundNBT, CompoundNBT> toCompound(BiConsumer<CompoundNBT, T> accumulator) {
-		return new CollectorImpl<>(CompoundNBT::new, accumulator, (compound1, compound2) -> {
+	public static <T> Collector<T, CompoundTag, CompoundTag> toCompound(BiConsumer<CompoundTag, T> accumulator) {
+		return new CollectorImpl<>(CompoundTag::new, accumulator, (compound1, compound2) -> {
 			Set<String> keys = compound2.getAllKeys();
 			keys.forEach(k -> compound1.put(k, compound2.get(k)));
 			return compound1;
 		}, CH_ID);
 	}
 
-	public static <K, V> Collector<Map.Entry<K, V>, CompoundNBT, CompoundNBT> entryToCompound(Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
 		return toCompound(keyFunc.compose(Map.Entry::getKey), valueFunc.compose(Map.Entry::getValue));
 	}
 
-	public static <K, V> Collector<Map.Entry<K, V>, CompoundNBT, CompoundNBT> entryToCompound(Function<V, INBT> valueFunc) {
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<V, INBT> valueFunc) {
 		return entryToCompound(Function.identity(), valueFunc);
 	}
 
-	public static <K, V> CompoundNBT collect(Map<K, V> map, Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
+	public static <K, V> CompoundTag collect(Map<K, V> map, Function<K, ?> keyFunc, Function<V, INBT> valueFunc) {
 		return map.entrySet()
 				.stream()
 				.collect(entryToCompound(keyFunc, valueFunc));
 	}
 
-	public static <K, V> CompoundNBT collect(Map<K, V> map, Function<V, INBT> valueFunc) {
+	public static <K, V> CompoundTag collect(Map<K, V> map, Function<V, INBT> valueFunc) {
 		return collect(map, Function.identity(), valueFunc);
 	}
 
-	public static <V> CompoundNBT collect(Int2ObjectMap<V> map, Function<V, INBT> valueFunc) {
+	public static <V> CompoundTag collect(Int2ObjectMap<V> map, Function<V, INBT> valueFunc) {
 		return map.int2ObjectEntrySet()
 				.stream()
 				.collect(toCompound(Int2ObjectMap.Entry::getIntKey, valueFunc.compose(Int2ObjectMap.Entry::getValue)));
@@ -85,12 +85,12 @@ public class NBTCollectors {
 
 	}
 
-	public static <T extends INBT, V> Int2ObjectMap<V> toInt2ObjectMap(CompoundNBT nbt, Function<T, V> valueFunc) {
+	public static <T extends INBT, V> Int2ObjectMap<V> toInt2ObjectMap(CompoundTag nbt, Function<T, V> valueFunc) {
 		return toInt2ObjectMap(nbt, (int k, T t) -> valueFunc.apply(t));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends INBT, V> Int2ObjectMap<V> toInt2ObjectMap(CompoundNBT nbt, IntObjectFunction<T, V> valueFunc) {
+	public static <T extends INBT, V> Int2ObjectMap<V> toInt2ObjectMap(CompoundTag nbt, IntObjectFunction<T, V> valueFunc) {
 		return nbt.getAllKeys()
 				.stream()
 				.collect(new CollectorImpl<>(Int2ObjectOpenHashMap::new, (map, key) -> {

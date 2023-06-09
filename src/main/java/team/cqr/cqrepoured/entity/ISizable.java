@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntitySize;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.entity.PartEntity;
 
 public interface ISizable {
@@ -59,11 +59,11 @@ public interface ISizable {
 
 	// These two methods NEED to be called on read/write entity to NBT!! OTherwise it won't get saved!
 	// Used to save the scale data
-	default void callOnWriteToNBT(CompoundNBT compound) {
+	default void callOnWriteToNBT(CompoundTag compound) {
 		compound.putFloat("sizeScaling", this.getSizeVariation());
 	}
 	// Used to load the scale data
-	default void callOnReadFromNBT(CompoundNBT compound) {
+	default void callOnReadFromNBT(CompoundTag compound) {
 		this.setSizeVariation(compound.contains("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F);
 	}
 

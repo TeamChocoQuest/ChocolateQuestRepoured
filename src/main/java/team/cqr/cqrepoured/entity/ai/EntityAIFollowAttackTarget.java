@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 import java.util.EnumSet;
@@ -37,7 +37,7 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public void start() {
-		Vector3d v = this.entity.getLastPosAttackTarget();
+		Vec3 v = this.entity.getLastPosAttackTarget();
 		this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.0D);
 	}
 
@@ -49,7 +49,7 @@ public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEnti
 	@Override
 	public void tick() {
 		if (this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.tickCount) {
-			Vector3d v = this.entity.getLastPosAttackTarget();
+			Vec3 v = this.entity.getLastPosAttackTarget();
 			this.entity.getNavigation().moveTo(v.x, v.y, v.z, 1.0D);
 		}
 		if (!this.entity.isPathFinding()) {

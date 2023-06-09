@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.PacketDistributor.TargetPoint;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor.TargetPoint;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
@@ -16,12 +16,12 @@ import java.util.*;
 
 public class TileEntityDataManager {
 
-	private final TileEntity tileEntity;
+	private final BlockEntity tileEntity;
 	private final List<DataEntry<?>> entries = new ArrayList<>();
 	private final Set<String> usedNames = new HashSet<>();
 	private boolean isDirty = false;
 
-	public TileEntityDataManager(@Nonnull TileEntity tileEntity) {
+	public TileEntityDataManager(@Nonnull BlockEntity tileEntity) {
 		if (tileEntity == null) {
 			throw new NullPointerException();
 		}
@@ -50,7 +50,7 @@ public class TileEntityDataManager {
 		return this.entries.get(id);
 	}
 
-	public CompoundNBT write(CompoundNBT compound) {
+	public CompoundTag write(CompoundTag compound) {
 		for (DataEntry<?> entry : this.entries) {
 			compound.put(entry.getName(), entry.write());
 		}
@@ -58,7 +58,7 @@ public class TileEntityDataManager {
 		return compound;
 	}
 
-	public void read(CompoundNBT compound) {
+	public void read(CompoundTag compound) {
 		for (DataEntry<?> entry : this.entries) {
 			if (compound.contains(entry.getName())) {
 				entry.read(compound.get(entry.getName()));
@@ -75,7 +75,7 @@ public class TileEntityDataManager {
 
 	public void checkIfDirtyAndSync() {
 		if (this.isDirty) {
-			World world = this.tileEntity.getLevel();
+			Level world = this.tileEntity.getLevel();
 
 			if (world != null) {
 				List<DataEntry<?>> entryList = new ArrayList<>();
@@ -111,7 +111,7 @@ public class TileEntityDataManager {
 		}
 	}
 
-	public TileEntity getTileEntity() {
+	public BlockEntity getTileEntity() {
 		return this.tileEntity;
 	}
 

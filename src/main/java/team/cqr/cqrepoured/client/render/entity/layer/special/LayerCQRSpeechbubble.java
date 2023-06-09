@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.client.render.entity.layer.special;
 
 import java.util.function.Function;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Matrix4f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
@@ -25,13 +25,13 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> ext
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if (CQRConfig.SERVER_CONFIG.general.enableSpeechBubbles.get() && entity.isChatting()) {
 			matrixStack.pushPose();
 			matrixStack.mulPose(Vector3f.YP.rotation(netHeadYaw));
 			matrixStack.translate(-0.5D, entity.getBbHeight() / entity.getSizeVariation() + 0.25D, 0.0D);
 
-			IVertexBuilder builder = bufferIn.getBuffer(CQRRenderTypes.speechbubble(entity.getCurrentSpeechBubble().getResourceLocation()));
+			VertexConsumer builder = bufferIn.getBuffer(CQRRenderTypes.speechbubble(entity.getCurrentSpeechBubble().getResourceLocation()));
 			Matrix4f matrix = matrixStack.last().pose();
 
 			builder.vertex(matrix, 0, 1, 0).uv(0, 0).uv2(packedLightIn).endVertex();

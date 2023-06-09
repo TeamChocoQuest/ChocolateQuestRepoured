@@ -11,31 +11,31 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.network.play.server.SEntityVelocityPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
@@ -122,7 +122,7 @@ public class ItemUtil {
 	}
 
 	/**
-	 * Copied from {@link PlayerEntity#attackTargetEntityWithCurrentItem(Entity)}
+	 * Copied from {@link Player#attackTargetEntityWithCurrentItem(Entity)}
 	 * 
 	 * @param stack
 	 * @param player
@@ -142,7 +142,7 @@ public class ItemUtil {
 	 * @param sweepingRangeVertical        (vanilla: 0.25D)
 	 * @param sweepingKnockback            (vanilla: 0.4F)
 	 */
-	public static void attackTarget(ItemStack stack, PlayerEntity player, Entity targetEntity, boolean fakeCrit, float damageBonus, float damageMultiplier, boolean sweepingEnabled, float sweepingDamage, float sweepingDamageMultiplicative, double sweepingRangeHorizontal, double sweepingRangeVertical,
+	public static void attackTarget(ItemStack stack, Player player, Entity targetEntity, boolean fakeCrit, float damageBonus, float damageMultiplier, boolean sweepingEnabled, float sweepingDamage, float sweepingDamageMultiplicative, double sweepingRangeHorizontal, double sweepingRangeVertical,
                                     float sweepingKnockback) {
 		// CQR: Replacement for ForgeHooks.onPlayerAttackTarget to prevent infinity loop
 		if (MinecraftForge.EVENT_BUS.post(new AttackEntityEvent(player, targetEntity))) {
@@ -173,12 +173,12 @@ public class ItemUtil {
 					i = i + EnchantmentHelper.getKnockbackBonus(player);
 
 					if (player.isSprinting() && flag) {
-						player.level.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
+						player.level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0F, 1.0F);
 						++i;
 						flag1 = true;
 					}
 
-					boolean flag2 = flag && player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(Effects.BLINDNESS) && !player.isPassenger() && targetEntity instanceof LivingEntity;
+					boolean flag2 = flag && player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.hasEffect(MobEffects.BLINDNESS) && !player.isPassenger() && targetEntity instanceof LivingEntity;
 					flag2 = flag2 && !player.isSprinting();
 
 					CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(player, targetEntity, flag2, flag2 ? 1.5F : 1.0F);
@@ -195,7 +195,7 @@ public class ItemUtil {
 
 					// CQR: Disable sweep attack when sweepingEnabled is false
 					if (sweepingEnabled && flag && !flag2 && !flag1 && player.isOnGround() && d0 < player.getSpeed()) {
-						ItemStack itemstack = player.getItemInHand(Hand.MAIN_HAND);
+						ItemStack itemstack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
 						if (itemstack.getItem() instanceof SwordItem) {
 							flag3 = true;
@@ -215,16 +215,16 @@ public class ItemUtil {
 						}
 					}
 
-					Vector3d motion = player.getDeltaMovement();
+					Vec3 motion = player.getDeltaMovement();
 					
 					boolean flag5 = targetEntity.hurt(DamageSource.playerAttack(player), f);
 
 					if (flag5) {
 						if (i > 0) {
 							if (targetEntity instanceof LivingEntity) {
-								((LivingEntity) targetEntity).knockback(i * 0.5F, MathHelper.sin(player.yRot * 0.017453292F), (-MathHelper.cos(player.yRot * 0.017453292F)));
+								((LivingEntity) targetEntity).knockback(i * 0.5F, Mth.sin(player.yRot * 0.017453292F), (-Mth.cos(player.yRot * 0.017453292F)));
 							} else {
-								targetEntity.push(-MathHelper.sin(player.yRot * 0.017453292F) * i * 0.5F, 0.1D, MathHelper.cos(player.yRot * 0.017453292F) * i * 0.5F);
+								targetEntity.push(-Mth.sin(player.yRot * 0.017453292F) * i * 0.5F, 0.1D, Mth.cos(player.yRot * 0.017453292F) * i * 0.5F);
 							}
 
 							player.setDeltaMovement(player.getDeltaMovement().multiply(0.6, 1.0, 0.6));
@@ -238,39 +238,39 @@ public class ItemUtil {
 
 							double entityReachDistanceSqr = getEntityReachDistanceSqr(player);
 							// CQR: Allow modification of sweeping hitbox
-							AxisAlignedBB aabb = targetEntity.getBoundingBox().expandTowards(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal);
+							AABB aabb = targetEntity.getBoundingBox().expandTowards(sweepingRangeHorizontal, sweepingRangeVertical, sweepingRangeHorizontal);
 							for (LivingEntity entitylivingbase : player.level.getEntitiesOfClass(LivingEntity.class, aabb)) {
 								// CQR: Increase sweeping range when players reach distance is higher
 								if (entitylivingbase != player && entitylivingbase != targetEntity && !player.isAlliedTo(entitylivingbase) && player.distanceToSqr(entitylivingbase) < entityReachDistanceSqr) {
 									// CQR: Allow modification of sweeping knockback strength
-									entitylivingbase.knockback(sweepingKnockback, MathHelper.sin(player.yRot * 0.017453292F), (-MathHelper.cos(player.yRot * 0.017453292F)));
+									entitylivingbase.knockback(sweepingKnockback, Mth.sin(player.yRot * 0.017453292F), (-Mth.cos(player.yRot * 0.017453292F)));
 									entitylivingbase.hurt(DamageSource.playerAttack(player), f3);
 								}
 							}
 
-							player.level.playSound((PlayerEntity)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
+							player.level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
 							player.sweepAttack();
 						}
 
-						if (targetEntity instanceof ServerPlayerEntity && targetEntity.hurtMarked) {
-							((ServerPlayerEntity) targetEntity).connection.send(new SEntityVelocityPacket(targetEntity));
+						if (targetEntity instanceof ServerPlayer && targetEntity.hurtMarked) {
+							((ServerPlayer) targetEntity).connection.send(new SEntityVelocityPacket(targetEntity));
 							targetEntity.hurtMarked = false;
 							targetEntity.setDeltaMovement(motion);
 						}
 
 						if (flag2) {
-							player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.0F);
+							player.level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.0F);
 							player.crit(targetEntity);
 						} else if (fakeCrit) { // CQR: Allow fake crits to happen
-							player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.2F);
+							player.level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_CRIT, player.getSoundSource(), 1.0F, 1.2F);
 							player.crit(targetEntity);
 						}
 
 						if (!flag2 && !fakeCrit && !flag3) {
 							if (flag) {
-								player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0F, 1.0F);
+								player.level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0F, 1.0F);
 							} else {
-								player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, player.getSoundSource(), 1.0F, 1.0F);
+								player.level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_WEAK, player.getSoundSource(), 1.0F, 1.0F);
 							}
 						}
 
@@ -301,8 +301,8 @@ public class ItemUtil {
 							itemstack1.hurtEnemy((LivingEntity) entity, player);
 
 							if (itemstack1.isEmpty()) {
-								ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, Hand.MAIN_HAND);
-								player.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+								ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, InteractionHand.MAIN_HAND);
+								player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 							}
 						}
 
@@ -314,15 +314,15 @@ public class ItemUtil {
 								targetEntity.setSecondsOnFire(j * 4);
 							}
 
-							if (player.level instanceof ServerWorld && f5 > 2.0F) {
+							if (player.level instanceof ServerLevel && f5 > 2.0F) {
 								int k = (int) (f5 * 0.5D);
-								((ServerWorld)targetEntity.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR, targetEntity.getX(), targetEntity.getY(0.5D), targetEntity.getZ(), k, 0.1D, 0.0D, 0.1D, 0.2D);
+								((ServerLevel)targetEntity.level).sendParticles(ParticleTypes.DAMAGE_INDICATOR, targetEntity.getX(), targetEntity.getY(0.5D), targetEntity.getZ(), k, 0.1D, 0.0D, 0.1D, 0.2D);
 							}
 						}
 
 						player.causeFoodExhaustion(0.1F);
 					} else {
-						player.level.playSound((PlayerEntity) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0F, 1.0F);
+						player.level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, player.getSoundSource(), 1.0F, 1.0F);
 
 						if (flag4) {
 							targetEntity.clearFire();
@@ -333,7 +333,7 @@ public class ItemUtil {
 		}
 	}
 
-	private static double getEntityReachDistanceSqr(PlayerEntity player) {
+	private static double getEntityReachDistanceSqr(Player player) {
 		double d = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
 		if (!player.isCreative()) {
 			d -= 0.5D;

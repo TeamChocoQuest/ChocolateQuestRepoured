@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.datasync;
 
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.inventory.InventoryBlockEntity;
 
 public class DataEntryInventory extends DataEntryObject<InventoryBlockEntity> {
@@ -27,12 +27,12 @@ public class DataEntryInventory extends DataEntryObject<InventoryBlockEntity> {
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		this.value.write(buf);
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value.read(buf);
 	}
 

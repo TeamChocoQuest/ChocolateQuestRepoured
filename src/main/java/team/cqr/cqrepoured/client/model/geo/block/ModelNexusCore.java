@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.model.geo.block;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRAnimations;

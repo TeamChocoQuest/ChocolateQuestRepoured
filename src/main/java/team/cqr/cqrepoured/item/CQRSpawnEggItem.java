@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.item;
 
 import java.util.function.Supplier;
 
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 
 public class CQRSpawnEggItem extends ForgeSpawnEggItem {

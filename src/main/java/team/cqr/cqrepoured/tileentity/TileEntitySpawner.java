@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Difficulty;
 import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
@@ -56,30 +56,30 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		return this.save(new CompoundNBT());
+	public CompoundTag getUpdateTag() {
+		return this.save(new CompoundTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		this.dataManager.read(pkt.getTag());
 	}
 
@@ -103,13 +103,13 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 		if (!this.level.isClientSide) {
 			this.level.destroyBlock(this.worldPosition, false);
 
-			List<CompoundNBT> entitiesToSpawn = new ArrayList<>();
+			List<CompoundTag> entitiesToSpawn = new ArrayList<>();
 
 			for (int i = 0; i < this.inventory.getContainerSize(); i++) {
 				ItemStack stack = this.inventory.getItem(i);
 
 				if (!stack.isEmpty() && stack.hasTag()) {
-					CompoundNBT nbt = stack.getTag().getCompound("EntityIn");
+					CompoundTag nbt = stack.getTag().getCompound("EntityIn");
 
 					while (!stack.isEmpty()) {
 						entitiesToSpawn.add(nbt);
@@ -122,7 +122,7 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 		}
 	}
 
-	protected Entity spawnEntityFromNBT(CompoundNBT entityTag) {
+	protected Entity spawnEntityFromNBT(CompoundTag entityTag) {
 		if (entityTag.isEmpty()) {
 			return null;
 		}
@@ -148,9 +148,9 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 
 			this.level.addFreshEntity(entity);
 
-			ListNBT passengers = entityTag.getList("Passengers", Constants.NBT.TAG_COMPOUND);
+			ListTag passengers = entityTag.getList("Passengers", Constants.NBT.TAG_COMPOUND);
 			for (INBT passengerNBT : passengers) {
-				Entity passenger = this.spawnEntityFromNBT((CompoundNBT) passengerNBT);
+				Entity passenger = this.spawnEntityFromNBT((CompoundTag) passengerNBT);
 				passenger.startRiding(entity);
 			}
 		}
@@ -161,7 +161,7 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 	protected boolean isNonCreativePlayerInRange(double range) {
 		if (range > 0.0D) {
 			double d = range * range;
-			for (PlayerEntity player : this.level.players()) {
+			for (Player player : this.level.players()) {
 				if (!player.isCreative() && !player.isSpectator() && player.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ()) < d) {
 					return true;
 				}

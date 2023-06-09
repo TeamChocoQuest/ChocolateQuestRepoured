@@ -3,15 +3,15 @@ package team.cqr.cqrepoured.entity;
 import java.util.Optional;
 import java.util.Set;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
-import net.minecraft.util.Hand;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -124,12 +124,12 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public static String ANIM_NAME_BLOCKING_LEFT = ANIM_NAME_PREFIX + "arms.left.block";
 	public static String ANIM_NAME_BLOCKING_RIGHT = ANIM_NAME_PREFIX + "arms.right.block";
 
-	public default <E extends AbstractEntityCQR & IAnimatableCQR> Hand getLeftHand(E animatable) {
-		return animatable.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> InteractionHand getLeftHand(E animatable) {
+		return animatable.isLeftHanded() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 	}
 
-	public default <E extends AbstractEntityCQR & IAnimatableCQR> Hand getRightHand(E animatable) {
-		return !animatable.isLeftHanded() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> InteractionHand getRightHand(E animatable) {
+		return !animatable.isLeftHanded() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 	}
 
 	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateRightArmSwing(AnimationEvent<E> event) {
@@ -145,7 +145,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 	public static String ANIM_NAME_SWING_NORMAL_LEFT = ANIM_NAME_PREFIX + "arms.left.item-use";
 	public static String ANIM_NAME_SWING_NORMAL_RIGHT = ANIM_NAME_PREFIX + "arms.right.item-use";
 	
-	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandSwing(Hand hand, boolean leftHand, AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandSwing(InteractionHand hand, boolean leftHand, AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
 		if (!animatable.isTwoHandedAnimationRunning(animatable)) {
 			if (animatable.isSwinging(hand, event)) {
@@ -194,7 +194,7 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return animatable.predicateHandPose(animatable.getLeftHand(animatable), true, event);
 	}
 
-	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandPose(Hand hand, boolean leftHand, AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & IAnimatableCQR> PlayState predicateHandPose(InteractionHand hand, boolean leftHand, AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
 		ItemStack handItemStack = animatable.getItemInHand(hand);
 		if (!handItemStack.isEmpty() && !animatable.isTwoHandedAnimationRunning(animatable)) {
@@ -315,13 +315,13 @@ public interface IAnimatableCQR extends IAnimatable, IAnimationTickable {
 		return PlayState.STOP;
 	}
 	
-	public <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(Hand hand, AnimationEvent<E> event);
+	public <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(InteractionHand hand, AnimationEvent<E> event);
 	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
 		if(animatable instanceof MobEntity) {
 			return ((MobEntity)animatable).swinging;
 		}
-		return animatable.isSwinging(Hand.MAIN_HAND, event);
+		return animatable.isSwinging(InteractionHand.MAIN_HAND, event);
 	}
 
 	public boolean isSpinToWinActive();

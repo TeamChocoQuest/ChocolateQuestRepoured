@@ -5,44 +5,44 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion.Mode;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
@@ -105,14 +105,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private SubEntityNetherDragonSegment[] dragonBodyParts = new SubEntityNetherDragonSegment[this.INITIAL_SEGMENT_COUNT];
 
 	// private boolean mouthOpen = false;
-	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>defineId(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> SKELE_COUNT = EntityDataManager.<Integer>defineId(EntityCQRNetherDragon.class, DataSerializers.INT);
-	private static final DataParameter<Integer> PHASE = EntityDataManager.<Integer>defineId(EntityCQRNetherDragon.class, DataSerializers.INT);
-	private static final DataParameter<Boolean> SPIT_FIRE = EntityDataManager.<Boolean>defineId(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> SERVER_PART_LENGTH = EntityDataManager.<Integer>defineId(EntityCQRNetherDragon.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> MOUTH_OPEN = SynchedEntityData.<Boolean>defineId(EntityCQRNetherDragon.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> SKELE_COUNT = SynchedEntityData.<Integer>defineId(EntityCQRNetherDragon.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.<Integer>defineId(EntityCQRNetherDragon.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> SPIT_FIRE = SynchedEntityData.<Boolean>defineId(EntityCQRNetherDragon.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> SERVER_PART_LENGTH = SynchedEntityData.<Integer>defineId(EntityCQRNetherDragon.class, EntityDataSerializers.INT);
 
 	// AI stuff
-	private Vector3d targetLocation = null;
+	private Vec3 targetLocation = null;
 	private boolean flyingUp = false;
 
 	private static List<ResourceLocation> breakableBlocks = new ArrayList<>();
@@ -137,11 +137,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return 0F;
 	}
 
-	public EntityCQRNetherDragon(World world) {
+	public EntityCQRNetherDragon(Level world) {
 		this(CQREntityTypes.NETHER_DRAGON.get(), world);
 	}
 	
-	public EntityCQRNetherDragon(EntityType<? extends EntityCQRNetherDragon> type, World worldIn) {
+	public EntityCQRNetherDragon(EntityType<? extends EntityCQRNetherDragon> type, Level worldIn) {
 		super(type, worldIn);
 		this.xpReward = 100;
 		this.noPhysics = true;
@@ -325,7 +325,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	@Override
-	public boolean canBeAffected(EffectInstance potioneffectIn) {
+	public boolean canBeAffected(MobEffectInstance potioneffectIn) {
 		return false;
 	}
 
@@ -340,7 +340,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public World getWorld() {
+	public Level getWorld() {
 		return this.level;
 	}
 
@@ -353,7 +353,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Shoot fireball
 			this.mouthTimer = 10;
 
-			Vector3d velocity = target.position().subtract(this.position());
+			Vec3 velocity = target.position().subtract(this.position());
 			velocity = velocity.normalize().scale(1.5);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.getX() + velocity.x, this.getY() + velocity.y, this.getZ() + velocity.z, this.level, this);
 			// proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
@@ -379,7 +379,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public boolean doHurtTarget(Entity entityIn) {
 		if (super.doHurtTarget(entityIn)) {
 			if (this.phase > 1 && (entityIn instanceof LivingEntity)) {
-				((LivingEntity) entityIn).addEffect(new EffectInstance(Effects.WITHER, 100 + entityIn.level.getDifficulty().ordinal() * 40, 3));
+				((LivingEntity) entityIn).addEffect(new MobEffectInstance(MobEffects.WITHER, 100 + entityIn.level.getDifficulty().ordinal() * 40, 3));
 			}
 			if (!this.level.isClientSide) {
 				this.mouthTimer = 5;
@@ -409,17 +409,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 			double straightDegree = 0.05D + (1.0 / (i + 1)) * 0.5D;
 
-			double calculatedRotatedX = -MathHelper.sin(angle) * straightDegree;
-			double calculatedRotatedZ = MathHelper.cos(angle) * straightDegree;
+			double calculatedRotatedX = -Mth.sin(angle) * straightDegree;
+			double calculatedRotatedZ = Mth.cos(angle) * straightDegree;
 
 			double x = this.dragonBodyParts[i].getX();
 			double y = this.dragonBodyParts[i].getY();
 			double z = this.dragonBodyParts[i].getZ();
 
-			Vector3d deltaPos = new Vector3d(x - headerX, y - headerY, z - headerZ);
+			Vec3 deltaPos = new Vec3(x - headerX, y - headerY, z - headerZ);
 			deltaPos = deltaPos.normalize();
 
-			deltaPos = deltaPos.add(new Vector3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
+			deltaPos = deltaPos.add(new Vec3(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
 
 			// Dont change these values, they are important for the correct allignment of the segments!!!
 			double f = i != 0 ? 0.378D : 0.338D;
@@ -431,7 +431,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Set rotated position
 			this.dragonBodyParts[i].setPos(targetX, targetY, targetZ);
 
-			double distance = MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
+			double distance = Mth.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
 			// Finally apply the new rotation -> Rotate the block
 			this.dragonBodyParts[i].yRot = (float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F;
 			this.dragonBodyParts[i].xRot = -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI);
@@ -474,12 +474,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				indx = this.getRandom().nextInt(this.dragonBodyParts.length);
 			}
 			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx - 1];
-			Vector3d v = this.dragonBodyParts[indx].position();
+			Vec3 v = this.dragonBodyParts[indx].position();
 			if (this.hasAttackTarget() && this.getRandom().nextDouble() > 0.6) {
 				v = this.getTarget().position().subtract(v).add(0, 0.5, 0);
 			} else {
 				v = pre.position().subtract(v);
-				v = v.add(new Vector3d(0, 1 - (2 * this.getRandom().nextDouble()), 0));
+				v = v.add(new Vec3(0, 1 - (2 * this.getRandom().nextDouble()), 0));
 				if (this.getRandom().nextBoolean()) {
 					v = VectorUtil.rotateVectorAroundY(v, 45);
 					int angle = this.getRandom().nextInt(61);
@@ -501,12 +501,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public void breatheFire() {
 		double motionX, motionZ;
-		Vector3d look = this.getLookAngle();
+		Vec3 look = this.getLookAngle();
 		motionX = look.x;
 		motionZ = look.z;
-		Vector3d flameStartPos = this.position().add((new Vector3d(motionX, 0, motionZ).scale((this.getBbWidth() / 2) - 0.25).subtract(0, 0.2, 0)));
+		Vec3 flameStartPos = this.position().add((new Vec3(motionX, 0, motionZ).scale((this.getBbWidth() / 2) - 0.25).subtract(0, 0.2, 0)));
 		flameStartPos = flameStartPos.add(0, this.getBbHeight() / 2, 0);
-		Vector3d v = new Vector3d(motionX, 0, motionZ).scale(0.75);
+		Vec3 v = new Vec3(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
 		double MAX_LENGTH = 24;
 		double angle = ANGLE_MAX / MAX_LENGTH;
@@ -515,8 +515,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if (this.level.isClientSide) {
 			for (int i = 0; i <= MAX_LENGTH; i++) {
 				for (int iY = 0; iY <= 10; iY++) {
-					Vector3d vOrig = v;
-					v = new Vector3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
+					Vec3 vOrig = v;
+					v = new Vec3(v.x, -0.15 + iY * dY, v.z).scale(1.5);
 
 					this.level.addParticle(ParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
 					this.level.addParticle(ParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
@@ -526,7 +526,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				v = VectorUtil.rotateVectorAroundY(v, angle);
 			}
 		} else {
-			v = new Vector3d(motionX, 0, motionZ).scale(0.75);
+			v = new Vec3(motionX, 0, motionZ).scale(0.75);
 			double angleTan = Math.tan(Math.toRadians(ANGLE_MAX / 2D));
 			MAX_LENGTH *= 1.25;
 			int count = 9;
@@ -535,9 +535,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			for (int i = 0; i < count; i++) {
 				double r = angleTan * currentLength;
 				// System.out.println("R=" + r);
-				Vector3d v2 = new Vector3d(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
-				Vector3d pCenter = flameStartPos.add(v2);
-				AxisAlignedBB aabb = new AxisAlignedBB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).deflate(0.25);
+				Vec3 v2 = new Vec3(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
+				Vec3 pCenter = flameStartPos.add(v2);
+				AABB aabb = new AABB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).deflate(0.25);
 				for (Entity ent : this.level.getEntities(this, aabb, TargetUtil.createPredicateNonAlly(this.getFaction()))) {
 					ent.setSecondsOnFire(8);
 					ent.hurt(DamageSource.ON_FIRE, 5);
@@ -556,17 +556,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	// Copied from ender dragon
-	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
+	private boolean destroyBlocksInAABB(AABB aabb) {
 		if (!CQRConfig.SERVER_CONFIG.bosses.netherDragonDestroysBlocks.get() || this.dead || !(this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) || this.level.isClientSide) {
 			return false;
 		}
 
-		int x1 = MathHelper.floor(aabb.minX);
-		int y1 = MathHelper.floor(aabb.minY);
-		int z1 = MathHelper.floor(aabb.minZ);
-		int x2 = MathHelper.floor(aabb.maxX);
-		int y2 = MathHelper.floor(aabb.maxY);
-		int z2 = MathHelper.floor(aabb.maxZ);
+		int x1 = Mth.floor(aabb.minX);
+		int y1 = Mth.floor(aabb.minY);
+		int z1 = Mth.floor(aabb.minZ);
+		int x2 = Mth.floor(aabb.maxX);
+		int y2 = Mth.floor(aabb.maxY);
+		int z2 = Mth.floor(aabb.maxZ);
 
 		boolean cancelled = false;
 		boolean blockDestroyed = false;
@@ -606,7 +606,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			double y = aabb.minY + (aabb.maxY - aabb.minY) * this.random.nextFloat();
 			double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * this.random.nextFloat();
 
-			((ServerWorld)this.level).sendParticles(ParticleTypes.EXPLOSION, x, y, z, 5, 0.0D, 0.0D, 0.0D, 0.25);
+			((ServerLevel)this.level).sendParticles(ParticleTypes.EXPLOSION, x, y, z, 5, 0.0D, 0.0D, 0.0D, 0.25);
 		}
 
 		return cancelled;
@@ -751,7 +751,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	@Override
-	protected PathNavigator createNavigation(World worldIn) {
+	protected PathNavigator createNavigation(Level worldIn) {
 		return new PathNavigateDirectLine(this, worldIn) {
 			
 			@Override
@@ -775,13 +775,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		super.writeSpawnData(buffer);
 		buffer.writeBoolean(this.entityData.get(MOUTH_OPEN));
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData) {
+	public void readSpawnData(FriendlyByteBuf additionalData) {
 		super.readSpawnData(additionalData);
 		this.entityData.set(MOUTH_OPEN, additionalData.readBoolean());
 	}
@@ -809,7 +809,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			if (this.dragonBodyParts.length > 0) {
 				SubEntityNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
 				if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-					this.dropExperience(MathHelper.floor(120), segment.getX(), segment.getY(), segment.getZ());
+					this.dropExperience(Mth.floor(120), segment.getX(), segment.getY(), segment.getZ());
 					this.level.explode(segment, segment.getX(), segment.getY(), segment.getZ(), 1, Mode.DESTROY);
 					this.removeLastSegment();
 				}
@@ -836,7 +836,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("segmentCount", this.segmentCount);
 		compound.putInt("phase", this.phase);
@@ -849,7 +849,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("segmentCount")) {
 			this.segmentCount = compound.getInt("segmentCount");
@@ -874,14 +874,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	protected void onFinalDeath() {
 		for (SubEntityNetherDragonSegment segment : this.dragonBodyParts) {
 			if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-				this.dropExperience(MathHelper.floor(120), segment.getX(), segment.getY(), segment.getZ());
+				this.dropExperience(Mth.floor(120), segment.getX(), segment.getY(), segment.getZ());
 			}
 			this.level.explode(segment, segment.getX(), segment.getY(), segment.getZ(), 1, Mode.DESTROY);
 			//this.level.removeEntityDangerously(segment);
 			segment.remove();
 		}
 		if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-			this.dropExperience(MathHelper.floor(800), this.getX(), this.getY(), this.getZ());
+			this.dropExperience(Mth.floor(800), this.getX(), this.getY(), this.getZ());
 		}
 		this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
 	}
@@ -910,7 +910,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	@Override
-	public void travel(Vector3d pTravelVector) {
+	public void travel(Vec3 pTravelVector) {
 		EntityUtil.move3D(this, pTravelVector.x(), pTravelVector.y(), pTravelVector.z(), this.getMoveControl().getSpeedModifier(), this.yRot, this.xRot);
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		/*this.motionX *= 0.9;
@@ -931,11 +931,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	// AI stuff
 	@Nullable
-	public Vector3d getTargetLocation() {
+	public Vec3 getTargetLocation() {
 		return this.targetLocation;
 	}
 
-	public void setTargetLocation(Vector3d newTarget) {
+	public void setTargetLocation(Vec3 newTarget) {
 		this.targetLocation = newTarget;
 	}
 
@@ -958,7 +958,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

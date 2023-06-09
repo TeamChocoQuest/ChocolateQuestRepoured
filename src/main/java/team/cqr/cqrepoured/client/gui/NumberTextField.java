@@ -5,7 +5,7 @@ import java.util.function.BooleanSupplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import team.cqr.cqrepoured.CQRMain;
 
@@ -25,8 +25,8 @@ public class NumberTextField<T extends Number & Comparable<T>> extends TextField
 	private final NumberParser<T> parser;
 	private boolean isValidating;
 
-	public NumberTextField(FontRenderer font, int x, int y, int width, int height, T def, @Nullable T min,
-			@Nullable T max, NumberParser<T> parser) {
+	public NumberTextField(Font font, int x, int y, int width, int height, T def, @Nullable T min,
+                           @Nullable T max, NumberParser<T> parser) {
 		super(font, x, y, width, height, null);
 		this.def = Objects.requireNonNull(def);
 		this.min = min;
@@ -55,33 +55,33 @@ public class NumberTextField<T extends Number & Comparable<T>> extends TextField
 		this.setNumber(def);
 	}
 
-	public static NumberTextField<Integer> integerTextField(FontRenderer font, int x, int y, int width, int height,
-			Integer def, @Nullable Integer min, @Nullable Integer max) {
+	public static NumberTextField<Integer> integerTextField(Font font, int x, int y, int width, int height,
+                                                            Integer def, @Nullable Integer min, @Nullable Integer max) {
 		return new NumberTextField<>(font, x, y, width, height, def, min, max, Integer::parseInt);
 	}
 
-	public static NumberTextField<Integer> integerTextField(FontRenderer font, int x, int y, int width, int height,
-			Integer def) {
+	public static NumberTextField<Integer> integerTextField(Font font, int x, int y, int width, int height,
+                                                            Integer def) {
 		return integerTextField(font, x, y, width, height, def, null, null);
 	}
 
-	public static NumberTextField<Integer> positiveIntegerTextField(FontRenderer font, int x, int y, int width,
-			int height, Integer def) {
+	public static NumberTextField<Integer> positiveIntegerTextField(Font font, int x, int y, int width,
+                                                                    int height, Integer def) {
 		return integerTextField(font, x, y, width, height, def, 0, null);
 	}
 
-	public static NumberTextField<Double> doubleTextField(FontRenderer font, int x, int y, int width, int height,
-			Double def, @Nullable Double min, @Nullable Double max) {
+	public static NumberTextField<Double> doubleTextField(Font font, int x, int y, int width, int height,
+                                                          Double def, @Nullable Double min, @Nullable Double max) {
 		return new NumberTextField<>(font, x, y, width, height, def, min, max, Double::parseDouble);
 	}
 
-	public static NumberTextField<Double> doubleTextField(FontRenderer font, int x, int y, int width, int height,
-			Double def) {
+	public static NumberTextField<Double> doubleTextField(Font font, int x, int y, int width, int height,
+                                                          Double def) {
 		return doubleTextField(font, x, y, width, height, def, null, null);
 	}
 
-	public static NumberTextField<Double> positiveDoubleTextField(FontRenderer font, int x, int y, int width,
-			int height, Double def) {
+	public static NumberTextField<Double> positiveDoubleTextField(Font font, int x, int y, int width,
+                                                                  int height, Double def) {
 		return doubleTextField(font, x, y, width, height, def, 0.0D, null);
 	}
 

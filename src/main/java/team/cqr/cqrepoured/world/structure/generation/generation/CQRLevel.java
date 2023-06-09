@@ -10,17 +10,17 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.FluidState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.math.SectionPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.feature.template.StructureProcessor;
 import team.cqr.cqrepoured.util.NBTCollectors;
@@ -35,7 +35,7 @@ public class CQRLevel implements ICQRLevel {
 		}
 
 		@Override
-		public void setBlockState(BlockPos pos, BlockState state, Consumer<TileEntity> blockEntityCallback) {
+		public void setBlockState(BlockPos pos, BlockState state, Consumer<BlockEntity> blockEntityCallback) {
 
 		}
 
@@ -46,7 +46,7 @@ public class CQRLevel implements ICQRLevel {
 
 		@Override
 		@Nullable
-		public TileEntity getBlockEntity(BlockPos pos) {
+		public BlockEntity getBlockEntity(BlockPos pos) {
 			return null;
 		}
 
@@ -60,7 +60,7 @@ public class CQRLevel implements ICQRLevel {
 	private final SectionPos center;
 	private final long seed;
 	private final Int2ObjectMap<CQRSection> sections;
-	private final IBlockReader blockReader = new IBlockReader() {
+	private final BlockGetter blockReader = new BlockGetter() {
 		@Override
 		public FluidState getFluidState(BlockPos pos) {
 			FluidState fluidState = this.getFluidState(pos);
@@ -74,7 +74,7 @@ public class CQRLevel implements ICQRLevel {
 		}
 
 		@Override
-		public TileEntity getBlockEntity(BlockPos pos) {
+		public BlockEntity getBlockEntity(BlockPos pos) {
 			return this.getBlockEntity(pos);
 		}
 	};
@@ -85,14 +85,14 @@ public class CQRLevel implements ICQRLevel {
 		this.sections = new Int2ObjectOpenHashMap<>();
 	}
 
-	public CQRLevel(CompoundNBT nbt) {
+	public CQRLevel(CompoundTag nbt) {
 		this.center = SectionPos.of(nbt.getInt("CenterX"), nbt.getInt("CenterY"), nbt.getInt("CenterZ"));
 		this.seed = nbt.getLong("Seed");
-		this.sections = NBTCollectors.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundNBT sectionNbt) -> new CQRSection(this, sectionNbt));
+		this.sections = NBTCollectors.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundTag sectionNbt) -> new CQRSection(this, sectionNbt));
 	}
 
-	public CompoundNBT save() {
-		CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag save() {
+		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("CenterX", this.center.x());
 		nbt.putInt("CenterY", this.center.y());
 		nbt.putInt("CenterZ", this.center.z());
@@ -159,7 +159,7 @@ public class CQRLevel implements ICQRLevel {
 	}
 
 	@Override
-	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<TileEntity> blockEntityCallback) {
+	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.getOrCreateSection(pos).setBlockState(pos, state, blockEntityCallback);
 	}
 
@@ -171,7 +171,7 @@ public class CQRLevel implements ICQRLevel {
 
 	@Override
 	@Nullable
-	public TileEntity getBlockEntity(BlockPos pos) {
+	public BlockEntity getBlockEntity(BlockPos pos) {
 		return this.getSection(pos).getBlockEntity(pos);
 	}
 
@@ -184,7 +184,7 @@ public class CQRLevel implements ICQRLevel {
 		return Collections.unmodifiableCollection(this.sections.values());
 	}
 
-	public IBlockReader asBlockReader() {
+	public BlockGetter asBlockReader() {
 		return this.blockReader;
 	}
 

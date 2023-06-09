@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.target.exterminator;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;

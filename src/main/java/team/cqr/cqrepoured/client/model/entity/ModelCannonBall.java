@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
 
@@ -34,7 +34,7 @@ public class ModelCannonBall<T extends ProjectileCannonBall> extends EntityModel
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack matrixStack, IVertexBuilder buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
+	public void renderToBuffer(PoseStack matrixStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha)
 	{
 		bb_main.render(matrixStack, buffer, packedLight, packedOverlay);
 	}

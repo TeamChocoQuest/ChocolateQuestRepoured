@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 
@@ -12,8 +12,8 @@ import java.util.function.Supplier;
 public class CPacketHandlerHookShotPlayerStop extends AbstractPacketHandler<SPacketHookShotPlayerStop> {
 
 	@Override
-	protected void execHandlePacket(SPacketHookShotPlayerStop packet, Supplier<Context> context, World world, PlayerEntity player) {
-		player.setDeltaMovement(Vector3d.ZERO);
+	protected void execHandlePacket(SPacketHookShotPlayerStop packet, Supplier<Context> context, Level world, Player player) {
+		player.setDeltaMovement(Vec3.ZERO);
 		player.hasImpulse = true;
 	}
 

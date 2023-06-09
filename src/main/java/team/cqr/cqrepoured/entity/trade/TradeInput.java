@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.trade;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Comparator;
 
@@ -69,19 +69,19 @@ public class TradeInput {
 		this.ignoreNBT = ignoreNBT;
 	}
 
-	public TradeInput(CompoundNBT compound) {
+	public TradeInput(CompoundTag compound) {
 		this.readFromNBT(compound);
 	}
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
-		compound.put("stack", this.stack.save(new CompoundNBT()));
+	public CompoundTag writeToNBT() {
+		CompoundTag compound = new CompoundTag();
+		compound.put("stack", this.stack.save(new CompoundTag()));
 		compound.putBoolean("ignoreMeta", this.ignoreMeta);
 		compound.putBoolean("ignoreNBT", this.ignoreNBT);
 		return compound;
 	}
 
-	public void readFromNBT(CompoundNBT compound) {
+	public void readFromNBT(CompoundTag compound) {
 		this.stack = ItemStack.of(compound.getCompound("stack"));
 		this.ignoreMeta = compound.getBoolean("ignoreMeta");
 		this.ignoreNBT = compound.getBoolean("ignoreNBT");

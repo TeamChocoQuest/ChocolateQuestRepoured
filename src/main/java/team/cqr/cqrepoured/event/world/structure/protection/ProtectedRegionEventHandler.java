@@ -25,7 +25,7 @@
 //import net.minecraft.util.Direction;
 //import net.minecraft.util.Hand;
 //import net.minecraft.util.datafix.FixTypes;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.math.ChunkPos;
 //import net.minecraft.util.math.RayTraceResult;
 //import net.minecraft.util.math.vector.Vector3d;

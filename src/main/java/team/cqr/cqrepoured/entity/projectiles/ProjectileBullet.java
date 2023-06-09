@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.EntityUtil;
@@ -56,17 +56,17 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	private LivingEntity shooter;
 	private EBulletType type;
 
-	public ProjectileBullet(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileBullet(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 		this.type = EBulletType.IRON;
 	}
 
-	public ProjectileBullet(double pX, double pY, double pZ, World world, EBulletType type) {
+	public ProjectileBullet(double pX, double pY, double pZ, Level world, EBulletType type) {
 		super(CQREntityTypes.PROJECTILE_BULLET.get(), world);
 		this.type = type;
 	}
 
-	public ProjectileBullet(LivingEntity shooter, World world, EBulletType type) {
+	public ProjectileBullet(LivingEntity shooter, Level world, EBulletType type) {
 		super(CQREntityTypes.PROJECTILE_BULLET.get(), shooter, world);
 		this.type = type;
 		this.shooter = shooter;
@@ -77,7 +77,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult) {
+	public void onHitEntity(EntityHitResult entityResult) {
 		Entity entity = entityResult.getEntity();
 
 		if (entity instanceof LivingEntity) {
@@ -97,7 +97,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result) {
+	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
 		this.remove();
 	}
@@ -126,12 +126,12 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.type.ordinal());
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer buffer) {
+	public void readSpawnData(FriendlyByteBuf buffer) {
 		this.type = EBulletType.values()[buffer.readInt()];
 	}
 
@@ -141,7 +141,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

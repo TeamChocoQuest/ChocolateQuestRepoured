@@ -1,26 +1,26 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityEndLaser extends EntityRotatingLaser {
 
-	public EntityEndLaser(World worldIn) {
+	public EntityEndLaser(Level worldIn) {
 		this(CQREntityTypes.END_LASER.get(), worldIn);
 	}
 	
-	public EntityEndLaser(EntityType<? extends EntityEndLaser> type, World world) {
+	public EntityEndLaser(EntityType<? extends EntityEndLaser> type, Level world) {
 		super(type, world);
 	}
 
-	public EntityEndLaser(World worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
+	public EntityEndLaser(Level worldIn, LivingEntity caster, float length, float deltaRotationYawPerTick, float deltaRotationPitchPerTick) {
 		super(CQREntityTypes.END_LASER.get(), worldIn, caster, length, deltaRotationYawPerTick, deltaRotationPitchPerTick);
 	}
 
@@ -70,7 +70,7 @@ public class EntityEndLaser extends EntityRotatingLaser {
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

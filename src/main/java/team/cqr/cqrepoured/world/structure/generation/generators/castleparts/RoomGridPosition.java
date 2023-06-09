@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import java.util.Objects;
 

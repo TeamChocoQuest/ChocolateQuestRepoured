@@ -1,30 +1,21 @@
 package team.cqr.cqrepoured.client.particle;
 
-import org.lwjgl.opengl.GL11;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.multiplayer.ClientLevel;
 
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particles.BasicParticleType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.CQRMain;
 
 public class ParticleBeam extends Particle {
 
-	public ParticleBeam(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+	public ParticleBeam(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn);
 		this.xd = xSpeedIn;
 		this.yd = ySpeedIn;
@@ -39,13 +30,13 @@ public class ParticleBeam extends Particle {
 		}
 
 		@Override
-		public Particle createParticle(BasicParticleType particleType, ClientWorld world, double posX, double posY, double posZ, double xSpeed, double ySpeed, double zSpeed) {
+		public Particle createParticle(BasicParticleType particleType, ClientLevel world, double posX, double posY, double posZ, double xSpeed, double ySpeed, double zSpeed) {
 			return new ParticleBeam(world, posX, posY, posZ, xSpeed, ySpeed, zSpeed);
 		}
 	}
 
 	@Override
-	public void render(IVertexBuilder buffer, ActiveRenderInfo pRenderInfo, float partialTicks) {
+	public void render(VertexConsumer buffer, ActiveRenderInfo pRenderInfo, float partialTicks) {
 		/*float f = 0.0F;
 		float f1 = 1.0F;
 		float f2 = 0.0F;

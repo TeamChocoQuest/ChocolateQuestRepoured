@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.util.math;
 
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.phys.Vec3;
 
 public class Square {
 
-	public final Vector3d vec1;
-	public final Vector3d vec2;
-	public final Vector3d vec3;
-	public final Vector3d vec4;
-	private final Vector3d normal;
+	public final Vec3 vec1;
+	public final Vec3 vec2;
+	public final Vec3 vec3;
+	public final Vec3 vec4;
+	private final Vec3 normal;
 
-	public Square(Vector3d vec1, Vector3d vec2, Vector3d vec3, Vector3d vec4) {
+	public Square(Vec3 vec1, Vec3 vec2, Vec3 vec3, Vec3 vec4) {
 		this.vec1 = vec1;
 		this.vec2 = vec2;
 		this.vec3 = vec3;
@@ -18,27 +18,27 @@ public class Square {
 		this.normal = vec2.subtract(vec1).cross(vec3.subtract(vec1));
 	}
 
-	public boolean isVecBehindPlane(Vector3d vec) {
+	public boolean isVecBehindPlane(Vec3 vec) {
 		return vec.subtract(this.vec1).dot(this.normal) >= 0.0D;
 	}
 
-	public Vector3d getVec1() {
+	public Vec3 getVec1() {
 		return this.vec1;
 	}
 
-	public Vector3d getVec2() {
+	public Vec3 getVec2() {
 		return this.vec2;
 	}
 
-	public Vector3d getVec3() {
+	public Vec3 getVec3() {
 		return this.vec3;
 	}
 
-	public Vector3d getVec4() {
+	public Vec3 getVec4() {
 		return this.vec4;
 	}
 
-	public Vector3d getNormal() {
+	public Vec3 getNormal() {
 		return this.normal;
 	}
 

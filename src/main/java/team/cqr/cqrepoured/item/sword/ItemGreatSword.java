@@ -4,24 +4,24 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -42,14 +42,14 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
 		ItemUtil.attackTarget(stack, player, entity, false, 0.0F, 1.0F, true, 2.0F, 0.0F, 1.25D, 0.25D, 0.5F);
 		return true;
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "great_sword");
 		/*
 		 * if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
@@ -62,7 +62,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 
 	// #TODO Needs tests
 	@Override
-	public void releaseUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+	public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
 		float range = 3F;
 		double mx = entityLiving.position().x - range;
 		double my = entityLiving.position().y - range;
@@ -71,7 +71,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 		double may = entityLiving.position().y + range;
 		double maz = entityLiving.position().z + range;
 
-		AxisAlignedBB bb = new AxisAlignedBB(mx, my, mz, max, may, maz);
+		AABB bb = new AABB(mx, my, mz, max, may, maz);
 
 		List<MobEntity> entitiesInAABB = worldIn.getEntitiesOfClass(MobEntity.class, bb);
 
@@ -91,8 +91,8 @@ public class ItemGreatSword extends ItemCQRWeapon {
 			}
 		}
 
-		if (entityLiving instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) entityLiving;
+		if (entityLiving instanceof Player) {
+			Player player = (Player) entityLiving;
 
 			float x = (float) -Math.sin(Math.toRadians(player.yRot));
 			float z = (float) Math.cos(Math.toRadians(player.yRot));
@@ -108,8 +108,8 @@ public class ItemGreatSword extends ItemCQRWeapon {
 			}
 
 			player.getCooldowns().addCooldown(stack.getItem(), this.specialAttackCooldown);
-			player.swing(Hand.MAIN_HAND);
-			worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, SoundEvents.GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+			player.swing(InteractionHand.MAIN_HAND);
+			worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, SoundEvents.GENERIC_EXPLODE, SoundSource.AMBIENT, 1.0F, 1.0F, false);
 			worldIn.addParticle(ParticleTypes.EXPLOSION, player.position().x + x, player.position().y + y + 1.5D, player.position().z + z, 0D, 0D, 0D);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(player.getUsedItemHand()));
 		}
@@ -126,14 +126,14 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(stack);
+		return InteractionResultHolder.success(stack);
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World level, Entity entity, int slot, boolean selected) {
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
 		if (!(entity instanceof LivingEntity)) {
 			return;
 		}
@@ -143,7 +143,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 		LivingEntity entityLiving = (LivingEntity) entity;
 		ItemStack offhand = entityLiving.getMainHandItem();
 		if (!offhand.isEmpty()) {
-			entityLiving.addEffect(new EffectInstance(CQRPotions.TWOHANDED, 30, 1));
+			entityLiving.addEffect(new MobEffectInstance(CQRPotions.TWOHANDED, 30, 1));
 		}
 	}
 

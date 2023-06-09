@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.mixin.forge;
 
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import net.minecraft.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;

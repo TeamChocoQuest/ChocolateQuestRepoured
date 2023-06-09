@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileCannonBall;
@@ -86,7 +86,7 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 					this.entity.getLookControl().setLookAt(attackTarget, 180, 180);
 
 					ProjectileCannonBall cannonBall = new ProjectileCannonBall(this.entity, this.world, this.isCurrentSequenceFast);
-					final Vector3d armPos = this.entity.getCannonFiringLocation();
+					final Vec3 armPos = this.entity.getCannonFiringLocation();
 
 					this.spawnParticles(armPos);
 
@@ -133,9 +133,9 @@ public class BossAIArmCannon extends EntityAIAttackRanged<EntityCQRExterminator>
 		ParticleTypes.FLAME
 	};
 
-	private void spawnParticles(Vector3d armPos) {
-		if (this.world instanceof ServerWorld) {
-			ServerWorld sw = (ServerWorld)this.world;
+	private void spawnParticles(Vec3 armPos) {
+		if (this.world instanceof ServerLevel) {
+			ServerLevel sw = (ServerLevel)this.world;
 			
 			for(int i = 0; i < SHOOT_PARTICLES.length; i++) {
 				int count = i > 0 ? 5 : 10;

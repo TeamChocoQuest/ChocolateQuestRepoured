@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
@@ -28,7 +28,7 @@ public class WorldDungeonGenerator {
 	 * @return the dungeon that will be generated in this chunk
 	 */
 	@Nullable
-	public static DungeonBase getDungeonAt(ServerWorld world, ChunkPos chunkPos) {
+	public static DungeonBase getDungeonAt(ServerLevel world, ChunkPos chunkPos) {
 		return getDungeonAt(world, chunkPos, Predicates.alwaysTrue());
 	}
 
@@ -36,7 +36,7 @@ public class WorldDungeonGenerator {
 	 * @return the dungeon that will be generated in this chunk
 	 */
 	@Nullable
-	public static DungeonBase getDungeonAt(ServerWorld world, ChunkPos chunkPos, Predicate<DungeonGrid> gridPredicate) {
+	public static DungeonBase getDungeonAt(ServerLevel world, ChunkPos chunkPos, Predicate<DungeonGrid> gridPredicate) {
 		DungeonBase locationSpecificDungeon = DungeonRegistry.getInstance().getLocationSpecificDungeon(world, chunkPos);
 		if (locationSpecificDungeon != null) {
 			return locationSpecificDungeon;
@@ -66,8 +66,8 @@ public class WorldDungeonGenerator {
 		return x;
 	}
 
-	public static ServerWorld getLevel(ChunkGenerator chunkGenerator) {
-		for (ServerWorld level : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
+	public static ServerLevel getLevel(ChunkGenerator chunkGenerator) {
+		for (ServerLevel level : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
 			ServerChunkProvider chunkSource = level.getChunkSource();
 			if (chunkSource.getGenerator() == chunkGenerator) {
 				return level;

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.client.handler;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
+import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class CPacketHandlerItemStackSync extends AbstractPacketHandler<SPacketItemStackSync> {
 
 	@Override
-	protected void execHandlePacket(SPacketItemStackSync message, Supplier<Context> context, World world, PlayerEntity player) {
+	protected void execHandlePacket(SPacketItemStackSync message, Supplier<Context> context, Level world, Player player) {
 		Entity entity = world.getEntity(message.getEntityId());
 
 		if (entity != null) {

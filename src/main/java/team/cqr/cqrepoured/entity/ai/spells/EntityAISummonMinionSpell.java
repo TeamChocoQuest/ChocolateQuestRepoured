@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -28,7 +28,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<>();
 	protected boolean summonViaCircle = true;
-	protected Vector3d positionOffsetForSummons = new Vector3d(0, 0, 0);
+	protected Vec3 positionOffsetForSummons = new Vec3(0, 0, 0);
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 
@@ -40,7 +40,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 		}
 	}
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vector3d offsetV) {
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3 offsetV) {
 		this(entity, cooldown, chargeUpTicks);
 		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
@@ -85,7 +85,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d vector = this.entity.getLookAngle().normalize();
+		Vec3 vector = this.entity.getLookAngle().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
 		if (minionCount > this.MAX_MINIONS_AT_A_TIME) {
@@ -135,11 +135,11 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 					} else {
 						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.level);
 
-						summoned.setUUID(MathHelper.createInsecureUUID());
+						summoned.setUUID(Mth.createInsecureUUID());
 						summoned.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
 						if(!this.entity.level.isClientSide) {
-							ServerWorld sw = (ServerWorld)this.entity.level;
+							ServerLevel sw = (ServerLevel)this.entity.level;
 							
 							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0F, 0.5F, 0F, 2);
 							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0.5F, 0.0F, 0.5F, 1);

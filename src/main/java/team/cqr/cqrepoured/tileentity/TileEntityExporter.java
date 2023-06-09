@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.Connection;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import java.io.File;
 import java.util.Arrays;
 
-public class TileEntityExporter extends TileEntity implements ITileEntitySyncable {
+public class TileEntityExporter extends BlockEntity implements ITileEntitySyncable {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -108,7 +108,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 
 		@Override
-		public void writeChanges(PacketBuffer buf) {
+		public void writeChanges(FriendlyByteBuf buf) {
 			buf.writeInt(this.value.length);
 			for (BlockPos pos : this.value) {
 				buf.writeBlockPos(pos);
@@ -116,7 +116,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		}
 
 		@Override
-		protected void readChangesInternal(PacketBuffer buf) {
+		protected void readChangesInternal(FriendlyByteBuf buf) {
 			this.value = new BlockPos[buf.readInt()];
 			for (int i = 0; i < this.value.length; i++) {
 				this.value[i] = buf.readBlockPos();
@@ -149,31 +149,31 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 		this.dataManager.read(compound);
 		this.onPositionsChanged();
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		return this.save(new CompoundNBT());
+	public CompoundTag getUpdateTag() {
+		return this.save(new CompoundTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		this.dataManager.read(pkt.getTag());
 		this.onPositionsChanged();
 	}
@@ -223,7 +223,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public AxisAlignedBB getRenderBoundingBox() {
+	public AABB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
 	}
 
@@ -233,7 +233,7 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 		return Double.POSITIVE_INFINITY;
 	}
 
-	public void saveStructure(PlayerEntity author) {
+	public void saveStructure(Player author) {
 		if (this.level == null) {
 			return;
 		}
@@ -242,9 +242,9 @@ public class TileEntityExporter extends TileEntity implements ITileEntitySyncabl
 			CQStructure structure = CQStructure.createFromWorld(this.level, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName().getString());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
-					author.sendMessage(new StringTextComponent("Successfully exported structure: " + this.structureName.get()), null);
+					author.sendMessage(new TextComponent("Successfully exported structure: " + this.structureName.get()), null);
 				} else {
-					author.sendMessage(new StringTextComponent("Failed to export structure: " + this.structureName.get()), null);
+					author.sendMessage(new TextComponent("Failed to export structure: " + this.structureName.get()), null);
 				}
 			}, "CQR Export Thread").start();
 		} else {

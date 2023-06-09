@@ -4,44 +4,44 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.BoostHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.IRideable;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.LookAtGoal;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public abstract class EntityCQRMountBase extends AnimalEntity implements IRideable {
 
-	private static final DataParameter<Boolean> DATA_SADDLE_ID = EntityDataManager.defineId(EntityCQRMountBase.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> DATA_BOOST_TIME = EntityDataManager.defineId(EntityCQRMountBase.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> DATA_SADDLE_ID = SynchedEntityData.defineId(EntityCQRMountBase.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Integer> DATA_BOOST_TIME = SynchedEntityData.defineId(EntityCQRMountBase.class, EntityDataSerializers.INT);
 
 	private final BoostHelper steering = new BoostHelper(this.entityData, DATA_BOOST_TIME, DATA_SADDLE_ID);
 
-	public EntityCQRMountBase(EntityType<? extends EntityCQRMountBase> type, World worldIn) {
+	public EntityCQRMountBase(EntityType<? extends EntityCQRMountBase> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
-	public void travelWithInput(Vector3d pTravelVec) {
+	public void travelWithInput(Vec3 pTravelVec) {
 		super.travel(pTravelVec);
 	}
 
 	@Override
-	public void travel(Vector3d pTravelVector) {
+	public void travel(Vec3 pTravelVector) {
 		this.travel(this, this.steering, pTravelVector);
 	}
 
@@ -57,20 +57,20 @@ public abstract class EntityCQRMountBase extends AnimalEntity implements IRideab
 
 	@Override
 	protected void registerGoals() {
-		this.goalSelector.addGoal(0, new SwimGoal(this));
+		this.goalSelector.addGoal(0, new RandomSwimmingGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 0.9D));
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomWalkingGoal(this, 0.6D));
-		this.goalSelector.addGoal(7, new LookAtGoal(this, PlayerEntity.class, 6.0F));
-		this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
+		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 	}
 
 	@Override
 	protected boolean canRide(Entity pEntity) {
-		return pEntity instanceof AbstractEntityCQR || pEntity instanceof PlayerEntity;
+		return pEntity instanceof AbstractEntityCQR || pEntity instanceof Player;
 	}
 
 	@Override
-	public void spawnChildFromBreeding(ServerWorld pLevel, AnimalEntity p_234177_2_) {
+	public void spawnChildFromBreeding(ServerLevel pLevel, AnimalEntity p_234177_2_) {
 		return;
 	}
 
@@ -96,27 +96,27 @@ public abstract class EntityCQRMountBase extends AnimalEntity implements IRideab
 	public boolean canBeControlledByRider() {
 		Entity entity = this.getControllingPassenger();
 
-		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof PlayerEntity);
+		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof Player);
 	}
 
 	@Override
-	public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
-		if (super.mobInteract(player, hand) != ActionResultType.SUCCESS) {
+	public InteractionResult mobInteract(Player player, InteractionHand hand) {
+		if (super.mobInteract(player, hand) != InteractionResult.SUCCESS) {
 			if (!this.isVehicle()) {
 				if (!this.level.isClientSide) {
 					player.startRiding(this);
 				}
 
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 
 		}
-		return ActionResultType.FAIL;
+		return InteractionResult.FAIL;
 
 	}
 
 	@Override
-	public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
+	public AgeableEntity getBreedOffspring(ServerLevel p_241840_1_, AgeableEntity p_241840_2_) {
 		return null;
 	}
 

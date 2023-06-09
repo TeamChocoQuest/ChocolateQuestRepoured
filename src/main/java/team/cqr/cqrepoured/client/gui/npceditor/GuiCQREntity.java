@@ -1,17 +1,16 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
@@ -39,7 +38,7 @@ public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 	private Slider sliderDropChanceOffhand;
 	private Slider sliderSizeScaling;
 
-	public GuiCQREntity(ContainerCQREntity inventorySlotsIn, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+	public GuiCQREntity(ContainerCQREntity inventorySlotsIn, Inventory pPlayerInventory, TextComponent pTitle) {
 		super(inventorySlotsIn, pPlayerInventory, pTitle);
 		this.entity = inventorySlotsIn.getEntity();
 	}
@@ -50,15 +49,15 @@ public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 		// W := 107 -> steps are 10% steps
 		// NEW: x, y, w, h
 		// OLD: id, x, y, w, h
-		this.sliderHealthScaling = new Slider(5, 5, 107, 16, new StringTextComponent("Health Scale "), new StringTextComponent(" %"), 10,  1000, this.entity.getHealthScale() * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceHelm = new Slider(5, 25, 108, 16,  new StringTextComponent("Drop helm "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.HEAD) * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceChest = new Slider(5, 45, 108, 16,  new StringTextComponent("Drop chest "), new StringTextComponent(" %"), 0,  100, this.entity.getDropChance(EquipmentSlotType.CHEST) * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceLegs = new Slider(5, 65, 108, 16,  new StringTextComponent("Drop legs "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.LEGS) * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceFeet = new Slider(5, 85, 108, 16,  new StringTextComponent("Drop feet "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.FEET) * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceMainhand = new Slider(5, 105, 108, 16,  new StringTextComponent("Drop mainhand "), new StringTextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlotType.MAINHAND) * 100.0D, false, true, (x) -> {});
-		this.sliderDropChanceOffhand = new Slider(5, 125, 108, 16,  new StringTextComponent("Drop offhand "), new StringTextComponent(" %"), 0, 100,  this.entity.getDropChance(EquipmentSlotType.OFFHAND) * 100.0D, false, true, (x) -> {});
-		this.sliderSizeScaling = new Slider(5, 145, 107, 16,  new StringTextComponent("Size Scale "), new StringTextComponent(" %"), 5, 500, this.entity.getSizeVariation() * 100.0D, false, true, (x) -> {});
-		this.openTradeGUIButton = new ExtendedButton(5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, 16, new StringTextComponent("Trades"), this::onPress);
+		this.sliderHealthScaling = new Slider(5, 5, 107, 16, new TextComponent("Health Scale "), new TextComponent(" %"), 10,  1000, this.entity.getHealthScale() * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceHelm = new Slider(5, 25, 108, 16,  new TextComponent("Drop helm "), new TextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlot.HEAD) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceChest = new Slider(5, 45, 108, 16,  new TextComponent("Drop chest "), new TextComponent(" %"), 0,  100, this.entity.getDropChance(EquipmentSlot.CHEST) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceLegs = new Slider(5, 65, 108, 16,  new TextComponent("Drop legs "), new TextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlot.LEGS) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceFeet = new Slider(5, 85, 108, 16,  new TextComponent("Drop feet "), new TextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlot.FEET) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceMainhand = new Slider(5, 105, 108, 16,  new TextComponent("Drop mainhand "), new TextComponent(" %"), 0, 100, this.entity.getDropChance(EquipmentSlot.MAINHAND) * 100.0D, false, true, (x) -> {});
+		this.sliderDropChanceOffhand = new Slider(5, 125, 108, 16,  new TextComponent("Drop offhand "), new TextComponent(" %"), 0, 100,  this.entity.getDropChance(EquipmentSlot.OFFHAND) * 100.0D, false, true, (x) -> {});
+		this.sliderSizeScaling = new Slider(5, 145, 107, 16,  new TextComponent("Size Scale "), new TextComponent(" %"), 5, 500, this.entity.getSizeVariation() * 100.0D, false, true, (x) -> {});
+		this.openTradeGUIButton = new ExtendedButton(5 + this.sliderHealthScaling.getWidth() + 40, 25, 54, 16, new TextComponent("Trades"), this::onPress);
 		this.addButton(this.sliderHealthScaling);
 		this.addButton(this.sliderDropChanceHelm);
 		this.addButton(this.sliderDropChanceChest);
@@ -96,12 +95,12 @@ public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.render(matrixStack, mouseX, mouseY, partialTicks);
 		this.renderComponentHoverEffect( matrixStack, null ,mouseX, mouseY);
 	}
 
-	protected void renderBg(MatrixStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
 		this.fillGradient(matrixStack, 0, 0, this.width, this.height, 0xC010_1010, 0xD010_1010);
 		GlStateManager._color4f(1, 1, 1, 1);
 		this.getMinecraft().getTextureManager().bind(BG_TEXTURE);
@@ -126,12 +125,12 @@ public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 		int sizeScaling = this.sliderSizeScaling.getValueInt();
 
 		this.entity.setHealthScale(healthScaling / 100.0D);
-		this.entity.setDropChance(EquipmentSlotType.HEAD, dropChanceHelm / 100.0F);
-		this.entity.setDropChance(EquipmentSlotType.CHEST, dropChanceChest / 100.0F);
-		this.entity.setDropChance(EquipmentSlotType.LEGS, dropChanceLegs / 100.0F);
-		this.entity.setDropChance(EquipmentSlotType.FEET, dropChanceFeet / 100.0F);
-		this.entity.setDropChance(EquipmentSlotType.MAINHAND, dropChanceMainhand / 100.0F);
-		this.entity.setDropChance(EquipmentSlotType.OFFHAND, dropChanceOffhand / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.HEAD, dropChanceHelm / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.CHEST, dropChanceChest / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.LEGS, dropChanceLegs / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.FEET, dropChanceFeet / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.MAINHAND, dropChanceMainhand / 100.0F);
+		this.entity.setDropChance(EquipmentSlot.OFFHAND, dropChanceOffhand / 100.0F);
 		this.entity.setSizeVariation(sizeScaling / 100.0F);
 
 		CQRMain.NETWORK.sendToServer(new CPacketSyncEntity(this.entity.getId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));

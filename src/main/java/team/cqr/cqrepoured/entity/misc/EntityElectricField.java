@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.entity.misc;
 
 import com.google.common.base.Predicate;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -35,7 +35,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 
 	private UUID ownerID = null;
 
-	public EntityElectricField(EntityType<? extends EntityElectricField> type, World worldIn) {
+	public EntityElectricField(EntityType<? extends EntityElectricField> type, Level worldIn) {
 		this(type, worldIn, 100, null);
 	}
 
@@ -52,11 +52,11 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 		return q;
 	}
 	
-	public EntityElectricField(World worldIn, int charge, UUID ownerId) {
+	public EntityElectricField(Level worldIn, int charge, UUID ownerId) {
 		this(CQREntityTypes.ELECTRIC_FIELD.get(), worldIn, charge, ownerId);
 	}
 
-	public EntityElectricField(EntityType<? extends EntityElectricField> type, World worldIn, int charge, UUID ownerId) {
+	public EntityElectricField(EntityType<? extends EntityElectricField> type, Level worldIn, int charge, UUID ownerId) {
 		super(type, worldIn);
 		this.noPhysics = true;
 		this.charge = charge;
@@ -176,18 +176,18 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.charge = compound.getInt("charge");
 		if (compound.contains("ownerId")) {
-			this.ownerID = NBTUtil.loadUUID(compound.getCompound("ownerId"));
+			this.ownerID = NbtUtils.loadUUID(compound.getCompound("ownerId"));
 		}
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("charge", this.charge);
 		if (this.getOwner() != null) {
-			compound.put("ownerId", NBTUtil.createUUID(this.getOwnerId()));
+			compound.put("ownerId", NbtUtils.createUUID(this.getOwnerId()));
 		}
 	}
 
@@ -213,7 +213,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

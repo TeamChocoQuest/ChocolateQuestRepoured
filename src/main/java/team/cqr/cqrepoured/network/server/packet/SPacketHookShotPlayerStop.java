@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketHookShotPlayerStop extends AbstractPacket<SPacketHookShotPlayerStop> {
@@ -15,12 +15,12 @@ public class SPacketHookShotPlayerStop extends AbstractPacket<SPacketHookShotPla
 	}
 
 	@Override
-	public SPacketHookShotPlayerStop fromBytes(PacketBuffer buffer) {
+	public SPacketHookShotPlayerStop fromBytes(FriendlyByteBuf buffer) {
 		return new SPacketHookShotPlayerStop();
 	}
 
 	@Override
-	public void toBytes(SPacketHookShotPlayerStop packet, PacketBuffer buffer) {
+	public void toBytes(SPacketHookShotPlayerStop packet, FriendlyByteBuf buffer) {
 		
 	}
 

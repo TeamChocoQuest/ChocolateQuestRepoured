@@ -1,13 +1,16 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import net.minecraft.entity.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
 
@@ -19,7 +22,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	
 	private float size = 1;
 
-	public EntityBubble(EntityType<? extends EntityBubble> type, World worldIn) {
+	public EntityBubble(EntityType<? extends EntityBubble> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
 	}
@@ -29,7 +32,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 		return super.getDimensions(p_213305_1_).scale(this.size);
 	}
 
-	protected static final Vector3d MOVEMENT_DIRECTION = new Vector3d(0, 0.05, 0);
+	protected static final Vec3 MOVEMENT_DIRECTION = new Vec3(0, 0.05, 0);
 
 	@Override
 	public void tick() {
@@ -43,10 +46,10 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 			if (!this.getPassengers().isEmpty()) {
 				Entity entity = this.getPassengers().get(0);
 				//entity.unRide();
-				Vector3d newPos = this.position().add(0, 0.5D * (this.getBbHeight() - entity.getBbHeight()), 0);
+				Vec3 newPos = this.position().add(0, 0.5D * (this.getBbHeight() - entity.getBbHeight()), 0);
 				entity.setPos(newPos.x, newPos.y, newPos.z);
 				if (entity instanceof LivingEntity) {
-					if (!((LivingEntity) entity).canBreatheUnderwater() && !((LivingEntity) entity).hasEffect(Effects.WATER_BREATHING)) {
+					if (!((LivingEntity) entity).canBreatheUnderwater() && !((LivingEntity) entity).hasEffect(MobEffects.WATER_BREATHING)) {
 						entity.setAirSupply(entity.getAirSupply() - 5);
 					}
 				} else {
@@ -115,17 +118,17 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.flyTicks = compound.getInt("flyTicks");
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("flyTicks", this.flyTicks);
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

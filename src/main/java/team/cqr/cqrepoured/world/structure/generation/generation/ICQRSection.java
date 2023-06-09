@@ -4,11 +4,11 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.core.BlockPos;
 
 public interface ICQRSection {
 
@@ -19,13 +19,13 @@ public interface ICQRSection {
 		this.setBlockState(pos, state, null);
 	}
 
-	void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<TileEntity> blockEntityCallback);
+	void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback);
 
 	@Nullable
-	FluidState getFluidState(BlockPos pos);
+    FluidState getFluidState(BlockPos pos);
 
 	@Nullable
-	TileEntity getBlockEntity(BlockPos pos);
+    BlockEntity getBlockEntity(BlockPos pos);
 
 	void addEntity(Entity entity);
 

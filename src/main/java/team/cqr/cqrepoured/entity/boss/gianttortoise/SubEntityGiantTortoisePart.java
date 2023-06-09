@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.boss.gianttortoise;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 
 public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<EntityCQRGiantTortoise> {
@@ -41,9 +41,9 @@ public class SubEntityGiantTortoisePart extends MultiPartEntityPartSizable<Entit
 	// As this is a part it does not make any noises
 	
 	@Override
-	public ActionResultType interact(PlayerEntity player, Hand hand) {
+	public InteractionResult interact(Player player, InteractionHand hand) {
 		if (this.getParent() == null || (this.getParent() != null && !this.getParent().isAlive())) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		return this.getParent().interact(player, hand);
 	}

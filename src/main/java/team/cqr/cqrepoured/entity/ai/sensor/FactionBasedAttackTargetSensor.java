@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.entity.ai.sensor;
 
 import java.util.function.BiPredicate;
 
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.custom.GenericAttackTargetSensor;
 import net.tslat.smartbrainlib.api.util.BrainUtils;

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 import javax.annotation.Nonnull;
@@ -21,18 +21,18 @@ public class DataEntryBlockPos extends DataEntryObject<BlockPos> {
 
 	@Override
 	protected void readInternal(INBT nbt) {
-		if (nbt instanceof ListNBT) {
-			this.value = DungeonGenUtils.readPosFromList((ListNBT) nbt);
+		if (nbt instanceof ListTag) {
+			this.value = DungeonGenUtils.readPosFromList((ListTag) nbt);
 		}
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		buf.writeBlockPos(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value = buf.readBlockPos();
 	}
 

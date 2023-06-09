@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.capability;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;

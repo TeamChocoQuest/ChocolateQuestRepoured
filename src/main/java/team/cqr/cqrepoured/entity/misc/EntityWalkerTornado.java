@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.entity.MoverType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.particle.EntityParticle;
 import team.cqr.cqrepoured.entity.particle.ParticleWalkerTornado;
@@ -35,17 +35,17 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	protected static final int PARTICLE_COUNT = 2;
 	protected static final int MAX_LIVING_TICKS = 200;
 	protected final List<EntityParticle> particles = new ArrayList<>();
-	protected Vector3d velocity = new Vector3d(0, 0, 0);
+	protected Vec3 velocity = new Vec3(0, 0, 0);
 	protected Entity owner = null;
 
-	public static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>defineId(EntityWalkerTornado.class, DataSerializers.INT);
-	public static final DataParameter<String> OWNER_ID = EntityDataManager.<String>defineId(EntityWalkerTornado.class, DataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.<Integer>defineId(EntityWalkerTornado.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<String> OWNER_ID = SynchedEntityData.<String>defineId(EntityWalkerTornado.class, EntityDataSerializers.STRING);
 
-	public EntityWalkerTornado(World world) {
+	public EntityWalkerTornado(Level world) {
 		this(CQREntityTypes.WALKER_TORNADO.get(), world);
 	}
 	
-	public EntityWalkerTornado(EntityType<? extends EntityWalkerTornado> type, World worldIn) {
+	public EntityWalkerTornado(EntityType<? extends EntityWalkerTornado> type, Level worldIn) {
 		super(type, worldIn);
 	}
 	
@@ -70,8 +70,8 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		}
 
 		if (this.getOwnerId() != null && this.owner == null && this.tickCount % 10 == 0) {
-			if (this.level instanceof ServerWorld) {
-				Entity ent = ((ServerWorld) this.level).getEntity(this.getOwnerId());
+			if (this.level instanceof ServerLevel) {
+				Entity ent = ((ServerLevel) this.level).getEntity(this.getOwnerId());
 				if (ent.isAlive()) {
 					this.owner = ent;
 				}
@@ -96,7 +96,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			final double d2 = (float) this.getY() + this.getBbHeight() + 0.125f;
 			final double d3 = (float) this.getZ() + this.random.nextFloat() * 0.25f;
 			final float f = this.random.nextFloat() * 360.0f;
-			final EntityParticle particle = new ParticleWalkerTornado((ClientWorld) this.level, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
+			final EntityParticle particle = new ParticleWalkerTornado((ClientLevel) this.level, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
 			//Still needed?
 			//FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			this.particles.add(particle);
@@ -129,12 +129,12 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		final float f = (float) (this.getX() - particle.getX());
 		final float f2 = (float) (this.getY() - particle.getY());
 		final float f3 = (float) (this.getZ() - particle.getZ());
-		return MathHelper.sqrt(f * f + f2 * f2 + f3 * f3);
+		return Mth.sqrt(f * f + f2 * f2 + f3 * f3);
 	}
 
 	private void handleNearbyEntities() {
 		double r = 0.75D;
-		AxisAlignedBB aabb = new AxisAlignedBB(this.getX() - r, this.getY(), this.getZ() - r, this.getX() + r, this.getY() + 2 * r, this.getZ() + r);
+		AABB aabb = new AABB(this.getX() - r, this.getY(), this.getZ() - r, this.getX() + r, this.getY() + 2 * r, this.getZ() + r);
 		final List<Entity> list = this.level.getEntities(this, aabb);
 		for (Entity ent : list) {
 			this.collideWithEntity(ent);
@@ -143,7 +143,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.isEntityAffected(entityIn)) {
-			Vector3d vAway = entityIn.position().subtract(this.position()).normalize().scale(1.25D);
+			Vec3 vAway = entityIn.position().subtract(this.position()).normalize().scale(1.25D);
 			vAway = vAway.add(0, vAway.y * 0.1D, 0);
 			/*entityIn.motionX = vAway.x * 0.75;
 			entityIn.motionY = Math.max(Math.abs(vAway.y), 0.6D);
@@ -171,9 +171,9 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		if (this.getOwnerId() != null) {
-			compound.put("summoner", NBTUtil.createUUID(this.getOwnerId()));
+			compound.put("summoner", NbtUtils.createUUID(this.getOwnerId()));
 		}
 		compound.putDouble("vX", this.velocity.x);
 		compound.putDouble("vY", this.velocity.y);
@@ -182,18 +182,18 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		if (compound.contains("summoner")) {
-			this.setOwner(NBTUtil.loadUUID(compound.get("summoner")));
+			this.setOwner(NbtUtils.loadUUID(compound.get("summoner")));
 		}
 		double x = compound.getDouble("vX");
 		double y = compound.getDouble("vY");
 		double z = compound.getDouble("vZ");
-		this.velocity = new Vector3d(x, y, z);
+		this.velocity = new Vec3(x, y, z);
 		this.tickCount = compound.getInt("ticksExisted");
 	}
 
-	public void setVelocity(Vector3d v) {
+	public void setVelocity(Vec3 v) {
 		this.velocity = v;
 	}
 
@@ -229,7 +229,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

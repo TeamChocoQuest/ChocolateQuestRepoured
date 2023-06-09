@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.entity.ai.goal.BreakBlockGoal;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIFireFighter extends /*AbstractCQREntityAI<AbstractEntityCQR>*/BreakBlockGoal {
@@ -96,7 +96,7 @@ public class EntityAIFireFighter extends /*AbstractCQREntityAI<AbstractEntityCQR
 	}
 	
 	@Override
-	protected boolean isValidTarget(IWorldReader pLevel, BlockPos pPos) {
+	protected boolean isValidTarget(BlockGetter pLevel, BlockPos pPos) {
 		Block block = pLevel.getBlockState(pPos).getBlock();
 		return super.isValidTarget(pLevel, pPos) || block instanceof FireBlock;
 	}

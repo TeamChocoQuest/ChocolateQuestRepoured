@@ -1,29 +1,29 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class ProjectileFireWallPart extends ProjectileBase {
 
-	public ProjectileFireWallPart(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileFireWallPart(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileFireWallPart(double pX, double pY, double pZ, World world) {
+	public ProjectileFireWallPart(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), world);
 	}
 
-	public ProjectileFireWallPart(LivingEntity shooter, World world) {
+	public ProjectileFireWallPart(LivingEntity shooter, Level world) {
 		super(CQREntityTypes.PROJECTILE_FIRE_WALL_PART.get(), shooter, world);
 	}
 
@@ -63,7 +63,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	} */
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result)
+	protected void onHitBlock(BlockHitResult result)
 	{
 		BlockState state = this.level.getBlockState(result.getBlockPos());
 
@@ -80,7 +80,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

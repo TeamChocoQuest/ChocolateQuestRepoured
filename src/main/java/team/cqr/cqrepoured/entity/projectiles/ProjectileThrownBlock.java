@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.particles.BlockParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -29,15 +29,15 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	private BlockState state = null;
 	private boolean placeOnImpact = false;
 
-	public ProjectileThrownBlock(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileThrownBlock(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileThrownBlock(double pX, double pY, double pZ, World world) {
+	public ProjectileThrownBlock(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_THROWN_BLOCK.get(), pX, pY, pZ, world);
 	}
 
-	public ProjectileThrownBlock(LivingEntity shooter, World world, BlockState block, boolean placeOnImpact)
+	public ProjectileThrownBlock(LivingEntity shooter, Level world, BlockState block, boolean placeOnImpact)
 	{
 		super(CQREntityTypes.PROJECTILE_THROWN_BLOCK.get(), shooter, world);
 		this.block = block.getBlock().getRegistryName();
@@ -56,8 +56,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 		double dz = this.getZ() + (-0.5 + (level.random.nextDouble()));
 		if(this.level.isClientSide()) {
 			this.level.addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
-		} else if(this.level instanceof ServerWorld) {
-			((ServerWorld)this.level).sendParticles(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 1, 0, 0, 0, 0.05D);
+		} else if(this.level instanceof ServerLevel) {
+			((ServerLevel)this.level).sendParticles(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 1, 0, 0, 0, 0.05D);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		super.onHitEntity(entityResult);
 
@@ -96,7 +96,7 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result)
+	protected void onHitBlock(BlockHitResult result)
 	{
 		super.onHitBlock(result);
 
@@ -104,8 +104,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 			// TODO: Add placed block to whitelist of protected region
 			this.level.setBlockAndUpdate(new BlockPos(this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ()), this.state);
 			// this.world.createExplosion(this.thrower, this.posX, this.posY, this.posZ, 1.5F, false);
-			if (this.level instanceof ServerWorld) {
-				ServerWorld ws = (ServerWorld) this.level;
+			if (this.level instanceof ServerLevel) {
+				ServerLevel ws = (ServerLevel) this.level;
 				//Vector3d pos = result.getLocation();
 				BlockPos pos = result.getBlockPos();
 				double particleSpeed = 0.2D;
@@ -123,11 +123,11 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 		try {
-			CompoundNBT blockstate = compound.getCompound("blockdata");
-			this.state = NBTUtil.readBlockState(blockstate);
+			CompoundTag blockstate = compound.getCompound("blockdata");
+			this.state = NbtUtils.readBlockState(blockstate);
 		} catch (Exception ex) {
 			// Ignore
 			this.state = Blocks.END_STONE.defaultBlockState();
@@ -136,21 +136,21 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
-		CompoundNBT tag = NBTUtil.writeBlockState(this.state);
+		CompoundTag tag = NbtUtils.writeBlockState(this.state);
 		tag.put("blockdata", tag);
 		super.addAdditionalSaveData(compound);
 	}
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeResourceLocation(this.block);
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		this.block = additionalData.readResourceLocation();
 		this.state = ForgeRegistries.BLOCKS.getValue(this.block).defaultBlockState();

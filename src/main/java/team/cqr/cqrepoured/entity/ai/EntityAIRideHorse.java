@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.entity.passive.horse.HorseEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 import java.util.ArrayList;
@@ -24,8 +24,8 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 
 	private static final AttributeModifier FOLLOW_RANGE_MODIFIER = new AttributeModifier("modifier.cqr_horse_path_extension", 24.d, Operation.ADDITION) {
 		//Disable saving
-		public net.minecraft.nbt.CompoundNBT save() {
-			return new CompoundNBT();};
+		public CompoundTag save() {
+			return new CompoundTag();};
 	};
 	private final AttributeModifier moveSpeedModifier;
 
@@ -36,8 +36,8 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 		super(entity);
 		this.moveSpeedModifier = new AttributeModifier("modifier.cqr_ride_speed", speedFactor, Operation.MULTIPLY_BASE) {
 			// Disable saving
-			public net.minecraft.nbt.CompoundNBT save() {
-				return new CompoundNBT();
+			public CompoundTag save() {
+				return new CompoundTag();
 			};
 		};
 	}
@@ -64,7 +64,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 		this.removeHorseAI();
 		if (this.horse instanceof AbstractHorseEntity) {
 			AbstractHorseEntity h = (AbstractHorseEntity) this.horse;
-			h.equipSaddle(SoundCategory.AMBIENT);
+			h.equipSaddle(SoundSource.AMBIENT);
 			h.setEating(false);
 			h.setJumping(false); //Previously setRearing, is this the correct replacement?
 		}
@@ -81,7 +81,7 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	protected void onDismountHorse() {
 		this.addHorseAI();
 		if (this.horse instanceof AbstractHorseEntity) {
-			((AbstractHorseEntity) this.horse).equipSaddle(SoundCategory.AMBIENT);
+			((AbstractHorseEntity) this.horse).equipSaddle(SoundSource.AMBIENT);
 			this.removeModifiers();
 		}
 	}

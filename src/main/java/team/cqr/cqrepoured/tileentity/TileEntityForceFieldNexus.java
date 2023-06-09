@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -12,7 +12,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 
-public class TileEntityForceFieldNexus extends TileEntity implements IAnimatable {
+public class TileEntityForceFieldNexus extends BlockEntity implements IAnimatable {
 
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
@@ -20,7 +20,7 @@ public class TileEntityForceFieldNexus extends TileEntity implements IAnimatable
 		super(CQRBlockEntities.FORCE_FIELD_NEXUS.get());
 	}
 
-	private <E extends TileEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+	private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle.loop", EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}

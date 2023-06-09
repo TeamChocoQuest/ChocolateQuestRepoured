@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.client.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 import java.util.function.Consumer;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 public class CPacketContainerClickButton extends AbstractPacket<CPacketContainerClickButton> {
 
 	private int button;
-	private final PacketBuffer extraData = new PacketBuffer(Unpooled.buffer());
+	private final FriendlyByteBuf extraData = new FriendlyByteBuf(Unpooled.buffer());
 
 	public CPacketContainerClickButton() {
 
@@ -26,7 +26,7 @@ public class CPacketContainerClickButton extends AbstractPacket<CPacketContainer
 	}
 
 	@Override
-	public CPacketContainerClickButton fromBytes(PacketBuffer buf) {
+	public CPacketContainerClickButton fromBytes(FriendlyByteBuf buf) {
 		CPacketContainerClickButton result = new CPacketContainerClickButton();
 		result.button = buf.readInt();
 		result.extraData.writeBytes(buf);
@@ -34,7 +34,7 @@ public class CPacketContainerClickButton extends AbstractPacket<CPacketContainer
 	}
 
 	@Override
-	public void toBytes(CPacketContainerClickButton packet, PacketBuffer buf) {
+	public void toBytes(CPacketContainerClickButton packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.button);
 		buf.writeBytes(packet.extraData);
 	}
@@ -43,7 +43,7 @@ public class CPacketContainerClickButton extends AbstractPacket<CPacketContainer
 		return button;
 	}
 
-	public PacketBuffer getExtraData() {
+	public FriendlyByteBuf getExtraData() {
 		return extraData;
 	}
 

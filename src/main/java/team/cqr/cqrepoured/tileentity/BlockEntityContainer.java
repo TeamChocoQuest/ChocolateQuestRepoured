@@ -1,25 +1,25 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import team.cqr.cqrepoured.inventory.InventoryBlockEntity;
 
-public class BlockEntityContainer extends TileEntity {
+public class BlockEntityContainer extends BlockEntity {
 
 	protected final InventoryBlockEntity inventory;
 
-	public BlockEntityContainer(TileEntityType<?> type, int invSize) {
+	public BlockEntityContainer(BlockEntityType<?> type, int invSize) {
 		this(type, invSize, 64);
 	}
 
-	public BlockEntityContainer(TileEntityType<?> type, int invSize, int maxStackSize) {
+	public BlockEntityContainer(BlockEntityType<?> type, int invSize, int maxStackSize) {
 		super(type);
 		this.inventory = new InventoryBlockEntity(this, invSize, true) {
 			@Override
@@ -30,14 +30,14 @@ public class BlockEntityContainer extends TileEntity {
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		super.save(compound);
 		this.inventory.save(compound);
 		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 		this.inventory.load(compound);
 	}

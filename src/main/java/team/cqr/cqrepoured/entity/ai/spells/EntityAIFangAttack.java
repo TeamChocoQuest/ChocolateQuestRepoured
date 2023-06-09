@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.projectile.EvokerFangsEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -38,20 +38,20 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		LivingEntity entitylivingbase = this.entity.getTarget();
 		double d0 = Math.min(entitylivingbase.getY(), this.entity.getY());
 		double d1 = Math.max(entitylivingbase.getY(), this.entity.getY()) + 1.0D;
-		float entityAngle = (float) MathHelper.atan2(entitylivingbase.getZ() - this.entity.getZ(), entitylivingbase.getX() - this.entity.getX());
+		float entityAngle = (float) Mth.atan2(entitylivingbase.getZ() - this.entity.getZ(), entitylivingbase.getX() - this.entity.getX());
 
 		if (this.entity.distanceToSqr(entitylivingbase) < 9.0D) {
 			for (int i = 0; i < 5; ++i) {
 				float f1 = entityAngle + i * (float) Math.PI * 0.4F;
-				this.spawnFangs(this.entity.getX() + MathHelper.cos(f1) * 1.5D, this.entity.getZ() + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+				this.spawnFangs(this.entity.getX() + Mth.cos(f1) * 1.5D, this.entity.getZ() + Mth.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 
 			for (int k = 0; k < 8; ++k) {
 				float f2 = entityAngle + k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
-				this.spawnFangs(this.entity.getX() + MathHelper.cos(f2) * 2.5D, this.entity.getZ() + MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+				this.spawnFangs(this.entity.getX() + Mth.cos(f2) * 2.5D, this.entity.getZ() + Mth.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
-			Vector3d v = new Vector3d(MathHelper.cos(entityAngle), 0, MathHelper.sin(entityAngle));
+			Vec3 v = new Vec3(Mth.cos(entityAngle), 0, Mth.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
 			int rows = DungeonGenUtils.randomBetween(this.minRows, this.maxRows, this.entity.getRandom());
 			double angle = rows > 0 ? 120 / rows : 0;
@@ -82,7 +82,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 			if (this.entity.level.getBlockState(blockpos).isFaceSturdy(this.entity.level, blockpos.below(), Direction.UP)/*!this.entity.level.isBlockNormalCube(blockpos, true) && this.entity.level.isBlockNormalCube(blockpos.below(), true)*/) {
 				if (!this.entity.level.isEmptyBlock(blockpos)) {
 					BlockState iblockstate = this.entity.level.getBlockState(blockpos);
-					AxisAlignedBB axisalignedbb = iblockstate.getShape(this.entity.level, blockpos).bounds();
+					AABB axisalignedbb = iblockstate.getShape(this.entity.level, blockpos).bounds();
 
 					if (axisalignedbb != null) {
 						d0 = axisalignedbb.maxY;
@@ -95,7 +95,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 
 			blockpos = blockpos.below();
 
-			if (blockpos.getY() < MathHelper.floor(minY) - 1) {
+			if (blockpos.getY() < Mth.floor(minY) - 1) {
 				break;
 			}
 		}

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network.server.packet.exterminator;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -44,7 +44,7 @@ public class SPacketUpdateEmitterTarget extends AbstractPacket<SPacketUpdateEmit
 	}
 
 	@Override
-	public SPacketUpdateEmitterTarget fromBytes(PacketBuffer buf) {
+	public SPacketUpdateEmitterTarget fromBytes(FriendlyByteBuf buf) {
 		SPacketUpdateEmitterTarget result = new SPacketUpdateEmitterTarget();
 		
 		result.entityId = buf.readInt();
@@ -59,7 +59,7 @@ public class SPacketUpdateEmitterTarget extends AbstractPacket<SPacketUpdateEmit
 	}
 
 	@Override
-	public void toBytes(SPacketUpdateEmitterTarget packet, PacketBuffer buf) {
+	public void toBytes(SPacketUpdateEmitterTarget packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 
 		buf.writeBoolean(packet.leftEmitter);

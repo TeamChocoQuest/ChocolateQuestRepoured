@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
 
 public interface IMechanical {
 
@@ -10,7 +10,7 @@ public interface IMechanical {
 	}
 
 	// We're an machine, we don't live
-	default boolean isPotionApplicable(Effect potioneffectIn) {
+	default boolean isPotionApplicable(MobEffect potioneffectIn) {
 		return false;
 	}
 

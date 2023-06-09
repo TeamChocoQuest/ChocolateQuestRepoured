@@ -1,33 +1,29 @@
 package team.cqr.cqrepoured.mixin;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.EquipmentSlotType.Group;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot.Group;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
-import team.cqr.cqrepoured.item.armor.ItemArmorSlime;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity extends Entity {
 
-	protected MixinLivingEntity(EntityType<? extends LivingEntity> type, World world) {
+	protected MixinLivingEntity(EntityType<? extends LivingEntity> type, Level world) {
 		super(type, world);
 	}
 
@@ -38,7 +34,7 @@ public abstract class MixinLivingEntity extends Entity {
 			if (ItemUtil.hasFullSet((LivingEntity) pEntity, ItemArmorBull.class)) {
 				if (pEntity.isSprinting()) {
 					int thornLevel = 0;
-					for(EquipmentSlotType slot : EquipmentSlotType.values()) {
+					for(EquipmentSlot slot : EquipmentSlot.values()) {
 						if(slot.getType() == Group.ARMOR) {
 							ItemStack stack = ((LivingEntity) pEntity).getItemBySlot(slot);
 							thornLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.THORNS, stack);
@@ -53,7 +49,7 @@ public abstract class MixinLivingEntity extends Entity {
 
 					if((myVolume / 2) <= theirVolume) {
 						
-						Vector3d velocity = this.position().subtract(pEntity.position());
+						Vec3 velocity = this.position().subtract(pEntity.position());
 						velocity = velocity.add(0, 0.5, 0);
 						velocity = velocity.multiply(1.5, 1.5, 1.5);
 						velocity = velocity.add(this.getDeltaMovement());
@@ -65,7 +61,7 @@ public abstract class MixinLivingEntity extends Entity {
 	}
 	
 	@Inject(at = @At("HEAD"), method = "travel(Lnet/minecraft/util/math/vector/Vector3d;)V", cancellable = true)
-	private void mixinTravel(Vector3d vectorIn, CallbackInfo ci) {
+	private void mixinTravel(Vec3 vectorIn, CallbackInfo ci) {
 		//Doesn't work yet
 		/*Entity ent = (Entity) this;
 		 if ((this.isEffectiveAi() || this.isControlledByLocalInstance())) {

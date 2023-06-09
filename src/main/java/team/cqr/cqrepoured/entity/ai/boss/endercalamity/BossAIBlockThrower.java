@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity.E_CALAMITY_HAND;
@@ -139,9 +139,9 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected void spawnEquipParticlesForHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		if (this.world instanceof ServerWorld && CQRConfig.SERVER_CONFIG.bosses.calamityBlockEquipParticles.get()) {
-			ServerWorld ws = (ServerWorld) this.world;
-			Vector3d pos = this.getPositionOfHand(hand);
+		if (this.world instanceof ServerLevel && CQRConfig.SERVER_CONFIG.bosses.calamityBlockEquipParticles.get()) {
+			ServerLevel ws = (ServerLevel) this.world;
+			Vec3 pos = this.getPositionOfHand(hand);
 			double dx = -0.5 + this.entity.getRandom().nextDouble();
 			dx *= 2;
 			double dy = -0.5 + this.entity.getRandom().nextDouble();
@@ -159,7 +159,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 	}
 
 	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vector3d v = this.entity.getLookAngle().normalize();
+		Vec3 v = this.entity.getLookAngle().normalize();
 		if (this.entity.hasAttackTarget()) {
 			v = this.entity.getTarget().position().subtract(this.entity.position());
 			v = v.normalize();
@@ -169,9 +169,9 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 		return this.throwBlockOfHand(hand, v);
 	}
 
-	protected Vector3d getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
-		Vector3d offset = this.entity.getLookAngle().normalize().scale(1.25);
-		offset = new Vector3d(offset.x, 0, offset.z);
+	protected Vec3 getPositionOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand) {
+		Vec3 offset = this.entity.getLookAngle().normalize().scale(1.25);
+		offset = new Vec3(offset.x, 0, offset.z);
 		offset = VectorUtil.rotateVectorAroundY(offset, hand.isLeftSided() ? 90 : 270);
 		switch (hand.name().split("_")[1].toUpperCase()) {
 		case "LOWER":
@@ -187,11 +187,11 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			break;
 		}
 		offset = offset.scale(this.entity.getSizeVariation());
-		Vector3d position = this.entity.position().add(offset);
+		Vec3 position = this.entity.position().add(offset);
 		return position;
 	}
 
-	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vector3d velocity) {
+	protected boolean throwBlockOfHand(EntityCQREnderCalamity.E_CALAMITY_HAND hand, Vec3 velocity) {
 		if (this.getStateOfHand(hand) == E_HAND_STATE.BLOCK) {
 			// DONE: Implement
 			/*
@@ -202,7 +202,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 			if (!handContent.isPresent()) {
 				return false;
 			}
-			Vector3d position = this.getPositionOfHand(hand);
+			Vec3 position = this.getPositionOfHand(hand);
 			BlockState block = handContent.get();
 			ProjectileThrownBlock blockProj = new ProjectileThrownBlock(this.entity, this.world, block, true);
 			blockProj.setPos(position.x, position.y, position.z);
@@ -231,7 +231,7 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 
 	public void forceDropAllBlocks() {
 		for (EntityCQREnderCalamity.E_CALAMITY_HAND hand : EntityCQREnderCalamity.E_CALAMITY_HAND.values()) {
-			this.throwBlockOfHand(hand, new Vector3d(0, -0.5, 0));
+			this.throwBlockOfHand(hand, new Vec3(0, -0.5, 0));
 		}
 	}
 

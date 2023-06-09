@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.client.util;
 
+import com.mojang.blaze3d.vertex.BufferBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.BufferBuilder.DrawState;
+import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 
 import team.cqr.cqrepoured.CQRMain;
@@ -246,7 +246,7 @@ public class SphereRenderer {
 		return arr[(index + arr.length - 1) % arr.length];
 	}
 
-	public static void renderSphere(MatrixStack matrixStack, RenderType renderType, VertexBuffer buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
+	public static void renderSphere(PoseStack matrixStack, RenderType renderType, VertexBuffer buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
 		if (!drawFront && !drawBack) {
 			return;
 		}

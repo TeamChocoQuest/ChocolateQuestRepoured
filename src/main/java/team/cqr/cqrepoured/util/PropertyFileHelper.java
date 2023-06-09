@@ -8,12 +8,12 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.apache.commons.lang3.ArrayUtils;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.processor.IReplaceBlocksProcessor;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
@@ -110,7 +110,7 @@ public class PropertyFileHelper {
 	}
 
 	public static int getIntProperty(Properties prop, String key, int defVal, int min, int max) {
-		return MathHelper.clamp(getIntProperty(prop, key, defVal), min, max);
+		return Mth.clamp(getIntProperty(prop, key, defVal), min, max);
 	}
 
 	public static double getDoubleProperty(Properties prop, String key, double defVal) {
@@ -132,7 +132,7 @@ public class PropertyFileHelper {
 	}
 
 	public static double getDoubleProperty(Properties prop, String key, double defVal, double min, double max) {
-		return MathHelper.clamp(getDoubleProperty(prop, key, defVal), min, max);
+		return Mth.clamp(getDoubleProperty(prop, key, defVal), min, max);
 	}
 
 	public static ResourceLocation getResourceLocationProperty(Properties prop, String key, ResourceLocation defVal) {

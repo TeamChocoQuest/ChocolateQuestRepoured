@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.Connection;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryFacing;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
+public class TileEntityMap extends BlockEntity implements ITileEntitySyncable {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -46,35 +46,35 @@ public class TileEntityMap extends TileEntity implements ITileEntitySyncable {
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		return this.save(new CompoundNBT());
+	public CompoundTag getUpdateTag() {
+		return this.save(new CompoundTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		this.dataManager.read(pkt.getTag());
 	}
 
 	public void set(int scale, Direction orientation, boolean lockOrientation, int originX, int originZ, int xOffset, int zOffset, boolean fillMap, int fillRadius) {
-		this.scale.set(MathHelper.clamp(scale, 0, 4));
+		this.scale.set(Mth.clamp(scale, 0, 4));
 		if (orientation.getAxis() != Direction.Axis.Y) {
 			this.orientation.set(orientation);
 		}

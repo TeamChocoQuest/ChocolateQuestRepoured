@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Random;
 
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
@@ -40,7 +40,7 @@ public class SpiralStrongholdBuilder {
 		if (this.roomCount % ((this.floorSideLength - 1) * 4) < 2) {
 			this.roomCount++;
 		}
-		this.floorCount = MathHelper.ceil((double) this.roomCount / ((this.floorSideLength - 1) * 4));
+		this.floorCount = Mth.ceil((double) this.roomCount / ((this.floorSideLength - 1) * 4));
 		this.floors = new SpiralStrongholdFloor[this.floorCount];
 	}
 

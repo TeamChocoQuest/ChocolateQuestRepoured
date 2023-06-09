@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import net.minecraft.world.level.ChunkPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,9 +13,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.SectionPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
@@ -36,7 +36,7 @@ public abstract class MixinNoiseChunkGenerator {
 	private int z;
 
 	@Inject(method = "fillFromNoise", at = @At("HEAD"))
-	private void pre_fillFromNoise(IWorld level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
+	private void pre_fillFromNoise(Level level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
 		ChunkPos chunkPos = chunk.getPos();
 		SectionPos sectionPos = SectionPos.of(chunkPos, 0);
 		noiseAffectingStructurePieces = INoiseAffectingStructurePiece.NOISE_AFFECTING_STRUCTURES.stream()
@@ -87,7 +87,7 @@ public abstract class MixinNoiseChunkGenerator {
 	}
 
 	@Inject(method = "fillFromNoise", at = @At("RETURN"))
-	private void post_fillFromNoise(IWorld level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
+	private void post_fillFromNoise(Level level, StructureManager structureManager, IChunk chunk, CallbackInfo info) {
 		noiseAffectingStructurePieces = null;
 	}
 

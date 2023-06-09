@@ -1,6 +1,6 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators;
 //
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import net.minecraft.world.gen.ChunkGenerator;
 //import team.cqr.cqrepoured.config.CQRConfig;

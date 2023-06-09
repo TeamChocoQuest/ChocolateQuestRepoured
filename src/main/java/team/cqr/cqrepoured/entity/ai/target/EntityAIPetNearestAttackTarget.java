@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 
@@ -21,15 +21,15 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 	protected final EntityAIPetNearestAttackTarget.Sorter sorter;
 	protected T targetEntity;
 
-	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, boolean checkSight) {
+	public EntityAIPetNearestAttackTarget(PathfinderMob creature, Class<T> classTarget, boolean checkSight) {
 		this(creature, classTarget, checkSight, false);
 	}
 
-	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
+	public EntityAIPetNearestAttackTarget(PathfinderMob creature, Class<T> classTarget, boolean checkSight, boolean onlyNearby) {
 		this(creature, classTarget, 10, checkSight, onlyNearby);
 	}
 
-	public EntityAIPetNearestAttackTarget(CreatureEntity creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby) {
+	public EntityAIPetNearestAttackTarget(PathfinderMob creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby) {
 		super(creature, checkSight, onlyNearby);
 		this.targetClass = classTarget;
 		this.targetChance = chance;
@@ -81,7 +81,7 @@ public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetG
 		 */
 	}
 
-	protected AxisAlignedBB getTargetableArea(double targetDistance) {
+	protected AABB getTargetableArea(double targetDistance) {
 		return this.mob.getBoundingBox().inflate(targetDistance, 4.0D, targetDistance);
 	}
 
