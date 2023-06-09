@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.item;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
@@ -46,19 +46,19 @@ public class ItemMagicBell extends ItemLore {
 	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
 		if (!worldIn.isClientSide) {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
-			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(entityLiving.blockPosition());
+			Stream<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(entityLiving.blockPosition());
 
-			protectedRegions.stream().map(ProtectedRegion::getEntityDependencies).flatMap(Collection::stream).map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid)).filter(Objects::nonNull)
+			/*protectedRegions.map(ProtectedRegion::getEntityDependencies).flatMap(Collection::stream).map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid)).filter(Objects::nonNull)
 					.forEach(entity -> {
 						//OLD: CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000, entity.getId())
 						worldIn.addParticle(new BlockHighlightParticleData(BlockHighlightParticleData.COLOR_ENTITY_HIGHLIGHT, 200, entity.getId()), entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0);
 					});
 
-			protectedRegions.stream().map(ProtectedRegion::getBlockDependencies).flatMap(Collection::stream)
+			protectedRegions.map(ProtectedRegion::getBlockDependencies).flatMap(Collection::stream)
 					.forEach(pos -> {
 						//OLD: CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0, pos.getX(), pos.getY(), pos.getZ())
 						worldIn.addParticle(new BlockHighlightParticleData(BlockHighlightParticleData.BLOCK_DEPENDENCY_HIGHLIGHT, 200, pos), entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), 0, 0, 0);
-					});
+					});*/
 
 			protectedRegions.forEach(pr -> {
 				BlockPos start = pr.getStartPos();
@@ -79,7 +79,7 @@ public class ItemMagicBell extends ItemLore {
 
 			worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CQRSounds.BELL_USE, entityLiving.getSoundSource(), 1.0F, 1.0F);
 			if (entityLiving instanceof PlayerEntity) {
-				if (protectedRegions.isEmpty()) {
+				if (protectedRegions.count() <= 0) {
 					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 60);
 				} else {
 					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 200);
