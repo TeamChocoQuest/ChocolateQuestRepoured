@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[36,)"
+loaderVersion="[46,)"
 
 license="MIT-license"
 
@@ -18,14 +18,14 @@ license="MIT-license"
 	[[dependencies.cqrepoured]]
 		modId="minecraft"
 		mandatory=true
-		versionRange="[1.16.5,1.17)"
+		versionRange="[1.20,)"
 		ordering="NONE"
 		side="BOTH"
 	
 	[[dependencies.cqrepoured]]
 		modId="forge"
 		mandatory=true
-		versionRange="[36,)"
+		versionRange="[46,)"
 		ordering="NONE"
 		side="BOTH"
 		
@@ -35,15 +35,15 @@ license="MIT-license"
 		side="BOTH"
 		
 	[[dependencies.cqrepoured]]
-		modId="geckolib3"
-		versionRange="[3.0.106,)"
+		modId="geckolib"
+		versionRange="[4.2,)"
 		mandatory=true
 		ordering="NONE"
 		side="BOTH"
 
     [[dependencies.cqrepoured]]
         modId="smartbrainlib"
-        versionRange="[1.5,)"
+        versionRange="[1.11,)"
         mandatory=true
         ordering="NONE"
         side="BOTH"
