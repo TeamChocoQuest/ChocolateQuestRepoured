@@ -13,8 +13,8 @@
 //import org.apache.commons.io.FileUtils;
 //
 //import meldexun.reflectionutil.ReflectionField;
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.entity.Entity;
 //import net.minecraft.entity.player.PlayerEntity;

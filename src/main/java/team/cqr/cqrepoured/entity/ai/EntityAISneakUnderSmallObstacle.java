@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.AirBlock;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.Pose;

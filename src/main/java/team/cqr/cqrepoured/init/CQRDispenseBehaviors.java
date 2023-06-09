@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.init;
 
 import java.util.Random;
 
-import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.world.level.block.AbstractFireBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,9 +10,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.CampfireBlock;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.TNTBlock;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.TNTBlock;
 import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IDispenseItemBehavior;

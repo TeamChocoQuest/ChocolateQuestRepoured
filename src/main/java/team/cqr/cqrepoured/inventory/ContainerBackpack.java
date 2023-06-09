@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.inventory.container.Container;

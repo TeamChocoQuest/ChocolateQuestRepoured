@@ -1,7 +1,7 @@
 //package team.cqr.cqrepoured.entity.boss;
 //
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.WebBlock;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.WebBlock;
 //import net.minecraft.entity.*;
 //import net.minecraft.entity.ai.attributes.Attributes;
 //import net.minecraft.entity.ai.goal.SwimGoal;

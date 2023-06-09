@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.ChestBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.LazyOptional;

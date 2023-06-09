@@ -7,7 +7,7 @@
 //import com.mojang.serialization.Codec;
 //import com.mojang.serialization.codecs.RecordCodecBuilder;
 //
-//import net.minecraft.block.AbstractBannerBlock;
+//import net.minecraft.world.level.block.AbstractBannerBlock;
 //import net.minecraft.entity.Entity;
 //import net.minecraft.entity.EntityList;
 //import net.minecraft.entity.LivingEntity;

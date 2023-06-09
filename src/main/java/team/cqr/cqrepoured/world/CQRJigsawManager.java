@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 
-import net.minecraft.block.JigsawBlock;
+import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;

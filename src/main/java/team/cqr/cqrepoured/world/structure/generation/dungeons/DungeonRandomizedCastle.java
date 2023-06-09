@@ -3,8 +3,8 @@
 //import java.util.Properties;
 //import java.util.Random;
 //
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.core.BlockPos;
 //import net.minecraft.util.registry.DynamicRegistries;
 //import net.minecraft.world.gen.ChunkGenerator;

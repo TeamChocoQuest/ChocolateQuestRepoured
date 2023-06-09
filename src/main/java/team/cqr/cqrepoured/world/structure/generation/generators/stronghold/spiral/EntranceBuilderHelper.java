@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral;
 
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.WallTorchBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;

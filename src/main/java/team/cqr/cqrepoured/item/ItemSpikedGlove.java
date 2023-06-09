@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.world.level.block.BlockRenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.data;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;

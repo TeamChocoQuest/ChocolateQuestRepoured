@@ -1,8 +1,8 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.addons;
 //
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
-//import net.minecraft.block.StairsBlock;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
+//import net.minecraft.world.level.block.StairsBlock;
 //import net.minecraft.util.Direction;
 //import net.minecraft.core.BlockPos;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;

@@ -1,6 +1,6 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 //
-//import net.minecraft.block.*;
+//import net.minecraft.world.level.block.*;
 //import net.minecraft.entity.Entity;
 //import net.minecraft.entity.EntityList;
 //import net.minecraft.nbt.CompoundNBT;

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.block.FireBlock;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;

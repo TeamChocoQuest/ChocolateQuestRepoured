@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.HorizontalBlock;
+import net.minecraft.world.level.block.HorizontalBlock;
 import net.minecraft.entity.item.ItemFrameEntity;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.core.Direction.Axis;

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.misc;
 
 import java.util.List;
 
-import net.minecraft.block.AbstractFireBlock;
+import net.minecraft.world.level.block.AbstractFireBlock;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;

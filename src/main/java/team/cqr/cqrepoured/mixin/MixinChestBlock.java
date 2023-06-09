@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.mixin;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.ChestBlock;
+import net.minecraft.world.level.block.ChestBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 

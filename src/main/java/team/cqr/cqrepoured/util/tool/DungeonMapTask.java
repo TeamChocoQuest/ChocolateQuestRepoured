@@ -4,9 +4,9 @@
 //import it.unimi.dsi.fastutil.ints.IntList;
 //import it.unimi.dsi.fastutil.objects.Object2IntMap;
 //import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-//import net.minecraft.block.Block;
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.Block;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.client.renderer.texture.TextureUtil;
 //import net.minecraft.client.resources.IResource;

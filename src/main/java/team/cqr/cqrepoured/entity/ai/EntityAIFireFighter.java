@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.FireBlock;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.entity.ai.goal.BreakBlockGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

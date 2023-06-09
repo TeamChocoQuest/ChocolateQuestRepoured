@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.state.IntegerProperty;

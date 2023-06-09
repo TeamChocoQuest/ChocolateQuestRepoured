@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.block.AirBlock;
+import net.minecraft.world.level.block.AirBlock;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.block;
 
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.block.BlockRenderType;
+import net.minecraft.world.level.block.BlockRenderType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SoundType;

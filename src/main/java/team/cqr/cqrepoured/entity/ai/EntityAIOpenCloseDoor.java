@@ -2,17 +2,17 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.List;
 
-import net.minecraft.block.AbstractButtonBlock;
+import net.minecraft.world.level.block.AbstractButtonBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.block.DirectionalBlock;
-import net.minecraft.block.DoorBlock;
-import net.minecraft.block.LeverBlock;
-import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;

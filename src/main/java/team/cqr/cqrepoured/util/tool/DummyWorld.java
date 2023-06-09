@@ -2,7 +2,7 @@
 //
 //import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 //import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.client.Minecraft;
 //import net.minecraft.server.integrated.IntegratedServer;
 //import net.minecraft.core.BlockPos;

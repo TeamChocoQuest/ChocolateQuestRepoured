@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
