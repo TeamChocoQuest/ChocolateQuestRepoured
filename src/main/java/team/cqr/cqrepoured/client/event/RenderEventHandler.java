@@ -1,19 +1,20 @@
 package team.cqr.cqrepoured.client.event;
 
-import static net.minecraft.client.renderer.entity.model.BipedModel.ArmPose.BOW_AND_ARROW;
+import static net.minecraft.client.model.HumanoidModel.ArmPose.BOW_AND_ARROW;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,7 +34,7 @@ public class RenderEventHandler {
 
 	//@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		Item itemMain = player.getMainHandItem().getItem();
 		Item itemOff = player.getOffhandItem().getItem();
 
@@ -71,7 +72,7 @@ public class RenderEventHandler {
 
 	//@SubscribeEvent
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-		PlayerEntity player = event.getPlayer();
+		Player player = event.getPlayer();
 		Item itemMain = player.getMainHandItem().getItem();
 		Item itemOff = player.getOffhandItem().getItem();
 		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
@@ -115,16 +116,16 @@ public class RenderEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onRenderWorldLastEvent(RenderWorldLastEvent event) {
+	public static void onRenderWorldLastEvent(RenderLevelLastEvent event) {
 		Minecraft mc = Minecraft.getInstance();
-		for (Hand hand : Hand.values()) {
+		for (InteractionHand hand : InteractionHand.values()) {
 			ItemStack stack = mc.player.getItemInHand(hand);
 			if (!(stack.getItem() instanceof ItemUnprotectedPositionTool)) {
 				continue;
 			}
 			ItemUnprotectedPositionTool item = (ItemUnprotectedPositionTool) stack.getItem();
 
-			MatrixStack matrixStack = event.getMatrixStack();
+			PoseStack matrixStack = event.getMatrixStack();
 			double x = mc.gameRenderer.getMainCamera().getPosition().x;
 			double y = mc.gameRenderer.getMainCamera().getPosition().y;
 			double z = mc.gameRenderer.getMainCamera().getPosition().z;
@@ -133,7 +134,7 @@ public class RenderEventHandler {
 			double d3 = 1.0D / 512.0D;
 			double d4 = 1.0D + d3;
 			
-			IVertexBuilder vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(CQRRenderTypes.overlayQuads());
+			VertexConsumer vertexBuilder = mc.renderBuffers().bufferSource().getBuffer(CQRRenderTypes.overlayQuads());
 			item.getPositions(stack).forEach(pos -> {
 				double dx = pos.getX() - x;
 				double dy = pos.getY() - y;
@@ -141,7 +142,7 @@ public class RenderEventHandler {
 				TileEntityExporterRenderer.renderBox(matrixStack, vertexBuilder, dx - d1, dy - d1, dz - d1, dx + d2, dy + d2, dz + d2, 0.0F, 0.0F, 1.0F, 0.5F);
 			});
 			
-			IVertexBuilder vertexBuilder1 = mc.renderBuffers().bufferSource().getBuffer(CQRRenderTypes.overlayLines());
+			VertexConsumer vertexBuilder1 = mc.renderBuffers().bufferSource().getBuffer(CQRRenderTypes.overlayLines());
 			item.getPositions(stack).forEach(pos -> {
 				double dx = pos.getX() - x;
 				double dy = pos.getY() - y;

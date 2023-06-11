@@ -1,6 +1,6 @@
 /*package team.cqr.cqrepoured.client.render.projectile;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;

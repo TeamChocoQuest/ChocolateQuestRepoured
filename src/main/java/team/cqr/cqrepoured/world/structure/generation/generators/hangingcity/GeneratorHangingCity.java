@@ -9,9 +9,9 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;

@@ -16,22 +16,23 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.model.ParrotModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.model.ParrotModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.util.EModelRenderCycle;
 import team.cqr.cqrepoured.CQRMain;
@@ -44,11 +45,11 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	
 	protected final static ResourceLocation STANDARD_BIPED_GEO_MODEL = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
-	public RenderCQRBipedBaseGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderCQRBipedBaseGeo(Context renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1.0F, 1.0F);
 	}
 	
-	protected RenderCQRBipedBaseGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, final float widthScale, final float heightScale) {
+	protected RenderCQRBipedBaseGeo(Context renderManager, AnimatedGeoModel<T> modelProvider, final float widthScale, final float heightScale) {
 		super(renderManager, modelProvider, widthScale, heightScale, widthScale / 2);
 	}
 
@@ -56,15 +57,15 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	protected TransformType currentTransformTypeAtBone = null;
 	
 	protected ItemStack currentArmorAtBone = null;
-	protected EquipmentSlotType currentSlotAtBone = null;
-	protected Function<BipedModel<?>, ModelRenderer> currentArmorPartAtBone = null;
+	protected EquipmentSlot currentSlotAtBone = null;
+	protected Function<HumanoidModel<?>, ModelRenderer> currentArmorPartAtBone = null;
 	
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_HEAD = (armorModel) -> armorModel.head;
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_BODY = (armorModel) -> armorModel.body;
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_ARM_LEFT = (armorModel) -> armorModel.leftArm;
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_ARM_RIGHT = (armorModel) -> armorModel.rightArm;
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_LEG_LEFT = (armorModel) -> armorModel.leftLeg;
-	protected final Function<BipedModel<?>, ModelRenderer> GET_ARMOR_LEG_RIGHT = (armorModel) -> armorModel.rightLeg;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_HEAD = (armorModel) -> armorModel.head;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_BODY = (armorModel) -> armorModel.body;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_ARM_LEFT = (armorModel) -> armorModel.leftArm;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_ARM_RIGHT = (armorModel) -> armorModel.rightArm;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_LEG_LEFT = (armorModel) -> armorModel.leftLeg;
+	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_LEG_RIGHT = (armorModel) -> armorModel.rightLeg;
 	
 	//Call order (armor): 
 	/**
@@ -80,7 +81,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	 */
 	
 	@Override
-	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE)) {
 			bone.setHidden(this.getCurrentModelRenderCycle() != EModelRenderCycle.INITIAL || !this.currentEntityBeingRendered.hasCape(), false);
 		}
@@ -108,42 +109,42 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 			case ARMOR_BODY:
 				this.currentArmorAtBone = chestplate;
 				this.currentArmorPartAtBone = GET_ARMOR_BODY;
-				this.currentSlotAtBone = EquipmentSlotType.CHEST;
+				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_HEAD:
 				this.currentArmorAtBone = helmet;
 				this.currentArmorPartAtBone = GET_ARMOR_HEAD;
-				this.currentSlotAtBone = EquipmentSlotType.HEAD;
+				this.currentSlotAtBone = EquipmentSlot.HEAD;
 				break;
 			case ARMOR_LEFT_ARM:
 				this.currentArmorAtBone = chestplate;
 				this.currentArmorPartAtBone = GET_ARMOR_ARM_LEFT;
-				this.currentSlotAtBone = EquipmentSlotType.CHEST;
+				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_RIGHT_ARM:
 				this.currentArmorAtBone = chestplate;
 				this.currentArmorPartAtBone = GET_ARMOR_ARM_RIGHT;
-				this.currentSlotAtBone = EquipmentSlotType.CHEST;
+				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_RIGHT_LEG:
 				this.currentArmorAtBone = leggings;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
-				this.currentSlotAtBone = EquipmentSlotType.LEGS;
+				this.currentSlotAtBone = EquipmentSlot.LEGS;
 				break;
 			case ARMOR_LEFT_LEG:
 				this.currentArmorAtBone = leggings;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
-				this.currentSlotAtBone = EquipmentSlotType.LEGS;
+				this.currentSlotAtBone = EquipmentSlot.LEGS;
 				break;
 			case ARMOR_RIGHT_FOOT:
 				this.currentArmorAtBone = boots;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
-				this.currentSlotAtBone = EquipmentSlotType.FEET;
+				this.currentSlotAtBone = EquipmentSlot.FEET;
 				break;
 			case ARMOR_LEFT_FOOT:
 				this.currentArmorAtBone = boots;
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
-				this.currentSlotAtBone = EquipmentSlotType.FEET;
+				this.currentSlotAtBone = EquipmentSlot.FEET;
 				break;
 			default:
 				break;
@@ -182,13 +183,13 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	}
 	
 	@Override
-	protected EquipmentSlotType getEquipmentSlotForArmorBone(String boneName, T currentEntity) {
+	protected EquipmentSlot getEquipmentSlotForArmorBone(String boneName, T currentEntity) {
 		return this.currentSlotAtBone;
 	}
 
 	@Override
 	@Nullable
-	protected ModelRenderer getArmorPartForBone(String name, BipedModel<?> armorModel) {
+	protected ModelRenderer getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
 		if(this.currentArmorPartAtBone != null) {
 			return this.currentArmorPartAtBone.apply(armorModel);
 		}
@@ -196,7 +197,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	}
 	
 	@Override
-	public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+	public void renderEarly(T animatable, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 	}
 	
@@ -211,7 +212,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	}
 	
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
 		if(boneName.equals(POTION_BONE)) {
 			matrixStack.scale(0.5F, 0.5F, 0.5F);
 		}
@@ -223,7 +224,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & IAnima
 	}
 	
 	@Override
-	public RenderType getRenderType(T animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+	public RenderType getRenderType(T animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
 		return RenderType.entityCutoutNoCull(textureLocation);
 	}
 

@@ -2,16 +2,17 @@ package team.cqr.cqrepoured.network.server.handler;
 
 import java.util.function.Supplier;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketAddPathNode;
 
 public class SPacketHandlerAddPathNode extends AbstractPacketHandler<CPacketAddPathNode> {
 
 	@Override
-	protected void execHandlePacket(CPacketAddPathNode packet, Supplier<Context> context, World world, PlayerEntity player) {
+	protected void execHandlePacket(CPacketAddPathNode packet, Supplier<Context> context, Level world, Player player) {
 		ItemStack stack = player.getItemInHand(packet.getHand());
 
 		/*if (stack.getItem() instanceof ItemPathTool) {

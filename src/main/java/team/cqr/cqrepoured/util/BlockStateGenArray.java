@@ -1,22 +1,23 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
+
+import java.util.*;
 
 public class BlockStateGenArray {
 
@@ -85,15 +86,15 @@ public class BlockStateGenArray {
 		return this.entityList;
 	}
 
-	public boolean addChestWithLootTable(World world, BlockPos pos, Direction facing, ResourceLocation lootTable, GenerationPhase phase) {
+	public boolean addChestWithLootTable(Level world, BlockPos pos, Direction facing, ResourceLocation lootTable, GenerationPhase phase) {
 		if (lootTable != null) {
 			Block chestBlock = Blocks.CHEST;
 			BlockState state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing);
-			ChestTileEntity chest = (ChestTileEntity) chestBlock.createTileEntity(state, world);
+			ChestBlockEntity chest = (ChestBlockEntity) chestBlock.newBlockEntity(state, world);
 			if (chest != null) {
 				long seed = WorldDungeonGenerator.getSeed(0, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
-				CompoundNBT nbt = chest.save(new CompoundNBT());
+				CompoundTag nbt = chest.serializeNBT();
 				return this.addBlockState(pos, state, nbt, phase, EnumPriority.MEDIUM);
 			}
 		} else {
@@ -112,12 +113,12 @@ public class BlockStateGenArray {
 		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
 	}
 
-	public boolean addBlockState(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
+	public boolean addBlockState(BlockPos pos, BlockState blockState, CompoundTag nbt, GenerationPhase phase, EnumPriority priority) {
 		return false;
 		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}
 
-	public boolean addSpawner(BlockPos pos, BlockState blockState, CompoundNBT nbt, GenerationPhase phase, EnumPriority priority) {
+	public boolean addSpawner(BlockPos pos, BlockState blockState, CompoundTag nbt, GenerationPhase phase, EnumPriority priority) {
 		return false;
 		//return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
 	}

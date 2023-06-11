@@ -1,8 +1,8 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 //
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.util.ResourceLocation;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //import team.cqr.cqrepoured.util.GearedMobFactory;

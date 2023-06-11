@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import java.util.List;
-
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntitySpectreLordIllusion;
 import team.cqr.cqrepoured.faction.Faction;
+
+import java.util.List;
 
 public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<EntitySpectreLordIllusion> implements IEntityAISpellAnimatedVanilla {
 
@@ -24,7 +24,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 		if (!super.shouldExecute()) {
 			return false;
 		}
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
+		AABB aabb = new AABB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
 		Faction faction = this.entity.getFaction();
 		List<LivingEntity> alliesToHeal = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {
@@ -50,7 +50,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 	@Override
 	public void startChargingSpell() {
 		super.startChargingSpell();
-		AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
+		AABB aabb = new AABB(this.entity.getX() - 24.0D, this.entity.getY() - 2.0D, this.entity.getZ() - 24.0D, this.entity.getX() + 24.0D, this.entity.getY() + this.entity.getBbHeight() + 2.0D, this.entity.getZ() + 24.0D);
 		Faction faction = this.entity.getFaction();
 		List<LivingEntity> alliesToHeal = this.world.getEntitiesOfClass(LivingEntity.class, aabb, e -> {
 			if (e == this.entity) {

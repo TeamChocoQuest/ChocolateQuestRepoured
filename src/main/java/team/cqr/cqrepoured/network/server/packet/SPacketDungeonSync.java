@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.util.Collection;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
@@ -20,7 +20,7 @@ public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {
 	}
 
 	@Override
-	public SPacketDungeonSync fromBytes(PacketBuffer buf) {
+	public SPacketDungeonSync fromBytes(FriendlyByteBuf buf) {
 		SPacketDungeonSync result = new SPacketDungeonSync();
 		int dungeonCount = buf.readByte();
 		/*result.fakeDungeonSet = new ArrayList<>(dungeonCount);
@@ -39,7 +39,7 @@ public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {
 	}
 
 	@Override
-	public void toBytes(SPacketDungeonSync packet, PacketBuffer buf) {
+	public void toBytes(SPacketDungeonSync packet, FriendlyByteBuf buf) {
 		buf.writeByte(packet.dungeons.size());
 		for (DungeonBase dungeon : packet.dungeons) {
 			buf.writeUtf(dungeon.getDungeonName());

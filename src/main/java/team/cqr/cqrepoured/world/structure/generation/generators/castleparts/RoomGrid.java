@@ -1,7 +1,7 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts;
 //
 //import net.minecraft.util.Direction;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import team.cqr.cqrepoured.CQRMain;
 //import team.cqr.cqrepoured.util.DungeonGenUtils;
 //import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.CastleRoomReplacedRoof;

@@ -1,34 +1,34 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketStructureSelector extends AbstractPacket<CPacketStructureSelector> {
 
-	private Hand hand;
+	private InteractionHand hand;
 
 	public CPacketStructureSelector() {
 
 	}
 
-	public CPacketStructureSelector(Hand hand) {
+	public CPacketStructureSelector(InteractionHand hand) {
 		this.hand = hand;
 	}
 
 	@Override
-	public CPacketStructureSelector fromBytes(PacketBuffer buf) {
+	public CPacketStructureSelector fromBytes(FriendlyByteBuf buf) {
 		CPacketStructureSelector result = new CPacketStructureSelector();
-		result.hand = buf.readBoolean() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+		result.hand = buf.readBoolean() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 		return result;
 	}
 
 	@Override
-	public void toBytes(CPacketStructureSelector packet, PacketBuffer buf) {
-		buf.writeBoolean(packet.hand == Hand.MAIN_HAND);
+	public void toBytes(CPacketStructureSelector packet, FriendlyByteBuf buf) {
+		buf.writeBoolean(packet.hand == InteractionHand.MAIN_HAND);
 	}
 
-	public Hand getHand() {
+	public InteractionHand getHand() {
 		return this.hand;
 	}
 

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.event;
 
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.ChatFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -17,7 +17,7 @@ public class TooltipEventHandler {
 	public static void onItemTooltipEvent(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
 		if (!stack.isEmpty() && ItemArmorCrown.hasCrown(stack)) {
-			event.getToolTip().add(0, new StringTextComponent(TextFormatting.GOLD + "Crown attached"));
+			event.getToolTip().add(0, new TextComponent(ChatFormatting.GOLD + "Crown attached"));
 		}
 	}
 

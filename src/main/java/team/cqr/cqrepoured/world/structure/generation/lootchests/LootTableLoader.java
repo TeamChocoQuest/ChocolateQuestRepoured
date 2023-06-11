@@ -20,12 +20,12 @@ import com.google.gson.JsonSyntaxException;
 
 import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.loot.LootTableManager;
-import net.minecraft.loot.RandomValueRange;
-import net.minecraft.loot.StandaloneLootEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.loot.RandomValueRange;
+import net.minecraft.loot.StandaloneLootEntry;
 import net.minecraftforge.common.ForgeHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -163,7 +163,7 @@ public class LootTableLoader {
 				que.push(LOOT_TABLE_CONTEXT.newInstance(name, true));
 				LootTable newLootTable;
 				try {
-					newLootTable = LootTableManager.GSON.fromJson(s, LootTable.class);
+					newLootTable = LootTables.GSON.fromJson(s, LootTable.class);
 				} finally {
 					que.pop();
 				}

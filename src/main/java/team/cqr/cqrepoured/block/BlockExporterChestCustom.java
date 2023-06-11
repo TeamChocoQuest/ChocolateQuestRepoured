@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
@@ -16,24 +16,24 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 public class BlockExporterChestCustom extends BlockExporterChest {
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new TileEntityExporterChestCustom();
 	}
 
 	@Override
-	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand,
-			BlockRayTraceResult result) {
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                 BlockHitResult result) {
 		if (!player.isCreative()) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
-		TileEntity tileEntity = level.getBlockEntity(pos);
+		BlockEntity tileEntity = level.getBlockEntity(pos);
 		if (!(tileEntity instanceof TileEntityExporterChestCustom)) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		if (level.isClientSide) {
 			this.openScreen((TileEntityExporterChestCustom) tileEntity);
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@OnlyIn(Dist.CLIENT)

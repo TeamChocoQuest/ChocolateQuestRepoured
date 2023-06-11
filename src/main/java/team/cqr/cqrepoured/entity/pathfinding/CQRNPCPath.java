@@ -1,33 +1,33 @@
 package team.cqr.cqrepoured.entity.pathfinding;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.world.World;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class CQRNPCPath {
 
 	private static final String VERSION = "1.0.0";
 	private final List<PathNode> nodes = new ArrayList<>();
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
+	public CompoundTag writeToNBT() {
+		CompoundTag compound = new CompoundTag();
 		compound.putString("version", VERSION);
-		ListNBT nbtTagList = new ListNBT();
+		ListTag nbtTagList = new ListTag();
 		for (PathNode node : this.nodes) {
 			nbtTagList.add(node.writeToNBT());
 		}
@@ -35,14 +35,14 @@ public class CQRNPCPath {
 		return compound;
 	}
 
-	public void readFromNBT(CompoundNBT compound) {
+	public void readFromNBT(CompoundTag compound) {
 		this.nodes.clear();
 		String s = compound.getString("version");
 		if (!s.equals(VERSION)) {
 			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
 		}
 		for (INBT nbt : compound.getList("nodes", Constants.NBT.TAG_COMPOUND)) {
-			this.nodes.add(new PathNode(this, (CompoundNBT) nbt));
+			this.nodes.add(new PathNode(this, (CompoundTag) nbt));
 		}
 		this.onPathChanged();
 	}
@@ -159,16 +159,16 @@ public class CQRNPCPath {
 		private PathNode(CQRNPCPath path, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, int index) {
 			this.path = path;
 			this.pos = pos.immutable();
-			this.waitingTimeMin = MathHelper.clamp(Math.min(waitingTimeMin, waitingTimeMax), 0, 24000);
-			this.waitingTimeMax = MathHelper.clamp(Math.max(waitingTimeMin, waitingTimeMax), 0, 24000);
-			this.waitingRotation = MathHelper.wrapDegrees(waitingRotation);
-			this.weight = MathHelper.clamp(weight, 1, 10000);
-			this.timeMin = MathHelper.clamp(timeMin, 0, 24000);
-			this.timeMax = MathHelper.clamp(timeMax, 0, 24000);
+			this.waitingTimeMin = Mth.clamp(Math.min(waitingTimeMin, waitingTimeMax), 0, 24000);
+			this.waitingTimeMax = Mth.clamp(Math.max(waitingTimeMin, waitingTimeMax), 0, 24000);
+			this.waitingRotation = Mth.wrapDegrees(waitingRotation);
+			this.weight = Mth.clamp(weight, 1, 10000);
+			this.timeMin = Mth.clamp(timeMin, 0, 24000);
+			this.timeMax = Mth.clamp(timeMax, 0, 24000);
 			this.index = index;
 		}
 
-		private PathNode(CQRNPCPath path, CompoundNBT compound) {
+		private PathNode(CQRNPCPath path, CompoundTag compound) {
 			this.path = path;
 			this.pos = DungeonGenUtils.readPosFromList(compound.getList("pos", Constants.NBT.TAG_INT));
 			this.waitingTimeMin = compound.getInt("waitingTimeMin");
@@ -182,8 +182,8 @@ public class CQRNPCPath {
 			this.blacklistedPrevNodes.addElements(0, compound.getIntArray("blacklistedPrevNodes"));
 		}
 
-		private CompoundNBT writeToNBT() {
-			CompoundNBT compound = new CompoundNBT();
+		private CompoundTag writeToNBT() {
+			CompoundTag compound = new CompoundTag();
 			compound.put("pos", DungeonGenUtils.writePosToList(this.pos));
 			compound.putInt("waitingTimeMin", this.waitingTimeMin);
 			compound.putInt("waitingTimeMax", this.waitingTimeMax);
@@ -283,7 +283,7 @@ public class CQRNPCPath {
 		}
 
 		@Nullable
-		public PathNode getNextNode(World world, Random rand, @Nullable PathNode prevNode) {
+		public PathNode getNextNode(Level world, Random rand, @Nullable PathNode prevNode) {
 			if (this.connectedNodes.isEmpty()) {
 				return null;
 			}

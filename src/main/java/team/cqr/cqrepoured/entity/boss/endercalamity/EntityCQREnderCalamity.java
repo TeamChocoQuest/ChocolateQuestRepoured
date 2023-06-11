@@ -7,48 +7,54 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.loot.LootParameterSets;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Explosion.Mode;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.keyframe.event.SoundKeyframeEvent;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
@@ -89,17 +95,17 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private static final int ARENA_RADIUS = 20;
 
 	private int cqrHurtTime = 0;
-	protected static final DataParameter<Boolean> IS_HURT = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> SHIELD_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> ROTATE_BODY_PITCH = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_DEAD_AND_ON_THE_GROUND = EntityDataManager.<Boolean>defineId(EntityCQREnderCalamity.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> IS_HURT = SynchedEntityData.<Boolean>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> SHIELD_ACTIVE = SynchedEntityData.<Boolean>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ROTATE_BODY_PITCH = SynchedEntityData.<Boolean>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IS_DEAD_AND_ON_THE_GROUND = SynchedEntityData.<Boolean>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BOOLEAN);
 
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_UPPER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_MIDDLE = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_LEFT_LOWER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_UPPER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_MIDDLE = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
-	private static final DataParameter<Optional<BlockState>> BLOCK_RIGHT_LOWER = EntityDataManager.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, DataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_LEFT_UPPER = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_LEFT_MIDDLE = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_LEFT_LOWER = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_RIGHT_UPPER = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_RIGHT_MIDDLE = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
+	private static final EntityDataAccessor<Optional<BlockState>> BLOCK_RIGHT_LOWER = SynchedEntityData.<Optional<BlockState>>defineId(EntityCQREnderCalamity.class, EntityDataSerializers.BLOCK_STATE);
 
 	// AI stuff
 	private boolean isDowned = false;
@@ -185,11 +191,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	private BossAIBlockThrower blockThrowerAI;
 	private BossAIEnergyTennis tennisAI;
 
-	public EntityCQREnderCalamity(World worldIn) {
+	public EntityCQREnderCalamity(Level worldIn) {
 		this(CQREntityTypes.ENDER_CALAMITY.get(), worldIn);
 	}
 	
-	public EntityCQREnderCalamity(EntityType<? extends EntityCQREnderCalamity> type, World worldIn) {
+	public EntityCQREnderCalamity(EntityType<? extends EntityCQREnderCalamity> type, Level worldIn) {
 		super(type, worldIn);
 		this.setSizeVariation(2.0F);
 	}
@@ -535,7 +541,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 
 	
 	@Override
-	public void move(MoverType type, Vector3d direction) {
+	public void move(MoverType type, Vec3 direction) {
 		if (this.entityData.get(IS_DEAD_AND_ON_THE_GROUND)) {
 			return;
 		}
@@ -723,9 +729,9 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		}
 
 		//If it rains => NO!
-		if (this.isInWaterOrRain() && !this.isInWater() && !this.getSummonedEntities().isEmpty() && (this.level instanceof ServerWorld)) {
+		if (this.isInWaterOrRain() && !this.isInWater() && !this.getSummonedEntities().isEmpty() && (this.level instanceof ServerLevel)) {
 
-			((ServerWorld)this.level).setWeatherParameters(2000, 0, false, false);
+			((ServerLevel)this.level).setWeatherParameters(2000, 0, false, false);
 
 			this.playSound(SoundEvents.ENDERMAN_STARE, 2.5F, this.getVoicePitch());
 		}
@@ -745,7 +751,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				}
 			}
 			if (flag) {
-				this.level.levelEvent((PlayerEntity) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, this.blockPosition(), 0);
+				this.level.levelEvent((Player) null, Constants.WorldEvents.WITHER_BREAK_BLOCK, this.blockPosition(), 0);
 			}
 		}
 
@@ -999,48 +1005,48 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		super.teleport(x, y, z);
 		this.playSound(SoundEvents.SHULKER_TELEPORT, 3.0F, 0.9F + this.getRandom().nextFloat() * 0.2F);
 		for(int i = 0; i < 4; i++) {
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0.2D, -0.2D);
 			
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, 0, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, 0, -0.2D);
 			
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, 0.2D, -0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, oldX, oldY + this.getBbHeight() * 0.5D, oldZ, -0.2D, -0.2D, -0.2D);
 			
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0.2D, -0.2D);
 			
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, 0, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, 0, -0.2D);
 			
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, -0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, 0.2D);
-			((ServerWorld) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, 0.2D, -0.2D, -0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, 0.2D);
+			((ServerLevel) this.level).addParticle(ParticleTypes.PORTAL, true, x, y + this.getBbHeight() * 0.5D, z, -0.2D, -0.2D, -0.2D);
 		}
 		
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("isDowned", this.isDowned);
 		compound.putBoolean("deadAndOnGround", this.entityData.get(IS_DEAD_AND_ON_THE_GROUND));
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.isDowned = compound.getBoolean("isDowned");
 		this.entityData.set(IS_DEAD_AND_ON_THE_GROUND, compound.getBoolean("deadAndOnGround"));
@@ -1221,7 +1227,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

@@ -1,27 +1,29 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.item.PaintingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.decoration.HangingEntity;
-import net.minecraft.world.level.block.Mirror;
+import net.minecraft.entity.item.HangingEntity;
+import net.minecraft.entity.item.PaintingEntity;
+import net.minecraft.nbt.DoubleNBT;
+import net.minecraft.util.Mirror;
+import net.minecraft.core.BlockPos;
+import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
+import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
 public class PreparableEntityInfo {
 
-	private final CompoundNBT entityData;
+	private final CompoundTag entityData;
 
 	public PreparableEntityInfo(BlockPos templatePos, Entity entity) {
 		this.entityData = IEntityFactory.save(entity);
 		this.entityData.remove("UUIDMost");
 		this.entityData.remove("UUIDLeast");
-		ListNBT nbtTagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
+		ListTag nbtTagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
 		nbtTagList.set(0, DoubleNBT.valueOf(entity.getX() - templatePos.getX()));
 		nbtTagList.set(1, DoubleNBT.valueOf(entity.getY() - templatePos.getY()));
 		nbtTagList.set(2, DoubleNBT.valueOf(entity.getZ() - templatePos.getZ()));
@@ -33,7 +35,7 @@ public class PreparableEntityInfo {
 		}
 	}
 
-	public PreparableEntityInfo(CompoundNBT entityData) {
+	public PreparableEntityInfo(CompoundTag entityData) {
 		this.entityData = entityData;
 	}
 
@@ -71,7 +73,7 @@ public class PreparableEntityInfo {
 			y = pos.getY();
 			z = pos.getZ();
 		} else {
-			ListNBT tagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
+			ListTag tagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
 			MutableVec3d vec = placement.transform(tagList.getDouble(0), tagList.getDouble(1), tagList.getDouble(2));
 			x = vec.x;
 			y = vec.y;
@@ -88,7 +90,7 @@ public class PreparableEntityInfo {
 		level.addEntity(entity);
 	}
 
-	public CompoundNBT getEntityData() {
+	public CompoundTag getEntityData() {
 		return this.entityData;
 	}
 

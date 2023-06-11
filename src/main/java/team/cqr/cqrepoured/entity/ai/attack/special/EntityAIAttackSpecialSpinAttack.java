@@ -1,22 +1,23 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import java.util.List;
-
-import org.joml.Vector3d;
-
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.item.*;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.sword.ItemDagger;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
+
+import java.util.List;
 
 public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpecial {
 
@@ -28,7 +29,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 	protected static final int ATTACK_DURATION = 200;
 	protected static final float MAX_DISTANCE_TO_TARGET = 12;
 
-	protected Vector3d attackDirection = Vector3d.ZERO;
+	protected Vec3 attackDirection = Vec3.ZERO;
 	protected short ticksCollided = 0;
 	protected boolean targetWasNullInLastCycle = false;
 
@@ -90,7 +91,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 			this.calcAttackDirection(attacker, target);
 		}
 
-		Vector3d deltaMovement = new Vector3d(this.attackDirection.x, attacker.getDeltaMovement().y(), this.attackDirection.z);
+		Vec3 deltaMovement = new Vec3(this.attackDirection.x, attacker.getDeltaMovement().y(), this.attackDirection.z);
 		/*attacker.motionX = this.attackDirection.x;
 		attacker.motionZ = this.attackDirection.z;
 		atacker.velocityChanged = true;*/

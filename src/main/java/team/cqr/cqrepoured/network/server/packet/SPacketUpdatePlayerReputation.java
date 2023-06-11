@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.UUID;
-
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.UUID;
 
 public class SPacketUpdatePlayerReputation extends AbstractPacket<SPacketUpdatePlayerReputation> {
 
@@ -16,14 +16,14 @@ public class SPacketUpdatePlayerReputation extends AbstractPacket<SPacketUpdateP
 
 	}
 
-	public SPacketUpdatePlayerReputation(ServerPlayerEntity player, String faction, int score) {
+	public SPacketUpdatePlayerReputation(ServerPlayer player, String faction, int score) {
 		this.score = score;
 		this.faction = faction;
 		this.playerId = player.getUUID();
 	}
 
 	@Override
-	public SPacketUpdatePlayerReputation fromBytes(PacketBuffer buf) {
+	public SPacketUpdatePlayerReputation fromBytes(FriendlyByteBuf buf) {
 		SPacketUpdatePlayerReputation result = new SPacketUpdatePlayerReputation();
 		
 		result.playerId = buf.readUUID();
@@ -46,7 +46,7 @@ public class SPacketUpdatePlayerReputation extends AbstractPacket<SPacketUpdateP
 	}
 
 	@Override
-	public void toBytes(SPacketUpdatePlayerReputation packet, PacketBuffer buf) {
+	public void toBytes(SPacketUpdatePlayerReputation packet, FriendlyByteBuf buf) {
 		buf.writeUUID(packet.playerId);
 		buf.writeUtf(packet.faction);
 		buf.writeInt(packet.score);

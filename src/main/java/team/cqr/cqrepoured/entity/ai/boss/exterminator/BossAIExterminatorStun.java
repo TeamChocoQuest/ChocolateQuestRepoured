@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import java.util.EnumSet;
-
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
+
+import java.util.EnumSet;
 
 public class BossAIExterminatorStun extends AbstractCQREntityAI<EntityCQRExterminator> {
 

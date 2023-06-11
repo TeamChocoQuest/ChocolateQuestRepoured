@@ -1,14 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.EnumSet;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -19,6 +17,8 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import java.util.EnumSet;
 
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 	
@@ -114,32 +114,32 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		return Math.round(absoluteMax * hpPercentage);
 	}
 
-	private AbstractEntityCQR getNewMinion(int seed, World world) {
+	private AbstractEntityCQR getNewMinion(int seed, Level world) {
 		AbstractEntityCQR entity = new EntityCQREnderman(world);
-		entity.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(entity.blockPosition()), SpawnReason.REINFORCEMENT, null, null);
+		entity.finalizeSpawn((IServerWorld) this.world, this.world.getCurrentDifficultyAt(entity.blockPosition()), MobSpawnType.REINFORCEMENT, null, null);
 		switch (seed) {
 		case 4:
-			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS.get()));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.DIAMOND_HELMET));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			entity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(CQRItems.SHIELD_SKELETON_FRIENDS.get()));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.DIAMOND_HELMET));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
 			break;
 		case 3:
-			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-			entity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-			entity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
+			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+			entity.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
 			break;
 		case 2:
-			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
-			entity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-			entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+			entity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+			entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
 			break;
 		case 1:
-			entity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
+			entity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 			break;
 		}
 

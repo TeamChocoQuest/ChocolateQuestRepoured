@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -29,7 +30,7 @@ public class GuiMapPlaceholder extends Screen {
 	private TextFieldWidget fillRadius;
 
 	public GuiMapPlaceholder(TileEntityMap tileEntity) {
-		super(new StringTextComponent("Map Placeholder"));
+		super(new TextComponent("Map Placeholder"));
 		this.minecraft = Minecraft.getInstance();
 		this.tileEntity = tileEntity;
 	}
@@ -77,7 +78,7 @@ public class GuiMapPlaceholder extends Screen {
 
 			this.tileEntity.set(scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		} catch (IllegalArgumentException e) {
-			Minecraft.getInstance().player.sendMessage(new StringTextComponent("Invalid arguments"), Minecraft.getInstance().player.getUUID());
+			Minecraft.getInstance().player.sendMessage(new TextComponent("Invalid arguments"), Minecraft.getInstance().player.getUUID());
 		}
 
 		super.onClose();
@@ -148,7 +149,7 @@ public class GuiMapPlaceholder extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 		drawString(pMatrixStack, this.font, "Scale", this.width / 2 + 4, this.height / 2 - 72 + 3, 0xE0E0E0);
@@ -191,7 +192,7 @@ public class GuiMapPlaceholder extends Screen {
 			} else {
 				this.index = this.index > 0 ? this.index - 1 : this.displayStrings.length - 1;
 			}
-			this.setMessage(new StringTextComponent(this.displayStrings[this.index]));
+			this.setMessage(new TextComponent(this.displayStrings[this.index]));
 		}
 
 		public void setDisplayString(Direction orientation) {
@@ -209,7 +210,7 @@ public class GuiMapPlaceholder extends Screen {
 				this.index = 0;
 				break;
 			}
-			this.setMessage(new StringTextComponent(this.displayStrings[this.index]));
+			this.setMessage(new TextComponent(this.displayStrings[this.index]));
 		}
 
 		public Direction getDirection() {

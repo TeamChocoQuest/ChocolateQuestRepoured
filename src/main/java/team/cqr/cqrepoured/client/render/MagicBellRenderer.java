@@ -1,7 +1,7 @@
 /*package team.cqr.cqrepoured.client.render;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,7 +17,7 @@ import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeRenderTypes;
 

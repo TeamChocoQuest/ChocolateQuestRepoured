@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.network.client.packet;
 
 import it.unimi.dsi.fastutil.ints.IntCollection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 
-	private Hand hand;
+	private InteractionHand hand;
 	private int rootNode;
 	private BlockPos pos;
 	private int waitingTimeMin;
@@ -24,7 +24,7 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 
 	}
 
-	public CPacketAddPathNode(Hand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
+	public CPacketAddPathNode(InteractionHand hand, int rootNode, BlockPos pos, int waitingTimeMin, int waitingTimeMax, float waitingRotation, int weight, int timeMin, int timeMax, boolean bidirectional, IntCollection blacklistedPrevNodes) {
 		this.hand = hand;
 		this.rootNode = rootNode;
 		this.pos = pos;
@@ -38,9 +38,9 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 		this.blacklistedPrevNodes = blacklistedPrevNodes.toIntArray();
 	}
 
-	public CPacketAddPathNode fromBytes(PacketBuffer buf) {
+	public CPacketAddPathNode fromBytes(FriendlyByteBuf buf) {
 		CPacketAddPathNode result = new CPacketAddPathNode();
-		result.hand = Hand.values()[buf.readByte()];
+		result.hand = InteractionHand.values()[buf.readByte()];
 		result.rootNode = buf.readInt();
 		result.pos = buf.readBlockPos();
 		result.waitingTimeMin = buf.readShort();
@@ -58,7 +58,7 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 		return result;
 	}
 
-	public void toBytes(CPacketAddPathNode packet, PacketBuffer buf) {
+	public void toBytes(CPacketAddPathNode packet, FriendlyByteBuf buf) {
 		buf.writeByte(packet.hand.ordinal());
 		buf.writeInt(packet.rootNode);
 		buf.writeBlockPos(packet.pos);
@@ -75,7 +75,7 @@ public class CPacketAddPathNode extends AbstractPacket<CPacketAddPathNode>{
 		}
 	}
 
-	public Hand getHand() {
+	public InteractionHand getHand() {
 		return this.hand;
 	}
 

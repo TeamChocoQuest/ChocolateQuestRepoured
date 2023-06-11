@@ -17,19 +17,20 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.apache.commons.io.FileUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
@@ -68,12 +69,12 @@ public class FactionRegistry {
 		return SERVER_INSTANCE;
 	}
 
-	public static FactionRegistry instance(IWorld world) {
+	public static FactionRegistry instance(Level world) {
 		return world.isClientSide() ? CLIENT_INSTANCE : SERVER_INSTANCE;
 	}
 
 	public static FactionRegistry instance(Entity entity) {
-		return instance(entity.level);
+		return instance(entity.level());
 	}
 
 	public void loadFactions() {
@@ -111,7 +112,7 @@ public class FactionRegistry {
 	}
 
 	// Variant on the server, used by the command
-	public void changeReputationTo(@Nonnull ServerPlayerEntity player, int reputation, @Nonnull Faction faction) {
+	public void changeReputationTo(@Nonnull ServerPlayer player, int reputation, @Nonnull Faction faction) {
 		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getUUID(), key -> new Object2IntOpenHashMap<>());
 		factionsOfPlayer.put(faction.getName(), reputation);
 
@@ -126,7 +127,7 @@ public class FactionRegistry {
 				continue;
 			}
 			ResourceLocation registryName = new ResourceLocation(s.substring(0, i).trim());
-			EntityType<?> entry = ForgeRegistries.ENTITIES.getValue(registryName);
+			EntityType<?> entry = ForgeRegistries.ENTITY_TYPES.getValue(registryName);
 			if (entry == null) {
 				CQRMain.logger.warn("Invalid entity-faction relation \"{}\"! Entity does not exists!", s);
 				continue;
@@ -316,15 +317,15 @@ public class FactionRegistry {
 		return faction.getDefaultReputation().getValue();
 	}
 
-	void incrementRepuOf(PlayerEntity player, String faction, int score) {
+	void incrementRepuOf(Player player, String faction, int score) {
 		this.changeRepuOf(player, faction, Math.abs(score));
 	}
 
-	void decrementRepuOf(PlayerEntity player, String faction, int score) {
+	void decrementRepuOf(Player player, String faction, int score) {
 		this.changeRepuOf(player, faction, -Math.abs(score));
 	}
 
-	private void changeRepuOf(PlayerEntity player, String faction, int score) {
+	private void changeRepuOf(Player player, String faction, int score) {
 		// System.out.println("Changing repu...");
 
 		/*
@@ -339,21 +340,21 @@ public class FactionRegistry {
 			// CQRMain.logger.info("Repu changed!");
 
 			// send packet to player
-			if (player instanceof ServerPlayerEntity) {
-				this.sendRepuUpdatePacket((ServerPlayerEntity) player, score + oldScore, faction);
+			if (player instanceof ServerPlayer) {
+				this.sendRepuUpdatePacket((ServerPlayer) player, score + oldScore, faction);
 			}
 		}
 		// System.out.println("Repu of " + player.getDisplayNameString() + " is " +
 		// this.getExactReputationOf(player.getPersistentID(), getFactionInstance(faction)));
 	}
 
-	private void sendRepuUpdatePacket(ServerPlayerEntity player, int reputation, String faction) {
+	private void sendRepuUpdatePacket(ServerPlayer player, int reputation, String faction) {
 		// System.out.println("Sending update packet...");
 		SPacketUpdatePlayerReputation packet = new SPacketUpdatePlayerReputation(player, faction, reputation);
 		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), packet);
 	}
 
-	private boolean canDecrementRepu(PlayerEntity player, String faction) {
+	private boolean canDecrementRepu(Player player, String faction) {
 		if (this.canRepuChange(player)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getUUID(), new Object2IntOpenHashMap<>());
 			if (factionsOfPlayer != null) {
@@ -369,7 +370,7 @@ public class FactionRegistry {
 		return false;
 	}
 
-	public boolean canIncrementRepu(PlayerEntity player, String faction) {
+	public boolean canIncrementRepu(Player player, String faction) {
 		if (this.canRepuChange(player)) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getUUID(), new Object2IntOpenHashMap<>());
 			if (factionsOfPlayer != null) {
@@ -385,17 +386,17 @@ public class FactionRegistry {
 		return false;
 	}
 
-	private boolean canRepuChange(PlayerEntity player) {
-		return player.level.getDifficulty() != Difficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
+	private boolean canRepuChange(Player player) {
+		return player.level().getDifficulty() != Difficulty.PEACEFUL && !player.isCreative() && !player.isSpectator();
 	}
 
-	public void loadPlayerReputationData(PlayerEntity player) {
+	public void loadPlayerReputationData(Player player) {
 		CQRMain.logger.info("Loading player reputation...");
 
 		UUID uuid = player.getUUID();
-		File file = FileIOUtil.getCQRDataFile((ServerWorld) player.level, "reputation/" + uuid + ".nbt");
+		File file = FileIOUtil.getCQRDataFile((ServerLevel) player.level(), "reputation/" + uuid + ".nbt");
 		if (file.exists()) {
-			CompoundNBT root = FileIOUtil.readNBT(file);
+			CompoundTag root = FileIOUtil.readNBT(file);
 			Map<String, Integer> mapping = this.playerFactionRepuMap.computeIfAbsent(uuid, key -> new Object2IntOpenHashMap<>());
 			for (String factionName : root.getAllKeys()) {
 				int value = root.getInt(factionName);
@@ -404,19 +405,19 @@ public class FactionRegistry {
 		}
 	}
 
-	public void syncPlayerReputationData(ServerPlayerEntity player) {
+	public void syncPlayerReputationData(ServerPlayer player) {
 		// Send over factions and reputations
 		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new SPacketInitialFactionInformation(player.getUUID(), this.getLoadedFactions(), this.playerFactionRepuMap.getOrDefault(player.getUUID(), Object2IntMaps.emptyMap())));
 	}
 
-	public void savePlayerReputationData(ServerPlayerEntity player) {
+	public void savePlayerReputationData(ServerPlayer player) {
 		if (this.playerFactionRepuMap.containsKey(player.getUUID())) {
 			CQRMain.logger.info("Saving player reputation...");
-			this.savePlayerReputation(player.getUUID(), true, player.level);
+			this.savePlayerReputation(player.getUUID(), true, player.level());
 		}
 	}
 
-	public void saveAllReputationData(final boolean removeMapsFromMemory, final IWorld world) {
+	public void saveAllReputationData(final boolean removeMapsFromMemory, final Level world) {
 		for (UUID playerID : this.playerFactionRepuMap.keySet()) {
 			this.savePlayerReputation(playerID, removeMapsFromMemory, world);
 		}
@@ -425,18 +426,18 @@ public class FactionRegistry {
 		}
 	}
 	
-	public void savePlayerReputation(final UUID playerID, final IWorld world) {
+	public void savePlayerReputation(final UUID playerID, final Level world) {
 		this.savePlayerReputation(playerID, false, world);
 	}
 
-	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap, final IWorld world) {
+	public void savePlayerReputation(final UUID playerID, final boolean removeFromMap, final Level world) {
 		Map<String, Integer> mapping = this.playerFactionRepuMap.get(playerID);
-		CompoundNBT root = new CompoundNBT();
+		CompoundTag root = new CompoundTag();
 		for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
 			root.putInt(entry.getKey(), entry.getValue());
 		}
 
-		File file = FileIOUtil.getCQRDataFile((ServerWorld) world, "reputation/" + playerID + ".nbt");
+		File file = FileIOUtil.getCQRDataFile((ServerLevel) world, "reputation/" + playerID + ".nbt");
 		FileIOUtil.writeNBT(file, root);
 
 		if (removeFromMap) {

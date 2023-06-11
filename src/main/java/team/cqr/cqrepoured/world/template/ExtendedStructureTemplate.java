@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.IServerWorld;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class ExtendedStructureTemplate extends Template {
@@ -22,7 +24,7 @@ public class ExtendedStructureTemplate extends Template {
 	protected final Set<BlockState> BLOCK_STATE_PALETTE = new HashSet<>();
 	
 	@Override
-	public void fillFromWorld(World world, BlockPos origin, BlockPos size, boolean saveEntities, Block blockToIgnore) {
+	public void fillFromWorld(Level world, BlockPos origin, BlockPos size, boolean saveEntities, Block blockToIgnore) {
 		//Load from blocks in world
 		super.fillFromWorld(world, origin, size, saveEntities, blockToIgnore);
 	}
@@ -58,13 +60,13 @@ public class ExtendedStructureTemplate extends Template {
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT pTag) {
+	public CompoundTag save(CompoundTag pTag) {
 		//Saves to nbt file
 		return super.save(pTag);
 	}
 	
 	@Override
-	public void load(CompoundNBT pTag) {
+	public void load(CompoundTag pTag) {
 		//loads from nbt file
 		super.load(pTag);
 	}

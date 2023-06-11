@@ -6,11 +6,12 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 public abstract class AbstractFileControlledProcessor extends StructureProcessor {
 
@@ -41,13 +42,13 @@ public abstract class AbstractFileControlledProcessor extends StructureProcessor
 	}
 	
 	@Override
-	public BlockInfo process(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
+	public BlockInfo process(BlockGetter worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
 		if(this.valid) {
 			return this.execProcess(worldReader, jigsawPos, jigsawPieceBottomCenterPos, blockInfoLocal, blockInfoGlobal, structurePlacementData, template);
 		}
 		return blockInfoGlobal;
 	}
 	
-	protected abstract BlockInfo execProcess(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template);
+	protected abstract BlockInfo execProcess(BlockGetter worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template);
 
 }

@@ -2,22 +2,24 @@ package team.cqr.cqrepoured.entity.mobs;
 
 import java.util.Set;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.IndirectEntityDamageSource;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.EntityAITeleportToTargetWhenStuck;
@@ -30,14 +32,14 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 
 	protected boolean mayTeleport = true;
 
-	public EntityCQREnderman(World world) {
+	public EntityCQREnderman(Level world) {
 		this(CQREntityTypes.ENDERMAN.get(), world);
 	}
 
-	public EntityCQREnderman(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQREnderman(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 		this.maxUpStep = 1.0F;
-		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+		this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
 	}
 
 	@Override
@@ -70,7 +72,7 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 
 	@Override
 	protected void customServerAiStep() {
-		if (this.isInWater() /* || (this.isWet() */ && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty()) {
+		if (this.isInWater() /* || (this.isWet() */ && this.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
 			this.hurt(DamageSource.DROWN, 1.0F);
 		}
 		super.customServerAiStep();
@@ -89,7 +91,7 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 			return false;
 		boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 		if (flag2 && !this.isSilent()) {
-			this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+			this.level.playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
 			this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 		}
 
@@ -161,13 +163,13 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("mayTeleport", mayTeleport);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("mayTeleport")) {
 			this.mayTeleport = compound.getBoolean("mayTeleport");
@@ -188,7 +190,7 @@ public class EntityCQREnderman extends AbstractEntityCQR implements IAnimatableC
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

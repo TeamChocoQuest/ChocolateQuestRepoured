@@ -3,16 +3,17 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.BannerTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.item.BannerItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.item.BannerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tileentity.BannerTileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -23,12 +24,12 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBannerInfo extends PreparableBlockInfo {
 
-	public PreparableBannerInfo(BlockState state, @Nullable CompoundNBT tileEntityData) {
+	public PreparableBannerInfo(BlockState state, @Nullable CompoundTag tileEntityData) {
 		super(state, tileEntityData);
 	}
 
 	@Override
-	protected void blockEntityCallback(BlockPos pos, BlockState state, TileEntity blockEntity, DungeonPlacement placement) {
+	protected void blockEntityCallback(BlockPos pos, BlockState state, BlockEntity blockEntity, DungeonPlacement placement) {
 		super.blockEntityCallback(pos, state, blockEntity, placement);
 
 		if (blockEntity instanceof BannerTileEntity && placement.getInhabitant().getBanner() != null) {
@@ -42,7 +43,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	public static class Factory implements IFactory<BannerTileEntity> {
 
 		@Override
-		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<BannerTileEntity> blockEntityLazy) {
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerTileEntity> blockEntityLazy) {
 			BannerTileEntity blockEntity = blockEntityLazy.orElseThrow(NullPointerException::new);
 			if (BannerHelper.isCQBanner(blockEntity)) {
 				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
@@ -55,7 +56,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	public static class Serializer implements ISerializer<PreparableBannerInfo> {
 
 		@Override
-		public void write(PreparableBannerInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableBannerInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			int data = (palette.idFor(preparable.getState()) << 1) | (preparable.getTileEntityData() != null ? 1 : 0);
 			ByteBufUtil.writeVarInt(buf, data, 5);
 			if (preparable.getTileEntityData() != null) {
@@ -65,10 +66,10 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		}
 
 		@Override
-		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
 			BlockState state = palette.stateFor(data >>> 1);
-			CompoundNBT tileEntityData = null;
+			CompoundTag tileEntityData = null;
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
 			}

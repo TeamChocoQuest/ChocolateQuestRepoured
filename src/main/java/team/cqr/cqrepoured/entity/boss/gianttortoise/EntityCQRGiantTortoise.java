@@ -3,40 +3,45 @@ package team.cqr.cqrepoured.entity.boss.gianttortoise;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.World;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.BossInfo.Color;
+import net.minecraft.world.level.Explosion.Mode;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
@@ -73,10 +78,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 	}
 
-	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>defineId(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>defineId(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IN_SHELL = SynchedEntityData.<Boolean>defineId(EntityCQRGiantTortoise.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IN_SHELL_BYPASS = SynchedEntityData.<Boolean>defineId(EntityCQRGiantTortoise.class, EntityDataSerializers.BOOLEAN);
 
-	private static final DataParameter<Integer> CURRENT_ANIMATION_ID = EntityDataManager.<Integer>defineId(EntityCQRGiantTortoise.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_ANIMATION_ID = SynchedEntityData.<Integer>defineId(EntityCQRGiantTortoise.class, EntityDataSerializers.INT);
 	private int nextAnimationId = ANIMATION_ID_IN_SHELL;
 	private int currentAnimationTick = 0;
 	public static final int ANIMATION_ID_IN_SHELL = 5;
@@ -107,17 +112,17 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int timesHealed = 1;
 	private boolean isHealing = false;
 
-	private Vector3d lastTickPos = null;
+	private Vec3 lastTickPos = null;
 	private int stuckTicks = 0;
 	private static final int MAX_STUCK_TICKS = 60;
 
 	private static List<ResourceLocation> hardBlocks = new ArrayList<>();
 
-	public EntityCQRGiantTortoise(World worldIn) {
+	public EntityCQRGiantTortoise(Level worldIn) {
 		this(CQREntityTypes.GIANT_TORTOISE.get(), worldIn);
 	}
 	
-	public EntityCQRGiantTortoise(EntityType<? extends EntityCQRGiantTortoise> type, World worldIn) {
+	public EntityCQRGiantTortoise(EntityType<? extends EntityCQRGiantTortoise> type, Level worldIn) {
 		super(type, worldIn);
 
 		this.maxUpStep = 2.1F;
@@ -219,7 +224,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public World getWorld() {
+	public Level getWorld() {
 		return this.level;
 	}
 
@@ -230,7 +235,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
-		if (source.isBypassInvul() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).isCreative())) {
+		if (source.isBypassInvul() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof Player && ((Player) source.getEntity()).isCreative())) {
 			return super.hurt(source, amount, sentFromPart);
 		}
 
@@ -239,7 +244,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		 */
 		this.partSoundFlag = sentFromPart;
 
-		if (source.getEntity() instanceof LivingEntity && !(source.getEntity() instanceof PlayerEntity)) {
+		if (source.getEntity() instanceof LivingEntity && !(source.getEntity() instanceof Player)) {
 			if (this.getRandom().nextBoolean() && !sentFromPart) {
 				sentFromPart = true;
 			}
@@ -384,7 +389,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			rotYawHead -= 360F;
 		}
 		// v = VectorUtil.rotateVectorAroundY(v, rotYawHead);
-		Vector3d v = this.getLookAngle().scale(this.getBbWidth() / 2 + this.getBbWidth() * 0.1);
+		Vec3 v = this.getLookAngle().scale(this.getBbWidth() / 2 + this.getBbWidth() * 0.1);
 
 		float vy = this.getCurrentAnimationId() != ANIMATION_ID_WALK ? 0.15F : 0.5F;
 		vy *= this.getSizeVariation();
@@ -455,7 +460,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (!blocked) {
 				entityIn.hurt(DamageSource.thorns(this), 4F * (Math.max(1, this.level.getDifficulty().getId()) * 1.5F));
 			}
-			Vector3d v = entityIn.position().subtract(this.position());
+			Vec3 v = entityIn.position().subtract(this.position());
 			v = v.normalize();
 			if (blocked) {
 				v = v.scale(0.8D);
@@ -509,7 +514,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 
 		compound.putInt("timesHealed", this.timesHealed);
@@ -517,7 +522,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 
 		this.setTimesHealed(compound.getInt("timesHealed"));
@@ -714,7 +719,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			double f1 = (this.random.nextDouble() - 0.5D) * (this.getBbHeight() * sizeVariation);
 			double f2 = (this.random.nextDouble() - 0.5D) * (this.getBbWidth() * sizeVariation);
 			if(!this.level.isClientSide) {
-				ServerWorld sw = (ServerWorld) this.level;
+				ServerLevel sw = (ServerLevel) this.level;
 				sw.sendParticles(ParticleTypes.ITEM_SLIME, this.getX() + f, this.getY() + (this.getBbHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
 				sw.sendParticles(ParticleTypes.DAMAGE_INDICATOR, this.getX() + f, this.getY() + (this.getBbHeight() * sizeVariation / 2) + f1, this.getZ() + f2, 20, 0.0D, 0.0D, 0.0D, 1);
 			}
@@ -738,7 +743,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

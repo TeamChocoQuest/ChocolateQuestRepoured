@@ -1,26 +1,25 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import org.joml.Vector3d;
-
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Explosion;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.config.CQRConfig;
 
 public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements IBlacklistedFromStatues {
 
 	public static final int MAX_DEATH_TICKS = 200;
 
-	protected AbstractEntityCQRBoss(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	protected AbstractEntityCQRBoss(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 		this.xpReward = 50;
 		this.enableBossBar();
@@ -29,7 +28,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	@Override
 	public boolean hurt(DamageSource source, float amount, boolean sentFromPart) {
 		int nearbyPlayerCount = 0;
-		for (PlayerEntity player : this.level.players()) {
+		for (Player player : this.level.players()) {
 			if (this.distanceToSqr(player) < 100.0D * 100.0D) {
 				nearbyPlayerCount++;
 			}
@@ -41,7 +40,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (this.hasCustomName() && this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
@@ -80,12 +79,12 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 				if(this.level.isClientSide) {
 					this.level.addParticle(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
 				} else {
-					((ServerWorld)this.level).sendParticles(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 1, 0.0D, 0.0D, 0.0D, 1.0);
+					((ServerLevel)this.level).sendParticles(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 1, 0.0D, 0.0D, 0.0D, 1.0);
 				}
 			}
 			this.setNoGravity(true);
 			// DONE: Do this correctly. It is meant to move the boss up 10 blocks while he dies, atm this is not correct
-			this.move(MoverType.SELF, new Vector3d(0, (10.0D / MAX_DEATH_TICKS), 0));
+			this.move(MoverType.SELF, new Vec3(0, (10.0D / MAX_DEATH_TICKS), 0));
 			if (this.deathTime == MAX_DEATH_TICKS && !this.level.isClientSide) {
 				this.playSound(this.getFinalDeathSound(), 10.0F, 1.0F);
 				this.remove();
@@ -153,7 +152,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	protected void spawnDeathPoofParticles() {
-		if (!(this.level instanceof ServerWorld)) {
+		if (!(this.level instanceof ServerLevel)) {
 			return;
 		}
 		// Copied from EntityLivingBase
@@ -163,7 +162,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 			double d2 = this.random.nextGaussian() * 0.02D;
 			double d0 = this.random.nextGaussian() * 0.02D;
 			double d1 = this.random.nextGaussian() * 0.02D;
-			((ServerWorld) this.level).sendParticles(
+			((ServerLevel) this.level).sendParticles(
 					ParticleTypes.EXPLOSION.getType(),
 					this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0F - this.getBbWidth(), 
 					this.getY() + this.random.nextFloat() * this.getBbHeight(), 

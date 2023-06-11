@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.init;
 import java.util.function.Supplier;
 
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.enchantment.EnchantmentLightningProtection;
 import team.cqr.cqrepoured.enchantment.EnchantmentSpectral;

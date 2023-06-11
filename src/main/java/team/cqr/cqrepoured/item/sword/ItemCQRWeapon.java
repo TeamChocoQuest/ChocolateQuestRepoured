@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Multimap;
 
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.SwordItem;
+import net.minecraft.item.IItemTier;
+import net.minecraft.world.item.Item;
+import net.minecraft.item.SwordItem;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemCQRWeapon extends SwordItem {
@@ -33,11 +35,11 @@ public class ItemCQRWeapon extends SwordItem {
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlotType pEquipmentSlot) {
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot pEquipmentSlot) {
 		if (defaultModifiers == null) {
 			defaultModifiers = ItemUtil.join(attributeModifierSuppliers.stream().map(Supplier::get).collect(Collectors.toList()));
 		}
-		return pEquipmentSlot == EquipmentSlotType.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
+		return pEquipmentSlot == EquipmentSlot.MAINHAND ? defaultModifiers : super.getDefaultAttributeModifiers(pEquipmentSlot);
 	}
 
 }

@@ -1,23 +1,22 @@
 package team.cqr.cqrepoured.inventory;
 
-import java.awt.Container;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 
 public class ContainerBossBlock extends Container {
 
-	private final IInventory inventory;
+	private final Container inventory;
 
 	/** Client **/
-	public ContainerBossBlock(final int containerID, PlayerInventory playerInv, PacketBuffer data) {
+	public ContainerBossBlock(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
 		this(containerID, playerInv, new Inventory(1) {
 			@Override
 			public int getMaxStackSize() {
@@ -27,7 +26,7 @@ public class ContainerBossBlock extends Container {
 	}
 
 	/** Server **/
-	public ContainerBossBlock(final int containerID, PlayerInventory playerInv, IInventory inventory) {
+	public ContainerBossBlock(final int containerID, Inventory playerInv, Container inventory) {
 		super(CQRContainerTypes.BOSS_BLOCK.get(), containerID);
 		this.inventory = inventory;
 
@@ -50,12 +49,12 @@ public class ContainerBossBlock extends Container {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		return this.inventory.stillValid(playerIn);
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		Slot slot = this.slots.get(index);
 
 		if (slot != null && slot.hasItem()) {

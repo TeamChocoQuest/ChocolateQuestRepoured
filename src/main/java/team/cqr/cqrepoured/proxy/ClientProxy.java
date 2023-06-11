@@ -3,16 +3,18 @@ package team.cqr.cqrepoured.proxy;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientAdvancementManager;
+import net.minecraft.client.multiplayer.ClientAdvancements;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.LivingRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.server.IntegratedServer;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerCrownRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.LayerElectrocute;
@@ -30,9 +32,9 @@ public class ClientProxy implements IProxy {
 		for (EntityRenderer<? extends Entity> renderer : Minecraft.getInstance().getEntityRenderDispatcher().renderers.values()) {
 			try {
                 EntityRenderer<Entity> render = (EntityRenderer<Entity>) renderer;
-				if (render instanceof LivingRenderer) {
-					((LivingRenderer<?, ?>) render).addLayer(new LayerElectrocute((LivingRenderer<?,?>) render));
-					((LivingRenderer<?, ?>) render).addLayer(new LayerCrownRenderer((LivingRenderer<?,?>) render));
+				if (render instanceof LivingEntityRenderer) {
+					((LivingEntityRenderer<?, ?>) render).addLayer(new LayerElectrocute((LivingEntityRenderer<?,?>) render));
+					((LivingEntityRenderer<?, ?>) render).addLayer(new LayerCrownRenderer((LivingEntityRenderer<?,?>) render));
 				}
 			} catch (ClassCastException ccex) {
 				// Ignore
@@ -47,28 +49,28 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public PlayerEntity getPlayer(Context context) {
+	public Player getPlayer(Context context) {
 		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().player, () -> () -> context.getSender());
 	}
 
 	@Override
-	public World getWorld(Context context) {
+	public Level getWorld(Context context) {
 		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> context.getSender().level);
 	}
 
 	@Override
-	public Advancement getAdvancement(PlayerEntity player, ResourceLocation id) {
-		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+	public Advancement getAdvancement(Player player, ResourceLocation id) {
+		if (player instanceof LocalPlayer) {
+			ClientAdvancements manager = ((LocalPlayer) player).connection.getAdvancements();
 			return manager.getAdvancements().get(id);
 		}
 		return null;
 	}
 
 	@Override
-	public boolean hasAdvancement(PlayerEntity player, ResourceLocation id) {
-		if (player instanceof ClientPlayerEntity) {
-			ClientAdvancementManager manager = ((ClientPlayerEntity) player).connection.getAdvancements();
+	public boolean hasAdvancement(Player player, ResourceLocation id) {
+		if (player instanceof LocalPlayer) {
+			ClientAdvancements manager = ((LocalPlayer) player).connection.getAdvancements();
 			Advancement advancement = manager.getAdvancements().get(id);
 			if (advancement != null) {
 				AdvancementProgress prog = manager.progress.get(advancement);
@@ -88,13 +90,13 @@ public class ClientProxy implements IProxy {
 	}
 
 	@Override
-	public boolean isOwnerOfIntegratedServer(PlayerEntity player) {
+	public boolean isOwnerOfIntegratedServer(Player player) {
 		IntegratedServer integratedServer = Minecraft.getInstance().getSingleplayerServer();
 		return integratedServer != null && player.getName().equals(integratedServer.getSingleplayerName()) && integratedServer.isSingleplayerOwner(player.getGameProfile());
 	}
 
 	@Override
-	public void openGui(int id, PlayerEntity player, World world, int... args) {
+	public void openGui(int id, Player player, Level world, int... args) {
 		/*Minecraft mc = Minecraft.getInstance();
 
 		if (id == GuiHandler.ADD_PATH_NODE_GUI_ID) {
@@ -105,9 +107,9 @@ public class ClientProxy implements IProxy {
 
 	@SuppressWarnings("resource")
 	@Override
-	public boolean isPlayerCurrentClientPlayer(PlayerEntity player) {
+	public boolean isPlayerCurrentClientPlayer(Player player) {
 		if(player != null) {
-			return ((PlayerEntity)Minecraft.getInstance().player).equals(player);
+			return ((Player)Minecraft.getInstance().player).equals(player);
 		}
 		return false;
 	}

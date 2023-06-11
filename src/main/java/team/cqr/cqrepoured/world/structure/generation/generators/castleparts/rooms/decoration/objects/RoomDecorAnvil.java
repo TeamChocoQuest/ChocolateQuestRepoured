@@ -1,7 +1,7 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 //
-//import net.minecraft.block.AnvilBlock;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.AnvilBlock;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.util.Direction;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //

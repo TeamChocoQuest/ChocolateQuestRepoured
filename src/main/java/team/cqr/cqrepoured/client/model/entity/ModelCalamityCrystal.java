@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
@@ -59,7 +59,7 @@ public class ModelCalamityCrystal extends EntityModel<EntityCalamityCrystal> {
 	}
 
 	@Override
-	public void renderToBuffer(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
+	public void renderToBuffer(PoseStack pMatrixStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
 		
 	}
 }

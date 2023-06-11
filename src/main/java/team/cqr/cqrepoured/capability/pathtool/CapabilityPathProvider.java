@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.capability.pathtool;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.util.NonNullSupplier;

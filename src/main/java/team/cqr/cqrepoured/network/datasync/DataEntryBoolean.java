@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.ByteNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryBoolean extends DataEntry<Boolean> {
 
@@ -16,24 +16,24 @@ public class DataEntryBoolean extends DataEntry<Boolean> {
 	}
 
 	@Override
-	public INBT write() {
-		return ByteNBT.valueOf((byte) (this.value ? 1 : 0));
+	public Tag write() {
+		return ByteTag.valueOf((byte) (this.value ? 1 : 0));
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
-		if (nbt instanceof ByteNBT) {
-			this.value = ((ByteNBT) nbt).getAsByte() != 0;
+	protected void readInternal(Tag nbt) {
+		if (nbt instanceof ByteTag) {
+			this.value = ((ByteTag) nbt).getAsByte() != 0;
 		}
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		buf.writeBoolean(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value = buf.readBoolean();
 	}
 

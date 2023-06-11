@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import org.joml.Vector3i;
-
+import net.minecraft.util.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGuardedCastle;

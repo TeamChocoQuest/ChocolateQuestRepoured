@@ -2,25 +2,25 @@ package team.cqr.cqrepoured.inventory;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
 
-public class InventoryMerchant implements IInventory {
+public class InventoryMerchant implements Container {
 
 	private final AbstractEntityCQR entity;
-	private final PlayerEntity player;
+	private final Player player;
 	private final NonNullList<ItemStack> slots = NonNullList.withSize(5, ItemStack.EMPTY);
 	@Nullable
 	private Trade currentTrade;
 	private int currentTradeIndex;
 
-	public InventoryMerchant(AbstractEntityCQR entity, PlayerEntity player) {
+	public InventoryMerchant(AbstractEntityCQR entity, Player player) {
 		this.entity = entity;
 		this.player = player;
 	}
@@ -74,7 +74,7 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		if (!this.entity.isAlive()) {
 			return false;
 		}
@@ -132,12 +132,12 @@ public class InventoryMerchant implements IInventory {
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) {
+	public void startOpen(Player player) {
 
 	}
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 
 	}
 

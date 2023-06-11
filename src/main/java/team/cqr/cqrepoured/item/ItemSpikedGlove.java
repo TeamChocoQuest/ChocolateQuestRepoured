@@ -1,19 +1,20 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.BlockRenderType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
 
 public class ItemSpikedGlove extends ItemLore
 {
@@ -26,13 +27,13 @@ public class ItemSpikedGlove extends ItemLore
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof LivingEntity) {
 			LivingEntity entity = (LivingEntity) entityIn;
 			if (entity.getMainHandItem().getItem() instanceof ItemSpikedGlove && entity.getMainHandItem().getItem() instanceof ItemSpikedGlove) {
 				// We actually have two bear hands
-				if (entity instanceof PlayerEntity && ((PlayerEntity) entity).isSpectator()) {
+				if (entity instanceof Player && ((Player) entity).isSpectator()) {
 					return;
 				}
 				if (entity.horizontalCollision) {
@@ -59,8 +60,8 @@ public class ItemSpikedGlove extends ItemLore
 							//entity.motionY = -0.2D;
 						}
 					} else {
-						entity.getMainHandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(Hand.MAIN_HAND));
-						entity.getOffhandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(Hand.MAIN_HAND));
+						entity.getMainHandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+						entity.getOffhandItem().hurtAndBreak(1, entity, e -> e.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 					}
 
 					entity.setOnGround(true);
@@ -75,12 +76,12 @@ public class ItemSpikedGlove extends ItemLore
 		return (enchantment == Enchantments.BLOCK_EFFICIENCY || enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING);
 	}
 
-	private void createClimbingParticles(LivingEntity player, World world) {
+	private void createClimbingParticles(LivingEntity player, Level world) {
 		int i = (int) player.position().x;
-		int j = MathHelper.floor(player.blockPosition().getY());
+		int j = Mth.floor(player.blockPosition().getY());
 		int k = (int) player.position().z;
 
-		int direction = MathHelper.floor((player.yRot * 4.0F / 360.0F) + 0.5D) & 3;
+		int direction = Mth.floor((player.yRot * 4.0F / 360.0F) + 0.5D) & 3;
 
 		if (direction == 0) // south
 		{

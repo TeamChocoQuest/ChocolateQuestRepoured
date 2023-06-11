@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import org.joml.Vector3d;
-
-import net.minecraft.client.renderer.EffectInstance;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.entity.monster.EndermanEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
@@ -39,15 +39,15 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		this.isImmuneToFire = true;
 	} */
 
-	public ProjectileHomingEnderEye(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileHomingEnderEye(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileHomingEnderEye(double pX, double pY, double pZ, World world) {
+	public ProjectileHomingEnderEye(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_HOMING_ENDER_EYE.get(), world);
 	}
 
-	public ProjectileHomingEnderEye(LivingEntity shooter, World world, Entity target) {
+	public ProjectileHomingEnderEye(LivingEntity shooter, Level world, Entity target) {
 		super(CQREntityTypes.PROJECTILE_HOMING_ENDER_EYE.get(), shooter, world);
 		//this.shooter = shooter;
 		this.setOwner(shooter);
@@ -70,7 +70,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	protected void onHit(RayTraceResult result)
+	protected void onHit(HitResult result)
 	{
 		AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
 		entityareaeffectcloud.setOwner(this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null);
@@ -80,7 +80,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		entityareaeffectcloud.setRadiusOnUse(-0.25F);
 		entityareaeffectcloud.setWaitTime(10);
 		entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
-		entityareaeffectcloud.addEffect(new EffectInstance(Effects.HARM, 20, 1));
+		entityareaeffectcloud.addEffect(new MobEffectInstance(MobEffects.HARM, 20, 1));
 
 		this.level.addFreshEntity(entityareaeffectcloud);
 
@@ -88,7 +88,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		if(entityResult.getEntity() != this.getOwner() && !(entityResult.getEntity() instanceof PartEntity))
 		{
@@ -101,7 +101,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result) {
+	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
 		this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
 		this.remove();
@@ -180,7 +180,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 			return;
 		}
 		if (!this.level.isClientSide && this.target != null) {
-			Vector3d v = this.target.position().subtract(this.position());
+			Vec3 v = this.target.position().subtract(this.position());
 			v = v.normalize();
 			v = v.scale(0.2);
 
@@ -198,7 +198,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

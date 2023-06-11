@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.util;
 
+import net.minecraft.core.Direction;
+
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */

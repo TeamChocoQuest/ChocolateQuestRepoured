@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.network;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
@@ -11,12 +11,12 @@ import team.cqr.cqrepoured.client.gui.IUpdatableGui;
 public class ClientOnlyMethods {
 	
 	@OnlyIn(Dist.CLIENT)
-	public static PlayerEntity getClientPlayer() {
+	public static Player getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public static World getWorld() {
+	public static Level getWorld() {
 		return Minecraft.getInstance().level;
 	}
 	

@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.EnumSet;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
+
+import java.util.EnumSet;
 
 public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -49,7 +48,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			} else if (this.hasPath) {
 				this.hasPath = false;
 				if (this.entity.distanceToSqr(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D) <= 1.0D) {
-					this.ticksToWait = MathHelper.nextInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
+					this.ticksToWait = Mth.nextInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
 				}
 			} else if (this.ticksToWait > 0) {
 				this.ticksToWait--;

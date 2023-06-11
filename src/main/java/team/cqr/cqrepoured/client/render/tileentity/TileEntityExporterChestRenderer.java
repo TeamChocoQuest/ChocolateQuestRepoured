@@ -2,18 +2,18 @@ package team.cqr.cqrepoured.client.render.tileentity;
 
 import java.util.Arrays;
 
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
+import net.minecraft.core.Direction;
+import net.minecraft.util.math.vector.Vector4f;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.client.CQRepouredClient;
@@ -31,18 +31,18 @@ public class TileEntityExporterChestRenderer extends ChestTileEntityRenderer<Til
 			quad(0.9375F, 0.4375F, 0.5F, Direction.NORTH, Direction.UP, SCALE)
 	};
 
-	public TileEntityExporterChestRenderer(TileEntityRendererDispatcher tileEntityRendererDispatcher) {
+	public TileEntityExporterChestRenderer(BlockEntityRenderDispatcher tileEntityRendererDispatcher) {
 		super(tileEntityRendererDispatcher);
 	}
 
 	@Override
-	public void render(TileEntityExporterChest pBlockEntity, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pCombinedLight, int pCombinedOverlay) {
+	public void render(TileEntityExporterChest pBlockEntity, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay) {
 		super.render(pBlockEntity, pPartialTicks, pMatrixStack, pBuffer, pCombinedLight, pCombinedOverlay);
 
 		BlockState state = CQRepouredClient.getBlockEntityBlockState(pBlockEntity);
 		if (state.getBlock() instanceof BlockExporterChest) {
 			ResourceLocation tex = new ResourceLocation(CQRMain.MODID, "textures/block/" + state.getBlock().getRegistryName().getPath() + ".png");
-			IVertexBuilder ivertexbuilder = pBuffer.getBuffer(RenderType.entityCutout(tex));
+			VertexConsumer ivertexbuilder = pBuffer.getBuffer(RenderType.entityCutout(tex));
 
 			pMatrixStack.pushPose();
 			pMatrixStack.translate(0.5D, 0.5D, 0.5D);
@@ -54,7 +54,7 @@ public class TileEntityExporterChestRenderer extends ChestTileEntityRenderer<Til
 		}
 	}
 
-	private void drawFace(MatrixStack matrixStack, IVertexBuilder vertexBuilder, Direction face, int light, int overlay) {
+	private void drawFace(PoseStack matrixStack, VertexConsumer vertexBuilder, Direction face, int light, int overlay) {
 		Vector3f n = new Vector3f(face.getStepX(), face.getStepY(), face.getStepZ());
 		n.transform(matrixStack.last().normal());
 

@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import org.joml.Vector3d;
-
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class BossAIFlyToTarget extends BossAIFlyToLocation {
@@ -65,11 +64,11 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 			this.entity.setBreathingFireFlag(false);
 		}
 		this.breathFire = false;
-		this.entity.setTargetLocation(new Vector3d(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
+		this.entity.setTargetLocation(new Vec3(this.entity.getCirclingCenter().getX(), this.entity.getCirclingCenter().getY(), this.entity.getCirclingCenter().getZ()));
 	}
 
 	@Override
-	protected Vector3d getTargetLocation() {
+	protected Vec3 getTargetLocation() {
 		return (this.entity.getTarget() != null && !this.entity.getTarget().isDeadOrDying()) ? this.entity.getTarget().position() : null;
 	}
 

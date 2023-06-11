@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.util.function.Function;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.cache.texture.AutoGlowingTexture;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
+import software.bernie.geckolib3.renderers.texture.AutoGlowingTexture;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 
 public class LayerGlowingAreasGeo<T extends MobEntity & IAnimatable> extends AbstractLayerGeo<T> {
@@ -20,7 +20,7 @@ public class LayerGlowingAreasGeo<T extends MobEntity & IAnimatable> extends Abs
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		//EmissiveUtil.preEmissiveTextureRendering();
 
 		//Not needed anymore?

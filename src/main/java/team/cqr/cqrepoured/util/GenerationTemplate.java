@@ -1,18 +1,13 @@
 package team.cqr.cqrepoured.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
 
 import javax.annotation.Nullable;
-
-import org.joml.Vector3i;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class GenerationTemplate {
 

@@ -5,44 +5,46 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -96,23 +98,23 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	private int stunTime = 0;
 
-	protected static final DataParameter<Boolean> IS_STUNNED = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> PUNCH_IS_KICK = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> CANNON_RAISED = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> IS_STUNNED = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> ARMS_BLOCKED_BY_LONG_ANIMATION = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> PUNCH_IS_KICK = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> CANNON_RAISED = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
 
-	protected static final DataParameter<Boolean> EMITTER_LEFT_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> EMITTER_RIGHT_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRExterminator.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> EMITTER_LEFT_ACTIVE = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> EMITTER_RIGHT_ACTIVE = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
 
 	// Geckolib
 	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	private boolean partSoundFlag;
 
-	public EntityCQRExterminator(World world) {
+	public EntityCQRExterminator(Level world) {
 		this(CQREntityTypes.EXTERMINATOR.get(), world);
 	}
 	
-	public EntityCQRExterminator(EntityType<? extends EntityCQRExterminator> type, World worldIn) {
+	public EntityCQRExterminator(EntityType<? extends EntityCQRExterminator> type, Level worldIn) {
 		super(type, worldIn);
 		this.xpReward = 100;
 
@@ -177,7 +179,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	protected void applyAttributeValues() {
 		super.applyAttributeValues();
 
-		this.getAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDefenseForSlot(EquipmentSlotType.CHEST));
+		this.getAttribute(Attributes.ARMOR).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getDefenseForSlot(EquipmentSlot.CHEST));
 		this.getAttribute(Attributes.ARMOR_TOUGHNESS).setBaseValue(CQRMaterials.ArmorMaterials.ARMOR_HEAVY_IRON.getToughness());
 	}
 
@@ -195,7 +197,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			//this.goalSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 			//this.targetSelector = new EntityAITasksProfiled(this.level.profiler, this.level);
 		}
-		this.goalSelector.addGoal(1, new SwimGoal(this));
+		this.goalSelector.addGoal(1, new RandomSwimmingGoal(this));
 		this.goalSelector.addGoal(2, new EntityAIOpenCloseDoor(this));
 
 		this.goalSelector.addGoal(0, new BossAIExterminatorStun(this));
@@ -277,7 +279,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public void thunderHit(ServerWorld pLevel, LightningBoltEntity pLightning) {
+	public void thunderHit(ServerLevel pLevel, LightningBoltEntity pLightning) {
 		if (this.isStunned()) {
 			this.stunTime += (50 / 3);
 		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
@@ -302,7 +304,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public World getWorld() {
+	public Level getWorld() {
 		return this.level;
 	}
 
@@ -451,7 +453,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return PlayState.STOP;
 		}
 
-		if (animatable.isSwinging(Hand.MAIN_HAND, animatable)) {
+		if (animatable.isSwinging(InteractionHand.MAIN_HAND, animatable)) {
 			boolean isKicking = animatable.entityData.get(PUNCH_IS_KICK);
 			this.kickInProgressClient = isKicking;
 			event.getController().setAnimation(new AnimationBuilder().loop(isKicking ? ANIM_NAME_KICK : ANIM_NAME_PUNCH));
@@ -635,7 +637,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			return false;
 		}
 
-		if (source.isCreativePlayer() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof PlayerEntity && ((PlayerEntity) source.getEntity()).isCreative())) {
+		if (source.isCreativePlayer() || source == DamageSource.OUT_OF_WORLD || (source.getEntity() instanceof Player && ((Player) source.getEntity()).isCreative())) {
 			return super.hurt(source, amount, sentFromPart);
 		}
 
@@ -681,7 +683,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
 		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() / 2)).inflate(1));
-		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity || ( entity instanceof ProjectileEntity && ((ProjectileEntity)entity).getOwner() == this)));
+		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity || ( entity instanceof Projectile && ((Projectile)entity).getOwner() == this)));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
 		}
@@ -705,11 +707,11 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			if (this.isCurrentlyPlayingAnimation()) {
 				if (this.currentAnimationPlaying.equalsIgnoreCase(ANIM_NAME_THROW)) {
 					if (!(this.getMainHandItem().getItem() instanceof ItemStaffHealing)) {
-						Vector3d v = entityIn.position().subtract(this.position());
+						Vec3 v = entityIn.position().subtract(this.position());
 						v = v.normalize().scale(1.5D);
 
 						// YEET!
-						Vector3d yeet = entityIn.getDeltaMovement().add(v).add(0, 0.75, 0);
+						Vec3 yeet = entityIn.getDeltaMovement().add(v).add(0, 0.75, 0);
 						entityIn.setDeltaMovement(yeet);
 
 						this.entityData.set(PUNCH_IS_KICK, true);
@@ -733,7 +735,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			Predicate<Entity> checkPred = TargetUtil.createPredicateNonAlly(this.getFaction());
 			affectedEntities.forEach((Entity entity) -> {
 				if ((entity instanceof LivingEntity && (!TargetUtil.areInSameParty(this, entity) && !TargetUtil.isAllyCheckingLeaders(this, (LivingEntity) entity))) || checkPred.test(entity)) {
-					Vector3d flyDirection = entity.position().subtract(this.position()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRandom()), 0);
+					Vec3 flyDirection = entity.position().subtract(this.position()).add(0, this.getSizeVariation() * 0.4 * DungeonGenUtils.randomBetween(1, 5, this.getRandom()), 0);
 
 					/*entity.motionX += flyDirection.x;
 					entity.motionY += flyDirection.y;
@@ -761,19 +763,19 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	private void alignParts() {
 		// Artificial main hitbox
-		final Vector3d offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookAngle().normalize().scale(this.getBbWidth()/ 6), 90.0D);
+		final Vec3 offsetMainHitbox = VectorUtil.rotateVectorAroundY(this.getLookAngle().normalize().scale(this.getBbWidth()/ 6), 90.0D);
 		this.parts[4].setPos(this.getX() + offsetMainHitbox.x, this.getY(), this.getZ() + offsetMainHitbox.z);
 		this.parts[3].setPos(this.getX() - offsetMainHitbox.x, this.getY(), this.getZ() - offsetMainHitbox.z);
 
 		// Backpack and emitters
-		Vector3d offset = this.getLookAngle().normalize().scale(-0.25D * this.getSizeVariation());
+		Vec3 offset = this.getLookAngle().normalize().scale(-0.25D * this.getSizeVariation());
 		offset = offset.add(0, 1.25D * this.getSizeVariation(), 0);
 
 		this.parts[0].setPos(this.getX() + offset.x, this.getY() + offset.y, this.getZ() + offset.z);
 
-		Vector3d offsetEmittersHorizontal = this.getLookAngle().normalize().scale(0.5 * this.getSizeVariation());
+		Vec3 offsetEmittersHorizontal = this.getLookAngle().normalize().scale(0.5 * this.getSizeVariation());
 
-		Vector3d offsetEmitters = this.getLookAngle().normalize().scale(-0.4D * this.getSizeVariation());
+		Vec3 offsetEmitters = this.getLookAngle().normalize().scale(-0.4D * this.getSizeVariation());
 		offsetEmitters = offsetEmitters.add(0, 2.375D * this.getSizeVariation(), 0);
 
 		offsetEmittersHorizontal = VectorUtil.rotateVectorAroundY(offsetEmittersHorizontal, 90);
@@ -960,14 +962,14 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		return this.entityData.get(CANNON_RAISED);
 	}
 
-	public Vector3d getCannonFiringPointOffset() {
-		Vector3d result = Vector3d.ZERO;
+	public Vec3 getCannonFiringPointOffset() {
+		Vec3 result = Vec3.ZERO;
 
 		final float scale = this.getSizeVariation();
 
 		result = result.add(0, 1.88, 0);
 
-		final Vector3d facing = Vector3d.directionFromRotation(this.xRot, this.yBodyRot);
+		final Vec3 facing = Vec3.directionFromRotation(this.xRot, this.yBodyRot);
 		result = result.add(facing.scale(1.25));
 		result = result.add(VectorUtil.rotateVectorAroundY(facing, 270).scale(0.68));
 
@@ -976,8 +978,8 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		return result;
 	}
 
-	public Vector3d getCannonFiringLocation() {
-		Vector3d result = this.getCannonFiringPointOffset();
+	public Vec3 getCannonFiringLocation() {
+		Vec3 result = this.getCannonFiringPointOffset();
 		result = result.add(this.position());
 		return result;
 	}
@@ -1044,7 +1046,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL.get(), 1));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL.get(), 1));
 	}
 
 	@Override
@@ -1069,7 +1071,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

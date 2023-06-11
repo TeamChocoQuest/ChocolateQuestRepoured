@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 
 public abstract class DataEntry<T> {
 
@@ -18,23 +18,23 @@ public abstract class DataEntry<T> {
 		this.name = name;
 		this.isClientModificationAllowed = isClientModificationAllowed;
 	}
+	
+	public abstract Tag write();
 
-	public abstract INBT write();
-
-	public void read(INBT nbt) {
+	public void read(Tag nbt) {
 		this.readInternal(nbt);
 	}
 
-	protected abstract void readInternal(INBT nbt);
+	protected abstract void readInternal(Tag nbt);
 
-	public abstract void writeChanges(PacketBuffer buf);
+	public abstract void writeChanges(FriendlyByteBuf buf);
 
-	public void readChanges(PacketBuffer buf) {
+	public void readChanges(FriendlyByteBuf buf) {
 		this.readChangesInternal(buf);
 		this.onValueChanged();
 	}
 
-	protected abstract void readChangesInternal(PacketBuffer buf);
+	protected abstract void readChangesInternal(FriendlyByteBuf buf);
 
 	public void setDataManagerAndId(TileEntityDataManager dataManager, int id) {
 		if (this.dataManager == null && dataManager != null) {
@@ -91,7 +91,7 @@ public abstract class DataEntry<T> {
 		if (this.dataManager == null) {
 			return;
 		}
-		World world = this.dataManager.getTileEntity().getLevel();
+		Level world = this.dataManager.getTileEntity().getLevel();
 		if (world == null) {
 			return;
 		}

@@ -1,5 +1,35 @@
 package team.cqr.cqrepoured.item;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.Tags.IOptionalNamedTag;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
+import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,29 +39,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.joml.Vector3d;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraftforge.common.Tags.IOptionalNamedTag;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITag;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
-import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.util.PropertyFileHelper;
-
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
@@ -39,7 +46,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 	//TODO: Replace with tags
 	protected List<Block> validLatchBlocks = new ArrayList<>();
-	protected List<ITag.INamedTag<Block>> latchGroups = new ArrayList<>();
+	protected List<Tag.INamedTag<Block>> latchGroups = new ArrayList<>();
 
 	public ItemHookshotBase(String hookshotName, Properties props) {
 		super(props.stacksTo(1));
@@ -95,7 +102,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 	}
 
 	public boolean canLatchToBlock(Block block) {
-		for (ITag.INamedTag<Block> bg : this.latchGroups) {
+		for (Tag.INamedTag<Block> bg : this.latchGroups) {
 			if (bg.contains(block)) {
 				return true;
 			}
@@ -105,16 +112,16 @@ public abstract class ItemHookshotBase extends ItemLore {
 
 	public abstract double getHookRange();
 
-	public abstract ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity shooter, ItemStack stack);
+	public abstract ProjectileHookShotHook getNewHookEntity(Level worldIn, LivingEntity shooter, ItemStack stack);
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		this.shoot(stack, worldIn, playerIn);
-		return new ActionResult<>(ActionResultType.SUCCESS, stack);
+		return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 	}
 
-	public void shoot(ItemStack stack, World worldIn, PlayerEntity player) {
+	public void shoot(ItemStack stack, Level worldIn, Player player) {
 
 		if (!worldIn.isClientSide) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, player, stack);
@@ -122,16 +129,16 @@ public abstract class ItemHookshotBase extends ItemLore {
 			worldIn.addFreshEntity(hookEntity);
 			player.getCooldowns().addCooldown(this, 100);
 			stack.hurtAndBreak(1, player, (p_220045_0_) -> {
-		         p_220045_0_.broadcastBreakEvent(EquipmentSlotType.MAINHAND);
+		         p_220045_0_.broadcastBreakEvent(EquipmentSlot.MAINHAND);
 		      });
-			worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), CQRSounds.GUN_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), CQRSounds.GUN_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
 		}
 	}
 
-	public ProjectileHookShotHook entityAIshoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
+	public ProjectileHookShotHook entityAIshoot(Level worldIn, LivingEntity shooter, Entity target, InteractionHand handIn) {
 		if (!worldIn.isClientSide) {
 			ProjectileHookShotHook hookEntity = this.getNewHookEntity(worldIn, shooter, shooter.getUseItem());
-			Vector3d v = target.position().subtract(shooter.position());
+			Vec3 v = target.position().subtract(shooter.position());
 			hookEntity.shootHook(shooter, v.x, v.y, v.z, this.getHookRange(), 1.8D);
 			worldIn.addFreshEntity(hookEntity);
 			return hookEntity;
@@ -175,7 +182,7 @@ public abstract class ItemHookshotBase extends ItemLore {
 	{
 		ItemModelsProperties.register(CQRItems.HOOKSHOT.get(), new ResourceLocation("hook_out"), (stack, world, entity) -> {
 			if (entity != null && stack.getItem() instanceof ItemHookshotBase) {
-				CompoundNBT stackTag = stack.getTag();
+				CompoundTag stackTag = stack.getTag();
 				if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
 					return 1.0F;
 				}

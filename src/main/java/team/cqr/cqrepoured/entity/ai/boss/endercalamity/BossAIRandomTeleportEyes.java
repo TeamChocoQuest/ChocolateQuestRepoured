@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import org.joml.Vector3d;
-
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHomingEnderEye;
@@ -14,7 +13,7 @@ public class BossAIRandomTeleportEyes extends AbstractBossAIRandomShoot {
 
 	@Override
 	protected int execRandomShoot() {
-		Vector3d v = this.entity.hasAttackTarget() ? this.entity.getTarget().position().subtract(this.entity.position()) : this.entity.getLookAngle();
+		Vec3 v = this.entity.hasAttackTarget() ? this.entity.getTarget().position().subtract(this.entity.position()) : this.entity.getLookAngle();
 		v = v.normalize();
 		ProjectileHomingEnderEye eye = new ProjectileHomingEnderEye(this.entity, this.entity.level, this.entity.getTarget());
 		/*eye.motionX = v.x / 10;

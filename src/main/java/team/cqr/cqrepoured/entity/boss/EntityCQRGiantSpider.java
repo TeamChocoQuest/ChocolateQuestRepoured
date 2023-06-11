@@ -1,7 +1,7 @@
 //package team.cqr.cqrepoured.entity.boss;
 //
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.WebBlock;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.WebBlock;
 //import net.minecraft.entity.*;
 //import net.minecraft.entity.ai.attributes.Attributes;
 //import net.minecraft.entity.ai.goal.SwimGoal;
@@ -19,7 +19,7 @@
 //import net.minecraft.util.DamageSource;
 //import net.minecraft.util.SoundEvent;
 //import net.minecraft.util.SoundEvents;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.math.vector.Vector3d;
 //import net.minecraft.world.DifficultyInstance;
 //import net.minecraft.world.IServerWorld;

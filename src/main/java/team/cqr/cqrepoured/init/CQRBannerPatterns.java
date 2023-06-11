@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.init;
 
-import java.lang.reflect.Field;
-import java.util.Locale;
-
 import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.BannerPatternItem;
+import net.minecraft.item.BannerPatternItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.tileentity.BannerPattern;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.banner.EBanners;
+
+import java.lang.reflect.Field;
+import java.util.Locale;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQRBannerPatterns {

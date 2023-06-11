@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Rotation;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,27 +15,29 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 
+import net.minecraft.world.level.block.JigsawBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.shapes.IBooleanFunction;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.util.registry.MutableRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.jigsaw.EmptyJigsawPiece;
+import net.minecraft.world.gen.feature.jigsaw.JigsawJunction;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPatternRegistry;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
 import net.minecraft.world.gen.feature.structure.AbstractVillagePiece;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
+import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.level.block.JigsawBlock;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawJunction;
-import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CQRJigsawManager {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -65,10 +69,10 @@ public class CQRJigsawManager {
 		p_242837_6_.add(abstractvillagepiece);
 		if (p_242837_1_.maxDepth() > 0) {
 			int i1 = 80;
-			AxisAlignedBB axisalignedbb = new AxisAlignedBB((double) (i - 80), (double) (k - 80), (double) (j - 80), (double) (i + 80 + 1), (double) (k + 80 + 1), (double) (j + 80 + 1));
+			AABB axisalignedbb = new AABB((double) (i - 80), (double) (k - 80), (double) (j - 80), (double) (i + 80 + 1), (double) (k + 80 + 1), (double) (j + 80 + 1));
 			CQRJigsawManager.Assembler jigsawmanager$assembler = new CQRJigsawManager.Assembler(mutableregistry, p_242837_1_.maxDepth(), p_242837_2_, p_242837_3_, p_242837_4_, p_242837_6_, p_242837_7_);
-			jigsawmanager$assembler.placing.addLast(new CQRJigsawManager.Entry(abstractvillagepiece, new MutableObject<>(VoxelShapes.join(VoxelShapes.create(axisalignedbb), VoxelShapes.create(AxisAlignedBB.of(mutableboundingbox)),
-					IBooleanFunction.ONLY_FIRST)), k + 80, 0));
+			jigsawmanager$assembler.placing.addLast(new CQRJigsawManager.Entry(abstractvillagepiece, new MutableObject<>(Shapes.join(Shapes.create(axisalignedbb), Shapes.create(AABB.of(mutableboundingbox)),
+					BooleanOp.ONLY_FIRST)), k + 80, 0));
 
 			while (!jigsawmanager$assembler.placing.isEmpty()) {
 				CQRJigsawManager.Entry jigsawmanager$entry = jigsawmanager$assembler.placing.removeFirst();
@@ -82,7 +86,7 @@ public class CQRJigsawManager {
 			List<? super AbstractVillagePiece> p_242838_6_, Random p_242838_7_) {
 		MutableRegistry<JigsawPattern> mutableregistry = p_242838_0_.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY);
 		CQRJigsawManager.Assembler jigsawmanager$assembler = new CQRJigsawManager.Assembler(mutableregistry, p_242838_2_, p_242838_3_, p_242838_4_, p_242838_5_, p_242838_6_, p_242838_7_);
-		jigsawmanager$assembler.placing.addLast(new CQRJigsawManager.Entry(p_242838_1_, new MutableObject<>(VoxelShapes.INFINITY), 0, 0));
+		jigsawmanager$assembler.placing.addLast(new CQRJigsawManager.Entry(p_242838_1_, new MutableObject<>(Shapes.INFINITY), 0, 0));
 
 		while (!jigsawmanager$assembler.placing.isEmpty()) {
 			CQRJigsawManager.Entry jigsawmanager$entry = jigsawmanager$assembler.placing.removeFirst();
@@ -140,7 +144,7 @@ public class CQRJigsawManager {
 							mutableobject1 = mutableobject;
 							l = i;
 							if (mutableobject.getValue() == null) {
-								mutableobject.setValue(VoxelShapes.create(AxisAlignedBB.of(mutableboundingbox)));
+								mutableobject.setValue(Shapes.create(AABB.of(mutableboundingbox)));
 							}
 						} else {
 							mutableobject1 = p_236831_2_;
@@ -215,8 +219,8 @@ public class CQRJigsawManager {
 											mutableboundingbox3.y1 = mutableboundingbox3.y0 + k2;
 										}
 
-										if (!VoxelShapes.joinIsNotEmpty(mutableobject1.getValue(), VoxelShapes.create(AxisAlignedBB.of(mutableboundingbox3).deflate(0.25D)), IBooleanFunction.ONLY_SECOND)) {
-											mutableobject1.setValue(VoxelShapes.joinUnoptimized(mutableobject1.getValue(), VoxelShapes.create(AxisAlignedBB.of(mutableboundingbox3)), IBooleanFunction.ONLY_FIRST));
+										if (!Shapes.joinIsNotEmpty(mutableobject1.getValue(), Shapes.create(AABB.of(mutableboundingbox3).deflate(0.25D)), BooleanOp.ONLY_SECOND)) {
+											mutableobject1.setValue(Shapes.joinUnoptimized(mutableobject1.getValue(), Shapes.create(AABB.of(mutableboundingbox3)), BooleanOp.ONLY_FIRST));
 											int j3 = p_236831_1_.getGroundLevelDelta();
 											int l2;
 											if (flag2) {

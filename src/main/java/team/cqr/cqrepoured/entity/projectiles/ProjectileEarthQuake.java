@@ -2,27 +2,28 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import java.util.List;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.projectile.ThrowableProjectile;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
-public class ProjectileEarthQuake extends ThrowableEntity {
+public class ProjectileEarthQuake extends ThrowableProjectile {
 	private int lifeTime = 60;
 	private double throwY = 0.3D;
 
@@ -30,16 +31,16 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 		this.throwY = amount;
 	}
 
-	public ProjectileEarthQuake(EntityType<? extends ProjectileEarthQuake> type, World worldIn) {
+	public ProjectileEarthQuake(EntityType<? extends ProjectileEarthQuake> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public ProjectileEarthQuake(World worldIn, double x, double y, double z) {
+	public ProjectileEarthQuake(Level worldIn, double x, double y, double z) {
 		this(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), worldIn);
 		this.setPos(x, y + 1.5, z);
 	}
 
-	public ProjectileEarthQuake(World worldIn, LivingEntity throwerIn) {
+	public ProjectileEarthQuake(Level worldIn, LivingEntity throwerIn) {
 		this(CQREntityTypes.PROJECTILE_EARTH_QUAKE.get(), worldIn);
 		this.setOwner(throwerIn);
 
@@ -60,10 +61,10 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 
 	@Override
 	public void shoot(double pX, double pY, double pZ, float pVelocity, float pInaccuracy) {
-		Vector3d vector3d = (new Vector3d(pX, pY, pZ)).normalize().add(this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian()
+		Vec3 vector3d = (new Vec3(pX, pY, pZ)).normalize().add(this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian()
 				* (double) 0.0075F * (double) pInaccuracy).scale((double) pVelocity);
 		this.setDeltaMovement(vector3d);
-		this.yRot = (float) (MathHelper.atan2(vector3d.x, vector3d.z) * (double) (180F / (float) Math.PI));
+		this.yRot = (float) (Mth.atan2(vector3d.x, vector3d.z) * (double) (180F / (float) Math.PI));
 		// this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
 		this.yRotO = this.yRot;
 		this.xRotO = this.xRot;
@@ -71,16 +72,16 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 
 	@Override
 	public void shootFromRotation(Entity pShooter, float pX, float pY, float pZ, float pVelocity, float pInaccuracy) {
-		float f = -MathHelper.sin(pY * ((float) Math.PI / 180F)) * MathHelper.cos(pX * ((float) Math.PI / 180F));
+		float f = -Mth.sin(pY * ((float) Math.PI / 180F)) * Mth.cos(pX * ((float) Math.PI / 180F));
 		float f1 = -1.0F;// -MathHelper.sin((pX + pZ) * ((float)Math.PI / 180F));
-		float f2 = MathHelper.cos(pY * ((float) Math.PI / 180F)) * MathHelper.cos(pX * ((float) Math.PI / 180F));
+		float f2 = Mth.cos(pY * ((float) Math.PI / 180F)) * Mth.cos(pX * ((float) Math.PI / 180F));
 		this.shoot((double) f, (double) f1, (double) f2, pVelocity, pInaccuracy);
-		Vector3d vector3d = pShooter.getDeltaMovement();
+		Vec3 vector3d = pShooter.getDeltaMovement();
 		this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, pShooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
 	}
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult) {
+	public void onHitEntity(EntityHitResult entityResult) {
 		if (!this.level.isClientSide) {
 			if (!(entityResult.getEntity() instanceof MobEntity)) {
 				// this.motionY = 0.0D;
@@ -166,7 +167,7 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 		}
 
 		double dist = 1.0D;
-		AxisAlignedBB var3 = this.getBoundingBox().expandTowards(dist, 2.0D, dist);
+		AABB var3 = this.getBoundingBox().expandTowards(dist, 2.0D, dist);
 		List<Entity> list = this.level.getEntitiesOfClass(LivingEntity.class, var3);
 
 		for (Entity entity : list) {
@@ -195,7 +196,7 @@ public class ProjectileEarthQuake extends ThrowableEntity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

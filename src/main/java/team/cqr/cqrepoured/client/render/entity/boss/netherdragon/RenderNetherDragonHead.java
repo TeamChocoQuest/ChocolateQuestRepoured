@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib.cache.object.GeoBone;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.renderers.geo.layer.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelNetherDragonHeadGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class RenderNetherDragonHead extends RenderCQREntityGeo<EntityCQRNetherDragon> {
 
-	public RenderNetherDragonHead(EntityRendererManager renderManager) {
+	public RenderNetherDragonHead(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelNetherDragonHeadGeo(ModelNetherDragonHeadGeo.TEXTURE_NORMAL, ModelNetherDragonHeadGeo.MODEL_IDENT_NORMAL, "boss/nether_dragon_head"));
 		
 		this.addLayer(new LayerGlowingAreasGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER, CQRRenderTypes::emissive));
@@ -49,22 +49,22 @@ public class RenderNetherDragonHead extends RenderCQREntityGeo<EntityCQRNetherDr
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRNetherDragon currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRNetherDragon currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRNetherDragon currentEntity) {
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName, EntityCQRNetherDragon currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRNetherDragon currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRNetherDragon currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRNetherDragon currentEntity) {
+	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName, EntityCQRNetherDragon currentEntity) {
 		
 	}
 

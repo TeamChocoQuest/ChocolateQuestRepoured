@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.event.enchantment;
 
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -17,7 +17,7 @@ public class LightningProtectionEventHandler {
 	public static void onStruckByLightning(EntityStruckByLightningEvent event) {
 		if (event.getEntity() instanceof LivingEntity) {
 			LivingEntity living = (LivingEntity) event.getEntity();
-			ItemStack helmet = living.getItemBySlot(EquipmentSlotType.HEAD);
+			ItemStack helmet = living.getItemBySlot(EquipmentSlot.HEAD);
 
 			int lvl = EnchantmentHelper.getItemEnchantmentLevel(CQREnchantments.LIGHTNING_PROTECTION.get(), helmet);
 			if (lvl > 0 && lvl > living.getRandom().nextInt(10)) {

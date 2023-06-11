@@ -1,28 +1,24 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.annotation.Nullable;
-
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -30,6 +26,10 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Optional;
 
 public class EntityCalamityCrystal extends Entity {
 
@@ -42,18 +42,18 @@ public class EntityCalamityCrystal extends Entity {
 
 	private float absorbedHealth = 0F;
 
-	private static final DataParameter<Optional<BlockPos>> BEAM_TARGET = EntityDataManager.defineId(EntityCalamityCrystal.class, DataSerializers.OPTIONAL_BLOCK_POS);
-	private static final DataParameter<Boolean> ABSORBING = EntityDataManager.<Boolean>defineId(EntityCalamityCrystal.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Optional<BlockPos>> BEAM_TARGET = SynchedEntityData.defineId(EntityCalamityCrystal.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+	private static final EntityDataAccessor<Boolean> ABSORBING = SynchedEntityData.<Boolean>defineId(EntityCalamityCrystal.class, EntityDataSerializers.BOOLEAN);
 
 	private static final int EXPLOSION_EFFECT_RADIUS = 16;
 
-	public EntityCalamityCrystal(EntityType<? extends EntityCalamityCrystal> type, World worldIn) {
+	public EntityCalamityCrystal(EntityType<? extends EntityCalamityCrystal> type, Level worldIn) {
 		super(type, worldIn);
 		this.blocksBuilding = true;
 		this.innerRotation = this.random.nextInt(100_000);
 	}
 
-	public EntityCalamityCrystal(World world, MobEntity owningEntity, double x, double y, double z) {
+	public EntityCalamityCrystal(Level world, MobEntity owningEntity, double x, double y, double z) {
 		this(CQREntityTypes.CALAMITY_CRYSTAL.get(), world);
 		this.owningEntity = owningEntity;
 		this.setPos(x, y, z);
@@ -83,9 +83,9 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		if (compound.contains("BeamTarget", 10)) {
-			this.setBeamTarget(NBTUtil.readBlockPos(compound.getCompound("BeamTarget")));
+			this.setBeamTarget(NbtUtils.readBlockPos(compound.getCompound("BeamTarget")));
 		}
 		if (compound.contains("Absorbing", Constants.NBT.TAG_BYTE)) {
 			this.setAbsorbing(compound.getBoolean("Absorbing"));
@@ -93,9 +93,9 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		if (this.getBeamTarget() != null) {
-			compound.put("BeamTarget", NBTUtil.writeBlockPos(this.getBeamTarget()));
+			compound.put("BeamTarget", NbtUtils.writeBlockPos(this.getBeamTarget()));
 		}
 		compound.putBoolean("Absorbing", this.isAbsorbing());
 	}
@@ -173,9 +173,9 @@ public class EntityCalamityCrystal extends Entity {
 		// Our old target was not good, we need a new one
 		if (this.currentTarget == null) {
 			// DONE: Create faction based predicate that checks for entities, also check their health
-			Vector3d p1 = this.position().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
-			Vector3d p2 = this.position().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
-			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+			Vec3 p1 = this.position().add(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			Vec3 p2 = this.position().subtract(2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS, 2 * EXPLOSION_EFFECT_RADIUS);
+			AABB aabb = new AABB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.level.getEntitiesOfClass(MobEntity.class, aabb, this::doesEntityFitForAbsorbing);
 			if (!affectedEntities.isEmpty()) {
 				this.currentTarget = affectedEntities.get(DungeonGenUtils.randomBetween(0, affectedEntities.size() - 1, this.random));
@@ -218,9 +218,9 @@ public class EntityCalamityCrystal extends Entity {
 		if (source != DamageSource.OUT_OF_WORLD) {
 			// DONE: Implement healing of all entities nearby
 
-			Vector3d p1 = this.position().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
-			Vector3d p2 = this.position().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
-			AxisAlignedBB aabb = new AxisAlignedBB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+			Vec3 p1 = this.position().add(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			Vec3 p2 = this.position().subtract(EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS, EXPLOSION_EFFECT_RADIUS);
+			AABB aabb = new AABB(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
 			List<MobEntity> affectedEntities = this.level.getEntitiesOfClass(MobEntity.class, aabb);
 			if (!affectedEntities.isEmpty()) {
 				final float healingAmount = 4 * (this.absorbedHealth / affectedEntities.size());
@@ -279,7 +279,7 @@ public class EntityCalamityCrystal extends Entity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +16,7 @@ public class RenderCQRPirate extends RenderCQRBipedBaseGeo<EntityCQRPirate> {
 	
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/pirate_0.png");
 
-	public RenderCQRPirate(EntityRendererManager renderManager) {
+	public RenderCQRPirate(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelCQRPirateGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "mob/pirate"));
 	}
 
@@ -36,17 +36,17 @@ public class RenderCQRPirate extends RenderCQRBipedBaseGeo<EntityCQRPirate> {
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRPirate currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRPirate currentEntity, IBone bone) {
 		
 	}
 

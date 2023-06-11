@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.potion.Potions;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
@@ -19,15 +19,15 @@ public class ProjectilePoisonSpell extends ProjectileBase {
 	private boolean canPlaceAura = false;
 	protected float damage;
 
-	public ProjectilePoisonSpell(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectilePoisonSpell(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectilePoisonSpell(double pX, double pY, double pZ, World world) {
+	public ProjectilePoisonSpell(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_POISON_SPELL.get(), pX, pY, pZ, world);
 	}
 
-	public ProjectilePoisonSpell(LivingEntity shooter, World world)
+	public ProjectilePoisonSpell(LivingEntity shooter, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_POISON_SPELL.get(), shooter, world);
 		this.shooter = shooter;
@@ -57,7 +57,7 @@ public class ProjectilePoisonSpell extends ProjectileBase {
 	}
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		if(entityResult.getEntity() instanceof LivingEntity)
 		{
@@ -65,14 +65,14 @@ public class ProjectilePoisonSpell extends ProjectileBase {
 
 			if(entity == this.shooter) return;
 
-			entity.addEffect(new EffectInstance(Effects.POISON, 100, 0));
+			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
 			entity.hurt(DamageSource.MAGIC, this.damage);
 			this.remove();
 		}
 	}
 
 	@Override
-	protected void onHit(RayTraceResult result) {
+	protected void onHit(HitResult result) {
 		if (this.level.isClientSide) {
 			return;
 		}

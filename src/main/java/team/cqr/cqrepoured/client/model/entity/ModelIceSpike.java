@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.client.model.entity;
 
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import team.cqr.cqrepoured.entity.misc.EntityIceSpike;

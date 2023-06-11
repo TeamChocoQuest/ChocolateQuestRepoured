@@ -2,9 +2,12 @@ package team.cqr.cqrepoured.event;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent.MissingMappings;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -34,8 +37,8 @@ public class MappingEventsHandler {
 	}
 	
 	@SubscribeEvent
-	public static void onMissingBlockEntityMappings(final MissingMappings<TileEntityType<?>> event) {
-		ImmutableList<Mapping<TileEntityType<?>>> entries = event.getMappings(CQRMain.MODID);
+	public static void onMissingBlockEntityMappings(final MissingMappings<BlockEntityType<?>> event) {
+		ImmutableList<Mapping<BlockEntityType<?>>> entries = event.getMappings(CQRMain.MODID);
 		if(entries.isEmpty()) {
 			return;
 		}

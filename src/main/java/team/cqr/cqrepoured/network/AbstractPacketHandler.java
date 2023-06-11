@@ -4,10 +4,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.network.play.ClientPlayNetHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.play.ServerPlayNetHandler;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ServerPacketListener;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent.Context;
 
 public abstract class AbstractPacketHandler<P extends Object> implements IMessageHandler<P> {
 
@@ -18,15 +19,15 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 	@Override
 	public final void handlePacket(P packet, Supplier<Context> context) {
 		context.get().enqueueWork(() -> {
-			PlayerEntity sender = null;
-			World world = null;
-			if(context.get().getNetworkManager().getPacketListener() instanceof ServerPlayNetHandler) {
+			Player sender = null;
+			Level world = null;
+			if(context.get().getNetworkManager().getPacketListener() instanceof ServerPacketListener) {
 				sender = context.get().getSender();
 				if(sender != null) {
-					world = sender.level;
+					world = sender.level();
 				}
 			}
-			if(context.get().getNetworkManager().getPacketListener() instanceof ClientPlayNetHandler) {
+			if(context.get().getNetworkManager().getPacketListener() instanceof ClientPacketListener) {
 				sender = ClientOnlyMethods.getClientPlayer();
 				world = ClientOnlyMethods.getWorld();
 			}
@@ -44,6 +45,6 @@ public abstract class AbstractPacketHandler<P extends Object> implements IMessag
 	 * world: Optional, set when player is not null or the packet is received clientside, then it is the currently opened world
 	 * player: Either the sender of the packet or the local player. Is null for packets recepted during login
 	 */
-	protected abstract void execHandlePacket(P packet, Supplier<Context> context, @Nullable World world, @Nullable PlayerEntity player);
+	protected abstract void execHandlePacket(P packet, Supplier<Context> context, @Nullable Level world, @Nullable Player player);
 
 }

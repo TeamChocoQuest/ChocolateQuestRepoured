@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.Collection;
-
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
+import java.util.Collection;
+
 public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProtectedRegions> {
 
-	private PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+	private FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
 
 	public SPacketSyncProtectedRegions() {
 
@@ -24,7 +24,7 @@ public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProte
 	}
 
 	@Override
-	public SPacketSyncProtectedRegions fromBytes(PacketBuffer buf) {
+	public SPacketSyncProtectedRegions fromBytes(FriendlyByteBuf buf) {
 		SPacketSyncProtectedRegions result = new SPacketSyncProtectedRegions();
 		
 		result.buffer.writeBytes(buf);
@@ -33,11 +33,11 @@ public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProte
 	}
 
 	@Override
-	public void toBytes(SPacketSyncProtectedRegions packet, PacketBuffer buf) {
+	public void toBytes(SPacketSyncProtectedRegions packet, FriendlyByteBuf buf) {
 		buf.writeBytes(packet.buffer);
 	}
 
-	public PacketBuffer getBuffer() {
+	public FriendlyByteBuf getBuffer() {
 		return this.buffer;
 	}
 

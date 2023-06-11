@@ -10,9 +10,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.util.PropertyFileHelper;

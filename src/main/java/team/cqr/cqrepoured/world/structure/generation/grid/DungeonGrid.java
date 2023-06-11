@@ -15,16 +15,17 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.Mth;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraftforge.common.BiomeDictionary;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
@@ -100,7 +101,7 @@ public class DungeonGrid implements IFeatureConfig {
 	}
 
 	@Nullable
-	public DungeonBase getDungeonAt(ServerWorld world, ChunkPos chunkPos) {
+	public DungeonBase getDungeonAt(ServerLevel world, ChunkPos chunkPos) {
 		BlockPos pos = new BlockPos((chunkPos.x << 4) + 8, 0, (chunkPos.z << 4) + 8);
 		Random random = WorldDungeonGenerator.getRandomForCoords(world.getSeed(), pos.getX(), pos.getZ());
 		if (!this.canSpawnDungeonAtCoords(world, chunkPos, random)) {
@@ -111,7 +112,7 @@ public class DungeonGrid implements IFeatureConfig {
 		CQRWeightedRandom<DungeonBase> possibleDungeons = this.getDungeonsForPos(world, biome, pos);
 		DungeonBase dungeon = possibleDungeons.next(random);
 		if (dungeon == null) {
-			RegistryKey<Biome> rk = RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName());
+			ResourceKey<Biome> rk = ResourceKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName());
 			log(world, chunkPos, "Could not find any dungeon for biome: %s (%s)", biome, BiomeDictionary.getTypes(rk));
 			return null;
 		}
@@ -136,7 +137,7 @@ public class DungeonGrid implements IFeatureConfig {
 	 * 
 	 * @return true when dungeon can be spawned in this chunk
 	 */
-	public boolean canSpawnDungeonAtCoords(World world, ChunkPos chunkPos, Random random) {
+	public boolean canSpawnDungeonAtCoords(Level world, ChunkPos chunkPos, Random random) {
 		// Check if the chunk is on the grid
 		if (!this.isChunkOnGrid(world, chunkPos)) {
 			return false;
@@ -158,11 +159,11 @@ public class DungeonGrid implements IFeatureConfig {
 	/**
 	 * @return true when the passed chunk coords are on the dungeon grid
 	 */
-	public boolean isChunkOnGrid(World world, ChunkPos chunkPos) {
+	public boolean isChunkOnGrid(Level world, ChunkPos chunkPos) {
 		int dungeonSeparation = this.getDistance();
 		// Check whether this chunk is farther north than the wall
 		if (CQRConfig.SERVER_CONFIG.wall.enabled.get() && chunkPos.z < -CQRConfig.SERVER_CONFIG.wall.distance.get() && CQRConfig.SERVER_CONFIG.general.moreDungeonsBehindWall.get()) {
-			dungeonSeparation = MathHelper.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
+			dungeonSeparation = Mth.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
 		}
 		int dungeonSpread = Math.min(this.getSpread() + 1, dungeonSeparation);
 
@@ -177,8 +178,8 @@ public class DungeonGrid implements IFeatureConfig {
 		Random random = world.getRandom();//OLD: world.setRandomSeed(x, z, this.seed);
 		//New cause 1.16 removed that method:
 		long seed = 0;
-		if(world instanceof ServerWorld) {
-			seed = ((ServerWorld) world).getSeed();
+		if(world instanceof ServerLevel) {
+			seed = ((ServerLevel) world).getSeed();
 		}
 		long lTmp = (long)x * 341873128712L + (long)z * 132897987541L + seed + (long)this.seed;
 		random.setSeed(lTmp);
@@ -190,11 +191,11 @@ public class DungeonGrid implements IFeatureConfig {
 		return x == cx && z == cz;
 	}
 	
-	public ChunkPos getPotentialChunkPosAtOrNear(World world, int chunkX, int chunkZ) {
+	public ChunkPos getPotentialChunkPosAtOrNear(Level world, int chunkX, int chunkZ) {
 		int dungeonSeparation = this.getDistance();
 		// Check whether this chunk is farther north than the wall
 		if (CQRConfig.SERVER_CONFIG.wall.enabled.get() && chunkZ < -CQRConfig.SERVER_CONFIG.wall.distance.get() && CQRConfig.SERVER_CONFIG.general.moreDungeonsBehindWall.get()) {
-			dungeonSeparation = MathHelper.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
+			dungeonSeparation = Mth.ceil(dungeonSeparation / CQRConfig.SERVER_CONFIG.general.densityBehindWallFactor.get());
 		}
 		int dungeonSpread = Math.min(this.getSpread() + 1, dungeonSeparation);
 
@@ -211,8 +212,8 @@ public class DungeonGrid implements IFeatureConfig {
 		Random random = world.getRandom();//OLD: world.setRandomSeed(x, z, this.seed);
 		//New cause 1.16 removed that method:
 		long seed = 0;
-		if(world instanceof ServerWorld) {
-			seed = ((ServerWorld) world).getSeed();
+		if(world instanceof ServerLevel) {
+			seed = ((ServerLevel) world).getSeed();
 		}
 		long lTmp = (long)x * 341873128712L + (long)z * 132897987541L + seed + (long)this.seed;
 		random.setSeed(lTmp);
@@ -228,7 +229,7 @@ public class DungeonGrid implements IFeatureConfig {
 	/**
 	 * @return true when a location specific dungeon, a vanilla structure or a aw2 structure is nearby
 	 */
-	public boolean isOtherStructureNearby(World world, ChunkPos chunkPos) {
+	public boolean isOtherStructureNearby(Level world, ChunkPos chunkPos) {
 		if(world.isClientSide) {
 			return false;
 		}
@@ -249,7 +250,7 @@ public class DungeonGrid implements IFeatureConfig {
 				if (x * x + z * z > this.checkRadiusInChunks * this.checkRadiusInChunks) {
 					continue;
 				}
-				if (WorldDungeonGenerator.getDungeonAt((ServerWorld)world, new ChunkPos(chunkPos.x + x, chunkPos.z + z), grid -> grid.priority < this.priority) != null) {
+				if (WorldDungeonGenerator.getDungeonAt((ServerLevel)world, new ChunkPos(chunkPos.x + x, chunkPos.z + z), grid -> grid.priority < this.priority) != null) {
 					log(world, chunkPos, "Nearby cqrepoured structure was found");
 					return true;
 				}
@@ -259,14 +260,14 @@ public class DungeonGrid implements IFeatureConfig {
 		return false;
 	}
 
-	private static void log(World world, ChunkPos chunkPos, String message, Object... params) {
+	private static void log(Level world, ChunkPos chunkPos, String message, Object... params) {
 		if (!CQRConfig.SERVER_CONFIG.advanced.debugDungeonGen.get()) {
 			return;
 		}
 		CQRMain.logger.info("Failed to generate structure at x={} z={} dim={}: {}", (chunkPos.x << 4) + 8, (chunkPos.z << 4) + 8, world.dimension().getRegistryName().toString(), String.format(message, params));
 	}
 
-	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(World world, Biome biome, BlockPos pos) {
+	private CQRWeightedRandom<DungeonBase> getDungeonsForPos(Level world, Biome biome, BlockPos pos) {
 		CQRWeightedRandom<DungeonBase> dungeonsForChunk = new CQRWeightedRandom<>();
 
 		for (DungeonBase dungeon : this.dungeons) {

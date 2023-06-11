@@ -1,20 +1,20 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import org.apache.commons.lang3.Validate;
-
-import net.minecraft.nbt.CompoundNBT;
 
 public class EntityContainer {
 
 	private Entity entity;
-	private CompoundNBT entityNbt;
+	private CompoundTag entityNbt;
 
 	public EntityContainer(Entity entity) {
 		Validate.notNull(entity);
 		this.entity = entity;
 	}
 
-	public EntityContainer(CompoundNBT entityNbt) {
+	public EntityContainer(CompoundTag entityNbt) {
 		Validate.notNull(entityNbt);
 		this.entityNbt = entityNbt;
 	}
@@ -26,7 +26,7 @@ public class EntityContainer {
 		return entity;
 	}
 
-	public CompoundNBT getEntityNbt() {
+	public CompoundTag getEntityNbt() {
 		if (entityNbt == null) {
 			entityNbt = IEntityFactory.save(entity);
 		}

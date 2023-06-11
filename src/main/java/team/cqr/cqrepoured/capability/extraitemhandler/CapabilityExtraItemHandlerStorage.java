@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.capability.extraitemhandler;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -12,12 +13,12 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 
 	@Override
 	public INBT writeNBT(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance, Direction side) {
-		ListNBT nbtTagList = new ListNBT();
+		ListTag nbtTagList = new ListTag();
 		int size = instance.getSlots();
 		for (int i = 0; i < size; i++) {
 			ItemStack stack = instance.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				CompoundNBT itemTag = new CompoundNBT();
+				CompoundTag itemTag = new CompoundTag();
 				itemTag.putInt("Slot", i);
 				stack.save(itemTag);
 				nbtTagList.add(itemTag);
@@ -29,9 +30,9 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 	@Override
 	public void readNBT(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance, Direction side, INBT base) {
 		IItemHandlerModifiable itemHandlerModifiable = instance;
-		ListNBT tagList = (ListNBT) base;
+		ListTag tagList = (ListTag) base;
 		for (int i = 0; i < tagList.size(); i++) {
-			CompoundNBT itemTag = tagList.getCompound(i);
+			CompoundTag itemTag = tagList.getCompound(i);
 			int j = itemTag.getInt("Slot");
 
 			if (j >= 0 && j < instance.getSlots()) {

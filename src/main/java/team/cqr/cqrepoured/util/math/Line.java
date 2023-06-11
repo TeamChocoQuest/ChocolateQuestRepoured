@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.util.math;
 
-import org.joml.Vector3d;
+import net.minecraft.world.phys.Vec3;
 
 public class Line {
 
-	public final Vector3d vec1;
-	public final Vector3d vec2;
+	public final Vec3 vec1;
+	public final Vec3 vec2;
 
-	public Line(Vector3d vec1, Vector3d vec2) {
+	public Line(Vec3 vec1, Vec3 vec2) {
 		this.vec1 = vec1;
 		this.vec2 = vec2;
 	}
 
-	public Vector3d getVec1() {
+	public Vec3 getVec1() {
 		return this.vec1;
 	}
 
-	public Vector3d getVec2() {
+	public Vec3 getVec2() {
 		return this.vec2;
 	}
 

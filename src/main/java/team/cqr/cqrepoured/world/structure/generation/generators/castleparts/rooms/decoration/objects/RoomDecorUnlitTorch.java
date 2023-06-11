@@ -1,6 +1,6 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 //
-//import net.minecraft.block.TorchBlock;
+//import net.minecraft.world.level.block.TorchBlock;
 //import net.minecraft.util.Direction;
 //import team.cqr.cqrepoured.init.CQRBlocks;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;

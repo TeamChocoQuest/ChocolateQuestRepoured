@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.client.packet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketOpenMerchantGui extends AbstractPacket<CPacketOpenMerchantGui> {
@@ -16,14 +16,14 @@ public class CPacketOpenMerchantGui extends AbstractPacket<CPacketOpenMerchantGu
 	}
 
 	@Override
-	public CPacketOpenMerchantGui fromBytes(PacketBuffer buf) {
+	public CPacketOpenMerchantGui fromBytes(FriendlyByteBuf buf) {
 		CPacketOpenMerchantGui result = new CPacketOpenMerchantGui();
 		result.entityId = buf.readInt();
 		return result;
 	}
 
 	@Override
-	public void toBytes(CPacketOpenMerchantGui packet, PacketBuffer buf) {
+	public void toBytes(CPacketOpenMerchantGui packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 	}
 

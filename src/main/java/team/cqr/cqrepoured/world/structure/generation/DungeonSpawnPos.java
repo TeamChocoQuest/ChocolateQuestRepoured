@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import net.minecraft.world.IWorld;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 
 public class DungeonSpawnPos {
 
@@ -27,15 +27,15 @@ public class DungeonSpawnPos {
 		return this.spawnPointRelative;
 	}
 
-	public boolean isInChunk(IWorld level, ChunkPos chunkPos) {
+	public boolean isInChunk(Level level, ChunkPos chunkPos) {
 		return (this.getX(level) >> 4) == chunkPos.x && (this.getZ(level) >> 4) == chunkPos.z;
 	}
 
-	public int getX(IWorld level) {
+	public int getX(Level level) {
 		return this.spawnPointRelative ? this.x + level.getLevelData().getXSpawn() : this.x;
 	}
 
-	public int getZ(IWorld level) {
+	public int getZ(Level level) {
 		return this.spawnPointRelative ? this.z + level.getLevelData().getZSpawn() : this.z;
 	}
 

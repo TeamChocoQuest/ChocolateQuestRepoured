@@ -1,18 +1,17 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.EnumSet;
-import java.util.List;
-
-import org.joml.Vector3d;
-
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.EnumSet;
+import java.util.List;
 
 public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -40,9 +39,9 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		}
 		if (this.random.nextInt(10) == 0) {
 			boolean hasSaddle = hasSaddle();
-			Vector3d vec1 = this.entity.position().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
-			Vector3d vec2 = this.entity.position().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
-			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+			Vec3 vec1 = this.entity.position().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			Vec3 vec2 = this.entity.position().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			AABB aabb = new AABB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<MobEntity> possibleMounts = this.world.getEntitiesOfClass(MobEntity.class, aabb, input -> {
 				if (!TargetUtil.PREDICATE_MOUNTS.apply(input)) {
 					return false;
@@ -113,7 +112,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 				//TODO: Replace
 				//this.world.setEntityState(horse, (byte) 7);
 				horse.setTamed(true);
-				horse.equipSaddle(SoundCategory.AMBIENT);
+				horse.equipSaddle(SoundSource.AMBIENT);
 				// Should that stay? -> Arlo says yes.
 				horse.setSlot(400, new ItemStack(Items.SADDLE));
 				horse.setSlot(401, new ItemStack(Items.IRON_HORSE_ARMOR));

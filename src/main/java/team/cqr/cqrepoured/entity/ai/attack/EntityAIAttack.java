@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
-import java.util.EnumSet;
-
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.EnumSet;
 
 public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -71,7 +71,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 		} else if (this.attackTick + this.getBlockCooldownPeriod() <= this.entity.tickCount && !this.entity.isBlocking()) {
 			ItemStack offhand = this.entity.getMainHandItem();
 			if (offhand.getItem().isShield(offhand, this.entity)) {
-				this.entity.startUsingItem(Hand.OFF_HAND);
+				this.entity.startUsingItem(InteractionHand.OFF_HAND);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.attackCooldownOverhead = 0.0F;
 			}
 			this.attackTick = this.entity.tickCount;
-			this.entity.swing(Hand.MAIN_HAND, true);
+			this.entity.swing(InteractionHand.MAIN_HAND, true);
 			//if(this.entity.canAttack(attackTarget)) {
 				this.entity.doHurtTarget(attackTarget);
 			//}

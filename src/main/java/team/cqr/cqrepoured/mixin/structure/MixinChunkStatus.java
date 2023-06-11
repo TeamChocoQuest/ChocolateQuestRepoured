@@ -12,7 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.chunk.ChunkStatus;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.CQRChunkStatus;
 
 @Mixin(ChunkStatus.class)

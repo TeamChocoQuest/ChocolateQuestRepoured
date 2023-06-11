@@ -5,7 +5,7 @@
 //import net.minecraft.command.ICommandSender;
 //import net.minecraft.command.WrongUsageException;
 //import net.minecraft.server.MinecraftServer;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.text.StringTextComponent;
 //import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 //import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;

@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
@@ -21,9 +21,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	private final BlockState state;
 	@Nullable
-	private final CompoundNBT tileEntityData;
+	private final CompoundTag tileEntityData;
 
-	public PreparableBlockInfo(BlockState state, @Nullable CompoundNBT tileEntityData) {
+	public PreparableBlockInfo(BlockState state, @Nullable CompoundTag tileEntityData) {
 		this.state = state;
 		this.tileEntityData = tileEntityData;
 	}
@@ -36,7 +36,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		level.setBlockState(transformedPos, transformedState, blockEntity -> this.blockEntityCallback(transformedPos, transformedState, blockEntity, placement));
 	}
 
-	protected void blockEntityCallback(BlockPos pos, BlockState state, @Nullable TileEntity blockEntity, DungeonPlacement placement) {
+	protected void blockEntityCallback(BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, DungeonPlacement placement) {
 		if (blockEntity != null && this.tileEntityData != null) {
 			this.tileEntityData.putInt("x", pos.getX());
 			this.tileEntityData.putInt("y", pos.getY());
@@ -57,7 +57,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		level.setBlockState(transformedPos, transformedState, blockEntity -> this.blockEntityCallbackDebug(transformedPos, transformedState, blockEntity, placement));
 	}
 
-	protected void blockEntityCallbackDebug(BlockPos pos, BlockState state, @Nullable TileEntity blockEntity, DungeonPlacement placement) {
+	protected void blockEntityCallbackDebug(BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, DungeonPlacement placement) {
 		if (blockEntity != null && this.tileEntityData != null) {
 			this.tileEntityData.putInt("x", pos.getX());
 			this.tileEntityData.putInt("y", pos.getY());
@@ -75,14 +75,14 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	@Nullable
-	public CompoundNBT getTileEntityData() {
+	public CompoundTag getTileEntityData() {
 		return this.tileEntityData;
 	}
 
-	public static class Factory implements IFactory<TileEntity> {
+	public static class Factory implements IFactory<BlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntity> blockEntityLazy) {
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BlockEntity> blockEntityLazy) {
 			return new PreparableBlockInfo(state, blockEntityLazy.map(IFactory::writeTileEntityToNBT).orElse(null));
 		}
 
@@ -91,7 +91,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			int data = (palette.idFor(preparable.state) << 1) | (preparable.tileEntityData != null ? 1 : 0);
 			ByteBufUtil.writeVarInt(buf, data, 5);
 			if (preparable.tileEntityData != null) {
@@ -101,10 +101,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBlockInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableBlockInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
 			BlockState state = palette.stateFor(data >>> 1);
-			CompoundNBT tileEntityData = null;
+			CompoundTag tileEntityData = null;
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
 			}

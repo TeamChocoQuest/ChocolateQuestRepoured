@@ -3,18 +3,23 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -32,18 +37,18 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 public class PreparableBossInfo extends PreparablePosInfo {
 
 	@Nullable
-	private final CompoundNBT bossTag;
+	private final CompoundTag bossTag;
 
 	public PreparableBossInfo(TileEntityBoss tileEntityBoss) {
 		this(getBossTag(tileEntityBoss));
 	}
 
-	public PreparableBossInfo(@Nullable CompoundNBT bossTag) {
+	public PreparableBossInfo(@Nullable CompoundTag bossTag) {
 		this.bossTag = bossTag;
 	}
 
 	@Nullable
-	private static CompoundNBT getBossTag(TileEntityBoss tileEntityBoss) {
+	private static CompoundTag getBossTag(TileEntityBoss tileEntityBoss) {
 		ItemStack stack = tileEntityBoss.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElseThrow(NullPointerException::new).getStackInSlot(0);
 		if (!stack.hasTag()) {
 			return null;
@@ -99,7 +104,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		if (entity instanceof MobEntity) {
 			MobEntity mobEntity = (MobEntity) entity;
-			placement.getEntityFactory().finalizeSpawn(mobEntity, pos, SpawnReason.STRUCTURE, null, null);
+			placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 			mobEntity.setPersistenceRequired();
 
 			if (entity instanceof AbstractEntityCQR) {
@@ -115,14 +120,14 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	private Entity createEntityFromEntityID(DungeonPlacement placement, BlockPos pos) {
 		Entity entity = placement.getEntityFactory().createEntity(placement.getInhabitant().getEntityID());
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-		entity.setCustomName(new StringTextComponent("Temporary Boss"));
+		entity.setCustomName(new TextComponent("Temporary Boss"));
 
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
 
 			if (entity instanceof MobEntity) {
 				MobEntity mobEntity = (MobEntity) entity;
-				placement.getEntityFactory().finalizeSpawn(mobEntity, pos, SpawnReason.STRUCTURE, null, null);
+				placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 				mobEntity.setPersistenceRequired();
 			}
 
@@ -139,27 +144,27 @@ public class PreparableBossInfo extends PreparablePosInfo {
 			livingEntity.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(new AttributeModifier("temp_boss_speed_buff", 0.35D, Operation.MULTIPLY_TOTAL));
 
 			// Some gear
-			livingEntity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
-			livingEntity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(CQRItems.CURSED_BONE.get()));
+			livingEntity.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+			livingEntity.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(CQRItems.CURSED_BONE.get()));
 
-			livingEntity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND.get()));
-			livingEntity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND.get()));
-			livingEntity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND.get()));
-			livingEntity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND.get()));
+			livingEntity.setItemSlot(EquipmentSlot.HEAD, new ItemStack(CQRItems.HELMET_HEAVY_DIAMOND.get()));
+			livingEntity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(CQRItems.CHESTPLATE_HEAVY_DIAMOND.get()));
+			livingEntity.setItemSlot(EquipmentSlot.LEGS, new ItemStack(CQRItems.LEGGINGS_HEAVY_DIAMOND.get()));
+			livingEntity.setItemSlot(EquipmentSlot.FEET, new ItemStack(CQRItems.BOOTS_HEAVY_DIAMOND.get()));
 		}
 
 		return entity;
 	}
 
 	@Nullable
-	public CompoundNBT getBossTag() {
+	public CompoundTag getBossTag() {
 		return this.bossTag;
 	}
 
 	public static class Factory implements IFactory<TileEntityBoss> {
 
 		@Override
-		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntityLazy) {
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntityLazy) {
 			return new PreparableBossInfo(blockEntityLazy.orElseThrow(NullPointerException::new));
 		}
 
@@ -168,7 +173,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBossInfo> {
 
 		@Override
-		public void write(PreparableBossInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableBossInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			ByteBufUtil.writeVarInt(buf, preparable.bossTag != null ? (nbtList.size() << 1) | 1 : 0, 5);
 			if (preparable.bossTag != null) {
 				nbtList.add(preparable.bossTag);
@@ -176,9 +181,9 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBossInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableBossInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
-			CompoundNBT bossTag = null;
+			CompoundTag bossTag = null;
 			if ((data & 1) == 1) {
 				bossTag = nbtList.getCompound(data >>> 1);
 			}

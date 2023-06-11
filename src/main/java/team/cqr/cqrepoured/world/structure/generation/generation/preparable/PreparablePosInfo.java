@@ -10,14 +10,15 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.world.level.block.BannerBlock;
-import net.minecraft.world.level.block.StructureVoidBlock;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.StructureVoidBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockBossBlock;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -47,20 +48,20 @@ public abstract class PreparablePosInfo {
 
 	public static class Registry {
 
-		public interface IFactory<T extends TileEntity> {
+		public interface IFactory<T extends BlockEntity> {
 
-			default PreparablePosInfo create(World level, BlockPos pos, BlockState state) {
+			default PreparablePosInfo create(Level level, BlockPos pos, BlockState state) {
 				return this.create(level, pos, state, LazyOptional.of(state.hasTileEntity() ? () -> level.getBlockEntity(pos) : null).cast());
 			}
 
-			PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<T> blockEntityLazy);
+			PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<T> blockEntityLazy);
 
 			@Nullable
-			static CompoundNBT writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
+			static CompoundTag writeTileEntityToNBT(@Nullable BlockEntity tileEntity) {
 				if (tileEntity == null) {
 					return null;
 				}
-				CompoundNBT compound = tileEntity.save(new CompoundNBT());
+				CompoundTag compound = tileEntity.save(new CompoundTag());
 				compound.remove("x");
 				compound.remove("y");
 				compound.remove("z");
@@ -71,9 +72,9 @@ public abstract class PreparablePosInfo {
 
 		public interface ISerializer<T extends PreparablePosInfo> {
 
-			void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
+			void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList);
 
-			T read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList);
+			T read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList);
 
 		}
 
@@ -112,14 +113,14 @@ public abstract class PreparablePosInfo {
 			BLOCK_CLASS_2_EXPORTER.put(blockClass, factory);
 		}
 
-		public static <T extends TileEntity> PreparablePosInfo create(World level, BlockPos pos, BlockState state) {
+		public static <T extends BlockEntity> PreparablePosInfo create(Level level, BlockPos pos, BlockState state) {
 			Class<? extends Block> blockClass = state.getBlock().getClass();
 			IFactory<T> factory = getFactory(blockClass);
 			return factory.create(level, pos, state);
 		}
 
 		@SuppressWarnings("unchecked")
-		private static <T extends TileEntity> IFactory<T> getFactory(Class<? extends Block> blockClass) {
+		private static <T extends BlockEntity> IFactory<T> getFactory(Class<? extends Block> blockClass) {
 			IFactory<T> factory = (IFactory<T>) BLOCK_CLASS_2_EXPORTER.get(blockClass);
 			if (factory == null && blockClass != Block.class) {
 				factory = getFactory((Class<? extends Block>) blockClass.getSuperclass());
@@ -141,7 +142,7 @@ public abstract class PreparablePosInfo {
 		}
 
 		@SuppressWarnings("unchecked")
-		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
+		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListTag compoundList) {
 			if (!CLASS_2_ID.containsKey(preparable.getClass())) {
 				throw new IllegalArgumentException("Class not registered: " + preparable.getClass().getSimpleName());
 			}
@@ -151,7 +152,7 @@ public abstract class PreparablePosInfo {
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT compoundList) {
+		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, ListTag compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);

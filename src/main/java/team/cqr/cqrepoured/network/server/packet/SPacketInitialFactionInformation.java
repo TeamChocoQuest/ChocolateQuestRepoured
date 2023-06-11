@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Tuple;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.AbstractPacket;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInitialFactionInformation> {
 
@@ -63,7 +63,7 @@ public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInit
 	}
 
 	@Override
-	public SPacketInitialFactionInformation fromBytes(PacketBuffer buf) {
+	public SPacketInitialFactionInformation fromBytes(FriendlyByteBuf buf) {
 		SPacketInitialFactionInformation result = new SPacketInitialFactionInformation();
 		result.playerId = buf.readUUID();
 		int count = buf.readInt();
@@ -81,7 +81,7 @@ public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInit
 	}
 
 	@Override
-	public void toBytes(SPacketInitialFactionInformation packet, PacketBuffer buf) {
+	public void toBytes(SPacketInitialFactionInformation packet, FriendlyByteBuf buf) {
 		buf.writeUUID(packet.playerId);
 		buf.writeInt(packet.factions.length);
 		for (int i = 0; i < packet.factions.length; i++) {

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import org.joml.Vector3d;
-
 import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -24,15 +24,15 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 	public void startCastingSpell() {
 		int projectiles = DungeonGenUtils.randomBetween(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRandom());
 
-		Vector3d vector = this.entity.getTarget().position().subtract(this.entity.position()).normalize();
+		Vec3 vector = this.entity.getTarget().position().subtract(this.entity.position()).normalize();
 		double angle = 180D / projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
-		Vector3d[] velocities = new Vector3d[projectiles];
+		Vec3[] velocities = new Vec3[projectiles];
 		for (int i = 0; i < projectiles; i++) {
 			velocities[i] = VectorUtil.rotateVectorAroundY(vector, angle * i);
 		}
 
-		for (Vector3d v : velocities) {
+		for (Vec3 v : velocities) {
 			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity, this.entity.level);
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
 

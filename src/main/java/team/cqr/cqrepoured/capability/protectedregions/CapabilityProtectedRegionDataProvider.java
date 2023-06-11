@@ -1,9 +1,8 @@
 package team.cqr.cqrepoured.capability.protectedregions;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.NonNullSupplier;
 import team.cqr.cqrepoured.CQRMain;
@@ -24,11 +23,11 @@ public class CapabilityProtectedRegionDataProvider extends SerializableCapabilit
 		CapabilityManager.INSTANCE.register(CapabilityProtectedRegionData.class, new CapabilityProtectedRegionDataStorage(), () -> new CapabilityProtectedRegionData(null));
 	}
 
-	public static CapabilityProtectedRegionDataProvider createProvider(Chunk chunk) {
+	public static CapabilityProtectedRegionDataProvider createProvider(LevelChunk chunk) {
 		return new CapabilityProtectedRegionDataProvider(CapabilityProtectedRegionDataProvider.PROTECTED_REGION_DATA, () -> new CapabilityProtectedRegionData(chunk));
 	}
 
-	public static CapabilityProtectedRegionData get(Chunk chunk) {
+	public static CapabilityProtectedRegionData get(LevelChunk chunk) {
 		return chunk.getCapability(PROTECTED_REGION_DATA)
 				.orElseThrow(NullPointerException::new);
 	}

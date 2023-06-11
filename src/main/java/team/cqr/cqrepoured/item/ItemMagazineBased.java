@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.item;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.item.ItemStack;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public abstract class ItemMagazineBased extends ItemLore {
 
@@ -37,7 +38,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 			return false;
 		}
 		if (!stack.hasTag()) {
-			stack.setTag(new CompoundNBT());
+			stack.setTag(new CompoundTag());
 		}
 		return stack.hasTag() && stack.getTag().contains(CONSTANT_AMMO_NBT_KEY, Constants.NBT.TAG_INT);
 	}
@@ -60,7 +61,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 	public void setAmmo(ItemStack stack, int amount) {
 		amount = amount < 0 ? 0 : amount;
 		if (!stack.hasTag()) {
-			stack.setTag(new CompoundNBT());
+			stack.setTag(new CompoundTag());
 		}
 		stack.getTag().putInt(CONSTANT_AMMO_NBT_KEY, amount);
 	}
@@ -86,10 +87,10 @@ public abstract class ItemMagazineBased extends ItemLore {
 
 	@Override
 	public int getRGBDurabilityForDisplay(ItemStack stack) {
-		return MathHelper.hsvToRgb(this.getAmmoInItemInPercent(stack) / 3.0F, 1.0F, 1.0F);
+		return Mth.hsvToRgb(this.getAmmoInItemInPercent(stack) / 3.0F, 1.0F, 1.0F);
 	}
 
-	public List<ItemStack> getAmmoItemsInInventory(PlayerInventory playerInventory) {
+	public List<ItemStack> getAmmoItemsInInventory(Inventory playerInventory) {
 		List<ItemStack> result = new ArrayList<>();
 		for (int i = 0; i < playerInventory.getContainerSize(); i++) {
 			ItemStack stack = playerInventory.getItem(i);
@@ -105,7 +106,7 @@ public abstract class ItemMagazineBased extends ItemLore {
 		ItemStack def = super.getDefaultInstance();
 
 		if (!def.hasTag()) {
-			def.setTag(new CompoundNBT());
+			def.setTag(new CompoundTag());
 		}
 
 		this.setAmmo(def, this.getMaxAmmo());
@@ -113,11 +114,11 @@ public abstract class ItemMagazineBased extends ItemLore {
 		return def;
 	}
 
-	protected void reloadFromInventory(PlayerInventory playerInventory, ItemStack stack, boolean removeItems) {
+	protected void reloadFromInventory(Inventory playerInventory, ItemStack stack, boolean removeItems) {
 		this.reloadFromAmmoItems(playerInventory, this.getAmmoItemsInInventory(playerInventory), stack, removeItems);
 	}
 
-	protected void reloadFromAmmoItems(PlayerInventory playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
+	protected void reloadFromAmmoItems(Inventory playerInventory, List<ItemStack> fuelItems, ItemStack stack, boolean removeItems) {
 		if (fuelItems.isEmpty()) {
 			return;
 		}

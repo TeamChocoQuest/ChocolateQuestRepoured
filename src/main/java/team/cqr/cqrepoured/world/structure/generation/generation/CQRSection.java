@@ -11,20 +11,24 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.SectionPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos.Mutable;
+import net.minecraft.util.math.SectionPos;
 import net.minecraft.util.math.shapes.BitSetVoxelShapePart;
 import net.minecraft.util.math.shapes.VoxelShapePart;
 import net.minecraft.util.palette.IPalette;
 import net.minecraft.util.palette.IdentityPalette;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.util.NBTCollectors;
@@ -39,39 +43,39 @@ public class CQRSection implements ICQRSection {
 	private final CQRLevel level;
 	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
-	private final Int2ObjectMap<TileEntity> blockEntities;
+	private final Int2ObjectMap<BlockEntity> blockEntities;
 	private final List<EntityContainer> entities;
 
 	public CQRSection(CQRLevel level, SectionPos sectionPos) {
 		this.level = level;
 		this.sectionPos = sectionPos;
-		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NBTUtil::readBlockState, NBTUtil::writeBlockState);
+		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NbtUtils::readBlockState, NbtUtils::writeBlockState);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
 
-	public CQRSection(CQRLevel level, CompoundNBT nbt) {
+	public CQRSection(CQRLevel level, CompoundTag nbt) {
 		this.level = level;
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
-		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NBTUtil::readBlockState, NBTUtil::writeBlockState);
+		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NbtUtils::readBlockState, NbtUtils::writeBlockState);
 		this.blocks.read(nbt.getList("Palette", NBT.TAG_COMPOUND), nbt.getLongArray("BlockStates"));
-		this.blockEntities = NBTCollectors.<CompoundNBT, TileEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
-			return TileEntity.loadStatic(this.getBlockState(index), blockEntityNbt);
+		this.blockEntities = NBTCollectors.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
+			return BlockEntity.loadStatic(this.getBlockState(index), blockEntityNbt);
 		});
-		this.entities = NBTHelper.stream(nbt.get("Entities"), CompoundNBT.TYPE).map(EntityContainer::new).collect(Collectors.toList());
+		this.entities = NBTHelper.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
 	}
 
 	public SectionPos getPos() {
 		return this.sectionPos;
 	}
 
-	public CompoundNBT save() {
-		CompoundNBT nbt = new CompoundNBT();
+	public CompoundTag save() {
+		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("X", this.sectionPos.x());
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
 		this.blocks.write(nbt, "Palette", "BlockStates");
-		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.save(new CompoundNBT())));
+		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.save(new CompoundTag())));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTCollectors.toList()));
 		return nbt;
 	}
@@ -114,7 +118,7 @@ public class CQRSection implements ICQRSection {
 			if (level.setBlock(mutablePos, state, 0)) {
 				voxelShapePart.setFull(x, y, z, true, true);
 
-				TileEntity tileEntity = this.blockEntities.get(i);
+				BlockEntity tileEntity = this.blockEntities.get(i);
 				if (tileEntity != null) {
 					level.getChunk(mutablePos).setBlockEntity(mutablePos, tileEntity);
 				}
@@ -168,7 +172,7 @@ public class CQRSection implements ICQRSection {
 
 		this.blockEntities.int2ObjectEntrySet().forEach(entry -> {
 			setPos(mutablePos, this.sectionPos, entry.getIntKey());
-			TileEntity blockEntity = level.getBlockEntity(mutablePos);
+			BlockEntity blockEntity = level.getBlockEntity(mutablePos);
 			if (blockEntity != null) {
 				blockEntity.setChanged();
 			}
@@ -219,14 +223,14 @@ public class CQRSection implements ICQRSection {
 	}
 
 	@Override
-	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<TileEntity> blockEntityCallback) {
+	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.setBlockState(index(pos), state, blockEntityCallback);
 	}
 
-	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<TileEntity> blockEntityCallback) {
+	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.blocks.set(index, state);
 		if (state != null && state.hasTileEntity()) {
-			TileEntity blockEntity = state.createTileEntity(this.level.asBlockReader());
+			BlockEntity blockEntity = state.createTileEntity(this.level.asBlockReader());
 			this.blockEntities.put(index, blockEntity);
 			if (blockEntityCallback != null) {
 				blockEntityCallback.accept(blockEntity);
@@ -245,7 +249,7 @@ public class CQRSection implements ICQRSection {
 
 	@Override
 	@Nullable
-	public TileEntity getBlockEntity(BlockPos pos) {
+	public BlockEntity getBlockEntity(BlockPos pos) {
 		return this.blockEntities.get(index(pos));
 	}
 

@@ -4,28 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.joml.Vector3d;
-
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -42,29 +42,29 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 
-	private static final DataParameter<Boolean> BONE_SHIELD_ACTIVE = EntityDataManager.<Boolean>defineId(EntityCQRNecromancer.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> BONE_SHIELD_ACTIVE = SynchedEntityData.<Boolean>defineId(EntityCQRNecromancer.class, EntityDataSerializers.BOOLEAN);
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
-	public EntityCQRNecromancer(World world) {
+	public EntityCQRNecromancer(Level world) {
 		this(CQREntityTypes.NECROMANCER.get(), world);
 	}
 	
-	public EntityCQRNecromancer(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRNecromancer(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(CQRMain.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vector3d(0, 0, 0)) {
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(CQRMain.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3(0, 0, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;
 			}
 		});
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 20, 5, new ResourceLocation(CQRMain.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vector3d(0, 2.5, 0)) {
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 20, 5, new ResourceLocation(CQRMain.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vec3(0, 2.5, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;
@@ -123,7 +123,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (!this.level.isClientSide && this.getHealth() <= this.getMaxHealth() / 2) {
-			if (source.isProjectile() || source.getDirectEntity() instanceof AbstractArrowEntity || source.getDirectEntity() instanceof ProjectileEntity) {
+			if (source.isProjectile() || source.getDirectEntity() instanceof AbstractArrowEntity || source.getDirectEntity() instanceof Projectile) {
 				amount = 0;
 				return false;
 			}
@@ -214,7 +214,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.client.model.geo;
 
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.cache.GeckoLibCache;
-import software.bernie.geckolib.core.animation.Animation;
+import net.minecraft.world.entity.Entity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
+import software.bernie.geckolib3.core.builder.Animation;
 import software.bernie.geckolib3.file.AnimationFile;
 import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
+import software.bernie.geckolib3.resource.GeckoLibCache;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;

@@ -1,18 +1,18 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import java.util.Random;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 import javax.annotation.Nullable;
-
-import net.minecraft.world.World;
-import net.minecraft.world.entity.LivingEntity;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import java.util.Random;
 
 public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> implements IEntityAISpell {
 
 	protected final Random random = new Random();
 	protected final T entity;
-	protected final World world;
+	protected final Level world;
 	protected boolean needsTargetToStart;
 	protected boolean needsSightToStart;
 	protected boolean needsTargetToContinue;

@@ -2,11 +2,10 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.EnumSet;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR> {
@@ -50,9 +49,9 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 			LivingEntity leader = this.entity.getLeader();
 
 			if (this.entity.distanceTo(leader) > 24) {
-				int i = MathHelper.floor(leader.getX()) - 2;
-				int j = MathHelper.floor(leader.getZ()) - 2;
-				int k = MathHelper.floor(leader.getBoundingBox().minY);
+				int i = Mth.floor(leader.getX()) - 2;
+				int j = Mth.floor(leader.getZ()) - 2;
+				int k = Mth.floor(leader.getBoundingBox().minY);
 
 				for (int l = 0; l <= 4; ++l) {
 					for (int i1 = 0; i1 <= 4; ++i1) {

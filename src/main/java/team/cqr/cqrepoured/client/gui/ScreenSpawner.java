@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.inventory.ContainerSpawner;
@@ -28,7 +27,7 @@ public class ScreenSpawner extends ContainerScreen<ContainerSpawner> {
 	private NumberTextField<Integer> activatingRangeFromPlayerTextField;
 	private NumberTextField<Integer> spawnRangeTextField;
 
-	public ScreenSpawner(ContainerSpawner container, PlayerInventory playerInv, ITextComponent title) {
+	public ScreenSpawner(ContainerSpawner container, Inventory playerInv, TextComponent title) {
 		super(container, playerInv, title);
 		this.tileEntity = container.getTileEntity();
 	}
@@ -39,7 +38,7 @@ public class ScreenSpawner extends ContainerScreen<ContainerSpawner> {
 		this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
 
 		this.vanillaSpawnerCheckBox = this.addButton(new CheckboxButton(this.width / 2 + 90, this.height / 2 - 80, 20,
-				20, new StringTextComponent("Vanilla Spawner"), this.tileEntity.isVanillaSpawner()) {
+				20, new TextComponent("Vanilla Spawner"), this.tileEntity.isVanillaSpawner()) {
 			@Override
 			public void onPress() {
 				super.onPress();
@@ -112,7 +111,7 @@ public class ScreenSpawner extends ContainerScreen<ContainerSpawner> {
 	}
 
 	@Override
-	protected void renderLabels(MatrixStack pMatrixStack, int pX, int pY) {
+	protected void renderLabels(PoseStack pMatrixStack, int pX, int pY) {
 		super.renderLabels(pMatrixStack, pX, pY);
 
 		this.font.drawShadow(pMatrixStack, "Min Spawn Delay", 214, 28, 0xE0E0E0);
@@ -124,7 +123,7 @@ public class ScreenSpawner extends ContainerScreen<ContainerSpawner> {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 		this.renderTooltip(pMatrixStack, pMouseX, pMouseY);
@@ -132,7 +131,7 @@ public class ScreenSpawner extends ContainerScreen<ContainerSpawner> {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	protected void renderBg(MatrixStack pMatrixStack, float pPartialTicks, int pX, int pY) {
+	protected void renderBg(PoseStack pMatrixStack, float pPartialTicks, int pX, int pY) {
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.minecraft.getTextureManager().bind(TEXTURE);
 		this.blit(pMatrixStack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);

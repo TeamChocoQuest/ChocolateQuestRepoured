@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.init;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
+
+import java.util.Arrays;
+import java.util.Random;
 
 public enum ESpeechBubble {
 

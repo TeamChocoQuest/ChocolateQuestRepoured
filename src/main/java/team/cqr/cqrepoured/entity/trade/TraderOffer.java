@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.jarjar.selection.util.Constants;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -25,16 +28,16 @@ public class TraderOffer {
 		this.entity = trader;
 	}
 
-	public void readFromNBT(CompoundNBT nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		this.trades.clear();
-		ListNBT tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
-		for (INBT tag : tradesNBT) {
-			this.trades.add(Trade.createFromNBT(this, (CompoundNBT) tag));
+		ListTag tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
+		for (Tag tag : tradesNBT) {
+			this.trades.add(Trade.createFromNBT(this, (CompoundTag) tag));
 		}
 	}
 
-	public CompoundNBT writeToNBT(CompoundNBT nbt) {
-		ListNBT tradesNBT = new ListNBT();
+	public CompoundTag writeToNBT(CompoundTag nbt) {
+		ListTag tradesNBT = new ListTag();
 		for (Trade trade : this.trades) {
 			tradesNBT.add(trade.writeToNBT());
 		}
@@ -66,8 +69,8 @@ public class TraderOffer {
 	}
 
 	public void onTradesUpdated() {
-		if (!this.entity.level.isClientSide) {
-			this.entity.level.players().stream()
+		if (!this.entity.level().isClientSide) {
+			this.entity.level().players().stream()
 					.map(p -> p.containerMenu)
 					.filter(Objects::nonNull)
 					.filter(ContainerMerchant.class::isInstance)
@@ -76,7 +79,7 @@ public class TraderOffer {
 					.forEach(c -> c.onTradesUpdated());
 			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new SPacketSyncTrades(this.entity));
 		} else {
-			Container c = Minecraft.getInstance().player.containerMenu;
+			AbstractContainerMenu c = Minecraft.getInstance().player.containerMenu;
 			if (c instanceof ContainerMerchant) {
 				((ContainerMerchant) c).onTradesUpdated();
 			}

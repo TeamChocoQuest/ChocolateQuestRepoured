@@ -1,16 +1,19 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.Level;
 
 public abstract class BlockExporterChest extends ChestBlock {
 
@@ -20,7 +23,7 @@ public abstract class BlockExporterChest extends ChestBlock {
 				.strength(-1.0F, 3600000.0F)
 				.noDrops()
 				.noOcclusion(),
-				() -> TileEntityType.CHEST);
+				() -> BlockEntityType.CHEST);
 	}
 
 	@Override
@@ -29,12 +32,12 @@ public abstract class BlockExporterChest extends ChestBlock {
 	}
 
 	@Override
-	public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+	public abstract BlockEntity createTileEntity(BlockState state, BlockGetter world);
 
 	@Override
-	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand,
-			BlockRayTraceResult result) {
-		return ActionResultType.PASS;
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                 BlockHitResult result) {
+		return InteractionResult.PASS;
 	}
 
 	@Override

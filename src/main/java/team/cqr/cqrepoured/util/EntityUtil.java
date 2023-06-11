@@ -6,13 +6,16 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import team.cqr.cqrepoured.client.util.ClientWorldUtil;
@@ -95,7 +98,7 @@ public class EntityUtil {
 					continue;
 				}
 				// TODO: Check if this is correct
-				while (mutablePos.getY() > 0 && entity.level.getBlockState(mutablePos).getCollisionShape(entity.level, mutablePos) == VoxelShapes.INFINITY) {
+				while (mutablePos.getY() > 0 && entity.level.getBlockState(mutablePos).getCollisionShape(entity.level, mutablePos) == Shapes.INFINITY) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
 				y += mutablePos.getY() + 1;
@@ -110,9 +113,9 @@ public class EntityUtil {
 	}
 
 	@Nullable
-	public static Entity getEntityByUUID(World world, UUID uuid) {
+	public static Entity getEntityByUUID(Level world, UUID uuid) {
 		if (!world.isClientSide) {
-			return ((ServerWorld) world).getEntity(uuid);
+			return ((ServerLevel) world).getEntity(uuid);
 		}
 
 		Entity resClient = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
@@ -123,7 +126,7 @@ public class EntityUtil {
 	}
 
 	public static void applyMaxHealthModifier(LivingEntity entity, UUID uuid, String name, double amount) {
-		ModifiableAttributeInstance attribute = entity.getAttribute(Attributes.MAX_HEALTH);
+		AttributeInstance attribute = entity.getAttribute(Attributes.MAX_HEALTH);
 		if (attribute == null) {
 			return;
 		}

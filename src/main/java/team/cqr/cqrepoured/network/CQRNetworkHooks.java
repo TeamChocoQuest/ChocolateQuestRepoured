@@ -3,37 +3,39 @@ package team.cqr.cqrepoured.network;
 import java.util.function.Consumer;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.NetworkHooks;
 
 public class CQRNetworkHooks {
 	
-	public static void openGUI(PlayerEntity pe, ITextComponent title, Consumer<PacketBuffer> customDataInstructions, ContainerType<? extends Container> containerConstructor) {
-		if(pe instanceof ServerPlayerEntity) {
-			openGUI((ServerPlayerEntity)pe, title, customDataInstructions, containerConstructor);
+	public static void openGUI(Player pe, Component title, Consumer<FriendlyByteBuf> customDataInstructions, MenuType<? extends Container> containerConstructor) {
+		if(pe instanceof ServerPlayer) {
+			openGUI((ServerPlayer)pe, title, customDataInstructions, containerConstructor);
 		} else {
 			
 		}
 	}
 	
-	public static void openGUI(ServerPlayerEntity spe, ITextComponent title, Consumer<PacketBuffer> customDataInstructions, ContainerType<? extends Container> containerConstructor) {
-		PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+	public static void openGUI(ServerPlayer spe, Component title, Consumer<FriendlyByteBuf> customDataInstructions, MenuType<? extends Container> containerConstructor) {
+		FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
 		customDataInstructions.accept(buffer);
-		NetworkHooks.openGui(spe, new INamedContainerProvider() {
+		NetworkHooks.openScreen(spe, new MenuProvider() {
 			
 			@Override
-			public Container createMenu(int windowId, PlayerInventory invPlayer, PlayerEntity lePlayer) {
+			public AbstractContainerMenu createMenu(int windowId, Inventory invPlayer, Player lePlayer) {
 				return containerConstructor.create(windowId, invPlayer, buffer);
 			}
 			
 			@Override
-			public ITextComponent getDisplayName() {
+			public Component getDisplayName() {
 				return title;
 			}
 		},

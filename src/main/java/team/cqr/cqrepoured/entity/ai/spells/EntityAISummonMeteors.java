@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -23,7 +23,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d vector = this.entity.getLookAngle().normalize();
+		Vec3 vector = this.entity.getLookAngle().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
 		int ballCount = DungeonGenUtils.randomBetween(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRandom());
@@ -33,7 +33,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getTarget().blockPosition();
-			Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
+			Vec3 v = this.entity.getTarget().position().subtract(this.entity.position());
 			v = v.normalize().scale(Math.abs((ballCount / 3) - 2));
 			centeredPos = centeredPos.offset(v.x, v.y, v.z);
 			for (int i = 0; i < ballCount; i++) {
@@ -47,7 +47,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.level, summon, 0.1F, texture, null);
 					circle.setSummon(summon);
 					circle.setPos(p.getX(), p.getY() + 10.0D, p.getZ());
-					circle.setVelocityForSummon(new Vector3d(0D, -1D, 0D));
+					circle.setVelocityForSummon(new Vec3(0D, -1D, 0D));
 
 					this.entity.level.addFreshEntity(circle);
 				}

@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
@@ -13,11 +13,11 @@ public class RenderNetherDragonBodyPart extends RenderEntityGeo<SubEntityNetherD
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/boss/nether_dragon_body.png");
 	private static final ResourceLocation MODEL_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_body_normal.geo.json");
 	
-	public RenderNetherDragonBodyPart(EntityRendererManager renderManager) {
+	public RenderNetherDragonBodyPart(EntityRendererProvider.Context renderManager) {
 		this(renderManager, new ModelNetherDragonBodyGeo(MODEL_RESLOC, TEXTURE, "boss/nether_dragon"));
 	}
 
-	public RenderNetherDragonBodyPart(EntityRendererManager renderManager, AnimatedGeoModel<SubEntityNetherDragonSegment> modelProvider) {
+	public RenderNetherDragonBodyPart(EntityRendererProvider.Context renderManager, AnimatedGeoModel<SubEntityNetherDragonSegment> modelProvider) {
 		super(renderManager, modelProvider);
 	}
 	

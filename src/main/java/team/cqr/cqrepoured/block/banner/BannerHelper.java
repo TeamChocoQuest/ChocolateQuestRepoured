@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.block.banner;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.BannerTileEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import team.cqr.cqrepoured.init.CQRBannerPatterns;
 
 public class BannerHelper {
@@ -18,7 +18,7 @@ public class BannerHelper {
 		return itemList;
 	}
 
-	public static boolean isCQBanner(BannerTileEntity bannerTile) {
+	public static boolean isCQBanner(BannerBlockEntity bannerTile) {
 		if (bannerTile.itemPatterns == null) {
 			return false;
 		}
@@ -26,7 +26,7 @@ public class BannerHelper {
 			return false;
 		}
 		for (int i = 0; i < bannerTile.itemPatterns.size(); i++) {
-			CompoundNBT nbttagcompound = bannerTile.itemPatterns.getCompound(i);
+			CompoundTag nbttagcompound = bannerTile.itemPatterns.getCompound(i);
 			if (nbttagcompound.getString("Pattern").equals(CQRBannerPatterns.CQ_BLANK.getHashname())) {
 				return true;
 			}

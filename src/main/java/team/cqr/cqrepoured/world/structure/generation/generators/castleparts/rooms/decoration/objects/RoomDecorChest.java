@@ -1,14 +1,14 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 //
-//import net.minecraft.block.Block;
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
-//import net.minecraft.block.ChestBlock;
+//import net.minecraft.world.level.block.Block;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
+//import net.minecraft.world.level.block.ChestBlock;
 //import net.minecraft.nbt.CompoundNBT;
 //import net.minecraft.tileentity.ChestTileEntity;
 //import net.minecraft.util.Direction;
 //import net.minecraft.util.ResourceLocation;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;

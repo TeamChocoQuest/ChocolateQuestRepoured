@@ -6,29 +6,14 @@ import java.util.List;
 
 import com.mojang.datafixers.DataFixer;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IObjectIntIterable;
-import net.minecraft.util.datafix.DataFixesManager;
-import net.minecraft.util.datafix.DefaultTypeReferences;
-import net.minecraft.world.EmptyTickList;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome.RainType;
-import net.minecraft.world.biome.BiomeAmbience;
-import net.minecraft.world.biome.BiomeContainer;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkSection;
-import net.minecraft.world.chunk.IChunk;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.chunk.UpgradeData;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class DataFixerUtil {
@@ -37,24 +22,24 @@ public class DataFixerUtil {
 	private static final int V18w20c = 1493;
 	private static final int V1165 = 2586;
 
-	public static CompoundNBT update(CompoundNBT chunkTag) {
+	public static CompoundTag update(CompoundTag chunkTag) {
 		DataFixer dataFixer = DataFixesManager.getDataFixer();
-		chunkTag = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkTag, V1122, V18w20c);
-		chunkTag = NBTUtil.update(dataFixer, DefaultTypeReferences.CHUNK, chunkTag, V18w20c, V1165);
+		chunkTag = NbtUtils.update(dataFixer, DefaultTypeReferences.CHUNK, chunkTag, V1122, V18w20c);
+		chunkTag = NbtUtils.update(dataFixer, DefaultTypeReferences.CHUNK, chunkTag, V18w20c, V1165);
 		chunkTag.putInt("DataVersion", V1165);
 		return chunkTag;
 	}
 
-	public static IChunk read(World world, CompoundNBT chunkTag) {
-		CompoundNBT levelTag = chunkTag.getCompound("Level");
+	public static IChunk read(Level world, CompoundTag chunkTag) {
+		CompoundTag levelTag = chunkTag.getCompound("Level");
 		ChunkPos chunkPos = new ChunkPos(levelTag.getInt("xPos"), levelTag.getInt("zPos"));
 		BiomeContainer biomeContainer = new BiomeContainer(BIOME_REGISTRY, new int[BiomeContainer.BIOMES_SIZE]);
 		UpgradeData upgradeData = levelTag.contains("UpgradeData", NBT.TAG_COMPOUND) ? new UpgradeData(levelTag.getCompound("UpgradeData")) : UpgradeData.EMPTY;
-		ListNBT sectionTagList = levelTag.getList("Sections", NBT.TAG_COMPOUND);
+		ListTag sectionTagList = levelTag.getList("Sections", NBT.TAG_COMPOUND);
 		ChunkSection[] sectionArray = new ChunkSection[16];
 
 		for (int i = 0; i < sectionTagList.size(); i++) {
-			CompoundNBT sectionTag = sectionTagList.getCompound(i);
+			CompoundTag sectionTag = sectionTagList.getCompound(i);
 			int y = sectionTag.getByte("Y");
 			if (sectionTag.contains("Palette", NBT.TAG_LIST) && sectionTag.contains("BlockStates", NBT.TAG_LONG_ARRAY)) {
 				ChunkSection chunksection = new ChunkSection(y << 4);
@@ -70,9 +55,9 @@ public class DataFixerUtil {
 			postLoadChunk(levelTag, p_222648_1_);
 		});
 
-		ListNBT postProcessingTagListList = levelTag.getList("PostProcessing", NBT.TAG_LIST);
+		ListTag postProcessingTagListList = levelTag.getList("PostProcessing", NBT.TAG_LIST);
 		for (int i = 0; i < postProcessingTagListList.size(); i++) {
-			ListNBT postProcessingTagList = postProcessingTagListList.getList(i);
+			ListTag postProcessingTagList = postProcessingTagListList.getList(i);
 			for (int j = 0; j < postProcessingTagList.size(); j++) {
 				chunk.addPackedPostProcess(postProcessingTagList.getShort(j), i);
 			}
@@ -81,12 +66,12 @@ public class DataFixerUtil {
 		return chunk;
 	}
 
-	private static void postLoadChunk(CompoundNBT p_222650_0_, Chunk p_222650_1_) {
-		ListNBT listnbt = p_222650_0_.getList("Entities", 10);
-		World world = p_222650_1_.getLevel();
+	private static void postLoadChunk(CompoundTag p_222650_0_, Chunk p_222650_1_) {
+		ListTag listnbt = p_222650_0_.getList("Entities", 10);
+		Level world = p_222650_1_.getLevel();
 
 		for (int i = 0; i < listnbt.size(); ++i) {
-			CompoundNBT compoundnbt = listnbt.getCompound(i);
+			CompoundTag compoundnbt = listnbt.getCompound(i);
 			EntityType.loadEntityRecursive(compoundnbt, world, (p_222655_1_) -> {
 				p_222650_1_.addEntity(p_222655_1_);
 				return p_222655_1_;
@@ -94,16 +79,16 @@ public class DataFixerUtil {
 			p_222650_1_.setLastSaveHadEntities(true);
 		}
 
-		ListNBT listnbt1 = p_222650_0_.getList("TileEntities", 10);
+		ListTag listnbt1 = p_222650_0_.getList("TileEntities", 10);
 
 		for (int j = 0; j < listnbt1.size(); ++j) {
-			CompoundNBT compoundnbt1 = listnbt1.getCompound(j);
+			CompoundTag compoundnbt1 = listnbt1.getCompound(j);
 			boolean flag = compoundnbt1.getBoolean("keepPacked");
 			if (flag) {
 				p_222650_1_.setBlockEntityNbt(compoundnbt1);
 			} else {
 				BlockPos blockpos = new BlockPos(compoundnbt1.getInt("x"), compoundnbt1.getInt("y"), compoundnbt1.getInt("z"));
-				TileEntity tileentity = TileEntity.loadStatic(p_222650_1_.getBlockState(blockpos), compoundnbt1);
+				BlockEntity tileentity = BlockEntity.loadStatic(p_222650_1_.getBlockState(blockpos), compoundnbt1);
 				if (tileentity != null) {
 					p_222650_1_.addBlockEntity(tileentity);
 				}

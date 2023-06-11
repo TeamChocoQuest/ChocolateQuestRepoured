@@ -4,24 +4,24 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceContext.BlockMode;
-import net.minecraft.util.math.RayTraceContext.FluidMode;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ClipContext.BlockMode;
+import net.minecraft.world.level.ClipContext.FluidMode;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -62,19 +62,19 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				return false;
 			}
 			BlockPos pos = this.entity.blockPosition();
-			Vector3d vec = this.entity.getEyePosition(1.0F);
+			Vec3 vec = this.entity.getEyePosition(1.0F);
 			int horizontalRadius = CQRConfig.SERVER_CONFIG.mobs.looterAIChestSearchRange.get();
 			int verticalRadius = horizontalRadius >> 1;
-			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (MathHelper.ceil(this.entity.getBbHeight()) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
+			this.currentTarget = BlockPosUtil.getNearest(this.world, pos.getX(), pos.getY() + (Mth.ceil(this.entity.getBbHeight()) >> 1), pos.getZ(), horizontalRadius, verticalRadius, true, true, Blocks.CHEST, (mutablePos, state) -> {
 				if (this.visitedChests.contains(mutablePos)) {
 					return false;
 				}
-				TileEntity te = this.world.getBlockEntity(mutablePos);
+				BlockEntity te = this.world.getBlockEntity(mutablePos);
 				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
 					return false;
 				}
-				RayTraceContext rtc = new RayTraceContext(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), BlockMode.COLLIDER, FluidMode.ANY, null);
-				RayTraceResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
+				ClipContext rtc = new ClipContext(vec, new Vec3(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), BlockMode.COLLIDER, FluidMode.ANY, null);
+				HitResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
 				BlockPos.Mutable bp = new BlockPos(result.getLocation()).mutable();
 				return result == null || bp.equals(mutablePos);
 			});
@@ -84,7 +84,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	private boolean hasBackpackSpace() {
-		ItemStack backpack = this.entity.getItemBySlot(EquipmentSlotType.CHEST);
+		ItemStack backpack = this.entity.getItemBySlot(EquipmentSlot.CHEST);
 		LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		if(lOpCap.isPresent()) {
 			IItemHandler inventory = lOpCap.resolve().get();
@@ -139,9 +139,9 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					}
 					if (stolenItem != null) {
 						tile.setChanged();
-						this.entity.swing(Hand.MAIN_HAND);
-						this.entity.swing(Hand.OFF_HAND);
-						ItemStack backpack = this.entity.getItemBySlot(EquipmentSlotType.CHEST);
+						this.entity.swing(InteractionHand.MAIN_HAND);
+						this.entity.swing(InteractionHand.OFF_HAND);
+						ItemStack backpack = this.entity.getItemBySlot(EquipmentSlot.CHEST);
 						LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						if(lOpCap.isPresent()) {
 							IItemHandler inventory = lOpCap.resolve().get();
@@ -170,7 +170,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected boolean hasBackpack(MobEntity living) {
-		ItemStack chest = living.getItemBySlot(EquipmentSlotType.CHEST);
+		ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST);
 		return chest != null && chest.getItem() instanceof ItemBackpack;
 	}
 
@@ -181,7 +181,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (this.visitedChests.contains(this.currentTarget)) {
 			return false;
 		}
-		TileEntity tile = this.world.getBlockEntity(this.currentTarget);
+		BlockEntity tile = this.world.getBlockEntity(this.currentTarget);
 		return tile != null && tile instanceof ChestTileEntity && !((ChestTileEntity) tile).isEmpty();
 	}
 

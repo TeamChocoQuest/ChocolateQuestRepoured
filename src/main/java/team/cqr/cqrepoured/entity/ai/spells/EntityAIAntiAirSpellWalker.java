@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;

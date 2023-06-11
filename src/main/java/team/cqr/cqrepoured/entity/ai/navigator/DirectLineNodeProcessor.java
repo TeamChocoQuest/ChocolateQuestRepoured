@@ -3,10 +3,11 @@ package team.cqr.cqrepoured.entity.ai.navigator;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.pathfinding.FlaggedPathPoint;
 import net.minecraft.pathfinding.NodeProcessor;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.world.IBlockReader;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.core.Direction;
 
 public class DirectLineNodeProcessor extends NodeProcessor {
 
@@ -15,12 +16,12 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 
 	@Override
 	public PathPoint getStart() {
-		return new PathPoint(MathHelper.floor(this.mob.getBoundingBox().minX), MathHelper.floor(this.mob.getBoundingBox().minY + 0.5D), MathHelper.floor(this.mob.getBoundingBox().minZ));
+		return new PathPoint(Mth.floor(this.mob.getBoundingBox().minX), Mth.floor(this.mob.getBoundingBox().minY + 0.5D), Mth.floor(this.mob.getBoundingBox().minZ));
 	}
 
 	@Override
 	public FlaggedPathPoint getGoal(double x, double y, double z) {
-		return new FlaggedPathPoint(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
+		return new FlaggedPathPoint(Mth.floor(x), Mth.floor(y), Mth.floor(z));
 	}
 	
 	@Override
@@ -40,13 +41,13 @@ public class DirectLineNodeProcessor extends NodeProcessor {
 	}
 
 	@Override
-	public PathNodeType getBlockPathType(IBlockReader blockaccessIn, int x, int y, int z, MobEntity entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
-		return PathNodeType.OPEN;
+	public BlockPathTypes getBlockPathType(BlockGetter blockaccessIn, int x, int y, int z, MobEntity entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+		return BlockPathTypes.OPEN;
 	}
 
 	@Override
-	public PathNodeType getBlockPathType(IBlockReader blockaccessIn, int x, int y, int z) {
-		return PathNodeType.OPEN;
+	public BlockPathTypes getBlockPathType(BlockGetter blockaccessIn, int x, int y, int z) {
+		return BlockPathTypes.OPEN;
 	}
 
 }

@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.init;
 
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRMain;

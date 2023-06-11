@@ -1,21 +1,23 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.awt.Color;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.DyeableArmorItem;
+import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
+import java.awt.*;
+
 public class ItemArmorDyable extends DyeableArmorItem {
 
-	public ItemArmorDyable(IArmorMaterial materialIn, EquipmentSlotType equipmentSlotIn, Properties prop) {
+	public ItemArmorDyable(IArmorMaterial materialIn, EquipmentSlot equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 	}
 
@@ -25,7 +27,7 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	@Override
 	public boolean hasCustomColor(ItemStack stack) {
 		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTag();
+			CompoundTag nbttagcompound = stack.getTag();
 			return nbttagcompound != null && nbttagcompound.contains("display", Constants.NBT.TAG_COMPOUND) ? nbttagcompound.getCompound("display").contains("color", Constants.NBT.TAG_INT) : false;
 		} else {
 			return super.hasCustomColor(stack);
@@ -38,10 +40,10 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	@Override
 	public int getColor(ItemStack stack) {
 		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTag();
+			CompoundTag nbttagcompound = stack.getTag();
 
 			if (nbttagcompound != null) {
-				CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
+				CompoundTag nbttagcompound1 = nbttagcompound.getCompound("display");
 
 				if (nbttagcompound1 != null && nbttagcompound1.contains("color", Constants.NBT.TAG_INT)) {
 					int color = nbttagcompound1.getInt("color");
@@ -53,7 +55,7 @@ public class ItemArmorDyable extends DyeableArmorItem {
 							float b = (color & 255) / 255.0F;
 							return Color.HSBtoRGB((mc.level.getGameTime() + PartialTicksUtil.getCurrentPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
 						} else if ((color >> 24 & 15) > 0) {
-							float f = 0.5F + 0.5F * MathHelper.sin((mc.level.getGameTime() + PartialTicksUtil.getCurrentPartialTicks()) / 15.0F * (color >> 25 & 15));
+							float f = 0.5F + 0.5F * Mth.sin((mc.level.getGameTime() + PartialTicksUtil.getCurrentPartialTicks()) / 15.0F * (color >> 25 & 15));
 							int r = Math.round((color >> 16 & 255) * f);
 							int g = Math.round((color >> 8 & 255) * f);
 							int b = Math.round((color & 255) * f);
@@ -80,10 +82,10 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	@Override
 	public void clearColor(ItemStack stack) {
 		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTag();
+			CompoundTag nbttagcompound = stack.getTag();
 
 			if (nbttagcompound != null) {
-				CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
+				CompoundTag nbttagcompound1 = nbttagcompound.getCompound("display");
 
 				if (nbttagcompound1.contains("color")) {
 					nbttagcompound1.remove("color");
@@ -98,14 +100,14 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	@Override
 	public void setColor(ItemStack stack, int color) {
 		if (this.getMaterial() == ArmorMaterial.DIAMOND || this.getMaterial() == ArmorMaterial.IRON) {
-			CompoundNBT nbttagcompound = stack.getTag();
+			CompoundTag nbttagcompound = stack.getTag();
 
 			if (nbttagcompound == null) {
-				nbttagcompound = new CompoundNBT();
+				nbttagcompound = new CompoundTag();
 				stack.setTag(nbttagcompound);
 			}
 
-			CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
+			CompoundTag nbttagcompound1 = nbttagcompound.getCompound("display");
 
 			if (!nbttagcompound.contains("display", Constants.NBT.TAG_COMPOUND)) {
 				nbttagcompound.put("display", nbttagcompound1);
@@ -126,12 +128,12 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 		if (this.getMaterial() == ArmorMaterial.IRON) {
-			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		if (this.getMaterial() == ArmorMaterial.DIAMOND) {
-			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlotType.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}

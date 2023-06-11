@@ -2,15 +2,16 @@ package team.cqr.cqrepoured.entity.mobs;
 
 import java.util.Set;
 
-import net.minecraft.network.IPacket;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -18,7 +19,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 
 public class EntityCQRMinotaur extends AbstractEntityCQR implements IAnimatableCQR {
 
-	public EntityCQRMinotaur(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRMinotaur(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -69,7 +70,7 @@ public class EntityCQRMinotaur extends AbstractEntityCQR implements IAnimatableC
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

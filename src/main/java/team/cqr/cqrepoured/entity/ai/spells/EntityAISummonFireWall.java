@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import org.joml.Vector3d;
-
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileFireWallPart;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -18,24 +18,24 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 	@Override
 	public void startCastingSpell() {
-		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
-		v = new Vector3d(v.x, 0, v.z);
+		Vec3 v = this.entity.getTarget().position().subtract(this.entity.position());
+		v = new Vec3(v.x, 0, v.z);
 		v = v.normalize();
-		Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
-		Vector3d vL = VectorUtil.rotateVectorAroundY(v, 270);
-		Vector3d[] positions = new Vector3d[WALL_LENGTH + 2];
-		Vector3d startPos = this.entity.position().add(new Vector3d(v.x / 2, 0, v.z / 2));
+		Vec3 vR = VectorUtil.rotateVectorAroundY(v, 90);
+		Vec3 vL = VectorUtil.rotateVectorAroundY(v, 270);
+		Vec3[] positions = new Vec3[WALL_LENGTH + 2];
+		Vec3 startPos = this.entity.position().add(new Vec3(v.x / 2, 0, v.z / 2));
 		int arrayIndex = 0;
 		positions[arrayIndex] = startPos;
 		arrayIndex++;
 		for (int i = 1; i <= WALL_LENGTH / 2; i++) {
-			positions[arrayIndex] = startPos.add(new Vector3d(i * vR.x, 0, i * vR.z));
+			positions[arrayIndex] = startPos.add(new Vec3(i * vR.x, 0, i * vR.z));
 			arrayIndex++;
-			positions[arrayIndex] = startPos.add(new Vector3d(i * vL.x, 0, i * vL.z));
+			positions[arrayIndex] = startPos.add(new Vec3(i * vL.x, 0, i * vL.z));
 			arrayIndex++;
 		}
 
-		for (Vector3d p : positions) {
+		for (Vec3 p : positions) {
 			if (p != null) {
 				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level);
 				wallPart.setPos(p.x, p.y, p.z);

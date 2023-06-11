@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -20,7 +20,7 @@ public class RenderCQREnderKing extends RenderCQRBipedBaseGeo<EntityCQREnderKing
 	
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/enderman.png");
 
-	public RenderCQREnderKing(EntityRendererManager rendermanagerIn) {
+	public RenderCQREnderKing(Context rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQREndermanGeo<EntityCQREnderKing>(CQRMain.prefix("geo/entity/biped_enderman.geo.json"), TEXTURE, "mob/enderman"));
 		
 		this.addLayer(new LayerGlowingAreasGeo<>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -51,22 +51,22 @@ public class RenderCQREnderKing extends RenderCQRBipedBaseGeo<EntityCQREnderKing
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderKing currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderKing currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQREnderKing currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderKing currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderKing currentEntity) {
 		
 	}
 

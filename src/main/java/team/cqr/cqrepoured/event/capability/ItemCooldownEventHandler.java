@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.event.capability;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -28,9 +28,9 @@ public class ItemCooldownEventHandler {
 		if (!event.getPlayer().level.isClientSide) {
 			LazyOptional<CapabilityCooldownHandler> lOpCap = event.getPlayer().getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 			
-			if(event.getPlayer() instanceof ServerPlayerEntity) {
+			if(event.getPlayer() instanceof ServerPlayer) {
 				lOpCap.ifPresent(capa -> {
-					CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity)event.getPlayer()), new SPacketArmorCooldownSync(capa.getItemCooldownMap()));
+					CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketArmorCooldownSync(capa.getItemCooldownMap()));
 				});
 			}
 		}

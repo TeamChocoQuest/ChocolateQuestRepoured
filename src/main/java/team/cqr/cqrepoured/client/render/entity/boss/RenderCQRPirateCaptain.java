@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelPirateCaptainGeo;
@@ -16,7 +16,7 @@ public class RenderCQRPirateCaptain extends RenderCQRBipedBaseGeo<EntityCQRPirat
 	
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/boss/pirate_captain.png");
 
-	public RenderCQRPirateCaptain(EntityRendererManager rendermanagerIn) {
+	public RenderCQRPirateCaptain(Context rendermanagerIn) {
 		super(rendermanagerIn, new ModelPirateCaptainGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "boss/pirate_captain"));
 	}
 
@@ -36,17 +36,17 @@ public class RenderCQRPirateCaptain extends RenderCQRBipedBaseGeo<EntityCQRPirat
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
+	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRPirateCaptain currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRPirateCaptain currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirateCaptain currentEntity) {
 		
 	}
 

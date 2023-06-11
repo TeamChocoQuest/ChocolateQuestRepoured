@@ -1,20 +1,22 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.List;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
+
+import java.util.List;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -67,7 +69,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		this.prevRevengeTimer = this.entity.getLastHurtByMobTimestamp();
 		this.trySetAttackTarget(this.entity);
 		Faction faction = this.entity.getFaction();
-		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof PlayerEntity)) {
+		if (faction != null && faction.isEnemy(this.attackTarget) && !(this.entity.getLeader() instanceof Player)) {
 			this.callForHelp();
 		}
 	}
@@ -77,7 +79,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		double y = this.entity.getY() + this.entity.getEyeHeight();
 		double z = this.entity.getZ();
 		double r = CQRConfig.SERVER_CONFIG.mobs.alertRadius.get();
-		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
+		AABB aabb = new AABB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
 		List<AbstractEntityCQR> allies = this.world.getEntitiesOfClass(AbstractEntityCQR.class, aabb, this::isSuitableAlly);
 		for (AbstractEntityCQR ally : allies) {
 			this.trySetAttackTarget(ally);
@@ -133,7 +135,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 	private static boolean isAllyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, LivingEntity possibleAlly) {
 		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
 		LivingEntity targetLeader = TargetUtil.getLeaderOrOwnerRecursive(possibleAlly);
-		if (!(leader instanceof PlayerEntity) && targetLeader instanceof PlayerEntity) {
+		if (!(leader instanceof Player) && targetLeader instanceof Player) {
 			return false;
 		}
 		return TargetUtil.isAllyCheckingLeaders(leader, targetLeader);
@@ -141,7 +143,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	private static boolean isEnemyCheckingLeadersWhenAttacked(AbstractEntityCQR entity, LivingEntity possibleEnemy) {
 		LivingEntity leader = TargetUtil.getLeaderOrOwnerRecursive(entity);
-		if (!(leader instanceof PlayerEntity)) {
+		if (!(leader instanceof Player)) {
 			return !TargetUtil.isAllyCheckingLeaders(leader, possibleEnemy);
 		}
 		return TargetUtil.isEnemyCheckingLeaders(leader, possibleEnemy);

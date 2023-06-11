@@ -2,26 +2,27 @@ package team.cqr.cqrepoured.entity.boss;
 
 import java.util.Set;
 
-import net.minecraft.client.renderer.EffectInstance;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Effects;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -37,18 +38,18 @@ import team.cqr.cqrepoured.init.CQRItems;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAnimatableCQR {
 
-	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>defineId(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>defineId(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IS_DISINTEGRATING = SynchedEntityData.<Boolean>defineId(EntityCQRPirateCaptain.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IS_REINTEGRATING = SynchedEntityData.<Boolean>defineId(EntityCQRPirateCaptain.class, EntityDataSerializers.BOOLEAN);
 
 	public static int TURN_INVISIBLE_ANIMATION_TIME = 15;
 
 	private boolean spawnedParrot = false;
 
-	public EntityCQRPirateCaptain(World world) {
+	public EntityCQRPirateCaptain(Level world) {
 		this(CQREntityTypes.PIRATE_CAPTAIN.get(), world);
 	}
 
-	public EntityCQRPirateCaptain(EntityType<? extends EntityCQRPirateCaptain> type, World worldIn) {
+	public EntityCQRPirateCaptain(EntityType<? extends EntityCQRPirateCaptain> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -63,14 +64,14 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public boolean canBeAffected(EffectInstance potioneffectIn) {
+	public boolean canBeAffected(MobEffectInstance potioneffectIn) {
 		if (!super.canBeAffected(potioneffectIn)) {
 			return false;
 		}
 		if (potioneffectIn.getEffect().isBeneficial()) {
 			return true;
 		}
-		return potioneffectIn.getEffect() == Effects.GLOWING;
+		return potioneffectIn.getEffect() == MobEffects.GLOWING;
 	}
 
 	@Override
@@ -115,26 +116,26 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	@Override
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER.get(), 1));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER.get(), 1));
 
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(CQRItems.BULLET_FIRE.get(), 64));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING.get(), 2));
 	}
 
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData setDamageValue, CompoundTag p_213386_5_) {
 		this.populateDefaultEquipmentSlots(difficulty);
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("spawnedParrot", this.spawnedParrot);
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.spawnedParrot = compound.getBoolean("spawnedParrot");
 	}
@@ -174,7 +175,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

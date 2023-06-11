@@ -18,26 +18,24 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.IPackFinder;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.resources.ResourcePackType;
-import net.minecraft.resources.data.IMetadataSectionSerializer;
+import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.resources.IoSupplier;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 
-public class CTResourcepack implements IResourcePack {
+public class CTResourcepack implements PackResources {
 	
-	public static final IPackFinder PACK_FINDER = new IPackFinder() {
+	/*public static final IPackFinder PACK_FINDER = new IPackFinder() {
 		
 		@Override
 		public void loadPacks(Consumer<ResourcePackInfo> pInfoConsumer, IFactory pInfoFactory) {
 			pInfoConsumer.accept(ResourcePackInfo.create(CQRMain.MODID + ":CQR-ResourcePack", true, CTResourcepack::getInstance, pInfoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.BUILT_IN));
 			
 		}
-	};
+	};*/
 
 	private Set<ResourceLocation> VALID_TEXTURES = new HashSet<>();
 	private Map<ResourceLocation, File> FILES = new HashMap<>();
@@ -125,41 +123,17 @@ public class CTResourcepack implements IResourcePack {
 	}
 
 	@Override
-	public InputStream getRootResource(String p_195763_1_) throws IOException {
-		return null;
+	public boolean hasResource(PackType p_195764_1_, ResourceLocation p_195764_2_) {
+		return this.FILES.containsKey(p_195764_2_) && p_195764_1_ == PackType.CLIENT_RESOURCES;
 	}
-
+	
 	@Override
-	public InputStream getResource(ResourcePackType p_195761_1_, ResourceLocation p_195761_2_) throws IOException {
-		File file = this.FILES.getOrDefault(p_195761_2_, null);
-		if (file != null) {
-			return new FileInputStream(file);
-		}
-		return null;
-	}
-
-	@Override
-	public Collection<ResourceLocation> getResources(ResourcePackType p_225637_1_, String p_225637_2_, String p_225637_3_, int p_225637_4_, Predicate<String> p_225637_5_) {
-		return null;
-	}
-
-	@Override
-	public boolean hasResource(ResourcePackType p_195764_1_, ResourceLocation p_195764_2_) {
-		return this.FILES.containsKey(p_195764_2_) && p_195764_1_ == ResourcePackType.CLIENT_RESOURCES;
-	}
-
-	@Override
-	public Set<String> getNamespaces(ResourcePackType p_195759_1_) {
+	public Set<String> getNamespaces(PackType p_195759_1_) {
 		return this.DOMAIN_SET;
 	}
 
 	@Override
-	public <T> T getMetadataSection(IMetadataSectionSerializer<T> p_195760_1_) throws IOException {
-		return null;
-	}
-
-	@Override
-	public String getName() {
+	public String packId() {
 		return "CQR-NPC-Textures";
 	}
 
@@ -167,6 +141,30 @@ public class CTResourcepack implements IResourcePack {
 	public void close() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public IoSupplier<InputStream> getRootResource(String... pElements) {
+		return null;
+	}
+
+	@Override
+	public IoSupplier<InputStream> getResource(PackType pPackType, ResourceLocation pLocation) {
+		File file = this.FILES.getOrDefault(pLocation, null);
+		if (file != null) {
+			return () -> new FileInputStream(file);
+		}
+		return null;
+	}
+
+	@Override
+	public void listResources(PackType pPackType, String pNamespace, String pPath, ResourceOutput pResourceOutput) {
+		
+	}
+
+	@Override
+	public <T> T getMetadataSection(MetadataSectionSerializer<T> pDeserializer) throws IOException {
+		return null;
 	}
 
 }

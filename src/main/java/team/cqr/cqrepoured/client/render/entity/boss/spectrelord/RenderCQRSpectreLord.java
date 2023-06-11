@@ -1,14 +1,15 @@
 package team.cqr.cqrepoured.client.render.entity.boss.spectrelord;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib3.core.util.Color;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelSpectrelordGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
@@ -18,7 +19,7 @@ public class RenderCQRSpectreLord extends RenderCQRBipedBaseGeo<EntityCQRSpectre
 	
 	public static final ResourceLocation TEXTURE_SPECTRE_LORD_DEFAULT = CQRMain.prefix("textures/entity/boss/spectre_lord.png");
 
-	public RenderCQRSpectreLord(EntityRendererManager renderManager) {
+	public RenderCQRSpectreLord(EntityRendererProvider.Context renderManager) {
 		super(renderManager,new ModelSpectrelordGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE_SPECTRE_LORD_DEFAULT, "boss/spectre_lord"));
 	}
 
@@ -40,7 +41,7 @@ public class RenderCQRSpectreLord extends RenderCQRBipedBaseGeo<EntityCQRSpectre
 	}*/
 	
 	@Override
-	public Color getRenderColor(EntityCQRSpectreLord animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn) {
+	public Color getRenderColor(EntityCQRSpectreLord animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn) {
 		Color sr = super.getRenderColor(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn);
 		
 		return Color.ofRGBA(sr.getRed(), sr.getGreen(), sr.getBlue(), 0.5F);
@@ -62,22 +63,22 @@ public class RenderCQRSpectreLord extends RenderCQRBipedBaseGeo<EntityCQRSpectre
 	}
 
 	@Override
-	protected void preRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRSpectreLord currentEntity, IBone bone) {
+	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRSpectreLord currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRSpectreLord currentEntity) {
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName, EntityCQRSpectreLord currentEntity) {
 		
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRSpectreLord currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRSpectreLord currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRSpectreLord currentEntity) {
+	protected void postRenderBlock(PoseStack matrixStack, BlockState block, String boneName, EntityCQRSpectreLord currentEntity) {
 		
 	}
 

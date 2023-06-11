@@ -1,14 +1,15 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
 public class EntitySpectreLordExplosion extends Entity {
 
-	public EntitySpectreLordExplosion(EntityType<? extends EntitySpectreLordExplosion> type, World worldIn) {
+	public EntitySpectreLordExplosion(EntityType<? extends EntitySpectreLordExplosion> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -19,19 +20,19 @@ public class EntitySpectreLordExplosion extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+	protected void readAdditionalSaveData(CompoundTag pCompound) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+	protected void addAdditionalSaveData(CompoundTag pCompound) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

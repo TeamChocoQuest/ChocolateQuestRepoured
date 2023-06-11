@@ -4,33 +4,35 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.core.BlockPos;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.UseAction;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.item.UseAction;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 
 public class ItemTeleportStone extends ItemLore {
@@ -51,16 +53,16 @@ public class ItemTeleportStone extends ItemLore {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 
-		if (isSelected && entityIn instanceof PlayerEntity && worldIn.isClientSide && worldIn.getGameTime() % 4 == 0) {
-			CompoundNBT tag = stack.getTag();
+		if (isSelected && entityIn instanceof Player && worldIn.isClientSide && worldIn.getGameTime() % 4 == 0) {
+			CompoundTag tag = stack.getTag();
 			//Marker particles for the stored location
 			if (tag != null && tag.contains(X) && tag.contains(Y) && tag.contains(Z) && tag.contains(DIMENSION) && worldIn.dimensionType().effectsLocation().toString().equals(tag.getString(DIMENSION))) {
-				double x = MathHelper.floor(tag.getDouble(X)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
-				double y = MathHelper.floor(tag.getDouble(Y)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.1D, -0.1D, 0.1D);
-				double z = MathHelper.floor(tag.getDouble(Z)) + MathHelper.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				double x = Mth.floor(tag.getDouble(X)) + Mth.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
+				double y = Mth.floor(tag.getDouble(Y)) + Mth.clamp(worldIn.random.nextGaussian() * 0.1D, -0.1D, 0.1D);
+				double z = Mth.floor(tag.getDouble(Z)) + Mth.clamp(worldIn.random.nextGaussian() * 0.3D, -0.5D, 0.5D);
 				worldIn.addParticle(ParticleTypes.DRAGON_BREATH, x + 0.5D, y + 0.1D, z + 0.5D, 0.0D, 0.0D, 0.0D);
 			}
 		}
@@ -72,24 +74,24 @@ public class ItemTeleportStone extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(stack);
+		return InteractionResultHolder.success(stack);
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-		if (entityLiving instanceof ServerPlayerEntity && worldIn instanceof ServerWorld) {
-			ServerWorld sw = (ServerWorld) worldIn;
-			ServerPlayerEntity player = (ServerPlayerEntity) entityLiving;
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
+		if (entityLiving instanceof ServerPlayer && worldIn instanceof ServerLevel) {
+			ServerLevel sw = (ServerLevel) worldIn;
+			ServerPlayer player = (ServerPlayer) entityLiving;
 			player.getCooldowns().addCooldown(stack.getItem(), 60);
 
 			if (player.isCrouching() && stack.hasTag()) {
 				stack.getTag().remove(X);
 				stack.getTag().remove(Y);
 				stack.getTag().remove(Z);
-				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.AMBIENT, 1.0F, 1.0F, false);
 					sw.sendParticles(ParticleTypes.LARGE_SMOKE, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 10, 0D, 0D, 0D, 1.0D);
 			}
 
@@ -98,7 +100,7 @@ public class ItemTeleportStone extends ItemLore {
 				for (int i = 0; i < 10; i++) {
 					worldIn.addParticle(ParticleTypes.FLAME, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 				}
-				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+				worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.AMBIENT, 1.0F, 1.0F, false);
 
 				return super.finishUsingItem(stack, worldIn, entityLiving);
 			}
@@ -115,12 +117,12 @@ public class ItemTeleportStone extends ItemLore {
 						player.stopRiding();
 					}
 
-					ServerWorld targetDimension = sw;
+					ServerLevel targetDimension = sw;
 					if (!dimension.equals(player.getLevel().dimensionType().effectsLocation().toString())) {
 						MinecraftServer server = player.level.getServer();
 						if (server != null) {
 							//transferPlayerToDimension(player, dimension, pos);
-							RegistryKey<World> rk = RegistryKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dimension));
+							ResourceKey<Level> rk = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(dimension));
 							
 							targetDimension = server.getLevel(rk);
 							if(targetDimension == null) {
@@ -132,7 +134,7 @@ public class ItemTeleportStone extends ItemLore {
 					for (int i = 0; i < 30; i++) {
 						worldIn.addParticle(ParticleTypes.PORTAL, player.getX() + worldIn.random.nextDouble() - 0.5D, player.getY() + 0.5D, player.getZ() + worldIn.random.nextDouble() - 0.5D, 0D, 0D, 0D);
 					}
-					worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+					worldIn.playLocalSound(player.getX(), player.getY(), player.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.AMBIENT, 1.0F, 1.0F, false);
 
 					if (!player.abilities.instabuild) {
 						stack.hurtAndBreak(1, entityLiving, e -> e.broadcastBreakEvent(entityLiving.getUsedItemHand()));
@@ -148,25 +150,25 @@ public class ItemTeleportStone extends ItemLore {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	protected void appendAdditionalTooltipEntries(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn, boolean holdingShift) {
+	protected void appendAdditionalTooltipEntries(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn, boolean holdingShift) {
 		if(holdingShift) {
 			if (stack.hasTag()) {
 				if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z) && stack.getTag().contains(DIMENSION)) {
 					tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + "." + getRegistryName().getPath() + ".tooltip.position"));
-					tooltip.add((new StringTextComponent("X: " + (int) stack.getTag().getDouble(X))).withStyle(TextFormatting.BLUE));
-					tooltip.add((new StringTextComponent("Y: " + (int) stack.getTag().getDouble(Y))).withStyle(TextFormatting.BLUE));
-					tooltip.add((new StringTextComponent("Z: " + (int) stack.getTag().getDouble(Z))).withStyle(TextFormatting.BLUE));
-					tooltip.add((new StringTextComponent("Dimension: " + stack.getTag().getString(DIMENSION))).withStyle(TextFormatting.BLUE));
+					tooltip.add((new TextComponent("X: " + (int) stack.getTag().getDouble(X))).withStyle(ChatFormatting.BLUE));
+					tooltip.add((new TextComponent("Y: " + (int) stack.getTag().getDouble(Y))).withStyle(ChatFormatting.BLUE));
+					tooltip.add((new TextComponent("Z: " + (int) stack.getTag().getDouble(Z))).withStyle(ChatFormatting.BLUE));
+					tooltip.add((new TextComponent("Dimension: " + stack.getTag().getString(DIMENSION))).withStyle(ChatFormatting.BLUE));
 				}
 			}
 		}
 	}
 
-	private void setPoint(ItemStack stack, ServerPlayerEntity player) {
-		CompoundNBT stone = stack.getTag();
+	private void setPoint(ItemStack stack, ServerPlayer player) {
+		CompoundTag stone = stack.getTag();
 
 		if (stone == null) {
-			stone = new CompoundNBT();
+			stone = new CompoundTag();
 			stack.setTag(stone);
 		}
 
@@ -197,7 +199,7 @@ public class ItemTeleportStone extends ItemLore {
 	private BlockPos getPoint(ItemStack stack) {
 		if (stack.hasTag()) {
 			if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z)) {
-				CompoundNBT stone = stack.getTag();
+				CompoundTag stone = stack.getTag();
 
 				double x = stone.getDouble(X);
 				double y = stone.getDouble(Y);

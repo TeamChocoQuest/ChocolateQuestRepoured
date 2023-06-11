@@ -8,10 +8,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.core.Registry;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.particles.IParticleData;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -60,7 +61,7 @@ public class BlockHighlightParticleData implements IParticleData {
 			return new BlockHighlightParticleData(color, lifetime);
 		}
 
-		public BlockHighlightParticleData fromNetwork(ParticleType<BlockHighlightParticleData> pParticleType, PacketBuffer pBuffer) {
+		public BlockHighlightParticleData fromNetwork(ParticleType<BlockHighlightParticleData> pParticleType, FriendlyByteBuf pBuffer) {
 			int color = pBuffer.readInt();
 			int lifetime = pBuffer.readInt();
 			Optional<Integer> entityReference = Optional.empty();
@@ -107,7 +108,7 @@ public class BlockHighlightParticleData implements IParticleData {
 	}
 
 	@Override
-	public void writeToNetwork(PacketBuffer buf) {
+	public void writeToNetwork(FriendlyByteBuf buf) {
 		buf.writeInt(this.color);
 		buf.writeInt(this.lifetime);
 		buf.writeBoolean(this.entityReferenceID.isPresent());

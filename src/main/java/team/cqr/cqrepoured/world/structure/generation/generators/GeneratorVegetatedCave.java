@@ -10,16 +10,20 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HugeMushroomBlock;
 import net.minecraft.world.level.block.VineBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap.Type;
+import software.bernie.geckolib3.core.util.Axis;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.util.VectorUtil;
@@ -59,13 +63,13 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		this.floorBlocks.addAll(this.getFloorBlocksOfBlob(blocks, this.pos, random));
 		this.storeBlockArrayInMap(blocks, this.pos);
 		final BlockPos centerBP = this.pos.below(this.dungeon.getCentralCaveSize() / 2);
-		Vector3d center = new Vector3d(centerBP.getX(), centerBP.getY(), centerBP.getZ());
-		Vector3d rad = new Vector3d(this.dungeon.getCentralCaveSize() * 1.75, 0, 0);
+		Vec3 center = new Vec3(centerBP.getX(), centerBP.getY(), centerBP.getZ());
+		Vec3 rad = new Vec3(this.dungeon.getCentralCaveSize() * 1.75, 0, 0);
 		int tunnelCount = this.dungeon.getTunnelCount(random);
 		double angle = 360D / tunnelCount;
 		for (int i = 0; i < tunnelCount; i++) {
-			Vector3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
-			Vector3d startPos = center.add(v);
+			Vec3 v = VectorUtil.rotateVectorAroundY(rad, angle * i);
+			Vec3 startPos = center.add(v);
 			//DONE: Add some variation to the tunnels so they can also go up and down in different angles
 			//TODO: Add option to generate one single larger tunnel that leads to the surface (WIP)
 			//TODO: Add possibility to add decorations (ceiling, wall, floor) to the tunnels
@@ -229,14 +233,14 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		}
 	}
 
-	private void createTunnel(Vector3d startPos, double initAngle, int startSize, int initLength, Random random, boolean isTunnelToSurface, double upAngle) {
+	private void createTunnel(Vec3 startPos, double initAngle, int startSize, int initLength, Random random, boolean isTunnelToSurface, double upAngle) {
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
 		
-		upAngle = MathHelper.clamp(upAngle, this.dungeon.minUpAngle(), this.dungeon.maxUpAngle());
+		upAngle = Mth.clamp(upAngle, this.dungeon.minUpAngle(), this.dungeon.maxUpAngle());
 		
-		Vector3d expansionDir = VectorUtil.rotateVectorAroundY(new Vector3d(startSize, 0, 0).xRot((float) Math.toRadians(upAngle)), initAngle);
+		Vec3 expansionDir = VectorUtil.rotateVectorAroundY(new Vec3(startSize, 0, 0).xRot((float) Math.toRadians(upAngle)), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			BlockState[][][] blob = this.getRandomBlob(this.dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
 			// if (this.dungeon.placeVines()) {
@@ -381,7 +385,7 @@ public class GeneratorVegetatedCave extends LegacyDungeonGenerator<DungeonVegeta
 		});
 	}
 
-	private void filterCeilingBlocks(World world) {
+	private void filterCeilingBlocks(Level world) {
 		this.ceilingBlocks.removeIf(arg0 -> {
 			BlockPos upper = arg0.above();
 			if (GeneratorVegetatedCave.this.blocks.containsKey(upper)) {

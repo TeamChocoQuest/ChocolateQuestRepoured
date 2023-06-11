@@ -13,14 +13,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import net.minecraft.command.arguments.BlockStateInput;
-import net.minecraft.core.BlockPos;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.CachedBlockInfo;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.command.arguments.BlockStateInput;
+import net.minecraft.util.CachedBlockInfo;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.Template.BlockInfo;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 
 public class FileBasedReplaceBlocksProcessor extends AbstractFileControlledProcessor implements IReplaceBlocksProcessor {
@@ -94,7 +95,7 @@ public class FileBasedReplaceBlocksProcessor extends AbstractFileControlledProce
 
 		final BlockInfo blockInfo;
 		
-		public AccessedCachedBlockInfo(IWorldReader pLevel, final BlockInfo bi) {
+		public AccessedCachedBlockInfo(BlockGetter pLevel, final BlockInfo bi) {
 			super(pLevel, bi.pos, false);
 			this.blockInfo = bi;
 		}
@@ -105,14 +106,14 @@ public class FileBasedReplaceBlocksProcessor extends AbstractFileControlledProce
 		};
 		
 		@Override
-		public TileEntity getEntity() {
+		public BlockEntity getEntity() {
 			return null;
 		}
 		
 	}
 
 	@Override
-	protected BlockInfo execProcess(IWorldReader worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
+	protected BlockInfo execProcess(BlockGetter worldReader, BlockPos jigsawPos, BlockPos jigsawPieceBottomCenterPos, BlockInfo blockInfoLocal, BlockInfo blockInfoGlobal, PlacementSettings structurePlacementData, Template template) {
 		AccessedCachedBlockInfo cbi = new AccessedCachedBlockInfo(worldReader, blockInfoGlobal);
 		this.inputList.forEach(bsi -> {
 			if(bsi.test(cbi)) {

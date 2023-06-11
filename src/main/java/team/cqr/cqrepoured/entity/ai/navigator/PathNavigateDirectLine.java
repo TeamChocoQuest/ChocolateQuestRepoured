@@ -1,16 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.world.World;
-import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
 public class PathNavigateDirectLine extends PathNavigator {
 
-	public PathNavigateDirectLine(MobEntity entity, World world) {
+	public PathNavigateDirectLine(MobEntity entity, Level world) {
 		super(entity, world);
 	}
 
@@ -25,7 +24,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 
 	@Override
 	protected void followThePath() {
-		Vector3d vec3d = this.getTempMobPos();
+		Vec3 vec3d = this.getTempMobPos();
 		float f = this.mob.getBbWidth() * this.mob.getBbWidth();
 		// int i = 6;
 
@@ -34,7 +33,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 		}
 
 		for (int j = Math.min(this.path.getNextNodeIndex() + 6, this.path.getNodeCount() - 1); j > this.path.getNextNodeIndex(); --j) {
-			Vector3d vec3d1 = this.path.getEntityPosAtNode(this.mob, j);
+			Vec3 vec3d1 = this.path.getEntityPosAtNode(this.mob, j);
 
 			if (vec3d1.distanceToSqr(vec3d) <= 36.0D && this.canMoveDirectly(vec3d, vec3d1, 0, 0, 0)) {
 				this.path.setNextNodeIndex(j);
@@ -44,7 +43,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected Vector3d getTempMobPos() {
+	protected Vec3 getTempMobPos() {
 		return this.mob.position();
 	}
 
@@ -54,7 +53,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected boolean canMoveDirectly(Vector3d posVec31, Vector3d posVec32, int sizeX, int sizeY, int sizeZ) {
+	protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
 		return true;
 	}
 	

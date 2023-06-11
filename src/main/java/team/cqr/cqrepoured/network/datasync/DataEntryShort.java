@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.network.datasync;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ShortNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataEntryShort extends DataEntry<Short> {
 
@@ -16,24 +16,24 @@ public class DataEntryShort extends DataEntry<Short> {
 	}
 
 	@Override
-	public INBT write() {
-		return ShortNBT.valueOf(this.value);
+	public Tag write() {
+		return ShortTag.valueOf(this.value);
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
-		if (nbt instanceof ShortNBT) {
-			this.value = ((ShortNBT) nbt).getAsShort();
+	protected void readInternal(Tag nbt) {
+		if (nbt instanceof ShortTag) {
+			this.value = ((ShortTag) nbt).getAsShort();
 		}
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		buf.writeShort(this.value);
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.value = buf.readShort();
 	}
 

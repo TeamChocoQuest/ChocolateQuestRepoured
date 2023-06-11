@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.util;
 import java.util.Random;
 
 import meldexun.randomutil.FastRandom;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.util.math.InterpolationUtil;
 
 public class Perlin3D {
@@ -25,17 +25,17 @@ public class Perlin3D {
 
 	public float getNoiseAt(float x, float y, float z) {
 		x *= this.frequency;
-		int minX = MathHelper.floor(x);
+		int minX = Mth.floor(x);
 		int maxX = minX + 1;
 		float fracX = x - minX;
 
 		y *= this.frequency;
-		int minY = MathHelper.floor(y);
+		int minY = Mth.floor(y);
 		int maxY = minY + 1;
 		float fracY = y - minY;
 
 		z *= this.frequency;
-		int minZ = MathHelper.floor(z);
+		int minZ = Mth.floor(z);
 		int maxZ = minZ + 1;
 		float fracZ = z - minZ;
 
@@ -52,7 +52,7 @@ public class Perlin3D {
 	}
 
 	private float getRandomAtPosition(float x, float y, float z) {
-		long newSeed = (long) ((MathHelper.sin(x) + MathHelper.cos(z) + MathHelper.cos(y) + this.tanSeed) * 10000.0F);
+		long newSeed = (long) ((Mth.sin(x) + Mth.cos(z) + Mth.cos(y) + this.tanSeed) * 10000.0F);
 		this.rand.setSeed(newSeed);
 		return this.rand.nextFloat();
 	}

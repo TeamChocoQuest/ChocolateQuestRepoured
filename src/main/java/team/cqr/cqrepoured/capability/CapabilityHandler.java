@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.capability;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -32,24 +33,24 @@ public class CapabilityHandler {
 	}
 
 	@SubscribeEvent
-	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<Chunk> event) {
+	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<LevelChunk> event) {
 		event.addCapability(CapabilityProtectedRegionDataProvider.LOCATION, CapabilityProtectedRegionDataProvider.createProvider(event.getObject()));
 	}
 
-	public static void writeToItemStackNBT(ItemStack stack, String key, CompoundNBT compound) {
-		CompoundNBT stackCompound = stack.getTag();
+	public static void writeToItemStackNBT(ItemStack stack, String key, CompoundTag compound) {
+		CompoundTag stackCompound = stack.getTag();
 
 		if (stackCompound == null) {
-			stackCompound = new CompoundNBT();
+			stackCompound = new CompoundTag();
 			stack.setTag(stackCompound);
 		}
 
 		stackCompound.put(key, compound);
 	}
 
-	public static CompoundNBT readFromItemStackNBT(ItemStack stack, String key) {
-		CompoundNBT stackCompound = stack.getTag();
-		return stackCompound != null ? stackCompound.getCompound(key) : new CompoundNBT();
+	public static CompoundTag readFromItemStackNBT(ItemStack stack, String key) {
+		CompoundTag stackCompound = stack.getTag();
+		return stackCompound != null ? stackCompound.getCompound(key) : new CompoundTag();
 	}
 
 }

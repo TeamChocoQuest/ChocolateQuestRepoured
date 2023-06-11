@@ -1,34 +1,37 @@
 package team.cqr.cqrepoured.world.structure.protection;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.item.TNTEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.client.world.structure.protection.ProtectionIndicatorHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
+
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ProtectedRegionHelper {
 
@@ -74,11 +77,11 @@ public class ProtectedRegionHelper {
 		}
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockBreakingPrevented(Level world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
 		return isBlockBreakingPrevented(world, pos, entity, updateProtectedRegions, addOrResetProtectedRegionIndicator, null);
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable Direction clickedFace) {
+	public static boolean isBlockBreakingPrevented(Level world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator, @Nullable Direction clickedFace) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -104,11 +107,11 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency && CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockBreaking.get() && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockBreaking.get() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isBreakingPrevented = true;
 					break;
@@ -132,7 +135,7 @@ public class ProtectedRegionHelper {
 		return BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, BlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
+	public static boolean isBlockPlacingPrevented(Level world, BlockPos pos, @Nullable Entity entity, BlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -147,11 +150,11 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockPlacing.get() && (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
+		if (CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockPlacing.get() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayerEntity ? (ServerPlayerEntity) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isPlacingPrevented = true;
 					break;
@@ -175,7 +178,7 @@ public class ProtectedRegionHelper {
 		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
 	}
 
-	public static BlockState getBlockFromItem(ItemStack stack, World world, BlockPos pos, Direction facing, @Nullable Vector3d hitVec, LivingEntity placer, Hand hand) {
+	public static BlockState getBlockFromItem(ItemStack stack, Level world, BlockPos pos, Direction facing, @Nullable Vec3 hitVec, LivingEntity placer, InteractionHand hand) {
 		if (stack.isEmpty()) {
 			return null;
 		}
@@ -201,7 +204,7 @@ public class ProtectedRegionHelper {
 		return null;
 	}
 
-	public static boolean isExplosionTNTPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
+	public static boolean isExplosionTNTPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
 		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) {
 			return false;
 		}
@@ -226,7 +229,7 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static boolean isExplosionOtherPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
+	public static boolean isExplosionOtherPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
 		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get()) {
 			return false;
 		}
@@ -251,7 +254,7 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static void removeExplosionPreventedPositions(World world, Explosion explosion, boolean checkForOrigin) {
+	public static void removeExplosionPreventedPositions(Level world, Explosion explosion, boolean checkForOrigin) {
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager == null) {
@@ -303,7 +306,7 @@ public class ProtectedRegionHelper {
 		}
 	}
 
-	public static boolean isFireSpreadingPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
+	public static boolean isFireSpreadingPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
 		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventFireSpreading.get()) {
 			return false;
 		}
@@ -328,7 +331,7 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static boolean isEntitySpawningPrevented(World world, BlockPos pos) {
+	public static boolean isEntitySpawningPrevented(Level world, BlockPos pos) {
 		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventEntitySpawning.get()) {
 			return false;
 		}
@@ -348,14 +351,14 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static <T extends Entity> Set<T> getEntitiesInProtectedRegionAt(Class<T> entityClass, BlockPos position, World world) {
+	public static <T extends Entity> Set<T> getEntitiesInProtectedRegionAt(Class<T> entityClass, BlockPos position, Level world) {
 		Set<T> set = new HashSet<>();
 
 		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
 		if (manager != null && manager instanceof ServerProtectedRegionManager) {
 			for (ProtectedRegion region : manager.getProtectedRegionsAt(position).collect(Collectors.toList())) {
-				AxisAlignedBB regionAABB = new AxisAlignedBB(region.getStartPos(), region.getEndPos());
+				AABB regionAABB = new AABB(region.getStartPos(), region.getEndPos());
 				set.addAll(world.getEntitiesOfClass(entityClass, regionAABB));
 			}
 		}

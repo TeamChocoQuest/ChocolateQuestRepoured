@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.faction;
 
 import java.util.Optional;
 
+import net.minecraft.world.entity.Entity;
+
 public class DummyFaction extends Faction {
 
 	public static final String NAME = "DUMMY";

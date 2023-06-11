@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.gen.feature.structure.Structure;
 
 public interface INoiseAffectingStructurePiece {
 

@@ -4,25 +4,25 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.entity.PartEntity;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -57,31 +57,31 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		}
 	}
 
-	private static final DataParameter<Byte> HOOK_STATE = EntityDataManager.defineId(ProjectileHookShotHook.class, DataSerializers.BYTE);
-	private static final DataParameter<Integer> LATCHED_ENTITY = EntityDataManager.defineId(ProjectileHookShotHook.class, DataSerializers.INT);
-	private static final DataParameter<Vector3d> LATCHED_POS = EntityDataManager.defineId(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
+	private static final EntityDataAccessor<Byte> HOOK_STATE = SynchedEntityData.defineId(ProjectileHookShotHook.class, EntityDataSerializers.BYTE);
+	private static final EntityDataAccessor<Integer> LATCHED_ENTITY = SynchedEntityData.defineId(ProjectileHookShotHook.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Vec3> LATCHED_POS = SynchedEntityData.defineId(ProjectileHookShotHook.class, CQRSerializers.VEC3D);
 
 	private double range;
 	private double speed;
-	private Vector3d startLocation = Vector3d.ZERO;
+	private Vec3 startLocation = Vec3.ZERO;
 	private ItemStack stack;
 	private ItemHookshotBase item;
 	private Entity latchedEntity;
 
 	// last recorded position of the shooter - used to detect blocked path
-	private Vector3d lastCheckedPosition;
+	private Vec3 lastCheckedPosition;
 	// tick count of last time shooter/entity position was recorded
 	private int lastMovementCheckTick;
 
-	public ProjectileHookShotHook(World worldIn) {
+	public ProjectileHookShotHook(Level worldIn) {
 		this(CQREntityTypes.PROJECTILE_HOOKSHOT_HOOK.get(), worldIn);
 	}
 	
-	public ProjectileHookShotHook(EntityType<? extends ProjectileHookShotHook> type, World worldIn) {
+	public ProjectileHookShotHook(EntityType<? extends ProjectileHookShotHook> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public ProjectileHookShotHook(World worldIn, LivingEntity shooter, ItemHookshotBase item, ItemStack stack) {
+	public ProjectileHookShotHook(Level worldIn, LivingEntity shooter, ItemHookshotBase item, ItemStack stack) {
 		super(CQREntityTypes.PROJECTILE_HOOKSHOT_HOOK.get(), shooter, worldIn);
 		this.item = item;
 		this.stack = stack;
@@ -107,9 +107,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	public void shootHook(double x, double y, double z, float yaw, float pitch, double range, double speed) {
-		Vector3d v = Vector3d.directionFromRotation(pitch, yaw);
+		Vec3 v = Vec3.directionFromRotation(pitch, yaw);
 		this.setPos(x, y, z);
-		this.startLocation = new Vector3d(x, y, z);
+		this.startLocation = new Vec3(x, y, z);
 		this.yRot = yaw;
 		this.xRot = pitch;
 		this.range = range;
@@ -121,7 +121,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	public void writeSpawnData(PacketBuffer buffer) {
+	public void writeSpawnData(FriendlyByteBuf buffer) {
 		buffer.writeInt(this.getOwner().getId());
 		buffer.writeFloat((float) this.range);
 		buffer.writeFloat((float) this.speed);
@@ -133,14 +133,14 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	public void readSpawnData(PacketBuffer additionalData) {
+	public void readSpawnData(FriendlyByteBuf additionalData) {
 		this.setOwner(this.level.getEntity(additionalData.readInt()));
 		this.range = additionalData.readFloat();
 		this.speed = additionalData.readFloat();
 		double x = additionalData.readFloat();
 		double y = additionalData.readFloat();
 		double z = additionalData.readFloat();
-		this.startLocation = new Vector3d(x, y, z);
+		this.startLocation = new Vec3(x, y, z);
 		this.yRot = additionalData.readFloat();
 		this.yRotO = this.yRot;
 		this.xRot = additionalData.readFloat();
@@ -148,24 +148,24 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+	protected void readAdditionalSaveData(CompoundTag pCompound) {
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+	protected void addAdditionalSaveData(CompoundTag pCompound) {
 	}
 	
 	@Override
-	public void load(CompoundNBT pCompound) {
+	public void load(CompoundTag pCompound) {
 	}
 	
 	@Override
-	public boolean save(CompoundNBT pCompound) {
+	public boolean save(CompoundTag pCompound) {
 		return false;
 	}
 
 	@Override
-	public CompoundNBT saveWithoutId(CompoundNBT pCompound) {
+	public CompoundTag saveWithoutId(CompoundTag pCompound) {
 		return pCompound;
 	}
 	
@@ -195,11 +195,11 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		this.entityData.set(LATCHED_ENTITY, latchedEntityId);
 	}
 
-	private Vector3d getLatchedPos() {
+	private Vec3 getLatchedPos() {
 		return this.entityData.get(LATCHED_POS);
 	}
 
-	private void setLatchedPos(Vector3d vec) {
+	private void setLatchedPos(Vec3 vec) {
 		this.entityData.set(LATCHED_POS, vec);
 	}
 
@@ -219,8 +219,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	@Override
 	public void onRemovedFromWorld() {
 		if (!this.level.isClientSide) {
-			if (this.getOwner() instanceof PlayerEntity) {
-				((PlayerEntity) this.getOwner()).getCooldowns().addCooldown(this.item, 0);
+			if (this.getOwner() instanceof Player) {
+				((Player) this.getOwner()).getCooldowns().addCooldown(this.item, 0);
 			}
 			this.setHookItemShootingTag(false);
 		}
@@ -228,9 +228,9 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void setHookItemShootingTag(boolean isShooting) {
-		CompoundNBT tag = this.stack.getTag();
+		CompoundTag tag = this.stack.getTag();
 		if (tag == null) {
-			tag = new CompoundNBT();
+			tag = new CompoundTag();
 			this.stack.setTag(tag);
 		}
 		tag.putBoolean("isShooting", isShooting);
@@ -274,7 +274,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void handleStateShoot() {
-		Vector3d v = Vector3d.directionFromRotation(this.xRot, this.yRot);
+		Vec3 v = Vec3.directionFromRotation(this.xRot, this.yRot);
 		this.setDeltaMovement(this.getDeltaMovement().multiply(this.speed, this.speed, this.speed));
 
 		double x = this.getX() - this.startLocation.x;
@@ -296,7 +296,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double distSqr = x * x + y * y + z * z;
 		double d = this.speed + 0.1D;
 		if (distSqr < d * d) {
-			this.setDeltaMovement(Vector3d.ZERO);
+			this.setDeltaMovement(Vec3.ZERO);
 			if (!this.level.isClientSide) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
@@ -307,7 +307,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void handleStatePullEntityToShooter() {
-		this.setDeltaMovement(Vector3d.ZERO);
+		this.setDeltaMovement(Vec3.ZERO);
 		
 		Entity latchedEntity = this.getLatchedEntity();
 		if (latchedEntity == null) {
@@ -320,7 +320,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(latchedEntity);
 		}
 
-		Vector3d v = this.getLatchedPos();
+		Vec3 v = this.getLatchedPos();
 		this.setPos(latchedEntity.getX() + v.x, latchedEntity.getY() + v.y, latchedEntity.getZ() + v.z);
 
 		double x = this.getOwner().getX() - this.getX();
@@ -329,7 +329,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double distSqr = x * x + y * y + z * z;
 		double d = latchedEntity.getBbWidth() * 0.5D + this.getOwner().getBbWidth() * 0.5D + 1.5D;
 		if (distSqr < d * d) {
-			latchedEntity.setDeltaMovement(Vector3d.ZERO);
+			latchedEntity.setDeltaMovement(Vec3.ZERO);
 			
 			if (!this.level.isClientSide) {
 				this.setHookState(EnumHookState.STOPPED);
@@ -341,20 +341,20 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void handleStatePullShooterToHookLatchedToBlock() {
-		this.setDeltaMovement(Vector3d.ZERO);
+		this.setDeltaMovement(Vec3.ZERO);
 
 		if (!this.level.isClientSide) {
 			this.checkForEntityStuck(this.getOwner());
 		} else {
-			if(this.getOwner() == null || !(this.getOwner() instanceof PlayerEntity && CQRMain.PROXY.isPlayerCurrentClientPlayer((PlayerEntity) this.getOwner()))) {
+			if(this.getOwner() == null || !(this.getOwner() instanceof Player && CQRMain.PROXY.isPlayerCurrentClientPlayer((Player) this.getOwner()))) {
 				return;
 			}
 		}
 
-		Vector3d v = this.getLatchedPos();
+		Vec3 v = this.getLatchedPos();
 		this.setPos(v.x, v.y, v.z);
 
-		Vector3d v1 = Vector3d.directionFromRotation(0.0F, this.xRot);
+		Vec3 v1 = Vec3.directionFromRotation(0.0F, this.xRot);
 		double x = this.getX() - this.getOwner().getX() + v1.x * 0.1D;
 		double y = this.getY() - this.getOwner().getY() + 1.0D;
 		double z = this.getZ() - this.getOwner().getZ() + v1.z * 0.1D;
@@ -376,7 +376,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	private void handleStatePullShooterToHookLatchedToEntity() {
-		this.setDeltaMovement(Vector3d.ZERO);
+		this.setDeltaMovement(Vec3.ZERO);
 
 		Entity latchedEntity = this.getLatchedEntity();
 		if (latchedEntity == null) {
@@ -389,7 +389,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.checkForEntityStuck(this.getOwner());
 		}
 
-		Vector3d v = this.getLatchedPos();
+		Vec3 v = this.getLatchedPos();
 		this.setPos(latchedEntity.getX() + v.x, latchedEntity.getY() + v.y, latchedEntity.getZ() + v.z);
 
 		double x = this.getX() - this.getOwner().getX();
@@ -416,7 +416,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	private void checkForEntityStuck(Entity entity) {
 		// once every 4 ticks ~ 0.2 seconds
 		if (this.tickCount - this.lastMovementCheckTick >= 4) {
-			Vector3d currentPos = entity.position();
+			Vec3 currentPos = entity.position();
 
 			if (this.lastCheckedPosition != null) {
 				double distanceTraveledSqr = currentPos.distanceToSqr(this.lastCheckedPosition);
@@ -431,38 +431,38 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	}
 
 	@Override
-	protected void onHit(RayTraceResult result) {
+	protected void onHit(HitResult result) {
 		if (!this.level.isClientSide && this.getHookState() == EnumHookState.SHOOT) {
-			if (result.getType() == RayTraceResult.Type.BLOCK) {
+			if (result.getType() == HitResult.Type.BLOCK) {
 				BlockPos hitPos = new BlockPos(result.getLocation().x(), result.getLocation().y(), result.getLocation().z());
 				BlockState state = this.level.getBlockState(hitPos);
 
 				if (this.item.canLatchToBlock(state.getBlock())) {
 					// Hit a valid latch block, start pulling next tick
-					Vector3d v = result.getLocation();
+					Vec3 v = result.getLocation();
 					this.setPos(v.x, v.y, v.z);
 					this.setDeltaMovement(v);
 					this.setLatchedPos(v);
 					this.setHookState(EnumHookState.PULL_SHOOTER_TO_HOOK_LATCHED_TO_BLOCK);
 				} else {
 					// Hit something but this hookshot cannot latch to it, send the hook back
-					this.setDeltaMovement(Vector3d.ZERO);
+					this.setDeltaMovement(Vec3.ZERO);
 					this.setHookState(EnumHookState.RETRACT);
 				}
-			} else if (result.getType() == RayTraceResult.Type.ENTITY) {
-				EntityRayTraceResult ertr = (EntityRayTraceResult) result;
+			} else if (result.getType() == HitResult.Type.ENTITY) {
+				EntityHitResult ertr = (EntityHitResult) result;
 				if (ertr.getEntity() != this.getOwner() && ertr.getEntity() instanceof LivingEntity) {
 					Entity entityHit = ertr.getEntity();
 
 					// Recalculate the hitVec because result.hitVec is just the pos of result.entityHit
-					Vector3d start = new Vector3d(this.getX(), this.getY(), this.getZ());
-					Vector3d end = start.add(this.getDeltaMovement());
-					AxisAlignedBB aabb = entityHit.getBoundingBox().inflate(0.3D);
-					Optional<Vector3d> result1 = aabb.clip(start, end);
+					Vec3 start = new Vec3(this.getX(), this.getY(), this.getZ());
+					Vec3 end = start.add(this.getDeltaMovement());
+					AABB aabb = entityHit.getBoundingBox().inflate(0.3D);
+					Optional<Vec3> result1 = aabb.clip(start, end);
 
-					Vector3d v = result1.isPresent() ? result1.get() : start;
+					Vec3 v = result1.isPresent() ? result1.get() : start;
 					this.setPos(v.x, v.y, v.z);
-					this.setDeltaMovement(Vector3d.ZERO);
+					this.setDeltaMovement(Vec3.ZERO);
 					this.setLatchedEntity(entityHit);
 					this.setLatchedPos(v.subtract(entityHit.getX(), entityHit.getY(), entityHit.getZ()));
 					if (CQRConfig.SERVER_CONFIG.general.hookOnlyPullsSmallerEntities.get()) {
@@ -484,7 +484,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	protected void defineSynchedData() {
 		this.entityData.define(HOOK_STATE, (byte) EnumHookState.SHOOT.getIndex());
 		this.entityData.define(LATCHED_ENTITY, -1);
-		this.entityData.define(LATCHED_POS, Vector3d.ZERO);
+		this.entityData.define(LATCHED_POS, Vec3.ZERO);
 	}
 
 }

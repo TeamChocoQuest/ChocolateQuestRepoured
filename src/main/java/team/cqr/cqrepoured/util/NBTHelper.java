@@ -7,15 +7,15 @@ import java.io.FileInputStream;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.INBTType;
 import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTypes;
-import net.minecraft.nbt.StringNBT;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTHelper {
@@ -30,10 +30,10 @@ public class NBTHelper {
 
 			while ((id = input.readByte()) != 0) {
 				String key = input.readUTF();
-				INBT nbtbase = CompoundNBT.readNamedTagData(NBTTypes.getType(id), key, input, 0, NBTSizeTracker.UNLIMITED);
+				INBT nbtbase = CompoundTag.readNamedTagData(NBTTypes.getType(id), key, input, 0, NBTSizeTracker.UNLIMITED);
 
 				if (key.equals("cqr_file_version")) {
-					return nbtbase instanceof StringNBT ? ((StringNBT) nbtbase).getAsString() : null;
+					return nbtbase instanceof StringTag ? ((StringTag) nbtbase).getAsString() : null;
 				}
 			}
 		} catch (Exception e) {
@@ -45,10 +45,10 @@ public class NBTHelper {
 	@SuppressWarnings("unchecked")
 	public static <T extends INBT> Stream<T> stream(INBT tag, INBTType<T> expectedElementType) {
 		INBTType<?> type = tag.getType();
-		if (type != ListNBT.TYPE) {
-			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListNBT.TYPE.getName() + ", but found " + type.getName() + ".");
+		if (type != ListTag.TYPE) {
+			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListTag.TYPE.getName() + ", but found " + type.getName() + ".");
 		}
-		ListNBT listNbt = (ListNBT) tag;
+		ListTag listNbt = (ListTag) tag;
 		if (listNbt.isEmpty()) {
 			return Stream.empty();
 		}

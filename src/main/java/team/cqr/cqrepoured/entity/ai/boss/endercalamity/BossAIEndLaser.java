@@ -1,15 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import java.util.EnumSet;
-
-import org.joml.Vector3d;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
+
+import java.util.EnumSet;
 
 public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 
@@ -73,7 +71,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	}
 
 	private void createLaser() {
-		Vector3d laserPosition = this.entity.position();
+		Vec3 laserPosition = this.entity.position();
 		laserPosition = laserPosition.add(0, this.entity.getBbHeight() / 2, 0);
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation

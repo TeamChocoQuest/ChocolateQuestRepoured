@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import org.joml.Vector3f;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
@@ -25,13 +24,13 @@ public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle>
 			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/flying_sword.png"),
 			new ResourceLocation(CQRMain.MODID, "textures/entity/summoning_circles/meteor.png") };
 
-	public RenderSummoningCircle(EntityRendererManager renderManager) {
+	public RenderSummoningCircle(Context renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void render(EntitySummoningCircle pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer,
-			int pPackedLight) {
+	public void render(EntitySummoningCircle pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer,
+                       int pPackedLight) {
 		float ageInTicks = pEntity.tickCount + pPartialTicks;
 		pMatrixStack.pushPose();
 		pMatrixStack.mulPose(Vector3f.YP.rotation(ageInTicks * 4.0F));

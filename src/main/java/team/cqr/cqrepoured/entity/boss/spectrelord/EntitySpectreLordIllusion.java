@@ -2,19 +2,23 @@ package team.cqr.cqrepoured.entity.boss.spectrelord;
 
 import java.util.UUID;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionExplosion;
 import team.cqr.cqrepoured.entity.ai.boss.spectrelord.EntityAISpectreLordIllusionHeal;
@@ -32,15 +36,15 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	private boolean canCastHeal;
 	private boolean canCastExplosion;
 
-	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, World worldIn) {
+	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, Level worldIn) {
 		this(type, worldIn, null, 200, false, false);
 	}
 
-	public EntitySpectreLordIllusion(World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
+	public EntitySpectreLordIllusion(Level worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
 		this(CQREntityTypes.SPECTRE_LORD_ILLUSION.get(), worldIn, caster, lifeTime, canCastHeal, canCastExplosion);
 	}
 	
-	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, World worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
+	public EntitySpectreLordIllusion(EntityType<? extends EntitySpectreLordIllusion> type, Level worldIn, LivingEntity caster, int lifeTime, boolean canCastHeal, boolean canCastExplosion) {
 		super(type, worldIn);
 		if (caster != null) {
 			this.caster = caster;
@@ -61,23 +65,23 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData livingdata, CompoundNBT p_213386_5_) {
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData livingdata, CompoundTag p_213386_5_) {
 		ILivingEntityData ld = super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, livingdata, p_213386_5_);
 		
 		if (this.random.nextDouble() < 0.3D) {
 			switch (this.random.nextInt(3)) {
 			case 0:
-				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON.get()));
+				this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CQRItems.SPEAR_IRON.get()));
 				break;
 			case 1:
-				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON.get()));
+				this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_IRON.get()));
 				break;
 			case 2:
-				this.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON.get()));
+				this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CQRItems.GREAT_SWORD_IRON.get()));
 				break;
 			}
 		} else {
-			this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+			this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
 		}
 		this.setHealingPotions(0);
 		return ld;
@@ -132,22 +136,22 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		
 		if (this.caster != null && this.caster.isAlive()) {
 			
-			compound.put("Summoner", NBTUtil.createUUID(this.caster.getUUID()));
+			compound.put("Summoner", NbtUtils.createUUID(this.caster.getUUID()));
 		}
 		compound.putInt("lifeTime", this.lifeTime);
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		
 		if (compound.contains("SummonerMost", Constants.NBT.TAG_LONG)) {
-			UUID uuid = NBTUtil.loadUUID(compound.get("Summoner"));
+			UUID uuid = NbtUtils.loadUUID(compound.get("Summoner"));
 			Entity e = EntityUtil.getEntityByUUID(this.level, uuid);
 			if (e instanceof EntityCQRSpectreLord) {
 				this.caster = (EntityCQRSpectreLord) e;
@@ -166,7 +170,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

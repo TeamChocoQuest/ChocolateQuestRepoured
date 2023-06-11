@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.server.level.ServerPlayer;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 
@@ -53,8 +53,8 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends Goal {
 			if (this.entity.getBoundingBox().intersects(this.owner.getBoundingBox())) {
 				if (this.owner instanceof AbstractEntityCQR) {
 					this.isSittingOnShoulder = this.entity.setCQREntityOnShoulder((AbstractEntityCQR) this.owner);
-				} else if (this.owner instanceof ServerPlayerEntity) {
-					this.isSittingOnShoulder = this.entity.setEntityOnShoulder((ServerPlayerEntity) this.owner);
+				} else if (this.owner instanceof ServerPlayer) {
+					this.isSittingOnShoulder = this.entity.setEntityOnShoulder((ServerPlayer) this.owner);
 				}
 			}
 		}

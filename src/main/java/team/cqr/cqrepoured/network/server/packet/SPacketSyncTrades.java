@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketSyncTrades extends AbstractPacket<SPacketSyncTrades> {
 
 	private int entityId;
-	private CompoundNBT trades;
+	private CompoundTag trades;
 
 	public SPacketSyncTrades() {
 
@@ -16,11 +16,11 @@ public class SPacketSyncTrades extends AbstractPacket<SPacketSyncTrades> {
 
 	public SPacketSyncTrades(AbstractEntityCQR entity) {
 		this.entityId = entity.getId();
-		this.trades = entity.getTrades().writeToNBT(new CompoundNBT());
+		this.trades = entity.getTrades().writeToNBT(new CompoundTag());
 	}
 
 	@Override
-	public SPacketSyncTrades fromBytes(PacketBuffer buf) {
+	public SPacketSyncTrades fromBytes(FriendlyByteBuf buf) {
 		SPacketSyncTrades result = new SPacketSyncTrades();
 		result.entityId = buf.readInt();
 		result.trades = buf.readNbt();
@@ -28,7 +28,7 @@ public class SPacketSyncTrades extends AbstractPacket<SPacketSyncTrades> {
 	}
 
 	@Override
-	public void toBytes(SPacketSyncTrades packet, PacketBuffer buf) {
+	public void toBytes(SPacketSyncTrades packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeNbt(packet.trades);
 	}
@@ -37,7 +37,7 @@ public class SPacketSyncTrades extends AbstractPacket<SPacketSyncTrades> {
 		return entityId;
 	}
 
-	public CompoundNBT getTrades() {
+	public CompoundTag getTrades() {
 		return trades;
 	}
 

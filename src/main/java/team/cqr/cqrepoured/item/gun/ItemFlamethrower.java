@@ -1,20 +1,22 @@
 package team.cqr.cqrepoured.item.gun;
 
-import java.util.List;
-
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.item.UseAction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.ISizable;
 import team.cqr.cqrepoured.item.ItemMagazineBased;
+
+import java.util.List;
 
 public class ItemFlamethrower extends ItemMagazineBased {
 
@@ -34,8 +36,8 @@ public class ItemFlamethrower extends ItemMagazineBased {
 	}
 
 	public void shootFlames(LivingEntity entity) {
-		World world = entity.level;
-		float rotationYaw = MathHelper.wrapDegrees(entity.yHeadRot);
+		Level world = entity.level;
+		float rotationYaw = Mth.wrapDegrees(entity.yHeadRot);
 		double armDist = 1.0D;
 		if(entity instanceof ISizable) {
 			armDist *= ((ISizable)entity).getSizeVariation();
@@ -65,7 +67,7 @@ public class ItemFlamethrower extends ItemMagazineBased {
 					double d2 = posZ - e.position().z;
 					double rotDiff = Math.atan2(d, d2);
 					rotDiff = rotDiff * 180.0D / 3.141592D;
-					rotDiff = -MathHelper.wrapDegrees(rotDiff - 180.0D);
+					rotDiff = -Mth.wrapDegrees(rotDiff - 180.0D);
 					rotDiff -= rotationYaw;
 
 					if (Math.abs(rotDiff) < 30.0D) {
@@ -78,16 +80,16 @@ public class ItemFlamethrower extends ItemMagazineBased {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		if (this.getAmmoInItem(playerIn.getItemInHand(handIn)) <= 0) {
-			return ActionResult.fail(playerIn.getItemInHand(handIn));
+			return InteractionResultHolder.fail(playerIn.getItemInHand(handIn));
 		}
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
 		if (entityIn instanceof LivingEntity) {
 			LivingEntity user = (LivingEntity) entityIn;
@@ -97,8 +99,8 @@ public class ItemFlamethrower extends ItemMagazineBased {
 					this.removeAmmoFromItem(stack, 1);
 				}
 			} else if ((((LivingEntity) entityIn).getMainHandItem() == stack || ((LivingEntity) entityIn).getMainHandItem() == stack) && entityIn.tickCount % 5 == 0 && this.getAmmoInItem(stack) < this.getMaxAmmo()) {
-				if (entityIn instanceof PlayerEntity) {
-					this.reloadFromInventory(((PlayerEntity) user).inventory, stack, !((PlayerEntity) user).isCreative());
+				if (entityIn instanceof Player) {
+					this.reloadFromInventory(((Player) user).inventory, stack, !((Player) user).isCreative());
 				}
 			}
 		}

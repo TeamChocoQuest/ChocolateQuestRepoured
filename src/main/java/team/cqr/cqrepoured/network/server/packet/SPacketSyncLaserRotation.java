@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -21,7 +21,7 @@ public class SPacketSyncLaserRotation extends AbstractPacket<SPacketSyncLaserRot
 	}
 
 	@Override
-	public SPacketSyncLaserRotation fromBytes(PacketBuffer buf) {
+	public SPacketSyncLaserRotation fromBytes(FriendlyByteBuf buf) {
 		SPacketSyncLaserRotation result = new SPacketSyncLaserRotation();
 		
 		result.entityId = buf.readInt();
@@ -32,7 +32,7 @@ public class SPacketSyncLaserRotation extends AbstractPacket<SPacketSyncLaserRot
 	}
 
 	@Override
-	public void toBytes(SPacketSyncLaserRotation packet, PacketBuffer buf) {
+	public void toBytes(SPacketSyncLaserRotation packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeFloat(packet.yaw);
 		buf.writeFloat(packet.pitch);

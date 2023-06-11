@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.item;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.World;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 
 public class ItemGoldenFeather extends ItemLore {
 
@@ -15,7 +16,7 @@ public class ItemGoldenFeather extends ItemLore {
 	}
 
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		// mainhand or offhand
 		if (!isSelected && itemSlot != 0) {
 			return;

@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
@@ -28,10 +28,10 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 		level.setBlockState(transformedPos, CQRBlocks.NULL_BLOCK.get().defaultBlockState());
 	}
 
-	public static class Factory implements IFactory<TileEntity> {
+	public static class Factory implements IFactory<BlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntity> blockEntityLazy) {
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BlockEntity> blockEntityLazy) {
 			return new PreparableEmptyInfo();
 		}
 
@@ -40,12 +40,12 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableEmptyInfo> {
 
 		@Override
-		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			return new PreparableEmptyInfo();
 		}
 

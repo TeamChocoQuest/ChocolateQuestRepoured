@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public abstract class AbstractPacket<T extends Object> implements IMessage<T> {
 	
@@ -9,9 +9,9 @@ public abstract class AbstractPacket<T extends Object> implements IMessage<T> {
 	}
 	
 	@Override
-	public abstract T fromBytes(PacketBuffer buffer);
+	public abstract T fromBytes(FriendlyByteBuf buffer);
 	
 	@Override
-	public abstract void toBytes(T packet, PacketBuffer buffer);
+	public abstract void toBytes(T packet, FriendlyByteBuf buffer);
 
 }

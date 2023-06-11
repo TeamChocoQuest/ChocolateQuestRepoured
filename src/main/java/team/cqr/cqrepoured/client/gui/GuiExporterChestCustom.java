@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -57,7 +56,7 @@ public class GuiExporterChestCustom extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		this.drawCenteredString(pMatrixStack, this.font, new TranslationTextComponent("gui.cqrepoured.exporter_chest_custom.name"), this.width / 2, 20, 0xFFFFFF);
 

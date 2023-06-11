@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import java.util.EnumSet;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+
+import java.util.EnumSet;
 
 public class EntityAIMoveToHome extends AbstractCQREntityAI<AbstractEntityCQR> {
 

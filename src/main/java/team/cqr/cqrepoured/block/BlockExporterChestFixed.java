@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.block;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
 
 public class BlockExporterChestFixed extends BlockExporterChest {
@@ -15,7 +15,7 @@ public class BlockExporterChestFixed extends BlockExporterChest {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new TileEntityExporterChestFixed();
 	}
 

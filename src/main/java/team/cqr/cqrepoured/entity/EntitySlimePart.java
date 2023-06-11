@@ -2,28 +2,30 @@ package team.cqr.cqrepoured.entity;
 
 import java.util.UUID;
 
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
-public class EntitySlimePart extends SlimeEntity {
+public class EntitySlimePart extends Slime {
 
 	private UUID ownerUuid;
 
-	public EntitySlimePart(World world) {
+	public EntitySlimePart(Level world) {
 		this(CQREntityTypes.SMALL_SLIME.get(), world);
 	}
 	
-	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, World worldIn) {
+	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, World worldIn, LivingEntity owner) {
+	public EntitySlimePart(EntityType<? extends EntitySlimePart> type, Level worldIn, LivingEntity owner) {
 		this(type, worldIn);
 		this.ownerUuid = owner.getUUID();
 	}
@@ -31,10 +33,10 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.availableGoals.clear();
+		this.targetSelector.getAvailableGoals().clear();
 	}
 
-	public static AttributeModifierMap.MutableAttribute createMobAttributes() {
+	public static AttributeSupplier.Builder createMobAttributes() {
 		return LivingEntity
 			.createLivingAttributes()
 			.add(Attributes.FOLLOW_RANGE, 16.0D)
@@ -45,7 +47,7 @@ public class EntitySlimePart extends SlimeEntity {
 	@Override
 	public void tick() {
 		if (this.tickCount > 400) {
-			this.remove();
+			this.discard();;
 		}
 
 		super.tick();
@@ -60,7 +62,7 @@ public class EntitySlimePart extends SlimeEntity {
 	public void push(Entity entityIn) {
 		if (entityIn instanceof LivingEntity && entityIn.getUUID().equals(this.ownerUuid)) {
 			((LivingEntity) entityIn).heal(2.0F);
-			this.remove();
+			this.discard();
 		}
 	}
 
@@ -70,17 +72,17 @@ public class EntitySlimePart extends SlimeEntity {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("ticksExisted", this.tickCount);
-		compound.put("ownerUuid", NBTUtil.createUUID(this.ownerUuid));
+		compound.put("ownerUuid", NbtUtils.createUUID(this.ownerUuid));
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.tickCount = compound.getInt("ticksExisted");
-		this.ownerUuid = NBTUtil.loadUUID(compound.getCompound("ownerUuid"));
+		this.ownerUuid = NbtUtils.loadUUID(compound.getCompound("ownerUuid"));
 	}
 
 }

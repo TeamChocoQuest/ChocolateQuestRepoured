@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ShieldItem;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
@@ -33,17 +34,17 @@ public class ProjectileHotFireball extends ProjectileBase {
 		this.setSize(0.5F, 0.5F);
 	} */
 
-	public ProjectileHotFireball(EntityType<? extends ProjectileBase> throwableEntity, World world)
+	public ProjectileHotFireball(EntityType<? extends ProjectileBase> throwableEntity, Level world)
 	{
 		super(throwableEntity, world);
 	}
 
-	public ProjectileHotFireball(double pX, double pY, double pZ, World world, LivingEntity shooter) {
+	public ProjectileHotFireball(double pX, double pY, double pZ, Level world, LivingEntity shooter) {
 		super(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), world);
 		this.shooter = shooter;
 	}
 
-	public ProjectileHotFireball(LivingEntity shooter, World world)
+	public ProjectileHotFireball(LivingEntity shooter, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_HOT_FIREBALL.get(), shooter.getX(), shooter.getEyeY() - (double)0.1F, shooter.getZ(), world);
 	}
@@ -101,7 +102,7 @@ public class ProjectileHotFireball extends ProjectileBase {
 	} */
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		Entity entity = entityResult.getEntity();
 
@@ -122,14 +123,14 @@ public class ProjectileHotFireball extends ProjectileBase {
 	}
 
 	@Override
-	protected void onHitBlock(BlockRayTraceResult result) {
+	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
 		this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 3.0F, CQRConfig.SERVER_CONFIG.bosses.hotFireballsDestroyTerrain.get() ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
 		this.remove();
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

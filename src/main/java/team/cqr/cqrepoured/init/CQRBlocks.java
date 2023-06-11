@@ -8,17 +8,9 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.core.BlockPos;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.WallOrFloorItem;
-import net.minecraft.loot.LootTables;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;

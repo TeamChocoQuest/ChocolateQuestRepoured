@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain.parrot;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PotionEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.world.item.Items;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
+import net.minecraft.potion.Potions;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 
 public class BossAIPirateParrotThrowPotions extends Goal {
@@ -65,7 +66,7 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 			}
 		}
 		ItemStack potion = PotionUtils.setPotion(new ItemStack(Items.SPLASH_POTION), type);
-		this.entity.setItemSlot(EquipmentSlotType.MAINHAND, potion);
+		this.entity.setItemSlot(EquipmentSlot.MAINHAND, potion);
 	}
 
 	@Override
@@ -88,16 +89,16 @@ public class BossAIPirateParrotThrowPotions extends Goal {
 		double d1 = target.getX() + target.getDeltaMovement().x() - thrower.getX();
 		double d2 = d0 - thrower.getY();
 		double d3 = target.getZ() + target.getDeltaMovement().z() - thrower.getZ();
-		float f = MathHelper.sqrt(d1 * d1 + d3 * d3);
+		float f = Mth.sqrt(d1 * d1 + d3 * d3);
 		ItemStack potionItem = thrower.getMainHandItem();
 		PotionEntity potion = new PotionEntity(thrower.level, thrower/*, potionItem*/);
 		potion.setItem(potionItem);
 		potion.xRot += 20F;
 		potion.shoot(d1, d2 + f * 0.2F, d3, 0.75F, 8.0F);
-		thrower.level.playSound((PlayerEntity) null, thrower.getX(), thrower.getY(), thrower.getZ(), SoundEvents.WITCH_THROW, thrower.getSoundSource(), 1.0F, 0.8F + thrower.getRandom().nextFloat() * 0.4F);
+		thrower.level.playSound((Player) null, thrower.getX(), thrower.getY(), thrower.getZ(), SoundEvents.WITCH_THROW, thrower.getSoundSource(), 1.0F, 0.8F + thrower.getRandom().nextFloat() * 0.4F);
 		thrower.level.addFreshEntity(potion);
 
-		this.entity.setItemInHand(Hand.MAIN_HAND, ItemStack.EMPTY);
+		this.entity.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
 	}
 
 	@Override

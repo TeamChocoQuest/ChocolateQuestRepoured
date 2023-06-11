@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.network.server.packet;
 
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
+import team.cqr.cqrepoured.network.AbstractPacket;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldownSync> {
 
@@ -21,7 +22,7 @@ public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldow
 	}
 
 	@Override
-	public SPacketArmorCooldownSync fromBytes(PacketBuffer buf) {
+	public SPacketArmorCooldownSync fromBytes(FriendlyByteBuf buf) {
 		SPacketArmorCooldownSync result = new SPacketArmorCooldownSync();
 		
 		int size = buf.readInt();
@@ -36,7 +37,7 @@ public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldow
 	}
 
 	@Override
-	public void toBytes(SPacketArmorCooldownSync packet, PacketBuffer buf) {
+	public void toBytes(SPacketArmorCooldownSync packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.itemCooldownMap.size());
 		for (Entry<Item, Integer> entry : packet.itemCooldownMap.entrySet()) {
 			//ByteBufUtils.writeRegistryEntry(buf, entry.getKey());

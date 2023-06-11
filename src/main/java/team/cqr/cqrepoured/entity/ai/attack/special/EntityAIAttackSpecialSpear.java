@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import org.joml.Vector3d;
-
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Hand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.server.ServerWorld;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.util.math.BoundingBox;
@@ -49,18 +48,18 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 
 	@Override
 	public void stopAttack(AbstractEntityCQR attacker, LivingEntity target) {
-		Vector3d vec1 = attacker.getEyePosition(1.0F);
+		Vec3 vec1 = attacker.getEyePosition(1.0F);
 		double x = target.getX() - vec1.x;
-		double y = MathHelper.clamp(vec1.y, target.getY(), target.getY() + target.getBbHeight()) - vec1.y;
+		double y = Mth.clamp(vec1.y, target.getY(), target.getY() + target.getBbHeight()) - vec1.y;
 		double z = target.getZ() - vec1.z;
-		double dist = MathHelper.sqrt(x * x + z * z);
-		double yaw = MathHelper.atan2(-x, z);
-		double pitch = MathHelper.atan2(-y, dist);
-		Vector3d vec2 = Vector3d.directionFromRotation((float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw));
+		double dist = Mth.sqrt(x * x + z * z);
+		double yaw = Mth.atan2(-x, z);
+		double pitch = Mth.atan2(-y, dist);
+		Vec3 vec2 = Vec3.directionFromRotation((float) Math.toDegrees(pitch), (float) Math.toDegrees(yaw));
 		ItemStack stack = attacker.getMainHandItem();
 		ItemSpearBase item = ((ItemSpearBase) stack.getItem());
 		double reachDistance = attacker.getBbWidth() + 0.85D + item.getReach() * 2.5D;
-		BoundingBox bb = new BoundingBox(new Vector3d(-0.25D, -0.25D, 0.0D), new Vector3d(0.25D, 0.25D, reachDistance), yaw, pitch, vec1);
+		BoundingBox bb = new BoundingBox(new Vec3(-0.25D, -0.25D, 0.0D), new Vec3(0.25D, 0.25D, reachDistance), yaw, pitch, vec1);
 
 		for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(attacker.level, attacker, LivingEntity.class, bb)) {
 			if (!attacker.getFaction().isAlly(entity)) {
@@ -69,14 +68,14 @@ public class EntityAIAttackSpecialSpear extends AbstractEntityAIAttackSpecial {
 			}
 		}
 
-		Vector3d vec3 = vec1.add(new Vector3d(-0.4D, -0.5D, 0.0D).xRot((float) -pitch).yRot((float) -yaw));
+		Vec3 vec3 = vec1.add(new Vec3(-0.4D, -0.5D, 0.0D).xRot((float) -pitch).yRot((float) -yaw));
 		for (double d = reachDistance; d >= 0.0D; d--) {
-			Vector3d vec4 = vec3.add(vec2.scale(d));
-			((ServerWorld) attacker.level).sendParticles(ParticleTypes.SMOKE, vec4.x, vec4.y, vec4.z, 1, 0, 0, 0, 0.05);
+			Vec3 vec4 = vec3.add(vec2.scale(d));
+			((ServerLevel) attacker.level).sendParticles(ParticleTypes.SMOKE, vec4.x, vec4.y, vec4.z, 1, 0, 0, 0, 0.05);
 		}
 
 		attacker.level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, attacker.getSoundSource(), 1.0F, 1.0F);
-		attacker.swing(Hand.MAIN_HAND);
+		attacker.swing(InteractionHand.MAIN_HAND);
 	}
 
 	@Override

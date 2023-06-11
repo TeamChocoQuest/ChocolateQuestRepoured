@@ -1,13 +1,15 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -77,7 +79,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityExporterChest> {
 
 		@Override
-		public PreparablePosInfo create(World world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntityLazy) {
+		public PreparablePosInfo create(Level world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntityLazy) {
 			return new PreparableLootChestInfo(blockEntityLazy.orElseThrow(NullPointerException::new).getLootTable(), state.getValue(ChestBlock.FACING));
 		}
 
@@ -86,13 +88,13 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableLootChestInfo> {
 
 		@Override
-		public void write(PreparableLootChestInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableLootChestInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			ByteBufUtil.writeUTF8String(buf, preparable.lootTable.toString());
 			buf.writeByte(preparable.facing.get2DDataValue());
 		}
 
 		@Override
-		public PreparableLootChestInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableLootChestInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			ResourceLocation lootTable = new ResourceLocation(ByteBufUtil.readUTF8String(buf));
 			Direction facing = Direction.from2DDataValue(buf.readByte());
 			return new PreparableLootChestInfo(lootTable, facing);

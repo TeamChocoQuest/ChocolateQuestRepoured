@@ -7,14 +7,15 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.NBTCollectors;
@@ -25,8 +26,8 @@ public class ProtectedRegion {
 
 	public static final String PROTECTED_REGION_VERSION = "1.2.0";
 	public static boolean logVersionWarnings = true;
-	private final World world;
-	private UUID uuid = MathHelper.createInsecureUUID();
+	private final Level world;
+	private UUID uuid = Mth.createInsecureUUID();
 	private String name;
 	private BlockPos pos;
 	private BlockPos startPos;
@@ -46,7 +47,7 @@ public class ProtectedRegion {
 	private boolean needsSaving = false;
 	private boolean needsSyncing = false;
 
-	public ProtectedRegion(World world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
+	public ProtectedRegion(Level world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
 		this.world = world;
 		this.name = dungeonName;
 		this.pos = pos.immutable();
@@ -59,22 +60,22 @@ public class ProtectedRegion {
 		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
 	}
 
-	public ProtectedRegion(World world, CompoundNBT compound) {
+	public ProtectedRegion(Level world, CompoundTag compound) {
 		this.world = world;
 		this.readFromNBT(compound);
 		this.clearNeedsSaving();
 		this.clearNeedsSyncing();
 	}
 
-	public ProtectedRegion(World world, PacketBuffer buf) {
+	public ProtectedRegion(Level world, FriendlyByteBuf buf) {
 		this.world = world;
 		this.readFromByteBuf(buf);
 		this.clearNeedsSaving();
 		this.clearNeedsSyncing();
 	}
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT tag = new CompoundNBT();
+	public CompoundTag writeToNBT() {
+		CompoundTag tag = new CompoundTag();
 		this.writeToNBT(tag);
 		return tag;
 	}
@@ -100,9 +101,9 @@ public class ProtectedRegion {
 		return this.needsSyncing;
 	}
 
-	public void writeToNBT(CompoundNBT compound) {
+	public void writeToNBT(CompoundTag compound) {
 		compound.putString("version", PROTECTED_REGION_VERSION);
-		compound.put("uuid", NBTUtil.createUUID(this.uuid));
+		compound.put("uuid", NbtUtils.createUUID(this.uuid));
 		compound.putString("name", this.name);
 		compound.put("pos", NBTHelper.createBlockPos(this.pos));
 		compound.put("startPos", NBTHelper.createBlockPos(this.startPos));
@@ -119,7 +120,7 @@ public class ProtectedRegion {
 		compound.putBoolean("isGenerating", this.isGenerating);
 
 		compound.put("entityDependencies", this.entityDependencies.stream()
-				.map(NBTUtil::createUUID)
+				.map(NbtUtils::createUUID)
 				.collect(NBTCollectors.toList()));
 
 		compound.put("blockDependencies", this.blockDependencies.stream()
@@ -127,13 +128,13 @@ public class ProtectedRegion {
 				.collect(NBTCollectors.toList()));
 	}
 
-	public void readFromNBT(CompoundNBT compound) {
+	public void readFromNBT(CompoundTag compound) {
 		String version = compound.getString("version");
 		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
 			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
 		}
 
-		this.uuid = NBTUtil.loadUUID(compound.get("uuid"));
+		this.uuid = NbtUtils.loadUUID(compound.get("uuid"));
 		this.name = compound.getString("name");
 		this.pos = NBTHelper.loadBlockPos(compound.get("pos"));
 		this.startPos = NBTHelper.loadBlockPos(compound.get("startPos"));
@@ -155,7 +156,7 @@ public class ProtectedRegion {
 
 		this.entityDependencies.clear();
 		NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
-				.map(NBTUtil::loadUUID)
+				.map(NbtUtils::loadUUID)
 				.forEach(this.entityDependencies::add);
 
 		this.blockDependencies.clear();
@@ -166,7 +167,7 @@ public class ProtectedRegion {
 		this.markDirty();
 	}
 
-	public void writeToByteBuf(PacketBuffer buf) {
+	public void writeToByteBuf(FriendlyByteBuf buf) {
 		buf.writeUUID(this.uuid);
 		buf.writeUtf(this.name);
 		buf.writeBlockPos(this.pos);
@@ -196,7 +197,7 @@ public class ProtectedRegion {
 		}
 	}
 
-	public void readFromByteBuf(PacketBuffer buf) {
+	public void readFromByteBuf(FriendlyByteBuf buf) {
 		this.uuid = buf.readUUID();
 		this.name = buf.readUtf();
 		this.pos = buf.readBlockPos();
@@ -313,7 +314,7 @@ public class ProtectedRegion {
 		this.markDirty();
 	}
 
-	public World getWorld() {
+	public Level getWorld() {
 		return this.world;
 	}
 
@@ -485,7 +486,7 @@ public class ProtectedRegion {
 			this.ignoreNoBossOrNexus = dungeonConfig.ignoreNoBossOrNexus();
 		}
 
-		public Builder(CompoundNBT compound) {
+		public Builder(CompoundTag compound) {
 			this.dungeonName = compound.getString("dungeonName");
 			this.dungeonPos = NBTHelper.loadBlockPos(compound.get("dungeonPos"));
 			this.min = NBTHelper.loadBlockPos(compound.get("min"));
@@ -499,7 +500,7 @@ public class ProtectedRegion {
 			this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
 			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
 			NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
-					.map(NBTUtil::loadUUID)
+					.map(NbtUtils::loadUUID)
 					.forEach(this.entityDependencies::add);
 			NBTHelper.stream(compound.get("blockDependencies"), IntArrayNBT.TYPE)
 					.map(NBTHelper::loadBlockPos)
@@ -509,8 +510,8 @@ public class ProtectedRegion {
 					.forEach(this.unprotectedBlocks::add);
 		}
 
-		public CompoundNBT writeToNBT() {
-			CompoundNBT compound = new CompoundNBT();
+		public CompoundTag writeToNBT() {
+			CompoundTag compound = new CompoundTag();
 			compound.putString("dungeonName", this.dungeonName);
 			compound.put("dungeonPos", NBTHelper.createBlockPos(this.dungeonPos));
 			compound.put("min", NBTHelper.createBlockPos(this.min));
@@ -524,7 +525,7 @@ public class ProtectedRegion {
 			compound.putBoolean("preventFireSpreading", this.preventFireSpreading);
 			compound.putBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
 			compound.put("entityDependencies", this.entityDependencies.stream()
-					.map(NBTUtil::createUUID)
+					.map(NbtUtils::createUUID)
 					.collect(NBTCollectors.toList()));
 			compound.put("blockDependencies", this.blockDependencies.stream()
 					.map(NBTHelper::createBlockPos)
@@ -565,7 +566,7 @@ public class ProtectedRegion {
 		}
 
 		@Nullable
-		public ProtectedRegion build(World world) {
+		public ProtectedRegion build(Level world) {
 			if (!this.protectionSystemEnabled) {
 				return null;
 			}

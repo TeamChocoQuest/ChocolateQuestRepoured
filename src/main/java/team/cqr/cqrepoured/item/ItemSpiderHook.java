@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.world.World;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderHook;
 
@@ -28,7 +28,7 @@ public class ItemSpiderHook extends ItemHookshotBase {
 	}
 
 	@Override
-	public ProjectileHookShotHook getNewHookEntity(World worldIn, LivingEntity shooter, ItemStack stack) {
+	public ProjectileHookShotHook getNewHookEntity(Level worldIn, LivingEntity shooter, ItemStack stack) {
 		return new ProjectileSpiderHook(worldIn, shooter, this, stack);
 	}
 

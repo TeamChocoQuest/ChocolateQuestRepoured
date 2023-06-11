@@ -8,9 +8,9 @@ import java.util.Random;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.generators.GeneratorTemplateSurface;

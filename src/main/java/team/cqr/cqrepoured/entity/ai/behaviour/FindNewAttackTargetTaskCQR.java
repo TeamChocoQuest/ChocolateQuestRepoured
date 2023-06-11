@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.entity.ai.behaviour;
 import java.util.List;
 import java.util.function.Predicate;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.task.FindNewAttackTargetTask;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.entity.ai.sensor.FactionBasedAttackTargetSensor;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -27,7 +27,7 @@ public class FindNewAttackTargetTaskCQR<E extends AbstractEntityCQR> extends Fin
 	protected E entity = null;
 	
 	@Override
-	protected void start(ServerWorld pLevel, E pEntity, long pGameTime) {
+	protected void start(ServerLevel pLevel, E pEntity, long pGameTime) {
 		this.entity = pEntity;
 		super.start(pLevel, pEntity, pGameTime);
 	}
@@ -53,7 +53,7 @@ public class FindNewAttackTargetTaskCQR<E extends AbstractEntityCQR> extends Fin
 				return false;
 			}
 		} else if (FactionBasedAttackTargetSensor.canTargetAlly(this.entity)) {
-			AxisAlignedBB aabb = this.entity.getBoundingBox().inflate(32.0D);
+			AABB aabb = this.entity.getBoundingBox().inflate(32.0D);
 			List<LivingEntity> possibleTargets = this.entity.level.getEntitiesOfClass(LivingEntity.class, aabb);
 			for (LivingEntity possibleTargetAlly : possibleTargets) {
 				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTargetAlly)) {

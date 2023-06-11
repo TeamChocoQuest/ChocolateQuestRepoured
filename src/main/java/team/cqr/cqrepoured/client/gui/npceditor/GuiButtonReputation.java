@@ -1,7 +1,8 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.faction.EReputationState;
@@ -16,7 +17,7 @@ public class GuiButtonReputation extends GuiButtonTextured {
 
 	public GuiButtonReputation(int buttonId, int x, int y, Button.IPressable pOnPress) {
 		super(buttonId, x, y, 60, 12, 0, 1,  1 / 3,
-				TEXTURE, null , pOnPress, new StringTextComponent(POSSIBLE_REPUTAITONS[0]));
+				TEXTURE, null , pOnPress, new TextComponent(POSSIBLE_REPUTAITONS[0]));
 	}
 
 	public void updateReputationIndex(boolean leftClick) {
@@ -25,7 +26,7 @@ public class GuiButtonReputation extends GuiButtonTextured {
 		} else {
 			this.reputationIndex = this.reputationIndex > 0 ? this.reputationIndex - 1 : POSSIBLE_REPUTAITONS.length - 1;
 		}
-		this.setMessage(new StringTextComponent(POSSIBLE_REPUTAITONS[this.reputationIndex]));
+		this.setMessage(new TextComponent(POSSIBLE_REPUTAITONS[this.reputationIndex]));
 	}
 
 	public void setReputationIndex(int reputation) {
@@ -42,7 +43,7 @@ public class GuiButtonReputation extends GuiButtonTextured {
 		} else {
 			this.reputationIndex = 0;
 		}
-		this.setMessage(new StringTextComponent(POSSIBLE_REPUTAITONS[this.reputationIndex]));
+		this.setMessage(new TextComponent(POSSIBLE_REPUTAITONS[this.reputationIndex]));
 	}
 
 }

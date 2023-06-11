@@ -1,7 +1,8 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.loot.LootTables;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTables;
 import team.cqr.cqrepoured.block.BlockExporterChestFixed;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 

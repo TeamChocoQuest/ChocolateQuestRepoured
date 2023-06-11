@@ -7,7 +7,7 @@
 //import com.mojang.serialization.Codec;
 //import com.mojang.serialization.codecs.RecordCodecBuilder;
 //
-//import net.minecraft.block.AbstractBannerBlock;
+//import net.minecraft.world.level.block.AbstractBannerBlock;
 //import net.minecraft.entity.Entity;
 //import net.minecraft.entity.EntityList;
 //import net.minecraft.entity.LivingEntity;
@@ -23,7 +23,7 @@
 //import net.minecraft.nbt.ListNBT;
 //import net.minecraft.tileentity.BannerTileEntity;
 //import net.minecraft.tileentity.TileEntity;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.util.text.StringTextComponent;
 //import net.minecraft.world.IWorld;
 //import net.minecraft.world.IWorldReader;

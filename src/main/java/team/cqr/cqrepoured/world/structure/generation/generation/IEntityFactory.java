@@ -4,17 +4,18 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRMain;
 
 public interface IEntityFactory {
 
 	<T extends Entity> T createEntity(EntityType<T> entityType);
 
-	<T extends Entity> T createEntity(Function<World, T> entityConstructor);
+	<T extends Entity> T createEntity(Function<Level, T> entityConstructor);
 
 	@Nullable
 	default Entity createEntity(ResourceLocation registryName) {
@@ -27,7 +28,7 @@ public interface IEntityFactory {
 	}
 
 	@Nullable
-	default Entity createEntity(CompoundNBT nbt) {
+	default Entity createEntity(CompoundTag nbt) {
 		Entity entity = EntityType.by(nbt).map(this::createEntity).orElse(null);
 		if (entity == null) {
 			CQRMain.logger.warn("Skipping Entity with id {}", nbt.getString("id"));
@@ -38,8 +39,8 @@ public interface IEntityFactory {
 	}
 
 	@Nullable
-	static CompoundNBT save(Entity entity) {
-		CompoundNBT nbt = new CompoundNBT();
+	static CompoundTag save(Entity entity) {
+		CompoundTag nbt = new CompoundTag();
 		return entity.save(nbt) ? nbt : null;
 	}
 

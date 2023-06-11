@@ -7,16 +7,16 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 public class CapabilityProtectedRegionData {
 
-	private final Chunk chunk;
+	private final LevelChunk chunk;
 	private final Set<UUID> protectedRegionUuids = new HashSet<>();
 
-	public CapabilityProtectedRegionData(Chunk chunk) {
+	public CapabilityProtectedRegionData(LevelChunk chunk) {
 		this.chunk = chunk;
 	}
 
@@ -30,7 +30,7 @@ public class CapabilityProtectedRegionData {
 			UUID uuid = iterator.next();
 			if (predicate.test(uuid)) {
 				iterator.remove();
-				this.chunk.markUnsaved();
+				this.chunk.setUnsaved(true);
 			}
 		}
 	}
@@ -38,13 +38,13 @@ public class CapabilityProtectedRegionData {
 	public void clearProtectedRegionUuids() {
 		if (!this.protectedRegionUuids.isEmpty()) {
 			this.protectedRegionUuids.clear();
-			this.chunk.markUnsaved();
+			this.chunk.setUnsaved(true);
 		}
 	}
 
 	public boolean addProtectedRegionUuid(UUID uuid) {
 		if (this.protectedRegionUuids.add(uuid)) {
-			this.chunk.markUnsaved();
+			this.chunk.setUnsaved(true);
 			return true;
 		}
 		return false;
@@ -52,14 +52,14 @@ public class CapabilityProtectedRegionData {
 
 	public boolean removeProtectedRegionUuid(UUID uuid) {
 		if (this.protectedRegionUuids.remove(uuid)) {
-			this.chunk.markUnsaved();
+			this.chunk.setUnsaved(true);
 			return true;
 		}
 		return false;
 	}
 
-	public CompoundNBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
+	public CompoundTag writeToNBT() {
+		CompoundTag compound = new CompoundTag();
 		int[] data = new int[this.protectedRegionUuids.size() * 4];
 		int i = 0;
 		for (UUID uuid : this.protectedRegionUuids) {
@@ -69,11 +69,11 @@ public class CapabilityProtectedRegionData {
 			data[i * 4 + 3] = (int) uuid.getLeastSignificantBits();
 			i++;
 		}
-		compound.put("protectedRegionUuids", new IntArrayNBT(data));
+		compound.put("protectedRegionUuids", new IntArrayTag(data));
 		return compound;
 	}
 
-	public void readFromNBT(CompoundNBT compound) {
+	public void readFromNBT(CompoundTag compound) {
 		this.protectedRegionUuids.clear();
 		int[] data = compound.getIntArray("protectedRegionUuids");
 		for (int i = 0; i < data.length / 4; i++) {

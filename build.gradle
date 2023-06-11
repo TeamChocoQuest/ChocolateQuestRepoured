@@ -79,7 +79,7 @@ configurations {
 
 repositories {
     ivy {
-	name "Github Releases" // Github Releases
+		name "Github Releases" // Github Releases
         url "https://github.com"
 
         patternLayout {
@@ -90,24 +90,24 @@ repositories {
     }
 
     maven {
-	name "Curse Maven" // CurseForge Maven
-	url "https://www.cursemaven.com"
+		name "Curse Maven" // CurseForge Maven
+		url "https://www.cursemaven.com"
     }
     maven { 
-	name "Geckolib Maven" // Geckolib
-	url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven"
+		name "Geckolib Maven" // Geckolib
+		url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven"
     }
     maven {
-	name = "SBL Maven" // SmartBrainLib
-	url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+		name = "SBL Maven" // SmartBrainLib
+		url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
     }
     maven {
-	name "Progwm16 Maven" // JEI
-	url "https://dvs1.progwml6.com/files/maven"
+		name "Progwm16 Maven" // JEI
+		url "https://dvs1.progwml6.com/files/maven"
     }
     maven { 
-	name "ModMaven" // JEI Alt
-	url "https://modmaven.dev"
+		name "ModMaven" // JEI Alt
+		url "https://modmaven.dev"
     }
 }
 
@@ -151,7 +151,7 @@ jar {
             "Implementation-Version": "${mod_version}",
             "Implementation-Vendor" :"${mod_vendor}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-	    "MixinConfigs": "${mod_id}.mixins.json"
+	    	"MixinConfigs": "${mod_id}.mixins.json"
         ])
     }
 }

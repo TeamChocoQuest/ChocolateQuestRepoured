@@ -1,23 +1,21 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import java.util.UUID;
-
 import com.google.common.base.Predicates;
-
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.loot.LootTables;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -25,6 +23,8 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.mobs.EntityCQRWalker;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+
+import java.util.UUID;
 
 public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
@@ -34,15 +34,15 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	private int damageCounter = 0;
 	private UUID parentUUID = null;
 
-	public EntityWalkerKingIllusion(EntityType<? extends EntityWalkerKingIllusion> type, World world) {
+	public EntityWalkerKingIllusion(EntityType<? extends EntityWalkerKingIllusion> type, Level world) {
 		super(type, world);
 	}
 	
-	public EntityWalkerKingIllusion(World worldIn) {
+	public EntityWalkerKingIllusion(Level worldIn) {
 		this(CQREntityTypes.WALKER_KING_ILLUSION.get(), worldIn);
 	}
 
-	public EntityWalkerKingIllusion(int ttl, EntityCQRWalkerKing parent, World world) {
+	public EntityWalkerKingIllusion(int ttl, EntityCQRWalkerKing parent, Level world) {
 		this(world);
 		this.parent = parent;
 		this.ttl = ttl;
@@ -53,16 +53,16 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	private void cloneParentEquipment(AbstractEntityCQR parent) {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, parent.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
-		this.setItemSlot(EquipmentSlotType.CHEST, parent.getItemBySlot(EquipmentSlotType.CHEST));
-		this.setItemSlot(EquipmentSlotType.HEAD, parent.getItemBySlot(EquipmentSlotType.HEAD));
-		this.setItemSlot(EquipmentSlotType.LEGS, parent.getItemBySlot(EquipmentSlotType.LEGS));
-		this.setItemSlot(EquipmentSlotType.FEET, parent.getItemBySlot(EquipmentSlotType.FEET));
-		this.setItemSlot(EquipmentSlotType.OFFHAND, parent.getItemBySlot(EquipmentSlotType.OFFHAND));
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(parent.getItemBySlot(EquipmentSlotType.MAINHAND).getItem(), 1));
+		this.setItemSlot(EquipmentSlot.CHEST, parent.getItemBySlot(EquipmentSlot.CHEST));
+		this.setItemSlot(EquipmentSlot.HEAD, parent.getItemBySlot(EquipmentSlot.HEAD));
+		this.setItemSlot(EquipmentSlot.LEGS, parent.getItemBySlot(EquipmentSlot.LEGS));
+		this.setItemSlot(EquipmentSlot.FEET, parent.getItemBySlot(EquipmentSlot.FEET));
+		this.setItemSlot(EquipmentSlot.OFFHAND, parent.getItemBySlot(EquipmentSlot.OFFHAND));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(parent.getItemBySlot(EquipmentSlot.MAINHAND).getItem(), 1));
 	}
 
 	@Override
-	protected int getExperienceReward(PlayerEntity player) {
+	protected int getExperienceReward(Player player) {
 		return 0;
 	}
 
@@ -132,7 +132,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 			if (this.parent == null && this.parentUUID != null) {
 				if (this.searchTicksForParent > 0) {
 					if (!this.level.isClientSide) {
-						this.level.getEntities(this, new AxisAlignedBB(this.blockPosition().offset(-10, -10, -10), this.blockPosition().offset(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(t -> {
+						this.level.getEntities(this, new AABB(this.blockPosition().offset(-10, -10, -10), this.blockPosition().offset(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(t -> {
 							if (t.getUUID().equals(EntityWalkerKingIllusion.this.parentUUID)) {
 								EntityWalkerKingIllusion.this.parent = (EntityCQRWalkerKing) t;
 							}
@@ -173,17 +173,17 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("ttl", this.ttl);
-		compound.put("illusionParent", NBTUtil.createUUID(this.parentUUID));
+		compound.put("illusionParent", NbtUtils.createUUID(this.parentUUID));
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.ttl = compound.getInt("ttl");
-		this.parentUUID = NBTUtil.loadUUID(compound.getCompound("illusionParent"));
+		this.parentUUID = NbtUtils.loadUUID(compound.getCompound("illusionParent"));
 	}
 
 	@Override

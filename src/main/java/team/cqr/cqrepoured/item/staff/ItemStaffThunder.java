@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.item.staff;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
@@ -26,7 +27,7 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (this.isNotAirBlock(worldIn, playerIn)) {
@@ -36,18 +37,18 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 				stack.hurtAndBreak(1, playerIn, p -> p.broadcastBreakEvent(handIn));
 				playerIn.getCooldowns().addCooldown(stack.getItem(), 20);
 			}
-			return ActionResult.success(stack);
+			return InteractionResultHolder.success(stack);
 		}
 
-		return ActionResult.fail(stack);
+		return InteractionResultHolder.fail(stack);
 	}
 
 	//#TODO RayTraceResult needs tests
-	public void spawnLightningBolt(PlayerEntity player, World worldIn) {
+	public void spawnLightningBolt(Player player, Level worldIn) {
 		if (!worldIn.isClientSide) {
-			Vector3d start = player.getEyePosition(1.0F);
-			Vector3d end = start.add(player.getLookAngle().scale(20.0D));
-			RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, player));
+			Vec3 start = player.getEyePosition(1.0F);
+			Vec3 end = start.add(player.getLookAngle().scale(20.0D));
+			HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.COLLIDER, ClipContext.FluidMode.NONE, player));
 
 			if (result != null) {
 				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.getLocation().x, result.getLocation().y, result.getLocation().z, true, false, 0.0F, 0.0F, 0.75F, 0.25F);
@@ -56,18 +57,18 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 		}
 	}
 
-	public boolean isNotAirBlock(World worldIn, PlayerEntity player) {
-		Vector3d start = player.getEyePosition(1.0F);
-		Vector3d end = start.add(player.getLookAngle().scale(20.0D));
-		RayTraceResult result = worldIn.clip(new RayTraceContext(start, end, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.NONE, player));
+	public boolean isNotAirBlock(Level worldIn, Player player) {
+		Vec3 start = player.getEyePosition(1.0F);
+		Vec3 end = start.add(player.getLookAngle().scale(20.0D));
+		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.OUTLINE, ClipContext.FluidMode.NONE, player));
 
 		return result != null && !worldIn.isEmptyBlock(new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z));
 	}
 
 	@Override
-	public void shoot(World worldIn, LivingEntity shooter, Entity target, Hand handIn) {
-		Vector3d v = target.position().subtract(shooter.position());
-		Vector3d pos = target.position();
+	public void shoot(Level worldIn, LivingEntity shooter, Entity target, InteractionHand handIn) {
+		Vec3 v = target.position().subtract(shooter.position());
+		Vec3 pos = target.position();
 		if (v.length() > 20) {
 			v = v.normalize();
 			v = v.scale(20D);

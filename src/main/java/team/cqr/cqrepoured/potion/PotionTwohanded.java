@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.potion;
 
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.potion.EffectType;
 
 public class PotionTwohanded extends PotionCQR {

@@ -2,23 +2,24 @@ package team.cqr.cqrepoured.item.crafting;
 
 import com.google.gson.JsonObject;
 
-import net.minecraft.core.NonNullList;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRRecipeTypes;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
-public class RecipeCrownDetach implements IRecipe<IInventory> {
+public class RecipeCrownDetach implements Recipe<Container> {
 	
 	protected final ResourceLocation ID;
 	public static final ResourceLocation TYPE_ID = CQRMain.prefix("crown_detach");
@@ -29,12 +30,12 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public boolean matches(IInventory inv, World worldIn) {
+	public boolean matches(Container inv, Level worldIn) {
 		ItemStack helmet = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemArmorCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlot.HEAD && ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return false;
@@ -45,12 +46,12 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public ItemStack assemble(IInventory inv) {
+	public ItemStack assemble(Container inv) {
 		ItemStack helmet = ItemStack.EMPTY;
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlotType.HEAD && ItemArmorCrown.hasCrown(stack)) {
+				if (helmet == ItemStack.EMPTY && MobEntity.getEquipmentSlotForItem(stack) == EquipmentSlot.HEAD && ItemArmorCrown.hasCrown(stack)) {
 					helmet = stack;
 				} else {
 					return ItemStack.EMPTY;
@@ -65,7 +66,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public NonNullList<ItemStack> getRemainingItems(IInventory inv) {
+	public NonNullList<ItemStack> getRemainingItems(Container inv) {
 		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
 		for (int i = 0; i < inv.getContainerSize(); i++) {
 			ItemStack stack = inv.getItem(i);
@@ -87,7 +88,7 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public IRecipeSerializer<?> getSerializer() {
+	public RecipeSerializer<?> getSerializer() {
 		return CQRRecipeTypes.CROWN_DETACH_SERIALIZER.get();
 	}
 
@@ -102,11 +103,11 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 	}
 
 	@Override
-	public IRecipeType<?> getType() {
+	public net.minecraft.world.item.crafting.RecipeType<?> getType() {
 		return Registry.RECIPE_TYPE.getOptional(TYPE_ID).get();
 	}
 
-	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<RecipeCrownDetach> {
+	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RecipeCrownDetach> {
 
 		@Override
 		public RecipeCrownDetach fromJson(ResourceLocation pRecipeId, JsonObject pJson) {
@@ -114,18 +115,18 @@ public class RecipeCrownDetach implements IRecipe<IInventory> {
 		}
 
 		@Override
-		public RecipeCrownDetach fromNetwork(ResourceLocation pRecipeId, PacketBuffer pBuffer) {
+		public RecipeCrownDetach fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
 			return new RecipeCrownDetach(pRecipeId);
 		}
 
 		@Override
-		public void toNetwork(PacketBuffer pBuffer, RecipeCrownDetach pRecipe) {
+		public void toNetwork(FriendlyByteBuf pBuffer, RecipeCrownDetach pRecipe) {
 
 		}
 
 	}
 
-	public static class RecipeType implements IRecipeType<RecipeCrownDetach> {
+	public static class RecipeType implements net.minecraft.world.item.crafting.RecipeType<RecipeCrownDetach> {
 		@Override
 		public String toString() {
 			return RecipeCrownDetach.TYPE_ID.toString();

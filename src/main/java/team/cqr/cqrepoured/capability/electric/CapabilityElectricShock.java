@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.capability.electric;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.nbt.INBT;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.util.EntityUtil;
+
+import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class CapabilityElectricShock {
 
@@ -29,16 +30,16 @@ public class CapabilityElectricShock {
 	}
 
 	public INBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
+		CompoundTag compound = new CompoundTag();
 
 		compound.putInt("cooldown", this.cooldown);
 		compound.putInt("ticks", this.remainingTicks);
 		compound.putInt("remainingSpreads", this.remainingSpreads);
 		if (this.target != null) {
-			compound.put("targetID", NBTUtil.createUUID(this.target.getUUID()));
+			compound.put("targetID", NbtUtils.createUUID(this.target.getUUID()));
 		}
 		if (this.originalCasterID != null) {
-			compound.put("casterID", NBTUtil.createUUID(this.originalCasterID));
+			compound.put("casterID", NbtUtils.createUUID(this.originalCasterID));
 		}
 
 		return compound;
@@ -57,8 +58,8 @@ public class CapabilityElectricShock {
 
 	protected void sendUpdate() {
 		CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this.entity), new SPacketUpdateElectrocuteCapability(this.entity));
-		if (this.entity instanceof ServerPlayerEntity) {
-			CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) this.entity), new SPacketUpdateElectrocuteCapability(this.entity));
+		if (this.entity instanceof ServerPlayer) {
+			CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) this.entity), new SPacketUpdateElectrocuteCapability(this.entity));
 		}
 	}
 
@@ -114,16 +115,16 @@ public class CapabilityElectricShock {
 		return this.remainingTicks >= 0;
 	}
 
-	public void readFromNBT(CompoundNBT nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		this.remainingTicks = nbt.getInt("ticks");
 		this.cooldown = nbt.getInt("cooldown");
 		this.remainingSpreads = nbt.getInt("remainingSpreads");
 		if (nbt.contains("targetID", Constants.NBT.TAG_COMPOUND)) {
-			UUID targetID = NBTUtil.loadUUID(nbt.getCompound("targetID"));
+			UUID targetID = NbtUtils.loadUUID(nbt.getCompound("targetID"));
 			this.target = EntityUtil.getEntityByUUID(this.entity.level, targetID);
 		}
 		if (nbt.contains("casterID", Constants.NBT.TAG_COMPOUND)) {
-			this.originalCasterID = NBTUtil.loadUUID(nbt.getCompound("casterID"));
+			this.originalCasterID = NbtUtils.loadUUID(nbt.getCompound("casterID"));
 		}
 	}
 

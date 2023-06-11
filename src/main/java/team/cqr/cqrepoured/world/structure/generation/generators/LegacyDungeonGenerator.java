@@ -4,12 +4,12 @@ import java.util.Random;
 import java.util.stream.StreamSupport;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.registry.DynamicRegistries;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
@@ -20,14 +20,14 @@ public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements I
 	protected T dungeon;
 	protected Random random;
 	protected final GeneratableDungeon.Builder dungeonBuilder;
-	protected final ServerWorld level;
+	protected final ServerLevel level;
 	protected final ChunkGenerator chunkGenerator;
 
 	public LegacyDungeonGenerator(ChunkGenerator chunkGenerator, BlockPos pos, T dungeon, Random random) {
 		this.pos = pos;
 		this.dungeon = dungeon;
 		this.random = random;
-		ServerWorld level = StreamSupport.stream(ServerLifecycleHooks.getCurrentServer().getAllLevels().spliterator(), false).filter(serverWorld -> serverWorld.getChunkSource().getGenerator() == chunkGenerator).findFirst().get();
+		ServerLevel level = StreamSupport.stream(ServerLifecycleHooks.getCurrentServer().getAllLevels().spliterator(), false).filter(serverWorld -> serverWorld.getChunkSource().getGenerator() == chunkGenerator).findFirst().get();
 		this.level = level;
 		this.chunkGenerator = chunkGenerator;
 		this.dungeonBuilder = new GeneratableDungeon.Builder(level, pos, dungeon);

@@ -1,9 +1,9 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 //
-//import net.minecraft.block.BedBlock;
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
-//import net.minecraft.block.HorizontalBlock;
+//import net.minecraft.world.level.block.BedBlock;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
+//import net.minecraft.world.level.block.HorizontalBlock;
 //import net.minecraft.util.Direction;
 //import team.cqr.cqrepoured.util.BlockStateGenArray;
 //

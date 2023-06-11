@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.loot.LootTables;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryResourceLocation;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
@@ -27,30 +27,30 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 	}
 
 	@Override
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		super.save(compound);
 		this.dataManager.write(compound);
 		return compound;
 	}
 
 	@Override
-	public void load(BlockState state, CompoundNBT compound) {
+	public void load(BlockState state, CompoundTag compound) {
 		super.load(state, compound);
 		this.dataManager.read(compound);
 	}
 
 	@Override
-	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.worldPosition, 0, this.dataManager.write(new CompoundNBT()));
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
 	}
 
 	@Override
-	public CompoundNBT getUpdateTag() {
-		return this.save(new CompoundNBT());
+	public CompoundTag getUpdateTag() {
+		return this.save(new CompoundTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		this.dataManager.read(pkt.getTag());
 	}
 

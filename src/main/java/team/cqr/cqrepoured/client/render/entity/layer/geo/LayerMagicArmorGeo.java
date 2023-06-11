@@ -2,13 +2,13 @@ package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.util.function.Function;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -55,7 +55,7 @@ public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> exten
 	}*/
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 		if(entity.isMagicArmorActive()) {
 			float f = (float)entity.tickCount + partialTicks;
 			float xOffset = f * 0.01F;

@@ -1,19 +1,18 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
-import java.util.List;
-
-import org.joml.Vector3d;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.MobEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
+
+import java.util.List;
 
 public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
 
@@ -46,20 +45,20 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	}
 
 	private boolean hasNearbyAllies() {
-		Vector3d vec = new Vector3d(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
-		Vector3d v1 = this.entity.position().add(vec);
-		Vector3d v2 = this.entity.position().subtract(vec);
-		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+		Vec3 vec = new Vec3(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
+		Vec3 v1 = this.entity.position().add(vec);
+		Vec3 v2 = this.entity.position().subtract(vec);
+		AABB aabb = new AABB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
 		List<MobEntity> allies = this.entity.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly);
 		return !allies.isEmpty();
 	}
 
 	private int getNearbyAllies(MobEntity o1) {
-		Vector3d vec = new Vector3d(4, 2, 4);
-		Vector3d v1 = o1.position().add(vec);
-		Vector3d v2 = o1.position().subtract(vec);
-		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+		Vec3 vec = new Vec3(4, 2, 4);
+		Vec3 v1 = o1.position().add(vec);
+		Vec3 v2 = o1.position().subtract(vec);
+		AABB aabb = new AABB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 		return o1.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly).size();
 	}
 
@@ -67,10 +66,10 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	public void castSpell() {
 		super.castSpell();
 
-		Vector3d vec = new Vector3d(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
-		Vector3d v1 = this.entity.position().add(vec);
-		Vector3d v2 = this.entity.position().subtract(vec);
-		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
+		Vec3 vec = new Vec3(CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), 0.5 * CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get(), CQRConfig.SERVER_CONFIG.bosses.pirateCaptainFleeCheckRadius.get());
+		Vec3 v1 = this.entity.position().add(vec);
+		Vec3 v2 = this.entity.position().subtract(vec);
+		AABB aabb = new AABB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 
 		List<MobEntity> allies = this.entity.level.getEntitiesOfClass(MobEntity.class, aabb, this.predicateAlly);
 		allies.sort((o1, o2) -> {
@@ -78,7 +77,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 			int entCount2 = BossAIPirateFleeSpell.this.getNearbyAllies(o2);
 			return entCount2 - entCount1;
 		});
-		Vector3d p = allies.get(0).position();
+		Vec3 p = allies.get(0).position();
 		this.entity.randomTeleport(p.x, p.y, p.z, true); //OLD: attemptTeleport
 	}
 

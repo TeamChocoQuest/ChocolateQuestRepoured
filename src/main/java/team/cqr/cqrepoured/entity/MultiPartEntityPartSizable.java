@@ -3,15 +3,17 @@ package team.cqr.cqrepoured.entity;
 
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 
 public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMultiPart<?> & ISizable> extends CQRPartEntity<T> implements ISizable, IBlacklistedFromStatues, IDontRenderFire {
 
 	public MultiPartEntityPartSizable(T parent, String partName, float width, float height) {
 		super(parent);
 
-		this.size = new EntitySize(width, height, false);
+		this.size = new EntityDimensions(width, height, false);
 		
 		this.initializeSize();
 	}
@@ -42,7 +44,7 @@ public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMulti
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose pPose) {
+	public EntityDimensions getDimensions(Pose pPose) {
 		return callOnGetDimensions(this.size);
 	}
 	
@@ -52,12 +54,12 @@ public abstract class MultiPartEntityPartSizable<T extends Entity & IEntityMulti
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound) {
+	protected void readAdditionalSaveData(CompoundTag pCompound) {
 
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound) {
+	protected void addAdditionalSaveData(CompoundTag pCompound) {
 
 	}
 

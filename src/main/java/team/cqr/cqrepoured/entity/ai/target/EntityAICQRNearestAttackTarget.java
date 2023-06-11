@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.util.EntityPredicates;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.Difficulty;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -47,7 +48,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 
 	@Override
 	public void start() {
-		AxisAlignedBB aabb = this.entity.getBoundingBox().inflate(32.0D);
+		AABB aabb = this.entity.getBoundingBox().inflate(32.0D);
 		List<LivingEntity> possibleTargets = this.world.getEntitiesOfClass(LivingEntity.class, aabb);
 		List<LivingEntity> possibleTargetsAlly = new ArrayList<>();
 		List<LivingEntity> possibleTargetsEnemy = new ArrayList<>();
@@ -138,7 +139,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 				return false;
 			}
 		} else if (this.canTargetAlly()) {
-			AxisAlignedBB aabb = this.entity.getBoundingBox().inflate(32.0D);
+			AABB aabb = this.entity.getBoundingBox().inflate(32.0D);
 			List<LivingEntity> possibleTargets = this.world.getEntitiesOfClass(LivingEntity.class, aabb);
 			for (LivingEntity possibleTargetAlly : possibleTargets) {
 				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTargetAlly)) {

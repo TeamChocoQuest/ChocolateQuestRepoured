@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import org.joml.Vector3d;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -26,11 +27,11 @@ public class EntityCalamitySpawner extends Entity {
 
 	private static final int CALAMITY_SPAWN_DURATION = 800;
 
-	public EntityCalamitySpawner(World world) {
+	public EntityCalamitySpawner(Level world) {
 		this(CQREntityTypes.CALAMITY_SPAWNER.get(), world);
 	}
 	
-	public EntityCalamitySpawner(EntityType<? extends EntityCalamitySpawner> type, World worldIn) {
+	public EntityCalamitySpawner(EntityType<? extends EntityCalamitySpawner> type, Level worldIn) {
 		super(type, worldIn);
 		this.setNoGravity(true);
 		this.setInvisible(true);
@@ -53,7 +54,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 	
 	@Override
-	public void playerTouch(PlayerEntity pEntity) {
+	public void playerTouch(Player pEntity) {
 	}
 
 	@Override
@@ -124,12 +125,12 @@ public class EntityCalamitySpawner extends Entity {
 						double radius = 2 * EntityCQREnderCalamity.getArenaRadius();
 						radius *= percentage;
 						radius += 1.5;
-						Vector3d vector = new Vector3d(radius, 0, 0);
+						Vec3 vector = new Vec3(radius, 0, 0);
 						final int lines = 5;
 						final int rotationDegree = 360 / lines;
 						vector = VectorUtil.rotateVectorAroundY(vector, 4 * rotationDegree * percentage);
 						for (int i = 0; i < lines; i++) {
-							Vector3d particlePosition = this.position().add(vector);
+							Vec3 particlePosition = this.position().add(vector);
 
 							this.spawnFirework(particlePosition.x, particlePosition.y + 1.0, particlePosition.z, FIREWORK_PURPLE_SPARK);
 
@@ -152,8 +153,8 @@ public class EntityCalamitySpawner extends Entity {
 		this.level.addFreshEntity(firework);
 	}
 
-	private Vector3d getRandomPositionAroundPosition() {
-		Vector3d v = new Vector3d(EntityCQREnderCalamity.getArenaRadius() * this.random.nextDouble(), 0, 0);
+	private Vec3 getRandomPositionAroundPosition() {
+		Vec3 v = new Vec3(EntityCQREnderCalamity.getArenaRadius() * this.random.nextDouble(), 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, DungeonGenUtils.randomBetween(0, 360, this.random));
 
 		return v.add(this.position());
@@ -179,7 +180,7 @@ public class EntityCalamitySpawner extends Entity {
 	// Spawns some fireworks and a small enderman too
 	protected void spawnFireworks(int count) {
 		for (int i = 0; i < count; i++) {
-			Vector3d v = this.getRandomPositionAroundPosition();
+			Vec3 v = this.getRandomPositionAroundPosition();
 			this.spawnFirework(v.x, v.y, v.z, FIREWORK_PURPLE_SPARK);
 		}
 	}
@@ -194,13 +195,13 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound) {
+	protected void readAdditionalSaveData(CompoundTag compound) {
 		this.timer = compound.getInt("entityTimer");
 		this.setFaction(compound.getString("faction"));
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound) {
+	protected void addAdditionalSaveData(CompoundTag compound) {
 		compound.putInt("entityTimer", this.timer);
 		compound.putString("faction", this.getFaction());
 	}
@@ -214,14 +215,14 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	static {
-		CompoundNBT compound = FIREWORK_PURPLE_SPARK.getTag();
+		CompoundTag compound = FIREWORK_PURPLE_SPARK.getTag();
 		if (compound == null) {
-			compound = new CompoundNBT();
+			compound = new CompoundTag();
 		}
-		CompoundNBT fwCompound = new CompoundNBT();
-		ListNBT explosionCompoundList = new ListNBT();
+		CompoundTag fwCompound = new CompoundTag();
+		ListTag explosionCompoundList = new ListTag();
 
-		CompoundNBT explosionCompound = new CompoundNBT();
+		CompoundTag explosionCompound = new CompoundTag();
 		explosionCompound.putInt("Type", 4);
 		explosionCompound.putIntArray("Colors", new int[] { 0x7B2FBE });
 		explosionCompound.putIntArray("FadeColors", new int[] { 0x253192, 0x6689D3, 0xC354CD });
@@ -233,7 +234,7 @@ public class EntityCalamitySpawner extends Entity {
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

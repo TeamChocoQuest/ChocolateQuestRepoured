@@ -9,22 +9,28 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.item.IItemTier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -41,7 +47,7 @@ public class ItemBullBattleAxe extends ItemCQRWeapon {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn)
 	{
 		if (!playerIn.swinging && playerIn.isOnGround())
 		{
@@ -56,25 +62,25 @@ public class ItemBullBattleAxe extends ItemCQRWeapon {
 				worldIn.addFreshEntity(quake);
 
 				playerIn.getCooldowns().addCooldown(playerIn.getItemInHand(handIn).getItem(), 20);
-				return ActionResult.success(playerIn.getItemInHand(handIn));
+				return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 			}
 			playerIn.swing(handIn);
 		}
-		return ActionResult.fail(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.fail(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext pContext)
+	public InteractionResult useOn(UseOnContext pContext)
 	{
-		World world = pContext.getLevel();
+		Level world = pContext.getLevel();
 		BlockPos blockpos = pContext.getClickedPos();
 		BlockState blockstate = world.getBlockState(blockpos);
 		BlockState block = blockstate.getToolModifiedState(world, blockpos, pContext.getPlayer(), pContext.getItemInHand(), ToolType.AXE);
 
 		if(block != null)
 		{
-			PlayerEntity playerentity = pContext.getPlayer();
-			world.playSound(playerentity, blockpos, SoundEvents.AXE_STRIP, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			Player playerentity = pContext.getPlayer();
+			world.playSound(playerentity, blockpos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 			if(!world.isClientSide)
 			{
 				world.setBlock(blockpos, block, 11);
@@ -86,17 +92,17 @@ public class ItemBullBattleAxe extends ItemCQRWeapon {
 				}
 			}
 
-			return ActionResultType.sidedSuccess(world.isClientSide);
+			return InteractionResult.sidedSuccess(world.isClientSide);
 		} else {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 	}
 
 	@Override
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
 		Multimap<Attribute, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
-		if (slot == EquipmentSlotType.MAINHAND) {
+		if (slot == EquipmentSlot.MAINHAND) {
 			this.replaceModifier(modifiers, Attributes.ATTACK_SPEED, BASE_ATTACK_SPEED_UUID, 0.6);
 		}
 
@@ -118,7 +124,7 @@ public class ItemBullBattleAxe extends ItemCQRWeapon {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn)
 	{
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "bull_battle_axe");
 	}

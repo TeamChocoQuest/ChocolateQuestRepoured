@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import org.joml.Vector3i;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.gen.ChunkGenerator;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonGridCity;

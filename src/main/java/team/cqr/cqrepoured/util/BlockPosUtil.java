@@ -6,26 +6,30 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 
 public class BlockPosUtil {
 
 	public interface BlockInfoConsumer {
-		void accept(BlockPos.Mutable mutablePos, BlockState state);
+		void accept(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
 	public interface BlockInfoPredicate {
-		boolean test(BlockPos.Mutable mutablePos, BlockState state);
+		boolean test(BlockPos.MutableBlockPos mutablePos, BlockState state);
 	}
 
-	public static void forEach(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
+	public static void forEach(Level world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
 		forEach(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, action);
 	}
 
-	public static void forEach(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
+	public static void forEach(Level world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockInfoConsumer action) {
 		if (world.isDebug()) {
 			return;
 		}
@@ -47,7 +51,7 @@ public class BlockPosUtil {
 		int chunkEndY = y2 >> 4;
 		int chunkEndZ = z2 >> 4;
 
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
 		for (int chunkX = chunkStartX; chunkX <= chunkEndX; chunkX++) {
 			for (int chunkZ = chunkStartZ; chunkZ <= chunkEndZ; chunkZ++) {
@@ -55,12 +59,12 @@ public class BlockPosUtil {
 					continue;
 				}
 
-				Chunk chunk = world.getChunk(chunkX, chunkZ);
-				ChunkSection[] blockStorageArray = chunk.getSections();
+				LevelChunk chunk = world.getChunk(chunkX, chunkZ);
+				LevelChunkSection[] blockStorageArray = chunk.getSections();
 				for (int chunkY = chunkStartY; chunkY <= chunkEndY; chunkY++) {
-					ChunkSection extendedBlockStorage = blockStorageArray[chunkY];
+					LevelChunkSection extendedBlockStorage = blockStorageArray[chunkY];
 
-					if (skipAirBlocks && extendedBlockStorage == Chunk.EMPTY_SECTION) {
+					if (skipAirBlocks && extendedBlockStorage == LevelChunk.EMPTY_SECTION) {
 						continue;
 					}
 
@@ -90,11 +94,11 @@ public class BlockPosUtil {
 		}
 	}
 
-	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static List<BlockPos> getAll(Level world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		return getAll(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, toCheck, predicate);
 	}
 
-	public static List<BlockPos> getAll(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static List<BlockPos> getAll(Level world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		List<BlockPos> list = new ArrayList<>();
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
@@ -104,11 +108,11 @@ public class BlockPosUtil {
 		return list;
 	}
 
-	public static BlockPos getNearest(World world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static BlockPos getNearest(Level world, int x1, int y1, int z1, int horizontalRadius, int verticalRadius, boolean skipUnloadedChunks, boolean skipAirBlocks, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		return getNearest(world, x1 - horizontalRadius, y1 - verticalRadius, z1 - horizontalRadius, x1 + horizontalRadius, y1 + verticalRadius, z1 + horizontalRadius, skipUnloadedChunks, skipAirBlocks, new BlockPos(x1, y1, z1), toCheck, predicate);
 	}
 
-	public static BlockPos getNearest(World world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
+	public static BlockPos getNearest(Level world, int x1, int y1, int z1, int x2, int y2, int z2, boolean skipUnloadedChunks, boolean skipAirBlocks, BlockPos pos, @Nullable Block toCheck, @Nullable BlockInfoPredicate predicate) {
 		BlockPosDistInfo blockPosDistInfo = new BlockPosDistInfo();
 		blockPosDistInfo.dist = Integer.MAX_VALUE;
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
@@ -126,7 +130,7 @@ public class BlockPosUtil {
 
 	private static class BlockPosDistInfo {
 
-		private final BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		private final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		private double dist;
 		private boolean empty = true;
 

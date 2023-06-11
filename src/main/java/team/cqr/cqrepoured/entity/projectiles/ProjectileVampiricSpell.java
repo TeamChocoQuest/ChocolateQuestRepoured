@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -14,15 +14,15 @@ public class ProjectileVampiricSpell extends ProjectileBase
 {
 	private LivingEntity shooter;
 
-	public ProjectileVampiricSpell(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileVampiricSpell(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileVampiricSpell(double pX, double pY, double pZ, World world) {
+	public ProjectileVampiricSpell(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), world);
 	}
 
-	public ProjectileVampiricSpell(LivingEntity shooter, World world) {
+	public ProjectileVampiricSpell(LivingEntity shooter, Level world) {
 		super(CQREntityTypes.PROJECTILE_VAMPIRIC_SPELL.get(), shooter, world);
 		this.shooter = shooter;
 		//this.isImmuneToFire = false;
@@ -59,7 +59,7 @@ public class ProjectileVampiricSpell extends ProjectileBase
 	} */
 
 	@Override
-	protected void onHitEntity(EntityRayTraceResult result)
+	protected void onHitEntity(EntityHitResult result)
 	{
 		if(result.getEntity() instanceof LivingEntity)
 		{
@@ -100,7 +100,7 @@ public class ProjectileVampiricSpell extends ProjectileBase
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

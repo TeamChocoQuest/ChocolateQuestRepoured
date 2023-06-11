@@ -2,9 +2,12 @@ package team.cqr.cqrepoured.world.structure.generation;
 
 import java.util.Collection;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.util.Perlin3D;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
@@ -26,7 +29,7 @@ public class GenerationUtil {
 	}
 
 	public static void setBoss(ICQRLevel level, BlockPos pos) {
-		new PreparableBossInfo((CompoundNBT) null).prepare(level, pos, placement);
+		new PreparableBossInfo((CompoundTag) null).prepare(level, pos, placement);
 	}
 
 	public static void setNexus(ICQRLevel level, BlockPos pos) {

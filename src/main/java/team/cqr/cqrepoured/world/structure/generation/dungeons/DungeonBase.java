@@ -17,24 +17,25 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.io.FileUtils;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -321,7 +322,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return this.isValidDim(dim);
 	}
 
-	public boolean canSpawnAt(World world, Biome biome, BlockPos pos) {
+	public boolean canSpawnAt(Level world, Biome biome, BlockPos pos) {
 		if (!this.enabled) {
 			return false;
 		}
@@ -343,7 +344,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (this.spawnOnlyBehindWall && world.dimension() == World.OVERWORLD && CQRConfig.SERVER_CONFIG.wall.enabled.get() && pos.getZ() >> 4 < -CQRConfig.SERVER_CONFIG.wall.distance.get()) {
+		if (this.spawnOnlyBehindWall && world.dimension() == Level.OVERWORLD && CQRConfig.SERVER_CONFIG.wall.enabled.get() && pos.getZ() >> 4 < -CQRConfig.SERVER_CONFIG.wall.distance.get()) {
 			return false;
 		}
 		if (!this.isValidBiome(biome)) {
@@ -352,7 +353,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return !this.isStructureNearby(world, pos);
 	}
 
-	public boolean canSpawnInChunkWithLockedPosition(World level, ChunkPos chunkPos) {
+	public boolean canSpawnInChunkWithLockedPosition(Level level, ChunkPos chunkPos) {
 		if (!this.enabled) {
 			return false;
 		}
@@ -374,7 +375,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return false;
 	}
 
-	public boolean isValidDim(RegistryKey<World> registryKey) {
+	public boolean isValidDim(ResourceKey<Level> registryKey) {
 		return this.isValidDim(registryKey.location());
 	}
 	
@@ -387,7 +388,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return this.allowedDimsAsBlacklist;
 	}
 
-	public boolean isDungeonDependencyMissing(World world) {
+	public boolean isDungeonDependencyMissing(Level world) {
 		Set<String> spawnedDungeons = DungeonDataManager.getSpawnedDungeonNames(world);
 		for (String s : this.dungeonDependencies) {
 			if (!spawnedDungeons.contains(s)) {
@@ -403,7 +404,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 	}
 	
 	public boolean isValidBiome(ResourceLocation biomeName) {
-		RegistryKey<Biome> biomeKey = RegistryKey.create(Registry.BIOME_REGISTRY, biomeName);
+		ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, biomeName);
 		
 		Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biomeKey);
 		boolean flag = this.allowedInAllBiomes;
@@ -449,7 +450,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return flag;
 	}
 
-	public boolean isStructureNearby(World world, BlockPos pos) {
+	public boolean isStructureNearby(Level world, BlockPos pos) {
 		if (!CQRConfig.SERVER_CONFIG.advanced.generationRespectOtherStructures.get()) {
 			return false;
 		}
@@ -462,7 +463,7 @@ public abstract class DungeonBase implements IFeatureConfig {
 		return false;
 	}
 
-	public boolean isLockedPositionInChunk(IWorld level, ChunkPos chunkPos) {
+	public boolean isLockedPositionInChunk(Level level, ChunkPos chunkPos) {
 		return Arrays.stream(this.lockedPositions).anyMatch(spawnPosition -> spawnPosition.isInChunk(level, chunkPos));
 	}
 

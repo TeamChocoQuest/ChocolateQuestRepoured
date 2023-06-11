@@ -11,9 +11,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.gen.feature.template.StructureProcessorList;
 
 public class FileBasedStructureListLoader {
 	

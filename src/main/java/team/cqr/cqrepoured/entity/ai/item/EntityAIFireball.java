@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import org.joml.Vector3d;
-
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.entity.projectile.FireballEntity;
 import net.minecraft.entity.projectile.SmallFireballEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -39,7 +39,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 		super.start();
 		this.cooldown = 140;
 		this.entity.getMainHandItem().shrink(1);
-		Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
+		Vec3 v = this.entity.getTarget().position().subtract(this.entity.position());
 		DamagingProjectileEntity fireball = this.entity.getRandom().nextDouble() > 0.7 ? new FireballEntity(this.entity.level, this.entity, v.x, v.y, v.z) : new SmallFireballEntity(this.entity.level, this.entity, v.x, v.y, v.z);
 		this.entity.level.addFreshEntity(fireball);
 	}

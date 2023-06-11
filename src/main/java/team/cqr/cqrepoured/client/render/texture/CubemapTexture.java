@@ -2,16 +2,15 @@ package team.cqr.cqrepoured.client.render.texture;
 
 import java.io.IOException;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
-import com.mojang.blaze3d.platform.NativeImage;
-
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.ResourceLocation;
 
 public class CubemapTexture extends Texture {
 
@@ -48,7 +47,7 @@ public class CubemapTexture extends Texture {
 	}
 
 	@Override
-	public void load(IResourceManager resourceManager) throws IOException {
+	public void load(ResourceManager resourceManager) throws IOException {
 		GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, this.getId());
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
@@ -65,7 +64,7 @@ public class CubemapTexture extends Texture {
 		this.load(resourceManager, AbstractTexture.appendBeforeEnding(this.originalTexture, "_back"), GL13.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z);
 	}
 
-	private void load(IResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
+	private void load(ResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
 		try (IResource iresource = resourceManager.getResource(location);
 				NativeImage image = NativeImage.read(iresource.getInputStream())) {
 			GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image.pixels);

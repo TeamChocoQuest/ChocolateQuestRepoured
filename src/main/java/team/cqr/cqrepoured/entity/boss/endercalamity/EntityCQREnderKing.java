@@ -2,35 +2,37 @@ package team.cqr.cqrepoured.entity.boss.endercalamity;
 
 import java.util.Set;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.entity.CreatureAttribute;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.core.Direction;
 import net.minecraft.util.IndirectEntityDamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -49,21 +51,21 @@ import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManag
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimatableCQR {
 
-	protected static final DataParameter<Boolean> WIDE = EntityDataManager.<Boolean>defineId(EntityCQREnderKing.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> WIDE = SynchedEntityData.<Boolean>defineId(EntityCQREnderKing.class, EntityDataSerializers.BOOLEAN);
 
-	public EntityCQREnderKing(World world) {
+	public EntityCQREnderKing(Level world) {
 		this(CQREntityTypes.ENDER_KING.get(), world);
 	}
 
-	public EntityCQREnderKing(EntityType<? extends EntityCQREnderKing> type, World worldIn) {
+	public EntityCQREnderKing(EntityType<? extends EntityCQREnderKing> type, Level worldIn) {
 		super(type, worldIn);
 		this.maxUpStep = 1.0F;
-		this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+		this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
 	}
 
 	@Override
 	protected void customServerAiStep() {
-		if (this.isInWater() || (this.isInWaterOrRain() && this.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())) {
+		if (this.isInWater() || (this.isInWaterOrRain() && this.getItemBySlot(EquipmentSlot.HEAD).isEmpty())) {
 			this.hurt(DamageSource.DROWN, 1.0F);
 		}
 		super.customServerAiStep();
@@ -100,9 +102,9 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
+	public TextComponent getDisplayName() {
 		if (this.isWide()) {
-			return new StringTextComponent("Wide Enderman");
+			return new TextComponent("Wide Enderman");
 		}
 		return super.getDisplayName();
 	}
@@ -169,7 +171,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 				return false;
 			boolean flag2 = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
 			if (flag2 && !this.isSilent()) {
-				this.level.playSound((PlayerEntity) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+				this.level.playSound((Player) null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
 				this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
 			}
 
@@ -239,7 +241,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 	}
 
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData setDamageValue, CompoundTag p_213386_5_) {
 		this.populateDefaultEquipmentSlots(difficulty);
 
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
@@ -249,14 +251,14 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
 		super.populateDefaultEquipmentSlots(difficulty);
 
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.GREAT_SWORD_DIAMOND.get()));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(CQRItems.POTION_HEALING.get(), 3));
 
-		this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(CQRItems.KING_CROWN.get(), 1));
+		this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(CQRItems.KING_CROWN.get(), 1));
 
 		// Give him some armor...
-		CompoundNBT nbttagcompound = new CompoundNBT();
-		CompoundNBT nbttagcompound1 = nbttagcompound.getCompound("display");
+		CompoundTag nbttagcompound = new CompoundTag();
+		CompoundTag nbttagcompound1 = nbttagcompound.getCompound("display");
 
 		if (!nbttagcompound.contains("display", 10)) {
 			nbttagcompound.put("display", nbttagcompound1);
@@ -265,7 +267,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 		nbttagcompound1.putInt("color", 0x9000FF);
 		ItemStack chest = new ItemStack(CQRItems.CHESTPLATE_DIAMOND_DYABLE.get(), 1, nbttagcompound);
 		((ItemArmorDyable) CQRItems.CHESTPLATE_DIAMOND_DYABLE.get()).setColor(chest, 0x9000FF);
-		this.setItemSlot(EquipmentSlotType.CHEST, chest);
+		this.setItemSlot(EquipmentSlot.CHEST, chest);
 	}
 
 	@Override
@@ -290,19 +292,19 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("wide_enderman", this.isWide());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.entityData.set(WIDE, compound.getBoolean("wide_enderman"));
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

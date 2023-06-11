@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.item;
 
 import java.util.stream.Stream;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.item.UseAction;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
@@ -34,13 +34,13 @@ public class ItemMagicBell extends ItemLore {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+	public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
 		if (!worldIn.isClientSide) {
 			IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(worldIn);
 			Stream<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(entityLiving.blockPosition());
@@ -75,11 +75,11 @@ public class ItemMagicBell extends ItemLore {
 			});
 
 			worldIn.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), CQRSounds.BELL_USE, entityLiving.getSoundSource(), 1.0F, 1.0F);
-			if (entityLiving instanceof PlayerEntity) {
+			if (entityLiving instanceof Player) {
 				if (protectedRegions.count() <= 0) {
-					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 60);
+					((Player) entityLiving).getCooldowns().addCooldown(stack.getItem(), 60);
 				} else {
-					((PlayerEntity) entityLiving).getCooldowns().addCooldown(stack.getItem(), 200);
+					((Player) entityLiving).getCooldowns().addCooldown(stack.getItem(), 200);
 				}
 			}
 		}

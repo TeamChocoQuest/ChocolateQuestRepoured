@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util.math;
 
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
 
 public class InterpolationUtil {
 
@@ -43,6 +43,6 @@ public class InterpolationUtil {
 	public static final Interpolation LINEAR = (f0, f1, fracX) -> f0 + (f1 - f0) * fracX;
 	public static final Interpolation SMOOTHSTEP = construct(LINEAR, x -> x * x * (3.0F - 2.0F * x));
 	public static final Interpolation SMOOTHERSTEP = construct(LINEAR, x -> x * x * x * (x * (x * 6.0F - 15.0F) + 10.0F));
-	public static final Interpolation COSINE = construct(LINEAR, x -> (1.0F - MathHelper.cos(x * (float) Math.PI) * 0.5F));
+	public static final Interpolation COSINE = construct(LINEAR, x -> (1.0F - Mth.cos(x * (float) Math.PI) * 0.5F));
 
 }

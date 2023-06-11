@@ -1,10 +1,12 @@
 package team.cqr.cqrepoured.block.banner;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.tileentity.BannerPattern.Builder;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.item.Items;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBannerPatterns;
 
@@ -109,7 +111,7 @@ public enum EBanners {
 			break;
 		}
 		//Copied from Raid.class#getLeaderBannerInstance()
-		CompoundNBT nbt = bannerItem.getOrCreateTagElement("BlockEntityTag");
+		CompoundTag nbt = bannerItem.getOrCreateTagElement("BlockEntityTag");
 		nbt.put("Patterns", builder.toListTag());
 		
 		bannerItem.hideTooltipPart(ItemStack.TooltipDisplayFlags.ADDITIONAL);

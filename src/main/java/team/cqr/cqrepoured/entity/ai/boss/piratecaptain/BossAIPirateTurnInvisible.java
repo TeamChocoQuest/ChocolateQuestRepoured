@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
@@ -42,11 +42,11 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 		if (this.invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			reInt = true;
 			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() - 1);
-			this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER.get(), 1));
+			this.entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CQRItems.CAPTAIN_REVOLVER.get(), 1));
 		} else if (this.invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			// this.entity.setInvisibleTicks(this.entity.getInvisibleTicks() + 1);
-			this.entity.setItemInHand(Hand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA.get(), 1));
+			this.entity.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(CQRItems.DAGGER_NINJA.get(), 1));
 		}
 		this.invisibleTime--;
 		if (this.invisibleTime <= 0) {

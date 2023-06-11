@@ -9,13 +9,14 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
@@ -30,22 +31,22 @@ public class DungeonDataManager {
 			this.spawnType = spawnType;
 		}
 
-		public DungeonInfo(CompoundNBT compound) {
+		public DungeonInfo(CompoundTag compound) {
 			this.readFromNBT(compound);
 		}
 
-		public CompoundNBT writeToNBT() {
-			CompoundNBT compound = new CompoundNBT();
-			compound.put("pos", NBTUtil.writeBlockPos(this.pos));
+		public CompoundTag writeToNBT() {
+			CompoundTag compound = new CompoundTag();
+			compound.put("pos", NbtUtils.writeBlockPos(this.pos));
 			compound.putInt("spawnType", this.spawnType.ordinal());
 			return compound;
 		}
 
-		public void readFromNBT(CompoundNBT compound) {
+		public void readFromNBT(CompoundTag compound) {
 			if (compound.contains("pos", Constants.NBT.TAG_COMPOUND)) {
-				this.pos = NBTUtil.readBlockPos(compound.getCompound("pos"));
+				this.pos = NbtUtils.readBlockPos(compound.getCompound("pos"));
 			} else {
-				this.pos = NBTUtil.readBlockPos(compound);
+				this.pos = NbtUtils.readBlockPos(compound);
 			}
 			this.spawnType = DungeonSpawnType.values()[compound.getInt("spawnType")];
 		}
@@ -55,65 +56,65 @@ public class DungeonDataManager {
 		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
 	}
 
-	private static final Map<IWorld, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
+	private static final Map<Level, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
 	private final Map<String, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
 	private final File file;
 	private boolean modifiedSinceLastSave = false;
 
-	public DungeonDataManager(IWorld world) {
-		this.file = FileIOUtil.getCQRDataFile((ServerWorld) world, "CQR/structures.nbt");
+	public DungeonDataManager(Level world) {
+		this.file = FileIOUtil.getCQRDataFile((ServerLevel) world, "CQR/structures.nbt");
 	}
 
 	@Nullable
-	public static DungeonDataManager getInstance(IWorld world) {
+	public static DungeonDataManager getInstance(Level world) {
 		if (!world.isClientSide()) {
 			return INSTANCES.get(world);
 		}
 		return null;
 	}
 
-	public static void handleWorldLoad(IWorld world) {
+	public static void handleWorldLoad(Level world) {
 		if (!world.isClientSide() && !INSTANCES.containsKey(world)) {
 			INSTANCES.put(world, new DungeonDataManager(world));
 			INSTANCES.get(world).readData();
 		}
 	}
 
-	public static void handleWorldSave(IWorld world) {
+	public static void handleWorldSave(Level world) {
 		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 		}
 	}
 
-	public static void handleWorldUnload(IWorld world) {
+	public static void handleWorldUnload(Level world) {
 		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).saveData();
 			INSTANCES.remove(world);
 		}
 	}
 
-	public static void addDungeonEntry(IWorld world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
+	public static void addDungeonEntry(Level world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
 		if (INSTANCES.containsKey(world)) {
 			INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
 		}
 	}
 
-	public static Set<String> getSpawnedDungeonNames(IWorld world) {
+	public static Set<String> getSpawnedDungeonNames(Level world) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getSpawnedDungeonNames();
 		}
 		return Collections.emptySet();
 	}
 
-	public static Set<DungeonInfo> getLocationsOfDungeon(IWorld world, DungeonBase dungeon) {
+	public static Set<DungeonInfo> getLocationsOfDungeon(Level world, DungeonBase dungeon) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
 		}
 		return Collections.emptySet();
 	}
 
-	public static boolean isDungeonSpawnLimitMet(IWorld world, DungeonBase dungeon) {
+	public static boolean isDungeonSpawnLimitMet(Level world, DungeonBase dungeon) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
 		}
@@ -122,11 +123,11 @@ public class DungeonDataManager {
 
 	public void saveData() {
 		if (this.modifiedSinceLastSave) {
-			CompoundNBT root = new CompoundNBT();
+			CompoundTag root = new CompoundTag();
 			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
 				Set<DungeonInfo> dungeonInfos = data.getValue();
 				if (!dungeonInfos.isEmpty()) {
-					ListNBT nbtTagList = new ListNBT();
+					ListTag nbtTagList = new ListTag();
 					for (DungeonInfo dungeonInfo : dungeonInfos) {
 						nbtTagList.add(dungeonInfo.writeToNBT());
 					}
@@ -146,12 +147,12 @@ public class DungeonDataManager {
 			return;
 		}
 
-		CompoundNBT root = FileIOUtil.readNBT(this.file);
+		CompoundTag root = FileIOUtil.readNBT(this.file);
 
 		for (String key : root.getAllKeys()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
 			for (INBT nbt : root.getList(key, Constants.NBT.TAG_COMPOUND)) {
-				dungeonInfos.add(new DungeonInfo((CompoundNBT) nbt));
+				dungeonInfos.add(new DungeonInfo((CompoundTag) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {
 				this.dungeonData.put(key, dungeonInfos);

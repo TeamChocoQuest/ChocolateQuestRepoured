@@ -1,8 +1,8 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 //
-//import net.minecraft.block.BlockColored;
-//import net.minecraft.block.BlockState;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.BlockColored;
+//import net.minecraft.world.level.block.BlockState;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.item.DyeColor;
 //import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonRandomizedCastle;
 //import team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.RoomDecorTypes;

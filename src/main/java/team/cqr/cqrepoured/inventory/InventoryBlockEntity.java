@@ -1,19 +1,19 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class InventoryBlockEntity extends Inventory {
 
-	private final TileEntity blockEntity;
+	private final BlockEntity blockEntity;
 	private final boolean creativeOnly;
 
-	public InventoryBlockEntity(TileEntity blockEntity, int size, boolean creativeOnly) {
+	public InventoryBlockEntity(BlockEntity blockEntity, int size, boolean creativeOnly) {
 		super(size);
 		this.blockEntity = blockEntity;
 		this.creativeOnly = creativeOnly;
@@ -21,7 +21,7 @@ public class InventoryBlockEntity extends Inventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity pPlayer) {
+	public boolean stillValid(Player pPlayer) {
 		if (this.creativeOnly && !pPlayer.isCreative()) {
 			return false;
 		}
@@ -31,28 +31,28 @@ public class InventoryBlockEntity extends Inventory {
 		return this.blockEntity.getBlockPos().distSqr(pPlayer.position(), true) < 64.0D;
 	}
 
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		ItemStackHelper.saveAllItems(compound, this.items);
 		return compound;
 	}
 
-	public void load(CompoundNBT compound) {
+	public void load(CompoundTag compound) {
 		ItemStackHelper.loadAllItems(compound, this.items);
 	}
 
-	public void write(PacketBuffer buf) {
+	public void write(FriendlyByteBuf buf) {
 		for (int i = 0; i < this.getContainerSize(); i++) {
-			buf.writeNbt(this.items.get(i).save(new CompoundNBT()));
+			buf.writeNbt(this.items.get(i).save(new CompoundTag()));
 		}
 	}
 
-	public void read(PacketBuffer buf) {
+	public void read(FriendlyByteBuf buf) {
 		for (int i = 0; i < this.getContainerSize(); i++) {
 			this.items.set(i, ItemStack.of(buf.readNbt()));
 		}
 	}
 
-	public TileEntity getBlockEntity() {
+	public BlockEntity getBlockEntity() {
 		return this.blockEntity;
 	}
 

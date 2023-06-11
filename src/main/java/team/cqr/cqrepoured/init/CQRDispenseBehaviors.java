@@ -2,28 +2,29 @@ package team.cqr.cqrepoured.init;
 
 import java.util.Random;
 
-import org.joml.Vector3d;
-
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.TNTBlock;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.world.level.block.AbstractFireBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.TNTBlock;
+import net.minecraft.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IDispenseItemBehavior;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.dispenser.OptionalDispenseBehavior;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBubble;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
@@ -49,39 +50,39 @@ public class CQRDispenseBehaviors {
 	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_BUBBLE_GUN = new DefaultDispenseItemBehavior() {
 		
 		protected ItemStack execute(IBlockSource source, ItemStack stack) {
-			Vector3d velocity = new Vector3d(0, 0, 0);
+			Vec3 velocity = new Vec3(0, 0, 0);
 			switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 			case DOWN:
-				velocity = new Vector3d(0, -1, 0);
+				velocity = new Vec3(0, -1, 0);
 				break;
 			case EAST:
-				velocity = new Vector3d(1, 0, 0);
+				velocity = new Vec3(1, 0, 0);
 				break;
 			case NORTH:
-				velocity = new Vector3d(0, 0, -1);
+				velocity = new Vec3(0, 0, -1);
 				break;
 			case SOUTH:
-				velocity = new Vector3d(0, 0, 1);
+				velocity = new Vec3(0, 0, 1);
 				break;
 			case UP:
-				velocity = new Vector3d(0, 1, 0);
+				velocity = new Vec3(0, 1, 0);
 				break;
 			case WEST:
-				velocity = new Vector3d(-1, 0, 0);
+				velocity = new Vec3(-1, 0, 0);
 				break;
 			default:
 				break;
 	
 			}
 			IPosition disPos = DispenserBlock.getDispensePosition(source);
-			Vector3d startLoc = new Vector3d(disPos.x(), disPos.y(), disPos.z());
+			Vec3 startLoc = new Vec3(disPos.x(), disPos.y(), disPos.z());
 			Item item = stack.getItem();
 			double acc = 0.5D;
 			if (item instanceof ItemBubblePistol) {
 				ItemBubblePistol pistol = (ItemBubblePistol) item;
 				acc = pistol.getInaccurary();
 			}
-			Vector3d v = new Vector3d(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
+			Vec3 v = new Vec3(-acc + velocity.x + (2 * acc * rng.nextDouble()), -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
 			v = v.normalize();
 			v = v.scale(1.4);
 	
@@ -93,10 +94,10 @@ public class CQRDispenseBehaviors {
 			bubble.setDeltaMovement(v);
 			source.getLevel().addFreshEntity(bubble);
 	
-			source.getLevel().playLocalSound(disPos.x(), disPos.y(), disPos.z(), CQRSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
+			source.getLevel().playLocalSound(disPos.x(), disPos.y(), disPos.z(), CQRSounds.BUBBLE_BUBBLE, SoundSource.BLOCKS, 1, 0.75F + (0.5F * rng.nextFloat()), false);
 	
 			// DONE: FIgure out how to make the stack damaged
-			if (stack.hurt(1, source.getLevel().random, (ServerPlayerEntity) null)) {
+			if (stack.hurt(1, source.getLevel().random, (ServerPlayer) null)) {
 				stack.setCount(0);
 			}
 			return stack;
@@ -106,39 +107,39 @@ public class CQRDispenseBehaviors {
 	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_SOUL_BOTTLE = new DefaultDispenseItemBehavior() {
 		
 		protected ItemStack execute(IBlockSource source, ItemStack stack) {
-			Vector3d velocity = new Vector3d(0, 0, 0);
+			Vec3 velocity = new Vec3(0, 0, 0);
 			switch (source.getBlockState().getValue(DispenserBlock.FACING)) {
 			case DOWN:
-				velocity = new Vector3d(0, -1, 0);
+				velocity = new Vec3(0, -1, 0);
 				break;
 			case EAST:
-				velocity = new Vector3d(1, 0, 0);
+				velocity = new Vec3(1, 0, 0);
 				break;
 			case NORTH:
-				velocity = new Vector3d(0, 0, -1);
+				velocity = new Vec3(0, 0, -1);
 				break;
 			case SOUTH:
-				velocity = new Vector3d(0, 0, 1);
+				velocity = new Vec3(0, 0, 1);
 				break;
 			case UP:
-				velocity = new Vector3d(0, 2, 0);
+				velocity = new Vec3(0, 2, 0);
 				break;
 			case WEST:
-				velocity = new Vector3d(-1, 0, 0);
+				velocity = new Vec3(-1, 0, 0);
 				break;
 			default:
 				break;
 	
 			}
 			IPosition disPos = DispenserBlock.getDispensePosition(source);
-			Vector3d pos = new Vector3d(disPos.x(), disPos.y(), disPos.z()).add(velocity);
+			Vec3 pos = new Vec3(disPos.x(), disPos.y(), disPos.z()).add(velocity);
 	
 			if (stack.hasTag()) {
-				CompoundNBT bottle = stack.getTag();
+				CompoundTag bottle = stack.getTag();
 	
 				if (bottle.contains(ItemSoulBottle.ENTITY_IN_TAG)) {
 					if (!source.getLevel().isClientSide) {
-						CompoundNBT entityTag = (CompoundNBT) bottle.get(ItemSoulBottle.ENTITY_IN_TAG);
+						CompoundTag entityTag = (CompoundTag) bottle.get(ItemSoulBottle.ENTITY_IN_TAG);
 						((ItemSoulBottle) stack.getItem()).createEntityFromNBT(entityTag, source.getLevel(), pos.x, pos.y, pos.z);
 					}
 				}
@@ -155,11 +156,11 @@ public class CQRDispenseBehaviors {
 	public static final IDispenseItemBehavior DISPENSE_BEHAVIOR_TNT_CQR = new DefaultDispenseItemBehavior() {
 		
 		protected ItemStack execute(IBlockSource source, ItemStack stack) {
-			World world = source.getLevel();
+			Level world = source.getLevel();
 			BlockPos blockpos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
 			EntityTNTPrimedCQR entitytntprimed = new EntityTNTPrimedCQR(world, blockpos.getX() + 0.5D, blockpos.getY(), blockpos.getZ() + 0.5D, (LivingEntity) null);
 			world.addFreshEntity(entitytntprimed);
-			world.playSound((PlayerEntity)null, entitytntprimed.getX(), entitytntprimed.getY(), entitytntprimed.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound((Player)null, entitytntprimed.getX(), entitytntprimed.getY(), entitytntprimed.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
 			stack.shrink(1);
 			return stack;
 		}
@@ -189,7 +190,7 @@ public class CQRDispenseBehaviors {
          * Dispense the specified stack, play the dispense sound and spawn particles.
          */
         protected ItemStack execute(IBlockSource pSource, ItemStack pStack) {
-           World world = pSource.getLevel();
+           Level world = pSource.getLevel();
            this.setSuccess(true);
            Direction direction = pSource.getBlockState().getValue(DispenserBlock.FACING);
            BlockPos blockpos = pSource.getPos().relative(direction);
@@ -206,7 +207,7 @@ public class CQRDispenseBehaviors {
               this.setSuccess(false);
            }
 
-           if (this.isSuccess() && pStack.hurt(1, world.random, (ServerPlayerEntity)null)) {
+           if (this.isSuccess() && pStack.hurt(1, world.random, (ServerPlayer)null)) {
               pStack.setCount(0);
            }
 

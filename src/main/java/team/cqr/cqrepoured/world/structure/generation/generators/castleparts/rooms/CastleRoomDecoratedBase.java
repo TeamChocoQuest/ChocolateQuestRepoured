@@ -1,9 +1,9 @@
 //package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 //
-//import net.minecraft.block.Block;
-//import net.minecraft.block.Blocks;
+//import net.minecraft.world.level.block.Block;
+//import net.minecraft.world.level.block.Blocks;
 //import net.minecraft.entity.Entity;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import team.cqr.cqrepoured.init.CQRBlocks;
 //import team.cqr.cqrepoured.tileentity.TileEntitySpawner;

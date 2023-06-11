@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
+import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiMapPlaceholder.GuiButtonOrientation;
 import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
@@ -88,9 +88,9 @@ public class GuiMapPlaceholderSimple extends Screen {
 
 	private int parseInt(String s, int min, int max, int defaultValue, String warning) {
 		try {
-			return MathHelper.clamp(Integer.parseInt(s), min, max);
+			return Mth.clamp(Integer.parseInt(s), min, max);
 		} catch (Exception e) {
-			this.minecraft.player.sendMessage(new StringTextComponent(warning), this.minecraft.player.getUUID());
+			this.minecraft.player.sendMessage(new TextComponent(warning), this.minecraft.player.getUUID());
 		}
 		return defaultValue;
 	}
@@ -140,7 +140,7 @@ public class GuiMapPlaceholderSimple extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 

@@ -1,22 +1,30 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.BlockParticleData;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.particles.BlockParticleData;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
 
 public class ItemSuperTool extends Item {
 
@@ -30,11 +38,11 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
+	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
 		if (entity instanceof PartEntity<?>) {
 			entity = ((PartEntity<?>) entity).getParent();
 		}
-		if (!player.level.isClientSide() && player.isCreative() && !(entity instanceof PlayerEntity)) {
+		if (!player.level.isClientSide() && player.isCreative() && !(entity instanceof Player)) {
 			entity.kill();
 			return true;
 		}
@@ -43,11 +51,11 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);
-		tooltip.add(new StringTextComponent("Mode: " + this.getModeName(this.getMode(stack))).withStyle(TextFormatting.BLUE));
+		tooltip.add(new TextComponent("Mode: " + this.getModeName(this.getMode(stack))).withStyle(ChatFormatting.BLUE));
 		//tooltip.add(new StringTextComponent("Block: " + this.getBlock(stack).asItem().toString()).withStyle(TextFormatting.BLUE));
-		tooltip.add(new StringTextComponent("Block: " + this.getBlock(stack).getName().getString()).withStyle(TextFormatting.BLUE));
+		tooltip.add(new TextComponent("Block: " + this.getBlock(stack).getName().getString()).withStyle(ChatFormatting.BLUE));
 	
 	}
 
@@ -64,11 +72,11 @@ public class ItemSuperTool extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
 		ItemStack stack = playerIn.getItemInHand(handIn);
 
 		if (!playerIn.isCreative()) {
-			return new ActionResult<>(ActionResultType.FAIL, stack);
+			return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
 		}
 
 		if (playerIn.isCrouching()) {
@@ -81,32 +89,32 @@ public class ItemSuperTool extends Item {
 			this.setMode(stack, mode);
 
 			if (!worldIn.isClientSide) {
-				playerIn.displayClientMessage(new StringTextComponent("Pickaxe Mode: " + this.getModeName(mode)), true);
+				playerIn.displayClientMessage(new TextComponent("Pickaxe Mode: " + this.getModeName(mode)), true);
 			}
 
-			return new ActionResult<>(ActionResultType.SUCCESS, stack);
+			return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
 		}
 
-		return new ActionResult<>(ActionResultType.FAIL, stack);
+		return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
 	}
 
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
-		PlayerEntity player = context.getPlayer();
-		World world = context.getLevel();
+		Player player = context.getPlayer();
+		Level world = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		Direction facing = context.getClickedFace();
 		ItemStack stack = context.getItemInHand();
 		//ItemStack stack = player.getItemInHand(hand);
 
 		if (!player.isCreative()) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 
 		if (player.isCrouching()) {
 			this.setBlock(stack, world.getBlockState(pos).getBlock());
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
 		int size = 1;
@@ -127,10 +135,10 @@ public class ItemSuperTool extends Item {
 			}
 		}
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
-	private void performAction(World worldIn, BlockPos pos, ItemStack stack) {
+	private void performAction(Level worldIn, BlockPos pos, ItemStack stack) {
 		int mode = this.getMode(stack);
 
 		if (mode == 0) {
@@ -155,10 +163,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public int getMode(ItemStack stack) {
-		CompoundNBT stackTag = stack.getTag();
+		CompoundTag stackTag = stack.getTag();
 
 		if (stackTag == null) {
-			stackTag = new CompoundNBT();
+			stackTag = new CompoundTag();
 			stack.setTag(stackTag);
 		}
 
@@ -173,10 +181,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public Block getBlock(ItemStack stack) {
-		CompoundNBT stackTag = stack.getTag();
+		CompoundTag stackTag = stack.getTag();
 
 		if (stackTag == null) {
-			stackTag = new CompoundNBT();
+			stackTag = new CompoundTag();
 			stack.setTag(stackTag);
 		}
 
@@ -187,10 +195,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public void setMode(ItemStack stack, int mode) {
-		CompoundNBT stackTag = stack.getTag();
+		CompoundTag stackTag = stack.getTag();
 
 		if (stackTag == null) {
-			stackTag = new CompoundNBT();
+			stackTag = new CompoundTag();
 			stack.setTag(stackTag);
 		}
 
@@ -202,10 +210,10 @@ public class ItemSuperTool extends Item {
 	}
 
 	public void setBlock(ItemStack stack, Block blockIn) {
-		CompoundNBT stackTag = stack.getTag();
+		CompoundTag stackTag = stack.getTag();
 
 		if (stackTag == null) {
-			stackTag = new CompoundNBT();
+			stackTag = new CompoundTag();
 			stack.setTag(stackTag);
 		}
 

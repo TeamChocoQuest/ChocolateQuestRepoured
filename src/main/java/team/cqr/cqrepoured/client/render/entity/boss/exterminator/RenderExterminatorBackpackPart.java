@@ -1,24 +1,24 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
-import org.joml.Vector3d;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 
 public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorFieldEmitter> extends EntityRenderer<T> {
 
-	public RenderExterminatorBackpackPart(EntityRendererManager renderManager) {
+	public RenderExterminatorBackpackPart(EntityRendererProvider.Context renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void render(T pEntity, float pEntityYaw, float pPartialTicks, MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight) {
+	public void render(T pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
 		if (pEntity.isActive()) {
 			long seed = (pEntity.getId() * 255L) ^ (pEntity.tickCount >> 1 << 1);
 
@@ -40,8 +40,8 @@ public class RenderExterminatorBackpackPart<T extends SubEntityExterminatorField
 				y2 += target.getEyeHeight();
 				double z2 = target.zOld + (target.getZ() - target.zOld) * pPartialTicks;
 
-				final Vector3d start = new Vector3d(0, pEntity.getBbHeight() * 0.5, 0);
-				final Vector3d end = new Vector3d(x2 - x1, y2 - y1, z2 - z1);
+				final Vec3 start = new Vec3(0, pEntity.getBbHeight() * 0.5, 0);
+				final Vec3 end = new Vec3(x2 - x1, y2 - y1, z2 - z1);
 
 				ElectricFieldRenderUtil.renderElectricLineBetween(pMatrixStack, pBuffer, start, end, 0.5, 5, seed);
 			}

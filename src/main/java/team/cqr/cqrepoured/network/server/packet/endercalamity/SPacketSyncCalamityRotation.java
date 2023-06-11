@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
@@ -18,7 +18,7 @@ public class SPacketSyncCalamityRotation extends AbstractPacket<SPacketSyncCalam
 	}
 
 	@Override
-	public SPacketSyncCalamityRotation fromBytes(PacketBuffer buf) {
+	public SPacketSyncCalamityRotation fromBytes(FriendlyByteBuf buf) {
 		SPacketSyncCalamityRotation result = new SPacketSyncCalamityRotation();
 		
 		result.entityId = buf.readInt();
@@ -28,7 +28,7 @@ public class SPacketSyncCalamityRotation extends AbstractPacket<SPacketSyncCalam
 	}
 
 	@Override
-	public void toBytes(SPacketSyncCalamityRotation packet, PacketBuffer buf) {
+	public void toBytes(SPacketSyncCalamityRotation packet, FriendlyByteBuf buf) {
 		buf.writeInt(packet.entityId);
 		buf.writeFloat(packet.pitch);
 	}

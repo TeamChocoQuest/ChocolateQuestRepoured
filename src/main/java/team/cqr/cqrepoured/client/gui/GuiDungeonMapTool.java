@@ -6,12 +6,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class GuiDungeonMapTool extends Screen {
@@ -178,28 +179,28 @@ public class GuiDungeonMapTool extends Screen {
 		this.textFieldRarityDivisor.setValue(Double.toString(lastRarityDivisor));
 		this.textFieldRarityDivisor.setVisible(false);
 
-		this.buttonRandSeed = this.addButton(new Button(this.width / 2 + 140, 60, 20, 20, new StringTextComponent("R"), (button) -> {
+		this.buttonRandSeed = this.addButton(new Button(this.width / 2 + 140, 60, 20, 20, new TextComponent("R"), (button) -> {
 				GuiDungeonMapTool.this.textFieldSeed.setValue(Long.toString(ThreadLocalRandom.current().nextLong()));
 		}));
-		this.buttonWorldSeed = this.addButton(new Button(this.width / 2 + 170, 60, 20, 20, new StringTextComponent("W"), (button) -> {
+		this.buttonWorldSeed = this.addButton(new Button(this.width / 2 + 170, 60, 20, 20, new TextComponent("W"), (button) -> {
 			if(this.minecraft.isLocalServer()) {
 				GuiDungeonMapTool.this.textFieldSeed.setValue(Long.toString(GuiDungeonMapTool.this.minecraft.getSingleplayerServer().getWorldData().worldGenSettings().seed()));
 			}
 		}));
 		this.buttonWorldSeed.visible = this.minecraft.isLocalServer();
-		this.buttonExit = this.addButton(new Button(5, 5, 20, 20, new StringTextComponent("X"), (button) -> {
+		this.buttonExit = this.addButton(new Button(5, 5, 20, 20, new TextComponent("X"), (button) -> {
 				if (GuiDungeonMapTool.this.canExit) {
 					GuiDungeonMapTool.this.minecraft.setScreen(GuiDungeonMapTool.this.parent);
 				}
 		}));
-		this.buttonCancel = this.addButton(new Button(this.width / 2 - 102, this.height - 24, 100, 20, new StringTextComponent("Cancel"), (button) -> {
+		this.buttonCancel = this.addButton(new Button(this.width / 2 - 102, this.height - 24, 100, 20, new TextComponent("Cancel"), (button) -> {
 			/*DungeonMapTask task1 = GuiDungeonMapTool.this.task;
 			if (task1 != null) {
 				task1.cancel();
 			}*/
 		}));
 		this.buttonCancel.visible = false;
-		this.buttonCreateMap = this.addButton(new Button(this.width / 2 + 2, this.height - 24, 100, 20, new StringTextComponent("Create Map"), (button) -> {
+		this.buttonCreateMap = this.addButton(new Button(this.width / 2 + 2, this.height - 24, 100, 20, new TextComponent("Create Map"), (button) -> {
 			int radius = Integer.parseInt(GuiDungeonMapTool.this.textFieldRadius.getValue());
 			long seed = Long.parseLong(GuiDungeonMapTool.this.textFieldSeed.getValue());
 			boolean generateBiomes = GuiDungeonMapTool.this.checkBoxGenerateBiomes.selected();
@@ -226,7 +227,7 @@ public class GuiDungeonMapTool extends Screen {
 			});*/
 		}));
 
-		this.checkBoxGenerateBiomes = this.addButton(new CheckboxButton(this.width / 2 - 20, 180, 20, 20, new StringTextComponent("Generate Biomes"), false));
+		this.checkBoxGenerateBiomes = this.addButton(new CheckboxButton(this.width / 2 - 20, 180, 20, 20, new TextComponent("Generate Biomes"), false));
 
 		this.children.add(this.textFieldRadius);
 		this.children.add(this.textFieldSeed);
@@ -246,7 +247,7 @@ public class GuiDungeonMapTool extends Screen {
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
+	public void render(PoseStack pMatrixStack, int pMouseX, int pMouseY, float pPartialTicks) {
 		this.renderBackground(pMatrixStack);
 		super.render(pMatrixStack, pMouseX, pMouseY, pPartialTicks);
 		int i = 0;

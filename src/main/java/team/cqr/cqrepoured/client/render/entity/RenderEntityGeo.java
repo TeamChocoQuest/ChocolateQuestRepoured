@@ -2,15 +2,16 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import java.util.function.Function;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.model.GeoModel;
+import net.minecraft.world.entity.Entity;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 import software.bernie.geckolib3.util.EModelRenderCycle;
@@ -31,11 +32,11 @@ public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjecti
 	
 	protected EModelRenderCycle currentModelRenderCycle = EModelRenderCycle.INITIAL;
 	
-	public RenderEntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderEntityGeo(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
 	
-	protected RenderEntityGeo(EntityRendererManager renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
+	protected RenderEntityGeo(EntityRendererProvider.Context renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
@@ -61,26 +62,26 @@ public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjecti
 	}
 
 	@Override
-	public void renderLate(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+	public void renderLate(T animatable, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		super.renderLate(animatable, stackIn, ticks, renderTypeBuffer, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		this.currentEntityBeingRendered = animatable;
 	}
 	
 	@Override
-	public void render(T entityIn, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
+	public void render(T entityIn, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
 		this.currentModelRenderCycle = EModelRenderCycle.INITIAL;
 		super.render(entityIn, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
 	}
 	
 	@Override
-	public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green,
-			float blue, float alpha) {
+	public void render(GeoModel model, T animatable, float partialTicks, RenderType type, PoseStack matrixStackIn, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green,
+                       float blue, float alpha) {
 		super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		this.currentModelRenderCycle = EModelRenderCycle.REPEATED;
 	}
 	
 	@Override
-	public void renderEarly(T animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+	public void renderEarly(T animatable, PoseStack stackIn, float ticks, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
 		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
 		if(this.currentModelRenderCycle == EModelRenderCycle.INITIAL) {
 			float width = this.getWidthScale(animatable);

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 
-import org.joml.Vector3d;
-
+import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Hand;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Explosion.Mode;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
@@ -48,9 +48,9 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRandom());
 		this.wallCounter = 0;
 		this.world.explode(this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 2, false, CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionRayDestroysTerrain.get() ? Mode.DESTROY : Mode.NONE);
-		Vector3d v = this.entity.position().subtract(this.entity.getTarget().position());
+		Vec3 v = this.entity.position().subtract(this.entity.getTarget().position());
 		v = v.normalize().scale(5);
-		Vector3d p = this.entity.getTarget().position().subtract(v);
+		Vec3 p = this.entity.getTarget().position().subtract(v);
 		if (this.entity.getNavigation().isStableDestination(new BlockPos(p.x, p.y, p.z))) {
 			if (this.entity.randomTeleport(p.x, p.y, p.z, true)) {
 				this.ticksAtTeleport = this.entity.tickCount;
@@ -79,25 +79,25 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 			int wallLength = MIN_WALL_LENGTH + this.wallCounter * ((MAX_WALL_LENGTH - MIN_WALL_LENGTH) / (this.wallsMax));
 
 			// WALL CODE
-			Vector3d v = this.entity.getTarget().position().subtract(this.entity.position());
-			v = new Vector3d(v.x, 0, v.z);
+			Vec3 v = this.entity.getTarget().position().subtract(this.entity.position());
+			v = new Vec3(v.x, 0, v.z);
 			v = v.normalize();
-			Vector3d vR = VectorUtil.rotateVectorAroundY(v, 90);
-			Vector3d vL = VectorUtil.rotateVectorAroundY(v, 270);
-			Vector3d[] positions = new Vector3d[wallLength + 2];
-			Vector3d startPos = this.entity.position().add(new Vector3d(v.x / 2, 0, v.z / 2));
+			Vec3 vR = VectorUtil.rotateVectorAroundY(v, 90);
+			Vec3 vL = VectorUtil.rotateVectorAroundY(v, 270);
+			Vec3[] positions = new Vec3[wallLength + 2];
+			Vec3 startPos = this.entity.position().add(new Vec3(v.x / 2, 0, v.z / 2));
 			int arrayIndex = 0;
 			positions[arrayIndex] = startPos;
 			arrayIndex++;
 			for (int i = 1; i <= wallLength / 2; i++) {
-				positions[arrayIndex] = startPos.add(new Vector3d(i * vR.x, 0, i * vR.z));
+				positions[arrayIndex] = startPos.add(new Vec3(i * vR.x, 0, i * vR.z));
 				arrayIndex++;
-				positions[arrayIndex] = startPos.add(new Vector3d(i * vL.x, 0, i * vL.z));
+				positions[arrayIndex] = startPos.add(new Vec3(i * vL.x, 0, i * vL.z));
 				arrayIndex++;
 			}
-			this.entity.swing(Hand.MAIN_HAND);
+			this.entity.swing(InteractionHand.MAIN_HAND);
 
-			for (Vector3d p : positions) {
+			for (Vec3 p : positions) {
 				if (p != null) {
 					ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level);
 					wallPart.setPos(p.x, p.y, p.z);

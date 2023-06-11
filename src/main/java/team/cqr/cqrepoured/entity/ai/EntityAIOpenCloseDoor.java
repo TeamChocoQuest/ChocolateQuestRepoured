@@ -2,23 +2,26 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.List;
 
-import org.joml.Vector3d;
-
-import net.minecraft.block.AbstractButtonBlock;
-import net.minecraft.core.BlockPos;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.AbstractButtonBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.state.properties.DoubleBlockHalf;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -108,7 +111,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		double dz = this.doorPos.getZ() + 0.5D - this.entity.getZ();
 		double d = this.entityPositionX * dx + this.entityPositionZ * dz;
 
-		if (d < 0.0D && (MathHelper.floor(this.entity.getX()) != this.doorPos.getX() || MathHelper.floor(this.entity.getY()) != this.doorPos.getY() || MathHelper.floor(this.entity.getZ()) != this.doorPos.getZ())) {
+		if (d < 0.0D && (Mth.floor(this.entity.getX()) != this.doorPos.getX() || Mth.floor(this.entity.getY()) != this.doorPos.getY() || Mth.floor(this.entity.getZ()) != this.doorPos.getZ())) {
 			this.hasStoppedDoorInteraction = true;
 		}
 	}
@@ -163,12 +166,12 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		BlockState state = this.world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof AbstractButtonBlock && state.getValue(DirectionalBlock.FACING) == facing) {
-			block.use(state, this.world, pos, null, Hand.MAIN_HAND, new BlockRayTraceResult(Vector3d.atBottomCenterOf(pos), facing, pos, false));
+			block.use(state, this.world, pos, null, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atBottomCenterOf(pos), facing, pos, false));
 			//block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
 		if (block instanceof LeverBlock && state.getValue(LeverBlock.FACING) == facing) {
-			block.use(state, this.world, pos, null, Hand.MAIN_HAND, new BlockRayTraceResult(Vector3d.atBottomCenterOf(pos), facing, pos, false));
+			block.use(state, this.world, pos, null, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atBottomCenterOf(pos), facing, pos, false));
 			//block.onBlockActivated(this.world, pos, state, null, Hand.MAIN_HAND, facing, pos.getX(), pos.getY(), pos.getZ());
 			return true;
 		}
@@ -188,7 +191,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		double y = this.entity.getY();
 		double z = this.entity.getZ();
 		double r = 4.0D;
-		AxisAlignedBB aabb = new AxisAlignedBB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
+		AABB aabb = new AABB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
 		List<AbstractEntityCQR> allies = this.world.getEntitiesOfClass(AbstractEntityCQR.class, aabb, e -> TargetUtil.isAllyCheckingLeaders(this.entity, e));
 		for (AbstractEntityCQR ally : allies) {
 			if (ally == this.entity) {
@@ -200,7 +203,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 			if (ally.distanceToSqr(this.entity) >= r * r) {
 				continue;
 			}
-			if (MathHelper.floor(ally.getX()) == this.doorPos.getX() && MathHelper.floor(ally.getY()) == this.doorPos.getY() && MathHelper.floor(ally.getZ()) == this.doorPos.getZ()) {
+			if (Mth.floor(ally.getX()) == this.doorPos.getX() && Mth.floor(ally.getY()) == this.doorPos.getY() && Mth.floor(ally.getZ()) == this.doorPos.getZ()) {
 				shouldCloseDoor = false;
 				break;
 			}
@@ -221,7 +224,7 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		return false;
 	}
 
-	public static boolean canMoveThroughDoor(IBlockReader world, BlockPos pos, Direction enterFacing, boolean canOpenCloseDoors) {
+	public static boolean canMoveThroughDoor(BlockGetter world, BlockPos pos, Direction enterFacing, boolean canOpenCloseDoors) {
 		BlockState state = world.getBlockState(pos);
 		if (!(state.getBlock() instanceof DoorBlock)) {
 			return false;
@@ -266,14 +269,14 @@ public class EntityAIOpenCloseDoor extends AbstractCQREntityAI<AbstractEntityCQR
 		return false;
 	}
 
-	private static boolean isPressurePlate(IBlockReader world, BlockPos pos) {
+	private static boolean isPressurePlate(BlockGetter world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		Material material = state.getMaterial();
 		return block.is(BlockTags.PRESSURE_PLATES) || (block instanceof PressurePlateBlock && (material == Material.WOOD || material == Material.STONE));
 	}
 
-	private static boolean isButtonOrLeverWithOrientation(IBlockReader world, BlockPos pos, Direction facing) {
+	private static boolean isButtonOrLeverWithOrientation(BlockGetter world, BlockPos pos, Direction facing) {
 		BlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof AbstractButtonBlock) {

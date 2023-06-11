@@ -5,25 +5,26 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.core.Registry;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.FlatGenerationSettings;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.StructureCQR;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
@@ -84,12 +85,12 @@ public class CQRStructures {
 
 	@SubscribeEvent
 	public static void onWorldLoadEvent(WorldEvent.Load event) {
-		IWorld iworld = event.getWorld();
-		if (!(iworld instanceof ServerWorld)) {
+		Level iworld = event.getWorld();
+		if (!(iworld instanceof ServerLevel)) {
 			return;
 		}
 		STRUCTURES.getEntries().stream().map(RegistryObject::get).forEach(structure -> {
-			DimensionStructuresSettings settings = ((ServerWorld) iworld).getChunkSource().getGenerator().getSettings();
+			DimensionStructuresSettings settings = ((ServerLevel) iworld).getChunkSource().getGenerator().getSettings();
 			settings.structureConfig = hashMap(settings.structureConfig, structure, DimensionStructuresSettings.DEFAULTS.get(structure));
 		});
 	}

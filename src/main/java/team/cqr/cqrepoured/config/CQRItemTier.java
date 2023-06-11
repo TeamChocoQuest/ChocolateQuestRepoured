@@ -2,10 +2,9 @@ package team.cqr.cqrepoured.config;
 
 import java.util.function.Supplier;
 
-import javax.swing.UIDefaults.LazyValue;
-
 import net.minecraft.item.IItemTier;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.LazyValue;
 
 public class CQRItemTier implements IItemTier {
 

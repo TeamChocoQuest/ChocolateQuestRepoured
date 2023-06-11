@@ -3,25 +3,29 @@ package team.cqr.cqrepoured.util;
 import java.util.Random;
 import java.util.UUID;
 
-import org.joml.Vector3d;
-import org.joml.Vector3i;
-
-import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.nbt.DoubleNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.LongNBT;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tileentity.BannerTileEntity;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.util.Mirror;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.world.gen.feature.template.Template;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -53,7 +57,7 @@ public class DungeonGenUtils {
 	}
 
 	// Center of spheroid is (0/0/0)
-	public static boolean isInsideSpheroid(Vector3i pointOnSphere, double radX, double radY, double radZ) {
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radX, double radY, double radZ) {
 		double axisX = pointOnSphere.getX();
 		axisX *= axisX;
 		axisX /= (radX * radX);
@@ -66,15 +70,15 @@ public class DungeonGenUtils {
 		return axisX + axisY + axisZ == 1.0D;
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointInSpace, Vector3i spheroidCenter, double radX, double radY, double radZ) {
-		return isInsideSpheroid(new Vector3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radX, double radY, double radZ) {
+		return isInsideSpheroid(new Vec3i(pointInSpace.getX() - spheroidCenter.getX(), pointInSpace.getY() - spheroidCenter.getY(), pointInSpace.getZ() - spheroidCenter.getZ()), radX, radY, radZ);
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointOnSphere, double radWidth, double radHeight) {
+	public static boolean isInsideSpheroid(Vec3i pointOnSphere, double radWidth, double radHeight) {
 		return isInsideSpheroid(pointOnSphere, radWidth, radHeight, radWidth);
 	}
 
-	public static boolean isInsideSpheroid(Vector3i pointInSpace, Vector3i spheroidCenter, double radWidth, double radHeight) {
+	public static boolean isInsideSpheroid(Vec3i pointInSpace, Vec3i spheroidCenter, double radWidth, double radHeight) {
 		return isInsideSpheroid(pointInSpace, spheroidCenter, radWidth, radHeight, radWidth);
 	}
 
@@ -129,24 +133,24 @@ public class DungeonGenUtils {
 		double stdDev = (max - avg) / 3.0D; // guarantees that MOST (99.7%) results will be between low & high
 		double gaussian = rand.nextGaussian();
 		int result = (int) (avg + (gaussian * stdDev) + 0.5D); // 0.5 is added for rounding to nearest whole number
-		return MathHelper.clamp(result, min, max);
+		return Mth.clamp(result, min, max);
 	}
 
 	public static boolean isLootChest(Block b) {
 		return b instanceof BlockExporterChest;
 	}
 
-	public static boolean isCQBanner(BannerTileEntity banner) {
+	public static boolean isCQBanner(BannerBlockEntity banner) {
 		return BannerHelper.isCQBanner(banner);
 	}
 
-	public static boolean isInWallRange(World world, ChunkPos chunkPos) {
+	public static boolean isInWallRange(Level world, ChunkPos chunkPos) {
 		// Check if the wall is enabled
 		if (!CQRConfig.SERVER_CONFIG.wall.enabled.get()) {
 			return false;
 		}
 		// Check if the world is the overworld
-		if (world.dimension() == World.OVERWORLD) {
+		if (world.dimension() == Level.OVERWORLD) {
 			return false;
 		}
 		// Check the coordinates
@@ -156,7 +160,7 @@ public class DungeonGenUtils {
 		return chunkPos.z <= -CQRConfig.SERVER_CONFIG.wall.distance.get() + 12;
 	}
 
-	public static boolean isFarAwayEnoughFromSpawn(IWorld world, ChunkPos chunkPos) {
+	public static boolean isFarAwayEnoughFromSpawn(Level world, ChunkPos chunkPos) {
 		//Correct replacement?
 		if (!world.dimensionType().respawnAnchorWorks()) {
 			return true;
@@ -166,7 +170,7 @@ public class DungeonGenUtils {
 		return x * x + z * z >= CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get() * CQRConfig.SERVER_CONFIG.general.dungeonSpawnDistance.get();
 	}
 
-	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, ChunkPos chunkPos, int distance) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(Level world, ChunkPos chunkPos, int distance) {
 		ResourceLocation dim = world.dimension().location();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getDungeons()) {
@@ -194,31 +198,31 @@ public class DungeonGenUtils {
 	/*
 	 * Rotate a vec3i to align with the given side. Assumes that the vec3i is default +x right, +z down coordinate system
 	 */
-	public static Vector3i rotateVec3i(Vector3i vec, Direction side) {
+	public static Vec3i rotateVec3i(Vec3i vec, Direction side) {
 		if (side == Direction.SOUTH) {
-			return new Vector3i(-vec.getX(), vec.getY(), -vec.getZ());
+			return new Vec3i(-vec.getX(), vec.getY(), -vec.getZ());
 		} else if (side == Direction.WEST) {
-			return new Vector3i(vec.getZ(), vec.getY(), -vec.getX());
+			return new Vec3i(vec.getZ(), vec.getY(), -vec.getX());
 		} else if (side == Direction.EAST) {
-			return new Vector3i(-vec.getZ(), vec.getY(), vec.getX());
+			return new Vec3i(-vec.getZ(), vec.getY(), vec.getX());
 		} else {
 			// North side, or some other invalid side
 			return vec;
 		}
 	}
 
-	public static Vector3i rotateMatrixOffsetCW(Vector3i offset, int sizeX, int sizeZ, int numRotations) {
+	public static Vec3i rotateMatrixOffsetCW(Vec3i offset, int sizeX, int sizeZ, int numRotations) {
 		final int maxXIndex = sizeX - 1;
 		final int maxZIndex = sizeZ - 1;
 
 		if (numRotations % 4 == 0) {
-			return new Vector3i(offset.getX(), offset.getY(), offset.getZ());
+			return new Vec3i(offset.getX(), offset.getY(), offset.getZ());
 		} else if (numRotations % 4 == 1) {
-			return new Vector3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
+			return new Vec3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
 		} else if (numRotations % 4 == 2) {
-			return new Vector3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
+			return new Vec3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
 		} else {
-			return new Vector3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
+			return new Vec3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
 		}
 	}
 
@@ -285,11 +289,11 @@ public class DungeonGenUtils {
 		return chunkGenerator.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
 	}
 
-	public static Vector3d transformedVec3d(Vector3d vec, PlacementSettings settings) {
+	public static Vec3 transformedVec3d(Vec3 vec, PlacementSettings settings) {
 		return transformedVec3d(vec, settings.getMirror(), settings.getRotation());
 	}
 
-	public static Vector3d transformedVec3d(Vector3d vec, Mirror mirror, Rotation rotation) {
+	public static Vec3 transformedVec3d(Vec3 vec, Mirror mirror, Rotation rotation) {
 		double i = vec.x;
 		double j = vec.y;
 		double k = vec.z;
@@ -308,48 +312,48 @@ public class DungeonGenUtils {
 
 		switch (rotation) {
 		case COUNTERCLOCKWISE_90:
-			return new Vector3d(k, j, 1.0D - i);
+			return new Vec3(k, j, 1.0D - i);
 		case CLOCKWISE_90:
-			return new Vector3d(1.0D - k, j, i);
+			return new Vec3(1.0D - k, j, i);
 		case CLOCKWISE_180:
-			return new Vector3d(1.0D - i, j, 1.0D - k);
+			return new Vec3(1.0D - i, j, 1.0D - k);
 		default:
-			return flag ? new Vector3d(i, j, k) : vec;
+			return flag ? new Vec3(i, j, k) : vec;
 		}
 	}
 
-	public static ListNBT writePosToList(BlockPos pos) {
-		ListNBT nbtTagList = new ListNBT();
+	public static ListTag writePosToList(BlockPos pos) {
+		ListTag nbtTagList = new ListTag();
 		nbtTagList.add(IntNBT.valueOf(pos.getX()));
 		nbtTagList.add(IntNBT.valueOf(pos.getY()));
 		nbtTagList.add(IntNBT.valueOf(pos.getZ()));
 		return nbtTagList;
 	}
 
-	public static BlockPos readPosFromList(ListNBT nbtTagList) {
+	public static BlockPos readPosFromList(ListTag nbtTagList) {
 		return new BlockPos(nbtTagList.getInt(0), nbtTagList.getInt(1), nbtTagList.getInt(2));
 	}
 
-	public static ListNBT writeVecToList(Vector3d vec) {
-		ListNBT nbtTagList = new ListNBT();
+	public static ListTag writeVecToList(Vec3 vec) {
+		ListTag nbtTagList = new ListTag();
 		nbtTagList.add(DoubleNBT.valueOf(vec.x));
 		nbtTagList.add(DoubleNBT.valueOf(vec.y));
 		nbtTagList.add(DoubleNBT.valueOf(vec.z));
 		return nbtTagList;
 	}
 
-	public static Vector3d readVecFromList(ListNBT nbtTagList) {
-		return new Vector3d(nbtTagList.getDouble(0), nbtTagList.getDouble(1), nbtTagList.getDouble(2));
+	public static Vec3 readVecFromList(ListTag nbtTagList) {
+		return new Vec3(nbtTagList.getDouble(0), nbtTagList.getDouble(1), nbtTagList.getDouble(2));
 	}
 
-	public static ListNBT writeUUIDToList(UUID uuid) {
-		ListNBT nbtTagList = new ListNBT();
+	public static ListTag writeUUIDToList(UUID uuid) {
+		ListTag nbtTagList = new ListTag();
 		nbtTagList.add(LongNBT.valueOf(uuid.getMostSignificantBits()));
 		nbtTagList.add(LongNBT.valueOf(uuid.getLeastSignificantBits()));
 		return nbtTagList;
 	}
 
-	public static UUID readUUIDFromList(ListNBT nbtTagList) {
+	public static UUID readUUIDFromList(ListTag nbtTagList) {
 		INBT nbtM = nbtTagList.get(0);
 		INBT nbtL = nbtTagList.get(1);
 		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getAsLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getAsLong() : 0);
@@ -368,18 +372,18 @@ public class DungeonGenUtils {
 		return pos.offset(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
-	public static int getSpawnX(IWorld world) {
+	public static int getSpawnX(Level world) {
 		int x = world.getLevelData().getXSpawn();
-		return x >= world.getWorldBorder().getMinX() && x < world.getWorldBorder().getMaxX() ? x : MathHelper.floor(world.getWorldBorder().getCenterX());
+		return x >= world.getWorldBorder().getMinX() && x < world.getWorldBorder().getMaxX() ? x : Mth.floor(world.getWorldBorder().getCenterX());
 	}
 
-	public static int getSpawnY(IWorld world) {
+	public static int getSpawnY(Level world) {
 		return world.getLevelData().getYSpawn();
 	}
 
-	public static int getSpawnZ(IWorld world) {
+	public static int getSpawnZ(Level world) {
 		int z = world.getLevelData().getYSpawn();
-		return z >= world.getWorldBorder().getMinZ() && z < world.getWorldBorder().getMaxZ() ? z : MathHelper.floor(world.getWorldBorder().getCenterZ());
+		return z >= world.getWorldBorder().getMinZ() && z < world.getWorldBorder().getMaxZ() ? z : Mth.floor(world.getWorldBorder().getCenterZ());
 	}
 
 }

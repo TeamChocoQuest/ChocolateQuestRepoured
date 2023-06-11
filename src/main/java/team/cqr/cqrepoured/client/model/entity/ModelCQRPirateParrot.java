@@ -1,18 +1,17 @@
 package team.cqr.cqrepoured.client.model.entity;
 
-import org.joml.Vector3f;
-
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.model.ParrotModel;
 import net.minecraft.client.renderer.entity.model.IHasArm;
+import net.minecraft.client.renderer.entity.model.ParrotModel;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer.ModelBox;
 import net.minecraft.util.HandSide;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
+import com.mojang.math.Vector3f;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateParrot;
 
 public class ModelCQRPirateParrot extends SegmentedModel<EntityCQRPirateParrot> implements IHasArm {
@@ -86,7 +85,7 @@ public class ModelCQRPirateParrot extends SegmentedModel<EntityCQRPirateParrot> 
 		this.prepare(ModelCQRPirateParrot.getState(pEntity));
 	}
 
-	public void renderOnShoulder(MatrixStack pMatrixStack, IVertexBuilder pBuffer, int pPackedLight, int pPackedOverlay, float p_228284_5_, float p_228284_6_, float p_228284_7_, float p_228284_8_, int p_228284_9_) {
+	public void renderOnShoulder(PoseStack pMatrixStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float p_228284_5_, float p_228284_6_, float p_228284_7_, float p_228284_8_, int p_228284_9_) {
 		this.prepare(ParrotModel.State.ON_SHOULDER);
 		this.setupAnim(ParrotModel.State.ON_SHOULDER, p_228284_9_, p_228284_5_, p_228284_6_, 0.0F, p_228284_7_, p_228284_8_);
 		this.parts().forEach((p_228285_4_) -> {
@@ -107,13 +106,13 @@ public class ModelCQRPirateParrot extends SegmentedModel<EntityCQRPirateParrot> 
 		case SITTING:
 			break;
 		case PARTY:
-			float f = MathHelper.cos((float) p_217162_2_);
-			float f1 = MathHelper.sin((float) p_217162_2_);
+			float f = Mth.cos((float) p_217162_2_);
+			float f1 = Mth.sin((float) p_217162_2_);
 			this.head.x = f;
 			this.head.y = 15.69F + f1;
 			this.head.xRot = 0.0F;
 			this.head.yRot = 0.0F;
-			this.head.zRot = MathHelper.sin((float) p_217162_2_) * 0.4F;
+			this.head.zRot = Mth.sin((float) p_217162_2_) * 0.4F;
 			this.body.x = f;
 			this.body.y = 16.5F + f1;
 			this.wingLeft.zRot = -0.0873F - p_217162_5_;
@@ -126,14 +125,14 @@ public class ModelCQRPirateParrot extends SegmentedModel<EntityCQRPirateParrot> 
 			this.tail.y = 21.07F + f1;
 			break;
 		case STANDING:
-			this.legLeft.xRot += MathHelper.cos(p_217162_3_ * 0.6662F) * 1.4F * p_217162_4_;
-			this.legRight.xRot += MathHelper.cos(p_217162_3_ * 0.6662F + (float) Math.PI) * 1.4F * p_217162_4_;
+			this.legLeft.xRot += Mth.cos(p_217162_3_ * 0.6662F) * 1.4F * p_217162_4_;
+			this.legRight.xRot += Mth.cos(p_217162_3_ * 0.6662F + (float) Math.PI) * 1.4F * p_217162_4_;
 		case FLYING:
 		case ON_SHOULDER:
 		default:
 			float f2 = p_217162_5_ * 0.3F;
 			this.head.y = 15.69F + f2;
-			this.tail.xRot = 1.015F + MathHelper.cos(p_217162_3_ * 0.6662F) * 0.3F * p_217162_4_;
+			this.tail.xRot = 1.015F + Mth.cos(p_217162_3_ * 0.6662F) * 0.3F * p_217162_4_;
 			this.tail.y = 21.07F + f2;
 			this.body.y = 16.5F + f2;
 			this.wingLeft.zRot = -0.0873F - p_217162_5_;
@@ -200,7 +199,7 @@ public class ModelCQRPirateParrot extends SegmentedModel<EntityCQRPirateParrot> 
 	}
 
 	@Override
-	public void translateToHand(HandSide pSide, MatrixStack pMatrixStack) {
+	public void translateToHand(HandSide pSide, PoseStack pMatrixStack) {
 		ModelRenderer armRenderer = this.legLeft;
 		if (!armRenderer.cubes.isEmpty()) {
 			ModelBox armBox = armRenderer.cubes.get(0);

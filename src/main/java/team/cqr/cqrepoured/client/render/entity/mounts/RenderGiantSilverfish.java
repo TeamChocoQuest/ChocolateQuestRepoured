@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.render.entity.mounts;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishNormal;
 
 public class RenderGiantSilverfish extends AbstractRenderGiantSilverfish<EntityGiantSilverfishNormal> {
 
-	public RenderGiantSilverfish(EntityRendererManager p_i50961_1_) {
+	public RenderGiantSilverfish(Context p_i50961_1_) {
 		super(p_i50961_1_);
 	}
 	

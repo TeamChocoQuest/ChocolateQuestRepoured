@@ -1,10 +1,10 @@
 //package team.cqr.cqrepoured.network.server.handler;
 //
-//import net.minecraft.block.HorizontalBlock;
+//import net.minecraft.world.level.block.HorizontalBlock;
 //import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.tileentity.TileEntity;
 //import net.minecraft.util.Direction;
-//import net.minecraft.util.math.BlockPos;
+//import net.minecraft.core.BlockPos;
 //import net.minecraft.world.World;
 //import net.minecraftforge.fml.network.NetworkEvent.Context;
 //import team.cqr.cqrepoured.init.CQRBlocks;

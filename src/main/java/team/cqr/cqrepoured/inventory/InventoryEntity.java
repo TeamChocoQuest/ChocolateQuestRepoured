@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.entity.player.Inventory;
 
 public class InventoryEntity extends Inventory {
 
@@ -17,7 +18,7 @@ public class InventoryEntity extends Inventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity pPlayer) {
+	public boolean stillValid(Player pPlayer) {
 		if (this.creativeOnly && !pPlayer.isCreative()) {
 			return false;
 		}
@@ -27,12 +28,12 @@ public class InventoryEntity extends Inventory {
 		return this.entity.closerThan(pPlayer, 8.0D);
 	}
 
-	public CompoundNBT save(CompoundNBT compound) {
+	public CompoundTag save(CompoundTag compound) {
 		ItemStackHelper.saveAllItems(compound, this.items);
 		return compound;
 	}
 
-	public void load(CompoundNBT compound) {
+	public void load(CompoundTag compound) {
 		ItemStackHelper.loadAllItems(compound, this.items);
 	}
 

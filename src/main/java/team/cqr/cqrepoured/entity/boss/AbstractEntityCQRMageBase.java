@@ -1,29 +1,28 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.MobSpawnType;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
-	private static final DataParameter<Boolean> IDENTITY_HIDDEN = EntityDataManager.<Boolean>defineId(AbstractEntityCQRMageBase.class, DataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> IDENTITY_HIDDEN = SynchedEntityData.<Boolean>defineId(AbstractEntityCQRMageBase.class, EntityDataSerializers.BOOLEAN);
 
-	protected AbstractEntityCQRMageBase(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	protected AbstractEntityCQRMageBase(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -55,29 +54,29 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, SpawnReason p_213386_3_, ILivingEntityData setDamageValue, CompoundNBT p_213386_5_) {
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(CQRItems.STAFF_VAMPIRIC.get(), 1));
+	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData setDamageValue, CompoundTag p_213386_5_) {
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.STAFF_VAMPIRIC.get(), 1));
 		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("identityHidden", this.isIdentityHidden());
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("identityHidden") && !compound.getBoolean("identityHidden")) {
 			this.revealIdentity();
 		}
 	}
 
-	protected static final ITextComponent HIDDEN_NAME = new StringTextComponent("???");
+	protected static final TextComponent HIDDEN_NAME = new TextComponent("???");
 	
 	@Override
-	public ITextComponent getDisplayName() {
+	public TextComponent getDisplayName() {
 		if (this.isIdentityHidden()) {
 			return HIDDEN_NAME;
 		}

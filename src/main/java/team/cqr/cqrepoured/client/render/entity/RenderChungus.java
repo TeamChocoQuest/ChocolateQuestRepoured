@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.render.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.RenderSpriteBase;
@@ -16,12 +16,12 @@ public class RenderChungus<T extends AbstractEntityCQR> extends RenderSpriteBase
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/chungus.png");
 
-	public RenderChungus(EntityRendererManager rendermanagerIn) {
+	public RenderChungus(Context rendermanagerIn) {
 		super(rendermanagerIn, TEXTURE);
 	}
 
 	@Override
-	public void render(T entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+	public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
 		matrixStack.pushPose();
 		float w = entity.getSizeVariation();
 		float h = entity.getSizeVariation();

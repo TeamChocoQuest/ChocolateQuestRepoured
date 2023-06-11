@@ -4,16 +4,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import org.joml.Vector3d;
-import org.joml.Vector3f;
+import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.renderer.RenderType;
+import com.mojang.math.Vector3f;
 
 public class ModelPentagram {
 
@@ -45,7 +45,7 @@ public class ModelPentagram {
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void render(MatrixStack matrix, RenderType renderType, int corners, float radius, float lineWidth, float lineHeight) {
+	public static void render(PoseStack matrix, RenderType renderType, int corners, float radius, float lineWidth, float lineHeight) {
 		if (!initialized) {
 			init();
 		}
@@ -58,13 +58,13 @@ public class ModelPentagram {
 		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
 
 		float f1 = 360.0F / corners;
-		Vector3d v1 = new Vector3d(0.0D, 0.0D, radius + lineWidth * 0.5F);
-		Vector3d v2 = v1.yRot((float) Math.toRadians(f1));
+		Vec3 v1 = new Vec3(0.0D, 0.0D, radius + lineWidth * 0.5F);
+		Vec3 v2 = v1.yRot((float) Math.toRadians(f1));
 		float f2 = (float) v1.distanceTo(v2);
 
 		float f3 = f1 * (corners / 2);
-		Vector3d v3 = new Vector3d(0.0D, 0.0D, radius);
-		Vector3d v4 = v3.yRot((float) Math.toRadians(f3));
+		Vec3 v3 = new Vec3(0.0D, 0.0D, radius);
+		Vec3 v4 = v3.yRot((float) Math.toRadians(f3));
 		float f4 = (float) v3.distanceTo(v4);
 
 		for (int i = 0; i < corners; i++) {

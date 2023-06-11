@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.render.armor;
 
-import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.model.geo.armor.ModelKingCrownGeo;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 

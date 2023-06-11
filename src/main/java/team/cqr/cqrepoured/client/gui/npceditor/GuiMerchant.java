@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.screens.inventory.ContainerScreen;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.Mth;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.client.gui.INumericIDButton;
@@ -40,7 +40,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 	private int buttonStartIndex = 0;
 	private boolean scrollBarClicked;
 
-	public GuiMerchant(ContainerMerchant container, PlayerInventory pPlayerInventory, ITextComponent pTitle) {
+	public GuiMerchant(ContainerMerchant container, Inventory pPlayerInventory, TextComponent pTitle) {
 		super(container, pPlayerInventory, pTitle);
 		this.entity = container.getMerchant();
 		this.trades = entity.getTrades();
@@ -55,10 +55,10 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 		for (int i = 0; i < this.tradeButtons.length; i++) {
 			this.tradeButtons[i] = this.addButton(new GuiButtonTrade(this, 10 + i, this.leftPos + 8, this.topPos + 18 + i * 20, i));
 			if (i < this.tradeButtons.length - 1) {
-				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.leftPos - 12, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0,	CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_up.png"), this::actionPerformed, new StringTextComponent("")));
-				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.leftPos - 12, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_down.png"), this::actionPerformed, new StringTextComponent("")));
-				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.leftPos - 2, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_delete.png"), this::actionPerformed, new StringTextComponent("")));
-				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.leftPos - 2, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_edit.png"), this::actionPerformed, new StringTextComponent("")));
+				this.pushUpButtons[i] = this.addButton(new GuiButtonTextured(20 + i, this.leftPos - 12, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0,	CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_up.png"), this::actionPerformed, new TextComponent("")));
+				this.pushDownButtons[i] = this.addButton(new GuiButtonTextured(30 + i, this.leftPos - 12, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_down.png"), this::actionPerformed, new TextComponent("")));
+				this.deleteButtons[i] = this.addButton(new GuiButtonTextured(40 + i, this.leftPos - 2, this.topPos + 18 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_delete.png"), this::actionPerformed, new TextComponent("")));
+				this.editButtons[i] = this.addButton(new GuiButtonTextured(50 + i, this.leftPos - 2, this.topPos + 28 + i * 20, 10, 10, 0, 0, 0, CQRMain.prefix("textures/gui/container/gui_button_10px.png"), CQRMain.prefix("textures/gui/container/icon_edit.png"), this::actionPerformed, new TextComponent("")));
 			}
 		}
 		this.addNewTradeButton = this.addButton(new Button(/*0, */this.leftPos - 12, this.topPos + 138, 136, 20, new TranslationTextComponent("- Create Trade -"), this::actionPerformed));
@@ -67,7 +67,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(PoseStack pMatrixStack, int mouseX, int mouseY, float partialTicks) {
 		super.render(pMatrixStack,mouseX, mouseY, partialTicks);
 		this.renderTooltip(pMatrixStack, mouseX, mouseY);
 		for (GuiButtonTrade tradeButton : this.tradeButtons) {
@@ -76,7 +76,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 	}
 
 	@Override
-	protected void renderBg(MatrixStack pMatrixStack, float partialTicks, int mouseX, int mouseY) {
+	protected void renderBg(PoseStack pMatrixStack, float partialTicks, int mouseX, int mouseY) {
 
 		this.renderBackground(pMatrixStack);
 
@@ -126,7 +126,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 		if (pDelta != 0.0D) {
 			int scrollAmount = (int) (pDelta / 60.0D);
 			if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
-				this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
+				this.buttonStartIndex = Mth.clamp(this.buttonStartIndex - scrollAmount, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
 				this.update();
 			}
 		}
@@ -141,7 +141,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 			int scrollLength = this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0));
 			float f = ((float) mouseY - (float) y1 - 13.5F) / (y2 - y1 - 27.0F);
 			f = f * scrollLength + 0.5F;
-			this.buttonStartIndex = MathHelper.clamp((int) f, 0, scrollLength);
+			this.buttonStartIndex = Mth.clamp((int) f, 0, scrollLength);
 			this.update();
 			return true;
 		} else {
@@ -170,7 +170,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 	@Override
 	public void update() {
 		if (this.trades.size() > this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)) {
-			this.buttonStartIndex = MathHelper.clamp(this.buttonStartIndex, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
+			this.buttonStartIndex = Mth.clamp(this.buttonStartIndex, 0, this.trades.size() - (this.tradeButtons.length - (this.getMinecraft().player.isCreative() ? 1 : 0)));
 		} else {
 			this.buttonStartIndex = 0;
 		}
@@ -199,7 +199,7 @@ public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements I
 
 	// Overriding to set access modifier to public
 	@Override
-	public void renderTooltip(MatrixStack pMatrixStack, ItemStack pItemStack, int pMouseX, int pMouseY) {
+	public void renderTooltip(PoseStack pMatrixStack, ItemStack pItemStack, int pMouseX, int pMouseY) {
 		super.renderTooltip(pMatrixStack, pItemStack, pMouseX, pMouseY);
 	}
 	

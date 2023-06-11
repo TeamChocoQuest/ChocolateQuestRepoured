@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQRTritonGeo;
@@ -16,7 +16,7 @@ public class RenderCQRTriton extends RenderCQRBipedBaseGeo<EntityCQRTriton> {
 	
 	private static final ResourceLocation TEXTURE = CQRMain.prefix("textures/entity/mob/triton_0.png");
 
-	public RenderCQRTriton(EntityRendererManager rendermanagerIn) {
+	public RenderCQRTriton(Context rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRTritonGeo(CQRMain.prefix("geo/entity/biped_triton.geo.json"), TEXTURE, "mob/triton"));
 	}
 
@@ -36,17 +36,17 @@ public class RenderCQRTriton extends RenderCQRBipedBaseGeo<EntityCQRTriton> {
 	}
 
 	@Override
-	protected void postRenderItem(MatrixStack matrixStack, ItemStack item, String boneName, EntityCQRTriton currentEntity, IBone bone) {
+	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRTriton currentEntity, IBone bone) {
 		
 	}
 
 	@Override
-	protected void postRenderBlock(MatrixStack stack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
+	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
 		
 	}
 
 	@Override
-	protected void preRenderBlock(MatrixStack matrixStack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
+	protected void preRenderBlock(PoseStack matrixStack, BlockState block, String boneName, EntityCQRTriton currentEntity) {
 		
 	}
 

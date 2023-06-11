@@ -4,14 +4,14 @@ import javax.annotation.Nullable;
 
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.gen.feature.structure.Structure;
 
 public class StructureHelper {
 
 	private static final ReflectionMethod<Boolean> METHOD_CAN_SPAWN_STRUCTURE_AT_COORDS = new ReflectionMethod<>(Structure.class, "func_75047_a", "canSpawnStructureAtCoords", Integer.TYPE, Integer.TYPE);
 
-	public static boolean isStructureInRange(World world, BlockPos pos, int radius, String name) {
+	public static boolean isStructureInRange(Level world, BlockPos pos, int radius, String name) {
 		return false;
 		/*if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return false;
@@ -62,7 +62,7 @@ public class StructureHelper {
 	}
 
 	@Nullable
-	private static Structure getStructureGenerator(World world, String name) {
+	private static Structure getStructureGenerator(Level world, String name) {
 		/*ChunkGenerator chunkGenerator = ((ServerWorld) world).getChunkProvider().chunkGenerator;
 
 		if (chunkGenerator instanceof OverworldChunkGenerator) {
@@ -125,7 +125,7 @@ public class StructureHelper {
 		return null;
 	}
 
-	private static boolean isStructureInRange(World world, Structure structureType, BlockPos pos, int radius) {
+	private static boolean isStructureInRange(Level world, Structure structureType, BlockPos pos, int radius) {
 		int x = pos.getX() >> 4;
 		int z = pos.getZ() >> 4;
 		/*Random random = structureType.rand;

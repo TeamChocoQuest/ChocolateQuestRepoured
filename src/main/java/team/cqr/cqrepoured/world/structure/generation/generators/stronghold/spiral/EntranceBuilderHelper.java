@@ -1,8 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.spiral;
 
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.WallTorchBlock;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper;

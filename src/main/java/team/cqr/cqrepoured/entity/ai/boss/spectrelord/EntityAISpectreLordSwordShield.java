@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;

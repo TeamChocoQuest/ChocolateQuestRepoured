@@ -1,17 +1,19 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.gui.ScreenExporter;
@@ -20,7 +22,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 public class BlockExporter extends Block {
 
-	private static final ITextComponent SCREEN_TITLE = new TranslationTextComponent("tile.exporter.name");
+	private static final Component SCREEN_TITLE = new TranslationTextComponent("tile.exporter.name");
 
 	public BlockExporter() {
 		super(Properties.of(Material.STONE)
@@ -35,23 +37,23 @@ public class BlockExporter extends Block {
 	}
 
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+	public BlockEntity createTileEntity(BlockState state, BlockGetter world) {
 		return new TileEntityExporter();
 	}
 
 	@Override
-	public ActionResultType use(BlockState pState, World pLevel, BlockPos pPos, PlayerEntity pPlayer, Hand pHand, BlockRayTraceResult pHit) {
+	public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
 		if (!pPlayer.isCreative()) {
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
-		TileEntity tileEntity = pLevel.getBlockEntity(pPos);
+		BlockEntity tileEntity = pLevel.getBlockEntity(pPos);
 		if (!(tileEntity instanceof TileEntityExporter)) {
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 		if (pLevel.isClientSide) {
 			this.openScreen((TileEntityExporter) tileEntity);
 		}
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@OnlyIn(Dist.CLIENT)

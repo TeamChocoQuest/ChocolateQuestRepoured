@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
@@ -32,8 +31,8 @@ public class LayerBossDeath<T extends LivingEntity, M extends EntityModel<T>> ex
 	}
 
 	@Override
-	public void render(MatrixStack pMatrixStack, IRenderTypeBuffer pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount,
-			float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+	public void render(PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight, T pLivingEntity, float pLimbSwing, float pLimbSwingAmount,
+                       float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		int ticks = this.getAnimationTick(pLivingEntity);
 		if (ticks > 0) {
 			this.rayHelper.renderRays(pMatrixStack, pBuffer.getBuffer(RenderType.lightning()), ticks, pPartialTicks);

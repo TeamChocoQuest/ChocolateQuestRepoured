@@ -20,27 +20,34 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.io.FileUtils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.util.Mirror;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.Mutable;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.Constants.NBT;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -118,7 +125,7 @@ public class CQStructure {
 		return structure;
 	}
 
-	public static CQStructure createFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks, String iTextComponent) {
+	public static CQStructure createFromWorld(Level world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks, String iTextComponent) {
 		CQStructure structure = new CQStructure();
 		structure.author = iTextComponent;
 		structure.takeBlocksAndEntitiesFromWorld(world, startPos, endPos, ignoreBasicEntities, unprotectedBlocks);
@@ -160,15 +167,15 @@ public class CQStructure {
 		return false;
 	}
 
-	private CompoundNBT writeToNBT() {
-		CompoundNBT compound = new CompoundNBT();
+	private CompoundTag writeToNBT() {
+		CompoundTag compound = new CompoundTag();
 
 		compound.putString("cqr_file_version", CQStructure.CQR_FILE_VERSION);
 		compound.putString("author", this.author);
-		compound.put("size", NBTUtil.writeBlockPos(this.size));
+		compound.put("size", NbtUtils.writeBlockPos(this.size));
 
 		BlockStatePalette palette = new BlockStatePalette();
-		ListNBT compoundList = new ListNBT();
+		ListTag compoundList = new ListTag();
 
 		// Save normal blocks
 		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
@@ -189,14 +196,14 @@ public class CQStructure {
 		return compound;
 	}
 
-	private void readFromNBT(CompoundNBT compound) {
+	private void readFromNBT(CompoundTag compound) {
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals(CQR_FILE_VERSION)) {
 			throw new IllegalArgumentException(String.format("Structure nbt is deprecated! Expected %s but got %s.", CQR_FILE_VERSION, cqrFileVersion));
 		}
 
 		this.author = compound.getString("author");
-		this.size = NBTUtil.readBlockPos(compound.getCompound("size"));
+		this.size = NbtUtils.readBlockPos(compound.getCompound("size"));
 
 		this.blockInfoList.clear();
 		this.entityInfoList.clear();
@@ -204,12 +211,12 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		ListNBT compoundTagList = compound.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListTag compoundTagList = compound.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
 		for (INBT nbt : compound.getList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
+			blockStatePalette.addMapping(NbtUtils.readBlockState((CompoundTag) nbt), blockStateIndex++);
 		}
 
 		// Load normal blocks
@@ -220,7 +227,7 @@ public class CQStructure {
 
 		// Load entities
 		for (INBT nbt : compound.getList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
-			this.entityInfoList.add(new PreparableEntityInfo((CompoundNBT) nbt));
+			this.entityInfoList.add(new PreparableEntityInfo((CompoundTag) nbt));
 		}
 
 		this.unprotectedBlockList.clear();
@@ -228,7 +235,7 @@ public class CQStructure {
 		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2])).forEach(this.unprotectedBlockList::add);
 	}
 
-	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
+	private void takeBlocksAndEntitiesFromWorld(Level world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
 		BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 		BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 
@@ -249,7 +256,7 @@ public class CQStructure {
 		}
 	}
 
-	private void takeBlocksFromWorld(World world, BlockPos minPos, BlockPos maxPos) {
+	private void takeBlocksFromWorld(Level world, BlockPos minPos, BlockPos maxPos) {
 		this.blockInfoList.clear();
 
 		for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
@@ -270,11 +277,11 @@ public class CQStructure {
 		}
 	}
 
-	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
+	private void takeEntitiesFromWorld(Level world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
 		this.entityInfoList.clear();
-		AxisAlignedBB aabb = new AxisAlignedBB(minPos, maxPos.offset(1, 1, 1));
+		AABB aabb = new AABB(minPos, maxPos.offset(1, 1, 1));
 
-		for (Entity entity : world.getEntitiesOfClass(Entity.class, aabb, input -> !(input instanceof PlayerEntity))) {
+		for (Entity entity : world.getEntitiesOfClass(Entity.class, aabb, input -> !(input instanceof Player))) {
 			if (ignoreBasicEntities && !SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
 				CQRMain.logger.info("Skipping entity: {}", entity);
 				continue;
@@ -346,13 +353,13 @@ public class CQStructure {
 	}
 
 	public void loadFromMigratableFile(File file) throws IOException {
-		CompoundNBT migratableStructureNbt = CompressedStreamTools.readCompressed(file);
-		CompoundNBT chunkNbts = migratableStructureNbt.getCompound("Chunk Data");
-		CompoundNBT cqrStructureNbt = migratableStructureNbt.getCompound("CQR Structure Data");
+		CompoundTag migratableStructureNbt = CompressedStreamTools.readCompressed(file);
+		CompoundTag chunkNbts = migratableStructureNbt.getCompound("Chunk Data");
+		CompoundTag cqrStructureNbt = migratableStructureNbt.getCompound("CQR Structure Data");
 
 		// update chunk data
 		DataFixerWorld world = new DataFixerWorld();
-		CompoundNBT entityChunkNbt = DataFixerUtil.update(chunkNbts.getCompound("entityChunk"));
+		CompoundTag entityChunkNbt = DataFixerUtil.update(chunkNbts.getCompound("entityChunk"));
 		for (String s : chunkNbts.getAllKeys()) {
 			int i = s.indexOf(' ');
 			if (i == -1) {
@@ -366,7 +373,7 @@ public class CQStructure {
 		world.chunks().stream().collect(Collectors.toList()).forEach(Chunk::postProcessGeneration);
 
 		this.author = cqrStructureNbt.getString("author");
-		this.size = NBTUtil.readBlockPos(cqrStructureNbt.getCompound("size"));
+		this.size = NbtUtils.readBlockPos(cqrStructureNbt.getCompound("size"));
 
 		this.blockInfoList.clear();
 		this.entityInfoList.clear();
@@ -374,12 +381,12 @@ public class CQStructure {
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
-		ListNBT compoundTagList = cqrStructureNbt.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
+		ListTag compoundTagList = cqrStructureNbt.getList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
 		int blockStateIndex = 0;
 		for (INBT nbt : cqrStructureNbt.getList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((CompoundNBT) nbt), blockStateIndex++);
+			blockStatePalette.addMapping(NbtUtils.readBlockState((CompoundTag) nbt), blockStateIndex++);
 		}
 
 		// Load normal blocks
@@ -398,7 +405,7 @@ public class CQStructure {
 					BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
 							.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
 							.orElse(Blocks.AIR.defaultBlockState());
-					TileEntity tileEntity = chunk.getBlockEntity(pos);
+					BlockEntity tileEntity = chunk.getBlockEntity(pos);
 					this.blockInfoList.add(new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
 				} else {
 					this.blockInfoList.add(PreparablePosInfo.Registry.read(buf, blockStatePalette, compoundTagList));
@@ -414,7 +421,7 @@ public class CQStructure {
 				BlockState state = Optional.ofNullable(chunk.getSections()[pos.getY() >> 4])
 						.map(section -> section.getBlockState(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15))
 						.orElse(Blocks.AIR.defaultBlockState());
-				TileEntity tileEntity = chunk.getBlockEntity(pos);
+				BlockEntity tileEntity = chunk.getBlockEntity(pos);
 				this.blockInfoList.add(new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(tileEntity)));
 			} else if (id == 3) {
 				// boss
@@ -423,8 +430,8 @@ public class CQStructure {
 			} else if (id == 6) {
 				// spawner
 				buf.readerIndex(buf.readerIndex() + 1);
-				CompoundNBT spawnerTag = compoundTagList.getCompound(buf.readInt());
-				ListNBT items = spawnerTag.getCompound("inventory").getList("Items", NBT.TAG_COMPOUND);
+				CompoundTag spawnerTag = compoundTagList.getCompound(buf.readInt());
+				ListTag items = spawnerTag.getCompound("inventory").getList("Items", NBT.TAG_COMPOUND);
 				int itemCount = buf.readByte();
 				for (int j = 0; j < itemCount; j++) {
 					items.getCompound(j).getCompound("tag").put("EntityIn", entityChunkNbt.getCompound("Level").getList("Entities", NBT.TAG_COMPOUND).getCompound(buf.readInt()));

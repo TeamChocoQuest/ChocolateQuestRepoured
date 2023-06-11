@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.network.IPacket;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ShieldItem;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
@@ -23,15 +24,15 @@ public class ProjectileBubble extends ProjectileBase {
 	private LivingEntity shooter;
 	protected float damage;
 
-	public ProjectileBubble(EntityType<? extends ProjectileBase> throwableEntity, World world) {
+	public ProjectileBubble(EntityType<? extends ProjectileBase> throwableEntity, Level world) {
 		super(throwableEntity, world);
 	}
 
-	public ProjectileBubble(double pX, double pY, double pZ, World world) {
+	public ProjectileBubble(double pX, double pY, double pZ, Level world) {
 		super(CQREntityTypes.PROJECTILE_BUBBLE.get(), world);
 	}
 
-	public ProjectileBubble(LivingEntity shooter, World world)
+	public ProjectileBubble(LivingEntity shooter, Level world)
 	{
 		super(CQREntityTypes.PROJECTILE_BUBBLE.get(), shooter, world);
 		this.shooter = shooter;
@@ -86,18 +87,18 @@ public class ProjectileBubble extends ProjectileBase {
 	}
 	
 	@Override
-	protected void onHit(RayTraceResult pResult)
+	protected void onHit(HitResult pResult)
 	{
-		RayTraceResult.Type raytraceresult$type = pResult.getType();
-		if(raytraceresult$type == RayTraceResult.Type.ENTITY)
+		HitResult.Type raytraceresult$type = pResult.getType();
+		if(raytraceresult$type == HitResult.Type.ENTITY)
 		{
-			EntityRayTraceResult entityResult = ((EntityRayTraceResult)pResult);
+			EntityHitResult entityResult = ((EntityHitResult)pResult);
 			if(!(entityResult.getEntity() instanceof PartEntity) && entityResult.getEntity() != this.shooter)
 			{
-				this.onHitEntity((EntityRayTraceResult)pResult);
+				this.onHitEntity((EntityHitResult)pResult);
 			}
-		} else if (raytraceresult$type == RayTraceResult.Type.BLOCK) {
-			super.onHitBlock((BlockRayTraceResult) pResult);
+		} else if (raytraceresult$type == HitResult.Type.BLOCK) {
+			super.onHitBlock((BlockHitResult) pResult);
 		}
 		super.onHit(pResult);
 	}
@@ -115,7 +116,7 @@ public class ProjectileBubble extends ProjectileBase {
 	} */
 
 	@Override
-	public void onHitEntity(EntityRayTraceResult entityResult)
+	public void onHitEntity(EntityHitResult entityResult)
 	{
 		Entity entity = entityResult.getEntity();
 
@@ -137,7 +138,7 @@ public class ProjectileBubble extends ProjectileBase {
 
 		entity.hurt(DamageSource.indirectMagic(this.shooter, this), this.damage);
 		float pitch = (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F;
-		this.level.playLocalSound(this.position().x, this.position().y, this.position().z, SoundEvents.PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
+		this.level.playLocalSound(this.position().x, this.position().y, this.position().z, SoundEvents.PLAYER_SWIM, SoundSource.PLAYERS, 4, pitch, true);
 
 		EntityBubble bubbles = CQREntityTypes.BUBBLE.get().create(this.level);
 		bubbles.moveTo(entity.blockPosition().offset(0, 0.25, 0), entity.yRot, entity.xRot);
@@ -164,7 +165,7 @@ public class ProjectileBubble extends ProjectileBase {
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

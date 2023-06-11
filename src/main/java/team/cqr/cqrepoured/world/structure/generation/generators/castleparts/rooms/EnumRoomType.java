@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms;
 
-import org.joml.Vector3i;
+import net.minecraft.util.math.vector.Vector3i;
 
 public enum EnumRoomType {
 	NONE(false, false, false, false, new Vector3i(999, 999, 999)),

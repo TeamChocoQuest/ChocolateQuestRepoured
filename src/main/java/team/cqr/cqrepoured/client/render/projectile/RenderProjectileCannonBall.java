@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.client.render.projectile;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
@@ -20,19 +19,19 @@ public class RenderProjectileCannonBall extends EntityRenderer<ProjectileCannonB
 
 	private final EntityModel model = new ModelCannonBall();
 
-	public RenderProjectileCannonBall(EntityRendererManager renderManager)
+	public RenderProjectileCannonBall(Context renderManager)
 	{
 		super(renderManager);
 	}
 
 	@Override
-	public void render(ProjectileCannonBall cannonBall, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+	public void render(ProjectileCannonBall cannonBall, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
 		matrixStack.pushPose();
 		RenderSystem.disableCull();
 		matrixStack.scale(0.875F, 0.875F, 0.875F);
 		matrixStack.scale(-1, -1, -1);
 
-		IVertexBuilder builder = buffer.getBuffer(RenderType.entityCutout(TEXTURE));
+		VertexConsumer builder = buffer.getBuffer(RenderType.entityCutout(TEXTURE));
 		this.model.renderToBuffer(matrixStack, builder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
 		RenderSystem.enableCull();

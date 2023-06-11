@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.giantspider;
 
-import java.util.EnumSet;
-
-import net.minecraft.entity.MobEntity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
+import net.minecraft.util.Mth;
+
+import java.util.EnumSet;
 
 public class BossAISpiderLeapAttack extends Goal {
 	/** The entity that is leaping. */
@@ -75,7 +74,7 @@ public class BossAISpiderLeapAttack extends Goal {
 	public void start() {
 		double d0 = this.leapTarget.getX() - this.leaper.getX();
 		double d1 = this.leapTarget.getZ() - this.leaper.getZ();
-		float f = MathHelper.sqrt(d0 * d0 + d1 * d1);
+		float f = Mth.sqrt(d0 * d0 + d1 * d1);
 
 		this.leaper.getLookControl().setLookAt(this.leapTarget, 100F, 100F);
 

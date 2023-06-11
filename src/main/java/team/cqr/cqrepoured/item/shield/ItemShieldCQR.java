@@ -1,10 +1,11 @@
 package team.cqr.cqrepoured.item.shield;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
+import net.minecraft.item.ShieldItem;
+
+import javax.annotation.Nullable;
 
 public class ItemShieldCQR extends ShieldItem {
 

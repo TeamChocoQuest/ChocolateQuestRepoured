@@ -1,17 +1,19 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.entity.EntityClassification;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityType.IFactory;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.EntitySlimePart;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
@@ -85,7 +87,6 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileSpiderBall;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileThrownBlock;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileVampiricSpell;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
@@ -98,64 +99,64 @@ public class CQREntityTypes {
 
 	//Projectiles //#TODO probably will be changed to registerSized, tweak values
 	public static final RegistryObject<EntityType<ProjectileBubble>> PROJECTILE_BUBBLE = ENTITY_TYPES.register("projectile_bubble",
-			() -> EntityType.Builder.<ProjectileBubble>of(ProjectileBubble::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10) //.fireImmune() I guess it isn't though
+			() -> EntityType.Builder.<ProjectileBubble>of(ProjectileBubble::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10) //.fireImmune() I guess it isn't though
 					.build(CQRMain.prefix("projectile_bubble").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileBullet>> PROJECTILE_BULLET = ENTITY_TYPES.register("projectile_bullet",
-			() -> EntityType.Builder.<ProjectileBullet>of(ProjectileBullet::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
+			() -> EntityType.Builder.<ProjectileBullet>of(ProjectileBullet::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_bullet").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileEarthQuake>> PROJECTILE_EARTH_QUAKE = ENTITY_TYPES.register("projectile_earth_quake",
-			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, EntityClassification.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).fireImmune()
+			() -> EntityType.Builder.<ProjectileEarthQuake>of(ProjectileEarthQuake::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_earth_quake").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileCannonBall>> PROJECTILE_CANNON_BALL = ENTITY_TYPES.register("projectile_cannon_ball",
-			() -> EntityType.Builder.<ProjectileCannonBall>of(ProjectileCannonBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
+			() -> EntityType.Builder.<ProjectileCannonBall>of(ProjectileCannonBall::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10).fireImmune()
 					.build(CQRMain.prefix("projectile_cannon_ball").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileWeb>> PROJECTILE_WEB = ENTITY_TYPES.register("projectile_web",
-			() -> EntityType.Builder.<ProjectileWeb>of(ProjectileWeb::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileWeb>of(ProjectileWeb::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_web").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileVampiricSpell>> PROJECTILE_VAMPIRIC_SPELL = ENTITY_TYPES.register("projectile_vampiric_spell",
-			() -> EntityType.Builder.<ProjectileVampiricSpell>of(ProjectileVampiricSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileVampiricSpell>of(ProjectileVampiricSpell::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_vampiric_spell").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileSpiderBall>> PROJECTILE_SPIDER_BALL = ENTITY_TYPES.register("projectile_spider_ball",
-			() -> EntityType.Builder.<ProjectileSpiderBall>of(ProjectileSpiderBall::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileSpiderBall>of(ProjectileSpiderBall::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_spider_ball").toString()));
 
 	public static final RegistryObject<EntityType<ProjectilePoisonSpell>> PROJECTILE_POISON_SPELL = ENTITY_TYPES.register("projectile_poison_spell",
-			() -> EntityType.Builder.<ProjectilePoisonSpell>of(ProjectilePoisonSpell::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectilePoisonSpell>of(ProjectilePoisonSpell::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_poison_spell").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileHotFireball>> PROJECTILE_HOT_FIREBALL = ENTITY_TYPES.register("projectile_hot_fireball",
-			() -> EntityType.Builder.<ProjectileHotFireball>of(ProjectileHotFireball::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileHotFireball>of(ProjectileHotFireball::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_hot_fireball").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileFireWallPart>> PROJECTILE_FIRE_WALL_PART = ENTITY_TYPES.register("projectile_fire_wall_part",
-			() -> EntityType.Builder.<ProjectileFireWallPart>of(ProjectileFireWallPart::new, EntityClassification.MISC).sized(1.0F, 2.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileFireWallPart>of(ProjectileFireWallPart::new, MobCategory.MISC).sized(1.0F, 2.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_fire_wall_part").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileHomingEnderEye>> PROJECTILE_HOMING_ENDER_EYE = ENTITY_TYPES.register("projectile_homing_ender_eye",
-			() -> EntityType.Builder.<ProjectileHomingEnderEye>of(ProjectileHomingEnderEye::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileHomingEnderEye>of(ProjectileHomingEnderEye::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_homing_ender_eye").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileThrownBlock>> PROJECTILE_THROWN_BLOCK = ENTITY_TYPES.register("projectile_thrown_block",
-			() -> EntityType.Builder.<ProjectileThrownBlock>of(ProjectileThrownBlock::new, EntityClassification.MISC).sized(1.0F, 1.0F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileThrownBlock>of(ProjectileThrownBlock::new, MobCategory.MISC).sized(1.0F, 1.0F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_thrown_block").toString()));
 
 	public static final RegistryObject<EntityType<ProjectileEnergyOrb>> PROJECTILE_ENERGY_ORB = ENTITY_TYPES.register("projectile_energy_orb",
-			() -> EntityType.Builder.<ProjectileEnergyOrb>of(ProjectileEnergyOrb::new, EntityClassification.MISC).sized(1.5F, 1.5F).clientTrackingRange(4).updateInterval(10)
+			() -> EntityType.Builder.<ProjectileEnergyOrb>of(ProjectileEnergyOrb::new, MobCategory.MISC).sized(1.5F, 1.5F).clientTrackingRange(4).updateInterval(10)
 					.build(CQRMain.prefix("projectile_energy_orb").toString())); 
 
 	public static final RegistryObject<EntityType<ProjectileHookShotHook>> PROJECTILE_HOOKSHOT_HOOK = ENTITY_TYPES.register("projectile_hookshot_hook",
-			() -> EntityType.Builder.<ProjectileHookShotHook>of(ProjectileHookShotHook::new, EntityClassification.MISC).sized(0.5F, 0.5F).clientTrackingRange(12).updateInterval(5)
+			() -> EntityType.Builder.<ProjectileHookShotHook>of(ProjectileHookShotHook::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(12).updateInterval(5)
 					.build(CQRMain.prefix("projectile_hookshot_hook").toString()));
 	
 
 	public static final RegistryObject<EntityType<EntityColoredLightningBolt>> COLORED_LIGHTNING = ENTITY_TYPES.register("colored_lightning_bolt",
-			() -> EntityType.Builder.<EntityColoredLightningBolt>of(EntityColoredLightningBolt::new, EntityClassification.MISC)
+			() -> EntityType.Builder.<EntityColoredLightningBolt>of(EntityColoredLightningBolt::new, MobCategory.MISC)
 			.noSave()
 			.sized(0.0F, 0.0F)
 			.clientTrackingRange(32)
@@ -163,7 +164,7 @@ public class CQREntityTypes {
 			.build(CQRMain.prefix("colored_lightning_bolt").toString())
 		);
 	public static final RegistryObject<EntityType<EntityWalkerTornado>> WALKER_TORNADO = ENTITY_TYPES.register("walker_tornado",
-			() -> EntityType.Builder.<EntityWalkerTornado>of(EntityWalkerTornado::new, EntityClassification.MISC)
+			() -> EntityType.Builder.<EntityWalkerTornado>of(EntityWalkerTornado::new, MobCategory.MISC)
 			.sized(0.5F, 0.5F)
 			.clientTrackingRange(64)
 			.updateInterval(1)
@@ -264,7 +265,7 @@ public class CQREntityTypes {
 
 	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(IFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
 		RegistryObject<EntityType<T>> result = ENTITY_TYPES.register(entityName, () -> EntityType.Builder
-				.<T>of(factory, EntityClassification.MISC)
+				.<T>of(factory, MobCategory.MISC)
 				.sized(width, height)
 				.setTrackingRange(128)
 				.clientTrackingRange(64)

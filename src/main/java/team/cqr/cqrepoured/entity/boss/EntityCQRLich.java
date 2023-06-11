@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.joml.Vector3d;
-
-import net.minecraft.core.BlockPos;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.IPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -40,11 +40,11 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
 
-	public EntityCQRLich(World world) {
+	public EntityCQRLich(Level world) {
 		this(CQREntityTypes.LICH.get(), world);
 	}
 
-	public EntityCQRLich(EntityType<? extends AbstractEntityCQR> type, World worldIn) {
+	public EntityCQRLich(EntityType<? extends AbstractEntityCQR> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
@@ -85,7 +85,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 				return true;
 			}
 		});
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 15, 10, new ResourceLocation(CQRMain.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 25, 5, new Vector3d(0, 0, 0)) {
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 15, 10, new ResourceLocation(CQRMain.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 25, 5, new Vec3(0, 0, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;
@@ -156,18 +156,18 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound) {
+	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		if (this.currentPhylacteryPosition != null) {
-			compound.put("currentPhylactery", NBTUtil.writeBlockPos(this.currentPhylacteryPosition));
+			compound.put("currentPhylactery", NbtUtils.writeBlockPos(this.currentPhylacteryPosition));
 		}
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound) {
+	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("currentPhylactery")) {
-			this.currentPhylacteryPosition = NBTUtil.readBlockPos(compound.getCompound("currentPhylactery"));
+			this.currentPhylacteryPosition = NbtUtils.readBlockPos(compound.getCompound("currentPhylactery"));
 		}
 	}
 
@@ -181,7 +181,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public IPacket<?> getAddEntityPacket() {
+	public Packet<?> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

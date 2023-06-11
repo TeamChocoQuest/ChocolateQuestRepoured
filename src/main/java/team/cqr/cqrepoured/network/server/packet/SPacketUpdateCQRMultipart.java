@@ -2,8 +2,9 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.io.IOException;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.network.AbstractPacket;
@@ -11,14 +12,14 @@ import team.cqr.cqrepoured.network.AbstractPacket;
 public class SPacketUpdateCQRMultipart extends AbstractPacket<SPacketUpdateCQRMultipart> {
 
 	private int id;
-	private PacketBuffer buffer;
+	private FriendlyByteBuf buffer;
 	private Entity entity;
 	
 	public SPacketUpdateCQRMultipart() {
 		
 	}
 
-	public SPacketUpdateCQRMultipart(PacketBuffer buf) {
+	public SPacketUpdateCQRMultipart(FriendlyByteBuf buf) {
 		this.id = buf.readInt();
 		this.buffer = buf;
 	}
@@ -33,13 +34,13 @@ public class SPacketUpdateCQRMultipart extends AbstractPacket<SPacketUpdateCQRMu
 	}
 
 	@Override
-	public SPacketUpdateCQRMultipart fromBytes(PacketBuffer buffer) {
+	public SPacketUpdateCQRMultipart fromBytes(FriendlyByteBuf buffer) {
 		SPacketUpdateCQRMultipart result = new SPacketUpdateCQRMultipart(buffer);
 		return result;
 	}
 
 	@Override
-	public void toBytes(SPacketUpdateCQRMultipart packet, PacketBuffer packetBuffer) {
+	public void toBytes(SPacketUpdateCQRMultipart packet, FriendlyByteBuf packetBuffer) {
 		try {
 			packetBuffer.writeInt(packet.entity.getId());
 			PartEntity<?>[] parts = packet.entity.getParts();
@@ -52,7 +53,7 @@ public class SPacketUpdateCQRMultipart extends AbstractPacket<SPacketUpdateCQRMu
 						boolean dirty = cqrPart.getEntityData().isDirty();
 						packetBuffer.writeBoolean(dirty);
 						if (dirty)
-							EntityDataManager.pack(cqrPart.getEntityData().packDirty(), packetBuffer);
+							SynchedEntityData.pack(cqrPart.getEntityData().packDirty(), packetBuffer);
 					}
 				}
 			}
@@ -65,7 +66,7 @@ public class SPacketUpdateCQRMultipart extends AbstractPacket<SPacketUpdateCQRMu
 		return id;
 	}
 
-	public PacketBuffer getBuffer() {
+	public FriendlyByteBuf getBuffer() {
 		return buffer;
 	}
 

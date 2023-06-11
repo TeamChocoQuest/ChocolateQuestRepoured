@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
@@ -31,10 +31,10 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 		level.setBlockState(transformedPos, CQRBlocks.TNT.get().defaultBlockState().setValue(BlockTNTCQR.HIDDEN, false));
 	}
 
-	public static class Factory implements IFactory<TileEntity> {
+	public static class Factory implements IFactory<BlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(World level, BlockPos pos, BlockState state, LazyOptional<TileEntity> blockEntityLazy) {
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BlockEntity> blockEntityLazy) {
 			return new PreparableTNTCQRInfo();
 		}
 
@@ -43,12 +43,12 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableTNTCQRInfo> {
 
 		@Override
-		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette palette, ListNBT nbtList) {
+		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
 			return new PreparableTNTCQRInfo();
 		}
 

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import net.minecraft.world.entity.Entity;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ITradeRestockOverTime {
 	
@@ -20,7 +21,7 @@ public interface ITradeRestockOverTime {
 			if(!this.hasTrades()) {
 				return;
 			}
-			long ticksExisted = ((Entity)this).level.getGameTime();
+			long ticksExisted = ((Entity)this).level().getGameTime();
 			long lastTimed = this.getLastTimedRestockTime();
 			if(lastTimed <= 0) {
 				this.setLastTimedRestockTime(ticksExisted);
@@ -34,7 +35,7 @@ public interface ITradeRestockOverTime {
 					TraderOffer offer = this.getTrades();
 					List<Trade> trades = offer.getTrades().stream().filter(Trade::canRestock).collect(Collectors.toList());
 					for(int i = 0; !trades.isEmpty() && i < restocks; i++) {
-						int index = ((Entity) this).level.random.nextInt(trades.size());
+						int index = ((Entity) this).level().random.nextInt(trades.size());
 						Trade trade = trades.get(index);
 						trade.incStock();
 						if (!trade.canRestock()) {

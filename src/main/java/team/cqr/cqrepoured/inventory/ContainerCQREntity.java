@@ -1,22 +1,19 @@
 package team.cqr.cqrepoured.inventory;
 
-import java.awt.Container;
-import java.util.Objects;
-
 import com.mojang.datafixers.util.Pair;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.PlayerContainer;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ArrowItem;
+import net.minecraft.item.ShieldItem;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
@@ -32,6 +29,8 @@ import team.cqr.cqrepoured.item.ItemBadge;
 import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.gun.ItemBullet;
 
+import java.util.Objects;
+
 public class ContainerCQREntity extends Container {
 
 	private final AbstractEntityCQR entity;
@@ -42,7 +41,7 @@ public class ContainerCQREntity extends Container {
 	public static final ResourceLocation EMPTY_SLOT_BADGE = CQRMain.prefix("items/empty_slot_badge");
 	public static final ResourceLocation EMPTY_SLOT_ARROW = CQRMain.prefix("items/empty_slot_arrow");
 
-	public ContainerCQREntity(final int containerID, PlayerInventory playerInv, PacketBuffer data)
+	public ContainerCQREntity(final int containerID, Inventory playerInv, FriendlyByteBuf data)
 	{
 		this(containerID, playerInv, getEntity(playerInv, data));
 	}
@@ -51,7 +50,7 @@ public class ContainerCQREntity extends Container {
 		return this.entity;
 	}
 	
-	private static AbstractEntityCQR getEntity(final PlayerInventory playerInventory, final PacketBuffer data)
+	private static AbstractEntityCQR getEntity(final Inventory playerInventory, final FriendlyByteBuf data)
 	{
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		int entityID = data.readInt();
@@ -63,7 +62,7 @@ public class ContainerCQREntity extends Container {
 		throw new IllegalStateException("EntityID is not correct! " + entityID);
 	}
 
-	public ContainerCQREntity(final int containerID, PlayerInventory playerInv, AbstractEntityCQR entity) {
+	public ContainerCQREntity(final int containerID, Inventory playerInv, AbstractEntityCQR entity) {
 		super(CQRContainerTypes.CQR_ENTITY_EDITOR.get(), containerID);
 		this.entity = entity;
 		if(entity == null) {
@@ -101,11 +100,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem().canEquip(stack, EquipmentSlotType.FEET, entity);
+				return stack.getItem().canEquip(stack, EquipmentSlot.FEET, entity);
 			}
 
 			@Override
-			public boolean mayPickup(PlayerEntity playerIn) {
+			public boolean mayPickup(Player playerIn) {
 				ItemStack itemstack = this.getItem();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(playerIn);
 			}
@@ -113,7 +112,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_BOOTS);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS);
 			}
 
 		});
@@ -126,11 +125,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem().canEquip(stack, EquipmentSlotType.LEGS, entity);
+				return stack.getItem().canEquip(stack, EquipmentSlot.LEGS, entity);
 			}
 
 			@Override
-			public boolean mayPickup(PlayerEntity playerIn) {
+			public boolean mayPickup(Player playerIn) {
 				ItemStack itemstack = this.getItem();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(playerIn);
 			}
@@ -138,7 +137,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_LEGGINGS);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS);
 			}
 		});
 		this.addSlot(new SlotItemHandler(inventory, 4, 71, 8) {
@@ -149,11 +148,11 @@ public class ContainerCQREntity extends Container {
 
 			@Override
 			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem().canEquip(stack, EquipmentSlotType.CHEST, entity);
+				return stack.getItem().canEquip(stack, EquipmentSlot.CHEST, entity);
 			}
 
 			@Override
-			public boolean mayPickup(PlayerEntity playerIn) {
+			public boolean mayPickup(Player playerIn) {
 				ItemStack itemstack = this.getItem();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(playerIn);
 			}
@@ -161,7 +160,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_CHESTPLATE);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE);
 			}
 		});
 		//helmet
@@ -172,7 +171,7 @@ public class ContainerCQREntity extends Container {
 			}
 
 			@Override
-			public boolean mayPickup(PlayerEntity playerIn) {
+			public boolean mayPickup(Player playerIn) {
 				ItemStack itemstack = this.getItem();
 				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(playerIn);
 			}
@@ -180,7 +179,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, PlayerContainer.EMPTY_ARMOR_SLOT_HELMET);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET);
 			}
 		});
 		//mainhand
@@ -188,7 +187,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_MAIN_HAND);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_MAIN_HAND);
 			}
 		});
 		//offhand
@@ -196,7 +195,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_OFF_HAND);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_OFF_HAND);
 			}
 		});
 		//potion
@@ -209,7 +208,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_POTION);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_POTION);
 			}
 		});
 		//badge
@@ -222,7 +221,7 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_BADGE);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_BADGE);
 			}
 		});
 		//arrow
@@ -235,13 +234,13 @@ public class ContainerCQREntity extends Container {
 			@OnlyIn(Dist.CLIENT)
 			@Override
 			public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-				return Pair.of(PlayerContainer.BLOCK_ATLAS, EMPTY_SLOT_ARROW);
+				return Pair.of(InventoryMenu.BLOCK_ATLAS, EMPTY_SLOT_ARROW);
 			}
 		});
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity playerIn) {
+	public boolean stillValid(Player playerIn) {
 		if (!playerIn.isCreative() && this.entity.getLeader() != playerIn) {
 			return false;
 		}
@@ -252,7 +251,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	@Override
-	public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
+	public ItemStack quickMoveStack(Player playerIn, int index) {
 		Slot slot = this.slots.get(index);
 
 		if (slot != null && slot.hasItem()) {
@@ -294,7 +293,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	private boolean isHelmet(ItemStack stack) {
-		return (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).getSlot() == EquipmentSlotType.HEAD) || stack.getItem().getEquipmentSlot(stack) == EquipmentSlotType.HEAD;
+		return (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).getSlot() == EquipmentSlot.HEAD) || stack.getItem().getEquipmentSlot(stack) == EquipmentSlot.HEAD;
 	}
 
 }

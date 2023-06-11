@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.network.datasync;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler> {
@@ -18,21 +18,21 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	}
 
 	@Override
-	public INBT write() {
+	public Tag write() {
 		return this.value.serializeNBT();
 	}
 
 	@Override
-	protected void readInternal(INBT nbt) {
+	protected void readInternal(Tag nbt) {
 		this.canMarkDirty = false;
-		if (nbt instanceof CompoundNBT) {
-			this.value.deserializeNBT((CompoundNBT) nbt);
+		if (nbt instanceof CompoundTag) {
+			this.value.deserializeNBT((CompoundTag) nbt);
 		}
 		this.canMarkDirty = true;
 	}
 
 	@Override
-	public void writeChanges(PacketBuffer buf) {
+	public void writeChanges(FriendlyByteBuf buf) {
 		int size = 0;
 		for (boolean dirtySlot : this.dirtySlots) {
 			if (dirtySlot) {
@@ -49,7 +49,7 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 	}
 
 	@Override
-	protected void readChangesInternal(PacketBuffer buf) {
+	protected void readChangesInternal(FriendlyByteBuf buf) {
 		this.canMarkDirty = false;
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
@@ -79,7 +79,7 @@ public class DataEntryItemStackHandler extends DataEntryObject<ItemStackHandler>
 		if (dataManager == null) {
 			return;
 		}
-		World world = dataManager.getTileEntity().getLevel();
+		Level world = dataManager.getTileEntity().getLevel();
 		if (world == null) {
 			return;
 		}

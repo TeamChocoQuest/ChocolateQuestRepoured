@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.particle;
 
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 public class ParticleWalkerTornado extends EntityParticle {
 
-	public ParticleWalkerTornado(ClientWorld worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
+	public ParticleWalkerTornado(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 
 		this.xd = xSpeedIn + (Math.random() * 2.0D - 1.0D) * 0.05000000074505806D;
