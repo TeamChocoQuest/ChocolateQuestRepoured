@@ -27,3 +27,6 @@ logs
 blockbench/*.java
 _notes/cqr-notes/OneNote_RecycleBin/
 .factorypath
+/.apt_generated/
+/.apt_generated_tests/
+
