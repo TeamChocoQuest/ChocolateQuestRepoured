@@ -1,22 +1,27 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Util;
-import net.minecraft.util.datafix.TypeReferences;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.BlockExporterChestFixed;
-import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.tileentity.*;
-
 import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.datafix.TypeReferences;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.block.BlockExporterChestFixed;
+import team.cqr.cqrepoured.block.BlockTable;
+import team.cqr.cqrepoured.tileentity.TileEntityBoss;
+import team.cqr.cqrepoured.tileentity.TileEntityExporter;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
+import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
+import team.cqr.cqrepoured.tileentity.TileEntityMap;
+import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
+import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
 public class CQRBlockEntities {
 

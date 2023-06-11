@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nonnull;
+import net.minecraft.resources.ResourceLocation;
 
 public class DataEntryResourceLocation extends DataEntryObject<ResourceLocation> {
 

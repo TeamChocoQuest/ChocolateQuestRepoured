@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.boss.spectrelord;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.joml.Vector3d;
+
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityCQRSpectreLord;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityAISpectreLordLaser extends AbstractEntityAISpell<EntityCQRSpectreLord> implements IEntityAISpellAnimatedVanilla {
 

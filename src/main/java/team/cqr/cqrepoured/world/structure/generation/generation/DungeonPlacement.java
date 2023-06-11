@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 

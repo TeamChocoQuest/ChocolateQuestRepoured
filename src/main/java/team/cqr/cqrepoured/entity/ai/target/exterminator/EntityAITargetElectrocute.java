@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.target.exterminator;
 
-import net.minecraft.entity.LivingEntity;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.target.EntityAICQRNearestAttackTarget;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class EntityAITargetElectrocute extends EntityAICQRNearestAttackTarget {
 

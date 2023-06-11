@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.block.banner;
 
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.tileentity.BannerPattern.Builder;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBannerPatterns;
 

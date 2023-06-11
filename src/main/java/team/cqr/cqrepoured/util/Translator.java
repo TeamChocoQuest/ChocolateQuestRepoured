@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class Translator {

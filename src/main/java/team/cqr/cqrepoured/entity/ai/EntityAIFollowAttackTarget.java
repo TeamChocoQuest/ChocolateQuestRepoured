@@ -1,9 +1,11 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.util.math.vector.Vector3d;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
 import java.util.EnumSet;
+
+import org.joml.Vector3d;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 

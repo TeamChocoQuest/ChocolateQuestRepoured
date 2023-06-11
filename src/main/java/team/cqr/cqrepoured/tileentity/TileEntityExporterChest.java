@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public abstract class TileEntityExporterChest extends ChestTileEntity {
 

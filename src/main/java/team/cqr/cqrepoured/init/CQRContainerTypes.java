@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.init;
 
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
 import team.cqr.cqrepoured.inventory.ContainerBackpack;

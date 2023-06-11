@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.INBTType;
@@ -15,7 +16,6 @@ import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTypes;
 import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class NBTHelper {

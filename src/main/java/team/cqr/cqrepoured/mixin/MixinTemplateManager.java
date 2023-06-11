@@ -9,10 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.common.util.Constants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.template.ExtendedStructureTemplate;
 

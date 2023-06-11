@@ -1,11 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import net.minecraft.util.math.vector.Vector3d;
+import java.util.EnumSet;
+
+import org.joml.Vector3d;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.EnumSet;
 
 public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 

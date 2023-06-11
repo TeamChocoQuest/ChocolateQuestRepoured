@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network;
 
-import net.minecraftforge.fml.network.NetworkEvent;
-
 import java.util.function.Supplier;
+
+import net.minecraftforge.network.NetworkEvent;
 
 public interface IMessageHandler<T extends Object> {
 	

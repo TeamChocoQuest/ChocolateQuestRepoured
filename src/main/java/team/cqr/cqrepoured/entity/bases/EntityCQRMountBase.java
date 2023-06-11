@@ -2,15 +2,13 @@ package team.cqr.cqrepoured.entity.bases;
 
 import javax.annotation.Nullable;
 
+import org.joml.Vector3d;
+
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.BoostHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRideable;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.LookAtGoal;
 import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.AnimalEntity;
@@ -20,8 +18,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.server.ServerWorld;
 
 public abstract class EntityCQRMountBase extends AnimalEntity implements IRideable {

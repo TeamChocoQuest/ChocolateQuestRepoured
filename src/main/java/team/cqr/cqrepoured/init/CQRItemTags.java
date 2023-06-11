@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
+import net.minecraftforge.registries.tags.ITag;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CQRItemTags {

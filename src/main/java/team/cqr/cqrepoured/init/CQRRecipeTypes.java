@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.init;
 
 import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.item.crafting.RecipeCrownAttach;
 import team.cqr.cqrepoured.item.crafting.RecipeCrownDetach;

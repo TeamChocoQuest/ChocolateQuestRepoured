@@ -1,9 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.inhabitants;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.init.CQRItems;

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity.boss.exterminator;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import org.joml.Vector3d;
+
 import net.minecraft.network.IPacket;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityTargetingLaser;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 

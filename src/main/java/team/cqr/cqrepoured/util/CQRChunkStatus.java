@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.util;
 
 import java.util.List;
 
-import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.server.ServerWorld;
 
 public class CQRChunkStatus {

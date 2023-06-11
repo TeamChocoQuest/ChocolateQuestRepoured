@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import java.io.IOException;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraftforge.entity.PartEntity;

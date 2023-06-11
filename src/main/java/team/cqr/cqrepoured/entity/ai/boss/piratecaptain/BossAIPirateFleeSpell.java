@@ -1,18 +1,19 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
+import java.util.List;
+
+import org.joml.Vector3d;
+
 import com.google.common.base.Predicate;
+
 import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
-
-import java.util.List;
 
 public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
 

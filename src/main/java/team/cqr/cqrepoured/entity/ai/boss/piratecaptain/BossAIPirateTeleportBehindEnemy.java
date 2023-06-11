@@ -1,8 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.piratecaptain;
 
-import net.minecraft.item.ItemStack;
+import org.joml.Vector3d;
+
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRPirateCaptain;
 import team.cqr.cqrepoured.init.CQRItems;

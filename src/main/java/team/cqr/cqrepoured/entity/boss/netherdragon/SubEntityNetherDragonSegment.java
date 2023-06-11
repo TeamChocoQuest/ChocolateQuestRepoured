@@ -2,20 +2,19 @@ package team.cqr.cqrepoured.entity.boss.netherdragon;
 
 import javax.annotation.Nullable;
 
-
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
+
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.world.Explosion.Mode;
+import net.minecraft.world.damagesource.DamageSource;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 

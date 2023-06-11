@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.gui.screen.WorldLoadProgressScreen;
-import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import team.cqr.cqrepoured.util.CQRChunkStatus;
 
 @Mixin(WorldLoadProgressScreen.class)

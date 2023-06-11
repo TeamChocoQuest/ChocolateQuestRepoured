@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.util.IntUtil;
 
 public class NoiseUtil {

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.level.pathfinder.PathFinder;
 
 public class PathNavigateDirectLine extends PathNavigator {
 

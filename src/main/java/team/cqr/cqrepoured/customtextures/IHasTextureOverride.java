@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.customtextures;
 
-import net.minecraft.util.ResourceLocation;
-
 import javax.annotation.Nonnull;
+
+import net.minecraft.resources.ResourceLocation;
 
 public interface IHasTextureOverride {
 

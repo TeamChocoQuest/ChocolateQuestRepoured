@@ -1,21 +1,18 @@
 package team.cqr.cqrepoured.item;
 
-import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
-import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;

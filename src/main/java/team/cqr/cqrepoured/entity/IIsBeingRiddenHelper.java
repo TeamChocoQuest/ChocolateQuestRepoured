@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
-
 public interface IIsBeingRiddenHelper {
 
 	public default boolean isBeingRidden() {

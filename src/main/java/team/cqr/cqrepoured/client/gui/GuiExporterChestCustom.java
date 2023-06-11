@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.screen.Screen;
+
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 

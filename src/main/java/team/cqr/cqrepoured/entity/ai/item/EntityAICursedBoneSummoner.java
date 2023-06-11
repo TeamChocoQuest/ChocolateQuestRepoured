@@ -1,11 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
@@ -13,10 +17,6 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.ItemCursedBone;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 // TODO: Make entity strafe backwards (like with the bow) while they are casting
 public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEntityCQR> implements ISummoner {

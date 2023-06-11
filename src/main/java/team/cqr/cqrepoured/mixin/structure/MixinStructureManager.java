@@ -4,8 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.feature.structure.StructureManager;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import team.cqr.cqrepoured.util.CQRChunkStatus;
 
 @Mixin(StructureManager.class)

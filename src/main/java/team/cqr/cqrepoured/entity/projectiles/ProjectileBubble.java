@@ -1,21 +1,20 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ShieldItem;
 import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.DamageSource;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.misc.EntityBubble;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 

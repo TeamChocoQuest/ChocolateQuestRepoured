@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.network.server.handler;
 
+import java.util.function.Supplier;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.inventory.IInteractable;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
-
-import java.util.function.Supplier;
 
 public class SPacketHandlerContainerClickButton extends AbstractPacketHandler<CPacketContainerClickButton> {
 

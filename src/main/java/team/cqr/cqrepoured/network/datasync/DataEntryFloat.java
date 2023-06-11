@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.FloatNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
-
-import javax.annotation.Nonnull;
 
 public class DataEntryFloat extends DataEntry<Float> {
 

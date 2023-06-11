@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.IPacket;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.boss.spectrelord.EntityRotatingLaser;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 

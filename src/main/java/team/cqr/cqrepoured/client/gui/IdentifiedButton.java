@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.client.gui;
 
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.text.ITextComponent;
 
 public class IdentifiedButton extends Button implements INumericIDButton {

@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.customtextures;
 
-import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import net.minecraft.resources.ResourceLocation;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.network.server.packet.SPacketCustomTextures;
 
 public class ClientPacketHandler {
 

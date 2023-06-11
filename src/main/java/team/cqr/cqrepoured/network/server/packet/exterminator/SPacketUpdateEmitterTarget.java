@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet.exterminator;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.network.AbstractPacket;
 

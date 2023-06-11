@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.network.datasync;
 import net.minecraft.nbt.ByteNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
 
 public class DataEntryFacing extends DataEntryObject<Direction> {
 

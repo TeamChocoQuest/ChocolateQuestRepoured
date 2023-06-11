@@ -11,10 +11,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.impl.LocateCommand;
-import team.cqr.cqrepoured.init.CQRStructures;
+import net.minecraft.commands.CommandSource;
+import net.minecraft.commands.Commands;
+import net.minecraft.server.commands.LocateCommand;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 @Mixin(LocateCommand.class)

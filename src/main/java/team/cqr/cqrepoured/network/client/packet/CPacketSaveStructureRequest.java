@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.client.packet;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class CPacketSaveStructureRequest extends AbstractPacket<CPacketSaveStructureRequest> {

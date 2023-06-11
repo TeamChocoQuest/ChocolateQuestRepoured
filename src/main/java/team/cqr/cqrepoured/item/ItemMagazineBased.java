@@ -1,14 +1,13 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.util.Constants;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public abstract class ItemMagazineBased extends ItemLore {
 

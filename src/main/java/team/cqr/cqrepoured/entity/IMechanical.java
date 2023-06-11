@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface IMechanical {
 

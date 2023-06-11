@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.util;
 import javax.annotation.Nullable;
 
 import meldexun.reflectionutil.ReflectionMethod;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class StructureHelper {
 

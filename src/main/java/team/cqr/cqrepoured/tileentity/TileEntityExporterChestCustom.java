@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryResourceLocation;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;

@@ -2,11 +2,9 @@ package team.cqr.cqrepoured.capability.armor.kingarmor;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
-import net.minecraftforge.common.util.Constants;
 
 public class CapabilityDynamicCrownStorage implements IStorage<CapabilityDynamicCrown> {
 

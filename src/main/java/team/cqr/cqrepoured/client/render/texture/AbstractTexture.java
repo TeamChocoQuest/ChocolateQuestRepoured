@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.client.render.texture;
 import java.util.function.BiFunction;
 
 import net.minecraft.client.renderer.texture.Texture;
-import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.renderers.texture.GeoAbstractTexture;
+import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.cache.texture.GeoAbstractTexture;
 
 public abstract class AbstractTexture extends GeoAbstractTexture {
 

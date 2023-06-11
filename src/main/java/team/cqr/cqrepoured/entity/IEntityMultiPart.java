@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.entity.PartEntity;
 
 public interface IEntityMultiPart<T extends Entity> {

@@ -1,17 +1,19 @@
 package team.cqr.cqrepoured.item.gun;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet;
@@ -19,9 +21,6 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
 import team.cqr.cqrepoured.init.CQRPotions;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.ItemLore;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemMusket extends ItemRevolver implements IFireArmTwoHanded {
 

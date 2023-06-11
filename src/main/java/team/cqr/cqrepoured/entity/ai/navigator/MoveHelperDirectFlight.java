@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
+import org.joml.Vector3d;
+
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class MoveHelperDirectFlight extends MovementController {
 

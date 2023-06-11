@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;

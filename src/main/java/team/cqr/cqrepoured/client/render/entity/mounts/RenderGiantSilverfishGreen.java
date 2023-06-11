@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.mounts;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.mount.EntityGiantSilverfishGreen;
 

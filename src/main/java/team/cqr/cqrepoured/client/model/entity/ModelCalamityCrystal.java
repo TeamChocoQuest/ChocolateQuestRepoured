@@ -1,12 +1,10 @@
 package team.cqr.cqrepoured.client.model.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 
 // Code largely copied from vanilla ender crystal

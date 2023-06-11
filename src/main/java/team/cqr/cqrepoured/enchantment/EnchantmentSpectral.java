@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.enchantment;
 
-import net.minecraft.enchantment.DamageEnchantment;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.enchantment.DamageEnchantment;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 public class EnchantmentSpectral extends DamageEnchantment {

@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import org.apache.commons.lang3.Validate;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundNBT;
 
 public class EntityContainer {

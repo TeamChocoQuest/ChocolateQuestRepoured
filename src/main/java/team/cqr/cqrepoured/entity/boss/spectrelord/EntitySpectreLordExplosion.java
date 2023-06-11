@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.network.NetworkHooks;
 
 public class EntitySpectreLordExplosion extends Entity {
 

@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.entity.boss.spectrelord;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import org.joml.Vector3d;
+
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 

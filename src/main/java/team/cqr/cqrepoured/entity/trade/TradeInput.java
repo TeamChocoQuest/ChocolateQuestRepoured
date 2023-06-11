@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.trade;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-
 import java.util.Comparator;
+
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
 
 public class TradeInput {
 

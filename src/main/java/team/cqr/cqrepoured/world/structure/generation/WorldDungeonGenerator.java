@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicates;
 
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;

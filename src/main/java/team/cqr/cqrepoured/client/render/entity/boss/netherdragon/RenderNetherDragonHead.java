@@ -2,17 +2,17 @@ package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.renderers.geo.layer.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelNetherDragonHeadGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class RenderNetherDragonHead extends RenderCQREntityGeo<EntityCQRNetherDragon> {

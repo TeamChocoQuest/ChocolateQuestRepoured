@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
-import net.minecraft.util.math.vector.Vector3d;
+import org.joml.Vector3d;
+
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
 
 public class BossAIFlyToTarget extends BossAIFlyToLocation {

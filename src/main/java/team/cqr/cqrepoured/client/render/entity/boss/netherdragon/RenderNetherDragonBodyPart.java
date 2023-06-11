@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelNetherDragonBodyGeo;

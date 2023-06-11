@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.server.packet;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.entity.IServerAnimationReceiver;
 import team.cqr.cqrepoured.network.AbstractPacket;
-
-import javax.annotation.Nullable;
 
 public class SPacketUpdateAnimationOfEntity extends AbstractPacket<SPacketUpdateAnimationOfEntity> {
 

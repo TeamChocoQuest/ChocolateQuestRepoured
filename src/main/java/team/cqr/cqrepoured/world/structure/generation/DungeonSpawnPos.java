@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.level.ChunkPos;
 
 public class DungeonSpawnPos {
 

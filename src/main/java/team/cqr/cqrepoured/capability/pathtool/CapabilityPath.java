@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.capability.pathtool;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
 
 public class CapabilityPath {

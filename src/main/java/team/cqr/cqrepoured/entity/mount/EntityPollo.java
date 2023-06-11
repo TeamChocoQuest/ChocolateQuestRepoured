@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.entity.mount;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 import team.cqr.cqrepoured.entity.bases.EntityCQRMountBase;
 
 public class EntityPollo extends EntityCQRMountBase {

@@ -2,12 +2,12 @@ package team.cqr.cqrepoured.config;
 
 import java.util.function.Supplier;
 
+import javax.swing.UIDefaults.LazyValue;
+
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.item.crafting.Ingredient;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CQRArmorMaterial implements IArmorMaterial {

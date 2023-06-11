@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
+import org.joml.Vector3d;
+
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;

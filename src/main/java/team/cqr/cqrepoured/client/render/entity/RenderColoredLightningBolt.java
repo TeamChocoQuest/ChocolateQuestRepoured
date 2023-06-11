@@ -2,6 +2,8 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import java.util.Random;
 
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -9,8 +11,7 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
 
 public class RenderColoredLightningBolt extends EntityRenderer<EntityColoredLightningBolt> {

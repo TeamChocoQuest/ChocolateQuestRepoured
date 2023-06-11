@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 

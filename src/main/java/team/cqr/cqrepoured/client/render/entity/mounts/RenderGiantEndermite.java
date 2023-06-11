@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.render.entity.mounts;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import net.minecraft.client.model.EndermiteModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EndermiteModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 

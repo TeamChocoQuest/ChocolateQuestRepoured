@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.level.ChunkPos;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;

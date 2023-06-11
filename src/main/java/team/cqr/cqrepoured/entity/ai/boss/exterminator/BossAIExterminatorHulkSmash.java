@@ -1,13 +1,14 @@
 package team.cqr.cqrepoured.entity.ai.boss.exterminator;
 
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
+import java.util.EnumSet;
+
+import org.joml.Vector3d;
+
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEarthQuake;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import java.util.EnumSet;
 
 public class BossAIExterminatorHulkSmash extends AbstractCQREntityAI<EntityCQRExterminator> {
 

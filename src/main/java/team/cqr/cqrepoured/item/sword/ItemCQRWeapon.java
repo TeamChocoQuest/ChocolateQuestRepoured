@@ -8,12 +8,10 @@ import java.util.stream.Collectors;
 import com.google.common.collect.Multimap;
 
 import meldexun.reflectionutil.ReflectionField;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.SwordItem;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.SwordItem;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemCQRWeapon extends SwordItem {

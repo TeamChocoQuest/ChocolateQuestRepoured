@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQRTritonGeo;

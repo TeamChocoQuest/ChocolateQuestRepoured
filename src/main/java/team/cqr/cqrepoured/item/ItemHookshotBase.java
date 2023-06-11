@@ -1,34 +1,5 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.Tags.IOptionalNamedTag;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
-import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.util.PropertyFileHelper;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,6 +8,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.joml.Vector3d;
+
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.common.Tags.IOptionalNamedTag;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
+import team.cqr.cqrepoured.init.CQRItems;
+import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.util.PropertyFileHelper;
 
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash

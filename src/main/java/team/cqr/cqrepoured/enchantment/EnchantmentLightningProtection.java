@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.enchantment;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public class EnchantmentLightningProtection extends Enchantment {
 

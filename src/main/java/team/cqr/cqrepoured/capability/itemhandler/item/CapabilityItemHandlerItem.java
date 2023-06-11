@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.capability.itemhandler.item;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.capability.itemhandler.CapabilityItemHandlerProvider;
 

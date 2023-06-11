@@ -6,11 +6,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.BitArray;
 import net.minecraft.util.ObjectIntIdentityMap;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.palette.ArrayPalette;
-import net.minecraft.util.palette.HashMapPalette;
 import net.minecraft.util.palette.IPalette;
 import net.minecraft.util.palette.IResizeCallback;
+import net.minecraft.world.level.chunk.HashMapPalette;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class PalettedContainer<T> implements IResizeCallback<T> {
 

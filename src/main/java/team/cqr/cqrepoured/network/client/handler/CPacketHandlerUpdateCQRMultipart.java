@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Supplier;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateCQRMultipart;

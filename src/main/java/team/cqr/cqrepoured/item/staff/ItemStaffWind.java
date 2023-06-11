@@ -1,10 +1,8 @@
 package team.cqr.cqrepoured.item.staff;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.ItemLore;

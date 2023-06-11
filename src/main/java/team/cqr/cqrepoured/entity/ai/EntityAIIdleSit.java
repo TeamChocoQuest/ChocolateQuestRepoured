@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.entity.ai;
 
+import java.util.EnumSet;
+import java.util.List;
+
 import com.google.common.base.Predicate;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 

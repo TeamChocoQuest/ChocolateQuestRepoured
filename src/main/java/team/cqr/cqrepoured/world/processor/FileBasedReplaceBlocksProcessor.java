@@ -13,15 +13,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.command.arguments.BlockStateInput;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.CachedBlockInfo;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 
 public class FileBasedReplaceBlocksProcessor extends AbstractFileControlledProcessor implements IReplaceBlocksProcessor {

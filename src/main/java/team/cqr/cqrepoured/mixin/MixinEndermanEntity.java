@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
 @Mixin(EndermanEntity.class)

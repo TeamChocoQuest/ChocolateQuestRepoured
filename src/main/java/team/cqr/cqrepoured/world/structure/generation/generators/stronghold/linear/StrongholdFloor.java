@@ -3,8 +3,8 @@ package team.cqr.cqrepoured.world.structure.generation.generators.stronghold.lin
 import java.io.File;
 import java.util.Random;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.util.ESkyDirection;

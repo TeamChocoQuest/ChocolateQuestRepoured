@@ -3,10 +3,9 @@ package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion.Mode;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;

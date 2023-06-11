@@ -1,19 +1,21 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
+import java.util.List;
+
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import com.google.common.base.Predicate;
-import net.minecraft.entity.LivingEntity;
+
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQRItems;
-
-import java.util.List;
 
 public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR & ICirclingEntity> extends AbstractCQREntityAI<T> {
 

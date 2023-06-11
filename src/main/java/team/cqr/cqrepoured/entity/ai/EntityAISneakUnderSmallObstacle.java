@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Pose;
-import net.minecraft.util.math.BlockPos;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
 import java.util.EnumSet;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAISneakUnderSmallObstacle<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
 

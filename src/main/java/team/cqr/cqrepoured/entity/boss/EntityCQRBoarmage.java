@@ -1,16 +1,19 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.ai.boss.boarmage.BossAIBoarmageExplodeAreaAttack;
@@ -24,10 +27,6 @@ import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner, IAnimatableCQR {
 

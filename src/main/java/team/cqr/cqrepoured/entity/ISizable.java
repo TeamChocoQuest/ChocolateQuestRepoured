@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.entity.PartEntity;

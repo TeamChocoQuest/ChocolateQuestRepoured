@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.server.packet;
 
+import java.util.Collection;
+
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
-
-import java.util.Collection;
 
 public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProtectedRegions> {
 

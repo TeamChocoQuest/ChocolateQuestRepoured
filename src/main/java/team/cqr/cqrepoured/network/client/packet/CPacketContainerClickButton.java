@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.network.client.packet;
 
+import java.util.function.Consumer;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import team.cqr.cqrepoured.network.AbstractPacket;
-
-import java.util.function.Consumer;
 
 public class CPacketContainerClickButton extends AbstractPacket<CPacketContainerClickButton> {
 

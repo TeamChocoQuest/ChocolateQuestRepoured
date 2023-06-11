@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Region;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 

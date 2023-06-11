@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.faction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.world.IWorld;
 
 public interface IHasFaction {

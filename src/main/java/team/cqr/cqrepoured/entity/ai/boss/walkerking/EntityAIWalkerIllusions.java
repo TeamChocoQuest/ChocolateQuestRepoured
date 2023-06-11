@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.boss.walkerking;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.EffectInstance;
+import org.joml.Vector3d;
+
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.entity.ai.spells.AbstractEntityAISpell;
 import team.cqr.cqrepoured.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;

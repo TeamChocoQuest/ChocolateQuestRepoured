@@ -1,10 +1,14 @@
 package team.cqr.cqrepoured.data;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RotatedPillarBlock;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.blockLoc;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.extend;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.itemLoc;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.valuesOfClass;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.valuesOfType;
+
 import net.minecraft.data.DataGenerator;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder.Perspective;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
@@ -13,8 +17,6 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockTable;
 import team.cqr.cqrepoured.init.CQRBlocks;
-
-import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
 
 public class CQRItemModelProvider extends ItemModelProvider {
 

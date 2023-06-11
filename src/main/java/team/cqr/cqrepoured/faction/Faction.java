@@ -12,19 +12,13 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSet;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
-import team.cqr.cqrepoured.init.CQRRegistries;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
 public class Faction implements IForgeRegistryEntry<Faction> {

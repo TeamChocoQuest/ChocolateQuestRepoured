@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity.phases;
 
-import team.cqr.cqrepoured.entity.boss.endercalamity.IEnderCalamityPhase;
-
 import javax.annotation.Nullable;
+
+import team.cqr.cqrepoured.entity.boss.endercalamity.IEnderCalamityPhase;
 
 public enum EEnderCalamityPhase {
 

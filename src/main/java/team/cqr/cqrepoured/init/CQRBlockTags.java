@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.block.Block;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ITag;
+import net.minecraftforge.registries.tags.ITag;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CQRBlockTags {

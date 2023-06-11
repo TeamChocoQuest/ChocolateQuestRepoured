@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.network.server.packet;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Tuple;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.AbstractPacket;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
 
 public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInitialFactionInformation> {
 

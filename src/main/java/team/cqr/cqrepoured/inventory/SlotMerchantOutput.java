@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.trade.Trade;
 
 public class SlotMerchantOutput extends Slot {

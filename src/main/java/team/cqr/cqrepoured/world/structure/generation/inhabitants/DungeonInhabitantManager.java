@@ -13,7 +13,6 @@ import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.IWorldInfo;

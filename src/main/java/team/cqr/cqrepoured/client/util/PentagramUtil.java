@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.math.MathHelper;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelPentagram;
 
 public class PentagramUtil {

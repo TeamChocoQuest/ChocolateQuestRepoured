@@ -1,14 +1,11 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.SpawnerFactory;

@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
 
 public abstract class EntityCQRGiantSilverfishBase extends EntityCQRMountBase {
 

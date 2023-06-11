@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import team.cqr.cqrepoured.customtextures.TextureSet;
-import team.cqr.cqrepoured.network.AbstractPacket;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.resources.ResourceLocation;
+import team.cqr.cqrepoured.customtextures.TextureSet;
+import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketCustomTextures extends AbstractPacket<SPacketCustomTextures> {
 

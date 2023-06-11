@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import net.minecraft.entity.LivingEntity;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
 import java.util.Random;
+
+import net.minecraft.world.entity.LivingEntity;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public abstract class AbstractEntityAIAttackSpecial {
 

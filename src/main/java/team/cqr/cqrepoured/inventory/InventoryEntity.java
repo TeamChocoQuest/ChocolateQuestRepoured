@@ -1,10 +1,9 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.entity.player.Inventory;
 
 public class InventoryEntity extends Inventory {
 

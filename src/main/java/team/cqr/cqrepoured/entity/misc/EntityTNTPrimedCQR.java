@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.misc;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class EntityTNTPrimedCQR extends TNTEntity {

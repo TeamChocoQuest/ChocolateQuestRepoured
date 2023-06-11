@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketItemStackSync extends AbstractPacket<SPacketItemStackSync> {

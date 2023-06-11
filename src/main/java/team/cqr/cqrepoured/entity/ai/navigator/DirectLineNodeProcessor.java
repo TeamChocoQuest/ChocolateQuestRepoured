@@ -5,9 +5,8 @@ import net.minecraft.pathfinding.FlaggedPathPoint;
 import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockReader;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class DirectLineNodeProcessor extends NodeProcessor {
 

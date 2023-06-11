@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 

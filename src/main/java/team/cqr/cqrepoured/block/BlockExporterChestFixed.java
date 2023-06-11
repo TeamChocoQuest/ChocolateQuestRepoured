@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.block;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
 
 public class BlockExporterChestFixed extends BlockExporterChest {

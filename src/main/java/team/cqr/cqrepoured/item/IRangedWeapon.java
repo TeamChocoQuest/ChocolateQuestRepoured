@@ -1,10 +1,8 @@
 package team.cqr.cqrepoured.item;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface IRangedWeapon {
 

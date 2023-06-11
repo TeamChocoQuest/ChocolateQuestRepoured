@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.network.server.packet;
 
-import net.minecraft.entity.Entity;
+import org.joml.Vector3d;
+
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
 import team.cqr.cqrepoured.network.AbstractPacket;
 
 public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEntityPrevPos> {

@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.Explosion.Mode;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;

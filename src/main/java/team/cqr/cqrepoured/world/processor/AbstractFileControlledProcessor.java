@@ -5,13 +5,12 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 public abstract class AbstractFileControlledProcessor extends StructureProcessor {
 

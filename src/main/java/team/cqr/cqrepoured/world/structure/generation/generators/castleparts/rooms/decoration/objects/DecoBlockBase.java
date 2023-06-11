@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators.castleparts.rooms.decoration.objects;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.vector.Vector3i;
+import org.joml.Vector3i;
+
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.util.BlockStateGenArray;
 
 public class DecoBlockBase {

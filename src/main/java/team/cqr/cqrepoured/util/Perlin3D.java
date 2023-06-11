@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.util;
 import java.util.Random;
 
 import meldexun.randomutil.FastRandom;
-import net.minecraft.util.math.MathHelper;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.util.math.InterpolationUtil;
 
 public class Perlin3D {

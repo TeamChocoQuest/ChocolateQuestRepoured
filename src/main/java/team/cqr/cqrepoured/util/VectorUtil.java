@@ -1,9 +1,10 @@
 package team.cqr.cqrepoured.util;
 
+import org.joml.Vector3d;
+import org.joml.Vector3i;
+
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

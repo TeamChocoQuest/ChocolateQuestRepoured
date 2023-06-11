@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.potion;
 
-import net.minecraft.potion.Effect;
+import net.minecraft.client.gui.font.glyphs.BakedGlyph.Effect;
 import net.minecraft.potion.EffectType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 
 public class PotionCQR extends Effect {

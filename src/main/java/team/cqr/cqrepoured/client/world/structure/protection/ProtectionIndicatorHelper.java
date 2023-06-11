@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.client.world.structure.protection;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 public class ProtectionIndicatorHelper {
 

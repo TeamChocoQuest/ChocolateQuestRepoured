@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.client;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.platform.ScreenManager;
+
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
 import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.ScreenBadge;

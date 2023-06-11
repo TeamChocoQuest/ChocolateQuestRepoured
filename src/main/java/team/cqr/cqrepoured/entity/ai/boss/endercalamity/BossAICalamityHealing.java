@@ -1,13 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import java.util.EnumSet;
+
+import org.joml.Vector3d;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.EnumSet;
 
 public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 

@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.network.datasync;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
 
 public abstract class DataEntry<T> {
 

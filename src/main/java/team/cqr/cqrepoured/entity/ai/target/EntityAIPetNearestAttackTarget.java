@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.target;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.util.math.AxisAlignedBB;
-import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.faction.FactionRegistry;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class EntityAIPetNearestAttackTarget<T extends MobEntity> extends TargetGoal {
 

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity.ai.boss.gianttortoise;
 
-import net.minecraft.particles.ParticleTypes;
+import java.util.EnumSet;
+
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import net.minecraft.world.server.ServerWorld;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
-
-import java.util.EnumSet;
 
 public class BossAITortoiseHealing extends AbstractCQREntityAI<EntityCQRGiantTortoise> {
 

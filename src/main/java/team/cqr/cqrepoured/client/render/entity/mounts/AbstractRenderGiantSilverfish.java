@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.client.render.entity.mounts;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
+import net.minecraft.client.model.SilverfishModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.SilverfishModel;
 import team.cqr.cqrepoured.entity.bases.EntityCQRGiantSilverfishBase;
 
 public abstract class AbstractRenderGiantSilverfish<T extends EntityCQRGiantSilverfishBase> extends MobRenderer<T, SilverfishModel<T>> {

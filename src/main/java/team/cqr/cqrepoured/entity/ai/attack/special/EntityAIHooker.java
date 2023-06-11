@@ -1,15 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
+import java.util.EnumSet;
+
+import org.joml.Vector3d;
+
 import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
-
-import java.util.EnumSet;
 
 public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import java.util.EnumSet;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.pathfinding.CQRNPCPath;
-
-import java.util.EnumSet;
 
 public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 

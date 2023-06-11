@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.item.ItemStack;
+import java.util.EnumSet;
+
 import net.minecraft.util.Hand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.EnumSet;
 
 public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 

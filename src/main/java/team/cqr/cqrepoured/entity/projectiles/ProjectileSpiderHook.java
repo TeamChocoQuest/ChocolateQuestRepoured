@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 
 public class ProjectileSpiderHook extends ProjectileHookShotHook {

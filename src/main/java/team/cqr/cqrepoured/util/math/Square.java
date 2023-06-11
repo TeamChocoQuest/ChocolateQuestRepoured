@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util.math;
 
-import net.minecraft.util.math.vector.Vector3d;
+import org.joml.Vector3d;
 
 public class Square {
 

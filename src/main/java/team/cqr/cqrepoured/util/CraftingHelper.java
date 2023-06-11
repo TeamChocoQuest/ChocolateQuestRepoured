@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.Arrays;
+
+import net.minecraft.world.item.ItemStack;
 
 public class CraftingHelper {
 

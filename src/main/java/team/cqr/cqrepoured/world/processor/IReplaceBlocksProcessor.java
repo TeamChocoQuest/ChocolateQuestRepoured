@@ -11,9 +11,9 @@ import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.command.arguments.BlockStateArgument;
 import net.minecraft.command.arguments.BlockStateInput;
+import net.minecraft.commands.arguments.blocks.BlockStateArgument;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 
 public interface IReplaceBlocksProcessor {

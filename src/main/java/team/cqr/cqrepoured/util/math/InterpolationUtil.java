@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.util.math;
 
-import net.minecraft.util.math.MathHelper;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class InterpolationUtil {
 

@@ -1,8 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.boss.EntityCQRLich;
 import team.cqr.cqrepoured.init.CQRBlocks;

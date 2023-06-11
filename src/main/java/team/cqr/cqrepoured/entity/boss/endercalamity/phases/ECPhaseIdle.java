@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.entity.boss.endercalamity.phases;
 
+import java.util.Optional;
+
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.IEnderCalamityPhase;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import java.util.Optional;
 
 public final class ECPhaseIdle implements IEnderCalamityPhase {
 

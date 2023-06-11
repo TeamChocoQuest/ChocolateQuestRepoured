@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
+import org.joml.Vector3d;
+
 import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.Pose;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public abstract class CQRPartEntity<T extends Entity> extends PartEntity<T> {
 	

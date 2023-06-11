@@ -1,17 +1,15 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import java.util.UUID;
+
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.SlimeEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.init.CQREntityTypes;
-
-import java.util.UUID;
 
 public class EntitySlimePart extends SlimeEntity {
 
