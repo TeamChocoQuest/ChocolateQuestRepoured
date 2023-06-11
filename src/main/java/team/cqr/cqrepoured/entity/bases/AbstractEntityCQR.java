@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.bases;
 
+import java.awt.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -7,80 +8,80 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
-import net.minecraft.world.*;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.loot.LootParameterSets;
 import net.minecraft.loot.LootParameters;
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.BossInfo;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.BossEvent;
+import net.minecraft.world.Container;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.server.ServerBossInfo;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.NameTagItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import net.minecraftforge.network.PacketDistributor;
+import software.bernie.geckolib.core.animation.AnimationState;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
@@ -235,10 +236,10 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	// Texture syncing
 	protected ResourceLocation textureOverride;
 
-	protected ServerBossInfo bossInfoServer;
+	protected ServerBossEvent bossInfoServer;
 	
 	//Sizing bullshit
-	protected EntitySize size;
+	protected EntityDimensions size;
 	
 	// Client only
 	@OnlyIn(Dist.CLIENT)
@@ -251,12 +252,12 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		}
 		this.xpReward = 5;
 		this.initializeSize();
-		this.size = new EntitySize(this.getBbWidth(), this.getBbHeight(), false);
+		this.size = new EntityDimensions(this.getBbWidth(), this.getBbHeight(), false);
 	}
 
 	public void enableBossBar() {
-		if (!this.level.isClientSide && this.bossInfoServer == null) {
-			this.bossInfoServer = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
+		if (!this.level().isClientSide && this.bossInfoServer == null) {
+			this.bossInfoServer = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
 			this.bossInfoServer.setVisible(CQRConfig.SERVER_CONFIG.bosses.enableBossBars.get());
 		}
 	}
@@ -346,10 +347,10 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		// Shoulder entity stuff
 		this.spawnShoulderEntities();
 
-		if (this.level.getLevelData().isHardcore()) {
+		if (this.level().getLevelData().isHardcore()) {
 			amount *= 0.7F;
 		} else {
-			Difficulty difficulty = this.level.getDifficulty();
+			Difficulty difficulty = this.level().getDifficulty();
 			if (difficulty == Difficulty.HARD) {
 				amount *= 0.8F;
 			} else if (difficulty == Difficulty.NORMAL) {
@@ -360,7 +361,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 		amount = this.handleDamageCap(source, amount);
 
-		if (!this.level.isClientSide && amount > 0.0F && this.canBlockDamageSource(source)) {
+		if (!this.level().isClientSide && amount > 0.0F && this.canBlockDamageSource(source)) {
 			if (source.getDirectEntity() instanceof LivingEntity && !(source.getDirectEntity() instanceof Player) && ((LivingEntity) source.getDirectEntity()).getMainHandItem().getItem() instanceof AxeItem) {
 				this.lastTickShieldDisabled = this.tickCount;
 			} else {
@@ -408,7 +409,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		vX -= xRatio * d * strength;
 		vZ -= zRatio * d * strength;
 
-		if (this.onGround) {
+		if (this.onGround()) {
 			vY *= 0.5D;
 			vY += strength;
 
@@ -724,24 +725,24 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 		boolean flag = false;
 
-		if(player instanceof ServerPlayer && !this.level.isClientSide()) {
+		if(player instanceof ServerPlayer && !this.level().isClientSide()) {
 			ServerPlayer spe = (ServerPlayer) player;
 			if (!player.isCrouching()) {
 				if (player.isCreative() || this.getLeader() == player) {
-					if (!this.level.isClientSide) {
+					if (!this.level().isClientSide) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getId(), 0, 0);
 						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.CQR_ENTITY_EDITOR.get());
 					}
 					flag = true;
 				} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
-					if (!this.level.isClientSide) {
+					if (!this.level().isClientSide) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
 						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 					}
 					flag = true;
 				}
 			} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
 					CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 				}
@@ -771,7 +772,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	protected void dropCustomDeathLoot(DamageSource deathCause, int lootingModifier, boolean wasRecentlyHit) {
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
-			LootTable lootTable = this.level.getServer().getLootTables().get(resourcelocation);
+			LootTable lootTable = this.level().getServer().getLootTables().get(resourcelocation);
 			LootContext.Builder lootContextBuilder =  this.createLootContext(wasRecentlyHit, deathCause);//new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
 			if (wasRecentlyHit && this.lastHurtByPlayer != null) {
 				lootContextBuilder = lootContextBuilder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
@@ -830,16 +831,16 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 		super.tick();
 
-		if (!this.level.isClientSide && this.isMagicArmorActive()) {
+		if (!this.level().isClientSide && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
 		}
-		if (!this.level.isClientSide && !this.isNonBoss() && this.level.getDifficulty() == Difficulty.PEACEFUL) {
-			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.level, this.blockPosition());
-			this.remove();
+		if (!this.level().isClientSide && !this.isNonBoss() && this.level().getDifficulty() == Difficulty.PEACEFUL) {
+			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.level(), this.blockPosition());
+			this.discard();
 		}
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
-		if (!this.level.isClientSide && stack != this.prevPotion) {
+		if (!this.level().isClientSide && stack != this.prevPotion) {
 			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new SPacketItemStackSync(this.getId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
@@ -862,7 +863,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		this.prevSneaking = this.isCrouching();
 		this.prevSitting = this.isSitting();
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			int spellInformation = 0;
 			if (this.spellHandler != null) {
 				if (this.spellHandler.isSpellCharging()) {
@@ -889,8 +890,8 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 				float f = /* OLD: renderYawOffset */this.rotOffs * 0.017453292F + Mth.cos(this.tickCount * 0.6662F) * 0.25F;
 				float f1 = Mth.cos(f);
 				float f2 = Mth.sin(f);
-				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() + (double) f2 * (double) this.getBbWidth(), red, green, blue);
-				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() - (double) f2 * (double) this.getBbWidth(), red, green, blue);
+				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() + (double) f2 * (double) this.getBbWidth(), red, green, blue);
+				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() - (double) f1 * (double) this.getBbWidth(), this.getY() + this.getBbHeight(), this.getZ() - (double) f2 * (double) this.getBbWidth(), red, green, blue);
 			}
 			if (this.isChatting() && this.tickCount % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
 				this.chooseNewRandomSpeechBubble();
@@ -927,7 +928,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 		// Bossbar
 		if (this.bossInfoServer != null) {
-			this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
+			this.bossInfoServer.setProgress(this.getHealth() / this.getMaxHealth());
 		}
 	}
 
@@ -952,7 +953,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 	
 	@Override
-	public void setCustomName(TextComponent name) {
+	public void setCustomName(Component name) {
 		super.setCustomName(name);
 		if (this.bossInfoServer != null) {
 			this.bossInfoServer.setName(this.getDisplayName());
@@ -987,7 +988,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	protected SoundEvent getFallDamageSound(int heightIn) {
 		return heightIn > 4 ? SoundEvents.GENERIC_BIG_FALL : SoundEvents.GENERIC_SMALL_FALL;
 	}
-
+	
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
 		// Shoulder entity stuff
@@ -995,12 +996,12 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		
 		if (this.getMainHandItem().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof LivingEntity) {
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					((LivingEntity) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
 					entityIn.setSecondsOnFire(0);
 					Vec3 pos = entityIn.position();
 					//TODO: Check if this works correctly
-					((ServerLevel) this.level).addParticle(
+					((ServerLevel) this.level()).addParticle(
 							ParticleTypes.HEART,
 							true,
 							pos.x,
@@ -1010,7 +1011,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 							0.25D, 
 							0.25D 
 					);
-					this.level.playSound(null, pos.y, pos.y + entityIn.getBbHeight() * 0.5D, pos.z, CQRSounds.MAGIC, SoundSource.MASTER, 0.6F, 0.6F + this.random.nextFloat() * 0.2F);
+					this.level().playSound(null, pos.y, pos.y + entityIn.getBbHeight() * 0.5D, pos.z, CQRSounds.MAGIC, SoundSource.MASTER, 0.6F, 0.6F + this.random.nextFloat() * 0.2F);
 				}
 				return true;
 			}
@@ -1060,7 +1061,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 					if (this.random.nextFloat() < f1) {
 						entityplayer.getCooldowns().addCooldown(itemstack1.getItem(), 100);
-						this.level.broadcastEntityEvent(entityplayer, (byte) 30);
+						this.level().broadcastEntityEvent(entityplayer, (byte) 30);
 					}
 				}
 			}
@@ -1075,7 +1076,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	
 	@Override
 	public void swing(InteractionHand p_184609_1_) {
-		super.swing(p_184609_1_, !this.level.isClientSide);
+		super.swing(p_184609_1_, !this.level().isClientSide);
 	}
 
 	@Override
@@ -1117,7 +1118,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	// #################### Chocolate Quest Repoured ####################
 
 	public void updateLeader() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			return;
 		}
 		// sync with clients that this is a leader
@@ -1130,7 +1131,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 			if ((this.getId() + this.tickCount) % 20 != 0) {
 				return;
 			}
-			Entity entity = EntityUtil.getEntityByUUID(this.level, this.leaderUUID);
+			Entity entity = EntityUtil.getEntityByUUID(this.level(), this.leaderUUID);
 			if (entity instanceof LivingEntity) {
 				this.leader = (LivingEntity) entity;
 			}
@@ -1151,7 +1152,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public void setLeader(LivingEntity leader) {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			return;
 		}
 		if (leader == null) {
@@ -1186,9 +1187,9 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	public abstract double getBaseHealth();
 
 	public void setBaseHealthDependingOnPos(BlockPos pos) {
-		if (CQRConfig.SERVER_CONFIG.mobs.enableHealthChangeOnDistance.get() && !this.level.isClientSide) {
-			double x = (double) pos.getX() - DungeonGenUtils.getSpawnX(this.level);
-			double z = (double) pos.getZ() - DungeonGenUtils.getSpawnZ(this.level);
+		if (CQRConfig.SERVER_CONFIG.mobs.enableHealthChangeOnDistance.get() && !this.level().isClientSide) {
+			double x = (double) pos.getX() - DungeonGenUtils.getSpawnX(this.level());
+			double z = (double) pos.getZ() - DungeonGenUtils.getSpawnZ(this.level());
 			double distance = Math.sqrt(x * x + z * z);
 			double amount = 0.1D * (int) (distance / CQRConfig.SERVER_CONFIG.mobs.distanceDivisor.get());
 
@@ -1197,7 +1198,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public void handleArmorBreaking() {
-		if (!this.level.isClientSide && this.usedPotions + 1 > this.getHealingPotions()) {
+		if (!this.level().isClientSide && this.usedPotions + 1 > this.getHealingPotions()) {
 			boolean armorBroke = false;
 			float hpPrcntg = this.getHealth() / this.getMaxHealth();
 			float[] thresholds = { 0.8F, 0.6F, 0.4F, 0.2F };
@@ -1273,7 +1274,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 	@Nullable
 	public Faction getFaction() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			// Leader faction is set when assigning the leader
 			// if (this.hasLeader()) { return FactionRegistry.instance().getFactionOf(this.getLeader()); }
 			if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
@@ -1301,7 +1302,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Faction faction = FactionRegistry.instance(this).getFactionInstance(newFac);
 			if (faction != null) {
 				this.factionInstance = null;
@@ -1323,7 +1324,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public void updateReputationOnDeath(DamageSource cause) {
-		if (cause.getEntity() instanceof Player && this.hasFaction() && !this.level.isClientSide) {
+		if (cause.getEntity() instanceof Player && this.hasFaction() && !this.level().isClientSide) {
 			Player player = (Player) cause.getEntity();
 			double range = CQRConfig.SERVER_CONFIG.mobs.factionUpdateRadius.get();
 			final Vec3 rangeVec = new Vec3(range, range, range);
@@ -1331,7 +1332,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 			List<Faction> checkedFactions = new ArrayList<>();
 			// boolean setRepu = false;
-			for (AbstractEntityCQR cqrentity : this.level.getEntitiesOfClass(AbstractEntityCQR.class, aabb)) {
+			for (AbstractEntityCQR cqrentity : this.level().getEntitiesOfClass(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canSee(this) || cqrentity.canSee(player))) {
 					Faction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
@@ -1366,7 +1367,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		this.setBaseHealthDependingOnPos(placement.getPos());
 
 		//Reset lastTimedRestockTick
-		this.setLastTimedRestockTime(this.level.getGameTime());
+		this.setLastTimedRestockTime(this.level().getGameTime());
 		
 		// Recalculate path points
 		for (CQRNPCPath.PathNode node : this.path.getNodes()) {
@@ -1468,8 +1469,8 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		/*if (stack.getItem() instanceof ItemSpearBase) {
 			reach += ((ItemSpearBase) stack.getItem()).getReach();
 		}*/
-		if(stack.getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ForgeMod.REACH_DISTANCE.get())) {
-			for(AttributeModifier am : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(ForgeMod.REACH_DISTANCE.get())) {
+		if(stack.getAttributeModifiers(EquipmentSlot.MAINHAND).containsKey(ForgeMod.ENTITY_REACH.get())) {
+			for(AttributeModifier am : stack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(ForgeMod.ENTITY_REACH.get())) {
 				reach += am.getAmount();
 			}
 		}
@@ -1543,7 +1544,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 	public void setHealthScale(double newHealthScale) {
 		if (this.healthScale != newHealthScale) {
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide) {
 				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", newHealthScale - 1.0D);
 			}
 			this.healthScale = newHealthScale;
@@ -1567,7 +1568,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 	public boolean isInSightRange(Entity target) {
 		double sightRange = 32.0D;
-		sightRange *= 0.6D + 0.4D * this.level.getRawBrightness(target.blockPosition(), 0) / 15.0D;
+		sightRange *= 0.6D + 0.4D * this.level().getRawBrightness(target.blockPosition(), 0) / 15.0D;
 		sightRange *= this.hasEffect(MobEffects.BLINDNESS) ? 0.5D : 1.0D;
 		return this.distanceToSqr(target) <= sightRange * sightRange;
 	}
@@ -1581,7 +1582,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public boolean isMagicArmorActive() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			return this.armorActive;
 		}
 		return this.entityData.get(MAGIC_ARMOR_ACTIVE);
@@ -1662,7 +1663,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 
 	// @SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			return this.entityData.get(HAS_TARGET);
 		} else {
 			return this.getTarget() != null && this.getTarget().isAlive();
@@ -1705,7 +1706,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	// Shoulder entity stuff
 
 	public boolean addShoulderEntity(CompoundTag compound) {
-		if (!this.isPassenger() && this.onGround && !this.isInWater()) {
+		if (!this.isPassenger() && this.onGround() && !this.isInWater()) {
 			if (this.getLeftShoulderEntity().isEmpty()) {
 				this.setLeftShoulderEntity(compound);
 				return true;
@@ -1723,16 +1724,16 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	private void spawnShoulderEntity(@Nullable CompoundTag compound) {
-		if (!this.level.isClientSide && compound != null && !compound.isEmpty()) {
-			Entity entity = EntityList.createEntityFromNBT(compound, this.level);
+		if (!this.level().isClientSide && compound != null && !compound.isEmpty()) {
+			Entity entity = EntityList.createEntityFromNBT(compound, this.level());
 
-			if (entity instanceof TameableEntity) {
-				((TameableEntity) entity).setOwnerUUID(this.getUUID());
+			if (entity instanceof TamableAnimal) {
+				((TamableAnimal) entity).setOwnerUUID(this.getUUID());
 			}
 
 			final Vec3 pos = this.position().add(0, 0.699999988079071D, 0);
 			entity.setPos(pos.x, pos.y, pos.z);
-			this.level.addFreshEntity(entity);
+			this.level().addFreshEntity(entity);
 		}
 	}
 
@@ -1759,7 +1760,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	protected boolean isServerWorld() {
-		return this.level != null && !this.level.isClientSide;
+		return this.level() != null && !this.level().isClientSide;
 	}
 
 	public TraderOffer getTrades() {
@@ -1786,7 +1787,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public void updateInvisibility() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.invisibilityTick > 0) {
 				this.invisibilityTick--;
 				this.entityData.set(INVISIBILITY, Math.min(this.entityData.get(INVISIBILITY) + 1.0F / this.getInvisibilityTurningTime(), 1.0F));
@@ -1816,9 +1817,9 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	// ISizable stuff
-	public EntitySize getSize() {
+	public EntityDimensions getSize() {
 		if(this.size == null) {
-			this.size = new EntitySize(this.getBbWidth(), this.getBbHeight(), false);
+			this.size = new EntityDimensions(this.getBbWidth(), this.getBbHeight(), false);
 		}
 		return this.size;
 	}
@@ -1834,9 +1835,9 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 	
 	@Nullable
-	private EntitySize getDimensionsCloneFromEntity(Pose poseIn) {
+	private EntityDimensions getDimensionsCloneFromEntity(Pose poseIn) {
 		if(poseIn != null) {
-			EntitySize result = poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize();
+			EntityDimensions result = poseIn == Pose.SLEEPING ? SLEEPING_DIMENSIONS : this.getSize();
 			if(result == null) {
 				return null;
 			}
@@ -1855,8 +1856,8 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	@Override
-	public EntitySize getDimensions(Pose pPose) {
-		EntitySize result = super.getDimensions(pPose);//this.getDimensionsCloneFromEntity(pPose);
+	public EntityDimensions getDimensions(Pose pPose) {
+		EntityDimensions result = super.getDimensions(pPose);//this.getDimensionsCloneFromEntity(pPose);
 		if(this instanceof ISizable) {
 			ISizable is = (ISizable)this;
 			return is.callOnGetDimensions(result);
@@ -1876,7 +1877,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 
 	public Level getWorld() {
-		return this.level;
+		return this.level();
 	}
 	
 	//Misc
@@ -1913,7 +1914,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public  <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(InteractionHand hand, AnimationEvent<E> event) {
+	public  <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(InteractionHand hand, AnimationState<E> event) {
 		return this.isSwinging(hand, event.getAnimatable());
 	}
 	
