@@ -40,7 +40,7 @@ public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjecti
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
-		this.TEXTURE_GETTER = modelProvider::getTextureLocation;
+		this.TEXTURE_GETTER = modelProvider::getTextureResource;
 
 		this.shadowRadius = shadowSize;
 		this.widthScale = widthScale;

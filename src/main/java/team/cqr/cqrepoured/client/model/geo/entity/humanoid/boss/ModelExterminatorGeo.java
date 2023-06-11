@@ -12,7 +12,7 @@ public class ModelExterminatorGeo extends AbstractModelGeoCQRBase<EntityCQRExter
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRExterminator animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRExterminator animatable) {
 		return CQRAnimations.Entity.EXTERMINATOR;
 	}
 	/* No longer needed, handled by animation now!

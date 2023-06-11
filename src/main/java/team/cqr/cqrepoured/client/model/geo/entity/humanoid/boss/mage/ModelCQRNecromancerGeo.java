@@ -11,9 +11,9 @@ public class ModelCQRNecromancerGeo extends AbstractModelMageGeo<EntityCQRNecrom
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRNecromancer animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRNecromancer animatable) {
 		if(animatable.isIdentityHidden()) {
-			return super.getAnimationFileLocation(animatable);
+			return super.getAnimationResource(animatable);
 		}
 		return CQRAnimations.Entity.NECROMANCER;
 	}

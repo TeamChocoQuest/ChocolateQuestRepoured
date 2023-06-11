@@ -21,7 +21,7 @@ public class ModelCQREndermanGeo<T extends AbstractEntityCQR & IAnimatableCQR> e
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(T animatable) {
+	public ResourceLocation getAnimationResource(T animatable) {
 		return CQRAnimations.Entity.ENDERMAN;
 	}
 

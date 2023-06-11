@@ -17,7 +17,7 @@ public class ModelCQROrcGeo extends AbstractModelHumanoidGeo<EntityCQROrc> {
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQROrc animatable) {
+	public ResourceLocation getAnimationResource(EntityCQROrc animatable) {
 		return CQRAnimations.Entity.ORC;
 	}
 

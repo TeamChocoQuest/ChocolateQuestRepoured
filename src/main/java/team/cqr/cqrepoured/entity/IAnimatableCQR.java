@@ -3,22 +3,21 @@ package team.cqr.cqrepoured.entity;
 import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.entity.MobEntity;
+import net.minecraft.item.ShootableItem;
+import net.minecraft.item.UseAction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.item.ShootableItem;
-import net.minecraft.item.UseAction;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
-import software.bernie.geckolib3.core.AnimationState;
+import net.minecraft.world.item.ShieldItem;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -28,7 +27,7 @@ import team.cqr.cqrepoured.item.gun.ItemRevolver;
 import team.cqr.cqrepoured.item.spear.ItemSpearBase;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
 
-public interface IAnimatableCQR extends GeoAnimatable {
+public interface IAnimatableCQR extends GeoEntity {
 	
 	@Override
 	default double getTick(Object arg0) {

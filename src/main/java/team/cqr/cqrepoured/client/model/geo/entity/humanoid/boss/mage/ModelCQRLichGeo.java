@@ -11,9 +11,9 @@ public class ModelCQRLichGeo extends AbstractModelMageGeo<EntityCQRLich> {
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRLich animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRLich animatable) {
 		if(animatable.isIdentityHidden()) {
-			return super.getAnimationFileLocation(animatable);
+			return super.getAnimationResource(animatable);
 		}
 		return CQRAnimations.Entity.LICH;
 	}

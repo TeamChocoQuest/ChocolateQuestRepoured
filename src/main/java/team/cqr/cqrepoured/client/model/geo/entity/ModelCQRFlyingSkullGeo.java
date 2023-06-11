@@ -12,7 +12,7 @@ public class ModelCQRFlyingSkullGeo extends AbstractModelGeoCQRBase<EntityFlying
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(EntityFlyingSkullMinion animatable) {
+    public ResourceLocation getAnimationResource(EntityFlyingSkullMinion animatable) {
         return CQRAnimations.Entity.FLYING_SKULL;
     }
 }

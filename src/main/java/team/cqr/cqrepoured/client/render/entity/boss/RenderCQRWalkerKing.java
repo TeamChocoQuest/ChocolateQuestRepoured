@@ -55,9 +55,9 @@ public class RenderCQRWalkerKing extends RenderCQRBipedBaseGeo<EntityCQRWalkerKi
 		if (this.renderingDeath) {
 			 float f2 = (float)animatable.deathTime / 200.0F;
 			if(this.renderingDeathSecondRenderCycle) {
-				return RenderType.entityDecal(this.getTextureLocation(animatable));
+				return RenderType.entityDecal(this.getTextureResource(animatable));
 			}
-			return RenderType.dragonExplosionAlpha(InvisibilityTexture.get(this.getTextureLocation(animatable)), f2);
+			return RenderType.dragonExplosionAlpha(InvisibilityTexture.get(this.getTextureResource(animatable)), f2);
 		}
 		return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}

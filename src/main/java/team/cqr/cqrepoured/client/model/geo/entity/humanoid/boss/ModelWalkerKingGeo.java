@@ -18,7 +18,7 @@ public class ModelWalkerKingGeo<T extends AbstractEntityCQR & IAnimatableCQR> ex
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(T animatable) {
+	public ResourceLocation getAnimationResource(T animatable) {
 		return CQRAnimations.Entity.WALKER_KING;
 	}
 

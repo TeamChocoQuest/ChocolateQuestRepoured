@@ -17,7 +17,7 @@ public class ModelCQRWalkerGeo extends AbstractModelHumanoidGeo<EntityCQRWalker>
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRWalker animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRWalker animatable) {
 		return CQRAnimations.Entity.WALKER;
 	}
 	

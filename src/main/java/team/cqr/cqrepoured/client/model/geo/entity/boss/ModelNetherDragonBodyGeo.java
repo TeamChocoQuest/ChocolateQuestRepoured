@@ -12,7 +12,7 @@ public class ModelNetherDragonBodyGeo extends AbstractModelGeoCQRBase<SubEntityN
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(SubEntityNetherDragonSegment animatable) {
+	public ResourceLocation getAnimationResource(SubEntityNetherDragonSegment animatable) {
 		return null;
 	}
 	
@@ -25,7 +25,7 @@ public class ModelNetherDragonBodyGeo extends AbstractModelGeoCQRBase<SubEntityN
 	protected final ResourceLocation MODEL_TAIL_END_RESLOC = CQRMain.prefix("geo/entity/boss/netherdragon/body/nether_dragon_tail_end.geo.json");
 	
 	@Override
-	public ResourceLocation getModelLocation(SubEntityNetherDragonSegment object) {
+	public ResourceLocation getModelResource(SubEntityNetherDragonSegment object) {
 		if(object.isSkeletal()) {
 			return MODEL_SKELETAL_RESLOC;
 		} else {
@@ -43,8 +43,8 @@ public class ModelNetherDragonBodyGeo extends AbstractModelGeoCQRBase<SubEntityN
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(SubEntityNetherDragonSegment entity) {
-		ResourceLocation result = super.getTextureLocation(entity);
+	public ResourceLocation getTextureResource(SubEntityNetherDragonSegment entity) {
+		ResourceLocation result = super.getTextureResource(entity);
 		if(result == this.TEXTURE_DEFAULT) {
 			if(entity.isSkeletal()) {
 				return this.TEXTURE_SKELETAL_DEFAULT;

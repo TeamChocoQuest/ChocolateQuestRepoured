@@ -19,24 +19,24 @@ public class ModelNetherDragonHeadGeo extends AbstractModelGeoCQRBase<EntityCQRN
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRNetherDragon animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRNetherDragon animatable) {
 		return CQRAnimations.Entity.NETHER_DRAGON;
 	}
 	
 	@Override
-	public ResourceLocation getModelLocation(EntityCQRNetherDragon object) {
+	public ResourceLocation getModelResource(EntityCQRNetherDragon object) {
 		if(object.getSkeleProgress() >= 0) {
 			return MODEL_IDENT_SKELETAL;
 		}
-		return super.getModelLocation(object);
+		return super.getModelResource(object);
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(EntityCQRNetherDragon entity) {
+	public ResourceLocation getTextureResource(EntityCQRNetherDragon entity) {
 		if(entity.getSkeleProgress() >= 0) {
 			return TEXTURE_SKELETAL;
 		}
-		return super.getTextureLocation(entity);
+		return super.getTextureResource(entity);
 	}
 
 }

@@ -17,7 +17,7 @@ public class ModelCQRTritonGeo extends AbstractModelHumanoidGeo<EntityCQRTriton>
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRTriton animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRTriton animatable) {
 		return CQRAnimations.Entity.TRITON;
 	}
 

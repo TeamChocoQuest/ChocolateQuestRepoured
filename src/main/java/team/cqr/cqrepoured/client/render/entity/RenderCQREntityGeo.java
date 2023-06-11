@@ -60,7 +60,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		super(renderManager, modelProvider);
 
 		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
-		this.TEXTURE_GETTER = modelProvider::getTextureLocation;
+		this.TEXTURE_GETTER = modelProvider::getTextureResource;
 
 		this.shadowRadius = shadowSize;
 		this.widthScale = widthScale;

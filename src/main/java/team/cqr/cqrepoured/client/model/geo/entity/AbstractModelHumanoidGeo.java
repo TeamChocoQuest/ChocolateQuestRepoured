@@ -3,8 +3,7 @@ package team.cqr.cqrepoured.client.model.geo.entity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -49,10 +48,6 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 		return netHeadYaw;
 	}
 
-	protected float getHeadPitch(final float partialTicks, T entity) {
-		return Mth.lerp(partialTicks, entity.xRotO, entity.xRot);
-	}
-
 	protected float rotlerpRad(float pAngle, float pMaxAngle, float pMul) {
 		float f = (pMul - pMaxAngle) % ((float) Math.PI * 2F);
 		if (f < -(float) Math.PI) {
@@ -66,36 +61,26 @@ public abstract class AbstractModelHumanoidGeo<T extends AbstractEntityCQR & IAn
 		return pMaxAngle + pAngle * f;
 	}
 
-	protected void rotateHead(T entity, final IBone headBone, final float partialTick, final float netHeadYaw, final float headPitch) {
+	protected void rotateHead(T entity, final CoreGeoBone headBone, final float partialTick, final float netHeadYaw, final float headPitch) {
 		boolean flag = entity.getFallFlyingTicks() > 4;
 		boolean flag1 = entity.isVisuallySwimming();
 		float swimAmount = entity.getSwimAmount(partialTick);
-		headBone.setRotationY(netHeadYaw * ((float) Math.PI / 180F));
+		headBone.setRotX(netHeadYaw * ((float) Math.PI / 180F));
 		if (flag) {
-			headBone.setRotationX(-(float) Math.PI / 4F);
+			headBone.setRotX(-(float) Math.PI / 4F);
 		} else if (swimAmount > 0.0F) {
 			if (flag1) {
-				headBone.setRotationX(this.rotlerpRad(swimAmount, headBone.getRotationX(), (-(float) Math.PI / 4F)));
+				headBone.setRotX(this.rotlerpRad(swimAmount, headBone.getRotX(), (-(float) Math.PI / 4F)));
 			} else {
-				headBone.setRotationX(this.rotlerpRad(swimAmount, headBone.getRotationX(), headPitch * ((float) Math.PI / 180F)));
+				headBone.setRotX(this.rotlerpRad(swimAmount, headBone.getRotX(), headPitch * ((float) Math.PI / 180F)));
 			}
 		} else {
-			headBone.setRotationX(headPitch * ((float) Math.PI / 180F));
+			headBone.setRotX(headPitch * ((float) Math.PI / 180F));
 		}
 	}
 
 	@Override
-	public void setLivingAnimations(T entity, Integer uniqueID, AnimationEvent customPredicate) {
-		IBone head = this.getAnimationProcessor().getBone(this.getHeadBoneIdent());
-		if (head != null) {
-			//this.rotateHead(entity, head, customPredicate.getPartialTick(), this.getNetHeadYaw(customPredicate.getPartialTick(), entity), this.getHeadPitch(customPredicate.getPartialTick(), entity));
-		}
-
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
-	}
-	
-	@Override
-	public ResourceLocation getAnimationFileLocation(T animatable) {
+	public ResourceLocation getAnimationResource(T animatable) {
 		return CQRAnimations.Entity._GENERIC_HUMANOID;
 	}
 	

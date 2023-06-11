@@ -17,7 +17,7 @@ public class ModelCQRZombieGeo extends AbstractModelHumanoidGeo<EntityCQRZombie>
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRZombie animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRZombie animatable) {
 		return CQRAnimations.Entity.ZOMBIE;
 	}
 

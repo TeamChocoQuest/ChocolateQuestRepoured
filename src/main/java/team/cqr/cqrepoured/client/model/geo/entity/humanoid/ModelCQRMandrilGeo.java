@@ -20,7 +20,7 @@ public class ModelCQRMandrilGeo extends AbstractModelHumanoidGeo<EntityCQRMandri
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRMandril animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRMandril animatable) {
 		return CQRAnimations.Entity.MANDRIL;
 	}
 

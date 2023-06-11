@@ -23,24 +23,24 @@ public class AbstractModelMageGeo<T extends AbstractEntityCQRMageBase & IAnimata
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(T entity) {
+	public ResourceLocation getTextureResource(T entity) {
 		if(entity.isIdentityHidden()) {
 			return TEXTURE_HIDDEN;
 		}
-		return super.getTextureLocation(entity);
+		return super.getTextureResource(entity);
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(T animatable) {
+	public ResourceLocation getAnimationResource(T animatable) {
 		return CQRAnimations.Entity.MAGE_HIDDEN;
 	}
 	
 	@Override
-	public ResourceLocation getModelLocation(T object) {
+	public ResourceLocation getModelResource(T object) {
 		if(object.isIdentityHidden()) {
 			return MODEL_HIDDEN;
 		}
-		return super.getModelLocation(object);
+		return super.getModelResource(object);
 	}
 	
 	@Override

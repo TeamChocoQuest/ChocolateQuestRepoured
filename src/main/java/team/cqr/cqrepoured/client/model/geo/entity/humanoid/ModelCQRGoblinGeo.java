@@ -20,7 +20,7 @@ public class ModelCQRGoblinGeo extends AbstractModelHumanoidGeo<EntityCQRGoblin>
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRGoblin animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRGoblin animatable) {
 		return CQRAnimations.Entity.GOBLIN;
 	}
 

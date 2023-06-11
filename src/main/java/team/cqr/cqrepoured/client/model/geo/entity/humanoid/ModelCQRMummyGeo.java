@@ -17,7 +17,7 @@ public class ModelCQRMummyGeo extends AbstractModelHumanoidGeo<EntityCQRMummy> {
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRMummy animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRMummy animatable) {
 		return CQRAnimations.Entity.MUMMY;
 	}
 

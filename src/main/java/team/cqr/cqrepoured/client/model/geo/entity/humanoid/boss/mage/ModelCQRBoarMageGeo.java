@@ -11,9 +11,9 @@ public class ModelCQRBoarMageGeo extends AbstractModelMageGeo<EntityCQRBoarmage>
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRBoarmage animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRBoarmage animatable) {
 		if(animatable.isIdentityHidden()) {
-			return super.getAnimationFileLocation(animatable);
+			return super.getAnimationResource(animatable);
 		}
 		return CQRAnimations.Entity.BOAR_MAGE;
 	}

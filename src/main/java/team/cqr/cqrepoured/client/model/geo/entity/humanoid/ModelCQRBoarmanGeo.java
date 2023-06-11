@@ -17,7 +17,7 @@ public class ModelCQRBoarmanGeo extends AbstractModelHumanoidGeo<EntityCQRBoarma
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRBoarman animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRBoarman animatable) {
 		return CQRAnimations.Entity.BOARMAN;
 	}
 

@@ -17,7 +17,7 @@ public class ModelCQRGolemGeo extends AbstractModelHumanoidGeo<EntityCQRGolem> {
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRGolem animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRGolem animatable) {
 		return CQRAnimations.Entity.GOLEM;
 	}
 

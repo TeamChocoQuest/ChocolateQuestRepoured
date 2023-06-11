@@ -17,7 +17,7 @@ public class ModelCQRMinotaurGeo extends AbstractModelHumanoidGeo<EntityCQRMinot
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRMinotaur animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRMinotaur animatable) {
 		return CQRAnimations.Entity.MINOTAUR;
 	}
 

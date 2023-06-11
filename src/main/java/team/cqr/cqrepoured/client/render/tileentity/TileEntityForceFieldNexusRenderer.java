@@ -33,7 +33,7 @@ public class TileEntityForceFieldNexusRenderer extends GeoBlockRenderer<TileEnti
 
 	@Override
 	public RenderType getRenderType(TileEntityForceFieldNexus animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
+		return RenderType.entityTranslucent(getTextureResource(animatable));
 	}
 
 	@Override

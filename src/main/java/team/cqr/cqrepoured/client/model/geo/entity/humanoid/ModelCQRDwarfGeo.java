@@ -17,7 +17,7 @@ public class ModelCQRDwarfGeo extends AbstractModelHumanoidGeo<EntityCQRDwarf> {
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRDwarf animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRDwarf animatable) {
 		return CQRAnimations.Entity.DWARF;
 	}
 

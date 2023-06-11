@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
@@ -15,7 +15,7 @@ public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnde
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQREnderCalamity animatable) {
+	public ResourceLocation getAnimationResource(EntityCQREnderCalamity animatable) {
 		return CQRAnimations.Entity.ENDER_CALAMITY;
 	}
 
@@ -39,9 +39,9 @@ public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnde
 	 */
 
 	@Override
-	public void setLivingAnimations(EntityCQREnderCalamity entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
+	public void setCustomAnimations(EntityCQREnderCalamity entity, long uniqueID, @SuppressWarnings("rawtypes") AnimationState<EntityCQREnderCalamity> customPredicate) {
 		// TODO: Fix buggy rotation
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 		// IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 		// IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
 
@@ -50,17 +50,17 @@ public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnde
 		// headBone.setRotationX((float) Math.toRadians(-entity.rotationPitch) /*- rootBone.getRotationX()*/);
 		// headBone.setRotationY((float) Math.toRadians(-(entity.rotationYawHead - entity.rotationYaw))/* -
 		// rootBone.getRotationY()*/);
-		IBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
-		IBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
-		float correctPitch = bodyBone.getRotationX();
+		CoreGeoBone rootBone = this.getAnimationProcessor().getBone(BONE_IDENT_ROOT);
+		CoreGeoBone bodyBone = this.getAnimationProcessor().getBone(BONE_IDENT_BODY);
+		float correctPitch = bodyBone.getRotX();
 		if (entity.rotateBodyPitch()) {
 			float pitch = (float) Math.toRadians(this.getPitch(entity, customPredicate.getPartialTick()) - 90F);
-			pitch -= rootBone.getRotationX();
+			pitch -= rootBone.getRotX();
 			// System.out.println("Client pitch: " + pitch);
 			// System.out.println("Client prev pitch: " + entity.prevRotationPitchCQR);
-			bodyBone.setRotationX(pitch);
+			bodyBone.setRotX(pitch);
 		} else {
-			bodyBone.setRotationX(correctPitch);
+			bodyBone.setRotX(correctPitch);
 		}
 
 	}

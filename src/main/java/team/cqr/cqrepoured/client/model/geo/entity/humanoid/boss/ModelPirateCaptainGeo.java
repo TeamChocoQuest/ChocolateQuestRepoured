@@ -17,7 +17,7 @@ public class ModelPirateCaptainGeo extends AbstractModelHumanoidGeo<EntityCQRPir
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRPirateCaptain animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRPirateCaptain animatable) {
 		return CQRAnimations.Entity.PIRATE_CAPTAIN;
 	}
 

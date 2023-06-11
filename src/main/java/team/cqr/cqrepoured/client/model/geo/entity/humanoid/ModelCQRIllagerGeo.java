@@ -17,7 +17,7 @@ public class ModelCQRIllagerGeo extends AbstractModelHumanoidGeo<EntityCQRIllage
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRIllager animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRIllager animatable) {
 		return CQRAnimations.Entity.ILLAGER;
 	}
 

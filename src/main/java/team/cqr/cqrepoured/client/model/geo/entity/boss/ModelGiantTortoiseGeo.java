@@ -14,7 +14,7 @@ public class ModelGiantTortoiseGeo extends AbstractModelGeoCQRBase<EntityCQRGian
 	}
 
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRGiantTortoise animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRGiantTortoise animatable) {
 		return CQRAnimations.Entity.GIANT_TORTOISE;
 	}
 

@@ -17,7 +17,7 @@ public class ModelCQRSpectreGeo extends AbstractModelHumanoidGeo<EntityCQRSpectr
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRSpectre animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRSpectre animatable) {
 		return CQRAnimations.Entity.SPECTRE;
 	}
 

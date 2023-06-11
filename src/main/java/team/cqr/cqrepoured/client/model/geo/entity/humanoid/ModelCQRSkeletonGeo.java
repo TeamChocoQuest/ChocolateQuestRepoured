@@ -17,7 +17,7 @@ public class ModelCQRSkeletonGeo extends AbstractModelHumanoidGeo<EntityCQRSkele
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(EntityCQRSkeleton animatable) {
+	public ResourceLocation getAnimationResource(EntityCQRSkeleton animatable) {
 		return CQRAnimations.Entity.SKELETON;
 	}
 
