@@ -9,29 +9,29 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.renderers.geo.ExtendedGeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.DynamicGeoEntityRenderer;
+import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRPirateParrot;
@@ -43,7 +43,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatable> extends ExtendedGeoEntityRenderer<T> implements IGeoRenderer<T> {
+public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity> extends DynamicGeoEntityRenderer<T> implements GeoRenderer<T> {
 
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
 
@@ -52,19 +52,19 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	protected final Queue<Tuple<GeoBone, CompoundTag>> SHOULDER_ENTITY_QUEUE = new ArrayDeque<>();
 
-	public RenderCQREntityGeo(Context renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderCQREntityGeo(Context renderManager, GeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1F, 1F, 0);
 	}
 
-	protected RenderCQREntityGeo(Context renderManager, AnimatedGeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
+	protected RenderCQREntityGeo(Context renderManager, GeoModel<T> modelProvider, float widthScale, float heightScale, float shadowSize) {
 		super(renderManager, modelProvider);
 
-		this.MODEL_ID_GETTER = modelProvider::getModelLocation;
+		this.MODEL_ID_GETTER = modelProvider::getModelResource;
 		this.TEXTURE_GETTER = modelProvider::getTextureResource;
 
 		this.shadowRadius = shadowSize;
-		this.widthScale = widthScale;
-		this.heightScale = heightScale;
+		this.scaleWidth = widthScale;
+		this.scaleHeight = heightScale;
 
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
@@ -72,14 +72,17 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		this.addLayer(new LayerCQRSpeechbubble<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
-	@Override
 	public float getWidthScale(T entity) {
-		return this.widthScale * entity.getSizeVariation();
+		return this.scaleWidth * entity.getSizeVariation();
 	}
 
-	@Override
 	public float getHeightScale(T entity) {
-		return this.heightScale * entity.getSizeVariation();
+		return this.scaleHeight * entity.getSizeVariation();
+	}
+	
+	@Override
+	public void scaleModelForRender(float widthScale, float heightScale, PoseStack poseStack, T animatable, BakedGeoModel model, boolean isReRender, float partialTick, int packedLight, int packedOverlay) {
+		super.scaleModelForRender(this.getWidthScale(animatable), this.getHeightScale(animatable), poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
 	}
 
 	@Override
@@ -87,13 +90,13 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		return this.TEXTURE_GETTER.apply(entity);
 	}
 
-	@Override
+	/*@Override
 	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if (this.isArmorBone(bone)) {
 			bone.setCubesHidden(true);
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-	}
+	}*/
 
 	@Override
 	protected void handleArmorRenderingForBone(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, ResourceLocation currentTexture) {
@@ -103,7 +106,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 
 	protected void handleShoulderEntityBone(GeoBone bone) {
 		if (bone.getName().startsWith("shoulderEntity")) {
-			CompoundTag data = this.getShoulderEntityDataFor(this.currentEntityBeingRendered, bone);
+			CompoundTag data = this.getShoulderEntityDataFor(this.animatable, bone);
 			if (data != null) {
 				this.SHOULDER_ENTITY_QUEUE.add(new Tuple<>(bone, data));
 			}
@@ -111,7 +114,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	}
 
 	protected CompoundTag getShoulderEntityDataFor(T currentEntityBeingRendered, GeoBone bone) {
-		switch (bone.name) {
+		switch (bone.getName()) {
 		case "shoulderEntityLeft":
 			return currentEntityBeingRendered.getLeftShoulderEntity();
 		default:
@@ -135,7 +138,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 						continue;
 					}
 
-					float f = Mth.lerp(partialTicks, cpe.yRotO, cpe.yRot);
+					float f = Mth.lerp(partialTicks, cpe.yRotO, cpe.getYRot());
 
 					stack.pushPose();
 
@@ -155,7 +158,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 	
 	@Override
 	protected void renderLayer(PoseStack stack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float rotFloat, float netHeadYaw, float headPitch, MultiBufferSource bufferIn2,
-                               GeoLayerRenderer<T> layerRenderer) {
+                               GeoRenderLayer<T> layerRenderer) {
 		super.renderLayer(stack, bufferIn, packedLightIn, entity, limbSwing, limbSwingAmount, partialTicks, rotFloat, netHeadYaw, headPitch, bufferIn2, layerRenderer);
 		
 		this.limbSwing = limbSwing;

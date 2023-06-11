@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -84,17 +85,17 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class CQREntityRenderers {
 	
-	protected static final Map<Class<? extends CQRPartEntity<?>>, Function<Context, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> ENTITY_PART_RENDERER_PRODUCERS = new ConcurrentHashMap<>();
+	protected static final Map<Class<? extends CQRPartEntity<?>>, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> ENTITY_PART_RENDERER_PRODUCERS = new ConcurrentHashMap<>();
 	protected static final Map<Class<? extends CQRPartEntity<?>>, EntityRenderer<? extends CQRPartEntity<?>>> ENTITY_PART_RENDERERS = new ConcurrentHashMap<>();
 
-	protected static void registerEntityPartRenderer(final Class<? extends CQRPartEntity<?>> partClass, Function<Context, ? extends EntityRenderer<? extends CQRPartEntity<?>>> rendererFactory) {
+	protected static void registerEntityPartRenderer(final Class<? extends CQRPartEntity<?>> partClass, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>> rendererFactory) {
 		ENTITY_PART_RENDERER_PRODUCERS.put(partClass, rendererFactory);
 	}
 	
-	public static <R extends EntityRenderer<? extends CQRPartEntity<?>>, P extends CQRPartEntity<?>> EntityRenderer<? extends CQRPartEntity<?>> getRendererFor(P partEntity, Context renderManager) {
-		return ENTITY_PART_RENDERERS.computeIfAbsent((Class<? extends CQRPartEntity<?>>) partEntity.getClass(), partClass -> {
-			Function<Context, ? extends EntityRenderer<? extends CQRPartEntity<?>>> constructor = null;
-			for(Entry<Class<? extends CQRPartEntity<?>>, Function<Context, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> entry : ENTITY_PART_RENDERER_PRODUCERS.entrySet()) {
+	public static <R extends EntityRenderer<? extends CQRPartEntity<?>>, P extends CQRPartEntity<?>> EntityRenderer<? extends CQRPartEntity<?>> getRendererFor(CQRPartEntity<?> cpe, EntityRenderDispatcher entityRenderDispatcher) {
+		return ENTITY_PART_RENDERERS.computeIfAbsent((Class<? extends CQRPartEntity<?>>) cpe.getClass(), partClass -> {
+			Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>> constructor = null;
+			for(Entry<Class<? extends CQRPartEntity<?>>, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> entry : ENTITY_PART_RENDERER_PRODUCERS.entrySet()) {
 				if(entry.getKey().equals(partClass)) {
 					constructor = entry.getValue();
 					break;
@@ -103,7 +104,7 @@ public class CQREntityRenderers {
 				}
 			}
 			if(constructor != null) {
-				return constructor.apply(renderManager);
+				return constructor.apply(entityRenderDispatcher);
 			}
 			return null;
 		});
