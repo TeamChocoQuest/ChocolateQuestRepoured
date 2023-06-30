@@ -5,27 +5,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Vector3f;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexBuffer;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexFormat.Mode;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import com.mojang.blaze3d.vertex.Tesselator;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamityGeo;
@@ -41,10 +44,10 @@ import team.cqr.cqrepoured.util.ArrayUtil;
 
 public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCalamity> {
 
-	private static final VertexBuffer SPHERE_VBO = new VertexBuffer(DefaultVertexFormat.POSITION);
+	private static final VertexBuffer SPHERE_VBO = new VertexBuffer(VertexBuffer.Usage.DYNAMIC);
 	static {
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-		buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormat.POSITION);
+		buffer.begin(Mode.TRIANGLES, DefaultVertexFormat.POSITION);
 
 		AtomicInteger index = new AtomicInteger();
 		SphereRenderer.getIcoSphere().flatMap(SphereRenderer.splitter(3, true)).forEach((Triangle triangle) -> {
@@ -78,8 +81,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			}
 		});
 
-		buffer.end();
-		SPHERE_VBO.upload(buffer);
+		SPHERE_VBO.upload(buffer.end());
 	}
 	private static final Vector3f SPHERE_ROT_AXIS = new Vector3f(1.0F, 1.0F, 0.0F);
 	static {
@@ -92,7 +94,9 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	public RenderCQREnderCalamity(Context renderManager) {
 		super(renderManager, new ModelEnderCalamityGeo(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));
 
-		this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		//this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
+		this.addRenderLayer(new BlockAndItemGeoLayer<EntityCQREnderCalamity>(this, this::getHeldItemForBone, this::getHeldBlockForBone));
 	}
 
 	@Override
@@ -133,16 +137,6 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			return optional.get();
 		}
 		return null;
-	}
-
-	@Override
-	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQREnderCalamity currentEntity) {
-		// Unused
 	}
 
 	@Override

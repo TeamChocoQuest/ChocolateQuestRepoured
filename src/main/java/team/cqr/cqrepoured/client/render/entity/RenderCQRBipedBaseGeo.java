@@ -21,13 +21,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.ParrotModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -53,18 +54,18 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	}
 
 	protected ItemStack currentItemAtBone = null;
-	protected TransformType currentTransformTypeAtBone = null;
+	protected ItemDisplayContext currentTransformTypeAtBone = null;
 	
 	protected ItemStack currentArmorAtBone = null;
 	protected EquipmentSlot currentSlotAtBone = null;
-	protected Function<HumanoidModel<?>, ModelRenderer> currentArmorPartAtBone = null;
+	protected Function<HumanoidModel<?>, ModelPart> currentArmorPartAtBone = null;
 	
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_HEAD = (armorModel) -> armorModel.head;
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_BODY = (armorModel) -> armorModel.body;
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_ARM_LEFT = (armorModel) -> armorModel.leftArm;
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_ARM_RIGHT = (armorModel) -> armorModel.rightArm;
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_LEG_LEFT = (armorModel) -> armorModel.leftLeg;
-	protected final Function<HumanoidModel<?>, ModelRenderer> GET_ARMOR_LEG_RIGHT = (armorModel) -> armorModel.rightLeg;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_HEAD = (armorModel) -> armorModel.head;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_BODY = (armorModel) -> armorModel.body;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_ARM_LEFT = (armorModel) -> armorModel.leftArm;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_ARM_RIGHT = (armorModel) -> armorModel.rightArm;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_LEG_LEFT = (armorModel) -> armorModel.leftLeg;
+	protected final Function<HumanoidModel<?>, ModelPart> GET_ARMOR_LEG_RIGHT = (armorModel) -> armorModel.rightLeg;
 	
 	//Call order (armor): 
 	/**
@@ -106,42 +107,42 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	protected void standardArmorCalculationForBone(String boneName, T currentEntity) {
 		switch(boneName) {
 			case ARMOR_BODY:
-				this.currentArmorAtBone = chestplate;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.CHEST);
 				this.currentArmorPartAtBone = GET_ARMOR_BODY;
 				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_HEAD:
-				this.currentArmorAtBone = helmet;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.HEAD);
 				this.currentArmorPartAtBone = GET_ARMOR_HEAD;
 				this.currentSlotAtBone = EquipmentSlot.HEAD;
 				break;
 			case ARMOR_LEFT_ARM:
-				this.currentArmorAtBone = chestplate;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.CHEST);
 				this.currentArmorPartAtBone = GET_ARMOR_ARM_LEFT;
 				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_RIGHT_ARM:
-				this.currentArmorAtBone = chestplate;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.CHEST);
 				this.currentArmorPartAtBone = GET_ARMOR_ARM_RIGHT;
 				this.currentSlotAtBone = EquipmentSlot.CHEST;
 				break;
 			case ARMOR_RIGHT_LEG:
-				this.currentArmorAtBone = leggings;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.LEGS);
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
 				this.currentSlotAtBone = EquipmentSlot.LEGS;
 				break;
 			case ARMOR_LEFT_LEG:
-				this.currentArmorAtBone = leggings;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.LEGS);
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
 				this.currentSlotAtBone = EquipmentSlot.LEGS;
 				break;
 			case ARMOR_RIGHT_FOOT:
-				this.currentArmorAtBone = boots;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.FEET);
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_RIGHT;
 				this.currentSlotAtBone = EquipmentSlot.FEET;
 				break;
 			case ARMOR_LEFT_FOOT:
-				this.currentArmorAtBone = boots;
+				this.currentArmorAtBone = currentEntity.getItemBySlot(EquipmentSlot.FEET);
 				this.currentArmorPartAtBone = GET_ARMOR_LEG_LEFT;
 				this.currentSlotAtBone = EquipmentSlot.FEET;
 				break;
@@ -155,16 +156,16 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	protected void standardItemCalculationForBone(String boneName, T currentEntity) {
 		switch(boneName) {
 			case LEFT_HAND:
-				this.currentItemAtBone = currentEntity.isLeftHanded() ? this.mainHand : this.offHand;
-				this.currentTransformTypeAtBone = TransformType.THIRD_PERSON_RIGHT_HAND;
+				this.currentItemAtBone = currentEntity.isLeftHanded() ? currentEntity.getItemBySlot(EquipmentSlot.MAINHAND) : currentEntity.getItemBySlot(EquipmentSlot.OFFHAND);
+				this.currentTransformTypeAtBone = ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
 				break;
 			case RIGHT_HAND:
-				this.currentItemAtBone = !currentEntity.isLeftHanded() ? this.mainHand : this.offHand;
-				this.currentTransformTypeAtBone = TransformType.THIRD_PERSON_RIGHT_HAND;
+				this.currentItemAtBone = !currentEntity.isLeftHanded() ? currentEntity.getItemBySlot(EquipmentSlot.MAINHAND) : currentEntity.getItemBySlot(EquipmentSlot.OFFHAND);
+				this.currentTransformTypeAtBone = ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
 				break;
 			case POTION_BONE:
 				this.currentItemAtBone = currentEntity.getHealingPotions() > 0 && !currentEntity.isHoldingPotion() ? currentEntity.getHeldItemPotion() : null;
-				this.currentTransformTypeAtBone = TransformType.NONE;
+				this.currentTransformTypeAtBone = ItemDisplayContext.NONE;
 				break;
 			default: break;
 		}
@@ -188,7 +189,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 
 	@Override
 	@Nullable
-	protected ModelRenderer getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
+	protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
 		if(this.currentArmorPartAtBone != null) {
 			return this.currentArmorPartAtBone.apply(armorModel);
 		}
@@ -218,7 +219,7 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	}
 
 	@Override
-	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+	protected ItemDisplayContext getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		return this.currentTransformTypeAtBone;
 	}
 	

@@ -8,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -20,7 +21,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -31,6 +34,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.DynamicGeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
@@ -70,6 +74,17 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addLayer(new LayerCQRSpeechbubble<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		
+		this.addRenderLayer(new BlockAndItemGeoLayer<T>(this, this::getHeldItemForBone, this::getHeldBlockForBone) {
+			@Override
+			protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, T animatable) {
+				return RenderCQREntityGeo.this.getCameraTransformForItemAtBone(stack, bone.getName());
+			}
+		});
+	}
+	
+	protected ItemDisplayContext getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
+		return ItemDisplayContext.NONE;
 	}
 
 	public float getWidthScale(T entity) {
@@ -203,8 +218,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 	
 	protected HumanoidModel<?> currentArmorModel = null;
 	
-	@Override
-	protected ModelRenderer getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
+	protected ModelPart getArmorPartForBone(String name, HumanoidModel<?> armorModel) {
 		this.currentArmorModel = armorModel;
 		return super.getArmorPartForBone(name, armorModel);
 	}
@@ -217,6 +231,14 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 			sourceLimb.render(stack, ivb, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		}
 		super.renderArmorPart(stack, sourceLimb, packedLightIn, packedOverlayIn, red, green, blue, alpha, armorForBone, armorResource);
+	}
+
+	protected BlockState getHeldBlockForBone(GeoBone boneName, T currentEntity) {
+		return null;
+	}
+
+	protected ItemStack getHeldItemForBone(GeoBone boneName, T currentEntity) {
+		return null;
 	}
 
 }
