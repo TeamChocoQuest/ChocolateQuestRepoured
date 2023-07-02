@@ -1,6 +1,8 @@
 package team.cqr.cqrepoured.entity.profile;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
@@ -13,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public record EntityVariant(
 		int weight,
 		SizeEntry size,
+		Map<ResourceLocation, Double> damageTypeMultipliers, 
 		List<AttributeEntry> attributes,
 		List<AssetEntry> assets
 		) {
@@ -21,6 +24,7 @@ public record EntityVariant(
 		return instance.group(
 				Codec.INT.optionalFieldOf("weight", 0).forGetter(EntityVariant::weight),
 				SizeEntry.CODEC.fieldOf("size").forGetter(EntityVariant::size),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.DOUBLE).optionalFieldOf("damageMultipliers", Collections.emptyMap()).forGetter(EntityVariant::damageTypeMultipliers),
 				AttributeEntry.CODEC.listOf().fieldOf("attributes").forGetter(EntityVariant::attributes),
 				AssetEntry.CODEC.listOf().fieldOf("assets").forGetter(EntityVariant::assets)
 			).apply(instance, EntityVariant::new);
