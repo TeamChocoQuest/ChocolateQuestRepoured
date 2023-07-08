@@ -122,7 +122,7 @@ dependencies {
 
     // Dependencies (Required)
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
-    implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-${mc_version}:${sbl_version}")
+    implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
 
  // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
