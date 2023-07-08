@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.mixin;
 
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 
-@Mixin(EnderDragonEntity.class)
-public abstract class MixinEnderdragonEntity extends MobEntity {
+@Mixin(EnderDragon.class)
+public abstract class MixinEnderdragonEntity extends Mob {
 
-	protected MixinEnderdragonEntity(EntityType<? extends MobEntity> p_i48576_1_, Level p_i48576_2_) {
+	protected MixinEnderdragonEntity(EntityType<? extends Mob> p_i48576_1_, Level p_i48576_2_) {
 		super(p_i48576_1_, p_i48576_2_);
 	}
 	
 	@Override
-	public CreatureAttribute getMobType() {
+	public MobType getMobType() {
 		return CQRCreatureAttributes.VOID;
 	}
 
