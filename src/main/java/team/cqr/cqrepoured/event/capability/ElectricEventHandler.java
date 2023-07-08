@@ -5,11 +5,10 @@ import java.util.List;
 import com.google.common.base.Predicates;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -36,21 +35,21 @@ public class ElectricEventHandler {
 		if (!(entity instanceof LivingEntity) || !checkForCapabilityAndServerSide((LivingEntity) entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability((LivingEntity) entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new SPacketUpdateElectrocuteCapability((LivingEntity) entity));
 	}
 
 	@SubscribeEvent
 	public static void onLogIn(PlayerLoggedInEvent event) {
-		LivingEntity entity = event.getPlayer();
+		LivingEntity entity = event.getEntity();
 		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new SPacketUpdateElectrocuteCapability(entity));
 	}
 
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		LivingEntity entity = event.getPlayer();
+		LivingEntity entity = event.getEntity();
 		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
@@ -64,15 +63,15 @@ public class ElectricEventHandler {
 
 	@SubscribeEvent
 	public static void onChangeDimension(PlayerChangedDimensionEvent event) {
-		LivingEntity entity = event.getPlayer();
+		LivingEntity entity = event.getEntity();
 		if (!checkForCapabilityAndServerSide(entity) || !(entity instanceof ServerPlayer)) {
 			return;
 		}
-		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketUpdateElectrocuteCapability(entity));
+		CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new SPacketUpdateElectrocuteCapability(entity));
 	}
 
 	private static boolean checkForCapabilityAndServerSide(LivingEntity entity) {
-		if (entity.level.isClientSide) {
+		if (entity.level().isClientSide) {
 			// If we are on the remote end, we don't do anything
 			return false;
 		}
@@ -83,8 +82,8 @@ public class ElectricEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onLivingUpdateEvent(LivingUpdateEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+	public static void onLivingUpdateEvent(LivingTickEvent event) {
+		LivingEntity entity = event.getEntity();
 		if (!checkForCapabilityAndServerSide(entity)) {
 			return;
 		}
@@ -99,10 +98,10 @@ public class ElectricEventHandler {
 				// But, if we are wet, we get damage from beign electrocuted
 				if (((IMechanical) entity).canReceiveElectricDamageCurrently()) {
 					currentCap.setRemainingTicks(100);
-					entity.hurt(DamageSource.LIGHTNING_BOLT, 2);
+					entity.hurt(entity.level().damageSources().lightningBolt(), 2);
 				}
 			} else if (currentCap.isElectrocutionActive()) {
-				entity.hurt(DamageSource.LIGHTNING_BOLT, 1);
+				entity.hurt(entity.level().damageSources().lightningBolt(), 1);
 			}
 			if (!entity.isAlive()) {
 				currentCap.setTarget(null);
@@ -111,7 +110,7 @@ public class ElectricEventHandler {
 			if (!(entity instanceof IDontSpreadElectrocution) && currentCap.canSpread() && currentCap.getTarget() == null && currentCap.getRemainignSpreads() > 0) {
 				spreadElectrocute(entity, currentCap);
 			} else if (currentCap.getTarget() != null) {
-				if (!currentCap.getTarget().isAlive() || !entity.canSee(currentCap.getTarget()) || entity.distanceTo(currentCap.getTarget()) > 16) {
+				if (!currentCap.getTarget().isAlive() || !entity.hasLineOfSight(currentCap.getTarget()) || entity.distanceTo(currentCap.getTarget()) > 16) {
 					currentCap.setTarget(null);
 				} else {
 					LazyOptional<CapabilityElectricShock> targetCap = currentCap.getTarget().getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
@@ -123,11 +122,11 @@ public class ElectricEventHandler {
 
 	private static void spreadElectrocute(LivingEntity spreader, CapabilityElectricShock sourceCap) {
 		// First, get all applicable entities in range
-		List<LivingEntity> entities = spreader.level.getEntitiesOfClass(LivingEntity.class, spreader.getBoundingBox().inflate(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
+		List<LivingEntity> entities = spreader.level().getEntitiesOfClass(LivingEntity.class, spreader.getBoundingBox().inflate(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
 			if (entityLiving.getUUID().equals(sourceCap.getCasterID())) {
 				return false;
 			}
-			if (!spreader.canSee(entityLiving)) {
+			if (!spreader.hasLineOfSight(entityLiving)) {
 				return false;
 			}
 			if (spreader.distanceTo(entityLiving) > CQRConfig.SERVER_CONFIG.general.electricFieldEffectSpreadRange.get()) {
@@ -138,7 +137,7 @@ public class ElectricEventHandler {
 		if (entities.isEmpty()) {
 			return;
 		}
-		LivingEntity chosen = entities.get(spreader.level.random.nextInt(entities.size()));
+		LivingEntity chosen = entities.get(spreader.level().random.nextInt(entities.size()));
 		sourceCap.setTarget(chosen);
 		sourceCap.reduceSpreads();
 
