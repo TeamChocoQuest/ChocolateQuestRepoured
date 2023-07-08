@@ -1,7 +1,7 @@
 {
 	"required": true,
 	"package": "team.cqr.cqrepoured.mixin",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_17",
 	"refmap": "cqrepoured.refmap.json",
 	"mixins": [
 		"structure.MixinChunkStatus",
