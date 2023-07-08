@@ -9,24 +9,31 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.resources.IPackFinder;
-import net.minecraft.resources.IPackNameDecorator;
-import net.minecraft.resources.ResourcePackInfo;
-import net.minecraft.resources.ResourcePackList;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.resources.ModFolderPack;
+import net.minecraft.server.packs.repository.PackRepository;
+import net.minecraft.server.packs.repository.RepositorySource;
 
-@Mixin(ResourcePackList.class)
+@Mixin(PackRepository.class)
 public class MixinResourcePackList {
 
 	@Shadow
 	@Final
-	private Set<IPackFinder> sources;
+	private Set<RepositorySource> sources;
 
-	@Inject(method = "<init>(Lnet/minecraft/resources/ResourcePackInfo$IFactory;[Lnet/minecraft/resources/IPackFinder;)V", at = @At("RETURN"))
-	private void init(ResourcePackInfo.IFactory factory, IPackFinder[] packFinders, CallbackInfo info) {
-		this.sources.add((packInfoConsumer, packFactory) -> {
-			packInfoConsumer.accept(ResourcePackInfo.create("cqrepoured_config", true, () -> new ModFolderPack("CQRepoured Config", CQRMain.MODID, CQRMain.CQ_CONFIG_FOLDER.toPath()), packFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.BUILT_IN));
+	@Inject(method = "<init>([Lnet/minecraft/resources/RepositorySource;)V", at = @At("RETURN"))
+	private void init(RepositorySource[] packFinders, CallbackInfo info) {
+		this.sources.add((packInfoConsumer) -> {
+			packInfoConsumer.accept(Pack.create(
+					"cqrepoured_config",
+					Component.literal("CQ-Repoured config resources"),
+					true, 
+					(string) -> new ModFolderPack("CQRepoured Config", CQRMain.MODID, CQRMain.CQ_CONFIG_FOLDER.toPath()), 
+					new Pack.Info(Component.literal("Dynamic resources of CQR"), 0, null), //TODO
+					PackType.SERVER_DATA,
+					Pack.Position.TOP,
+					true,
+					//TODO: WTF is a packsource?!
+					
+				));
 		});
 	}
 
