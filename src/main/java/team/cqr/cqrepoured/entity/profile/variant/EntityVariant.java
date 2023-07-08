@@ -19,6 +19,7 @@ public record EntityVariant(
 				SizeEntry.CODEC.fieldOf("size").forGetter(EntityVariant::size),
 				DamageEntry.CODEC.fieldOf("damage").forGetter(EntityVariant::damageConfig),
 				AttributeEntry.CODEC.listOf().fieldOf("attributes").forGetter(EntityVariant::attributes),
+				//TODO: Change to weighted list!
 				AssetEntry.CODEC.listOf().fieldOf("assets").forGetter(EntityVariant::assets)
 				
 			).apply(instance, EntityVariant::new);
