@@ -4,6 +4,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
+	id 'java'
 }
 
 version = "${mc_version}-${mod_version}"
@@ -11,6 +13,10 @@ group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+configurations {
+	shade
+}
 
 minecraft {
     mappings channel: "${mappings_channel}", version: "${mappings_version}"
@@ -20,6 +26,9 @@ minecraft {
     runs {
         client {
             taskName "runClient ${mod_name} ${mc_version}"
+			arg "-mixin.config=${mod_id}.mixins.json"
+
+			property 'mixin.debug', 'true'
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -33,6 +42,9 @@ minecraft {
 
         server {
             taskName "runServer ${mod_name} ${mc_version}"
+			arg "-mixin.config=${mod_id}.mixins.json"
+
+			property 'mixin.debug', 'true'
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -109,6 +121,11 @@ repositories {
 		name "ModMaven" // JEI Alt
 		url "https://modmaven.dev"
     }
+	
+	maven { 
+		name "Databuddy" // Databuddy repo
+		url "https://cubicinterpolation.net/maven/" 
+	}
 }
 
 dependencies {
@@ -133,8 +150,22 @@ dependencies {
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
  // runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
+ 
+    // Databuddy
+	implementation fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+	shade fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
 }
 
+shadowJar {
+	configurations = [project.configurations.shade]
+	relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
+}
+
+reobf {
+    shadowJar { }
+}
+
+tasks.build.dependsOn reobfShadowJar
 jar.finalizedBy('reobfJar')
 
 jar {
@@ -164,4 +195,8 @@ processResources {
 
 compileJava {
     classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
