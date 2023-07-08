@@ -3,13 +3,13 @@ package team.cqr.cqrepoured.capability.protectedregions;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
 
 public class CapabilityProtectedRegionDataStorage implements Storage<CapabilityProtectedRegionData> {
 
 	@Override
-	public INBT writeNBT(Capability<CapabilityProtectedRegionData> capability, CapabilityProtectedRegionData instance, Direction side) {
+	public Tag writeNBT(Capability<CapabilityProtectedRegionData> capability, CapabilityProtectedRegionData instance, Direction side) {
 		return instance.writeToNBT();
 	}
 
