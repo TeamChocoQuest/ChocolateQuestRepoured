@@ -1,22 +1,20 @@
 package team.cqr.cqrepoured.mixin;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.EquipmentSlot.Group;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -35,13 +33,13 @@ public abstract class MixinLivingEntity extends Entity {
 				if (pEntity.isSprinting()) {
 					int thornLevel = 0;
 					for(EquipmentSlot slot : EquipmentSlot.values()) {
-						if(slot.getType() == Group.ARMOR) {
+						if(slot.getType() == EquipmentSlot.Type.ARMOR) {
 							ItemStack stack = ((LivingEntity) pEntity).getItemBySlot(slot);
 							thornLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.THORNS, stack);
 						}
 					}
 					if(thornLevel > 0) {
-						this.hurt(DamageSource.thorns(pEntity), thornLevel * 1.5F);
+						this.hurt(pEntity.damageSources().thorns(pEntity), thornLevel * 1.5F);
 					}
 					
 					double myVolume = this.getBbWidth() * this.getBbHeight() * this.getBbWidth();
@@ -97,10 +95,10 @@ public abstract class MixinLivingEntity extends Entity {
 		throw new IllegalStateException("Mixin failed to shadow isFallFlying()");
 	}
 
-	@Shadow
+	/*@Shadow
 	private boolean canStandOnFluid(Fluid type) {
 		throw new IllegalStateException("Mixin failed to shadow canStandOnFluid()");
-	}
+	}*/
 
 	@Shadow
 	public boolean isAffectedByFluids() {
