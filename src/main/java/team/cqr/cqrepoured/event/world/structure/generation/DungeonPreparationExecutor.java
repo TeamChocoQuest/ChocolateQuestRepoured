@@ -1,22 +1,29 @@
 package team.cqr.cqrepoured.event.world.structure.generation;
 
-import net.minecraft.world.level.Level;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import team.cqr.cqrepoured.CQRMain;
-
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import team.cqr.cqrepoured.CQRMain;
 
 //@EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonPreparationExecutor {
 
 	private static final ThreadFactory DEFAULT_THREAD_FACTORY = task -> new Thread(task, "CQR Dungeon Preparation Thread");
-	private static final Map<Level, ExecutorService> DIM_2_EXECUTOR = new ConcurrentHashMap<>();
+	private static final Map<LevelAccessor, ExecutorService> DIM_2_EXECUTOR = new ConcurrentHashMap<>();
 
 	public static Executor getExecutor(Level world) {
 		return DIM_2_EXECUTOR.computeIfAbsent(world, key -> Executors.newSingleThreadExecutor(DEFAULT_THREAD_FACTORY));
@@ -39,8 +46,8 @@ public class DungeonPreparationExecutor {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void onWorldLoadEvent(WorldEvent.Load event) {
-		DIM_2_EXECUTOR.computeIfAbsent(event.getWorld(), key -> Executors.newSingleThreadExecutor(DEFAULT_THREAD_FACTORY));
+	public static void onWorldLoadEvent(LevelEvent.Load event) {
+		DIM_2_EXECUTOR.computeIfAbsent(event.getLevel(), key -> Executors.newSingleThreadExecutor(DEFAULT_THREAD_FACTORY));
 	}
 
 	public static void onWorldUnloadEvent(Level iWorld) {

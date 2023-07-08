@@ -14,8 +14,8 @@ public class DungeonPlacerEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
-		if (!event.getPlayer().level.isClientSide()) {
-			CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getPlayer()), new SPacketDungeonSync(DungeonRegistry.getInstance().getDungeons()));
+		if (!event.getEntity().level().isClientSide()) {
+			CQRMain.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer)event.getEntity()), new SPacketDungeonSync(DungeonRegistry.getInstance().getDungeons()));
 			//CQRMain.NETWORK.sendTo(new SPacketDungeonSync(DungeonRegistry.getInstance().getDungeons()), (ServerPlayerEntity) event.player);
 		}
 	}

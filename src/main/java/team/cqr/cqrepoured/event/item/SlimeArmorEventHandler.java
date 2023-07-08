@@ -17,16 +17,16 @@ public class SlimeArmorEventHandler {
 
 	@SubscribeEvent
 	public static void onLivingHurtEvent(LivingHurtEvent event) {
-		LivingEntity entity = event.getEntityLiving();
+		LivingEntity entity = event.getEntity();
 
 		if (ItemUtil.hasFullSet(entity, ItemArmorSlime.class) && !CapabilityCooldownHandlerHelper.onCooldown(entity, CQRItems.CHESTPLATE_SLIME.get())) {
-			if (!entity.level.isClientSide) {
-				EntitySlimePart slime = new EntitySlimePart(CQREntityTypes.SMALL_SLIME.get(), entity.level, entity);
+			if (!entity.level().isClientSide()) {
+				EntitySlimePart slime = new EntitySlimePart(CQREntityTypes.SMALL_SLIME.get(), entity.level(), entity);
 				double x = entity.getX() - 5.0D + 2.5D * slime.getRandom().nextDouble();
 				double y = entity.getY();
 				double z = entity.getZ() - 5.0D + 2.5D * slime.getRandom().nextDouble();
 				slime.setPos(x, y, z);
-				entity.level.addFreshEntity(slime);
+				entity.level().addFreshEntity(slime);
 			}
 			CapabilityCooldownHandlerHelper.setCooldown(entity, CQRItems.CHESTPLATE_SLIME.get(), 160);
 		}

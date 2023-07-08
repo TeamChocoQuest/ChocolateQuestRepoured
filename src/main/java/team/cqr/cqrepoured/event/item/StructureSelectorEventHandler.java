@@ -14,11 +14,11 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		ItemStack stack = player.getItemInHand(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector) {
-			if (!player.level.isClientSide()) {
+			if (!player.level().isClientSide()) {
 				((ItemStructureSelector) stack.getItem()).setFirstPos(stack, player.isCrouching() ? player.blockPosition() : event.getPos(), player);
 			}
 
@@ -28,7 +28,7 @@ public class StructureSelectorEventHandler {
 
 	@SubscribeEvent
 	public static void onLeftClickEmptyEvent(PlayerInteractEvent.LeftClickEmpty event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		ItemStack stack = player.getItemInHand(event.getHand());
 
 		if (stack.getItem() instanceof ItemStructureSelector && player.isCrouching()) {
