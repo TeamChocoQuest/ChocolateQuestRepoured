@@ -217,4 +217,5 @@
   <entry oldName="net.minecraftforge.fml.network.simple.SimpleChannel" newName="net.minecraftforge.network.simple.SimpleChannel" type="class"/>
   <entry oldName="net.minecraftforge.fml.RegistryObject" newName="net.minecraftforge.registries.RegistryObject" type="class"/>
   <entry oldName="net.minecraftforge.fmlclient.gui.GuiUtils" newName="net.minecraftforge.client.gui.GuiUtils" type="class"/>
+  <entry oldName="net.minecraft.nbt.INBT>" newName="net.minecraft.nbt.Tag" type="class"/>
 </migrationMap>
