@@ -20,12 +20,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.ParrotModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -34,14 +32,11 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.util.EModelRenderCycle;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
 
 public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEntity> extends RenderCQREntityGeo<T> {
-	
-	protected final ParrotModel PARROT_MODEL = new ParrotModel();
 	
 	protected final static ResourceLocation STANDARD_BIPED_GEO_MODEL = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
@@ -81,11 +76,14 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	 */
 	
 	@Override
-	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void renderRecursively(PoseStack poseStack, T animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red,
+			float green, float blue, float alpha) {
 		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE)) {
-			bone.setHidden(this.getCurrentModelRenderCycle() != EModelRenderCycle.INITIAL || !this.currentEntityBeingRendered.hasCape(), false);
+			bone.setHidden(isReRender || !animatable.hasCape());
+			bone.setChildrenHidden(false);
 		}
-		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 	
 	@Override
