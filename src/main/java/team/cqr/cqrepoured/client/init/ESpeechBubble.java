@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.client.init;
 
-import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
-
 import java.util.Arrays;
-import java.util.Random;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
+import team.cqr.cqrepoured.CQRMain;
 
 public enum ESpeechBubble {
 
@@ -81,12 +81,12 @@ public enum ESpeechBubble {
 		return this.resLoc;
 	}
 
-	public static ESpeechBubble getRandNormalBubble(Random rand) {
+	public static ESpeechBubble getRandNormalBubble(RandomSource rand) {
 		return NORMAL[rand.nextInt(NORMAL.length)];
 	}
 
-	public static ESpeechBubble getRandTraderBubble(Random rand) {
-		return TRADE[rand.nextInt(TRADE.length)];
+	public static ESpeechBubble getRandTraderBubble(RandomSource random) {
+		return TRADE[random.nextInt(TRADE.length)];
 	}
 
 }
