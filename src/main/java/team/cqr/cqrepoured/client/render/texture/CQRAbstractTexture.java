@@ -8,9 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.texture.GeoAbstractTexture;
 
 public abstract class CQRAbstractTexture extends GeoAbstractTexture {
+	
+	protected final ResourceLocation originalLocation;
+	protected final ResourceLocation location;
 
 	protected CQRAbstractTexture(ResourceLocation originalLocation, ResourceLocation location) {
 		super();
+		this.originalLocation = originalLocation;
+		this.location = location;
 	}
 
 	public static ResourceLocation get(ResourceLocation originalLocation, String appendix, BiFunction<ResourceLocation, ResourceLocation, AbstractTexture> constructor) {
