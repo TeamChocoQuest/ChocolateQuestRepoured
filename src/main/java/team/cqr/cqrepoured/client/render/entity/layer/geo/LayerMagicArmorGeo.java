@@ -1,13 +1,10 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -17,7 +14,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class LayerMagicArmorGeo<T extends AbstractEntityCQR & GeoEntity> extends GeoRenderLayer<T>{
 
-	public LayerMagicArmorGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
+	public LayerMagicArmorGeo(GeoEntityRenderer<T> renderer) {
 		super(renderer);
 	}
 	

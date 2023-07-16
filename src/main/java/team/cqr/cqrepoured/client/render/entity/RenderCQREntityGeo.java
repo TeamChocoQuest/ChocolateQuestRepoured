@@ -61,7 +61,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
-		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addRenderLayer(new LayerMagicArmorGeo<T>(this));
 		this.addRenderLayer(new LayerCQRSpeechbubble<>(this));
 		
 		this.addRenderLayer(new BlockAndItemGeoLayer<T>(this, this::getHeldItemForBone, this::getHeldBlockForBone) {
