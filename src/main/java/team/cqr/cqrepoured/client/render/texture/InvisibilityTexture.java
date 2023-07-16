@@ -7,7 +7,7 @@ import net.minecraft.resources.IResource;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.util.Perlin2D;
 
-public class InvisibilityTexture extends AbstractTexture {
+public class InvisibilityTexture extends CQRAbstractTexture {
 
 	private static final Random RANDOM = new Random();
 	private static final Perlin2D PERLIN = new Perlin2D(RANDOM.nextLong(), 4);
