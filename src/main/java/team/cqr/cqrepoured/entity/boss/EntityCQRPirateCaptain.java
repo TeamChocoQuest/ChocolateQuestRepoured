@@ -1,32 +1,35 @@
 package team.cqr.cqrepoured.entity.boss;
 
+import java.util.Optional;
 import java.util.Set;
 
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.Capes;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
+import team.cqr.cqrepoured.entity.IShoulderEntityProvider;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateFleeSpell;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateSummonParrot;
 import team.cqr.cqrepoured.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
@@ -36,7 +39,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 
-public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAnimatableCQR {
+public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAnimatableCQR, IShoulderEntityProvider {
 
 	private static final EntityDataAccessor<Boolean> IS_DISINTEGRATING = SynchedEntityData.<Boolean>defineId(EntityCQRPirateCaptain.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Boolean> IS_REINTEGRATING = SynchedEntityData.<Boolean>defineId(EntityCQRPirateCaptain.class, EntityDataSerializers.BOOLEAN);
@@ -195,5 +198,13 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void registerControllers(AnimationData data) {
 		this.registerControllers(this, data);
+	}
+	
+	@Override
+	public Optional<CompoundTag> getShoulderEntityFor(String boneName) {
+		if (boneName.equalsIgnoreCase(CQRConstants.Entity.PirateCaptain.PARROT_BONE_NAME)) {
+			return Optional.ofNullable(this.getLeftShoulderEntity());
+		}
+		return Optional.empty();
 	}
 }
