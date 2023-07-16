@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowMobGoal;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class EntityCQRPirateParrot extends ParrotEntity {
+public class EntityCQRPirateParrot extends Parrot {
 
 	public EntityCQRPirateParrot(EntityType<? extends EntityCQRPirateParrot> type, Level worldIn) {
 		super(type, worldIn);
@@ -77,8 +78,8 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 	@Override
 	public void die(DamageSource cause) {
 		super.die(cause);
-		if (!this.level.isClientSide) {
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 2, Mode.DESTROY);
+		if (!this.level().isClientSide) {
+			this.level().explode(this, this.getX(), this.getY(), this.getZ(), 2, Mode.DESTROY);
 		}
 	}
 
@@ -106,7 +107,7 @@ public class EntityCQRPirateParrot extends ParrotEntity {
 
 	private LivingEntity getOwnerInRange(UUID uuid) {
 
-		List<Entity> ents = this.level.getEntities(this, new AABB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input.getUUID().equals(uuid));
+		List<Entity> ents = this.level().getEntities(this, new AABB(this.blockPosition().subtract(OWNER_RANGE_RADIUS), this.blockPosition().offset(OWNER_RANGE_RADIUS)), input -> input instanceof LivingEntity && input.getUUID().equals(uuid));
 		return ents.isEmpty() ? null : (LivingEntity) ents.get(0);
 	}
 
