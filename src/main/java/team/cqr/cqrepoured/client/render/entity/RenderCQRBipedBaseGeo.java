@@ -30,8 +30,8 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -40,11 +40,11 @@ public abstract class RenderCQRBipedBaseGeo<T extends AbstractEntityCQR & GeoEnt
 	
 	protected final static ResourceLocation STANDARD_BIPED_GEO_MODEL = CQRMain.prefix("geo/entity/biped_base.geo.json");
 
-	public RenderCQRBipedBaseGeo(Context renderManager, AnimatedGeoModel<T> modelProvider) {
+	public RenderCQRBipedBaseGeo(Context renderManager, GeoModel<T> modelProvider) {
 		this(renderManager, modelProvider, 1.0F, 1.0F);
 	}
 	
-	protected RenderCQRBipedBaseGeo(Context renderManager, AnimatedGeoModel<T> modelProvider, final float widthScale, final float heightScale) {
+	protected RenderCQRBipedBaseGeo(Context renderManager, GeoModel<T> modelProvider, final float widthScale, final float heightScale) {
 		super(renderManager, modelProvider, widthScale, heightScale, widthScale / 2);
 	}
 
