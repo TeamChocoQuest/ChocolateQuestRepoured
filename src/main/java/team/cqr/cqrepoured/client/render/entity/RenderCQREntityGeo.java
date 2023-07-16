@@ -31,9 +31,9 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
@@ -62,7 +62,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 		// layers
 		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addLayer(new LayerMagicArmorGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
-		this.addLayer(new LayerCQRSpeechbubble<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addRenderLayer(new LayerCQRSpeechbubble<>(this));
 		
 		this.addRenderLayer(new BlockAndItemGeoLayer<T>(this, this::getHeldItemForBone, this::getHeldBlockForBone) {
 			@Override
@@ -101,11 +101,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 		}
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}*/
-
-	@Override
-	protected void handleArmorRenderingForBone(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, ResourceLocation currentTexture) {
-		super.handleArmorRenderingForBone(bone, stack, bufferIn, packedLightIn, packedOverlayIn, currentTexture);
-	}
 
 	@Override
 	public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
