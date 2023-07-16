@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.entity;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public interface ITextureVariants {
 
@@ -12,7 +12,7 @@ public interface ITextureVariants {
 		return 0;
 	}
 
-	public default int getTextureVariant(Random rng) {
+	public default int getTextureVariant(RandomSource rng) {
 		return rng.nextInt(this.getTextureCount());
 	}
 
