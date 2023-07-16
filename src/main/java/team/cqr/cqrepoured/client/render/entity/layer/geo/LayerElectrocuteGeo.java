@@ -1,21 +1,22 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.util.function.Function;
-
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.client.render.entity.layer.IElectrocuteLayerRenderLogic;
 
-public class LayerElectrocuteGeo<T extends LivingEntity & IAnimatable> extends AbstractLayerGeo<T> implements IElectrocuteLayerRenderLogic<T> {
+public class LayerElectrocuteGeo<T extends LivingEntity & GeoEntity> extends GeoRenderLayer<T> implements IElectrocuteLayerRenderLogic<T> {
 
-	public LayerElectrocuteGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
-		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
+	public LayerElectrocuteGeo(GeoEntityRenderer<T> renderer) {
+		super(renderer);
 	}
 
 	@Override
@@ -24,8 +25,30 @@ public class LayerElectrocuteGeo<T extends LivingEntity & IAnimatable> extends A
 	}
 
 	@Override
-	public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.renderLayerLogic(entityLivingBaseIn, matrixStackIn, bufferIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch);
+	public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+		super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+		
+		float limbSwing = 0;
+		float limbSwingAmount = 0;
+		float lerpBodyRot = Mth.rotLerp(partialTick, animatable.yBodyRotO, animatable.yBodyRot);
+		float lerpHeadRot = Mth.rotLerp(partialTick, animatable.yHeadRotO, animatable.yHeadRot);
+		float netHeadYaw = lerpHeadRot - lerpBodyRot;
+		float headPitch = Mth.lerp(partialTick, animatable.xRotO, animatable.getXRot());
+		
+		boolean shouldSit = animatable.isPassenger() && (animatable.getVehicle() != null && animatable.getVehicle().shouldRiderSit());
+		
+		if (!shouldSit && animatable.isAlive()) {
+			limbSwingAmount = animatable.walkAnimation.speed(partialTick);
+			limbSwing = animatable.walkAnimation.position(partialTick);
+
+			if (animatable.isBaby())
+				limbSwing *= 3f;
+
+			if (limbSwingAmount > 1f)
+				limbSwingAmount = 1f;
+		}
+		
+		this.renderLayerLogic(animatable, poseStack, bufferSource, limbSwing, limbSwingAmount, partialTick, animatable.tickCount, netHeadYaw, headPitch);
 	}
 
 }

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -46,7 +47,7 @@ public interface IElectrocuteLayerRenderLogic<T extends LivingEntity> {
 					matrix.pushPose();
 
 					this.performPreLineRenderPreparation(matrix);
-					matrix.mulPose(Vector3f.YP.rotation(yaw -180));
+					matrix.mulPose(Axis.YP.rotation(yaw -180));
 
 					ElectricFieldRenderUtil.renderElectricLineBetween(matrix, buffer, start, end, 0.5, 5, seed);
 
