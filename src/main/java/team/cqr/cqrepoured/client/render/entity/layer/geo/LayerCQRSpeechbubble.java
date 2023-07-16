@@ -1,45 +1,56 @@
-package team.cqr.cqrepoured.client.render.entity.layer.special;
+package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
 import java.util.function.Function;
 
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.renderers.geo.layer.AbstractLayerGeo;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & IAnimatable> extends AbstractLayerGeo<T> {
+public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & GeoEntity> extends GeoRenderLayer<T> {
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
 	public LayerCQRSpeechbubble(RenderCQREntityGeo<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
-		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
+		super(renderer);
 	}
-
+	
 	@Override
-	public void render(PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-		if (CQRConfig.SERVER_CONFIG.general.enableSpeechBubbles.get() && entity.isChatting()) {
-			matrixStack.pushPose();
-			matrixStack.mulPose(Vector3f.YP.rotation(netHeadYaw));
-			matrixStack.translate(-0.5D, entity.getBbHeight() / entity.getSizeVariation() + 0.25D, 0.0D);
+	public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+		super.render(poseStack, animatable, bakedModel, renderType, bufferSource, buffer, partialTick, packedLight, packedOverlay);
+		
+		if (CQRConfig.SERVER_CONFIG.general.enableSpeechBubbles.get() && animatable.isChatting()) {
+			poseStack.pushPose();
+			
+			float lerpBodyRot = Mth.rotLerp(partialTick, animatable.yBodyRotO, animatable.yBodyRot);
+			float lerpHeadRot = Mth.rotLerp(partialTick, animatable.yHeadRotO, animatable.yHeadRot);
+			float netHeadYaw = lerpHeadRot - lerpBodyRot;
+			
+			poseStack.mulPose(Axis.YP.rotation(netHeadYaw));
+			poseStack.translate(-0.5D, animatable.getBbHeight() / animatable.getSizeVariation() + 0.25D, 0.0D);
 
-			VertexConsumer builder = bufferIn.getBuffer(CQRRenderTypes.speechbubble(entity.getCurrentSpeechBubble().getResourceLocation()));
-			Matrix4f matrix = matrixStack.last().pose();
+			VertexConsumer builder = bufferSource.getBuffer(CQRRenderTypes.speechbubble(animatable.getCurrentSpeechBubble().getResourceLocation()));
+			Matrix4f matrix = poseStack.last().pose();
 
-			builder.vertex(matrix, 0, 1, 0).uv(0, 0).uv2(packedLightIn).endVertex();
-			builder.vertex(matrix, 1, 1, 0).uv(1, 0).uv2(packedLightIn).endVertex();
-			builder.vertex(matrix, 1, 0, 0).uv(1, 1).uv2(packedLightIn).endVertex();
-			builder.vertex(matrix, 0, 0, 0).uv(0, 1).uv2(packedLightIn).endVertex();
+			builder.vertex(matrix, 0, 1, 0).uv(0, 0).uv2(packedLight).endVertex();
+			builder.vertex(matrix, 1, 1, 0).uv(1, 0).uv2(packedLight).endVertex();
+			builder.vertex(matrix, 1, 0, 0).uv(1, 1).uv2(packedLight).endVertex();
+			builder.vertex(matrix, 0, 0, 0).uv(0, 1).uv2(packedLight).endVertex();
 
-			matrixStack.popPose();
+			poseStack.popPose();
 		}
 	}
 
