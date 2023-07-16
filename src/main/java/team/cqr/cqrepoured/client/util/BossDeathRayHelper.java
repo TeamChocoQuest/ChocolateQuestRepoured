@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.client.util;
 
+import java.util.Random;
+
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.util.Mth;
-import com.mojang.math.Matrix4f;
-
-import java.util.Random;
 
 public class BossDeathRayHelper {
 
@@ -44,12 +45,12 @@ public class BossDeathRayHelper {
 
 		int rayCount = Math.min(Mth.ceil((f + f * f) / 2.0F * 60.0F), this.maxRays);
 		for (int i = 0; i < rayCount; ++i) {
-			matrixStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
-			matrixStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F));
-			matrixStack.mulPose(Vector3f.XP.rotationDegrees(random.nextFloat() * 360.0F));
-			matrixStack.mulPose(Vector3f.YP.rotationDegrees(random.nextFloat() * 360.0F));
-			matrixStack.mulPose(Vector3f.ZP.rotationDegrees(random.nextFloat() * 360.0F + f * 90.0F));
+			matrixStack.mulPose(Axis.XP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Axis.YP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Axis.XP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Axis.YP.rotationDegrees(random.nextFloat() * 360.0F));
+			matrixStack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 360.0F + f * 90.0F));
 			float y = random.nextFloat() * this.raySize + (this.raySize / 4.0F) + f1 * (this.raySize / 2.0F);
 			float xz = random.nextFloat() * (this.raySize / 10.0F) + 1.0F + f1 * (this.raySize / 10.0F);
 			Matrix4f matrix = matrixStack.last().pose();
