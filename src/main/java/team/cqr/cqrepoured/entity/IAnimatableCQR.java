@@ -4,22 +4,24 @@ import java.util.Optional;
 import java.util.Set;
 
 import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ShootableItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.UseAnim;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.gun.IFireArmTwoHanded;
 import team.cqr.cqrepoured.item.gun.ItemMusket;
@@ -47,15 +49,15 @@ public interface IAnimatableCQR extends GeoEntity {
 		return 
 				//Bow and crossbows
 				(
-						animatable.getMainHandItem().getItem() instanceof ShootableItem || animatable.getOffhandItem().getItem() instanceof ShootableItem
+						animatable.getMainHandItem().getItem() instanceof ProjectileWeaponItem || animatable.getOffhandItem().getItem() instanceof ProjectileWeaponItem
 						|| animatable.getMainHandItem().getItem() instanceof ItemRevolver || animatable.getOffhandItem().getItem() instanceof ItemRevolver
 						|| animatable.getMainHandItem().getItem() instanceof IFireArmTwoHanded || animatable.getOffhandItem().getItem() instanceof IFireArmTwoHanded
-						|| animatable.getMainHandItem().getUseAnimation() == UseAction.BOW || animatable.getOffhandItem().getUseAnimation() == UseAction.BOW
-						|| animatable.getMainHandItem().getUseAnimation() == UseAction.CROSSBOW || animatable.getOffhandItem().getUseAnimation() == UseAction.CROSSBOW
+						|| animatable.getMainHandItem().getUseAnimation() == UseAnim.BOW || animatable.getOffhandItem().getUseAnimation() == UseAnim.BOW
+						|| animatable.getMainHandItem().getUseAnimation() == UseAnim.CROSSBOW || animatable.getOffhandItem().getUseAnimation() == UseAnim.CROSSBOW
 				)
 				|| //Spears
 				(
-						animatable.getMainHandItem().getUseAnimation() == UseAction.SPEAR || animatable.getOffhandItem().getUseAnimation() == UseAction.SPEAR
+						animatable.getMainHandItem().getUseAnimation() == UseAnim.SPEAR || animatable.getOffhandItem().getUseAnimation() == UseAnim.SPEAR
 						|| animatable.getMainHandItem().getItem() instanceof ItemSpearBase || animatable.getOffhandItem().getItem() instanceof ItemSpearBase
 				)
 				|| //Greatswords
@@ -64,7 +66,7 @@ public interface IAnimatableCQR extends GeoEntity {
 				);
 	}
 	
-	public default <E extends AbstractEntityCQR & IAnimatableCQR> void registerControllers(E animatable, AnimationData data) {
+	public default <E extends AbstractEntityCQR & IAnimatableCQR> void registerControllers(E animatable, ControllerRegistrar data) {
 		//Always playing
 		Set<String> alwaysPlaying = animatable.getAlwaysPlayingAnimations();
 		if(alwaysPlaying != null && alwaysPlaying.size() > 0) {
@@ -97,7 +99,7 @@ public interface IAnimatableCQR extends GeoEntity {
 
 	public static String ANIM_NAME_IDLE = ANIM_NAME_PREFIX + "idle";
 
-	default <E extends AbstractEntityCQR & IAnimatable> PlayState predicateIdle(AnimationEvent<E> event) {
+	default <E extends AbstractEntityCQR & GeoEntity> PlayState predicateIdle(AnimationEvent<E> event) {
 		if (event.getController().getCurrentAnimation() == null) {
 			event.getController().setAnimation(new AnimationBuilder().loop(ANIM_NAME_IDLE));
 		}
@@ -155,7 +157,7 @@ public interface IAnimatableCQR extends GeoEntity {
 					event.getController().markNeedsReload();
 				}*/
 				if (!handItemStack.isEmpty()) {
-					if (handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.EAT || handItemStack.getItem().getUseAnimation(handItemStack) == UseAction.DRINK) {
+					if (handItemStack.getItem().getUseAnimation(handItemStack) == UseAnim.EAT || handItemStack.getItem().getUseAnimation(handItemStack) == UseAnim.DRINK) {
 						// Eating/Drinking animation
 					} else {
 						// Normal swinging
@@ -265,14 +267,14 @@ public interface IAnimatableCQR extends GeoEntity {
 			return Optional.of(PlayState.CONTINUE);
 		}
 		// If item instanceof Spear => spear animation
-		else if (item.getUseAnimation(itemStack) == UseAction.SPEAR || item instanceof ItemSpearBase) {
+		else if (item.getUseAnimation(itemStack) == UseAnim.SPEAR || item instanceof ItemSpearBase) {
 			// Yes this is for tridents but we can use it anyway
 			// Spear
 			event.getController().setAnimation(new AnimationBuilder().loop(leftHanded ? ANIM_NAME_SPEAR_POSE_LEFT : ANIM_NAME_SPEAR_POSE_RIGHT));
 			return Optional.of(PlayState.CONTINUE);
 		}
 		// If item instanceof Firearm/Bow/Crossbow => firearm animation
-		else if ((item instanceof IFireArmTwoHanded) || item.getUseAnimation(itemStack) == UseAction.BOW || item.getUseAnimation(itemStack) == UseAction.CROSSBOW) {
+		else if ((item instanceof IFireArmTwoHanded) || item.getUseAnimation(itemStack) == UseAnim.BOW || item.getUseAnimation(itemStack) == UseAnim.CROSSBOW) {
 			// Firearm
 			event.getController().setAnimation(new AnimationBuilder().loop(leftHanded ? ANIM_NAME_FIREARM_POSE_LEFT : ANIM_NAME_FIREARM_POSE_RIGHT));
 			return Optional.of(PlayState.CONTINUE);
@@ -287,7 +289,7 @@ public interface IAnimatableCQR extends GeoEntity {
 		E animatable = event.getAnimatable();
 		if (animatable.isTwoHandedAnimationRunning(animatable) && animatable.isSwinging(event)) {
 			// Check for greatsword & spear and play their animations
-			if (animatable.getMainHandItem().getItem().getUseAnimation(animatable.getMainHandItem()) == UseAction.SPEAR || animatable.getOffhandItem().getItem().getUseAnimation(animatable.getOffhandItem()) == UseAction.SPEAR) {
+			if (animatable.getMainHandItem().getItem().getUseAnimation(animatable.getMainHandItem()) == UseAnim.SPEAR || animatable.getOffhandItem().getItem().getUseAnimation(animatable.getOffhandItem()) == UseAnim.SPEAR) {
 				// Spear use animation
 				event.getController().setAnimation(new AnimationBuilder().playOnce(ANIM_NAME_SPEAR_SWING));
 			}
@@ -318,8 +320,8 @@ public interface IAnimatableCQR extends GeoEntity {
 	public <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(InteractionHand hand, AnimationEvent<E> event);
 	public default <E extends AbstractEntityCQR & IAnimatableCQR> boolean isSwinging(AnimationEvent<E> event) {
 		E animatable = event.getAnimatable();
-		if(animatable instanceof MobEntity) {
-			return ((MobEntity)animatable).swinging;
+		if(animatable instanceof Mob) {
+			return ((Mob)animatable).swinging;
 		}
 		return animatable.isSwinging(InteractionHand.MAIN_HAND, event);
 	}
