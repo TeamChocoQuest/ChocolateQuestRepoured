@@ -60,7 +60,7 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 		this.scaleHeight = heightScale;
 
 		// layers
-		this.addLayer(new LayerElectrocuteGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
+		this.addRenderLayer(new LayerElectrocuteGeo<T>(this));
 		this.addRenderLayer(new LayerMagicArmorGeo<T>(this));
 		this.addRenderLayer(new LayerCQRSpeechbubble<>(this));
 		
