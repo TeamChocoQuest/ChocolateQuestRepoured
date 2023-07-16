@@ -1,24 +1,25 @@
 package team.cqr.cqrepoured.client.render.entity.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.world.entity.LivingEntity;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 
-public class LayerBossDeath<T extends LivingEntity, M extends EntityModel<T>> extends LayerRenderer<T, M> {
+public class LayerBossDeath<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
 	private final BossDeathRayHelper rayHelper;
 
-	public LayerBossDeath(IEntityRenderer<T, M> renderer, int red, int green, int blue) {
+	public LayerBossDeath(RenderLayerParent<T, M> renderer, int red, int green, int blue) {
 		this(renderer, red, green, blue, 20.0F);
 	}
 
-	public LayerBossDeath(IEntityRenderer<T, M> renderer, int red, int green, int blue, float raySize) {
+	public LayerBossDeath(RenderLayerParent<T, M> renderer, int red, int green, int blue, float raySize) {
 		super(renderer);
 		this.rayHelper = new BossDeathRayHelper(red, green, blue, raySize);
 	}
