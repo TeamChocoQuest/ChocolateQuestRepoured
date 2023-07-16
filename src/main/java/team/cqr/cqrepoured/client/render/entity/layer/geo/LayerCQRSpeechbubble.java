@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.client.render.entity.layer.geo;
 
-import java.util.function.Function;
-
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -10,7 +8,6 @@ import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -24,7 +21,7 @@ public class LayerCQRSpeechbubble<T extends AbstractEntityCQR & GeoEntity> exten
 
 	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
-	public LayerCQRSpeechbubble(RenderCQREntityGeo<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
+	public LayerCQRSpeechbubble(RenderCQREntityGeo<T> renderer) {
 		super(renderer);
 	}
 	
