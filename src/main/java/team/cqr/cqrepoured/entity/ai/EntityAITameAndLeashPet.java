@@ -36,7 +36,7 @@
 //			Vector3d vec1 = this.entity.position().add(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
 //			Vector3d vec2 = this.entity.position().subtract(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
 //			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-//			List<TameableEntity> possiblePets = this.entity.world.getEntitiesWithinAABB(TameableEntity.class, aabb, input -> TargetUtil.PREDICATE_PETS.apply(input) && this.entity.getSensing().canSee(input));
+//			List<TameableEntity> possiblePets = this.entity.world.getEntitiesWithinAABB(TameableEntity.class, aabb, input -> TargetUtil.PREDICATE_PETS.apply(input) && this.entity.getSensing().hasLineOfSight(input));
 //			if (!possiblePets.isEmpty()) {
 //				this.entityToTame = TargetUtil.getNearestEntity(this.entity, possiblePets);
 //				return true;

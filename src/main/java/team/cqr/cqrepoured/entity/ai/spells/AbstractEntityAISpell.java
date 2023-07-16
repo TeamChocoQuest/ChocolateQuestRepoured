@@ -42,7 +42,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 			if (attackTarget == null) {
 				return false;
 			}
-			if (this.needsSightToStart && !this.entity.getSensing().canSee(attackTarget)) {
+			if (this.needsSightToStart && !this.entity.getSensing().hasLineOfSight(attackTarget)) {
 				return false;
 			}
 		}
@@ -59,7 +59,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 			if (attackTarget == null) {
 				return false;
 			}
-			if (this.needsSightToContinue && !this.entity.getSensing().canSee(attackTarget)) {
+			if (this.needsSightToContinue && !this.entity.getSensing().hasLineOfSight(attackTarget)) {
 				return false;
 			}
 		}

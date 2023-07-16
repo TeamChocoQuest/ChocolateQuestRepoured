@@ -46,7 +46,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 				if (!TargetUtil.PREDICATE_MOUNTS.apply(input)) {
 					return false;
 				}
-				if (!this.entity.getSensing().canSee(input)) {
+				if (!this.entity.getSensing().hasLineOfSight(input)) {
 					return false;
 				}
 				return hasSaddle || input.getTags().contains(TAG_TAMED_BY_CQR_MOB);

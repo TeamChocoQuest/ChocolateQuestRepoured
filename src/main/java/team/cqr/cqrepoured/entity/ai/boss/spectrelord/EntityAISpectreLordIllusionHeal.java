@@ -36,7 +36,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 			if (faction == null || !faction.isAlly(e)) {
 				return false;
 			}
-			return this.entity.canSee(e);
+			return this.entity.hasLineOfSight(e);
 		});
 		return !alliesToHeal.isEmpty();
 	}
@@ -62,7 +62,7 @@ public class EntityAISpectreLordIllusionHeal extends AbstractEntityAISpell<Entit
 			if (!faction.isAlly(e)) {
 				return false;
 			}
-			return this.entity.canSee(e);
+			return this.entity.hasLineOfSight(e);
 		});
 		this.target = TargetUtil.getNearestEntity(this.entity, alliesToHeal);
 	}

@@ -23,13 +23,13 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	@Override
 	public boolean canUse() {
 		LivingEntity attackTarget = this.entity.getTarget();
-		return attackTarget != null && this.entity.getSensing().canSee(attackTarget);
+		return attackTarget != null && this.entity.getSensing().hasLineOfSight(attackTarget);
 	}
 
 	@Override
 	public boolean canContinueToUse() {
 		LivingEntity attackTarget = this.entity.getTarget();
-		return attackTarget != null && this.entity.getSensing().canSee(attackTarget);
+		return attackTarget != null && this.entity.getSensing().hasLineOfSight(attackTarget);
 	}
 
 	@Override

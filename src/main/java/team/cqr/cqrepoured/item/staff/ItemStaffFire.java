@@ -112,7 +112,7 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 					return false;
 				}
 
-				return shooter.canSee(entity);
+				return shooter.hasLineOfSight(entity);
 			}).forEach(target -> {
 				if (target.hurt(DamageSource.mobAttack(shooter).setIsFire(), 3.0F)) {
 					target.setSecondsOnFire(5);

@@ -39,7 +39,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 				this.cooldown--;
 				return false;
 			}
-			return this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getTarget());
+			return this.entity.hasAttackTarget() && this.entity.getSensing().hasLineOfSight(this.entity.getTarget());
 		}
 
 		return false;
@@ -118,7 +118,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean canContinueToUse() {
-		return super.canContinueToUse() && this.entity.hasAttackTarget() && this.entity.getSensing().canSee(this.entity.getTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
+		return super.canContinueToUse() && this.entity.hasAttackTarget() && this.entity.getSensing().hasLineOfSight(this.entity.getTarget()) && this.hasHookShoot(this.entity) && this.cooldown <= 0;
 	}
 
 	@Override

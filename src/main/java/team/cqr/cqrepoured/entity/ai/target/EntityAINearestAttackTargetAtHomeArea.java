@@ -75,14 +75,14 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			/*
 			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
 			 */
-			// return this.entity.getEntitySenses().canSee(possibleTarget);
+			// return this.entity.getEntitySenses().hasLineOfSight(possibleTarget);
 			return this.isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		/*
-		 * if (!this.entity.getEntitySenses().canSee(possibleTarget)) { return false; }
+		 * if (!this.entity.getEntitySenses().hasLineOfSight(possibleTarget)) { return false; }
 		 */
 		if (this.entity.isInAttackReach(possibleTarget)) {
 			return true;
@@ -114,7 +114,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 			/*
 			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
 			 */
-			// return this.entity.getEntitySenses().canSee(possibleTarget);
+			// return this.entity.getEntitySenses().hasLineOfSight(possibleTarget);
 			return this.isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
@@ -122,7 +122,7 @@ public class EntityAINearestAttackTargetAtHomeArea<T extends AbstractEntityCQR &
 		}
 		/*
 		 * if (!this.entity.isInSightRange(possibleTarget)) { return false; } return
-		 * this.entity.getEntitySenses().canSee(possibleTarget);
+		 * this.entity.getEntitySenses().hasLineOfSight(possibleTarget);
 		 */
 		return this.isInHomeZone(possibleTarget);
 	}

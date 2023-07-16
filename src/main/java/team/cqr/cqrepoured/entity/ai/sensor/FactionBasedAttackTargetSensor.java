@@ -3,15 +3,14 @@ package team.cqr.cqrepoured.entity.ai.sensor;
 import java.util.function.BiPredicate;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.ai.brain.memory.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
+import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.custom.GenericAttackTargetSensor;
-import net.tslat.smartbrainlib.api.util.BrainUtils;
-import net.tslat.smartbrainlib.object.NearestVisibleLivingEntities;
-import net.tslat.smartbrainlib.registry.SBLMemoryTypes;
+import net.tslat.smartbrainlib.util.BrainUtils;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
@@ -30,7 +29,7 @@ public class FactionBasedAttackTargetSensor<E extends AbstractEntityCQR & IHasFa
 	@Override
 	protected LivingEntity testForEntity(E entity) {
 		NearestVisibleLivingEntities matcher = (NearestVisibleLivingEntities) BrainUtils.getMemory(entity,
-				(MemoryModuleType<NearestVisibleLivingEntities>) SBLMemoryTypes.NEAREST_VISIBLE_LIVING_ENTITIES.get());
+				(MemoryModuleType<NearestVisibleLivingEntities>) MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES);
 		if(matcher == null) {
 			return null;
 		}
@@ -74,14 +73,14 @@ public class FactionBasedAttackTargetSensor<E extends AbstractEntityCQR & IHasFa
 		if (!factionHolder.isInSightRange(possibleTarget)) {
 			return false;
 		}
-		return factionHolder.getSensing().canSee(possibleTarget);
+		return factionHolder.getSensing().hasLineOfSight(possibleTarget);
 	}
 
 	public static <E extends AbstractEntityCQR & IHasFaction> boolean isSuitableTargetEnemy(LivingEntity possibleTarget, E factionHolder) {
 		if (!TargetUtil.isEnemyCheckingLeaders(factionHolder, possibleTarget)) {
 			return false;
 		}
-		if (!factionHolder.getSensing().canSee(possibleTarget)) {
+		if (!factionHolder.getSensing().hasLineOfSight(possibleTarget)) {
 			return false;
 		}
 		if (factionHolder.isInAttackReach(possibleTarget)) {

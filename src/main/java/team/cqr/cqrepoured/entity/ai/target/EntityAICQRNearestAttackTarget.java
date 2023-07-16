@@ -99,14 +99,14 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}
-		return this.entity.getSensing().canSee(possibleTarget);
+		return this.entity.getSensing().hasLineOfSight(possibleTarget);
 	}
 
 	protected boolean isSuitableTargetEnemy(LivingEntity possibleTarget) {
 		if (!TargetUtil.isEnemyCheckingLeaders(this.entity, possibleTarget)) {
 			return false;
 		}
-		if (!this.entity.getSensing().canSee(possibleTarget)) {
+		if (!this.entity.getSensing().hasLineOfSight(possibleTarget)) {
 			return false;
 		}
 		if (this.entity.isInAttackReach(possibleTarget)) {

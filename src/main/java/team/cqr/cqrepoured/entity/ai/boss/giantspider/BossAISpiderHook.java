@@ -19,7 +19,7 @@
 //				this.cooldown--;
 //				return false;
 //			}
-//			return this.entity.hasAttackTarget() && this.entity.distanceToSqr(this.entity.getTarget()) >= this.MIN_RANGE && this.entity.getSensing().canSee(this.entity.getTarget());
+//			return this.entity.hasAttackTarget() && this.entity.distanceToSqr(this.entity.getTarget()) >= this.MIN_RANGE && this.entity.getSensing().hasLineOfSight(this.entity.getTarget());
 //		}
 //
 //		return false;

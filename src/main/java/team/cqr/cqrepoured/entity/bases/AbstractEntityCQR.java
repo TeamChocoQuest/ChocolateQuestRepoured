@@ -19,6 +19,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -86,7 +87,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.client.init.ESpeechBubble;
-import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRSpeechbubble;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
@@ -664,11 +665,11 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		this.callOnReadFromNBT(compound);
 		// this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
-		this.setHealthScale(compound.contains("healthScale", Constants.NBT.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
+		this.setHealthScale(compound.contains("healthScale", Tag.TAG_DOUBLE) ? compound.getDouble("healthScale") : 1.0D);
 
-		if (compound.contains("pathingAI", Constants.NBT.TAG_COMPOUND)) {
+		if (compound.contains("pathingAI", Tag.TAG_COMPOUND)) {
 			CompoundTag pathTag = compound.getCompound("pathingAI");
-			ListTag nbtTagList = pathTag.getList("pathPoints", Constants.NBT.TAG_COMPOUND);
+			ListTag nbtTagList = pathTag.getList("pathPoints", Tag.TAG_COMPOUND);
 			this.path.clear();
 			for (int i = 0; i < nbtTagList.size(); i++) {
 				BlockPos pos = NbtUtils.readBlockPos(nbtTagList.getCompound(i));
@@ -684,7 +685,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 			} else {
 				this.prevPathTargetPoint = -1;
 			}
-		} else if (compound.contains("pathTag", Constants.NBT.TAG_COMPOUND)) {
+		} else if (compound.contains("pathTag", Tag.TAG_COMPOUND)) {
 			CompoundTag pathTag = compound.getCompound("pathTag");
 			this.path.readFromNBT(pathTag.getCompound("path"));
 			this.prevPathTargetPoint = pathTag.getInt("prevPathTargetPoint");
@@ -697,11 +698,11 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		}
 
 		this.trades.readFromNBT(compound.getCompound("trades"));
-		if(compound.contains("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
+		if(compound.contains("lastTimedRestockTime", Tag.TAG_LONG)) {
 			this.lastTimedTradeRestock = compound.getLong("lastTimedRestockTime");
 		}
 
-		if (compound.contains("textureOverride", Constants.NBT.TAG_STRING)) {
+		if (compound.contains("textureOverride", Tag.TAG_STRING)) {
 			String ct = compound.getString("textureOverride");
 			if (!ct.isEmpty()) {
 				this.setCustomTexture(new ResourceLocation(ct));
@@ -750,7 +751,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 			}
 		}
 
-		if (flag && !this.getLookControl().isHasWanted() && !this.isPathFinding()) {
+		if (flag && !this.getLookControl().isLookingAtTarget() && !this.isPathFinding()) {
 			double x1 = player.position().x() - this.position().x();
 			double z1 = player.position().z() - this.position().z();
 			float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
@@ -804,7 +805,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		LivingEntity attackTarget = this.getTarget();
 		if (attackTarget != null) {
 			this.lastTickWithAttackTarget = this.tickCount;
-			if (this.isInSightRange(attackTarget) && this.getSensing().canSee(attackTarget)) {
+			if (this.isInSightRange(attackTarget) && this.getSensing().hasLineOfSight(attackTarget)) {
 				this.lastTimeSeenAttackTarget = this.tickCount;
 			}
 			if (this.lastTimeSeenAttackTarget + 100 >= this.tickCount) {
@@ -984,11 +985,6 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		return SoundEvents.HOSTILE_DEATH;
 	}
 
-	@Override
-	protected SoundEvent getFallDamageSound(int heightIn) {
-		return heightIn > 4 ? SoundEvents.GENERIC_BIG_FALL : SoundEvents.GENERIC_SMALL_FALL;
-	}
-	
 	@Override
 	public boolean doHurtTarget(Entity entityIn) {
 		// Shoulder entity stuff
@@ -1333,7 +1329,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 			List<Faction> checkedFactions = new ArrayList<>();
 			// boolean setRepu = false;
 			for (AbstractEntityCQR cqrentity : this.level().getEntitiesOfClass(AbstractEntityCQR.class, aabb)) {
-				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canSee(this) || cqrentity.canSee(player))) {
+				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.hasLineOfSight(this) || cqrentity.hasLineOfSight(player))) {
 					Faction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
