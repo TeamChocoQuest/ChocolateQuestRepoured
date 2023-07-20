@@ -91,7 +91,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileWeb;
 @EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
 public class CQREntityTypes {
 
-	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITIES, CQRMain.MODID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CQRMain.MODID);
 	
 	//Default ticking rate is 3 => every 3 ticks it updates
 	//Misc mobs
@@ -255,15 +255,15 @@ public class CQREntityTypes {
 	public static final RegistryObject<EntityType<EntityGiantSilverfishRed>> GIANT_SILVERFISH_RED = registerSized(EntityGiantSilverfishRed::new, "giant_silverfish1", 2.0F, 1.0F, 3);
 	public static final RegistryObject<EntityType<EntityGiantSilverfishGreen>> GIANT_SILVERFISH_GREEN = registerSized(EntityGiantSilverfishGreen::new, "giant_silverfish2", 2.0F, 1.0F, 3);
 	
-	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSizedHumanoid(IFactory<T> factory, final String entityName, int updateInterval) {
+	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSizedHumanoid(EntityFactory<T> factory, final String entityName, int updateInterval) {
 		return registerSized(factory, entityName, 0.6F, 1.875F, updateInterval);
 	}
 	
-	protected static <T extends AbstractEntityLaser>  RegistryObject<EntityType<T>> registerLaser(IFactory<T> factory, String entityName) {
+	protected static <T extends AbstractEntityLaser>  RegistryObject<EntityType<T>> registerLaser(EntityFactory<T> factory, String entityName) {
 		return registerSized(factory, entityName, 0.1F, 0.1F, 1);
 	}
 
-	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(IFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
+	protected static <T extends Entity>  RegistryObject<EntityType<T>> registerSized(EntityFactory<T> factory, final String entityName, float width, float height, int updateInterval) {
 		RegistryObject<EntityType<T>> result = ENTITY_TYPES.register(entityName, () -> EntityType.Builder
 				.<T>of(factory, MobCategory.MISC)
 				.sized(width, height)
