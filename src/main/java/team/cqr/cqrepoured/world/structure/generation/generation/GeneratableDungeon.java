@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.Mirror;
@@ -189,7 +191,7 @@ public class GeneratableDungeon {
 		long t = System.nanoTime();
 
 		// TODO this could be improved further
-		Set<BlockPos> updated = new HashSet<>();
+		TIntSet updated = new TIntHashSet();
 		for (LightInfo removedLight : this.removedLights) {
 			int r = removedLight.light - 1;
 			for (int y = -r; y <= r; y++) {
@@ -199,10 +201,11 @@ public class GeneratableDungeon {
 				for (int x = -r; x <= r; x++) {
 					for (int z = -r; z <= r; z++) {
 						BlockPos p = new BlockPos(removedLight.pos.add(x, y, z));
-						if (!updated.add(p)) {
-							continue;
+						int posKey = p.getX() << 16 | p.getZ() & 0xFFFF;
+						if (!updated.contains(posKey)) {
+							updated.add(posKey);
+							world.checkLightFor(EnumSkyBlock.BLOCK, p);
 						}
-						world.checkLightFor(EnumSkyBlock.BLOCK, p);
 					}
 				}
 			}
