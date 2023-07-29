@@ -197,7 +197,13 @@ public class GeneratableDungeon {
 					continue;
 				}
 				for (int x = -r; x <= r; x++) {
+					if (Math.abs(x) + Math.abs(y) > removedLight.light - 1) {
+						continue;
+					}
 					for (int z = -r; z <= r; z++) {
+						if (Math.abs(x) + Math.abs(y) + Math.abs(z) > removedLight.light - 1) {
+							continue;
+						}
 						BlockPos p = new BlockPos(removedLight.pos.add(x, y, z));
 						if (!updated.add(p)) {
 							continue;
