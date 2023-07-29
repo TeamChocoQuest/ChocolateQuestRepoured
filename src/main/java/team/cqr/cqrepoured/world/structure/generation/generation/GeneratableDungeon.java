@@ -3,10 +3,8 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -189,7 +187,21 @@ public class GeneratableDungeon {
 		long t = System.nanoTime();
 
 		// TODO this could be improved further
-		Set<BlockPos> updated = new HashSet<>();
+		int minX = Integer.MAX_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int minZ = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		int maxZ = Integer.MIN_VALUE;
+		for (LightInfo removedLight : this.removedLights) {
+			minX = Math.min(removedLight.pos.getX() - removedLight.light - 1, minX);
+			minY = Math.min(removedLight.pos.getY() - removedLight.light - 1, minY);
+			minZ = Math.min(removedLight.pos.getZ() - removedLight.light - 1, minZ);
+			maxX = Math.max(removedLight.pos.getX() + removedLight.light - 1, maxX);
+			maxY = Math.max(removedLight.pos.getY() + removedLight.light - 1, maxY);
+			maxZ = Math.max(removedLight.pos.getZ() + removedLight.light - 1, maxZ);
+		}
+		int[] updated = new int[(maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1) / 32];
 		for (LightInfo removedLight : this.removedLights) {
 			int r = removedLight.light - 1;
 			for (int y = -r; y <= r; y++) {
@@ -204,11 +216,14 @@ public class GeneratableDungeon {
 						if (Math.abs(x) + Math.abs(y) + Math.abs(z) > removedLight.light - 1) {
 							continue;
 						}
-						BlockPos p = new BlockPos(removedLight.pos.add(x, y, z));
-						if (!updated.add(p)) {
-							continue;
+						MUTABLE.setPos(removedLight.pos.getX() + x, removedLight.pos.getY() + y, removedLight.pos.getZ() + z);
+						int i = ((MUTABLE.getX() - minX) * (maxY - minY + 1) + (MUTABLE.getY() - minY)) * (maxZ - minZ + 1) + (MUTABLE.getZ() - minZ);
+						int index = i >> 5;
+						int offset = i & 31;
+						if ((updated[index] & (1 << offset)) == 0) {
+							updated[index] |= 1 << offset;
+							world.checkLightFor(EnumSkyBlock.BLOCK, MUTABLE);
 						}
-						world.checkLightFor(EnumSkyBlock.BLOCK, p);
 					}
 				}
 			}
