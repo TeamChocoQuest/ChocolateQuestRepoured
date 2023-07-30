@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.BlockPlacingHelper.IBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
@@ -25,21 +26,16 @@ public abstract class GeneratablePosInfo implements IGeneratable, IBlockInfo {
 		this(pos.getX(), pos.getY(), pos.getZ());
 	}
 
+	@Deprecated
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
-		Chunk chunk = world.getChunk(this.x >> 4, this.z >> 4);
-		if (this.y < 0 || this.y > 256) {
-			return;
-		}
-		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[this.y >> 4];
-		if (blockStorage == null) {
-			blockStorage = new ExtendedBlockStorage(this.y >> 4 << 4, world.provider.hasSkyLight());
-			if (this.place(world, chunk, blockStorage, dungeon)) {
-				chunk.getBlockStorageArray()[this.y >> 4] = blockStorage;
+		BlockPlacingHelper.setBlockStates(world, getChunkX(), getChunkY(), getChunkZ(), dungeon, (world1, chunk, blockStorage, dungeon1) -> {
+			boolean flag = place(world1, chunk, blockStorage, dungeon1);
+			if (flag) {
+				dungeon.mark(getChunkX(), getChunkY(), getChunkZ());
 			}
-		} else {
-			this.place(world, chunk, blockStorage, dungeon);
-		}
+			return flag;
+		});
 	}
 
 	@Override
