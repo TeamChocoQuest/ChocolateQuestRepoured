@@ -52,12 +52,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 
 	@Override
 	public boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		IBlockState state = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
-		int light = state.getLightValue(world, pos);
-		if (light > 0) {
-			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), light);
-		}
-		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16);
+		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16, dungeon);
 		ItemStack stack = ItemMap.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
 		if (this.fillMap) {
 			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));

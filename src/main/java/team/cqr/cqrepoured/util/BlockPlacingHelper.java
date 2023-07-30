@@ -54,7 +54,7 @@ public class BlockPlacingHelper {
 
 	}
 
-	public static boolean setBlockState(World world, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags) {
+	public static boolean setBlockState(World world, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags, GeneratableDungeon dungeon) {
 		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates) {
 			if (!world.setBlockState(pos, state, flags)) {
 				return false;
@@ -85,7 +85,18 @@ public class BlockPlacingHelper {
 			chunk.getBlockStorageArray()[pos.getY() >> 4] = blockStorage;
 		}
 
-		return setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags);
+		return setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags, dungeon);
+	}
+
+	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags, GeneratableDungeon dungeon) {
+		int oldLight = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15).getLightValue(world, pos);
+		if (!setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags)) {
+			return false;
+		}
+		if (oldLight > 0) {
+			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), oldLight);
+		}
+		return true;
 	}
 
 	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags) {

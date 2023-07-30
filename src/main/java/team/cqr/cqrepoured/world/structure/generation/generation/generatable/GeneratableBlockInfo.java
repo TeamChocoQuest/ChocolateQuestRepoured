@@ -29,15 +29,7 @@ public class GeneratableBlockInfo extends GeneratablePosInfo {
 
 	@Override
 	protected boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		IBlockState oldState = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
-		int oldLight = oldState.getLightValue(world, pos);
-		if (!BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, 16)) {
-			return false;
-		}
-		if (oldLight > 0 && blockStorage.getBlockLight(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15) > 0) {
-			dungeon.markRemovedLight(pos.getX(), pos.getY(), pos.getZ(), oldLight);
-		}
-		return true;
+		return BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, 16, dungeon);
 	}
 
 	public IBlockState getState() {
