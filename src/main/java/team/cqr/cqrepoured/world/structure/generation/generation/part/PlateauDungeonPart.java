@@ -69,12 +69,12 @@ public class PlateauDungeonPart implements IDungeonPart {
 
 				MUTABLE.setY(y);
 				while (MUTABLE.getY() < end - 1) {
-					BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, false);
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16);
 					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 					MUTABLE.setY(MUTABLE.getY() + 1);
 				}
 				if (MUTABLE.getY() < end) {
-					BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16, false);
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16);
 					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 				}
 			}

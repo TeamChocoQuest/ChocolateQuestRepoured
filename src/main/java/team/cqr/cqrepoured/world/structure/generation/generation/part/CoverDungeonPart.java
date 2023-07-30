@@ -49,7 +49,7 @@ public class CoverDungeonPart implements IDungeonPart {
 							} else {
 								if (state.getBlock() != this.coverBlock.getBlock()) {
 									MUTABLE.setY(MUTABLE.getY() + 1);
-									BlockPlacingHelper.setBlockState(world, MUTABLE, this.coverBlock, null, 16, false);
+									BlockPlacingHelper.setBlockState(world, MUTABLE, this.coverBlock, null, 16);
 									dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 								}
 								break;

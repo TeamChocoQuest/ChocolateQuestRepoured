@@ -54,8 +54,8 @@ public class BlockPlacingHelper {
 
 	}
 
-	public static boolean setBlockState(World world, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags, boolean updateLight) {
-		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates || updateLight) {
+	public static boolean setBlockState(World world, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags) {
+		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates) {
 			if (!world.setBlockState(pos, state, flags)) {
 				return false;
 			}
