@@ -31,17 +31,21 @@ public class BlockPlacingHelper {
 			return false;
 		}
 
-		Chunk chunk = world.getChunk(chunkX, chunkZ);
-		ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+		Chunk chunk = null;
+		ExtendedBlockStorage blockStorage = null;
+		if (!CQRMain.isPhosphorInstalled && !CQRConfig.advanced.instantLightUpdates) {
+			chunk = world.getChunk(chunkX, chunkZ);
+			blockStorage = chunk.getBlockStorageArray()[chunkY];
 
-		if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-			blockStorage = new ExtendedBlockStorage(chunkY << 4, world.provider.hasSkyLight());
-			chunk.getBlockStorageArray()[chunkY] = blockStorage;
-			if (!blockInfo.place(world, chunk, blockStorage, dungeon)) {
-				chunk.getBlockStorageArray()[chunkY] = null;
-				return false;
+			if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+				blockStorage = new ExtendedBlockStorage(chunkY << 4, world.provider.hasSkyLight());
+				chunk.getBlockStorageArray()[chunkY] = blockStorage;
+				if (!blockInfo.place(world, chunk, blockStorage, dungeon)) {
+					chunk.getBlockStorageArray()[chunkY] = null;
+					return false;
+				}
+				return true;
 			}
-			return true;
 		}
 
 		return blockInfo.place(world, chunk, blockStorage, dungeon);
@@ -89,6 +93,17 @@ public class BlockPlacingHelper {
 	}
 
 	public static boolean setBlockState(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, IBlockState state, @Nullable TileEntity tileEntity, int flags, GeneratableDungeon dungeon) {
+		if (CQRMain.isPhosphorInstalled || CQRConfig.advanced.instantLightUpdates) {
+			if (!world.setBlockState(pos, state, flags)) {
+				return false;
+			}
+			if (tileEntity != null) {
+				world.setTileEntity(pos, tileEntity);
+				tileEntity.updateContainingBlockInfo();
+			}
+			return true;
+		}
+
 		int oldLight = blockStorage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15).getLightValue(world, pos);
 		if (!setBlockState(world, chunk, blockStorage, pos, state, tileEntity, flags)) {
 			return false;

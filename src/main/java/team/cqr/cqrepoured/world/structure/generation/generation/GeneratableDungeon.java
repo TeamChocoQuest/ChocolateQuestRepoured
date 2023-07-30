@@ -20,6 +20,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo.ChunkInfoMap;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.IDungeonPart;
@@ -94,10 +95,12 @@ public class GeneratableDungeon {
 		}
 
 		this.tryGeneratePart(world);
-		this.tryCheckBlockLight(world);
-		this.tryGenerateSkylightMap(world);
-		this.tryCheckSkyLight(world);
-		this.tryCheckRemovedBlockLight(world);
+		if (!CQRMain.isPhosphorInstalled && !CQRConfig.advanced.instantLightUpdates) {
+			this.tryCheckBlockLight(world);
+			this.tryGenerateSkylightMap(world);
+			this.tryCheckSkyLight(world);
+			this.tryCheckRemovedBlockLight(world);
+		}
 		this.tryMarkBlockForUpdate(world);
 		this.tryNotifyNeighboursRespectDebug(world);
 
@@ -121,23 +124,30 @@ public class GeneratableDungeon {
 			part.generate(world, this);
 		}
 
-		for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
-			Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
-			if (world.provider.hasSkyLight()) {
-				for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
-					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-					if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
-						blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
-						chunk.getBlockStorageArray()[chunkY] = blockStorage;
+		if (!CQRMain.isPhosphorInstalled && !CQRConfig.advanced.instantLightUpdates) {
+			for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
+				Chunk chunk = world.getChunk(chunkInfo.getChunkX(), chunkInfo.getChunkZ());
+				if (world.provider.hasSkyLight()) {
+					for (int chunkY = chunkInfo.topMarked(); chunkY >= 0; chunkY--) {
+						ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+						if (blockStorage == Chunk.NULL_BLOCK_STORAGE) {
+							blockStorage = new ExtendedBlockStorage(chunkY << 4, true);
+							chunk.getBlockStorageArray()[chunkY] = blockStorage;
+						}
+						Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 					}
-					Arrays.fill(blockStorage.getSkyLight().getData(), (byte) 0);
 				}
+				chunkInfo.forEach(chunkY -> {
+					ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
+					if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
+						Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
+					}
+				});
 			}
+		}
+
+		for (ChunkInfo chunkInfo : this.chunkInfoMap.values()) {
 			chunkInfo.forEach(chunkY -> {
-				ExtendedBlockStorage blockStorage = chunk.getBlockStorageArray()[chunkY];
-				if (blockStorage != Chunk.NULL_BLOCK_STORAGE) {
-					Arrays.fill(blockStorage.getBlockLight().getData(), (byte) 0);
-				}
 				int r = 1;
 				for (int x = -r; x <= r; x++) {
 					for (int y = -r; y <= r; y++) {
