@@ -49,7 +49,11 @@ public class CoverDungeonPart implements IDungeonPart {
 							} else {
 								if (state.getBlock() != this.coverBlock.getBlock()) {
 									MUTABLE.setY(MUTABLE.getY() + 1);
+									int oldLight = world.getBlockState(MUTABLE).getLightValue(world, MUTABLE);
 									BlockPlacingHelper.setBlockState(world, MUTABLE, this.coverBlock, null, 16);
+									if (oldLight > 0) {
+										dungeon.markRemovedLight(MUTABLE, oldLight);
+									}
 									dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 								}
 								break;
