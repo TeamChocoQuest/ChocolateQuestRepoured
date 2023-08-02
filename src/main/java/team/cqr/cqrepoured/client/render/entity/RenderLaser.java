@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.ClipContext.BlockMode;
-import net.minecraft.world.level.ClipContext.FluidMode;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
@@ -51,8 +49,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 
 		pMatrixStack.pushPose();
 		pMatrixStack.translate(x1 - x2, y1 - y2, z1 - z2);
-		pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - yaw));
-		pMatrixStack.mulPose(Vector3f.XP.rotationDegrees(-pitch));
+		pMatrixStack.mulPose(Axis.YP.rotationDegrees(180.0F - yaw));
+		pMatrixStack.mulPose(Axis.XP.rotationDegrees(-pitch));
 		pMatrixStack.scale(-1.0F, -1.0F, 1.0F);
 
 		float laserLength = this.getLaserLength(entity, pitch, yaw);
@@ -101,8 +99,8 @@ public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T
 	protected float getLaserLength(T entity, float pitch, float yaw) {
 		Vec3 start = entity.position();
 		Vec3 end = start.add(Vec3.directionFromRotation(pitch, yaw).scale(entity.length));
-		ClipContext rtc = new ClipContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, entity);
-		BlockHitResult result = entity.level.clip(rtc);
+		ClipContext rtc = new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity);
+		BlockHitResult result = entity.level().clip(rtc);
 		float d = result != null ? (float) result.getLocation().subtract(entity.position()).length() : entity.length;
 		return d;
 	}
