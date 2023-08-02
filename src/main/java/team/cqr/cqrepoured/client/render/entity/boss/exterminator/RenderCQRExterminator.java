@@ -1,23 +1,31 @@
 package team.cqr.cqrepoured.client.render.entity.boss.exterminator;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
+import org.apache.commons.lang3.tuple.Triple;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
+import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelExterminatorGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.client.render.entity.StandardBipedBones;
-import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
+import team.cqr.cqrepoured.client.render.entity.layer.geo.CQRBlockAndItemGeoLayer;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
@@ -27,28 +35,40 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	public RenderCQRExterminator(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelExterminatorGeo(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
-		
-		this.addLayer(new LayerGlowingAreasGeo<EntityCQRExterminator>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
-	}
 
-	public static final String HAND_IDENT_LEFT = "item_left_hand";
+		this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
+	}
 
 	@Override
-	protected ItemStack getHeldItemForBone(String boneName, EntityCQRExterminator currentEntity) {
-		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			return currentEntity.getItemInHand(InteractionHand.MAIN_HAND);
-		}
-		return null;
+	protected Optional<ItemArmorGeoLayer<EntityCQRExterminator>> createArmorLayer(RenderCQREntityGeo<EntityCQRExterminator> renderCQREntityGeo) {
+		// TODO: Create own armor layer
+		return Optional.empty();
 	}
+	
+	@Override
+	protected Optional<BlockAndItemGeoLayer<EntityCQRExterminator>> createBlockAndItemLayer(RenderCQREntityGeo<EntityCQRExterminator> renderCQREntityGeo) {
+		Map<String, Triple<Function<EntityCQRExterminator, ItemStack>, ItemDisplayContext, Optional<BiConsumer<EntityCQRExterminator, PoseStack>>>> map = new Object2ObjectArrayMap<>(1);
+		
+		map.put(HAND_IDENT_LEFT, Triple.of(
+				(e) -> {
+					return e.getItemInHand(InteractionHand.MAIN_HAND);
+				}, 
+				ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, 
+				Optional.of((e, p) -> {
+					p.scale(1.5F, 1.5F, 1.5F);
+				})
+			)
+		);
+		
+		BlockAndItemGeoLayer<EntityCQRExterminator> layer = new CQRBlockAndItemGeoLayer<>(this, map);
+		return Optional.of(layer);
+	}
+	
+	public static final String HAND_IDENT_LEFT = "item_left_hand";
 
 	@Override
 	protected float getDeathMaxRotation(EntityCQRExterminator entityLivingBaseIn) {
 		return 0.0F;
-	}
-
-	@Override
-	protected BlockState getHeldBlockForBone(String boneName, EntityCQRExterminator currentEntity) {
-		return null;
 	}
 
 	/*@Override
@@ -72,51 +92,16 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 			}
 		}
 	}*/
-
+	
 	@Override
-	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRExterminator currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRExterminator currentEntity) {
-		// Unused
-	}
-
-	@Override
-	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
-		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			return TransformType.THIRD_PERSON_RIGHT_HAND;
-		}
-		return TransformType.NONE;
-	}
-
-	@Override
-	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
-		if(boneName != null && boneName.equals(HAND_IDENT_LEFT)) {
-			matrixStack.scale(1.5F, 1.5F, 1.5F);
-		}
-	}
-
-	@Override
-	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRExterminator currentEntity, IBone bone) {
-		
-	}
-
-	@Override
-	public RenderType getRenderType(EntityCQRExterminator animatable, float partialTicks, PoseStack stack, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-		return RenderType.entityCutoutNoCull(textureLocation);
+	public RenderType getRenderType(EntityCQRExterminator animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
+		return RenderType.entityCutoutNoCull(texture);
 	}
 	
 	@Override
-	protected boolean isArmorBone(GeoBone bone) {
-		return false;
-	}
-
-	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQRExterminator currentEntity) {
-		if(boneName.equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && currentEntity.hasCape()) {
-			return currentEntity.getResourceLocationOfCape();
+	protected ResourceLocation getTextureOverrideForBone(GeoBone bone, EntityCQRExterminator animatable, float partialTick) {
+		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && animatable.hasCape()) {
+			return animatable.getResourceLocationOfCape();
 		}
 		return null;
 	}
