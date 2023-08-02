@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.client.render.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
@@ -33,7 +33,7 @@ public class RenderSummoningCircle extends EntityRenderer<EntitySummoningCircle>
                        int pPackedLight) {
 		float ageInTicks = pEntity.tickCount + pPartialTicks;
 		pMatrixStack.pushPose();
-		pMatrixStack.mulPose(Vector3f.YP.rotation(ageInTicks * 4.0F));
+		pMatrixStack.mulPose(Axis.YP.rotation(ageInTicks * 4.0F));
 		PentagramUtil.renderPentagram(pMatrixStack, CQRRenderTypes.emissiveSolid(), ageInTicks);
 		pMatrixStack.popPose();
 	}
