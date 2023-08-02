@@ -18,16 +18,14 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import software.bernie.geckolib3.core.processor.IBone;
+import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamityGeo;
@@ -91,7 +89,17 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 		//this.addLayer(new LayerGlowingAreasGeo<EntityCQREnderCalamity>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 		this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
-		this.addRenderLayer(new BlockAndItemGeoLayer<EntityCQREnderCalamity>(this, this::getHeldItemForBone, this::getHeldBlockForBone));
+	}
+	
+	@Override
+	protected Optional<ItemArmorGeoLayer<EntityCQREnderCalamity>> createArmorLayer(RenderCQREntityGeo<EntityCQREnderCalamity> renderCQREntityGeo) {
+		return Optional.empty();
+	}
+	
+	@Override
+	protected Optional<BlockAndItemGeoLayer<EntityCQREnderCalamity>> createBlockAndItemLayer(RenderCQREntityGeo<EntityCQREnderCalamity> renderCQREntityGeo) {
+		BlockAndItemGeoLayer<EntityCQREnderCalamity> layer = new BlockAndItemGeoLayer<>(this, (b, a) -> null, this::getHeldBlockForBone);
+		return Optional.of(layer);
 	}
 
 	@Override
@@ -118,16 +126,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 		}
 	}
 
-	// we do not hold items, so we can ignore this
-	@Override
-	protected ItemStack getHeldItemForBone(String boneName, EntityCQREnderCalamity currentEntity) {
-		return null;
-	}
 
 	@Nullable
-	@Override
-	protected BlockState getHeldBlockForBone(String boneName, EntityCQREnderCalamity currentEntity) {
-		Optional<BlockState> optional = currentEntity.getBlockFromHand(E_CALAMITY_HAND.getFromBoneName(boneName));
+	protected BlockState getHeldBlockForBone(GeoBone bone, EntityCQREnderCalamity currentEntity) {
+		Optional<BlockState> optional = currentEntity.getBlockFromHand(E_CALAMITY_HAND.getFromBoneName(bone.getName()));
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -135,36 +137,16 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 
 	@Override
-	protected ResourceLocation getTextureForBone(String boneName, EntityCQREnderCalamity currentEntity) {
-		if(boneName.equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && currentEntity.hasCape()) {
-			return currentEntity.getResourceLocationOfCape();
+	protected ResourceLocation getTextureOverrideForBone(GeoBone bone, EntityCQREnderCalamity animatable, float partialTick) {
+		if(bone.getName().equalsIgnoreCase(StandardBipedBones.CAPE_BONE) && animatable.hasCape()) {
+			return animatable.getResourceLocationOfCape();
 		}
-		return null;
+		return super.getTextureOverrideForBone(bone, animatable, partialTick);
 	}
 
 	@Override
 	protected float getDeathMaxRotation(EntityCQREnderCalamity entityLivingBaseIn) {
 		return 0;
-	}
-
-	@Override
-	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
-		return TransformType.NONE;
-	}
-
-	@Override
-	protected void preRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQREnderCalamity currentEntity, IBone bone) {
-		
-	}
-	
-	@Override
-	protected boolean isArmorBone(GeoBone bone) {
-		return false;
 	}
 
 }
