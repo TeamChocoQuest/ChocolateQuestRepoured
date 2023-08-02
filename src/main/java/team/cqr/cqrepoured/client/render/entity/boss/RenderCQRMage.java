@@ -1,16 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import software.bernie.geckolib3.core.processor.IBone;
+import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.mage.AbstractModelMageGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
-import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerGlowingAreasGeo;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.boss.AbstractEntityCQRMageBase;
 
@@ -22,37 +17,7 @@ public class RenderCQRMage<T extends AbstractEntityCQRMageBase & IAnimatableCQR>
 	public RenderCQRMage(Context rendermanagerIn, AbstractModelMageGeo<T> model) {
 		super(rendermanagerIn, model);
 		
-		this.addLayer(new LayerGlowingAreasGeo<T>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
-	}
-
-	@Override
-	protected void calculateArmorStuffForBone(String boneName, T currentEntity) {
-		standardArmorCalculationForBone(boneName, currentEntity);
-	}
-
-	@Override
-	protected void calculateItemStuffForBone(String boneName, T currentEntity) {
-		standardItemCalculationForBone(boneName, currentEntity);
-	}
-
-	@Override
-	protected BlockState getHeldBlockForBone(String boneName, T currentEntity) {
-		return null;
-	}
-
-	@Override
-	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, T currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, T currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, T currentEntity, IBone bone) {
-		
+		this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
 	}
 
 }
