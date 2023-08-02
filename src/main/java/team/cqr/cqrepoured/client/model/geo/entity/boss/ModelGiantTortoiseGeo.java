@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
@@ -34,15 +36,16 @@ public class ModelGiantTortoiseGeo extends AbstractModelGeoCQRBase<EntityCQRGian
 	 * - legJoint BL
 	 * - head
 	 */
-
+	
 	@Override
-	public void setLivingAnimations(EntityCQRGiantTortoise entity, Integer uniqueID, @SuppressWarnings("rawtypes") AnimationEvent customPredicate) {
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		if (entity.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
-			IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
+	public void setCustomAnimations(EntityCQRGiantTortoise animatable, long instanceId, AnimationState<EntityCQRGiantTortoise> animationState) {
+		// TODO Auto-generated method stub
+		super.setCustomAnimations(animatable, instanceId, animationState);
+		if (animatable.getCurrentAnimationId() == EntityCQRGiantTortoise.ANIMATION_ID_WALK) {
+			CoreGeoBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);
 
-			headBone.setRotationX((float) Math.toRadians(-entity.xRot));
-			headBone.setRotationY((float) Math.toRadians(-(entity.yHeadRot - entity.yBodyRot)));
+			headBone.setRotX((float) Math.toRadians(-animatable.getXRot()));
+			headBone.setRotY((float) Math.toRadians(-(animatable.yHeadRot - animatable.yBodyRot)));
 
 		}
 	}
