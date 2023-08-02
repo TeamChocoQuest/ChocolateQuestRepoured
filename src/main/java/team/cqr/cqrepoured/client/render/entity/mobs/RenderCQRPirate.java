@@ -1,12 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.mobs;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import software.bernie.geckolib3.core.processor.IBone;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQRPirateGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
@@ -19,36 +14,5 @@ public class RenderCQRPirate extends RenderCQRBipedBaseGeo<EntityCQRPirate> {
 	public RenderCQRPirate(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelCQRPirateGeo(STANDARD_BIPED_GEO_MODEL, TEXTURE, "mob/pirate"));
 	}
-
-	@Override
-	protected void calculateArmorStuffForBone(String boneName, EntityCQRPirate currentEntity) {
-		standardArmorCalculationForBone(boneName, currentEntity);
-	}
-
-	@Override
-	protected void calculateItemStuffForBone(String boneName, EntityCQRPirate currentEntity) {
-		standardItemCalculationForBone(boneName, currentEntity);
-	}
-
-	@Override
-	protected BlockState getHeldBlockForBone(String boneName, EntityCQRPirate currentEntity) {
-		return null;
-	}
-
-	@Override
-	protected void preRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderBlock(PoseStack stack, BlockState block, String boneName, EntityCQRPirate currentEntity) {
-		
-	}
-
-	@Override
-	protected void postRenderItem(PoseStack matrixStack, ItemStack item, String boneName, EntityCQRPirate currentEntity, IBone bone) {
-		
-	}
-
 
 }

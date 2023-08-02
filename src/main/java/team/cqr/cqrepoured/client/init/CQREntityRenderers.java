@@ -21,7 +21,7 @@ import team.cqr.cqrepoured.client.render.entity.RenderPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.RenderSummoningCircle;
 import team.cqr.cqrepoured.client.render.entity.RenderWalkerTornado;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRBoarmage;
-import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoiseGecko;
+import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRLich;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRNecromancer;
 import team.cqr.cqrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
@@ -223,7 +223,7 @@ public class CQREntityRenderers {
 		/* RenderingRegistry.registerEntityRenderingHandler(SubEntityNetherDragonSegment.class, RenderCQRNetherDragonSegment::new); */
 
 		// Giant Tortoise
-		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_TORTOISE.get(), RenderCQRGiantTortoiseGecko::new);
+		RenderingRegistry.registerEntityRenderingHandler(CQREntityTypes.GIANT_TORTOISE.get(), RenderCQRGiantTortoise::new);
 
 		// Shelob
 		/*

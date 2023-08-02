@@ -15,11 +15,11 @@ import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 import javax.annotation.Nullable;
 
-public class RenderCQRGiantTortoiseGecko extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
+public class RenderCQRGiantTortoise extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
 	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/giant_tortoise.geo.json");
 
-	public RenderCQRGiantTortoiseGecko(EntityRendererProvider.Context renderManager) {
+	public RenderCQRGiantTortoise(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelGiantTortoiseGeo(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));
 	}
 
