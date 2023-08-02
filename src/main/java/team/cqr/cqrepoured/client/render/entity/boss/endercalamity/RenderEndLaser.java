@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.client.render.entity.boss.endercalamity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.util.Mth;
-import com.mojang.math.Vector3f;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.entity.RenderLaser;
 import team.cqr.cqrepoured.client.util.PentagramUtil;
@@ -33,7 +33,7 @@ public class RenderEndLaser<T extends AbstractEntityLaser> extends RenderLaser<T
 
 	private void renderRing(PoseStack matrixStack, int corners, T entity, float pitch, float yaw, float scale, float partialTicks, float colorMultiplier) {
 		matrixStack.pushPose();
-		matrixStack.mulPose(Vector3f.XP.rotationDegrees(90.0F));
+		matrixStack.mulPose(Axis.XP.rotationDegrees(90.0F));
 		matrixStack.scale(scale, scale, scale);
 		PentagramUtil.renderPentagram(matrixStack, CQRRenderTypes.emissiveSolid(), entity.getColorR() * colorMultiplier, entity.getColorG() * colorMultiplier, entity.getColorB() * colorMultiplier, corners);
 		matrixStack.popPose();
