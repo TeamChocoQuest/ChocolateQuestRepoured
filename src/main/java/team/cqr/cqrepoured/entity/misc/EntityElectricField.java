@@ -1,29 +1,38 @@
 package team.cqr.cqrepoured.entity.misc;
 
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.IEntityOwnable;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.init.CQRBlockTags;
 import team.cqr.cqrepoured.init.CQREntityTypes;
+import team.cqr.cqrepoured.init.CQRFluidTags;
 import team.cqr.cqrepoured.util.EntityUtil;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class EntityElectricField extends Entity implements IDontRenderFire, IEntityOwnable {
 
@@ -67,7 +76,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	public void setPos(double x, double y, double z) {
 		super.setPos(x, y, z);
 
-		BlockPos p = new BlockPos(x, y, z);
+		BlockPos p = BlockPos.containing(x, y, z);
 		EXISTING_FIELDS.add(p);
 	}
 
@@ -82,7 +91,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 	
 	protected List<LivingEntity> getEntitiesAffectedByField() {
-		return this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox(), this.selectionPredicate);
+		return this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox(), this.selectionPredicate);
 	}
 
 	private Predicate<LivingEntity> selectionPredicate = input -> {
@@ -116,14 +125,14 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 
 	public void destroyField() {
 		EXISTING_FIELDS.remove(this.blockPosition());
-		this.remove();
+		this.discard();
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.charge--;
 
 			BlockPos pos = this.blockPosition();
@@ -153,14 +162,14 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 						if (face != null) {
 							BlockPos currentPos = pos.relative(face); //Correct?
 							if (!EXISTING_FIELDS.contains(currentPos)) {
-								BlockState blockState = this.level.getBlockState(currentPos);
-								if (blockState.getMaterial().isLiquid() || blockState.getMaterial() == Material.METAL) {
+								BlockState blockState = this.level().getBlockState(currentPos);
+								if (blockState.is(CQRBlockTags.CONDUCTING_BLOCKS) || (blockState.getFluidState() != null && blockState.getFluidState().is(CQRFluidTags.CONDUCTING_FLUIDS))) {
 									int charge = this.charge - 10;
 									if (charge > 0) {
-										EntityElectricField newField = new EntityElectricField(this.level, charge, this.ownerID);
+										EntityElectricField newField = new EntityElectricField(this.level(), charge, this.ownerID);
 										newField.setPos(currentPos.getX() + 0.5, currentPos.getY(), currentPos.getZ() + 0.5);
 
-										this.level.addFreshEntity(newField);
+										this.level().addFreshEntity(newField);
 
 										break;
 									}
@@ -204,7 +213,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	@Nullable
 	@Override
 	public Entity getOwner() {
-		return EntityUtil.getEntityByUUID(this.level, this.ownerID);
+		return EntityUtil.getEntityByUUID(this.level(), this.ownerID);
 	}
 
 	@Override
@@ -213,7 +222,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
