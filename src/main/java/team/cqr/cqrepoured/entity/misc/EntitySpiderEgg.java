@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -50,7 +51,7 @@ public class EntitySpiderEgg extends Entity {
 	@Override
 	public void tick() {
 		// TODO: Play particles and sound on mob spawning
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			this.currentStageDuration++;
 			if (this.currentStageDuration > STAGE_DURATION) {
 				this.entityData.set(STAGE, this.getStage() + 1);
@@ -59,12 +60,12 @@ public class EntitySpiderEgg extends Entity {
 			super.tick();
 			if (this.getStage() >= STAGE_COUNT) {
 				// Destroy yourself and spawn the spider
-				Entity spider = EntityList.createEntityByIDFromName(MINION_ID, this.level);
+				Entity spider = EntityList.createEntityByIDFromName(MINION_ID, this.level());
 				if (spider != null) {
 					spider.setPos(this.position().x, this.position().y + 0.5D, this.position().z);
-					this.level.addFreshEntity(spider);
+					this.level().addFreshEntity(spider);
 				}
-				this.remove();
+				this.discard();
 			}
 		} else {
 			super.tick();
@@ -88,7 +89,7 @@ public class EntitySpiderEgg extends Entity {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
