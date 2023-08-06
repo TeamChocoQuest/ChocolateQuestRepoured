@@ -6,23 +6,22 @@ import java.util.Map;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.ClipContext.BlockMode;
-import net.minecraft.world.level.ClipContext.FluidMode;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
@@ -103,8 +102,8 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	@Override
 	public void baseTick() {
-		if (!this.level.isClientSide && !this.caster.isAlive()) {
-			this.remove();
+		if (!this.level().isClientSide && !this.caster.isAlive()) {
+			this.discard();
 		}
 
 		super.baseTick();
@@ -112,40 +111,40 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 		this.prevRotationYawCQR = this.rotationYawCQR;
 		this.prevRotationPitchCQR = this.rotationPitchCQR;
 
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			this.rotationYawCQR = this.serverRotationYawCQR;
 			this.rotationPitchCQR = this.serverRotationPitchCQR;
 		} else {
 			this.updatePositionAndRotation();
-			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(this::getEntity), new SPacketSyncLaserRotation(this));
+			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new SPacketSyncLaserRotation(this));
 		}
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Vec3 start = this.position();
 			Vec3 end = start.add(Vec3.directionFromRotation(this.rotationPitchCQR, this.rotationYawCQR).scale(this.length));
-			ClipContext rtc = new ClipContext(start, end, BlockMode.COLLIDER, FluidMode.NONE, null);
-			HitResult result = this.level.clip(rtc);//this.level.rayTraceBlocks(start, end, false, false, false);
+			ClipContext rtc = new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
+			HitResult result = this.level().clip(rtc);//this.level.rayTraceBlocks(start, end, false, false, false);
 			double d = result != null ? (float) result.getLocation().subtract(this.position()).length() : this.length;
 
 			if (result != null) {
-				BlockPos pos = new BlockPos(result.getLocation());
-				BlockState state = this.level.getBlockState(pos);
+				BlockPos pos = BlockPos.containing(result.getLocation());
+				BlockState state = this.level().getBlockState(pos);
 				if (this.canHitBlock(pos, state)) {
 					float breakProgress = this.onHitBlock(pos, state);
 					if (breakProgress > 0.0F) {
 						if (breakProgress >= 1.0F) {
 							// destroy block
-							this.level.destroyBlock(pos, true);
+							this.level().destroyBlock(pos, true);
 						} else {
 							BreakingInfo breakingInfo = this.blockBreakMap.computeIfAbsent(pos, key -> new BreakingInfo());
 							breakingInfo.lastTimeHit = this.tickCount;
 							breakingInfo.progress += breakProgress;
 							if (breakingInfo.progress >= 1.0F) {
 								// destroy block
-								this.level.destroyBlock(pos, true);
+								this.level().destroyBlock(pos, true);
 								this.blockBreakMap.remove(pos);
 								int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
-								this.level.destroyBlockProgress(i, pos, -1);
+								this.level().destroyBlockProgress(i, pos, -1);
 							}
 						}
 					}
@@ -161,16 +160,16 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 				int i = 0x1000000 + this.getId() * 256 + breakingInfo.id;
 				if (breakingInfo.progress <= 0.0F) {
 					iterator.remove();
-					this.level.destroyBlockProgress(i, entry.getKey(), -1);
+					this.level().destroyBlockProgress(i, entry.getKey(), -1);
 				} else {
-					this.level.destroyBlockProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
+					this.level().destroyBlockProgress(i, entry.getKey(), (int) (breakingInfo.progress * 10.0F));
 				}
 			}
 
 			Vec3 vec1 = new Vec3(-this.laserEffectRadius(), -this.laserEffectRadius(), 0.0D);
 			Vec3 vec2 = new Vec3(this.laserEffectRadius(), this.laserEffectRadius(), d);
 			BoundingBox bb = new BoundingBox(vec1, vec2, Math.toRadians(this.rotationYawCQR), Math.toRadians(this.rotationPitchCQR), start);
-			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.level, this.caster, LivingEntity.class, bb)) {
+			for (LivingEntity entity : BoundingBox.getEntitiesInsideBB(this.level(), this.caster, LivingEntity.class, bb)) {
 				if (this.canHitEntity(entity) && this.tickCount - this.hitInfoMap.getInt(entity) >= this.getEntityHitRate()) {
 					this.onEntityHit(entity);
 					this.hitInfoMap.put(entity, this.tickCount);
@@ -184,7 +183,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	public float onHitBlock(BlockPos pos, BlockState state) {
-		float hardness = state.getDestroySpeed(this.level, pos);
+		float hardness = state.getDestroySpeed(this.level(), pos);
 		if (hardness < 0.0F) {
 			return 0.0F;
 		}
@@ -217,6 +216,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 
 	public void onEntityHit(LivingEntity entity) {
+		// TODO: Create own damage type for lasers
 		entity.hurt(new DamageSource("ray").bypassArmor(), this.getDamage());
 	}
 
@@ -235,12 +235,12 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	@Override
 	public void onRemovedFromWorld() {
 		super.onRemovedFromWorld();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			Iterator<Map.Entry<BlockPos, BreakingInfo>> iterator = this.blockBreakMap.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Map.Entry<BlockPos, BreakingInfo> entry = iterator.next();
 				int i = 0x1000000 + this.getId() * 256 + entry.getValue().id;
-				this.level.destroyBlockProgress(i, entry.getKey(), -1);
+				this.level().destroyBlockProgress(i, entry.getKey(), -1);
 			}
 		}
 	}
@@ -265,7 +265,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData) {
-		this.caster = (LivingEntity) this.level.getEntity(additionalData.readInt());
+		this.caster = (LivingEntity) this.level().getEntity(additionalData.readInt());
 		this.length = additionalData.readFloat();
 		this.rotationYawCQR = additionalData.readFloat();
 		this.rotationPitchCQR = additionalData.readFloat();
@@ -286,7 +286,7 @@ public abstract class AbstractEntityLaser extends Entity implements IEntityAddit
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
