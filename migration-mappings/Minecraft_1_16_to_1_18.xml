@@ -217,5 +217,8 @@
   <entry oldName="net.minecraftforge.fml.network.simple.SimpleChannel" newName="net.minecraftforge.network.simple.SimpleChannel" type="class"/>
   <entry oldName="net.minecraftforge.fml.RegistryObject" newName="net.minecraftforge.registries.RegistryObject" type="class"/>
   <entry oldName="net.minecraftforge.fmlclient.gui.GuiUtils" newName="net.minecraftforge.client.gui.GuiUtils" type="class"/>
-  <entry oldName="net.minecraft.nbt.INBT>" newName="net.minecraft.nbt.Tag" type="class"/>
+  <entry oldName="net.minecraft.nbt.INBT" newName="net.minecraft.nbt.Tag" type="class"/>
+  <entry oldName="net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData" newName="net.minecraftforge.entity.IEntityAdditionalSpawnData" type="class"/>
+  <entry oldName="net.minecraft.world.level.ClipContext.BlockMode" newName="net.minecraft.world.level.ClipContext.Block" type="class"/>
+  <entry oldName="net.minecraft.world.level.ClipContext.FluidMode" newName="net.minecraft.world.level.ClipContext.Fluid" type="class"/>
 </migrationMap>
