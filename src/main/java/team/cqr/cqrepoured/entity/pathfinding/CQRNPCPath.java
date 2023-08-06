@@ -1,23 +1,23 @@
 package team.cqr.cqrepoured.entity.pathfinding;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.ints.IntLists;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntLists;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class CQRNPCPath {
 
@@ -41,7 +41,7 @@ public class CQRNPCPath {
 		if (!s.equals(VERSION)) {
 			CQRMain.logger.warn("Reading path: Expected version {} but got {}", VERSION, s);
 		}
-		for (INBT nbt : compound.getList("nodes", Constants.NBT.TAG_COMPOUND)) {
+		for (Tag nbt : compound.getList("nodes", Tag.TAG_COMPOUND)) {
 			this.nodes.add(new PathNode(this, (CompoundTag) nbt));
 		}
 		this.onPathChanged();
@@ -170,7 +170,7 @@ public class CQRNPCPath {
 
 		private PathNode(CQRNPCPath path, CompoundTag compound) {
 			this.path = path;
-			this.pos = DungeonGenUtils.readPosFromList(compound.getList("pos", Constants.NBT.TAG_INT));
+			this.pos = DungeonGenUtils.readPosFromList(compound.getList("pos", Tag.TAG_INT));
 			this.waitingTimeMin = compound.getInt("waitingTimeMin");
 			this.waitingTimeMax = compound.getInt("waitingTimeMax");
 			this.waitingRotation = compound.getFloat("waitingRotation");
