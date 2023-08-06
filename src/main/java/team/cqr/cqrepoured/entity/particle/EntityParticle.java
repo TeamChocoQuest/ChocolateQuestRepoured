@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.entity.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.minecraft.client.particle.IParticleRenderType;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleRenderType;
 
 public class EntityParticle extends Particle {
 
@@ -54,13 +54,13 @@ public class EntityParticle extends Particle {
 	}
 
 	@Override
-	public void render(VertexConsumer pBuffer, ActiveRenderInfo pRenderInfo, float pPartialTicks) {
+	public void render(VertexConsumer pBuffer, Camera pRenderInfo, float pPartialTicks) {
 		
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 }
