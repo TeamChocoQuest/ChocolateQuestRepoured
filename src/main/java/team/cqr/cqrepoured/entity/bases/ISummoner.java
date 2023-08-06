@@ -1,5 +1,8 @@
 package team.cqr.cqrepoured.entity.bases;
 
+import java.util.List;
+
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,9 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;
 import team.cqr.cqrepoured.faction.Faction;
-
-import java.util.List;
-import java.util.Random;
 
 public interface ISummoner {
 
@@ -31,12 +31,12 @@ public interface ISummoner {
 
 	void addSummonedEntityToList(Entity summoned);
 
-	default void tryEquipSummon(Entity summoned, Random rand) {
+	default void tryEquipSummon(Entity summoned, RandomSource random) {
 		if (summoned instanceof LivingEntity) {
 			LivingEntity living = (LivingEntity) summoned;
 
-			int material = rand.nextInt(3); // wood, stone, iron
-			int weapon = rand.nextInt(4); // sword, pickaxe, axe, shovel
+			int material = random.nextInt(3); // wood, stone, iron
+			int weapon = random.nextInt(4); // sword, pickaxe, axe, shovel
 			ItemStack stack = ItemStack.EMPTY;
 			if (material == 0) {
 				if (weapon == 0) {
