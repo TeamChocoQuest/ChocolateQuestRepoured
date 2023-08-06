@@ -2,14 +2,17 @@ package team.cqr.cqrepoured.entity.misc;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
@@ -28,7 +31,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose p_213305_1_) {
+	public EntityDimensions getDimensions(Pose p_213305_1_) {
 		return super.getDimensions(p_213305_1_).scale(this.size);
 	}
 
@@ -38,9 +41,9 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide) {
-			if (this.isInLava() || (this.verticalCollision && !this.onGround) || this.flyTicks > FLY_TIME_MAX) {
-				this.remove();
+		if (!this.level().isClientSide) {
+			if (this.isInLava() || (this.verticalCollision && !this.onGround()) || this.flyTicks > FLY_TIME_MAX) {
+				this.discard();
 				return;
 			}
 			if (!this.getPassengers().isEmpty()) {
@@ -128,7 +131,7 @@ public class EntityBubble extends Entity implements IDontRenderFire, IIsBeingRid
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
