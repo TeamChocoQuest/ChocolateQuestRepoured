@@ -5,6 +5,7 @@ import java.util.Arrays;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.entity.EntityList;
@@ -20,7 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -41,6 +42,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	protected LivingEntity summonerLiving;
 	protected Vec3 velForSummon = null;
 
+	//TODO: Replace with changeable color and corner amount
 	public enum ECircleTexture {
 		ZOMBIE(), SKELETON(), FLYING_SKULL(), FLYING_SWORD(), METEOR();
 
@@ -87,9 +89,9 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	public void tick() {
 		super.tick();
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (this.tickCount >= EntitySummoningCircle.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon) {
-				Entity summon = EntityList.createEntityByIDFromName(this.entityToSpawn, this.level);
+				Entity summon = EntityList.createEntityByIDFromName(this.entityToSpawn, this.level());
 
 				if (summon != null) {
 					//summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
@@ -108,7 +110,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 						Arrays.stream(EquipmentSlot.values()).forEach(slot -> ((AbstractEntityCQR) summon).setDropChance(slot, 1.01F));
 					}
 
-					this.level.addFreshEntity(summon);
+					this.level().addFreshEntity(summon);
 
 					if (this.summonerLiving != null && summon instanceof AbstractEntityCQR) {
 						((AbstractEntityCQR) summon).setLeader(this.summonerLiving);
@@ -120,22 +122,22 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 					if (this.summoner != null && !this.summoner.getSummoner().isDeadOrDying()) {
 						this.summoner.setSummonedEntityFaction(summon);
-						this.summoner.tryEquipSummon(summon, this.level.random);
+						this.summoner.tryEquipSummon(summon, this.level().random);
 						this.summoner.addSummonedEntityToList(summon);
 					}
 				}
 
-				this.remove();
+				this.discard();
 			}
 		} else {
 			if (this.tickCount >= EntitySummoningCircle.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon * 0.8F) {
 				for (int i = 0; i < 4; i++) {
-					this.level.addParticle(ParticleTypes.WITCH, this.position().x, this.position().y + 0.02D, this.position().z, this.random.nextDouble(), this.random.nextDouble(), this.random.nextDouble());
+					this.level().addParticle(ParticleTypes.WITCH, this.position().x, this.position().y + 0.02D, this.position().z, this.random.nextDouble(), this.random.nextDouble(), this.random.nextDouble());
 				}
 
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					Faction faction = this.summoner != null ? this.summoner.getSummonerFaction() : null;
-					for (Entity ent : this.level.getEntities(this, new AABB(this.position().add(this.getBbWidth() / 2, 0, this.getBbWidth() / 2), this.position().add(-this.getBbWidth() / 2, 3, -this.getBbWidth() / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
+					for (Entity ent : this.level().getEntities(this, new AABB(this.position().add(this.getBbWidth() / 2, 0, this.getBbWidth() / 2), this.position().add(-this.getBbWidth() / 2, 3, -this.getBbWidth() / 2)), faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
 						if (ent != null && ent.isAlive() && ent instanceof LivingEntity) {
 							((LivingEntity) ent).addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 0));
 						}
@@ -174,6 +176,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer) {
+		// TODO: Change to color and corner amount instead
 		buffer.writeByte(this.texture.ordinal());
 		buffer.writeFloat(this.timeMultiplierForSummon);
 		buffer.writeInt(this.tickCount);
@@ -202,7 +205,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
