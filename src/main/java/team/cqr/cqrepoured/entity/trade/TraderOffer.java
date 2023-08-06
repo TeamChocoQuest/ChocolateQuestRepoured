@@ -9,9 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.Container;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.jarjar.selection.util.Constants;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -30,7 +28,7 @@ public class TraderOffer {
 
 	public void readFromNBT(CompoundTag nbt) {
 		this.trades.clear();
-		ListTag tradesNBT = nbt.getList("trades", Constants.NBT.TAG_COMPOUND);
+		ListTag tradesNBT = nbt.getList("trades", Tag.TAG_COMPOUND);
 		for (Tag tag : tradesNBT) {
 			this.trades.add(Trade.createFromNBT(this, (CompoundTag) tag));
 		}

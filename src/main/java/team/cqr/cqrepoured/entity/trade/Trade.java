@@ -79,7 +79,7 @@ public class Trade {
 
 	private void readFromNBT(CompoundTag nbt) {
 		this.inputs.clear();
-		ListTag inItems = nbt.getList("inputs", Constants.NBT.TAG_COMPOUND);
+		ListTag inItems = nbt.getList("inputs", Tag.TAG_COMPOUND);
 		for (Tag tag : inItems) {
 			this.inputs.add(new TradeInput((CompoundTag) tag));
 		}
@@ -87,7 +87,7 @@ public class Trade {
 		this.isSimple = nbt.getBoolean("isSimple");
 
 		this.requiredReputation = nbt.getInt("requiredReputation");
-		this.requiredAdvancement = nbt.contains("requiredAdvancement", Constants.NBT.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
+		this.requiredAdvancement = nbt.contains("requiredAdvancement", Tag.TAG_STRING) ? new ResourceLocation(nbt.getString("requiredAdvancement")) : null;
 
 		this.hasLimitedStock = nbt.getBoolean("hasLimitedStock");
 		this.restockRate = nbt.getInt("restockRate");
