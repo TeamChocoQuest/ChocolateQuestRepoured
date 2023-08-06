@@ -3,30 +3,29 @@ package team.cqr.cqrepoured.entity.misc;
 import java.util.UUID;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
-import net.minecraft.pathfinding.FlyingPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -49,18 +48,18 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 		this.setNoGravity(true);
 		this.setHealth(1F);
 		this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(1F);
-		this.navigation = new FlyingPathNavigator(this, worldIn);
+		this.navigation = new FlyingPathNavigation(this, worldIn);
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (source.isExplosion()) {
+		if (source.is(DamageTypes.EXPLOSION)) {
 			return false;
 		}
 		if (source.getEntity() != null && EntityUtil.isEntityFlying(source.getEntity())) {
 			return false;
 		}
-		if (source.getDirectEntity() instanceof SpectralArrowEntity) {
+		if (source.getDirectEntity() instanceof SpectralArrow) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getEntity();
 			this.target = summonerTmp;
@@ -72,16 +71,16 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getEntity();
 			this.target = summonerTmp;
-			this.remove();
+			this.discard();
 			return true;
 		}
 		this.explode(1.25F);
-		this.remove();
+		this.discard();
 		return true;
 	}
 
 	@Override
-	public PathNavigator getNavigation() {
+	public PathNavigation getNavigation() {
 		return this.navigation;
 	}
 
@@ -92,8 +91,8 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 	@Override
 	public void tick() {
 		super.tick();
-		if(this.level.isClientSide()) {
-			this.level.addParticle(ParticleTypes.WITCH, this.position().x, this.position().y + 0.02, this.position().z, 0F, 0.5F, 0F);
+		if(this.level().isClientSide()) {
+			this.level().addParticle(ParticleTypes.WITCH, this.position().x, this.position().y + 0.02, this.position().z, 0F, 0.5F, 0F);
 		}
 	}
 
@@ -103,7 +102,7 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 		// If we hit a wall we explode
 		if (this.isInWall()) {
 			this.explode(1.25F);
-			this.remove();
+			this.discard();
 		}
 		if (this.attacking) {
 			if (this.target != null && this.target.isAlive()) {
@@ -160,7 +159,7 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 				}
 			}
 			this.explode(0.75F);
-			this.remove();
+			this.discard();
 		}
 	}
 
@@ -171,12 +170,12 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 	}
 
 	private void explode(float strengthMultiplier) {
-		if (this.level != null) {
+		if (this.level() != null) {
 			if (this.summoner != null && this.summoner.isAlive() && this.isAlive()) {
-				this.level.explode(this.summoner, this.position().x(), this.position().y(), this.position().z(), 2 * strengthMultiplier, false, Mode.NONE);
+				this.level().explode(this.summoner, this.position().x(), this.position().y(), this.position().z(), 2 * strengthMultiplier, false, ExplosionInteraction.NONE);
 			}
-			if(!this.level.isClientSide) {
-				ServerLevel sw = (ServerLevel) this.level;
+			if(!this.level().isClientSide) {
+				ServerLevel sw = (ServerLevel) this.level();
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, 0.5F, 1);
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, 0.5F, 0.0F, -0.5F, 1);
 				sw.sendParticles(ParticleTypes.FLAME, this.position().x(), this.position().y() + 0.02, this.position().z(), 3, -0.5F, 0.0F, -0.5F, 1);
@@ -236,8 +235,8 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 		this.setDeltaMovement(new Vec3(x, y, z));
 		if (compound.contains("targetID")) {
 			UUID id = NbtUtils.loadUUID(compound.getCompound("targetID"));
-			if (this.level != null) {
-				for (Entity ent : this.level.getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+			if (this.level() != null) {
+				for (Entity ent : this.level().getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getUUID().equals(id)) {
 						this.target = ent;
 					}
@@ -246,8 +245,8 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 		}
 		if (compound.contains("summonerID")) {
 			UUID id = NbtUtils.loadUUID(compound.getCompound("summonerID"));
-			if (this.level != null) {
-				for (Entity ent : this.level.getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+			if (this.level() != null) {
+				for (Entity ent : this.level().getEntities(this, new AABB(this.position().add(10, 10, 10), this.position().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if (ent.getUUID().equals(id)) {
 						this.summoner = ent;
 					}
@@ -257,25 +256,17 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<>(this, "controller", 2, this::predicate));
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
 	}
 
-	private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-		event.getController().setAnimation(new AnimationBuilder().loop("animation.flying_skull.controller_idle"));
-		return PlayState.CONTINUE;
-	}
-
+	public static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.flying_skull.controller_idle");
+	
 	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
-
-	@Override
-	public int tickTimer() {
-		return 0;
+	public void registerControllers(ControllerRegistrar data) {
+		data.add(new AnimationController<>(this, "controller", 2, state -> state.setAndContinue(IDLE_ANIMATION)));
 	}
 }
