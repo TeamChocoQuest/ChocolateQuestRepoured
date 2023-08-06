@@ -15,6 +15,7 @@ import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -59,19 +60,19 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 		super.tick();
 
 		if (this.tickCount >= EntityWalkerTornado.MAX_LIVING_TICKS) {
-			this.remove();
+			this.discard();
 			return;
 		}
 
-		if (this.level.isClientSide()) {
+		if (this.level().isClientSide()) {
 			this.updateParticles();
 		} else {
 			this.handleNearbyEntities();
 		}
 
 		if (this.getOwnerId() != null && this.owner == null && this.tickCount % 10 == 0) {
-			if (this.level instanceof ServerLevel) {
-				Entity ent = ((ServerLevel) this.level).getEntity(this.getOwnerId());
+			if (this.level() instanceof ServerLevel) {
+				Entity ent = ((ServerLevel) this.level()).getEntity(this.getOwnerId());
 				if (ent.isAlive()) {
 					this.owner = ent;
 				}
@@ -96,7 +97,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 			final double d2 = (float) this.getY() + this.getBbHeight() + 0.125f;
 			final double d3 = (float) this.getZ() + this.random.nextFloat() * 0.25f;
 			final float f = this.random.nextFloat() * 360.0f;
-			final EntityParticle particle = new ParticleWalkerTornado((ClientLevel) this.level, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
+			final EntityParticle particle = new ParticleWalkerTornado((ClientLevel) this.level(), -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
 			//Still needed?
 			//FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 			this.particles.add(particle);
@@ -135,7 +136,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	private void handleNearbyEntities() {
 		double r = 0.75D;
 		AABB aabb = new AABB(this.getX() - r, this.getY(), this.getZ() - r, this.getX() + r, this.getY() + 2 * r, this.getZ() + r);
-		final List<Entity> list = this.level.getEntities(this, aabb);
+		final List<Entity> list = this.level().getEntities(this, aabb);
 		for (Entity ent : list) {
 			this.collideWithEntity(ent);
 		}
@@ -229,7 +230,7 @@ public class EntityWalkerTornado extends Entity implements IEntityOwnable, IDont
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
