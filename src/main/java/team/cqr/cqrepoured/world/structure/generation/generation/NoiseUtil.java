@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
-import net.minecraft.util.Mth;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import team.cqr.cqrepoured.util.IntUtil;
 
 public class NoiseUtil {
@@ -19,7 +18,7 @@ public class NoiseUtil {
 		double d1 = y - 0.5D;
 		double d2 = d1 * d1;
 		double d3 = Math.pow(Math.E, -(d2 / 16.0D + d0 / 16.0D));
-		double d4 = -d1 * Mth.fastInvSqrt(d2 / 2.0D + d0 / 2.0D) / 2.0D;
+		double d4 = -d1 / Math.sqrt(d2 / 2.0D + d0 / 2.0D) / 2.0D;
 		return d4 * d3;
 	}
 
