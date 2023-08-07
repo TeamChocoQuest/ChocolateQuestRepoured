@@ -1,73 +1,87 @@
 package team.cqr.cqrepoured.world.structure;
 
+import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.SharedSeedRandom;
+import com.mojang.serialization.Codec;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import team.cqr.cqrepoured.init.CQRStructureTypes;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
-public class StructureCQR extends Structure<NoFeatureConfig> {
+public class StructureCQR extends Structure {
 
-	public StructureCQR() {
-		super(NoFeatureConfig.CODEC);
+	public static final Codec<StructureCQR> CODEC = simpleCodec(StructureCQR::new);
+
+	public StructureCQR(StructureSettings structureSettings) {
+		super(structureSettings);
 	}
 
 	@Override
-	public Decoration step() {
-		return Decoration.SURFACE_STRUCTURES;
+	public StructureType<?> type() {
+		return CQRStructureTypes.CQR_STRUCTURE_TYPE;
 	}
 
 	@Override
-	public ChunkPos getPotentialFeatureChunk(StructureSeparationSettings separationSettings, long seed, SharedSeedRandom random, int chunkX, int chunkZ) {
-		return new ChunkPos(chunkX, chunkZ);
+	protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
+		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
+		return Optional.ofNullable(WorldDungeonGenerator.getDungeonAt(level, context.chunkPos()))
+				.map(dungeon -> {
+					BlockPos pos = context.chunkPos().getMiddleBlockPosition(0);
+					Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
+					return new GenerationStub(pos, dungeon.createGenerator(context, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
+				});
 	}
 
-	@Override
-	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeProvider, long seed, SharedSeedRandom random, int chunkX, int chunkZ,
-			Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
-		ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
-		return WorldDungeonGenerator.getDungeonAt(level, chunkPos) != null;
-	}
-
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory() {
-		return Start::new;
-	}
-
-	public static class Start extends StructureStart<NoFeatureConfig> {
-
-		public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int references, long seed) {
-			super(structure, chunkX, chunkZ, boundingBox, references, seed);
-		}
-
-		@Override
-		public void generatePieces(DynamicRegistries registries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int chunkX, int chunkZ,
-				Biome biome, NoFeatureConfig config) {
-			ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
-			DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(level, new ChunkPos(chunkX, chunkZ));
-			BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-			Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
-
-			this.pieces.addAll(dungeon.generate(registries, chunkGenerator, templateManager, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
-
-			this.calculateBoundingBox();
-		}
-
-	}
+//	public StructureCQR() {
+//		super(NoFeatureConfig.CODEC);
+//	}
+//
+//	@Override
+//	public Decoration step() {
+//		return Decoration.SURFACE_STRUCTURES;
+//	}
+//
+//	@Override
+//	public ChunkPos getPotentialFeatureChunk(StructureSeparationSettings separationSettings, long seed, SharedSeedRandom random, int chunkX, int chunkZ) {
+//		return new ChunkPos(chunkX, chunkZ);
+//	}
+//
+//	@Override
+//	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeProvider, long seed, SharedSeedRandom random, int chunkX, int chunkZ,
+//			Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
+//		ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
+//		return WorldDungeonGenerator.getDungeonAt(level, chunkPos) != null;
+//	}
+//
+//	@Override
+//	public IStartFactory<NoFeatureConfig> getStartFactory() {
+//		return Start::new;
+//	}
+//
+//	public static class Start extends StructureStart<NoFeatureConfig> {
+//
+//		public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int references, long seed) {
+//			super(structure, chunkX, chunkZ, boundingBox, references, seed);
+//		}
+//
+//		@Override
+//		public void generatePieces(DynamicRegistries registries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int chunkX, int chunkZ,
+//				Biome biome, NoFeatureConfig config) {
+//			ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
+//			DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(level, new ChunkPos(chunkX, chunkZ));
+//			BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
+//			Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
+//
+//			this.pieces.addAll(dungeon.generate(registries, chunkGenerator, templateManager, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
+//
+//			this.calculateBoundingBox();
+//		}
+//
+//	}
 
 }
