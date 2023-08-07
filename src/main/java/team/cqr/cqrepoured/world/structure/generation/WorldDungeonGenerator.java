@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicates;
 
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.server.ServerChunkProvider;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
@@ -68,7 +68,7 @@ public class WorldDungeonGenerator {
 
 	public static ServerLevel getLevel(ChunkGenerator chunkGenerator) {
 		for (ServerLevel level : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
-			ServerChunkProvider chunkSource = level.getChunkSource();
+			ServerChunkCache chunkSource = level.getChunkSource();
 			if (chunkSource.getGenerator() == chunkGenerator) {
 				return level;
 			}
