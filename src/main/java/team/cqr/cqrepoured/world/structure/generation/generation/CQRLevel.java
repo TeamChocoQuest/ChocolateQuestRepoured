@@ -10,19 +10,19 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.SectionPos;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
+import net.minecraft.world.level.material.Fluids;
 import team.cqr.cqrepoured.util.NBTCollectors;
 
 public class CQRLevel implements ICQRLevel {
@@ -77,6 +77,18 @@ public class CQRLevel implements ICQRLevel {
 		public BlockEntity getBlockEntity(BlockPos pos) {
 			return this.getBlockEntity(pos);
 		}
+
+		@Override
+		public int getHeight() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		@Override
+		public int getMinBuildHeight() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	};
 
 	public CQRLevel(SectionPos center, long seed) {
@@ -101,8 +113,8 @@ public class CQRLevel implements ICQRLevel {
 		return nbt;
 	}
 
-	public void generate(ISeedReader level, MutableBoundingBox box, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
-		SectionPos.betweenClosedStream(box.x0 >> 4, box.y0 >> 4, box.z0 >> 4, box.x1 >> 4, box.y1 >> 4, box.z1 >> 4).forEach(sectionPos -> {
+	public void generate(WorldGenLevel level, BoundingBox box, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+		SectionPos.betweenClosedStream(box.minX() >> 4, box.minY() >> 4, box.minZ() >> 4, box.maxX() >> 4, box.maxY() >> 4, box.maxZ() >> 4).forEach(sectionPos -> {
 			CQRSection section = this.sections.get(this.index(sectionPos));
 			if (section != null) {
 				section.generate(level, entityFactory, processors);
