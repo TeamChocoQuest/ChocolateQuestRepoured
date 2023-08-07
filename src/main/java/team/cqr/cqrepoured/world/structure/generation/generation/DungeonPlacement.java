@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.util.Mirror;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
@@ -37,7 +38,7 @@ public class DungeonPlacement {
 
 	}
 
-	private static final ThreadLocal<BlockPos.Mutable> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(BlockPos.Mutable::new);
+	private static final ThreadLocal<MutableBlockPos> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(MutableBlockPos::new);
 	private static final ThreadLocal<MutableVec3d> LOCAL_MUTABLE_VEC3D = ThreadLocal.withInitial(MutableVec3d::new);
 	private final BlockPos pos;
 	private final BlockPos partPos;
@@ -86,27 +87,27 @@ public class DungeonPlacement {
 		return entityFactory;
 	}
 
-	public BlockPos.Mutable transform(BlockPos pos) {
+	public MutableBlockPos transform(BlockPos pos) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), this.partPos, this.mirror, this.rotation);
 	}
 
-	public BlockPos.Mutable transform(int x, int y, int z) {
+	public MutableBlockPos transform(int x, int y, int z) {
 		return transform(x, y, z, this.partPos, this.mirror, this.rotation);
 	}
 
-	public static BlockPos.Mutable transform(BlockPos pos, Mirror mirror, Rotation rotation) {
+	public static MutableBlockPos transform(BlockPos pos, Mirror mirror, Rotation rotation) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), BlockPos.ZERO, mirror, rotation);
 	}
 
-	public static BlockPos.Mutable transform(int x, int y, int z, Mirror mirror, Rotation rotation) {
+	public static MutableBlockPos transform(int x, int y, int z, Mirror mirror, Rotation rotation) {
 		return transform(x, y, z, BlockPos.ZERO, mirror, rotation);
 	}
 
-	public static BlockPos.Mutable transform(BlockPos pos, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static MutableBlockPos transform(BlockPos pos, BlockPos origin, Mirror mirror, Rotation rotation) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), origin, mirror, rotation);
 	}
 
-	public static BlockPos.Mutable transform(int x, int y, int z, BlockPos origin, Mirror mirror, Rotation rotation) {
+	public static MutableBlockPos transform(int x, int y, int z, BlockPos origin, Mirror mirror, Rotation rotation) {
 		switch (mirror) {
 		case LEFT_RIGHT:
 			z = -z;
@@ -196,8 +197,9 @@ public class DungeonPlacement {
 	}
 
 	public static void transform(BlockEntity blockEntity, Mirror mirror, Rotation rotation) {
-		blockEntity.mirror(mirror);
-		blockEntity.rotate(rotation);
+		// TODO method not needed anymore
+//		blockEntity.mirror(mirror);
+//		blockEntity.rotate(rotation);
 	}
 
 }
