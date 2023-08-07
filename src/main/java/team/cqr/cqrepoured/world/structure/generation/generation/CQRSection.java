@@ -9,36 +9,40 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.chunk.PalettedContainer;
+import net.minecraft.world.level.chunk.PalettedContainer.Strategy;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockPos.Mutable;
-import net.minecraft.util.math.SectionPos;
-import net.minecraft.util.math.shapes.BitSetVoxelShapePart;
-import net.minecraft.util.math.shapes.VoxelShapePart;
-import net.minecraft.util.palette.IPalette;
-import net.minecraft.util.palette.IdentityPalette;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.Template.BlockInfo;
-import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
+import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
-import team.cqr.cqrepoured.util.palette.PalettedContainer;
 
 @SuppressWarnings("deprecation")
 public class CQRSection implements ICQRSection {
 
-	private static final IPalette<BlockState> GLOBAL_BLOCKSTATE_PALETTE = new IdentityPalette<>(Block.BLOCK_STATE_REGISTRY, Blocks.AIR.defaultBlockState());
+	// TODO copied from ChunkSerializer, does this work?
+	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, Blocks.AIR.defaultBlockState());
 
 	private final CQRLevel level;
 	private final SectionPos sectionPos;
@@ -49,7 +53,8 @@ public class CQRSection implements ICQRSection {
 	public CQRSection(CQRLevel level, SectionPos sectionPos) {
 		this.level = level;
 		this.sectionPos = sectionPos;
-		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NbtUtils::readBlockState, NbtUtils::writeBlockState);
+		// TODO this probably doesn't support null as default value
+		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, null, Strategy.SECTION_STATES);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
@@ -57,10 +62,9 @@ public class CQRSection implements ICQRSection {
 	public CQRSection(CQRLevel level, CompoundTag nbt) {
 		this.level = level;
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
-		this.blocks = new PalettedContainer<>(GLOBAL_BLOCKSTATE_PALETTE, Block.BLOCK_STATE_REGISTRY, NbtUtils::readBlockState, NbtUtils::writeBlockState);
-		this.blocks.read(nbt.getList("Palette", NBT.TAG_COMPOUND), nbt.getLongArray("BlockStates"));
+		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRMain.logger::error).getOrThrow(false, CQRMain.logger::error);
 		this.blockEntities = NBTCollectors.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
-			return BlockEntity.loadStatic(this.getBlockState(index), blockEntityNbt);
+			return BlockEntity.loadStatic(getPos(sectionPos, index), this.getBlockState(index), blockEntityNbt);
 		});
 		this.entities = NBTHelper.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
 	}
@@ -74,14 +78,14 @@ public class CQRSection implements ICQRSection {
 		nbt.putInt("X", this.sectionPos.x());
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
-		this.blocks.write(nbt, "Palette", "BlockStates");
-		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.save(new CompoundTag())));
+		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRMain.logger::error));
+		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTCollectors.toList()));
 		return nbt;
 	}
 
-	public void generate(ISeedReader level, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
-		VoxelShapePart voxelShapePart = new BitSetVoxelShapePart(16, 16, 16);
+	public void generate(WorldGenLevel level, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+		DiscreteVoxelShape voxelShapePart = new BitSetDiscreteVoxelShape(16, 16, 16);
 
 		this.placeBlocks(level, voxelShapePart, processors);
 		this.updateShapeAtEdge(level, voxelShapePart);
@@ -90,45 +94,47 @@ public class CQRSection implements ICQRSection {
 		this.addEntities(level, entityFactory);
 	}
 
-	private void placeBlocks(ISeedReader level, VoxelShapePart voxelShapePart, @Nonnull List<StructureProcessor> processors) {
-		Mutable mutablePos = new Mutable();
+	private void placeBlocks(WorldGenLevel level, DiscreteVoxelShape voxelShapePart, @Nonnull List<StructureProcessor> processors) {
+		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		for (int i = 0; i < 4096; i++) {
 			BlockState state = this.getBlockState(i);
 			if (state == null) {
 				continue;
 			}
-			
+
 			int x = x(i);
 			int y = y(i);
 			int z = z(i);
 			setPos(mutablePos, this.sectionPos, x, y, z);
-			
-			final BlockPos worldPos = mutablePos.immutable();
-			
-			BlockInfo biIn = new BlockInfo(mutablePos, state, this.blockEntities.get(i) != null ? this.blockEntities.get(i).getTileData() : null);
-			BlockInfo biWorld = new BlockInfo(worldPos, level.getBlockState(mutablePos), level.getBlockEntity(mutablePos) != null ? level.getBlockEntity(mutablePos).getTileData() : null);
-			//TODO: Calculate local position and pass that to it
-			for(StructureProcessor sp : processors) {
-				biIn = sp.process(level, mutablePos, mutablePos, biIn, biWorld, null, null);
+
+			if (!processors.isEmpty()) {
+				// TODO check if this works as intended as this differs a lot from StructureTemplate#processBlockInfos
+				BlockEntity blockEntity = this.blockEntities.get(i);
+				StructureBlockInfo blockInfo = new StructureBlockInfo(mutablePos, state, blockEntity != null ? blockEntity.saveWithFullMetadata() : null);
+				StructureBlockInfo blockInfo1 = new StructureBlockInfo(mutablePos, state, blockInfo.nbt() != null ? blockInfo.nbt().copy() : null);
+				StructurePlaceSettings placeSettings = new StructurePlaceSettings();
+				for (StructureProcessor processor : processors) {
+					blockInfo1 = processor.process(level, mutablePos, mutablePos, blockInfo, blockInfo1, placeSettings, null);
+				}
+				state = blockInfo1.state();
+				blockEntity.load(blockInfo1.nbt());
 			}
-			
-			state = biIn.state;
-			
+
 			if (level.setBlock(mutablePos, state, 0)) {
-				voxelShapePart.setFull(x, y, z, true, true);
+				voxelShapePart.fill(x, y, z);
 
 				BlockEntity tileEntity = this.blockEntities.get(i);
 				if (tileEntity != null) {
-					level.getChunk(mutablePos).setBlockEntity(mutablePos, tileEntity);
+					level.getChunk(mutablePos).setBlockEntity(tileEntity);
 				}
 			}
 		}
 	}
 
-	private void updateShapeAtEdge(ISeedReader level, VoxelShapePart voxelShapePart) {
-		Mutable mutablePos = new Mutable();
-		Mutable mutablePosNeighbour = new Mutable();
+	private void updateShapeAtEdge(WorldGenLevel level, DiscreteVoxelShape voxelShapePart) {
+		MutableBlockPos mutablePos = new MutableBlockPos();
+		MutableBlockPos mutablePosNeighbour = new MutableBlockPos();
 
 		voxelShapePart.forAllFaces((direction, x, y, z) -> {
 			setPos(mutablePos, this.sectionPos, x, y, z);
@@ -148,8 +154,8 @@ public class CQRSection implements ICQRSection {
 		});
 	}
 
-	private void updateFromNeighbourShapes(ISeedReader level, VoxelShapePart voxelShapePart) {
-		Mutable mutablePos = new Mutable();
+	private void updateFromNeighbourShapes(WorldGenLevel level, DiscreteVoxelShape voxelShapePart) {
+		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		IntUtil.forEachSectionCoord((x, y, z) -> {
 			if (!voxelShapePart.isFull(x, y, z)) {
@@ -167,8 +173,8 @@ public class CQRSection implements ICQRSection {
 		});
 	}
 
-	private void setBlockEntitiesChanged(ISeedReader level) {
-		Mutable mutablePos = new Mutable();
+	private void setBlockEntitiesChanged(WorldGenLevel level) {
+		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		this.blockEntities.int2ObjectEntrySet().forEach(entry -> {
 			setPos(mutablePos, this.sectionPos, entry.getIntKey());
@@ -179,16 +185,20 @@ public class CQRSection implements ICQRSection {
 		});
 	}
 
-	private void addEntities(ISeedReader level, IEntityFactory entityFactory) {
+	private void addEntities(WorldGenLevel level, IEntityFactory entityFactory) {
 		this.entities.stream().map(entityContainer -> entityContainer.getEntity(entityFactory)).forEach(level::addFreshEntity);
 	}
 
-	private static Mutable setPos(Mutable mutablePos, SectionPos sectionPos, int index) {
+	private static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int index) {
 		return setPos(mutablePos, sectionPos, x(index), y(index), z(index));
 	}
 
-	public static Mutable setPos(Mutable mutablePos, SectionPos sectionPos, int x, int y, int z) {
+	public static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int x, int y, int z) {
 		return mutablePos.set(sectionPos.minBlockX() | x, sectionPos.minBlockY() | y, sectionPos.minBlockZ() | z);
+	}
+
+	private static BlockPos getPos(SectionPos sectionPos, int index) {
+		return new BlockPos(sectionPos.minBlockX() | x(index), sectionPos.minBlockY() | y(index), sectionPos.minBlockZ() | z(index));
 	}
 
 	private static int index(BlockPos pos) {
@@ -219,6 +229,7 @@ public class CQRSection implements ICQRSection {
 
 	@Nullable
 	private BlockState getBlockState(int index) {
+		// TODO make method visible via AT
 		return this.blocks.get(index);
 	}
 
@@ -228,9 +239,10 @@ public class CQRSection implements ICQRSection {
 	}
 
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
+		// TODO make method visible via AT
 		this.blocks.set(index, state);
-		if (state != null && state.hasTileEntity()) {
-			BlockEntity blockEntity = state.createTileEntity(this.level.asBlockReader());
+		if (state != null && state.hasBlockEntity()) {
+			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(sectionPos, index), state);
 			this.blockEntities.put(index, blockEntity);
 			if (blockEntityCallback != null) {
 				blockEntityCallback.accept(blockEntity);
