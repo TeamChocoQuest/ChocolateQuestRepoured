@@ -7,22 +7,21 @@ import java.io.FileInputStream;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.INBTType;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NBTSizeTracker;
-import net.minecraft.nbt.NBTTypes;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagType;
+import net.minecraft.nbt.TagTypes;
 
 public class NBTHelper {
 
 	public static String getVersionOfStructureFile(File file) {
 		try (DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new FileInputStream(file))))) {
-			if (input.readByte() != NBT.TAG_COMPOUND) {
+			if (input.readByte() != Tag.TAG_COMPOUND) {
 				return null;
 			}
 			input.readUTF();
@@ -30,7 +29,8 @@ public class NBTHelper {
 
 			while ((id = input.readByte()) != 0) {
 				String key = input.readUTF();
-				INBT nbtbase = CompoundTag.readNamedTagData(NBTTypes.getType(id), key, input, 0, NBTSizeTracker.UNLIMITED);
+				// TODO make method visible via AT
+				Tag nbtbase = CompoundTag.readNamedTagData(TagTypes.getType(id), key, input, 0, NbtAccounter.UNLIMITED);
 
 				if (key.equals("cqr_file_version")) {
 					return nbtbase instanceof StringTag ? ((StringTag) nbtbase).getAsString() : null;
@@ -43,8 +43,8 @@ public class NBTHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends INBT> Stream<T> stream(INBT tag, INBTType<T> expectedElementType) {
-		INBTType<?> type = tag.getType();
+	public static <T extends Tag> Stream<T> stream(Tag tag, TagType<T> expectedElementType) {
+		TagType<?> type = tag.getType();
 		if (type != ListTag.TYPE) {
 			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListTag.TYPE.getName() + ", but found " + type.getName() + ".");
 		}
@@ -52,23 +52,23 @@ public class NBTHelper {
 		if (listNbt.isEmpty()) {
 			return Stream.empty();
 		}
-		INBTType<?> elementType = NBTTypes.getType(listNbt.getElementType());
+		TagType<?> elementType = TagTypes.getType(listNbt.getElementType());
 		if (elementType != expectedElementType) {
 			throw new IllegalArgumentException("Expected List-Tag elements to be of type " + expectedElementType.getName() + ", but found " + elementType.getName() + ".");
 		}
 		return (Stream<T>) listNbt.stream();
 	}
 
-	public static IntArrayNBT createBlockPos(BlockPos pos) {
-		return new IntArrayNBT(new int[] { pos.getX(), pos.getY(), pos.getZ() });
+	public static IntArrayTag createBlockPos(BlockPos pos) {
+		return new IntArrayTag(new int[] { pos.getX(), pos.getY(), pos.getZ() });
 	}
 
-	public static BlockPos loadBlockPos(INBT tag) {
-		INBTType<?> type = tag.getType();
-		if (type != IntArrayNBT.TYPE) {
-			throw new IllegalArgumentException("Expected BlockPos-Tag to be of type " + IntArrayNBT.TYPE.getName() + ", but found " + type.getName() + ".");
+	public static BlockPos loadBlockPos(Tag tag) {
+		TagType<?> type = tag.getType();
+		if (type != IntArrayTag.TYPE) {
+			throw new IllegalArgumentException("Expected BlockPos-Tag to be of type " + IntArrayTag.TYPE.getName() + ", but found " + type.getName() + ".");
 		}
-		int[] data = ((IntArrayNBT) tag).getAsIntArray();
+		int[] data = ((IntArrayTag) tag).getAsIntArray();
 		if (data.length != 3) {
 			throw new IllegalArgumentException("Expected BlockPos-Array to be of length 3, but found " + data.length + ".");
 		}
