@@ -3,29 +3,30 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.util.Mirror;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockPos.Mutable;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.math.SectionPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.StructureProcessorList;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import team.cqr.cqrepoured.init.CQRStructures;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import team.cqr.cqrepoured.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
@@ -69,20 +70,20 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 	
 	protected GeneratableDungeon(String dungeonName, BlockPos pos, CQRLevel level, ProtectedRegion.Builder protectedRegionBuilder, int undergroundOffset) {
-		super(CQRStructures.GENERATABLE_DUNGEON, 0);
+		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE, 0, calculateBoundingBox(level));
 		this.dungeonName = dungeonName;
 		this.pos = pos;
 		this.level = level;
 		this.protectedRegionBuilder = protectedRegionBuilder;
 		this.undergroundOffset = undergroundOffset;
-		this.boundingBox = this.calculateBoundingBox();
 		this.groundData = this.calculateGroundData();
 	}
 
-	private MutableBoundingBox calculateBoundingBox() {
-		MutableBoundingBox boundingBox = MutableBoundingBox.getUnknownBox();
-		Mutable mutablePos = new Mutable();
-		
+	@SuppressWarnings("deprecation")
+	private static BoundingBox calculateBoundingBox(CQRLevel level) {
+		AtomicReference<BoundingBox> boundingBox = new AtomicReference<>();
+		MutableBlockPos mutablePos = new MutableBlockPos();
+
 		level.getSections().forEach(section -> {
 			SectionPos sectionPos = section.getPos();
 			
@@ -93,27 +94,25 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 					return;
 				}
 
-				boundingBox.x0 = Math.min(mutablePos.getX(), boundingBox.x0);
-				boundingBox.y0 = Math.min(mutablePos.getY(), boundingBox.y0);
-				boundingBox.z0 = Math.min(mutablePos.getZ(), boundingBox.z0);
-				boundingBox.x1 = Math.max(mutablePos.getX(), boundingBox.x1);
-				boundingBox.y1 = Math.max(mutablePos.getY(), boundingBox.y1);
-				boundingBox.z1 = Math.max(mutablePos.getZ(), boundingBox.z1);
+				if (boundingBox.get() == null) {
+					boundingBox.set(new BoundingBox(mutablePos));
+				} else {
+					boundingBox.get().encapsulate(mutablePos);
+				}
 			});
 		});
 
-		boundingBox.x0 -= 16;
-		boundingBox.y0 -= 16;
-		boundingBox.z0 -= 16;
-		boundingBox.x1 += 16;
-		boundingBox.y1 += 16;
-		boundingBox.z1 += 16;
-		return boundingBox;
+		if (boundingBox.get() == null) {
+			// TODO empty structure -> log warning? throw error?
+			return new BoundingBox(level.getCenter().center());
+		}
+
+		return boundingBox.get().inflatedBy(16);
 	}
 
 	private Cache2D<GroundData> calculateGroundData() {
-		Cache2D<GroundData> groundData = new Cache2D<>(boundingBox.x0, boundingBox.z0, boundingBox.x1, boundingBox.z1, null, GroundData[]::new);
-		Mutable mutablePos = new Mutable();
+		Cache2D<GroundData> groundData = new Cache2D<>(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ(), null, GroundData[]::new);
+		MutableBlockPos mutablePos = new MutableBlockPos();
 		
 		level.getSections().forEach(section -> {
 			SectionPos sectionPos = section.getPos();
@@ -142,33 +141,33 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		return groundData;
 	}
 
-	public GeneratableDungeon(TemplateManager templateManager, CompoundTag nbt) {
-		super(CQRStructures.GENERATABLE_DUNGEON, nbt);
+	public GeneratableDungeon(CompoundTag nbt) {
+		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE, nbt);
 		this.dungeonName = nbt.getString("dungeonName");
 		this.pos = NbtUtils.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegionBuilder = new ProtectedRegion.Builder(nbt.getCompound("protectedRegionBuilder"));
 		this.undergroundOffset = 0;
-		this.boundingBox = new MutableBoundingBox(nbt.getInt("x0"), nbt.getInt("y0"), nbt.getInt("y0"), nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("y1"));
-		this.groundData = new Cache2D<>(this.boundingBox.x0, this.boundingBox.z0, this.boundingBox.x1, this.boundingBox.z1, null, GroundData[]::new);
+		this.boundingBox = new BoundingBox(nbt.getInt("x0"), nbt.getInt("y0"), nbt.getInt("y0"), nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("y1"));
+		this.groundData = new Cache2D<>(this.boundingBox.minX(), this.boundingBox.minZ(), this.boundingBox.maxX(), this.boundingBox.maxZ(), null, GroundData[]::new);
 	}
 
 	@Override
-	protected void addAdditionalSaveData(CompoundTag nbt) {
+	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag nbt) {
 		nbt.putString("dungeonName", this.dungeonName);
 		nbt.put("pos", NbtUtils.writeBlockPos(this.pos));
 		nbt.put("level", this.level.save());
 		nbt.put("protectedRegionBuilder", this.protectedRegionBuilder.writeToNBT());
-		nbt.putInt("x0", this.boundingBox.x0);
-		nbt.putInt("y0", this.boundingBox.y0);
-		nbt.putInt("z0", this.boundingBox.z0);
-		nbt.putInt("x1", this.boundingBox.x1);
-		nbt.putInt("y1", this.boundingBox.y1);
-		nbt.putInt("z1", this.boundingBox.z1);
+		nbt.putInt("x0", this.boundingBox.minX());
+		nbt.putInt("y0", this.boundingBox.minY());
+		nbt.putInt("z0", this.boundingBox.minZ());
+		nbt.putInt("x1", this.boundingBox.maxX());
+		nbt.putInt("y1", this.boundingBox.maxY());
+		nbt.putInt("z1", this.boundingBox.maxZ());
 	}
 
 	@Override
-	public boolean postProcess(ISeedReader pLevel, StructureManager pStructureManager, ChunkGenerator pChunkGenerator, Random pRandom, MutableBoundingBox pBox, ChunkPos pChunkPos, BlockPos pPos) {
+	public void postProcess(WorldGenLevel pLevel, StructureManager pStructureManager, ChunkGenerator pGenerator, RandomSource pRandom, BoundingBox pBox, ChunkPos pChunkPos, BlockPos pPos) {
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(pLevel.getLevel());
 		ProtectedRegion protectedRegion = this.protectedRegionBuilder.build(pLevel.getLevel());
 		if (protectedRegion != null) {
@@ -183,7 +182,6 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		}
 		
 		this.level.generate(pLevel, pBox, new ServerEntityFactory(pLevel.getLevel()), processorList);
-		return true;
 	}
 
 	@Override

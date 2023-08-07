@@ -122,6 +122,10 @@ public class CQRLevel implements ICQRLevel {
 		});
 	}
 
+	public SectionPos getCenter() {
+		return center;
+	}
+
 	@Override
 	public long getSeed() {
 		return this.seed;
