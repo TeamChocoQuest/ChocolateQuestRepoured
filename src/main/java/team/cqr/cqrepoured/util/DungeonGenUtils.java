@@ -3,29 +3,27 @@ package team.cqr.cqrepoured.util;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntNBT;
-import net.minecraft.nbt.LongNBT;
-import net.minecraft.tileentity.BannerTileEntity;
-import net.minecraft.util.Mirror;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -260,13 +258,13 @@ public class DungeonGenUtils {
 		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30_000_000), Math.min(Math.max(pos1.getY(), pos2.getY()), 255), Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30_000_000));
 	}
 
-	public static BlockPos getTransformedStartPos(BlockPos startPos, BlockPos size, PlacementSettings settings) {
+	public static BlockPos getTransformedStartPos(BlockPos startPos, BlockPos size, StructurePlaceSettings settings) {
 		if (settings.getMirror() == Mirror.NONE && settings.getRotation() == Rotation.NONE) {
 			return startPos;
 		}
 		//Source pos, mirror, rot, offset
 		//Zero offset is correct?
-		BlockPos pos = Template.transform(size, settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
+		BlockPos pos = StructureTemplate.transform(size, settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
 		int x = startPos.getX();
 		int y = startPos.getY();
 		int z = startPos.getZ();
@@ -282,14 +280,14 @@ public class DungeonGenUtils {
 		return flag ? new BlockPos(x, y, z) : startPos;
 	}
 
-	public static int getYForPos(ChunkGenerator chunkGenerator, int x, int z, boolean ignoreWater) {
+	public static int getYForPos(GenerationContext context, int x, int z, boolean ignoreWater) {
 		if (ignoreWater) {
-			return chunkGenerator.getBaseHeight(x, z, Heightmap.Type.OCEAN_FLOOR_WG);
+			return context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 		}
-		return chunkGenerator.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+		return context.chunkGenerator().getBaseHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 	}
 
-	public static Vec3 transformedVec3d(Vec3 vec, PlacementSettings settings) {
+	public static Vec3 transformedVec3d(Vec3 vec, StructurePlaceSettings settings) {
 		return transformedVec3d(vec, settings.getMirror(), settings.getRotation());
 	}
 
@@ -324,9 +322,9 @@ public class DungeonGenUtils {
 
 	public static ListTag writePosToList(BlockPos pos) {
 		ListTag nbtTagList = new ListTag();
-		nbtTagList.add(IntNBT.valueOf(pos.getX()));
-		nbtTagList.add(IntNBT.valueOf(pos.getY()));
-		nbtTagList.add(IntNBT.valueOf(pos.getZ()));
+		nbtTagList.add(IntTag.valueOf(pos.getX()));
+		nbtTagList.add(IntTag.valueOf(pos.getY()));
+		nbtTagList.add(IntTag.valueOf(pos.getZ()));
 		return nbtTagList;
 	}
 
@@ -336,9 +334,9 @@ public class DungeonGenUtils {
 
 	public static ListTag writeVecToList(Vec3 vec) {
 		ListTag nbtTagList = new ListTag();
-		nbtTagList.add(DoubleNBT.valueOf(vec.x));
-		nbtTagList.add(DoubleNBT.valueOf(vec.y));
-		nbtTagList.add(DoubleNBT.valueOf(vec.z));
+		nbtTagList.add(DoubleTag.valueOf(vec.x));
+		nbtTagList.add(DoubleTag.valueOf(vec.y));
+		nbtTagList.add(DoubleTag.valueOf(vec.z));
 		return nbtTagList;
 	}
 
@@ -348,15 +346,15 @@ public class DungeonGenUtils {
 
 	public static ListTag writeUUIDToList(UUID uuid) {
 		ListTag nbtTagList = new ListTag();
-		nbtTagList.add(LongNBT.valueOf(uuid.getMostSignificantBits()));
-		nbtTagList.add(LongNBT.valueOf(uuid.getLeastSignificantBits()));
+		nbtTagList.add(LongTag.valueOf(uuid.getMostSignificantBits()));
+		nbtTagList.add(LongTag.valueOf(uuid.getLeastSignificantBits()));
 		return nbtTagList;
 	}
 
 	public static UUID readUUIDFromList(ListTag nbtTagList) {
-		INBT nbtM = nbtTagList.get(0);
-		INBT nbtL = nbtTagList.get(1);
-		return new UUID(nbtM instanceof LongNBT ? ((LongNBT) nbtM).getAsLong() : 0, nbtM instanceof LongNBT ? ((LongNBT) nbtL).getAsLong() : 0);
+		Tag nbtM = nbtTagList.get(0);
+		Tag nbtL = nbtTagList.get(1);
+		return new UUID(nbtM instanceof LongTag ? ((LongTag) nbtM).getAsLong() : 0, nbtM instanceof LongTag ? ((LongTag) nbtL).getAsLong() : 0);
 	}
 
 	/**
@@ -365,10 +363,10 @@ public class DungeonGenUtils {
 	 * @return the passed position with the half of the transformed structure sizeX and sizeZ subtracted.
 	 */
 	@Deprecated
-	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
+	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, StructurePlaceSettings settings) {
 		//Source pos, mirror, rot, offset
 		//Zero offset is correct?
-		BlockPos transformedSize = Template.transform(structure.getSize(), settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
+		BlockPos transformedSize = StructureTemplate.transform(structure.getSize(), settings.getMirror(), settings.getRotation(), BlockPos.ZERO);
 		return pos.offset(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
