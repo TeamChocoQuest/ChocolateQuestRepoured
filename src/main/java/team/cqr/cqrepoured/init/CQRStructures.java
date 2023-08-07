@@ -1,7 +1,34 @@
 package team.cqr.cqrepoured.init;
 
+import java.util.Map;
+
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.data.worldgen.Structures;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.Structure.StructureSettings;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.world.structure.StructureCQR;
+
 //@EventBusSubscriber(modid = CQRMain.MODID)
 public class CQRStructures {
+
+	public static final ResourceKey<Structure> CQR_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(CQRMain.MODID, "cqr_structure"));
+
+	/**
+	 * TODO call in {@link Structures#bootstrap(BootstapContext)} via mixin
+	 */
+	public static void bootstrap(BootstapContext<Structure> context) {
+		HolderGetter<Biome> biomeLookup = context.lookup(Registries.BIOME);
+		context.register(CQR_STRUCTURE, new StructureCQR(new StructureSettings(biomeLookup.getOrThrow(BiomeTags.IS_FOREST), Map.of(), Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+	}
 
 //	public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
 //
