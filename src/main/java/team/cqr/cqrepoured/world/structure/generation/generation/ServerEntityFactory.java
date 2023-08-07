@@ -4,15 +4,16 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.event.ForgeEventFactory;
 
 public class ServerEntityFactory implements IEntityFactory {
 
@@ -33,8 +34,8 @@ public class ServerEntityFactory implements IEntityFactory {
 	}
 
 	@Nullable
-	public ILivingEntityData finalizeSpawn(MobEntity entity, BlockPos pos, MobSpawnType pReason, @Nullable ILivingEntityData pSpawnData, @Nullable CompoundTag pDataTag) {
-		return entity.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), pReason, pSpawnData, pDataTag);
+	public SpawnGroupData finalizeSpawn(Mob entity, BlockPos pos, MobSpawnType spawnType, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag spawnTag) {
+		return ForgeEventFactory.onFinalizeSpawn(entity, level, level.getCurrentDifficultyAt(pos), spawnType, spawnData, spawnTag);
 	}
 
 }
