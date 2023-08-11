@@ -27,7 +27,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 public class CQRBlockAndItemGeoLayer<T extends LivingEntity & GeoAnimatable> extends BlockAndItemGeoLayer<T> {
 	
 	public static <E extends LivingEntity & GeoAnimatable> Map<String, Triple<Function<E, ItemStack>, ItemDisplayContext, Optional<BiConsumer<E, PoseStack>>>> createStandardBipedCalcMap() {
-		Map<String, Triple<Function<E, ItemStack>, ItemDisplayContext, Optional<BiConsumer<E, PoseStack>>>> result = new Object2ObjectArrayMap<>(8);
+		Map<String, Triple<Function<E, ItemStack>, ItemDisplayContext, Optional<BiConsumer<E, PoseStack>>>> result = new Object2ObjectArrayMap<>(3);
 		
 		result.put(StandardBipedBones.LEFT_HAND, Triple.of(
 				(e) -> {
