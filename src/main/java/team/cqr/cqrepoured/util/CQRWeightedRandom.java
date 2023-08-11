@@ -8,14 +8,7 @@ import java.util.Random;
 
 public class CQRWeightedRandom<T> {
 
-	public static class WeightedObject<T> {
-		private T object;
-		private int weight;
-
-		public WeightedObject(T object, int weight) {
-			this.object = object;
-			this.weight = weight;
-		}
+	public static record WeightedObject<T>(T object, int weight) {
 	}
 
 	private static final Random RAND = new Random();
