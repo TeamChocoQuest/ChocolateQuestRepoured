@@ -3,13 +3,17 @@ package team.cqr.cqrepoured.entity.mobs;
 import java.util.Set;
 
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.entity.AnimationEvent;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.EDefaultFaction;
@@ -64,7 +68,7 @@ public class EntityCQRDummy extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(ControllerRegistrar data) {
 		this.registerControllers(this, data);
 	}
 
