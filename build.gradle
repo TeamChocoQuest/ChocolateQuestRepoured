@@ -100,6 +100,17 @@ repositories {
 
         metadataSources { artifact() }
     }
+	
+	ivy {
+		name "Github Releases - DT Versioning" // Github Releases
+        url "https://github.com"
+
+        patternLayout {
+            artifact "[organisation]/[module]/releases/download/MC[revision]/[module]-[revision].[ext]"
+        }
+
+        metadataSources { artifact() }
+    }
 
     maven {
 		name "Curse Maven" // CurseForge Maven
@@ -140,8 +151,8 @@ dependencies {
     // Dependencies (Required)
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
-	//implementation fg.deobf("dertoaster98:multihitboxlib:${multihitboxlib_version}@jar")
-	implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
+	implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
+	//implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
 
  // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
