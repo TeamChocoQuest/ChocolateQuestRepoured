@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 
 import java.util.function.Supplier;

@@ -2,7 +2,7 @@
 //
 //import net.minecraft.network.PacketBuffer;
 //import team.cqr.cqrepoured.config.CQRConfig;
-//import team.cqr.cqrepoured.network.AbstractPacket;
+//import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 //
 //public class SPacketSyncProtectionConfig extends AbstractPacket<SPacketSyncProtectionConfig> {
 //

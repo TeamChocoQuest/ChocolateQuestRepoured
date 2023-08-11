@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.CQRNetworkHooks;
 import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 

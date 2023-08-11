@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
 
 import java.util.function.Supplier;

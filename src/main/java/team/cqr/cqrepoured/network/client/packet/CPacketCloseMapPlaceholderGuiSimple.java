@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.client.packet;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class CPacketCloseMapPlaceholderGuiSimple extends AbstractPacket<CPacketCloseMapPlaceholderGuiSimple> {
 

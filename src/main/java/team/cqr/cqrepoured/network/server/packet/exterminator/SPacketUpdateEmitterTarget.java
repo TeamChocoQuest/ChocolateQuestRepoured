@@ -4,7 +4,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class SPacketUpdateEmitterTarget extends AbstractPacket<SPacketUpdateEmitterTarget> {
 

@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateCQRMultipart;
 
 public class CPacketHandlerUpdateCQRMultipart extends AbstractPacketHandler<SPacketUpdateCQRMultipart> {

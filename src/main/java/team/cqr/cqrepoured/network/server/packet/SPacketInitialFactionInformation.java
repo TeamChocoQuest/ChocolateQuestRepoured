@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.Tuple;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 import java.util.ArrayList;
 import java.util.Collection;

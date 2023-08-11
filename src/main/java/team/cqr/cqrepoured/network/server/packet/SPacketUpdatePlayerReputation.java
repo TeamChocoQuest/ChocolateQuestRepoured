@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 import java.util.UUID;
 

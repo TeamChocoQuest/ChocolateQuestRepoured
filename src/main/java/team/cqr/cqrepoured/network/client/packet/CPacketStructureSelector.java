@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.client.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class CPacketStructureSelector extends AbstractPacket<CPacketStructureSelector> {
 

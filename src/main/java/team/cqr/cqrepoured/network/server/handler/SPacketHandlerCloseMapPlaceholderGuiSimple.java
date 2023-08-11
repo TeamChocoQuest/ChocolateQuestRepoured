@@ -8,7 +8,7 @@
 //import net.minecraft.world.World;
 //import net.minecraftforge.fml.network.NetworkEvent.Context;
 //import team.cqr.cqrepoured.init.CQRBlocks;
-//import team.cqr.cqrepoured.network.AbstractPacketHandler;
+//import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 //import team.cqr.cqrepoured.network.client.packet.CPacketCloseMapPlaceholderGuiSimple;
 //import team.cqr.cqrepoured.tileentity.TileEntityMap;
 //

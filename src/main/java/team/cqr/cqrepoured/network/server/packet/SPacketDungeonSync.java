@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.server.packet;
 import java.util.Collection;
 
 import net.minecraft.network.FriendlyByteBuf;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 public class SPacketDungeonSync extends AbstractPacket<SPacketDungeonSync> {

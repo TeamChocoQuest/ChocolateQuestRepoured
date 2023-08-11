@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 
 import java.util.function.Supplier;

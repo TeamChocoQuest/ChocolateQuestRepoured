@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.CQRPartEntity;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class SPacketUpdateCQRMultipart extends AbstractPacket<SPacketUpdateCQRMultipart> {
 

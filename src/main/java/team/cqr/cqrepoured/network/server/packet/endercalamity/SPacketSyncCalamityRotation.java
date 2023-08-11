@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.network.server.packet.endercalamity;
 
 import net.minecraft.network.FriendlyByteBuf;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class SPacketSyncCalamityRotation extends AbstractPacket<SPacketSyncCalamityRotation> {
 

@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.server.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.customtextures.TextureSet;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 import java.util.HashMap;
 import java.util.HashSet;

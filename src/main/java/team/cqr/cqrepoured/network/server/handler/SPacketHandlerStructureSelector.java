@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent.Context;
 import team.cqr.cqrepoured.item.ItemStructureSelector;
-import team.cqr.cqrepoured.network.AbstractPacketHandler;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.client.packet.CPacketStructureSelector;
 
 public class SPacketHandlerStructureSelector extends AbstractPacketHandler<CPacketStructureSelector> {

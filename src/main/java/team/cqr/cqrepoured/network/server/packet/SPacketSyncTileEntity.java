@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.network.server.packet;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.network.AbstractPacket;
+import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 import team.cqr.cqrepoured.network.datasync.DataEntry;
 
 import java.util.Collection;
