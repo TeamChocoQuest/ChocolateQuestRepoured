@@ -37,7 +37,9 @@ import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
 import team.cqr.cqrepoured.network.client.packet.CPacketStructureSelector;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
 import team.cqr.cqrepoured.network.client.packet.CPacketSyncTileEntity;
+import team.cqr.cqrepoured.network.datapacksynch.handler.SPacketHandlerSyncEntityProfiles;
 import team.cqr.cqrepoured.network.datapacksynch.handler.SPacketHandlerSyncTextureSet;
+import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncTextureSet;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerAddPathNode;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerContainerClickButton;
@@ -140,6 +142,7 @@ public class CQRMessages {
 		
 		// Datapacksynch
 		registerServerToClient(SPacketSyncTextureSet.class, SPacketHandlerSyncTextureSet.class);
+		registerServerToClient(SPacketSyncEntityProfiles.class, SPacketHandlerSyncEntityProfiles.class);
 	}
 
 	// Start the IDs at 1 so any unregistered messages (ID 0) throw a more obvious exception when received
