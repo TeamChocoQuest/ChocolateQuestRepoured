@@ -211,7 +211,7 @@ public class GeneratableDungeon {
 			maxY = Math.max(removedLight.pos.getY() + removedLight.light - 1, maxY);
 			maxZ = Math.max(removedLight.pos.getZ() + removedLight.light - 1, maxZ);
 		}
-		int[] updated = new int[(maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1) / 32];
+		int[] updated = new int[((maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1) - 1 >> 5) + 1];
 		for (LightInfo removedLight : this.removedLights) {
 			int r = removedLight.light - 1;
 			for (int y = -r; y <= r; y++) {
