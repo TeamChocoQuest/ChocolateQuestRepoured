@@ -42,8 +42,8 @@ public class CQRDatapackLoaders {
 		return Optional.ofNullable(manager.getData().getOrDefault(id, null));
 	}
 	
-	public static Optional<TextureSetNew> getTextureSet(ResourceLocation entityID) {
-		return getValueGeneral(TEXTURE_SETS, entityID);
+	public static Optional<TextureSetNew> getTextureSet(ResourceLocation textureSetId) {
+		return getValueGeneral(TEXTURE_SETS, textureSetId);
 	}
 	
 	public static Optional<TextureSetNew> getTextureSet(EntityType<?> entityType) {
