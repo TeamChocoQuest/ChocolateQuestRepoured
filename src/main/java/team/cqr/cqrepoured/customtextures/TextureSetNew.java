@@ -16,12 +16,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 
 public class TextureSetNew {
 
-	public static final String RES_LOC_DOMAIN_CQR_ASSET_SYNCH = "";
-	
 	private ResourceLocation id = null; 
 	
 	private Map<EntityType<?>, CQRWeightedRandom<ResourceLocation>> entries;
@@ -31,7 +30,7 @@ public class TextureSetNew {
 		TextureSetNew.this.entries().entrySet().forEach(entry -> {
 			entry.getValue().getEntries().forEach(wo -> {
 				ResourceLocation rs = wo.object();
-				if (rs.getNamespace().equalsIgnoreCase(RES_LOC_DOMAIN_CQR_ASSET_SYNCH)) {
+				if (rs.getNamespace().equalsIgnoreCase(CQRConstants.Resources.Domains.CTS_DOMAIN_BASE)) {
 					result.add(rs);
 				}
 			});
@@ -40,6 +39,7 @@ public class TextureSetNew {
 		return new ArrayList<>(result);
 	});
 	
+	//TODO: Respect when synching that we only synch the CTS textures! Since this can reference ANY texture in the system (non cts won't be synched)
 	public static final Codec<TextureSetNew> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
 				Codec.unboundedMap(ForgeRegistries.ENTITY_TYPES.getCodec(), CQRWeightedRandom.createCodec(ResourceLocation.CODEC)).fieldOf("entries").forGetter(TextureSetNew::entries)
@@ -69,7 +69,7 @@ public class TextureSetNew {
 	}
 	
 	public static ResourceLocation prefixAssetSynch(final String path) {
-		return new ResourceLocation(RES_LOC_DOMAIN_CQR_ASSET_SYNCH, path);
+		return new ResourceLocation(CQRConstants.Resources.Domains.CTS_DOMAIN_BASE, path);
 	}
 	
 	public static ResourceLocation prefixAssetSynch(final ResourceLocation id) {
