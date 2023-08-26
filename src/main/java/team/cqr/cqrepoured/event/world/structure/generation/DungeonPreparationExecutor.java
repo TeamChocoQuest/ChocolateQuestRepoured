@@ -19,7 +19,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import team.cqr.cqrepoured.CQRMain;
 
-//@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRConstants.MODID)
 public class DungeonPreparationExecutor {
 
 	private static final ThreadFactory DEFAULT_THREAD_FACTORY = task -> new Thread(task, "CQR Dungeon Preparation Thread");

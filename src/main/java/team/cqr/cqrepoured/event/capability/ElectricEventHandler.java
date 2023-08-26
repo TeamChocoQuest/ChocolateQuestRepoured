@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.network.PacketDistributor;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
@@ -26,7 +27,7 @@ import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class ElectricEventHandler {
 
 	@SubscribeEvent

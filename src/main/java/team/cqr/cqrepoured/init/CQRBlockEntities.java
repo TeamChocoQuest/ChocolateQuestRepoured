@@ -1,26 +1,32 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.util.Util;
-import net.minecraft.util.datafix.TypeReferences;
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.BlockExporterChestFixed;
-import team.cqr.cqrepoured.block.BlockTable;
-import team.cqr.cqrepoured.tileentity.*;
-
 import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import net.minecraft.util.datafix.TypeReferences;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.block.BlockExporterChestFixed;
+import team.cqr.cqrepoured.block.BlockTable;
+import team.cqr.cqrepoured.tileentity.TileEntityBoss;
+import team.cqr.cqrepoured.tileentity.TileEntityExporter;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
+import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
+import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
+import team.cqr.cqrepoured.tileentity.TileEntityMap;
+import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
+import team.cqr.cqrepoured.tileentity.TileEntityTable;
+
 public class CQRBlockEntities {
 
-	public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CQRMain.MODID);
+	public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CQRConstants.MODID);
 
 	public static final RegistryObject<BlockEntityType<TileEntityExporter>> EXPORTER = register("exporter", TileEntityExporter::new, CQRBlocks.EXPORTER);
 	public static final RegistryObject<BlockEntityType<TileEntityTable>> TABLE = register("table", TileEntityTable::new, blocks(BlockTable.class));

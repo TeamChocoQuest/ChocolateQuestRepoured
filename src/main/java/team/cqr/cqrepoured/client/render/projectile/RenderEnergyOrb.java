@@ -6,18 +6,17 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.Mth;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.util.Mth;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.model.entity.ModelEnergyOrb;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 
 public class RenderEnergyOrb extends EntityRenderer<ProjectileEnergyOrb> {
 
-	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/energy_orb.png");
+	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/energy_orb.png");
 	private final Model modelEnderCrystal = new ModelEnergyOrb();
 	private final BossDeathRayHelper rayHelper;
 

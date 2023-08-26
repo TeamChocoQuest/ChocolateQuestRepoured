@@ -8,12 +8,9 @@ import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.particle.ParticleBeam;
-import team.cqr.cqrepoured.client.particle.ParticleMagicBell;
-import team.cqr.cqrepoured.init.CQRParticleTypes;
+import team.cqr.cqrepoured.CQRConstants;
 
-@Mod.EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD, value = Dist.CLIENT)
 @OnlyIn(Dist.CLIENT)
 public class CQRParticles {
 	

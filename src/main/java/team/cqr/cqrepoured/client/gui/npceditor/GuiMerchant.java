@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.awt.TextComponent;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.Mth;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.GuiButtonTextured;
 import team.cqr.cqrepoured.client.gui.INumericIDButton;
@@ -26,8 +27,8 @@ import team.cqr.cqrepoured.network.client.packet.CPacketContainerClickButton;
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchant extends ContainerScreen<ContainerMerchant> implements IUpdatableGui {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant.png");
-	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_creative.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/gui/container/gui_merchant.png");
+	private static final ResourceLocation BG_TEXTURE_CREATIVE = new ResourceLocation(CQRConstants.MODID, "textures/gui/container/gui_merchant_creative.png");
 
 	private final AbstractEntityCQR entity;
 	private final TraderOffer trades;

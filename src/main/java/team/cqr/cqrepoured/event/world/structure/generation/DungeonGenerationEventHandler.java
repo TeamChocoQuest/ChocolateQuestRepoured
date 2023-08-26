@@ -7,7 +7,7 @@
 //import net.minecraftforge.eventbus.api.SubscribeEvent;
 //import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 //
-////@EventBusSubscriber(modid = CQRMain.MODID)
+////@EventBusSubscriber(modid = CQRConstants.MODID)
 //public class DungeonGenerationEventHandler {
 //
 //	@SubscribeEvent

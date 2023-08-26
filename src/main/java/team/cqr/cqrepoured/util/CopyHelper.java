@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import net.minecraftforge.fml.loading.FMLLoader;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 
 public class CopyHelper {
@@ -39,7 +40,7 @@ public class CopyHelper {
 					copyFiles(source, target);
 				}
 			} else if (url.getProtocol().equals("modjar")) {
-				source = FMLLoader.getLoadingModList().getModFileById(CQRMain.MODID).getFile().findResource(sourceName);
+				source = FMLLoader.getLoadingModList().getModFileById(CQRConstants.MODID).getFile().findResource(sourceName);
 				copyFiles(source, target);
 			} else {
 				URL resource = CQRMain.class.getResource(sourceName);

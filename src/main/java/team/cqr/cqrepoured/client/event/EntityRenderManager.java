@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
+import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.chunk.ChunkSection;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.util.CachedBlockAccess;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 @OnlyIn(Dist.CLIENT)
-//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface

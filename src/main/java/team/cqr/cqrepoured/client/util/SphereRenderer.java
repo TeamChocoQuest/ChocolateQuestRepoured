@@ -6,7 +6,6 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -30,7 +29,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
 import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
 import team.cqr.cqrepoured.client.render.texture.CubemapTexture;
@@ -143,7 +142,7 @@ public class SphereRenderer {
 
 	public static void init() {
 		delete();
-		shader = new ShaderProgram.Builder().addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl"))).addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl"))).build();
+		shader = new ShaderProgram.Builder().addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRConstants.MODID, "shaders/sphere/vertex.glsl"))).addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRConstants.MODID, "shaders/sphere/fragment.glsl"))).build();
 		GL20.glUseProgram(shader.getShaderProgram());
 		uniformColor = GL20.glGetUniformLocation(shader.getShaderProgram(), "color");
 		uniformTexture = GL20.glGetUniformLocation(shader.getShaderProgram(), "useTexture");

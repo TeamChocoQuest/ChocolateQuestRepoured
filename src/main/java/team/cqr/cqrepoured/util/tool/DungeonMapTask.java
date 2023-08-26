@@ -48,7 +48,7 @@
 //	private static final BufferedImage[] icons = IntStream.range(0, 20).mapToObj(i -> {
 //		Minecraft mc = Minecraft.getInstance();
 //		IResourceManager resourceManager = mc.getResourceManager();
-//		try (IResource resource = resourceManager.getResource(new ResourceLocation(CQRMain.MODID, "textures/gui/map/d" + i + ".png"))) {
+//		try (IResource resource = resourceManager.getResource(new ResourceLocation(CQRConstants.MODID, "textures/gui/map/d" + i + ".png"))) {
 //			return TextureUtil.readResource(resource.getInputStream());
 //		} catch (IOException e) {
 //			CrashReport crash = new CrashReport("Failed loading dungeon icons", e);

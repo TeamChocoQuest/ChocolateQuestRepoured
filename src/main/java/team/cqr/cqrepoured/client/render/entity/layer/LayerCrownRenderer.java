@@ -6,19 +6,19 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.render.armor.RenderArmorKingCrown;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
 public class LayerCrownRenderer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends BipedArmorLayer<T, M, A> {
 
-	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/models/armor/king_crown_layer_1.png");
+	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/models/armor/king_crown_layer_1.png");
 
 	@SuppressWarnings("unchecked")
 	public LayerCrownRenderer(IEntityRenderer<T, M> renderer) {

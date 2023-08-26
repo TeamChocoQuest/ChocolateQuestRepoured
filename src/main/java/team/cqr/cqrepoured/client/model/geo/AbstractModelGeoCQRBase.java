@@ -12,7 +12,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.ITextureVariants;
@@ -70,7 +70,7 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 				}
 				final int index = ((ITextureVariants) entity).getTextureIndex();
 				if (this.textureVariantCache[index] == null) {
-					this.textureVariantCache[index] = new ResourceLocation(CQRMain.MODID, "textures/entity/" + this.ENTITY_REGISTRY_PATH_NAME + "_" + index + ".png");
+					this.textureVariantCache[index] = new ResourceLocation(CQRConstants.MODID, "textures/entity/" + this.ENTITY_REGISTRY_PATH_NAME + "_" + index + ".png");
 				}
 				return this.textureVariantCache[index];
 			}

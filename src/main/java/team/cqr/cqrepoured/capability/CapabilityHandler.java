@@ -8,14 +8,14 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class CapabilityHandler {
 
 	@SubscribeEvent

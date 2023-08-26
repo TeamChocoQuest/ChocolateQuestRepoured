@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.block.banner;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.BannerPattern;
-import net.minecraft.tileentity.BannerPattern.Builder;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.init.CQRBannerPatterns;
 
 public enum EBanners {
@@ -115,7 +114,7 @@ public enum EBanners {
 		nbt.put("Patterns", builder.toListTag());
 		
 		bannerItem.hideTooltipPart(ItemStack.TooltipDisplayFlags.ADDITIONAL);
-		bannerItem.setHoverName(new TranslationTextComponent("item." + CQRMain.MODID + ".banner." + this.name().toLowerCase()));
+		bannerItem.setHoverName(new TranslationTextComponent("item." + CQRConstants.MODID + ".banner." + this.name().toLowerCase()));
 		
 		return bannerItem;
 	}

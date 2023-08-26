@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.entity.boss.EntityCQRGiantSpider;
 
 public class RenderCQRGiantSpider extends MobRenderer<EntityCQRGiantSpider> {
 
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_spider.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/giant_spider.png");
 
 	public RenderCQRGiantSpider(EntityRendererManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelGiantSpider(), 2.0F);

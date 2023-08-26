@@ -74,7 +74,7 @@
 //import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 //import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager.ProtectedRegionContainer;
 //
-////@EventBusSubscriber(modid = CQRMain.MODID)
+////@EventBusSubscriber(modid = CQRConstants.MODID)
 //public class ProtectedRegionEventHandler {
 //
 //	/*

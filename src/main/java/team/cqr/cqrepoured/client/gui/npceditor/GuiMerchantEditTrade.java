@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.awt.TextComponent;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -8,19 +9,17 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.AbstractButton;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.INumericIDButton;
 import team.cqr.cqrepoured.client.gui.IdentifiedButton;
@@ -35,7 +34,7 @@ import team.cqr.cqrepoured.network.client.packet.CPacketOpenMerchantGui;
 @OnlyIn(Dist.CLIENT)
 public class GuiMerchantEditTrade extends ContainerScreen<ContainerMerchantEditTrade> {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/gui/container/gui_merchant_edit_trade.png");
 
 	private final AbstractEntityCQR entity;
 	private final int tradeIndex;

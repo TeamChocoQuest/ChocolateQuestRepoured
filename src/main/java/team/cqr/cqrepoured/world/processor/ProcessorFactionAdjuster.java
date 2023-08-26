@@ -152,7 +152,7 @@
 //		String id = entityTag.getString("id");
 //
 //		try {
-//			if (id.equals(CQRMain.MODID + ":dummy")) {
+//			if (id.equals(CQRConstants.MODID + ":dummy")) {
 //				entityTag.putString("id", placement.getInhabitant().getEntityID().toString());
 //			}
 //

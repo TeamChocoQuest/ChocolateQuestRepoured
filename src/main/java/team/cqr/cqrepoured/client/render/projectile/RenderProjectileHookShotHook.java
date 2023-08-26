@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 
 public class RenderProjectileHookShotHook extends EntityRenderer<ProjectileHookShotHook> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/hook.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/hook.png");
 	private final ModelBase model = new ModelHook();
 	private final ModelBase chainModel = new ModelChain();
 

@@ -26,7 +26,7 @@ public class MixinResourcePackList {
 					"cqrepoured_config",
 					Component.literal("CQ-Repoured config resources"),
 					true, 
-					(string) -> new ModFolderPack("CQRepoured Config", CQRMain.MODID, CQRMain.CQ_CONFIG_FOLDER.toPath()), 
+					(string) -> new ModFolderPack("CQRepoured Config", CQRConstants.MODID, CQRMain.CQ_CONFIG_FOLDER.toPath()), 
 					new Pack.Info(Component.literal("Dynamic resources of CQR"), 0, null), //TODO
 					PackType.SERVER_DATA,
 					Pack.Position.TOP,

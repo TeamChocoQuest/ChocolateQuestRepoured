@@ -5,10 +5,10 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.inventory.ContainerCQREntity;
 
-@EventBusSubscriber(bus = Bus.MOD, modid = CQRMain.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(bus = Bus.MOD, modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class CQRTextureAtlasSprites {
 
 	@SubscribeEvent

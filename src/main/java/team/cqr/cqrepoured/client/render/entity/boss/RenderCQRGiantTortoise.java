@@ -12,8 +12,8 @@ import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.boss.gianttortoise.EntityCQRGiantTortoise;
 
 public class RenderCQRGiantTortoise extends RenderCQREntityGeo<EntityCQRGiantTortoise> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/giant_tortoise.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/giant_tortoise.geo.json");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/giant_tortoise.png");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRConstants.MODID, "geo/entity/boss/giant_tortoise.geo.json");
 
 	public RenderCQRGiantTortoise(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelGiantTortoiseGeo(MODEL_RESLOC, TEXTURE, "boss/giant_tortoise"));

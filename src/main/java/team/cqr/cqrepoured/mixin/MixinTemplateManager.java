@@ -10,9 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.common.util.Constants;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.template.ExtendedStructureTemplate;
 
@@ -25,7 +24,7 @@ public abstract class MixinTemplateManager {
 	)
 	private void mixinCreatePathToStructure(ResourceLocation structureTemplateId, String fileExtension, CallbackInfoReturnable<Path> cir) {
 		//If this is a CQR structure, then return the path to it, otherwise ignore it
-		if(structureTemplateId != null && structureTemplateId.getNamespace().equalsIgnoreCase(CQRMain.MODID_STRUCTURES)) {
+		if(structureTemplateId != null && structureTemplateId.getNamespace().equalsIgnoreCase(CQRConstants.MODID_STRUCTURES)) {
 			File f = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER, structureTemplateId.getPath() + "." + fileExtension);
 			if(f.exists() && f.canRead()) {
 				Path path = f.toPath();

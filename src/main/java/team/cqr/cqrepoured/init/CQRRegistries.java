@@ -5,10 +5,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.faction.Faction;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class CQRRegistries {
 	
 	public static IForgeRegistry<Faction> FACTION = null;

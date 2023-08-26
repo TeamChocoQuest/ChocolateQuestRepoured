@@ -1,39 +1,38 @@
 package team.cqr.cqrepoured.item;
 
+import java.awt.TextComponent;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.UseAction;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 
 public class ItemTeleportStone extends ItemLore {
 
@@ -154,7 +153,7 @@ public class ItemTeleportStone extends ItemLore {
 		if(holdingShift) {
 			if (stack.hasTag()) {
 				if (stack.getTag().contains(X) && stack.getTag().contains(Y) && stack.getTag().contains(Z) && stack.getTag().contains(DIMENSION)) {
-					tooltip.add(new TranslationTextComponent("item." + CQRMain.MODID + "." + getRegistryName().getPath() + ".tooltip.position"));
+					tooltip.add(new TranslationTextComponent("item." + CQRConstants.MODID + "." + getRegistryName().getPath() + ".tooltip.position"));
 					tooltip.add((new TextComponent("X: " + (int) stack.getTag().getDouble(X))).withStyle(ChatFormatting.BLUE));
 					tooltip.add((new TextComponent("Y: " + (int) stack.getTag().getDouble(Y))).withStyle(ChatFormatting.BLUE));
 					tooltip.add((new TextComponent("Z: " + (int) stack.getTag().getDouble(Z))).withStyle(ChatFormatting.BLUE));

@@ -4,16 +4,16 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import net.minecraft.world.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.RenderType;
-import com.mojang.math.Vector3f;
+import net.minecraft.world.phys.Vec3;
 
 public class ModelPentagram {
 
@@ -69,12 +69,12 @@ public class ModelPentagram {
 
 		for (int i = 0; i < corners; i++) {
 			matrix.pushPose();
-			matrix.mulPose(Vector3f.YP.rotationDegrees(f1 * i));
+			matrix.mulPose(Axis.YP.rotationDegrees(f1 * i));
 			matrix.translate(0F, 0F, radius);
 
 			matrix.pushPose();
 			matrix.translate(0.0F, 0.0F, lineWidth * 0.5F);
-			matrix.mulPose(Vector3f.YP.rotationDegrees(90.0F + f1 * 0.5F));
+			matrix.mulPose(Axis.YP.rotationDegrees(90.0F + f1 * 0.5F));
 			matrix.translate(0.0F, -lineHeight * 0.5F, 0.0F);
 			matrix.scale(lineWidth, lineHeight, f2);
 
@@ -87,7 +87,7 @@ public class ModelPentagram {
 			matrix.popPose();
 
 			matrix.pushPose();
-			matrix.mulPose(Vector3f.YP.rotationDegrees(90.0F + f3 * 0.5F));
+			matrix.mulPose(Axis.YP.rotationDegrees(90.0F + f3 * 0.5F));
 			matrix.translate(-lineWidth * 0.5F, -lineHeight * 0.5F, 0.0F);
 			matrix.scale(lineWidth, lineHeight, f4);
 

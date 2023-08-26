@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.init;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTables;
-import team.cqr.cqrepoured.CQRMain;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTables;
+import team.cqr.cqrepoured.CQRConstants;
 
 public class CQRLoottables {
 
@@ -85,7 +85,7 @@ public class CQRLoottables {
 	}
 
 	public static ResourceLocation createLootTable(String name) {
-		ResourceLocation lootTable = new ResourceLocation(CQRMain.MODID, name);
+		ResourceLocation lootTable = new ResourceLocation(CQRConstants.MODID, name);
 		LOOT_TABLES.add(lootTable);
 		return lootTable;
 	}

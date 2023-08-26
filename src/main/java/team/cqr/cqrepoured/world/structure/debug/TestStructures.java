@@ -8,29 +8,29 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.FlatGenerationSettings;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class TestStructures {
 
-	public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
+	public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRConstants.MODID);
 
 	public static final RegistryObject<Structure<NoFeatureConfig>> TEST = STRUCTURES.register("test", TestStructure::new);
 

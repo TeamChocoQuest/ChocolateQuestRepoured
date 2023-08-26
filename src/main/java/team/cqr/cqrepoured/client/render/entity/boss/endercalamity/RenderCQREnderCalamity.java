@@ -81,8 +81,8 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	}
 	private static final Axis SPHERE_ROT_AXIS = Axis.of(new Vector3f(1.0F, 1.0F, 0.0F).normalize());
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/ender_calamity.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/ender_calamity.geo.json");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/ender_calamity.png");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRConstants.MODID, "geo/entity/boss/ender_calamity.geo.json");
 
 	public RenderCQREnderCalamity(Context renderManager) {
 		super(renderManager, new ModelEnderCalamityGeo(MODEL_RESLOC, TEXTURE, "boss/ender_calamity"));

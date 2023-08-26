@@ -14,13 +14,13 @@ import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.Structure.StructureSettings;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.world.structure.StructureCQR;
 
-//@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRConstants.MODID)
 public class CQRStructures {
 
-	public static final ResourceKey<Structure> CQR_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(CQRMain.MODID, "cqr_structure"));
+	public static final ResourceKey<Structure> CQR_STRUCTURE = ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(CQRConstants.MODID, "cqr_structure"));
 
 	/**
 	 * TODO call in {@link Structures#bootstrap(BootstapContext)} via mixin
@@ -30,7 +30,7 @@ public class CQRStructures {
 		context.register(CQR_STRUCTURE, new StructureCQR(new StructureSettings(biomeLookup.getOrThrow(BiomeTags.IS_FOREST), Map.of(), Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
 	}
 
-//	public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRMain.MODID);
+//	public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CQRConstants.MODID);
 //
 //	public static final RegistryObject<Structure<NoFeatureConfig>> WALL_IN_THE_NORTH = STRUCTURES.register("wall_in_the_north", WallStructure::new);
 //	public static final RegistryObject<Structure<NoFeatureConfig>> CQR_ANY_DUNGEON = STRUCTURES.register("cqr_dungeon", StructureCQR::new);
@@ -102,7 +102,7 @@ public class CQRStructures {
 //	}
 //
 //	private static IStructurePieceType registerStructurePiece(IStructurePieceType type, String id) {
-//		return IStructurePieceType.setPieceId(type, CQRMain.MODID + ":" + id);
+//		return IStructurePieceType.setPieceId(type, CQRConstants.MODID + ":" + id);
 //	}
 
 }

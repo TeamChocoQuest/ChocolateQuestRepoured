@@ -16,7 +16,7 @@
 //public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 //
 //	public RecipeArmorDyableRainbow() {
-//		this.setRegistryName(CQRMain.MODID, "rainbow");
+//		this.setRegistryName(CQRConstants.MODID, "rainbow");
 //	}
 //
 //	@Override

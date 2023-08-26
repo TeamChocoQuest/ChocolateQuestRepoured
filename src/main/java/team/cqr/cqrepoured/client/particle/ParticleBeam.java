@@ -1,15 +1,14 @@
 package team.cqr.cqrepoured.client.particle;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.multiplayer.ClientLevel;
 
+import net.minecraft.client.Camera;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.IParticleRenderType;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.particles.BasicParticleType;
-import com.mojang.math.Vector3f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -36,7 +35,7 @@ public class ParticleBeam extends Particle {
 	}
 
 	@Override
-	public void render(VertexConsumer buffer, ActiveRenderInfo pRenderInfo, float partialTicks) {
+	public void render(VertexConsumer buffer, Camera pRenderInfo, float partialTicks) {
 		/*float f = 0.0F;
 		float f1 = 1.0F;
 		float f2 = 0.0F;
@@ -77,7 +76,7 @@ public class ParticleBeam extends Particle {
 		}
 
 		Minecraft mc = Minecraft.getInstance();
-		mc.getTextureManager().bind(new ResourceLocation(CQRMain.MODID, "textures/particles/beam.png"));
+		mc.getTextureManager().bind(new ResourceLocation(CQRConstants.MODID, "textures/particles/beam.png"));
 		//Necessary?
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE);
 		buffer.vertex(f5 + avec3d[0].x, f6 + avec3d[0].y, f7 + avec3d[0].z).uv(f1, f3).color(this.rCol, this.gCol, this.bCol, this.alpha).lightmap(j, k).endVertex();
@@ -88,8 +87,8 @@ public class ParticleBeam extends Particle {
 	}
 
 	@Override
-	public IParticleRenderType getRenderType() {
-		return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+	public ParticleRenderType getRenderType() {
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 }

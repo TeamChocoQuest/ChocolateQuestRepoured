@@ -1,39 +1,39 @@
 package team.cqr.cqrepoured.item;
 
+import java.awt.TextComponent;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.entity.*;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
 
 public class ItemCursedBone extends ItemLore {
 
@@ -71,17 +71,17 @@ public class ItemCursedBone extends ItemLore {
 	public Optional<Entity> spawnEntity(BlockPos pos, Level worldIn, ItemStack item, LivingEntity summoner, ISummoner isummoner) {
 		if (worldIn.isEmptyBlock(pos.relative(Direction.UP, 1)) && worldIn.isEmptyBlock(pos.relative(Direction.UP, 2))) {
 			// DONE: Spawn circle
-			ResourceLocation resLoc = new ResourceLocation(CQRMain.MODID, "skeleton");
+			ResourceLocation resLoc = new ResourceLocation(CQRConstants.MODID, "skeleton");
 			// Get entity id
 			if (hasCursedBoneEntityTag(item)) {
 				try {
 					CompoundTag tag = item.getTag();// .getCompoundTag("tag");
 					resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
 					if (!ForgeRegistries.ENTITIES.containsKey(resLoc)) {
-						resLoc = new ResourceLocation(CQRMain.MODID, "skeleton");
+						resLoc = new ResourceLocation(CQRConstants.MODID, "skeleton");
 					}
 				} catch (Exception ex) {
-					resLoc = new ResourceLocation(CQRMain.MODID, "skeleton");
+					resLoc = new ResourceLocation(CQRConstants.MODID, "skeleton");
 				}
 			}
 			EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, isummoner, summoner);
@@ -139,7 +139,7 @@ public class ItemCursedBone extends ItemLore {
 			}
 			return;
 		}
-		tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", this.getEntityName(CQRMain.MODID + ":skeleton")));
+		tooltip.add(new TranslationTextComponent("item.cqrepoured.cursed_bone.tooltip", this.getEntityName(CQRConstants.MODID + ":skeleton")));
 	}
 
 	private String getEntityName(String registryName) {

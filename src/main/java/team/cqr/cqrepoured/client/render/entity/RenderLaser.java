@@ -13,14 +13,14 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.entity.ModelLaser;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 public class RenderLaser<T extends AbstractEntityLaser> extends EntityRenderer<T> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/effects/ray.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/effects/ray.png");
 	private final ModelLaser model;
 
 	public RenderLaser(Context renderManager) {

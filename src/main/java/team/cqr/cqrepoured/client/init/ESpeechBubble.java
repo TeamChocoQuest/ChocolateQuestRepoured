@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 
 public enum ESpeechBubble {
 
@@ -61,12 +61,12 @@ public enum ESpeechBubble {
 
 	ESpeechBubble() {
 		this.isTraderBubble = false;
-		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
+		this.resLoc = new ResourceLocation(CQRConstants.MODID, folderPath + "bubble_" + this.name().toLowerCase() + ".png");
 	}
 
 	ESpeechBubble(boolean isTraderBubble, String filename) {
 		this.isTraderBubble = isTraderBubble;
-		this.resLoc = new ResourceLocation(CQRMain.MODID, folderPath + filename + ".png");
+		this.resLoc = new ResourceLocation(CQRConstants.MODID, folderPath + filename + ".png");
 	}
 
 	public boolean isNormalBubble() {

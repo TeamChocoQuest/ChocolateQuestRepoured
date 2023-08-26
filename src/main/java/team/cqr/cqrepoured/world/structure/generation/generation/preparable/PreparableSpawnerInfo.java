@@ -5,25 +5,24 @@ import java.util.Collection;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.EntityList;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.spawner.AbstractSpawner;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
@@ -180,7 +179,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		String id = entityTag.getString("id");
 
 		try {
-			if (id.equals(CQRMain.MODID + ":dummy")) {
+			if (id.equals(CQRConstants.MODID + ":dummy")) {
 				entityTag.putString("id", placement.getInhabitant().getEntityID().toString());
 			}
 

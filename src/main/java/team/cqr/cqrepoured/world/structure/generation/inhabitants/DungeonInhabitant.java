@@ -1,16 +1,17 @@
 package team.cqr.cqrepoured.world.structure.generation.inhabitants;
 
+import java.util.Properties;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.block.banner.EBanners;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
-
-import javax.annotation.Nullable;
-import java.util.Properties;
-import java.util.Random;
 
 public class DungeonInhabitant {
 
@@ -26,7 +27,7 @@ public class DungeonInhabitant {
 	private String factionOverride = null;
 
 	private static final Random random = new Random();
-	private static final ResourceLocation EMPTY_RES_LOC = new ResourceLocation(CQRMain.MODID, "dummy");
+	private static final ResourceLocation EMPTY_RES_LOC = new ResourceLocation(CQRConstants.MODID, "dummy");
 
 	public DungeonInhabitant(Properties prop) {
 		this.name = prop.getProperty(ConfigKeys.KEY_NAME, "missingNo");

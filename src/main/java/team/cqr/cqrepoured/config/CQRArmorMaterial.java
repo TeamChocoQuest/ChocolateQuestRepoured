@@ -2,13 +2,14 @@ package team.cqr.cqrepoured.config;
 
 import java.util.function.Supplier;
 
+import javax.swing.UIDefaults.LazyValue;
+
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraft.world.item.crafting.Ingredient;
+import team.cqr.cqrepoured.CQRConstants;
 
 public class CQRArmorMaterial implements IArmorMaterial {
 
@@ -31,7 +32,7 @@ public class CQRArmorMaterial implements IArmorMaterial {
 	}
 
 	public CQRArmorMaterial(String name, ArmorMaterialConfig config, SoundEvent equipSound, Supplier<Ingredient> repairIngredient) {
-		this.name = CQRMain.MODID + ":" + name;
+		this.name = CQRConstants.MODID + ":" + name;
 		this.config = config;
 		this.equipSound = equipSound;
 		this.repairIngredient = new LazyValue<>(repairIngredient);

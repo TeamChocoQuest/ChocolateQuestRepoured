@@ -30,8 +30,8 @@ import team.cqr.cqrepoured.entity.boss.exterminator.EntityCQRExterminator;
 
 public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExterminator> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/exterminator.png");
-	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRMain.MODID, "geo/entity/boss/exterminator.geo.json");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/exterminator.png");
+	private static final ResourceLocation MODEL_RESLOC = new ResourceLocation(CQRConstants.MODID, "geo/entity/boss/exterminator.geo.json");
 
 	public RenderCQRExterminator(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelExterminatorGeo(MODEL_RESLOC, TEXTURE, "boss/exterminator"));

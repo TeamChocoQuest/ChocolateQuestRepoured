@@ -31,6 +31,7 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
@@ -43,7 +44,7 @@ import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class EventsHandler {
 
 	//@SubscribeEvent
@@ -155,7 +156,7 @@ public class EventsHandler {
 
 	/*@SubscribeEvent
 	public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
-		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(CQRMain.MODID, "armor_coloring"));
+		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(CQRConstants.MODID, "armor_coloring"));
 		event.getRegistry().register(new RecipeArmorDyableRainbow());
 		event.getRegistry().register(new RecipeArmorDyableBreathing());
 		event.getRegistry().register(new RecipeCrownAttach());

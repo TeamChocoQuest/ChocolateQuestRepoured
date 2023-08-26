@@ -1,18 +1,21 @@
 package team.cqr.cqrepoured.tileentity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.EntityList;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.Difficulty;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
@@ -20,10 +23,6 @@ import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class TileEntitySpawner extends BlockEntityContainer implements ITileEntitySyncable {
 
@@ -132,7 +131,7 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 		 */
 
 		// compatibility with old spawners
-		if (entityTag.getString("id").equals(CQRMain.MODID + ":dummy")) {
+		if (entityTag.getString("id").equals(CQRConstants.MODID + ":dummy")) {
 			DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistance(this.level, this.worldPosition.getX(), this.worldPosition.getZ());
 			entityTag.putString("id", mobType.getEntityID().toString());
 		}

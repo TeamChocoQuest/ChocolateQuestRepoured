@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.init;
 
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRMain;
+import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
 import team.cqr.cqrepoured.inventory.ContainerBackpack;
 import team.cqr.cqrepoured.inventory.ContainerBadge;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.inventory.ContainerSpawner;
 
 public class CQRContainerTypes {
 	
-	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, CQRMain.MODID);
+	public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, CQRConstants.MODID);
 
 	public static final RegistryObject<MenuType<ContainerMerchant>> MERCHANT = CONTAINERS.register("merchant", () -> IForgeContainerType.create(ContainerMerchant::new));
 	public static final RegistryObject<MenuType<ContainerMerchantEditTrade>> MERCHANT_EDIT_TRADE = CONTAINERS.register("merchant_edit_trade", () -> IForgeContainerType.create(ContainerMerchantEditTrade::new));

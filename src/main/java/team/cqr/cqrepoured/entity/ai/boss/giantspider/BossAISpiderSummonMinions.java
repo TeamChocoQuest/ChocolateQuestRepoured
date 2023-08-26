@@ -16,7 +16,7 @@
 //	protected ISummoner summoner = null;
 //	protected int MAX_MINIONS = 6;
 //	protected int MAX_MINIONS_AT_A_TIME = 3;
-//	protected ResourceLocation minionOverride = new ResourceLocation(CQRMain.MODID, "spider_egg");
+//	protected ResourceLocation minionOverride = new ResourceLocation(CQRConstants.MODID, "spider_egg");
 //
 //	private int cooldown = 0;
 //	private static final int MAX_COOLDOWN = 150;

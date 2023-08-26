@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCalamityCrystal;
 
 public class RenderCalamityCrystal extends EntityRenderer<EntityCalamityCrystal> {
 
-	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/boss/calamity_crystal.png");
+	private static final ResourceLocation ENDER_CRYSTAL_TEXTURES = new ResourceLocation(CQRConstants.MODID, "textures/entity/boss/calamity_crystal.png");
 	private final ModelBase modelEnderCrystal = new ModelCalamityCrystal(0.0F);
 
 	public RenderCalamityCrystal(EntityRendererManager renderManager) {

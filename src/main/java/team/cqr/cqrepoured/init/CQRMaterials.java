@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.init;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Items;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Ingredient;
 import team.cqr.cqrepoured.config.CQRArmorMaterial;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.config.CQRItemTier;

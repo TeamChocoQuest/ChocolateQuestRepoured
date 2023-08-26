@@ -12,7 +12,7 @@
 //public class RecipeArmorDyableBreathing extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 //
 //	public RecipeArmorDyableBreathing() {
-//		this.setRegistryName(CQRMain.MODID, "breathing");
+//		this.setRegistryName(CQRConstants.MODID, "breathing");
 //	}
 //
 //	@Override

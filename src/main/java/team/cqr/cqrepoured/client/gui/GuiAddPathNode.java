@@ -1,13 +1,11 @@
 package team.cqr.cqrepoured.client.gui;
 
+import java.awt.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec2;
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,14 +13,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.CheckboxButton;
 import net.minecraft.client.util.InputMappings;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
@@ -510,7 +509,7 @@ public class GuiAddPathNode extends Screen {
 
 		// draw nodes
 		GL11.glColor4d(1.0D, 1.0D, 1.0D, 1.0D);
-//		this.minecraft.getTextureManager().bindTexture(new ResourceLocation(CQRMain.MODID, "textures/gui/path_map.png"));
+//		this.minecraft.getTextureManager().bindTexture(new ResourceLocation(CQRConstants.MODID, "textures/gui/path_map.png"));
 		GL11.glBegin(GL11.GL_QUADS);
 		for (CQRNPCPath.PathNode node : path.getNodes()) {
 			int offsetX = node.getPos().getX() - centerX;

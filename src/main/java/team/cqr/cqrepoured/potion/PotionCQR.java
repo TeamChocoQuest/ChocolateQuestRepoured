@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.potion;
 
+import net.minecraft.potion.EffectType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.potion.EffectType;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 
 public class PotionCQR extends MobEffect {
 
@@ -11,10 +11,10 @@ public class PotionCQR extends MobEffect {
 
 	public PotionCQR(String name, EffectType type, int color) {
 		super(type, color);
-		this.setRegistryName(CQRMain.MODID, name);
+		this.setRegistryName(CQRConstants.MODID, name);
 		//Unnecessary?
-		//this.setPotionName("effect." + CQRMain.MODID + "." + name);
-		this.texture = new ResourceLocation(CQRMain.MODID, "textures/mob_effect/" + name + ".png");
+		//this.setPotionName("effect." + CQRConstants.MODID + "." + name);
+		this.texture = new ResourceLocation(CQRConstants.MODID, "textures/mob_effect/" + name + ".png");
 	}
 
 	//No longer needed?

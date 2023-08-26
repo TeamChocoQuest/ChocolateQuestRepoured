@@ -7,15 +7,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileBullet.EBulletType;
 import team.cqr.cqrepoured.item.CQRSpawnEggItem;
@@ -39,6 +40,7 @@ import team.cqr.cqrepoured.item.ItemSuperTool;
 import team.cqr.cqrepoured.item.ItemTeleportStone;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
+import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
 import team.cqr.cqrepoured.item.armor.ItemArmorHeavy;
 import team.cqr.cqrepoured.item.armor.ItemArmorInquisition;
@@ -47,7 +49,6 @@ import team.cqr.cqrepoured.item.armor.ItemArmorSpider;
 import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 import team.cqr.cqrepoured.item.armor.ItemBootsCloud;
-import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 import team.cqr.cqrepoured.item.armor.ItemHelmetDragon;
 import team.cqr.cqrepoured.item.gun.ItemBubblePistol;
 import team.cqr.cqrepoured.item.gun.ItemBubbleRifle;
@@ -81,7 +82,7 @@ import team.cqr.cqrepoured.item.sword.ItemSwordWalker;
 
 public class CQRItems {
 
-	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRMain.MODID);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CQRConstants.MODID);
 
 	// Daggers
 	public static final RegistryObject<ItemDagger> DAGGER_IRON = register("dagger_iron", prop -> new ItemDagger(prop, Tiers.IRON, 25));
@@ -537,7 +538,7 @@ public class CQRItems {
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable ItemGroup tab) {
-			return item.setRegistryName(CQRMain.MODID, name).setTranslationKey(name).setCreativeTab(tab);
+			return item.setRegistryName(CQRConstants.MODID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
 
 	}

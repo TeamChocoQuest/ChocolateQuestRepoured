@@ -1,34 +1,41 @@
 package team.cqr.cqrepoured.data;
 
+import static team.cqr.cqrepoured.data.CQRDataGenerators.blockLoc;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.extend;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.valuesOfClass;
+import static team.cqr.cqrepoured.data.CQRDataGenerators.valuesOfType;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import net.minecraft.core.Direction;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.block.*;
+import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.block.BlockNull;
+import team.cqr.cqrepoured.block.BlockPoisonousWeb;
+import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.block.BlockTable;
 import team.cqr.cqrepoured.init.CQRBlocks;
-
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import static team.cqr.cqrepoured.data.CQRDataGenerators.*;
 
 public class CQRBlockStateProvider extends BlockStateProvider {
 
 	public CQRBlockStateProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-		super(generator, CQRMain.MODID, existingFileHelper);
+		super(generator, CQRConstants.MODID, existingFileHelper);
 	}
 
 	@Override

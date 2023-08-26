@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
+import java.awt.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 
+import mcjty.theoneprobe.rendering.RenderHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.gui.INumericIDButton;
 import team.cqr.cqrepoured.client.util.GuiHelper;
@@ -25,7 +25,7 @@ import team.cqr.cqrepoured.faction.FactionRegistry;
 
 public class GuiButtonTrade extends Button implements INumericIDButton {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_button_trade.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/gui/container/gui_button_trade.png");
 	private int index;
 	private final int id;
 	private Trade trade;

@@ -1,19 +1,18 @@
 package team.cqr.cqrepoured.item.armor;
 
+import java.awt.Color;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.item.DyeableArmorItem;
-import net.minecraft.item.IArmorMaterial;
+import net.minecraft.world.item.DyeableArmorItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.Constants;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
-
-import java.awt.*;
 
 public class ItemArmorDyable extends DyeableArmorItem {
 
@@ -130,10 +129,10 @@ public class ItemArmorDyable extends DyeableArmorItem {
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
 		if (this.getMaterial() == ArmorMaterial.IRON) {
-			return CQRMain.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRConstants.MODID + ":textures/models/armor/iron_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		if (this.getMaterial() == ArmorMaterial.DIAMOND) {
-			return CQRMain.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
+			return CQRConstants.MODID + ":textures/models/armor/diamond_dyable_layer_" + (slot != EquipmentSlot.LEGS ? 1 : 2) + (type != null ? "_" + type : "") + ".png";
 		}
 		return super.getArmorTexture(stack, entity, slot, type);
 	}

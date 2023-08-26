@@ -1,20 +1,21 @@
 package team.cqr.cqrepoured.client.gui.npceditor;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import java.awt.TextComponent;
+
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.client.gui.widget.button.Button;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 import net.minecraftforge.fml.client.gui.widget.Slider;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.inventory.ContainerCQREntity;
@@ -24,7 +25,7 @@ import team.cqr.cqrepoured.network.client.packet.CPacketSyncEntity;
 @OnlyIn(Dist.CLIENT)
 public class GuiCQREntity extends ContainerScreen<ContainerCQREntity> {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/gui/container/gui_cqr_entity.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/gui/container/gui_cqr_entity.png");
 
 	private AbstractEntityCQR entity;
 

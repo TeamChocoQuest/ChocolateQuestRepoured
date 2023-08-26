@@ -5,13 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 import com.mojang.blaze3d.platform.NativeImage;
 
@@ -23,8 +20,6 @@ import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.resources.IoSupplier;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 
 public class CTResourcepack implements PackResources {
 	
@@ -32,7 +27,7 @@ public class CTResourcepack implements PackResources {
 		
 		@Override
 		public void loadPacks(Consumer<ResourcePackInfo> pInfoConsumer, IFactory pInfoFactory) {
-			pInfoConsumer.accept(ResourcePackInfo.create(CQRMain.MODID + ":CQR-ResourcePack", true, CTResourcepack::getInstance, pInfoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.BUILT_IN));
+			pInfoConsumer.accept(ResourcePackInfo.create(CQRConstants.MODID + ":CQR-ResourcePack", true, CTResourcepack::getInstance, pInfoFactory, ResourcePackInfo.Priority.TOP, IPackNameDecorator.BUILT_IN));
 			
 		}
 	};*/
@@ -122,10 +117,11 @@ public class CTResourcepack implements PackResources {
 		}
 	}
 
-	@Override
+	//GetResource is nullable now, no longer needed
+	/*@Override
 	public boolean hasResource(PackType p_195764_1_, ResourceLocation p_195764_2_) {
 		return this.FILES.containsKey(p_195764_2_) && p_195764_1_ == PackType.CLIENT_RESOURCES;
-	}
+	}*/
 	
 	@Override
 	public Set<String> getNamespaces(PackType p_195759_1_) {

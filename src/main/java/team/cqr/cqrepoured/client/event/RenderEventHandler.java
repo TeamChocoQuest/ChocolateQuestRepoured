@@ -6,20 +6,20 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.HandSide;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.HandSide;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
@@ -29,7 +29,7 @@ import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
 @OnlyIn(Dist.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
 	//@SubscribeEvent

@@ -8,12 +8,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.init.CQRStructurePlacementTypes.EverywhereStructurePlacement;
 
 public class CQRStructureSets {
 
-	public static final ResourceKey<StructureSet> CQR_STRUCTURE_SET = ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(CQRMain.MODID, "cqr_structure_set"));
+	public static final ResourceKey<StructureSet> CQR_STRUCTURE_SET = ResourceKey.create(Registries.STRUCTURE_SET, new ResourceLocation(CQRConstants.MODID, "cqr_structure_set"));
 
 	/**
 	 * TODO call in {@link StructureSets#bootstrap(BootstapContext)} via mixin

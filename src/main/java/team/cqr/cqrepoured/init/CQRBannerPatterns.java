@@ -1,21 +1,22 @@
 package team.cqr.cqrepoured.init;
 
+import java.lang.reflect.Field;
+import java.util.Locale;
+
 import net.minecraft.core.NonNullList;
-import net.minecraft.item.BannerPatternItem;
+import net.minecraft.world.item.BannerPatternItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.tileentity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.banner.EBanners;
 
-import java.lang.reflect.Field;
-import java.util.Locale;
-
-@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
 public class CQRBannerPatterns {
 
 	public static BannerPattern CQ_BLANK = addBanner("cq_blank");
@@ -34,7 +35,7 @@ public class CQRBannerPatterns {
 	}
 
 	public static BannerPattern addBanner(String name, ItemStack craftingStack) {
-		return BannerPattern.create(name.toUpperCase(), name, CQRMain.MODID + "." + name, true);
+		return BannerPattern.create(name.toUpperCase(), name, CQRConstants.MODID + "." + name, true);
 	}
 
 	//!!!CALL AFTER ITEMS ARE REGISTERED!!!
@@ -47,7 +48,7 @@ public class CQRBannerPatterns {
 				if (obj instanceof BannerPattern) {
 					BannerPattern pattern = (BannerPattern) obj;
 					String name = f.getName().replace("PATTERN_", "").toLowerCase(Locale.ROOT);
-					event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).stacksTo(1).tab(CQRMain.CQR_BANNERS_TAB)).setRegistryName(CQRMain.MODID + ":banner_pattern_" + name));
+					event.getRegistry().register(new BannerPatternItem(pattern, (new Item.Properties()).stacksTo(1).tab(CQRMain.CQR_BANNERS_TAB)).setRegistryName(CQRConstants.MODID + ":banner_pattern_" + name));
 
 				}
 			}

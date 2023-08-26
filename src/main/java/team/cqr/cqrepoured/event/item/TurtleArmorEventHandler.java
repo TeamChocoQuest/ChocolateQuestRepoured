@@ -15,13 +15,13 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorTurtle;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-@EventBusSubscriber(modid = CQRMain.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID)
 public class TurtleArmorEventHandler {
 
 	@SubscribeEvent

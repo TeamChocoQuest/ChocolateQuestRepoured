@@ -6,12 +6,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.NonNullSupplier;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
 public class CapabilityElectricShockProvider extends SerializableCapabilityProvider<CapabilityElectricShock> {
 
-	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(CQRMain.MODID, "entity_electrocute_handler");
+	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(CQRConstants.MODID, "entity_electrocute_handler");
 
 	@CapabilityInject(CapabilityElectricShock.class)
 	public static final Capability<CapabilityElectricShock> ELECTROCUTE_HANDLER_CQR = null;

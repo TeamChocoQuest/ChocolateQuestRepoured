@@ -10,17 +10,17 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoProjectilesRenderer;
 import software.bernie.geckolib3.util.EModelRenderCycle;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.entity.ISizable;
 
 public class RenderEntityGeo<T extends Entity & IAnimatable> extends GeoProjectilesRenderer<T> {
 	
-	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRConstants.MODID, "textures/entity/magic_armor/mages.png");
 
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;

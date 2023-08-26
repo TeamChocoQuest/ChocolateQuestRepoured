@@ -1,25 +1,25 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle;
 import team.cqr.cqrepoured.entity.misc.EntitySummoningCircle.ECircleTexture;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
@@ -106,9 +106,9 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 					if (this.minionOverride != null) {
 						summon = this.minionOverride;
 					} else {
-						summon = new ResourceLocation(CQRMain.MODID, "zombie");
+						summon = new ResourceLocation(CQRConstants.MODID, "zombie");
 						if (this.entity.getRandom().nextInt(4) == 3) {
-							summon = new ResourceLocation(CQRMain.MODID, "skeleton");
+							summon = new ResourceLocation(CQRConstants.MODID, "skeleton");
 							rdmFlag = true;
 						}
 					}

@@ -12,13 +12,13 @@ import net.minecraftforge.registries.ObjectHolder;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.potion.PotionTwohanded;
 
-@ObjectHolder(CQRMain.MODID)
+@ObjectHolder(CQRConstants.MODID)
 @EventBusSubscriber
 public class CQRPotions {
 
 	public static final MobEffect TWOHANDED = Null();
 
-	@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+	@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
 	public static class EventHandler {
 
 		@SubscribeEvent

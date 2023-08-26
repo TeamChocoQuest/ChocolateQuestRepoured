@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.init;
 
-//@EventBusSubscriber(modid = CQRMain.MODID)
+//@EventBusSubscriber(modid = CQRConstants.MODID)
 public class CQREntities {
 
 	private static int entityID = 0;
@@ -105,11 +105,11 @@ public class CQREntities {
 //	}
 
 //	private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
-//		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+//		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRConstants.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 //	}
 //
 //	private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
-//		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRMain.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+//		return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(CQRConstants.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 //	}
 
 }

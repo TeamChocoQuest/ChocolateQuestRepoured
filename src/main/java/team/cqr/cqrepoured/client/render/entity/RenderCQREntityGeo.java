@@ -24,7 +24,7 @@ import software.bernie.geckolib.renderer.DynamicGeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.CQRBlockAndItemGeoLayer;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.CQRItemArmorGeoLayer;
@@ -37,7 +37,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 @OnlyIn(Dist.CLIENT)
 public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity> extends DynamicGeoEntityRenderer<T> implements GeoRenderer<T> {
 
-	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRMain.MODID, "textures/entity/magic_armor/mages.png");
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation(CQRConstants.MODID, "textures/entity/magic_armor/mages.png");
 
 	public final Function<T, ResourceLocation> TEXTURE_GETTER;
 	public final Function<T, ResourceLocation> MODEL_ID_GETTER;

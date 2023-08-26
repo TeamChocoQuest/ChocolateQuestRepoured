@@ -1,8 +1,9 @@
 package team.cqr.cqrepoured.client.event;
 
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.item.ItemStack;
+import java.awt.TextComponent;
+
 import net.minecraft.ChatFormatting;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -10,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
 @OnlyIn(Dist.CLIENT)
-//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class TooltipEventHandler {
 
 	@SubscribeEvent

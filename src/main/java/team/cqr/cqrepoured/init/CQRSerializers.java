@@ -8,7 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DataSerializerEntry;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
@@ -51,7 +51,7 @@ public class CQRSerializers {
 		// Create a new DataSerializerEntry (can't register the serializer directly)
 		// and add it to the forge registry list so our classes can use it.
 		// The register() function takes an IForgeRegistryEntry so we create that here from the DataSerializerEntry.
-		event.getRegistry().register(new DataSerializerEntry(VEC3D).setRegistryName(CQRMain.MODID, "serializer_vector_double"));
+		event.getRegistry().register(new DataSerializerEntry(VEC3D).setRegistryName(CQRConstants.MODID, "serializer_vector_double"));
 		registered = true;
 	}
 

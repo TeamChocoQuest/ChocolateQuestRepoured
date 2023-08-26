@@ -2,16 +2,16 @@ package team.cqr.cqrepoured.client.render.entity.mounts;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import net.minecraft.client.model.EndermiteModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EndermiteModel;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.entity.mount.EntityGiantEndermite;
 
 public class RenderGiantEndermite extends MobRenderer<EntityGiantEndermite, EndermiteModel<EntityGiantEndermite>> {
 
-	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(CQRMain.MODID, "textures/entity/mounts/giant_endermite.png");
+	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(CQRConstants.MODID, "textures/entity/mounts/giant_endermite.png");
 
 	public RenderGiantEndermite(Context rendermanagerIn) {
 		super(rendermanagerIn, new EndermiteModel<EntityGiantEndermite>(), 1.5F);

@@ -29,7 +29,7 @@ public class TileEntityMapPlaceHolderRenderer extends FastTESR<TileEntityMap> {
 		int blockLight = lightmapCoords & 0xFFFF;
 		EnumFacing orientation = te.getOrientation();
 
-		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(CQRMain.MODID, "textures/blocks/map.png"));
+		Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(CQRConstants.MODID, "textures/blocks/map.png"));
 		buffer.setTranslation(x, y, z);
 		float f = 4.0F / 128.0F;
 		float f1 = 124.0F / 128.0F;

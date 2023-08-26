@@ -7,19 +7,19 @@ import com.mojang.serialization.Codec;
 
 import de.dertoaster.multihitboxlib.api.network.AbstractSPacketSyncDatapackContent;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.customtextures.TextureSet;
+import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 
-public class SPacketSyncTextureSet extends AbstractSPacketSyncDatapackContent<TextureSet, SPacketSyncTextureSet> {
+public class SPacketSyncTextureSet extends AbstractSPacketSyncDatapackContent<TextureSetNew, SPacketSyncTextureSet> {
 
-	private static final Codec<Map<ResourceLocation, TextureSet>> _MAPPER =
-            Codec.unboundedMap(ResourceLocation.CODEC, TextureSet.CODEC);
+	private static final Codec<Map<ResourceLocation, TextureSetNew>> _MAPPER =
+            Codec.unboundedMap(ResourceLocation.CODEC, TextureSetNew.CODEC);
 	
 	public SPacketSyncTextureSet() {
 		super();
 	}
 	
-	public SPacketSyncTextureSet(Map<ResourceLocation, TextureSet> data) {
+	public SPacketSyncTextureSet(Map<ResourceLocation, TextureSetNew> data) {
 		super(data);
 	}
 	
@@ -29,23 +29,23 @@ public class SPacketSyncTextureSet extends AbstractSPacketSyncDatapackContent<Te
 	}
 
 	@Override
-	public BiConsumer<ResourceLocation, TextureSet> consumer() {
+	public BiConsumer<ResourceLocation, TextureSetNew> consumer() {
 		return CQRDatapackLoaders.TEXTURE_SETS.getData()::putIfAbsent;
 	}
 
 	@Override
-	protected SPacketSyncTextureSet createFromPacket(Map<ResourceLocation, TextureSet> var1) {
+	protected SPacketSyncTextureSet createFromPacket(Map<ResourceLocation, TextureSetNew> var1) {
 		return new SPacketSyncTextureSet(var1);
 	}
 
 	@Override
-	protected Codec<Map<ResourceLocation, TextureSet>> createMapper() {
+	protected Codec<Map<ResourceLocation, TextureSetNew>> createMapper() {
 		return _MAPPER;
 	}
 
 	@Override
-	protected Codec<TextureSet> getCodec() {
-		return TextureSet.CODEC;
+	protected Codec<TextureSetNew> getCodec() {
+		return TextureSetNew.CODEC;
 	}
 
 }

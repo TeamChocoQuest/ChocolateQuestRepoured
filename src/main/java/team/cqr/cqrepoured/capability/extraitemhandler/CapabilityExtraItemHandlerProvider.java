@@ -5,12 +5,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.NonNullSupplier;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 
 public class CapabilityExtraItemHandlerProvider extends SerializableCapabilityProvider<CapabilityExtraItemHandler> {
 
-	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(CQRMain.MODID, "extra_item_slot");
+	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(CQRConstants.MODID, "extra_item_slot");
 
 	@CapabilityInject(CapabilityExtraItemHandler.class)
 	public static final Capability<CapabilityExtraItemHandler> EXTRA_ITEM_HANDLER = null;

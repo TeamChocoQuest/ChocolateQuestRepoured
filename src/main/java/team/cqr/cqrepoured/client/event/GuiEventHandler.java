@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.event;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-//@EventBusSubscriber(modid = CQRMain.MODID, value = Dist.CLIENT)
+//@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class GuiEventHandler {
 
 	@SubscribeEvent
@@ -13,7 +13,7 @@ public class GuiEventHandler {
 //		}
 //
 //		GuiConfig gui = (GuiConfig) event.getGui();
-//		if (!gui.modID.equals(CQRMain.MODID) || !(gui.parentScreen instanceof ModListScreen)) {
+//		if (!gui.modID.equals(CQRConstants.MODID) || !(gui.parentScreen instanceof ModListScreen)) {
 //			return;
 //		}
 //

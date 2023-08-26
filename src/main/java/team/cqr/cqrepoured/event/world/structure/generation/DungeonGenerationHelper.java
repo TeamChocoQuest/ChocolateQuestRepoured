@@ -18,7 +18,7 @@
 //
 //import java.util.*;
 //
-////@EventBusSubscriber(modid = CQRMain.MODID)
+////@EventBusSubscriber(modid = CQRConstants.MODID)
 //public class DungeonGenerationHelper {
 //
 //	private static final Map<DimensionType, Set<PlayerEntity>> TRAVELING_PLAYERS = new HashMap<>();

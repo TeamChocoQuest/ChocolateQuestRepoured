@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.Parrot;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRModelLayers;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRPirateParrot;
 import team.cqr.cqrepoured.client.render.entity.layer.special.LayerCQRPirateParrotHeldItem;
@@ -29,7 +29,7 @@ public class RenderPirateParrot extends MobRenderer<EntityCQRPirateParrot, Model
 		return (Mth.sin(f) + 1.0F) * f1;
 	}
 
-	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRMain.MODID, "textures/entity/pirate_parrot.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/entity/pirate_parrot.png");
 
 	public RenderPirateParrot(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new ModelCQRPirateParrot(renderManager.getModelSet().bakeLayer(CQRModelLayers.PIRATE_PARROT)), 0.3F);

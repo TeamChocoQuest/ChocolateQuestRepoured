@@ -9,8 +9,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -18,6 +21,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockBossBlock;
 import team.cqr.cqrepoured.block.BlockExporter;
@@ -38,10 +42,10 @@ import team.cqr.cqrepoured.client.render.tileentity.ItemStackExporterChestRender
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestFixed;
 
-@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
 public class CQRBlocks {
 
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CQRMain.MODID);
+	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CQRConstants.MODID);
 
 	// Dungeon Blocks
 	// Andesite
