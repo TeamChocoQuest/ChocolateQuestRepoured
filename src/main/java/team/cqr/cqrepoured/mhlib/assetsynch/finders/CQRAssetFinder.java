@@ -22,6 +22,7 @@ public class CQRAssetFinder extends AbstractAssetFinder {
 			if (ts == null) {
 				continue;
 			}
+			// Already filters to only include CTS textures that need to be synched
 			result.addAll(ts.getCTSTextures().stream().filter(Objects::nonNull).filter(RS_CHECK_PREDICATE).collect(Collectors.toList()));
 		}
 		return result;
