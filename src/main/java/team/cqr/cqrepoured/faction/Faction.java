@@ -16,7 +16,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.customtextures.TextureSet;
+import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 
@@ -28,7 +28,7 @@ public class Faction {
 	private List<Faction> allies = Collections.synchronizedList(new ArrayList<Faction>());
 	private List<Faction> enemies = Collections.synchronizedList(new ArrayList<Faction>());
 	private EReputationState defaultRelation;
-	private TextureSet textureSet = null;
+	private TextureSetNew textureSet = null;
 
 	private int repuChangeOnMemberKill = 5;
 	private int repuChangeOnAllyKill = 2;
@@ -42,7 +42,7 @@ public class Faction {
 		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 
-	public Faction(@Nonnull String name, TextureSet ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+	public Faction(@Nonnull String name, TextureSetNew ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
 		this.textureSet = ctSet;
