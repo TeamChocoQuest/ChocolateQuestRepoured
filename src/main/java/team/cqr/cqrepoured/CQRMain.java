@@ -4,15 +4,14 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,9 +26,8 @@ import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-import software.bernie.geckolib3.GeckoLib;
+import net.minecraftforge.network.simple.SimpleChannel;
+import software.bernie.geckolib.GeckoLib;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -57,11 +55,10 @@ import team.cqr.cqrepoured.world.structure.debug.TestStructures;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
-@Mod(CQRMain.MODID)
-@EventBusSubscriber(modid = CQRMain.MODID, bus = Bus.MOD)
+@Mod(CQRConstants.MODID)
+@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
 public class CQRMain {
 
-	public static final String MODID = "cqrepoured";
 	public static final String MODID_STRUCTURES = "cqrepoured_structures";
 	
 	public static final String VERSION = "3.0.0B";
@@ -69,7 +66,7 @@ public class CQRMain {
 	public static final IProxy PROXY = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
 	private static final String PROTOCOL_VERSION = "1";
-	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, "main-network-channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+	public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(CQRConstants.MODID, "main-network-channel"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
 	// @SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
 	// public static IProxy proxy;
@@ -98,26 +95,26 @@ public class CQRMain {
 	public static boolean isCubicChunksInstalled;
 	public static boolean isAW2Installed;
 
-	public static final CreativeModeTab CQR_ITEMS_TAB = new CreativeModeTab(CQRMain.MODID + "_items") {
+	public static final CreativeModeTab CQR_ITEMS_TAB = new CreativeModeTab(CQRConstants.MODID + "_items") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRItems.BOOTS_CLOUD.get());
 		}
 
 	};
-	public static final CreativeModeTab CQR_BLOCKS_TAB = new CreativeModeTab(CQRMain.MODID + "_blocks") {
+	public static final CreativeModeTab CQR_BLOCKS_TAB = new CreativeModeTab(CQRConstants.MODID + "_blocks") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.TABLE_OAK.get());
 		}
 	};
-	public static final CreativeModeTab CQR_CREATIVE_TOOL_TAB = new CreativeModeTab(CQRMain.MODID + "_creative_tools") {
+	public static final CreativeModeTab CQR_CREATIVE_TOOL_TAB = new CreativeModeTab(CQRConstants.MODID + "_creative_tools") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER.get());
 		}
 	};
-	public static final CreativeModeTab CQR_BANNERS_TAB = new CreativeModeTab(CQRMain.MODID + "_banners") {
+	public static final CreativeModeTab CQR_BANNERS_TAB = new CreativeModeTab(CQRConstants.MODID + "_banners") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.SKULL_BANNER_PATTERN);
@@ -134,20 +131,20 @@ public class CQRMain {
 
 		}
 	};
-	public static final CreativeModeTab CQR_DUNGEON_PLACER_TAB = new CreativeModeTab(CQRMain.MODID + "_dungeon_placers") {
+	public static final CreativeModeTab CQR_DUNGEON_PLACER_TAB = new CreativeModeTab(CQRConstants.MODID + "_dungeon_placers") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.APPLE);
-			// return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRMain.MODID, "dungeon_placer_d5")));
+			// return new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(CQRConstants.MODID, "dungeon_placer_d5")));
 		}
 	};
-	public static final CreativeModeTab CQR_EXPORTER_CHEST_TAB = new CreativeModeTab(CQRMain.MODID + "_exporter_chests") {
+	public static final CreativeModeTab CQR_EXPORTER_CHEST_TAB = new CreativeModeTab(CQRConstants.MODID + "_exporter_chests") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(CQRBlocks.EXPORTER_CHEST_VALUABLE.get());
 		}
 	};
-	public static final CreativeModeTab CQR_SPAWN_EGG_TAB = new CreativeModeTab(CQRMain.MODID + "_spawn_eggs") {
+	public static final CreativeModeTab CQR_SPAWN_EGG_TAB = new CreativeModeTab(CQRConstants.MODID + "_spawn_eggs") {
 		@Override
 		public ItemStack makeIcon() {
 			return new ItemStack(Items.PILLAGER_SPAWN_EGG);
@@ -295,7 +292,7 @@ public class CQRMain {
 	}
 
 	public static final ResourceLocation prefix(final String path) {
-		return new ResourceLocation(MODID, path);
+		return new ResourceLocation(CQRConstants.MODID, path);
 	}
 	
 	public static final ResourceLocation prefixStructureTemplateId(final String path) {
@@ -308,7 +305,7 @@ public class CQRMain {
 		if(!path.endsWith(ANIMATION_SUFFIX)) {
 			pathToUse = path + ANIMATION_SUFFIX;
 		}
-		return new ResourceLocation(MODID, "animations/" + pathToUse);
+		return new ResourceLocation(CQRConstants.MODID, "animations/" + pathToUse);
 	}
 	
 	public static final ResourceLocation prefixEntityAnimation(final String path) {
@@ -319,9 +316,16 @@ public class CQRMain {
 		return prefixAnimation("block/" + path);
 	}
 	
-
 	public static ResourceLocation prefixArmorAnimation(final String path) {
 		return prefixAnimation("armor/" + path);
+	}
+
+	public static ResourceLocation prefixAssesEnforcementManager(String string) {
+		return prefix("asset_manager/" + string);
+	}
+
+	public static ResourceLocation prefixAssetFinder(String string) {
+		return prefix("asset_finder/" + string);
 	}
 
 }
