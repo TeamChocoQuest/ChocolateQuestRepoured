@@ -12,12 +12,13 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.server.level.ServerPlayer;
 import org.apache.commons.io.FileUtils;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -84,8 +85,8 @@ public class TextureSetManager {
 			
 			//Now, register the pack...
 			ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-			if(resourceManager instanceof SimpleReloadableResourceManager) {
-				((SimpleReloadableResourceManager)resourceManager).add(CTResourcepack.getInstance());
+			if(resourceManager instanceof ReloadableResourceManager) {
+				((ReloadableResourceManager)resourceManager).add(CTResourcepack.getInstance());
 			} else {
 				//WTF?!
 			}

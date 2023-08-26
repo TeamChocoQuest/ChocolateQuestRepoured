@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 
@@ -18,7 +17,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.world.entity.EntityType;
 import team.cqr.cqrepoured.CQRMain;
 
 public class TextureSet {
@@ -61,7 +60,7 @@ public class TextureSet {
 				File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
 				if (tf != null && tf.exists()) {
 					files.put(texture + ".png", tf);
-					ResourceLocation rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png");
+					ResourceLocation rs = new ResourceLocation(CQRConstants.MODID + "_ctts_" + this.name, texture + ".png");
 					texNameRLMap.put(texture + ".png", rs);
 					// if(TextureSetManager.loadTexture(tf, rs)) {
 					this.addTexture(pair.getFirst(), rs);
@@ -71,7 +70,7 @@ public class TextureSet {
 					File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
 					if (mf != null && mf.exists()) {
 						files.put(texture + ".png.mcmeta", mf);
-						rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
+						rs = new ResourceLocation(CQRConstants.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
 						texNameRLMap.put(texture + ".png.mcmeta", rs);
 					}
 				}
@@ -79,54 +78,9 @@ public class TextureSet {
 		}
 	}
 
-	// FOR SERVER
-	public TextureSet(Properties config, String name) {
-		this.name = name.toLowerCase();
-		try {
-			for (String entry : config.stringPropertyNames()) {
-				if (entry.startsWith("#")) {
-					continue;
-				}
-				String rlkey = entry.replace('.', ':');
-				ResourceLocation resLoc = new ResourceLocation(rlkey);
-				String texturesString = config.getProperty(entry, "");
-				if (texturesString.isEmpty()) {
-					continue;
-				}
-				texturesString = texturesString.replaceAll(" ", "");
-				// This strings represent the FILE PATHS, not the actual resource locations
-				for (String texture : texturesString.split(",")) {
-					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png");
-					if (tf != null && tf.exists()) {
-						files.put(texture + ".png", tf);
-						ResourceLocation rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png");
-						texNameRLMap.put(texture + ".png", rs);
-						// if(TextureSetManager.loadTexture(tf, rs)) {
-						this.addTexture(resLoc, rs);
-						// }
-
-						// Meta file
-						File mf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES, texture + ".png.mcmeta");
-						if (mf != null && mf.exists()) {
-							files.put(texture + ".png.mcmeta", mf);
-							rs = new ResourceLocation(CQRMain.MODID + "_ctts_" + this.name, texture + ".png.mcmeta");
-							texNameRLMap.put(texture + ".png.mcmeta", rs);
-						}
-					}
-				}
-			}
-			if (!this.entityTextureMap.isEmpty()) {
-				TextureSetManager.registerTextureSet(this);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			this.entityTextureMap.clear();
-		}
-	}
-
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity ent) {
-		ResourceLocation ers = EntityList.getKey(ent);
+		ResourceLocation ers = EntityType.getKey(ent.getType());
 		// System.out.println("Searching texture for " + ers.toString() + " in texture set: " + name);
 		if (this.entityTextureMap.containsKey(ers) && !this.entityTextureMap.get(ers).isEmpty()) {
 			Object[] textures = this.entityTextureMap.get(ers).toArray();

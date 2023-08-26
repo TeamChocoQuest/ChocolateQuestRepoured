@@ -22,6 +22,8 @@ public class TextureSetNew {
 
 	public static final String RES_LOC_DOMAIN_CQR_ASSET_SYNCH = "";
 	
+	private ResourceLocation id = null; 
+	
 	private Map<EntityType<?>, CQRWeightedRandom<ResourceLocation>> entries;
 	private final LazyLoadField<List<ResourceLocation>> ctsTextures = new LazyLoadField<>(() -> {
 		Set<ResourceLocation> result = new HashSet<>();
@@ -61,7 +63,7 @@ public class TextureSetNew {
 		return this.entries.get(ent.getType()).next();
 	}
 	
-	// For MHLib asset synchers => will grab those and search for the files to synch
+	// For MHLib asset synchers => will grab those and search for the files to synchs
 	public List<ResourceLocation> getCTSTextures() {
 		return this.ctsTextures.get();
 	}
@@ -69,8 +71,21 @@ public class TextureSetNew {
 	public static ResourceLocation prefixAssetSynch(final String path) {
 		return new ResourceLocation(RES_LOC_DOMAIN_CQR_ASSET_SYNCH, path);
 	}
+	
 	public static ResourceLocation prefixAssetSynch(final ResourceLocation id) {
 		return prefixAssetSynch(id.getPath());
 	}
+	
+	@Nullable
+	public ResourceLocation getId() {
+		return this.id;
+	}
+	
+	public final void setId(final ResourceLocation id) {
+		if (this.id == null) {
+			this.id = id;
+		}
+	}
+	
 
 }
