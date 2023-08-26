@@ -39,7 +39,9 @@ public class TextureSetNew {
 		return new ArrayList<>(result);
 	});
 	
-	//TODO: Respect when synching that we only synch the CTS textures! Since this can reference ANY texture in the system (non cts won't be synched)
+	// Respect when synching that we only synch the CTS textures! Since this can reference ANY texture in the system (non cts won't be synched)
+	// ANY texture can be specified => any texture in the system.
+	// Textures of domain "CTS_DOMAIN_BASE" (cqrepoured_ctts) will be synched to clients and are thus user defined
 	public static final Codec<TextureSetNew> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
 				Codec.unboundedMap(ForgeRegistries.ENTITY_TYPES.getCodec(), CQRWeightedRandom.createCodec(ResourceLocation.CODEC)).fieldOf("entries").forGetter(TextureSetNew::entries)
