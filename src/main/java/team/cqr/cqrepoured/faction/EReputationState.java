@@ -1,8 +1,14 @@
 package team.cqr.cqrepoured.faction;
 
+import com.mojang.serialization.Codec;
+
+import net.minecraft.util.ExtraCodecs;
+
 public enum EReputationState {
 
 	ARCH_ENEMY(-1000), ENEMY(-500), HATED(-250), AVOIDED(-125), NEUTRAL(0), ACCEPTED(125), FRIEND(250), ALLY(500), MEMBER(1000);
+	
+	public static final Codec<EReputationState> CODEC = ExtraCodecs.stringResolverCodec(EReputationState::toString, EReputationState::valueOf);
 
 	private int value = 0;
 
@@ -38,6 +44,8 @@ public enum EReputationState {
 
 	public enum EReputationStateRough {
 		NEUTRAL(250, -249), ENEMY(-250, -10000), ALLY(10000, 251);
+		
+		public static final Codec<EReputationStateRough> CODEC = ExtraCodecs.stringResolverCodec(EReputationStateRough::toString, EReputationStateRough::valueOf);
 
 		private final int high;
 		private final int low;
