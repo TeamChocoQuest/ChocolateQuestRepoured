@@ -116,7 +116,7 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 						((AbstractEntityCQR) summon).setLeader(this.summonerLiving);
 						Faction faction = FactionRegistry.instance(this).getFactionOf(this.summonerLiving);
 						if (faction != null) {
-							((AbstractEntityCQR) summon).setFaction(faction.getName());
+							((AbstractEntityCQR) summon).setFaction(faction.getId());
 						}
 					}
 

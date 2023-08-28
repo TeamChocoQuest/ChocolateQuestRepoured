@@ -88,7 +88,7 @@ public class FactionRegistry {
 			this.entityFactionMap.clear();
 		}
 
-		this.factions.put(DUMMY_FACTION.getName(), DUMMY_FACTION);
+		this.factions.put(DUMMY_FACTION.getId(), DUMMY_FACTION);
 		//this.entityFactionMap.put(Entity.class, DUMMY_FACTION);
 
 		this.loadFactionsInConfigFolder();
@@ -99,14 +99,14 @@ public class FactionRegistry {
 
 	@OnlyIn(Dist.CLIENT)
 	public void addFaction(Faction faction) {
-		this.factions.put(faction.getName(), faction);
+		this.factions.put(faction.getId(), faction);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void setReputation(UUID player, int reputation, Faction faction) {
 		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new Object2IntOpenHashMap<>());
-			factionsOfPlayer.put(faction.getName(), reputation);
+			factionsOfPlayer.put(faction.getId(), reputation);
 			// System.out.println("Repu of " + player.toString() + " set to " + reputation + " for faction " + faction.getName());
 		}
 	}
@@ -114,9 +114,9 @@ public class FactionRegistry {
 	// Variant on the server, used by the command
 	public void changeReputationTo(@Nonnull ServerPlayer player, int reputation, @Nonnull Faction faction) {
 		Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player.getUUID(), key -> new Object2IntOpenHashMap<>());
-		factionsOfPlayer.put(faction.getName(), reputation);
+		factionsOfPlayer.put(faction.getId(), reputation);
 
-		this.sendRepuUpdatePacket(player, reputation, faction.getName());
+		this.sendRepuUpdatePacket(player, reputation, faction.getId());
 	}
 
 	private void loadEntityFactionRelations() {
@@ -310,8 +310,8 @@ public class FactionRegistry {
 			return faction.getDefaultReputation().getValue();
 		}
 		if (playerID != null && this.playerFactionRepuMap.containsKey(playerID)) {
-			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
-				return this.playerFactionRepuMap.get(playerID).getInt(faction.getName());
+			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getId())) {
+				return this.playerFactionRepuMap.get(playerID).getInt(faction.getId());
 			}
 		}
 		return faction.getDefaultReputation().getValue();

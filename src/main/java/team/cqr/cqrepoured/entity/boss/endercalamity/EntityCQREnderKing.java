@@ -132,7 +132,7 @@ public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimat
 			EntityCalamitySpawner cs = new EntityCalamitySpawner(this.level);
 			BlockPos pos = this.hasHomePositionCQR() ? this.getHomePositionCQR() : this.blockPosition();
 			cs.setPos(pos.getX(), pos.getY(), pos.getZ());
-			cs.setFaction(this.getFaction().getName());
+			cs.setFaction(this.getFaction().getId());
 
 			this.level.addFreshEntity(cs);
 

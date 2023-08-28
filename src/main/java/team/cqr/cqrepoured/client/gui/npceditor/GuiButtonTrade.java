@@ -145,7 +145,7 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = FactionRegistry.instance(parent.getMinecraft().player).getExactReputationOf(parent.getMinecraft().player.getUUID(), this.trade.getHolder().getTraderFaction());
 					ChatFormatting formatting = i >= this.trade.getRequiredReputation() ? ChatFormatting.GREEN : ChatFormatting.RED;
-					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
+					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getId() + " " + i + "/" + this.trade.getRequiredReputation()).withStyle(formatting));
 				}
 			} else if (!inStock) {
 				tooltip.add(new TranslationTextComponent("description.gui_button_trade.out_of_stock.name"));
@@ -160,7 +160,7 @@ public class GuiButtonTrade extends Button implements INumericIDButton {
 				}
 				if (this.trade.getRequiredReputation() != Integer.MIN_VALUE) {
 					int i = this.trade.getRequiredReputation();
-					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getName() + " " + i + "/" + i).withStyle(ChatFormatting.GREEN));
+					tooltip.add(new TextComponent("" + this.trade.getHolder().getTraderFaction().getId() + " " + i + "/" + i).withStyle(ChatFormatting.GREEN));
 				}
 			}
 			parent.renderComponentTooltip(matrixStack, tooltip, mouseX, mouseY);

@@ -17,7 +17,7 @@ public interface IHasFaction {
 	public Faction getDefaultFactionInstance();
 	
 	public default void setFaction(@Nonnull Faction faction) {
-		this.setFaction(faction.getName());
+		this.setFaction(faction.getId());
 	}
 	public void setFaction(String newFaction);
 	

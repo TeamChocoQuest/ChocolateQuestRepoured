@@ -50,7 +50,7 @@ public class EntitySpectreLordIllusion extends EntityCQRSpectre {
 			this.caster = caster;
 			Faction faction = FactionRegistry.instance(this).getFactionOf(caster);
 			if (faction != null) {
-				this.setFaction(faction.getName(), true);
+				this.setFaction(faction.getId(), true);
 			}
 		}
 		this.lifeTime = lifeTime;

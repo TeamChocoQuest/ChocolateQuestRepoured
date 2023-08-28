@@ -1,12 +1,9 @@
 package team.cqr.cqrepoured.faction;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -18,13 +15,11 @@ import net.minecraft.world.entity.player.Player;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
+import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
-public class Faction {
+public class Faction /*extends AbstractRegistratableObject */{
 	
-	private boolean savedGlobally = true;
 	private boolean repuMayChange = true;
-	private String name;
 	private List<Faction> allies = Collections.synchronizedList(new ArrayList<Faction>());
 	private List<Faction> enemies = Collections.synchronizedList(new ArrayList<Faction>());
 	private EReputationState defaultRelation;
@@ -43,8 +38,6 @@ public class Faction {
 	}
 
 	public Faction(@Nonnull String name, TextureSetNew ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
-		this.savedGlobally = saveGlobally;
-		this.name = name;
 		this.textureSet = ctSet;
 		this.defaultRelation = defaultReputationState;
 		this.repuMayChange = canRepuChange;
@@ -65,12 +58,8 @@ public class Faction {
 		return this.repuChangeOnEnemyKill;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-
-	public boolean isSavedGlobally() {
-		return this.savedGlobally;
+	public String getId() {
+		return null;
 	}
 
 	public EReputationState getDefaultReputation() {
@@ -110,7 +99,7 @@ public class Faction {
 	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
-			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId())) {
 				return false;
 			}
 		}
@@ -132,15 +121,15 @@ public class Faction {
 	}
 
 	public boolean isEnemy(Faction faction) {
-		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == this || (faction != null && faction.getId().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
 		}
-		if (faction != null && faction.getName().equalsIgnoreCase("ALL_ENEMY")) {
+		if (faction != null && faction.getId().equalsIgnoreCase("ALL_ENEMY")) {
 			return true;
 		}
 		if (faction != null) {
 			for (Faction str : this.enemies) {
-				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
+				if (str != null && faction.getId().equalsIgnoreCase(str.getId())) {
 					return true;
 				}
 			}
@@ -151,7 +140,7 @@ public class Faction {
 	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
-			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getName())) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId())) {
 				return true;
 			}
 		}
@@ -167,12 +156,12 @@ public class Faction {
 	}
 
 	public boolean isAlly(Faction faction) {
-		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == this || (faction != null && faction.getId().equalsIgnoreCase("ALL_ALLY"))) {
 			return true;
 		}
 		if (faction != null) {
 			for (Faction str : this.allies) {
-				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
+				if (str != null && faction.getId().equalsIgnoreCase(str.getId())) {
 					return true;
 				}
 			}
@@ -182,53 +171,18 @@ public class Faction {
 
 	public void decrementReputation(Player player, int score) {
 		if (this.repuMayChange) {
-			FactionRegistry.instance(player).decrementRepuOf(player, this.name, score);
+			FactionRegistry.instance(player).decrementRepuOf(player, this.getId(), score);
 		}
 	}
 
 	public void incrementReputation(Player player, int score) {
 		if (this.repuMayChange) {
-			FactionRegistry.instance(player).incrementRepuOf(player, this.name, score);
+			FactionRegistry.instance(player).incrementRepuOf(player, this.getId(), score);
 		}
 	}
 
 	public boolean canRepuChange() {
 		return this.repuMayChange;
-	}
-
-	public void saveToFile(File folder) {
-		if (this.savedGlobally) {
-			// DONE: SAVE DATA
-			Thread t = new Thread(() -> {
-				Properties prop = new Properties();
-				prop.setProperty(ConfigKeys.FACTION_NAME_KEY, this.name);
-				prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(!this.canRepuChange()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, this.getDefaultReputation().toString());
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(this.getRepuAllyKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(this.getRepuMemberKill()));
-				prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(this.getRepuEnemyKill()));
-				prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, this.allies.stream().map(Faction::getName).collect(Collectors.joining(", ")));
-				prop.setProperty(ConfigKeys.FACTION_ENEMIES_KEY, this.enemies.stream().map(Faction::getName).collect(Collectors.joining(", ")));
-
-				// Save file
-				File file = new File(folder, this.getName() + ".properties");
-				FileIOUtil.writeProperties(file, prop);
-			});
-			t.setDaemon(true);
-			t.start();
-		}
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || this.getClass() != o.getClass()) {
-			return false;
-		}
-		Faction that = (Faction) o;
-		return this.name.equals(that.name);
 	}
 
 }

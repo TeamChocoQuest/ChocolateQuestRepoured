@@ -355,7 +355,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss implements IAnima
 				// End IceAndFire compatibility
 
 				Faction fac = FactionRegistry.instance(this).getFactionOf(source.getEntity());
-				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
+				boolean dragonFactionFlag = fac != null && (fac.getId().equalsIgnoreCase("DRAGON") || fac.getId().equalsIgnoreCase("DRAGONS"));
 
 				// If we are attacked by a dragon: KILL IT
 				if (this.dragonAttackCooldown <= 0 && (dragonFactionFlag || resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {

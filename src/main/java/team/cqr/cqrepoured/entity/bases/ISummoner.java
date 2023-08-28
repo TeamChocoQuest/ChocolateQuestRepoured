@@ -22,7 +22,7 @@ public interface ISummoner {
 	default void setSummonedEntityFaction(Entity summoned) {
 		if (summoned instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) summoned).setLeader(this.getSummoner());
-			((AbstractEntityCQR) summoned).setFaction(this.getSummonerFaction().getName());
+			((AbstractEntityCQR) summoned).setFaction(this.getSummonerFaction().getId());
 		}
 		if (summoned instanceof EntityFlyingSkullMinion) {
 			((EntityFlyingSkullMinion) summoned).setSummoner(this.getSummoner());

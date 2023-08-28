@@ -34,8 +34,8 @@ public class SPacketInitialFactionInformation extends AbstractPacket<SPacketInit
 		this.defaultRepu = new String[arrSize];
 		for (int i = 0; i < this.factions.length; i++) {
 			Faction fac = loadedFactions.get(i);
-			this.factions[i] = fac.getName();
-			int score = reputation.getInt(fac.getName());
+			this.factions[i] = fac.getId();
+			int score = reputation.getInt(fac.getId());
 			this.repuCanChange[i] = fac.canRepuChange();
 			this.defaultRepu[i] = fac.getDefaultReputation().toString();
 			this.reputations[i] = score;
