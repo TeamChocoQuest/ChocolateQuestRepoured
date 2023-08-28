@@ -18,5 +18,19 @@ public class AbstractRegistratableObject implements RegistrationIDSupplier {
 			this.id = id;
 		}
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null || this.getClass() != obj.getClass()) {
+			return false;
+		}
+		if (obj instanceof AbstractRegistratableObject aro) {
+			return this.getId().equals(aro.getId());
+		}
+		return false;
+	}
 
 }
