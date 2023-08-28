@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.entity.profile.EntityProfile;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncTextureSet;
 import team.cqr.cqrepoured.util.CQRCodecJsonDataManager;
-import team.cqr.cqrepoured.util.RegistrationIDSupplier;
+import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
 
 @Mod.EventBusSubscriber(modid = CQRConstants.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CQRDatapackLoaders {

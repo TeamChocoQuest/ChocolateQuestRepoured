@@ -18,11 +18,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.RegistrationIDSupplier;
+import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
-public class TextureSetNew implements RegistrationIDSupplier {
-
-	private ResourceLocation id = null; 
+public class TextureSetNew extends AbstractRegistratableObject {
 	
 	private Map<EntityType<?>, CQRWeightedRandom<ResourceLocation>> entries;
 	private final LazyLoadField<List<ResourceLocation>> ctsTextures = new LazyLoadField<>(() -> {
@@ -77,17 +75,6 @@ public class TextureSetNew implements RegistrationIDSupplier {
 	
 	public static ResourceLocation prefixAssetSynch(final ResourceLocation id) {
 		return prefixAssetSynch(id.getPath());
-	}
-	
-	@Nullable
-	public ResourceLocation getId() {
-		return this.id;
-	}
-	
-	public final void setId(final ResourceLocation id) {
-		if (this.id == null) {
-			this.id = id;
-		}
 	}
 
 }

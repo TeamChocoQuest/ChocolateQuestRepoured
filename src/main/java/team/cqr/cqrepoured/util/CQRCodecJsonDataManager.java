@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
 
 public class CQRCodecJsonDataManager<T extends Object & RegistrationIDSupplier> extends CodecJsonDataManager<T> {
 

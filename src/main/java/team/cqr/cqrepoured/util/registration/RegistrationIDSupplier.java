@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.util.registration;
 
 import javax.annotation.Nonnull;
 
