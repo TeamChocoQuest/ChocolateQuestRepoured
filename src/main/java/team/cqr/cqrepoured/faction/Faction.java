@@ -63,45 +63,25 @@ public class Faction extends AbstractRegistratableObject {
 	}
 	
 	public int getRepuMemberKill() {
-		return this.repuChangeOnMemberKill;
+		return this.reputationSettings.onKillMember();
 	}
 
 	public int getRepuAllyKill() {
-		return this.repuChangeOnAllyKill;
+		return this.reputationSettings.onKillAlly();
 	}
 
 	public int getRepuEnemyKill() {
-		return this.repuChangeOnEnemyKill;
+		return this.reputationSettings.onKillEnemy();
 	}
 
 	public EReputationState getDefaultReputation() {
-		return this.defaultRelation;
-	}
-
-	public List<Faction> getEnemies() {
-		return this.enemies;
-	}
-
-	public List<Faction> getAllies() {
-		return this.allies;
-	}
-
-	public void addAlly(Faction ally) {
-		if (ally != null) {
-			this.allies.add(ally);
-		}
-	}
-
-	public void addEnemy(Faction enemy) {
-		if (enemy != null) {
-			this.enemies.add(enemy);
-		}
+		return this.reputationSettings.defaultReputation();
 	}
 
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity entity) {
-		if (this.textureSet != null) {
-			return this.textureSet.getRandomTextureFor(entity);
+		if (this.textureSet != null && this.textureSet.isPresent()) {
+			return this.textureSet.get().getRandomTextureFor(entity);
 		}
 		// Debug
 		// System.out.println("No texture set defined for faction: " + this.name);
@@ -131,22 +111,23 @@ public class Faction extends AbstractRegistratableObject {
 		}
 		return this.isEnemy(ent.getFaction());
 	}
+	
+	public EReputationState getReputationTowards(Faction faction) {
+		return this.factionRelations.getOrDefault(faction.getId(), EReputationState.NEUTRAL);
+	}
+	
+	public EReputationStateRough getRoughReputationTowards(Faction faction) {
+		return EReputationStateRough.getByRepuScore(this.getReputationTowards(faction).getValue());
+	}
 
 	public boolean isEnemy(Faction faction) {
-		if (faction == this || (faction != null && faction.getId().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == null) {
 			return false;
 		}
-		if (faction != null && faction.getId().equalsIgnoreCase("ALL_ENEMY")) {
-			return true;
+		if (faction == this) {
+			return false;
 		}
-		if (faction != null) {
-			for (Faction str : this.enemies) {
-				if (str != null && faction.getId().equalsIgnoreCase(str.getId())) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return this.getRoughReputationTowards(faction).isEnemy();
 	}
 
 	// DONE: Special case for player faction!!
@@ -168,17 +149,13 @@ public class Faction extends AbstractRegistratableObject {
 	}
 
 	public boolean isAlly(Faction faction) {
-		if (faction == this || (faction != null && faction.getId().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == null) {
+			return false;
+		}
+		if (faction == this) {
 			return true;
 		}
-		if (faction != null) {
-			for (Faction str : this.allies) {
-				if (str != null && faction.getId().equalsIgnoreCase(str.getId())) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return this.getRoughReputationTowards(faction).isAlly();
 	}
 
 	public void decrementReputation(Player player, int score) {

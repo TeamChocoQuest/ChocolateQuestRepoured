@@ -72,6 +72,18 @@ public enum EReputationState {
 			}
 			return NEUTRAL;
 		}
+		
+		public boolean isAlly() {
+			return this.equals(ALLY);
+		}
+		
+		public boolean isNeutral() {
+			return this.equals(NEUTRAL);
+		}
+		
+		public boolean isEnemy() {
+			return this.equals(ENEMY);
+		}
 	}
 
 }
