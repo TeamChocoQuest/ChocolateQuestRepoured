@@ -22,6 +22,9 @@ public interface IFactionRelationCapability extends IFactionRelated, INBTSeriali
 	
 	public void setReputationTowards(final ResourceLocation id, int value);
 	public default void setReputationTowards(final Faction faction, int value) {
+		if (!faction.canRepuChange()) {
+			return;
+		}
 		this.setReputationTowards(faction, value);
 	}
 	
