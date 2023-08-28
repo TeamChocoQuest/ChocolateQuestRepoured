@@ -18,8 +18,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.util.RegistrationIDSupplier;
 
-public class TextureSetNew {
+public class TextureSetNew implements RegistrationIDSupplier {
 
 	private ResourceLocation id = null; 
 	
@@ -88,6 +89,5 @@ public class TextureSetNew {
 			this.id = id;
 		}
 	}
-	
 
 }
