@@ -20,7 +20,7 @@ import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
-public class Faction extends AbstractRegistratableObject {
+public class Faction extends AbstractRegistratableObject implements IFactionRelated {
 	
 	private boolean repuMayChange = true;
 	private Map<ResourceLocation, EReputationState> factionRelations;
@@ -176,6 +176,32 @@ public class Faction extends AbstractRegistratableObject {
 	
 	public Map<ResourceLocation, EReputationState> getRelations() {
 		return this.factionRelations;
+	}
+
+	@Override
+	public boolean isAllyOf(Faction faction) {
+		return this.isAlly(faction);
+	}
+
+	@Override
+	public boolean isEnemyOf(Faction faction) {
+		return this.isEnemy(faction);
+	}
+
+	@Override
+	public boolean isMemberOf(Faction faction) {
+		// A faction can't be a member of a faction
+		return false;
+	}
+
+	@Override
+	public EReputationState getRelationTowards(Faction faction) {
+		return this.getReputationTowards(faction);
+	}
+
+	@Override
+	public EReputationStateRough getRoughRelationTowards(Faction faction) {
+		return this.getRoughRelationTowards(faction);
 	}
 
 }

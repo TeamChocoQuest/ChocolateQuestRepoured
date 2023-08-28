@@ -3,6 +3,8 @@ package team.cqr.cqrepoured.init;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
@@ -15,6 +17,7 @@ import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.entity.profile.EntityProfile;
+import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncFaction;
@@ -27,6 +30,7 @@ public class CQRDatapackLoaders {
 	
 	public static final CQRCodecJsonDataManager<TextureSetNew> TEXTURE_SETS = new CQRCodecJsonDataManager<>("cqr/texture_sets", TextureSetNew.CODEC);
 	public static final CQRCodecJsonDataManager<Faction> FACTIONS = new CQRCodecJsonDataManager<>("cqr/factions", Faction.CODEC);
+	public static final CQRCodecJsonDataManager<EntityFactionInformation> ENTITY_FACTION_INFORMATIONS = new CQRCodecJsonDataManager<>("entity/cqr_faction_information", EntityFactionInformation.CODEC);
 	public static final CodecJsonDataManager<EntityProfile> ENTITY_PROFILES = new CodecJsonDataManager<>("entity/profile", EntityProfile.CODEC);
 	
 	public static void init() {
@@ -53,7 +57,10 @@ public class CQRDatapackLoaders {
 		return getValueGeneral(FACTIONS, factionId);
 	}
 	
-	
+	@Nullable
+	public static EntityFactionInformation getEntityFactionInformation(EntityType<?> entityType) {
+		return ENTITY_FACTION_INFORMATIONS.getData().getOrDefault(ForgeRegistries.ENTITY_TYPES.getKey(entityType), null);
+	}
 	
 	/* Access codecs */
 	public static <T extends Object & RegistrationIDSupplier> Codec<T> byNameCodec(final Function<ResourceLocation, T> retrievalFunction) {
