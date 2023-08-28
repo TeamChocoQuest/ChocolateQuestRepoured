@@ -50,6 +50,9 @@ public abstract class MixinLivingEntity extends Entity implements IFactionRelate
 	@Unique
 	private IFactionRelated getRelevantObjectForFactionHandling() {
 		IFactionRelated result = null;
+		if (this.FACTION_INFORMATION.get() != null && !this.FACTION_INFORMATION.get().canChangeReputation()) {
+			return this.FACTION_INFORMATION.get();
+		}
 		if (this.getCapability(IFactionRelationCapability.INSTANCE).isPresent()) {
 			Optional<IFactionRelationCapability> opCap = this.getCapability(IFactionRelationCapability.INSTANCE).resolve();
 			if (opCap.isPresent()) {
