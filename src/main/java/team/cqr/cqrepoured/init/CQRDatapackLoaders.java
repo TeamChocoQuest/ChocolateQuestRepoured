@@ -15,7 +15,9 @@ import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.entity.profile.EntityProfile;
+import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
+import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncFaction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncTextureSet;
 import team.cqr.cqrepoured.util.CQRCodecJsonDataManager;
 import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
@@ -24,17 +26,21 @@ import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
 public class CQRDatapackLoaders {
 	
 	public static final CQRCodecJsonDataManager<TextureSetNew> TEXTURE_SETS = new CQRCodecJsonDataManager<>("cqr/texture_sets", TextureSetNew.CODEC);
+	public static final CQRCodecJsonDataManager<Faction> FACTIONS = new CQRCodecJsonDataManager<>("cqr/factions", Faction.CODEC);
 	public static final CodecJsonDataManager<EntityProfile> ENTITY_PROFILES = new CodecJsonDataManager<>("entity/profile", EntityProfile.CODEC);
 	
 	public static void init() {
 		TEXTURE_SETS.subscribeAsSyncable(CQRMain.NETWORK, SPacketSyncTextureSet::new);
+		FACTIONS.subscribeAsSyncable(CQRMain.NETWORK, SPacketSyncFaction::new);
 		ENTITY_PROFILES.subscribeAsSyncable(CQRMain.NETWORK, SPacketSyncEntityProfiles::new);
 	}
 	
+	/* Access methods */
 	public static <T> Optional<T> getValueGeneral(final CodecJsonDataManager<T> manager, final ResourceLocation id) {
 		return Optional.ofNullable(manager.getData().getOrDefault(id, null));
 	}
 	
+	/* Type specific */
 	public static Optional<TextureSetNew> getTextureSet(ResourceLocation textureSetId) {
 		return getValueGeneral(TEXTURE_SETS, textureSetId);
 	}
@@ -43,6 +49,13 @@ public class CQRDatapackLoaders {
 		return getTextureSet(ForgeRegistries.ENTITY_TYPES.getKey(entityType));
 	}
 	
+	public static Optional<Faction> getFaction(ResourceLocation factionId) {
+		return getValueGeneral(FACTIONS, factionId);
+	}
+	
+	
+	
+	/* Access codecs */
 	public static <T extends Object & RegistrationIDSupplier> Codec<T> byNameCodec(final Function<ResourceLocation, T> retrievalFunction) {
 		return byNameCodecFor(T::getId, retrievalFunction);
 	}

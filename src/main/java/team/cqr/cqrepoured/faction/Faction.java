@@ -1,12 +1,14 @@
 package team.cqr.cqrepoured.faction;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Difficulty;
@@ -15,37 +17,51 @@ import net.minecraft.world.entity.player.Player;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
+import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
-public class Faction /*extends AbstractRegistratableObject */{
+public class Faction extends AbstractRegistratableObject {
 	
 	private boolean repuMayChange = true;
-	private List<Faction> allies = Collections.synchronizedList(new ArrayList<Faction>());
-	private List<Faction> enemies = Collections.synchronizedList(new ArrayList<Faction>());
-	private EReputationState defaultRelation;
-	private TextureSetNew textureSet = null;
+	private Map<ResourceLocation, EReputationState> factionRelations;
+	private Optional<TextureSetNew> textureSet = Optional.empty();
+	private ReputationSettings reputationSettings;
 
-	private int repuChangeOnMemberKill = 5;
-	private int repuChangeOnAllyKill = 2;
-	private int repuChangeOnEnemyKill = 1;
-
-	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange) {
-		this(name, defaultReputationState, canRepuChange, Optional.empty(), Optional.empty(), Optional.empty());
+	public static record ReputationSettings(EReputationState defaultReputation, int onKillMember, int onKillAlly, int onKillEnemy) {
+		public static final Codec<ReputationSettings> CODEC = RecordCodecBuilder.create(instance -> {
+			return instance.group(
+					EReputationState.CODEC.fieldOf("defaultReputation").forGetter(ReputationSettings::defaultReputation),
+					Codec.INT.fieldOf("reputationChangeOnMemberKill").forGetter(ReputationSettings::onKillMember),
+					Codec.INT.fieldOf("reputationChangeOnAllyKill").forGetter(ReputationSettings::onKillAlly),
+					Codec.INT.fieldOf("reputationChangeOnEnemyKill").forGetter(ReputationSettings::onKillEnemy)
+			).apply(instance, ReputationSettings::new);
+		});
 	}
-
-	public Faction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
-		this(name, null, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
+	
+	public static final Codec<Faction> CODEC = RecordCodecBuilder.create(instance -> {
+		return instance.group(
+				Codec.unboundedMap(ResourceLocation.CODEC, EReputationState.CODEC).fieldOf("relations").forGetter(Faction::getRelations),
+				Codec.BOOL.fieldOf("changeableReputation").forGetter(Faction::canRepuChange),
+				ReputationSettings.CODEC.fieldOf("reputation").forGetter(Faction::getReputationSettings),
+				CQRDatapackLoaders.TEXTURE_SETS.byNameCodec().optionalFieldOf("textureSet").forGetter(Faction::getTextureSet)
+		).apply(instance, Faction::new);
+	});
+	
+	public Faction(Map<ResourceLocation, EReputationState> factionRelations, boolean repuCanChange, ReputationSettings repuSettings, Optional<TextureSetNew> optTextureSet) {
+		this.factionRelations = factionRelations;
+		this.repuMayChange = repuCanChange;
+		this.reputationSettings = repuSettings;
+		this.textureSet = optTextureSet;
 	}
-
-	public Faction(@Nonnull String name, TextureSetNew ctSet, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
-		this.textureSet = ctSet;
-		this.defaultRelation = defaultReputationState;
-		this.repuMayChange = canRepuChange;
-		this.repuChangeOnMemberKill = repuChangeOnMemberKill.isPresent() ? repuChangeOnMemberKill.get() : 5;
-		this.repuChangeOnAllyKill = repuChangeOnAllyKill.isPresent() ? repuChangeOnAllyKill.get() : 2;
-		this.repuChangeOnEnemyKill = repuChangeOnEnemyKill.isPresent() ? repuChangeOnEnemyKill.get() : 1;
+	
+	public ReputationSettings getReputationSettings() {
+		return this.reputationSettings;
 	}
-
+	
+	public Optional<TextureSetNew> getTextureSet() {
+		return this.textureSet;
+	}
+	
 	public int getRepuMemberKill() {
 		return this.repuChangeOnMemberKill;
 	}
@@ -56,10 +72,6 @@ public class Faction /*extends AbstractRegistratableObject */{
 
 	public int getRepuEnemyKill() {
 		return this.repuChangeOnEnemyKill;
-	}
-
-	public String getId() {
-		return null;
 	}
 
 	public EReputationState getDefaultReputation() {
@@ -99,7 +111,7 @@ public class Faction /*extends AbstractRegistratableObject */{
 	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
-			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId())) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return false;
 			}
 		}
@@ -140,7 +152,7 @@ public class Faction /*extends AbstractRegistratableObject */{
 	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
-			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId())) {
+			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return true;
 			}
 		}
@@ -183,6 +195,10 @@ public class Faction /*extends AbstractRegistratableObject */{
 
 	public boolean canRepuChange() {
 		return this.repuMayChange;
+	}
+	
+	public Map<ResourceLocation, EReputationState> getRelations() {
+		return this.factionRelations;
 	}
 
 }
