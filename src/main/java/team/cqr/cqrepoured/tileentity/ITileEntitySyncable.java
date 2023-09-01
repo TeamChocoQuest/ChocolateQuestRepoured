@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.tileentity;
 
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public interface ITileEntitySyncable extends ITickableTileEntity {
+public interface ITileEntitySyncable extends TickingBlockEntity {
 
 	@Override
 	default void tick() {
