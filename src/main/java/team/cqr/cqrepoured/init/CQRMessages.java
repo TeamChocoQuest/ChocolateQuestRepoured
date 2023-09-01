@@ -13,7 +13,6 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateO
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDungeonSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerHookShotPlayerStop;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerInitialFactionInformation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerItemStackSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncLaserRotation;
@@ -53,7 +52,6 @@ import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegio
 import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketDungeonSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
-import team.cqr.cqrepoured.network.server.packet.SPacketInitialFactionInformation;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
@@ -116,7 +114,6 @@ public class CQRMessages {
 		registerServerToClient(SPacketUpdateProtectedRegion.class, CPacketHandlerUpdateProtectedRegion.class);
 		registerServerToClient(SPacketUnloadProtectedRegion.class, CPacketHandlerUnloadProtectedRegion.class);
 		registerServerToClient(SPacketAddOrResetProtectedRegionIndicator.class, CPacketHandlerAddOrResetProtectedRegionIndicator.class);
-		registerServerToClient(SPacketInitialFactionInformation.class, CPacketHandlerInitialFactionInformation.class);
 		registerServerToClient(SPacketUpdatePlayerReputation.class, CPacketHandlerUpdateReputation.class);
 		registerServerToClient(SPacketSyncTileEntity.class, CPacketHandlerSyncTileEntity.class);
 		registerServerToClient(SPacketUpdateEntityPrevPos.class, CPacketHandlerUpdateEntityPrevPos.class);
