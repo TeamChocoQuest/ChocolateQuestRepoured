@@ -36,6 +36,6 @@ public class CQRTradeRules {
 	public static final RegistryObject<Codec<ITradeMatchRule>> MATCH_META = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_meta", () -> Codec.unit(new MatchMeta()));
 	public static final RegistryObject<Codec<ITradeMatchRule>> MATCH_ENCHANTS = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_enchants", () -> Codec.unit(new MatchEnchants()));
 	public static final RegistryObject<Codec<ITradeMatchRule>> MATCH_NBT = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_nbt", () -> Codec.unit(new MatchNBT()));
-	public static final RegistryObject<Codec<ITradeMatchRule>> MATCH_EnchantmentList = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_enchantment_list", () -> MatchEnchantmentList.CODEC);
+	public static final RegistryObject<Codec<? extends ITradeMatchRule>> MATCH_ENCHANTMENT_LIST = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_enchantment_list", () -> MatchEnchantmentList.CODEC);
 	
 }
