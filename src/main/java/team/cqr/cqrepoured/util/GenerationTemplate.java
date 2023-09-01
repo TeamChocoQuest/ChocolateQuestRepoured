@@ -1,27 +1,32 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
-import java.util.*;
-import java.util.function.Predicate;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class GenerationTemplate {
 
 	private class GenerationRule {
 
-		private Predicate<Vector3i> condition;
+		private Predicate<Vec3i> condition;
 		private BlockState block;
 
-		public GenerationRule(Predicate<Vector3i> condition, BlockState blockToBuild) {
+		public GenerationRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
 			this.condition = condition;
 			this.block = blockToBuild;
 		}
 
-		public Predicate<Vector3i> getCondition() {
+		public Predicate<Vec3i> getCondition() {
 			return this.condition;
 		}
 
@@ -49,14 +54,14 @@ public class GenerationTemplate {
 		this.fillUnusedBlockWithAir = shouldFill;
 	}
 
-	public GenerationTemplate(Vector3i dimensions) {
+	public GenerationTemplate(Vec3i dimensions) {
 		this.generationRules = new ArrayList<>();
 		this.lengthX = dimensions.getX();
 		this.lengthY = dimensions.getY();
 		this.lengthZ = dimensions.getZ();
 	}
 
-	public void addRule(Predicate<Vector3i> condition, BlockState blockToBuild) {
+	public void addRule(Predicate<Vec3i> condition, BlockState blockToBuild) {
 		this.generationRules.add(new GenerationRule(condition, blockToBuild));
 	}
 
@@ -84,7 +89,7 @@ public class GenerationTemplate {
 				for (int y = 0; y < this.lengthY; y++) {
 					boolean foundRule = false;
 
-					Vector3i offset = new Vector3i(x, y, z);
+					Vec3i offset = new Vec3i(x, y, z);
 					for (GenerationRule rule : this.generationRules) {
 						if (rule.getCondition().test(offset)) {
 							result.put(origin.offset(offset), rule.getBlock());
