@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.server.level.ServerLevel;
@@ -78,7 +79,7 @@ public class EntityUtil {
 		if (entity == null) {
 			return false;
 		}
-		if (entity.isOnGround()) {
+		if (entity.onGround()) {
 			return false;
 		}
 		if (entity.horizontalCollision || entity.verticalCollision) {
@@ -90,15 +91,15 @@ public class EntityUtil {
 		BlockPos pos = entity.blockPosition();
 		int y = 0;
 		int count = 0;
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		MutableBlockPos mutablePos = new MutableBlockPos();
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
 				mutablePos.set(pos.getX() + i, pos.getY(), pos.getZ() + j);
-				if (!entity.level.isLoaded(mutablePos)) {
+				if (!entity.level().isLoaded(mutablePos)) {
 					continue;
 				}
 				// TODO: Check if this is correct
-				while (mutablePos.getY() > 0 && entity.level.getBlockState(mutablePos).getCollisionShape(entity.level, mutablePos) == Shapes.INFINITY) {
+				while (mutablePos.getY() > 0 && entity.level().getBlockState(mutablePos).getCollisionShape(entity.level(), mutablePos) == Shapes.INFINITY) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
 				y += mutablePos.getY() + 1;
@@ -109,7 +110,7 @@ public class EntityUtil {
 		if (entity.getY() < y + 8) {
 			return false;
 		}
-		return entity.level.noCollision(entity.getBoundingBox());
+		return entity.level().noCollision(entity.getBoundingBox());
 	}
 
 	@Nullable
@@ -157,7 +158,7 @@ public class EntityUtil {
 			return false;
 		}
 
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level());
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position).collect(Collectors.toList());
@@ -189,7 +190,7 @@ public class EntityUtil {
 			return false;
 		}
 
-		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level);
+		IProtectedRegionManager manager = ProtectedRegionManager.getInstance(entity.level());
 		if (manager instanceof ServerProtectedRegionManager) {
 			ServerProtectedRegionManager regionManager = (ServerProtectedRegionManager) manager;
 			List<ProtectedRegion> regions = regionManager.getProtectedRegionsAt(position).collect(Collectors.toList());
