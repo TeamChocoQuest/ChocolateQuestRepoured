@@ -23,7 +23,7 @@ public class SPacketUpdateEntityPrevPos extends AbstractPacket<SPacketUpdateEnti
 		this.x = (float) p.x;
 		this.y = (float) p.y;
 		this.z = (float) p.z;
-		this.yaw = entity.yRot;
+		this.yaw = entity.getYRot();
 
 	}
 

@@ -14,7 +14,7 @@ public class SPacketHandlerSaveStructureRequest extends AbstractPacketHandler<CP
 
 	@Override
 	protected void execHandlePacket(CPacketSaveStructureRequest packet, Supplier<Context> context, Level world, Player player) {
-		BlockEntity tileEntity = player.level.getBlockEntity(packet.getPos());
+		BlockEntity tileEntity = player.level().getBlockEntity(packet.getPos());
 
 		if (tileEntity instanceof TileEntityExporter) {
 			((TileEntityExporter) tileEntity).saveStructure(player);
