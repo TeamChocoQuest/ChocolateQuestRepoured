@@ -1,9 +1,16 @@
 package team.cqr.cqrepoured.tileentity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -12,7 +19,7 @@ import team.cqr.cqrepoured.network.datasync.DataEntryByte;
 import team.cqr.cqrepoured.network.datasync.DataEntryInventory;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityTable extends BlockEntityContainer implements ITileEntitySyncable {
+public class TileEntityTable extends RandomizableContainerBlockEntity implements ITileEntitySyncable {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -45,7 +52,9 @@ public class TileEntityTable extends BlockEntityContainer implements ITileEntity
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this, (be) -> {
+			return ((TileEntityTable)be).dataManager.write(new CompoundTag());
+		});
 	}
 
 	@Override
@@ -92,6 +101,26 @@ public class TileEntityTable extends BlockEntityContainer implements ITileEntity
 
 	public float getRotationInDegree() {
 		return this.rotation.getByte() * 22.5F;
+	}
+
+	@Override
+	public int getContainerSize() {
+		return 1;
+	}
+
+	@Override
+	protected NonNullList<ItemStack> getItems() {
+		return NonNullList.<ItemStack>of(ItemStack.EMPTY, this.getItem(0));
+	}
+
+	@Override
+	protected void setItems(NonNullList<ItemStack> pItemStacks) {
+		this.setItem(0, pItemStacks.get(0));
+	}
+
+	@Override
+	protected Component getDefaultName() {
+		return null;
 	}
 
 }
