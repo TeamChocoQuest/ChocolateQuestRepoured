@@ -1,17 +1,19 @@
 package team.cqr.cqrepoured.potion;
 
-import net.minecraft.potion.EffectType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import team.cqr.cqrepoured.CQRConstants;
 
 public class PotionCQR extends MobEffect {
 
 	private final ResourceLocation texture;
 
-	public PotionCQR(String name, EffectType type, int color) {
+	public PotionCQR(String name, MobEffectCategory type, int color) {
 		super(type, color);
-		this.setRegistryName(CQRConstants.MODID, name);
+		//Finally no longer needed?
+		//this.setRegistryName(CQRConstants.MODID, name);
+		
 		//Unnecessary?
 		//this.setPotionName("effect." + CQRConstants.MODID + "." + name);
 		this.texture = new ResourceLocation(CQRConstants.MODID, "textures/mob_effect/" + name + ".png");
