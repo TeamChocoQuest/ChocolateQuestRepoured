@@ -17,6 +17,7 @@ import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.entity.profile.EntityProfile;
+import team.cqr.cqrepoured.entity.trade.TradeProfile;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
@@ -31,6 +32,8 @@ public class CQRDatapackLoaders {
 	public static final CQRCodecJsonDataManager<TextureSetNew> TEXTURE_SETS = new CQRCodecJsonDataManager<>("cqr/texture_sets", TextureSetNew.CODEC);
 	public static final CQRCodecJsonDataManager<Faction> FACTIONS = new CQRCodecJsonDataManager<>("cqr/factions", Faction.CODEC);
 	public static final CQRCodecJsonDataManager<EntityFactionInformation> ENTITY_FACTION_INFORMATIONS = new CQRCodecJsonDataManager<>("entity/cqr_faction_information", EntityFactionInformation.CODEC);
+	
+	public static final CodecJsonDataManager<TradeProfile> TRADE_PROFILES = new CodecJsonDataManager<>("cqr/trades", TradeProfile.CODEC);
 	public static final CodecJsonDataManager<EntityProfile> ENTITY_PROFILES = new CodecJsonDataManager<>("entity/profile", EntityProfile.CODEC);
 	
 	public static void init() {
@@ -57,13 +60,17 @@ public class CQRDatapackLoaders {
 		return getValueGeneral(FACTIONS, factionId);
 	}
 	
+	public static Optional<TradeProfile> getTradeProfile(ResourceLocation tradeProfileId) {
+		return getValueGeneral(TRADE_PROFILES, tradeProfileId);
+	}
+	
 	@Nullable
 	public static EntityFactionInformation getEntityFactionInformation(EntityType<?> entityType) {
 		return ENTITY_FACTION_INFORMATIONS.getData().getOrDefault(ForgeRegistries.ENTITY_TYPES.getKey(entityType), null);
 	}
 	
 	/* Access codecs */
-	public static <T extends Object & RegistrationIDSupplier> Codec<T> byNameCodec(final Function<ResourceLocation, T> retrievalFunction) {
+	public static <T extends RegistrationIDSupplier> Codec<T> byNameCodec(final Function<ResourceLocation, T> retrievalFunction) {
 		return byNameCodecFor(T::getId, retrievalFunction);
 	}
 	
