@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.mixin;
 
-import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.world.spawner.AbstractSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.List;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.SpawnData;
 
-@Mixin(AbstractSpawner.class)
+@Mixin(BaseSpawner.class)
 public interface AccessorAbstractSpawner {
 	
 	@Accessor
-	public List<WeightedSpawnerEntity> getSpawnPotentials();
+	public SimpleWeightedRandomList<SpawnData> getSpawnPotentials();
 	
 }

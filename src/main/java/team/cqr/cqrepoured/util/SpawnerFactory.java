@@ -1,19 +1,25 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Iterator;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedEntry.Wrapper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.EntityList;
-import net.minecraft.nbt.INBT;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
@@ -21,10 +27,6 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.mixin.AccessorAbstractSpawner;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * A static utility class for generating CQR/vanilla spawners and converting them to/from the other
@@ -76,8 +78,8 @@ public final class SpawnerFactory {
 
 		BlockEntity tileEntity = world.getBlockEntity(pos);
 		if (multiUseSpawner) {
-			MobSpawnerTileEntity tileEntityMobSpawner = (MobSpawnerTileEntity) tileEntity;
-			CompoundTag compound = tileEntityMobSpawner.save(new CompoundTag());
+			SpawnerBlockEntity tileEntityMobSpawner = (SpawnerBlockEntity) tileEntity;
+			CompoundTag compound = tileEntityMobSpawner.saveWithFullMetadata();
 			ListTag spawnPotentials = new ListTag();
 
 			// Store entity ids into NBT tag
@@ -90,7 +92,7 @@ public final class SpawnerFactory {
 
 						entities[i].remove("Pos");
 						ListTag passengers = entities[i].getList("Passengers", 10);
-						for (INBT passenger : passengers) {
+						for (Tag passenger : passengers) {
 							((CompoundTag) passenger).remove("UUID");
 							((CompoundTag) passenger).remove("Pos");
 						}
@@ -115,7 +117,7 @@ public final class SpawnerFactory {
 			}
 
 			// Read data from modified nbt
-			tileEntityMobSpawner.load(blockState, compound);
+			tileEntityMobSpawner.load(compound);
 
 			tileEntityMobSpawner.setChanged();
 		} else {
@@ -137,20 +139,20 @@ public final class SpawnerFactory {
 	 */
 	public static void createSimpleMultiUseSpawner(Level world, BlockPos pos, ResourceLocation entityResLoc) {
 		world.setBlockAndUpdate(pos, Blocks.SPAWNER.defaultBlockState());
-		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
+		SpawnerBlockEntity spawner = (SpawnerBlockEntity) world.getBlockEntity(pos);
 
-		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entityResLoc));
+		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITY_TYPES.getValue(entityResLoc), world, world.getRandom(), pos);
 
 		spawner.setChanged();
 		
 		//Correct method?
 		spawner.requestModelDataUpdate();
-		spawner.tick();
+		SpawnerBlockEntity.serverTick(world, pos, world.getBlockState(pos), spawner);
 	}
 
-	public static MobSpawnerTileEntity getSpawnerTile(Level world, ResourceLocation entity, BlockPos pos) {
-		MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) world.getBlockEntity(pos);
-		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITIES.getValue(entity));
+	public static SpawnerBlockEntity getSpawnerTile(Level world, ResourceLocation entity, BlockPos pos) {
+		SpawnerBlockEntity spawner = (SpawnerBlockEntity) world.getBlockEntity(pos);
+		spawner.getSpawner().setEntityId(ForgeRegistries.ENTITY_TYPES.getValue(entity), world, world.getRandom(), pos);
 		return spawner;
 	}
 
@@ -210,13 +212,13 @@ public final class SpawnerFactory {
 	 */
 	public static void convertVanillaSpawnerToCQSpawner(Level world, BlockPos pos) {
 		BlockEntity tile = world.getBlockEntity(pos);
-		if (tile != null && tile instanceof MobSpawnerTileEntity) {
-			MobSpawnerTileEntity spawnerMultiUseTile = (MobSpawnerTileEntity) tile;
+		if (tile != null && tile instanceof SpawnerBlockEntity) {
+			SpawnerBlockEntity spawnerMultiUseTile = (SpawnerBlockEntity) tile;
 
 			//TODO: Create mixin to retrieve this
-			List<WeightedSpawnerEntity> spawnerEntries = ((AccessorAbstractSpawner)spawnerMultiUseTile.getSpawner()).getSpawnPotentials();
+			SimpleWeightedRandomList<SpawnData> spawnerEntries = ((AccessorAbstractSpawner)spawnerMultiUseTile.getSpawner()).getSpawnPotentials();
 			if (!spawnerEntries.isEmpty()) {
-				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();
+				Iterator<Wrapper<SpawnData>> iterator = spawnerEntries.unwrap().iterator();
 
 				// Entity[] entities = new Entity[9];
 				CompoundTag[] entityCompound = new CompoundTag[9];
@@ -227,7 +229,7 @@ public final class SpawnerFactory {
 					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world); entities[entriesRead] =
 					 * entity;
 					 */
-					entityCompound[entriesRead] = iterator.next().getTag();
+					entityCompound[entriesRead] = iterator.next().getData().getEntityToSpawn();
 					entriesRead++;
 				}
 				// placeSpawner(entities, false, null, world, pos);
@@ -267,7 +269,7 @@ public final class SpawnerFactory {
 		}
 		entityCompound.remove("Pos");
 		ListTag passengerList = entityCompound.getList("Passengers", 10);
-		for (INBT passengerTag : passengerList) {
+		for (Tag passengerTag : passengerList) {
 			if (removeUUID) {
 				((CompoundTag) passengerTag).remove("UUID");
 			}
