@@ -1,10 +1,10 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.StairsBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
@@ -49,7 +49,7 @@ public class SpiralStaircaseBuilder {
 		switch (stairSide) {
 		case NORTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -57,7 +57,7 @@ public class SpiralStaircaseBuilder {
 
 		case SOUTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairBlock.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -65,7 +65,7 @@ public class SpiralStaircaseBuilder {
 
 		case WEST:
 			if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, -STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
@@ -73,7 +73,7 @@ public class SpiralStaircaseBuilder {
 
 		case EAST:
 			if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlockState.setValue(StairsBlock.FACING, stairFacing);
+				return this.stairBlockState.setValue(StairBlock.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
 				return this.platformBlockState;
 			}
