@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class MatchEnchantmentList implements ITradeMatchRule {
 	
-	public static final Codec<MatchEnchantmentList> CODEC = null;
+	public static final Codec<ITradeMatchRule> CODEC = null;
 
 	@Override
 	public boolean matches(ItemStack input, ItemStack toMatch) {
