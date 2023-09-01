@@ -3,19 +3,19 @@ package team.cqr.cqrepoured.util;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.item.SwordItem;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.util.Mth;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -27,7 +27,7 @@ public class GearedMobFactory {
 	private static final List<ItemStack> DEBUFF_ARROW_LIST = new ArrayList<>();
 
 	static {
-		for (MobEffect potion : ForgeRegistries.POTIONS.getValues()) {
+		for (MobEffect potion : ForgeRegistries.MOB_EFFECTS.getValues()) {
 			if (!potion.isBeneficial()) {
 				MobEffectInstance potionEffect = new MobEffectInstance(potion, potion.isInstantenous() ? 0 : 100);
 				List<MobEffectInstance> effectList = new ArrayList<>(1);
@@ -39,9 +39,9 @@ public class GearedMobFactory {
 
 	private int floorCount = 1;
 	private ResourceLocation entityID;
-	private Random random;
+	private RandomSource random;
 
-	public GearedMobFactory(int floorCount, ResourceLocation entityID, Random rng) {
+	public GearedMobFactory(int floorCount, ResourceLocation entityID, RandomSource rng) {
 		this.floorCount = floorCount;
 		this.entityID = entityID;
 		this.random = rng;
