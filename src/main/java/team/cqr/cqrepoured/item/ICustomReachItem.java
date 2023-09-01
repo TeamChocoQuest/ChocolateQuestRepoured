@@ -41,7 +41,7 @@ public interface ICustomReachItem extends IForgeItem {
                 });
 
                 //!!ONLY call get when you need it according to "dieSieben07"...
-                attributeBuilder.put(ForgeMod.REACH_DISTANCE.get(), new AttributeModifier(ICustomReachItem.REACH_DISTANCE_MODIFIER, "Weapon modifier", this.getReachDistanceBonus(), Operation.ADDITION));
+                attributeBuilder.put(ForgeMod.ENTITY_REACH.get(), new AttributeModifier(ICustomReachItem.REACH_DISTANCE_MODIFIER, "Weapon modifier", this.getReachDistanceBonus(), Operation.ADDITION));
 
                 this.setCustomAttributesField(attributeBuilder.build());
             }
