@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.util;
 
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.math.vector.Vector3i;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
@@ -28,7 +28,7 @@ public class VectorUtil {
 		return Math.toDegrees(phi);
 	}
 
-	public static Vector3i rotateVector(EAxis axis, Vector3i vector, Double degrees) {
+	public static Vec3i rotateVector(EAxis axis, Vec3i vector, Double degrees) {
 		double rad = Math.toRadians(degrees);
 
 		double currentX = vector.getX();
@@ -40,11 +40,11 @@ public class VectorUtil {
 
 		switch (axis) {
 		case AXIS_X:
-			return new Vector3i(vector.getX(), (currentY * cosine - currentZ * sine), (currentY * sine - currentZ * cosine));
+			return new Vec3i(vector.getX(), (int)(currentY * cosine - currentZ * sine), (int)(currentY * sine - currentZ * cosine));
 		case AXIS_Y:
-			return new Vector3i((cosine * currentX - sine * currentZ), vector.getY(), (sine * currentX + cosine * currentZ));
+			return new Vec3i((int)(cosine * currentX - sine * currentZ), (int)vector.getY(), (int)(sine * currentX + cosine * currentZ));
 		case AXIS_Z:
-			return new Vector3i((currentX * cosine - currentY * sine), (currentX * sine - currentY * cosine), vector.getZ());
+			return new Vec3i((int)(currentX * cosine - currentY * sine), (int)(currentX * sine - currentY * cosine), vector.getZ());
 		default:
 			break;
 
@@ -52,13 +52,13 @@ public class VectorUtil {
 		return null;
 	}
 
-	public static Vector3i rotateVectorAroundY(Vector3i newPos, double degrees) {
+	public static Vec3i rotateVectorAroundY(Vec3i newPos, double degrees) {
 		Vec3 res = rotateVectorAroundY(new Vec3(newPos.getX(), newPos.getY(), newPos.getZ()), degrees);
-		return new Vector3i(Math.floor(res.x), Math.floor(res.y), Math.floor(res.z));
+		return new Vec3i((int)Math.floor(res.x), (int)Math.floor(res.y), (int)Math.floor(res.z));
 	}
 
-	public static Vector3i vectorAdd(Vector3i start, int x, int y, int z) {
-		return new Vector3i(start.getX() + x, start.getY() + y, start.getZ() + z);
+	public static Vec3i vectorAdd(Vec3i start, int x, int y, int z) {
+		return new Vec3i(start.getX() + x, start.getY() + y, start.getZ() + z);
 	}
 
 	public static CompoundTag createVectorNBTTag(Vec3 vector) {
