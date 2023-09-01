@@ -52,11 +52,9 @@ public class FactionRegistry {
 	private static final FactionRegistry CLIENT_INSTANCE = new FactionRegistry();
 	private static final FactionRegistry SERVER_INSTANCE = new FactionRegistry();
 
-	public static final DummyFaction DUMMY_FACTION = new DummyFaction();
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
 
-	private final Map<String, Faction> factions = new HashMap<>();
 	//TODO: Replace player reputation saving with generic capability
 	private final Map<UUID, Object2IntMap<String>> playerFactionRepuMap = new HashMap<>();
 	private final Map<EntityType<? extends Entity>, Faction> entityFactionMap = new HashMap<>();
@@ -78,9 +76,6 @@ public class FactionRegistry {
 	}
 
 	public void loadFactions() {
-		if (!this.factions.isEmpty()) {
-			this.factions.clear();
-		}
 		if (!this.playerFactionRepuMap.isEmpty()) {
 			this.playerFactionRepuMap.clear();
 		}
@@ -88,7 +83,6 @@ public class FactionRegistry {
 			this.entityFactionMap.clear();
 		}
 
-		this.factions.put(DUMMY_FACTION.getId(), DUMMY_FACTION);
 		//this.entityFactionMap.put(Entity.class, DUMMY_FACTION);
 
 		this.loadFactionsInConfigFolder();
@@ -97,12 +91,6 @@ public class FactionRegistry {
 		this.loadEntityFactionRelations();
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public void addFaction(Faction faction) {
-		this.factions.put(faction.getId(), faction);
-	}
-
-	@OnlyIn(Dist.CLIENT)
 	public void setReputation(UUID player, int reputation, Faction faction) {
 		if (faction.canRepuChange()) {
 			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.computeIfAbsent(player, key -> new Object2IntOpenHashMap<>());
