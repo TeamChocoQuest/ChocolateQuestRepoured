@@ -11,9 +11,9 @@ import meldexun.reflectionutil.ReflectionField;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.item.IItemTier;
 import net.minecraft.world.item.Item;
-import net.minecraft.item.SwordItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 import team.cqr.cqrepoured.util.ItemUtil;
 
 public class ItemCQRWeapon extends SwordItem {
@@ -23,7 +23,7 @@ public class ItemCQRWeapon extends SwordItem {
 	// TODO reset on config change
 	private Multimap<Attribute, AttributeModifier> defaultModifiers;
 
-	public ItemCQRWeapon(IItemTier tier, Item.Properties properties) {
+	public ItemCQRWeapon(Tier tier, Item.Properties properties) {
 		super(tier, 3, -2.4F, properties);
 		this.addAttributeModifiers(() -> DEFAULT_MODIFIERS.get(this));
 	}
