@@ -1,23 +1,25 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
-
-import java.util.*;
 
 public class BlockStateGenArray {
 
@@ -88,9 +90,9 @@ public class BlockStateGenArray {
 
 	public boolean addChestWithLootTable(Level world, BlockPos pos, Direction facing, ResourceLocation lootTable, GenerationPhase phase) {
 		if (lootTable != null) {
-			Block chestBlock = Blocks.CHEST;
+			ChestBlock chestBlock = (ChestBlock) Blocks.CHEST;
 			BlockState state = Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing);
-			ChestBlockEntity chest = (ChestBlockEntity) chestBlock.newBlockEntity(state, world);
+			ChestBlockEntity chest = (ChestBlockEntity) chestBlock.newBlockEntity(pos, state);
 			if (chest != null) {
 				long seed = WorldDungeonGenerator.getSeed(0, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
 				chest.setLootTable(lootTable, seed);
