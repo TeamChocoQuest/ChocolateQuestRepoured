@@ -6,20 +6,19 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntArrayNBT;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 public class ItemUnprotectedPositionTool extends ItemLore {
@@ -51,7 +50,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player) {
-		BlockEntity tileEntity = player.level.getBlockEntity(pos);
+		BlockEntity tileEntity = player.level().getBlockEntity(pos);
 		if (!(tileEntity instanceof TileEntityExporter)) {
 			return super.onBlockStartBreak(itemstack, pos, player);
 		}
@@ -72,7 +71,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 
 	public void addPosition(ItemStack stack, BlockPos pos) {
 		int[] data = new int[] { pos.getX(), pos.getY(), pos.getZ() };
-		this.getOrCreatePositionTagList(stack).add(new IntArrayNBT(data));
+		this.getOrCreatePositionTagList(stack).add(new IntArrayTag(data));
 	}
 
 	public boolean removePosition(ItemStack stack, BlockPos pos) {
@@ -80,10 +79,10 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 		if (tagList == null) {
 			return false;
 		}
-		Iterator<INBT> iterator = tagList.iterator();
+		Iterator<Tag> iterator = tagList.iterator();
 		while (iterator.hasNext()) {
-			INBT tag = iterator.next();
-			int[] data = ((IntArrayNBT) tag).getAsIntArray();
+			Tag tag = iterator.next();
+			int[] data = ((IntArrayTag) tag).getAsIntArray();
 			if (data[0] == pos.getX() && data[1] == pos.getY() && data[2] == pos.getZ()) {
 				iterator.remove();
 				return true;
@@ -106,7 +105,7 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 			return Stream.empty();
 		}
 		return tagList.stream().map(tag -> {
-			int[] data = ((IntArrayNBT) tag).getAsIntArray();
+			int[] data = ((IntArrayTag) tag).getAsIntArray();
 			return new BlockPos(data[0], data[1], data[2]);
 		});
 	}
@@ -117,10 +116,10 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 			return null;
 		}
 		CompoundTag nbt = stack.getTag();
-		if (!nbt.contains(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
+		if (!nbt.contains(POSITIONS_NBT_KEY, Tag.TAG_LIST)) {
 			return null;
 		}
-		return nbt.getList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
+		return nbt.getList(POSITIONS_NBT_KEY, Tag.TAG_INT_ARRAY);
 	}
 
 	private ListTag getOrCreatePositionTagList(ItemStack stack) {
@@ -128,10 +127,10 @@ public class ItemUnprotectedPositionTool extends ItemLore {
 			stack.setTag(new CompoundTag());
 		}
 		CompoundTag nbt = stack.getTag();
-		if (!nbt.contains(POSITIONS_NBT_KEY, Constants.NBT.TAG_LIST)) {
+		if (!nbt.contains(POSITIONS_NBT_KEY, Tag.TAG_LIST)) {
 			nbt.put(POSITIONS_NBT_KEY, new ListTag());
 		}
-		return nbt.getList(POSITIONS_NBT_KEY, Constants.NBT.TAG_INT_ARRAY);
+		return nbt.getList(POSITIONS_NBT_KEY, Tag.TAG_INT_ARRAY);
 	}
 
 }
