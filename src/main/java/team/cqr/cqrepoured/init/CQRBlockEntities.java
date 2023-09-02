@@ -44,9 +44,10 @@ public class CQRBlockEntities {
 	public static final RegistryObject<BlockEntityType<BlockEntityPhylactery>> PHYLACTERY = register("phylactery", BlockEntityType.Builder.of(BlockEntityPhylactery::new, CQRBlocks.PHYLACTERY));
 	
 	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.Builder<T> builder) {
-		 if (builder.validBlocks.isEmpty()) {
+		// TODO: Add AT
+		 /*if (builder.validBlocks.isEmpty()) {
 	         CQRMain.logger.warn("Block entity type {} requires at least one valid block to be defined!", (Object)pKey);
-	      }
+	      }*/
 
 	      Type<?> type = Util.fetchChoiceType(References.BLOCK_ENTITY, name);
 	      return TILE_ENTITIES.register(name, () -> builder.build(type));
