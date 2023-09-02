@@ -1,10 +1,7 @@
 package team.cqr.cqrepoured.init;
 
-import java.util.Arrays;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import net.minecraft.util.datafix.TypeReferences;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,6 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.block.BlockExporterChestFixed;
 import team.cqr.cqrepoured.block.BlockTable;
+import team.cqr.cqrepoured.tileentity.BlockEntityPhylactery;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
@@ -26,7 +24,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityTable;
 
 public class CQRBlockEntities {
 
-	public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, CQRConstants.MODID);
+	public static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CQRConstants.MODID);
 
 	public static final RegistryObject<BlockEntityType<TileEntityExporter>> EXPORTER = register("exporter", TileEntityExporter::new, CQRBlocks.EXPORTER);
 	public static final RegistryObject<BlockEntityType<TileEntityTable>> TABLE = register("table", TileEntityTable::new, blocks(BlockTable.class));
@@ -37,13 +35,10 @@ public class CQRBlockEntities {
 	public static final RegistryObject<BlockEntityType<TileEntityBoss>> BOSS = register("boss", TileEntityBoss::new, CQRBlocks.BOSS_BLOCK);
 	public static final RegistryObject<BlockEntityType<TileEntityMap>> MAP = register("map", TileEntityMap::new, CQRBlocks.MAP_PLACEHOLDER);
 
-	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, Supplier<T> s, Stream<RegistryObject<Block>> b) {
-		return TILE_ENTITIES.register(name, () -> BlockEntityType.Builder.of(s, b.map(Supplier::get).toArray(Block[]::new)).build(Util.fetchChoiceType(TypeReferences.BLOCK_ENTITY, name)));
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, Supplier<T> s, RegistryObject<?>... b) {
-		return register(name, s, Arrays.stream((RegistryObject<Block>[]) b));
+	public static final RegistryObject<BlockEntityType<BlockEntityPhylactery>> PHYLACTERY = register("phylactery", BlockEntityPhylactery::new, CQRBlocks.PHYLACTERY);
+	
+	private static <T extends BlockEntity> RegistryObject<BlockEntityType<T>> register(String name, BlockEntityType.BlockEntitySupplier<T> supplier, RegistryObject<Block> b) {
+		return TILE_ENTITIES.register(name, () -> BlockEntityType.Builder.of(supplier, b.get()).build(null));
 	}
 
 	private static Stream<RegistryObject<Block>> blocks(Class<? extends Block> blockClass) {
