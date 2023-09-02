@@ -1,37 +1,33 @@
 package team.cqr.cqrepoured.tileentity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType.EDefaultLoopTypes;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import net.minecraft.world.level.block.state.BlockState;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 
-public class TileEntityForceFieldNexus extends BlockEntity implements IAnimatable {
+public class TileEntityForceFieldNexus extends BlockEntity implements GeoBlockEntity {
 
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 	
-	public TileEntityForceFieldNexus() {
-		super(CQRBlockEntities.FORCE_FIELD_NEXUS.get());
-	}
-
-	private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle.loop", EDefaultLoopTypes.LOOP));
-		return PlayState.CONTINUE;
+	public TileEntityForceFieldNexus(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.FORCE_FIELD_NEXUS.get(), pos, state);
 	}
 
 	@Override
-	public void registerControllers(AnimationData data) {
-		data.addAnimationController(new AnimationController<TileEntityForceFieldNexus>(this, "controller", 0, this::predicate));
+	public void registerControllers(ControllerRegistrar data) {
+		data.add(new AnimationController<TileEntityForceFieldNexus>(this, "controller", 0, state -> {
+			return state.setAndContinue(DefaultAnimations.IDLE);
+		}));
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return factory;
 	}
 
