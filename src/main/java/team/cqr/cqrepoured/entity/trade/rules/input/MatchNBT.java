@@ -9,8 +9,7 @@ public class MatchNBT implements ITradeMatchRule {
 
 	@Override
 	public boolean matches(ItemStack input, ItemStack toMatch) {
-		// TODO Auto-generated method stub
-		return false;
+		return ItemStack.isSameItem(input, toMatch);
 	}
 
 	@Override
