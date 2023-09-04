@@ -55,7 +55,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public Level getWorld(Context context) {
-		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> context.getSender().level);
+		return DistExecutor.safeRunForDist(() -> () -> Minecraft.getInstance().level, () -> () -> context.getSender().level());
 	}
 
 	@Override
