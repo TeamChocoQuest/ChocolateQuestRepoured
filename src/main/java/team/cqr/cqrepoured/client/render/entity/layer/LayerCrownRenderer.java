@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -21,8 +22,8 @@ public class LayerCrownRenderer<T extends LivingEntity, M extends HumanoidModel<
 	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/models/armor/king_crown_layer_1.png");
 
 	@SuppressWarnings("unchecked")
-	public LayerCrownRenderer(RenderLayerParent<T, M> renderer) {
-		super(renderer, null, (A) new RenderArmorKingCrown());
+	public LayerCrownRenderer(RenderLayerParent<T, M> renderer, EntityRendererProvider.Context context) {
+		super(renderer, null, (A) new RenderArmorKingCrown(), context.getModelManager());
 	}
 	
 	@Override
@@ -33,10 +34,10 @@ public class LayerCrownRenderer<T extends LivingEntity, M extends HumanoidModel<
 		}
 	}
 
-	@Override
+	/*@Override
 	protected A getArmorModelHook(T entity, ItemStack itemStack, EquipmentSlot slot, A model) {
 		return (A) CQRItems.KING_CROWN.get().getArmorModel(entity, itemStack, slot, model);
-	}
+	}*/
 
 	@Override
 	public ResourceLocation getArmorResource(Entity entity, ItemStack stack, EquipmentSlot slot, String type) {
