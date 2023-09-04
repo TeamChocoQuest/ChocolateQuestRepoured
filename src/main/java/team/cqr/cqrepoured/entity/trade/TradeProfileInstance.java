@@ -168,6 +168,18 @@ public class TradeProfileInstance {
 		}
 		
 		ServerLevel sl = (ServerLevel)level;
+		
+		TradeData toRestock = this.getTradeToRestock(sl);
+		
+		int tradeIndex = this.TRADE_PROFILE.get().indexOf(toRestock);
+		
+		int currentStock = this.TRADE_STOCK.getOrDefault(tradeIndex, toRestock.getStockData().get().defaultStockSupplier().sample(sl.getRandom()));
+		this.TRADE_STOCK.put(tradeIndex, currentStock + toRestock.getStockData().get().restockData().get().restockAmount());
+	}
+	
+	// Saving & Loading
+	
+	protected TradeData getTradeToRestock(ServerLevel sl) {
 		final long worldTime = sl.getGameTime();
 		
 		// First, find all restocking trades
@@ -199,14 +211,10 @@ public class TradeProfileInstance {
 		CQRWeightedRandom<TradeData> weightedRandom = new CQRWeightedRandom<>(weightedObjects);
 		
 		TradeData toRestock = weightedRandom.next(sl.getRandom());
-		int tradeIndex = this.TRADE_PROFILE.get().indexOf(toRestock);
 		
-		int currentStock = this.TRADE_STOCK.getOrDefault(tradeIndex, toRestock.getStockData().get().defaultStockSupplier().sample(sl.getRandom()));
-		this.TRADE_STOCK.put(tradeIndex, currentStock + toRestock.getStockData().get().restockData().get().restockAmount());
+		return toRestock;
 	}
-	
-	// Saving & Loading
-	
+
 	public static CompoundTag saveToNBT(CompoundTag nbt, final TradeProfileInstance tpi) {
 		if (tpi == null) {
 			return nbt;
