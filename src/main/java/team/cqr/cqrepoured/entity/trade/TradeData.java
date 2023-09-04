@@ -17,7 +17,7 @@ public class TradeData extends ArrayList<TradeInput> {
 	private final ItemStack result;
 	private final List<ITradeBuyerRule> customerConstraints;
 	
-	private final Optional<StockData> restockSettings;
+	private final Optional<StockData> stockSettings;
 	
 	private static final long serialVersionUID = 8257720743528671701L;
 	
@@ -26,7 +26,7 @@ public class TradeData extends ArrayList<TradeInput> {
 				TradeInput.CODEC.listOf().fieldOf("inputs").forGetter((data) -> data),
 				ItemStack.CODEC.fieldOf("result").forGetter((data) -> data.result),
 				CQRTradeRules.TRADE_CUSTOMER_RULE_DISPATCHER.dispatchedCodec().listOf().fieldOf("customer-rules").forGetter(data -> data.customerConstraints),
-				StockData.CODEC.optionalFieldOf("restock-settings").forGetter(trade -> trade.restockSettings)
+				StockData.CODEC.optionalFieldOf("stock-settings").forGetter(trade -> trade.stockSettings)
 			).apply(instance, TradeData::new);
 	});
 	
@@ -34,11 +34,11 @@ public class TradeData extends ArrayList<TradeInput> {
 		super(inputs);
 		this.result = result;
 		this.customerConstraints = customerConstraints;
-		this.restockSettings = restockOpt;
+		this.stockSettings = restockOpt;
 	}
 	
-	public Optional<StockData> getRestockData() {
-		return this.restockSettings;
+	public Optional<StockData> getStockData() {
+		return this.stockSettings;
 	}
 	
 	public final ItemStack getResultingItem() {
@@ -55,7 +55,7 @@ public class TradeData extends ArrayList<TradeInput> {
 		return this.matchesConstraints(customer, trader) && this.matches(inputs);
 	}
 	
-	protected boolean matches(final ItemStack[] inputs) {
+	public boolean matches(final ItemStack[] inputs) {
 		if (this.size() > inputs.length) {
 			// Not enough stacks
 			return false;
@@ -68,7 +68,7 @@ public class TradeData extends ArrayList<TradeInput> {
 		return true;
 	}
 	
-	protected boolean matchesConstraints(final Entity customer, final Entity trader) {
+	public boolean matchesConstraints(final Entity customer, final Entity trader) {
 		if (customer == null) {
 			return false;
 		}
