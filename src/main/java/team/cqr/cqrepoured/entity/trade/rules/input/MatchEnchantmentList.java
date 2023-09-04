@@ -9,7 +9,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.entity.trade.rules.input.MatchEnchantmentList.EnchantmentEntry;
 
 public record MatchEnchantmentList(
 		boolean isBlacklist,
