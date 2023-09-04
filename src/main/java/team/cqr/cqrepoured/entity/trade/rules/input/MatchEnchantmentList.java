@@ -78,7 +78,7 @@ public record MatchEnchantmentList(
 			}
 			if (!condition.matches(condition.enchantment(), level)) {
 				if (!countMatching) {
-					return false;
+					return !this.isBlacklist();
 				}
 				continue;
 			}
@@ -86,19 +86,19 @@ public record MatchEnchantmentList(
 		}
 		
 		if (!countMatching) {
-			return true;
+			return !this.isBlacklist();
 		} else {
 			if (this.minMatches.isPresent() && this.maxMatches.isPresent()) {
-				return this.minMatches.get() <= matches && this.maxMatches.get() >= matches;
+				return this.minMatches.get() <= matches && this.maxMatches.get() >= matches && !this.isBlacklist();
 			} else {
 				if (this.minMatches.isPresent()) {
-					return this.minMatches.get() <= matches;
+					return this.minMatches.get() <= matches && !this.isBlacklist();
 				} else if (this.maxMatches.isPresent()) {
-					return this.maxMatches.get() >= matches;
+					return this.maxMatches.get() >= matches && !this.isBlacklist();
 				}
 			}
 		}
-		return false;
+		return !this.isBlacklist();
 	}
 
 	@Override
