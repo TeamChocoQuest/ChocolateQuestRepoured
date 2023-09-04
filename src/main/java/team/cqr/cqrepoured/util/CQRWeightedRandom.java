@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.util.RandomSource;
 
 public class CQRWeightedRandom<T> {
 	
@@ -89,9 +92,19 @@ public class CQRWeightedRandom<T> {
 
 	@Nullable
 	public T next(Random rand) {
+		return this.next(rand::nextInt);
+	}
+	
+	@Nullable
+	public T next(RandomSource rand) {
+		return this.next(rand::nextInt);
+	}
+	
+	@Nullable
+	public T next(Function<Integer, Integer> seedFunc) {
 		if (this.numItems() > 0) {
 			if (this.totalWeight > 0) {
-				int seed = rand.nextInt(this.totalWeight);
+				int seed = seedFunc.apply(this.totalWeight);
 				int total = 0;
 				for (WeightedObject<T> item : this.items) {
 					total += item.weight;
