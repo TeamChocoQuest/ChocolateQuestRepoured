@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.BipedArmorLayer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -16,12 +16,12 @@ import team.cqr.cqrepoured.client.render.armor.RenderArmorKingCrown;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
-public class LayerCrownRenderer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends BipedArmorLayer<T, M, A> {
+public class LayerCrownRenderer<T extends LivingEntity, M extends HumanoidModel<T>, A extends HumanoidModel<T>> extends HumanoidArmorLayer<T, M, A> {
 
 	private static final ResourceLocation CROWN_TEXTURE = new ResourceLocation(CQRConstants.MODID, "textures/models/armor/king_crown_layer_1.png");
 
 	@SuppressWarnings("unchecked")
-	public LayerCrownRenderer(IEntityRenderer<T, M> renderer) {
+	public LayerCrownRenderer(RenderLayerParent<T, M> renderer) {
 		super(renderer, null, (A) new RenderArmorKingCrown());
 	}
 	
