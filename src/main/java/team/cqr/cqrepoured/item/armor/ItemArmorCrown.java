@@ -1,25 +1,26 @@
 package team.cqr.cqrepoured.item.armor;
 
-import java.awt.TextComponent;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.IArmorMaterial;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import team.cqr.cqrepoured.item.ItemLore;
@@ -28,8 +29,8 @@ public class ItemArmorCrown extends ArmorItem implements GeoItem {
 
 	public static final String NBT_KEY_CROWN = "CQR Crown";
 
-	public ItemArmorCrown(IArmorMaterial materialIn, Properties props) {
-		super(materialIn, EquipmentSlot.HEAD, props);
+	public ItemArmorCrown(ArmorMaterial materialIn, Properties props) {
+		super(materialIn, Type.HELMET, props);
 	}
 
 	@Override
@@ -64,31 +65,31 @@ public class ItemArmorCrown extends ArmorItem implements GeoItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		LazyOptional<CapabilityDynamicCrown> lOpCap = stack.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null);
 		if (lOpCap.isPresent()) {
-			tooltip.add(new TextComponent("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).getHoverName().getString()));
+			tooltip.add(Component.translatable("Attached helmet: " + new ItemStack(lOpCap.resolve().get().getAttachedItem()).getHoverName().getString()));
 		}
 
-		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
+		ItemLore.addHoverTextLogic(tooltip, flagIn, ForgeRegistries.ITEMS.getKey(this).getPath());
 	}
 
 	// TODO: Tooltip that shows the attachment
 	// TODO: Stats are affected by attachment
 
 	public static boolean hasCrown(ItemStack stack) {
-		return stack.hasTag() && stack.getTag().contains(NBT_KEY_CROWN, Constants.NBT.TAG_COMPOUND);
+		return stack.hasTag() && stack.getTag().contains(NBT_KEY_CROWN, Tag.TAG_COMPOUND);
 	}
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
 	@Override
-	public void registerControllers(AnimationData data) {
+	public void registerControllers(ControllerRegistrar data) {
 		
 	}
 
 	@Override
-	public AnimationFactory getFactory() {
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.factory;
 	}
 
