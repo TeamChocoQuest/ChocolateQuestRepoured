@@ -6,11 +6,10 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.advancements.Advancement;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.ServerAdvancementManager;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.trade.TradeData;
 
 public record BuyerRuleAdvancement(
@@ -31,30 +30,19 @@ public record BuyerRuleAdvancement(
 	
 	@Override
 	public boolean matches(Entity customer, Entity trader, TradeData tradeRawData) {
-		if (!(customer instanceof ServerPlayer)) {
+		if (!(customer instanceof Player)) {
 			return this.isBlacklist();
 		}
 		// TODO: Somehow make this work on client too
-		ServerPlayer player = (ServerPlayer) customer;
+		Player player = (Player) customer;
 		if (customer == null || customer.level() == null || customer.level().getServer() == null) {
 			return this.isBlacklist();
 		}
 		final boolean countMatching = this.minMatches.isPresent() || this.maxMatches.isPresent();
 		int matches = 0;
 
-		ServerAdvancementManager sam = customer.level().getServer().getAdvancements();
-		if (sam == null) {
-			return this.isBlacklist();
-		}
-		
 		for (ResourceLocation condition : this.advancements) {
-			Advancement advancement = sam.getAdvancement(condition);
-			if (advancement == null) {
-				continue;
-			}
-			if (!player.getAdvancements().getOrStartProgress(advancement).isDone()) {
-				continue;
-			}
+			if (CQRMain.PROXY.hasAdvancement(player, condition));
 			matches++;
 		}
 		
