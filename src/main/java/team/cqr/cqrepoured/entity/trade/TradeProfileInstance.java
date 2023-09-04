@@ -1,8 +1,12 @@
 package team.cqr.cqrepoured.entity.trade;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -16,12 +20,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.util.CQRWeightedRandom.WeightedObject;
 import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
 
 public class TradeProfileInstance {
@@ -148,6 +156,53 @@ public class TradeProfileInstance {
 		
 		
 		return result;
+	}
+	
+	public void onStockIncrement() {
+		if (this.trader.get() == null || !this.trader.get().isAlive()) {
+			return;
+		}
+		Level level = this.trader.get().level();
+		if (level == null || level.isClientSide() || !(level instanceof ServerLevel)) {
+			return;
+		}
+		
+		ServerLevel sl = (ServerLevel)level;
+		final long worldTime = sl.getGameTime();
+		
+		// First, find all restocking trades
+		// Second, filter out those that can't restock
+		// Also filter for the restock rate
+		// Lastly, create a weighted list and pick a random trade
+		Set<TradeData> relevantEntries = new HashSet<>();
+		relevantEntries.addAll(this.TRADE_OVERRIDES.values());
+		relevantEntries.addAll(this.TRADE_PROFILE.get());
+		relevantEntries.removeIf(td -> {
+			if (td.getStockData().isPresent()) {
+				if (td.getStockData().get().restockData().isEmpty()) {
+					return true;
+				}
+				RestockData rd = td.getStockData().get().restockData().get();
+				
+				if (rd.restockAmount() == 0) {
+					return true;
+				}
+				// check rate
+				return !(rd.restockRate() == 0 || worldTime % rd.restockRate() == 0);
+			}
+			return true;
+		});
+		
+		Collection<WeightedObject<TradeData>> weightedObjects = new ArrayList<>();
+		relevantEntries.forEach(td -> weightedObjects.add(new WeightedObject<TradeData>(td, td.getStockData().get().restockData().get().restockWeight())));
+		
+		CQRWeightedRandom<TradeData> weightedRandom = new CQRWeightedRandom<>(weightedObjects);
+		
+		TradeData toRestock = weightedRandom.next(sl.getRandom());
+		int tradeIndex = this.TRADE_PROFILE.get().indexOf(toRestock);
+		
+		int currentStock = this.TRADE_STOCK.getOrDefault(tradeIndex, toRestock.getStockData().get().defaultStockSupplier().sample(sl.getRandom()));
+		this.TRADE_STOCK.put(tradeIndex, currentStock + toRestock.getStockData().get().restockData().get().restockAmount());
 	}
 	
 	// Saving & Loading
