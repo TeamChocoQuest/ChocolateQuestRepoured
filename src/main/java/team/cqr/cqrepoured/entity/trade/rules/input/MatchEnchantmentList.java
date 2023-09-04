@@ -65,9 +65,9 @@ public record MatchEnchantmentList(
 
 		if (input.getAllEnchantments().isEmpty()) {
 			if (!countMatching) {
-				return !this.isBlacklist();
+				return this.isBlacklist();
 			} else {
-				return this.minMatches.get() <= 0 && !this.isBlacklist();
+				return this.minMatches.get() <= 0 && this.isBlacklist();
 			}
 		}
 		
@@ -98,7 +98,7 @@ public record MatchEnchantmentList(
 				}
 			}
 		}
-		return !this.isBlacklist();
+		return this.isBlacklist();
 	}
 
 	@Override
