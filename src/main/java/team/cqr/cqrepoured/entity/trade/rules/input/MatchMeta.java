@@ -9,8 +9,7 @@ public class MatchMeta implements ITradeMatchRule {
 
 	@Override
 	public boolean matches(ItemStack input, ItemStack toMatch) {
-		// TODO Auto-generated method stub
-		return false;
+		return input.getDamageValue() == toMatch.getDamageValue();
 	}
 
 	@Override
