@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.faction;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -19,7 +20,7 @@ public interface IHasFaction {
 	public default void setFaction(@Nonnull Faction faction) {
 		this.setFaction(faction.getId());
 	}
-	public void setFaction(String newFaction);
+	public void setFaction(ResourceLocation newFaction);
 	
 	public default boolean hasFaction() {
 		return this.getFaction() != null;

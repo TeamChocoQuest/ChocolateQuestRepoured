@@ -1292,7 +1292,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IMob, I
 		return this.getDefaultFactionInstance();
 	}
 
-	public void setFaction(String newFac) {
+	public void setFaction(ResourceLocation newFac) {
 		this.setFaction(newFac, false);
 	}
 
