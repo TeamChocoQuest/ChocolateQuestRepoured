@@ -92,7 +92,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	}
 
 	// DONE: Special case for player faction!!
-	public boolean isEnemy(Entity ent) {
+	public <T extends Entity & IFactionRelated> boolean isEnemy(T ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return false;
@@ -101,18 +101,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent.level().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
-		if (ent instanceof Player) {
-			// Special case for player
-			return FactionRegistry.instance(ent).getReputationOf(ent.getUUID(), this) == EReputationStateRough.ENEMY;
-		}
-		return this.isEnemy(FactionRegistry.instance(ent).getFactionOf(ent));
-	}
-
-	public boolean isEnemy(IHasFaction ent) {
-		if (ent.getLevel().getDifficulty() == Difficulty.PEACEFUL) {
-			return false;
-		}
-		return this.isEnemy(ent.getFaction());
+		return ent.isEnemyOf(this);
 	}
 	
 	public EReputationState getReputationTowards(Faction faction) {
@@ -134,31 +123,13 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	}
 
 	// DONE: Special case for player faction!!
-	public boolean isAlly(Entity ent) {
+	public <T extends Entity & IFactionRelated> boolean isAlly(T ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return true;
 			}
 		}
-		if (ent instanceof Player) {
-			// Special case for player
-			return FactionRegistry.instance(ent).getReputationOf(ent.getUUID(), this) == EReputationStateRough.ALLY;
-		}
-		return this.isAlly(FactionRegistry.instance(ent).getFactionOf(ent));
-	}
-
-	public boolean isAlly(IHasFaction ent) {
-		return this.isAlly(ent.getFaction());
-	}
-
-	public boolean isAlly(Faction faction) {
-		if (faction == null) {
-			return false;
-		}
-		if (faction == this) {
-			return true;
-		}
-		return this.getRoughReputationTowards(faction).isAlly();
+		return ent.isAllyOf(this);
 	}
 
 	public <T extends IFactionRelated & ICapabilityProvider> void decrementReputation(T capProvider, int score, Level level) {
@@ -193,11 +164,6 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	
 	public Map<ResourceLocation, EReputationState> getRelations() {
 		return this.factionRelations;
-	}
-
-	@Override
-	public boolean isAllyOf(Faction faction) {
-		return this.isAlly(faction);
 	}
 
 	@Override
