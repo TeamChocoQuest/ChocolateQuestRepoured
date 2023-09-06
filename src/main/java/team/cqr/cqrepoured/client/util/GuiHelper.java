@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.widget.TextFieldWidget;
+import java.awt.TextField;
 
-import net.minecraft.client.util.InputMappings;
 import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.StringWidget;
 
 public class GuiHelper {
 
@@ -56,7 +56,7 @@ public class GuiHelper {
 	}
 
 
-	public static boolean isMouseOver(int mouseX, int mouseY, TextFieldWidget inStockTextField) {
+	public static boolean isMouseOver(int mouseX, int mouseY, StringWidget inStockTextField) {
 		return inStockTextField.isMouseOver(mouseX, mouseY);
 	}
 
