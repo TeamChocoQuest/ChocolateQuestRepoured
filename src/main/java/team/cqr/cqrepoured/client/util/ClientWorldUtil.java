@@ -14,7 +14,7 @@ public class ClientWorldUtil {
 	public static Entity getEntityByUUID(Level world, UUID uuid) {
 		if(world instanceof ClientLevel) {
 			ClientLevel cw = (ClientLevel) world;
-			for(Entity entity : cw.entitiesById.values()) {
+			for(Entity entity : cw.getEntities()) {
 				if(entity.getUUID().equals(uuid)) {
 					return entity;
 				}

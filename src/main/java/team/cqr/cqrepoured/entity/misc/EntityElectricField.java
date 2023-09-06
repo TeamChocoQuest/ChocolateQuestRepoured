@@ -132,7 +132,7 @@ public class EntityElectricField extends Entity implements IDontRenderFire, IEnt
 	public void baseTick() {
 		super.baseTick();
 
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.charge--;
 
 			BlockPos pos = this.blockPosition();
