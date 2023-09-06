@@ -7,7 +7,6 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
@@ -52,6 +51,11 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 	@Override
 	public EReputationState getRelationTowards(Faction faction) {
 		return this.reputationMapping.getOrDefault(faction, fallbackReputation);
+	}
+
+	@Override
+	public int getExactRelationTowards(Faction faction) {
+		return this.getRelationTowards(faction).getValue();
 	}
 
 }

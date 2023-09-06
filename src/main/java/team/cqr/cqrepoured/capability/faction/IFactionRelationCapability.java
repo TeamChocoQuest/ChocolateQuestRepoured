@@ -30,10 +30,15 @@ public interface IFactionRelationCapability extends IFactionRelated, INBTSeriali
 	
 	@Override
 	default EReputationState getRelationTowards(Faction faction) {
+		return EReputationState.getByInt(this.getExactRelationTowards(faction));
+	}
+	
+	@Override
+	default int getExactRelationTowards(Faction faction) {
 		if (this.hasInformationFor(faction)) {
-			return EReputationState.getByInt(this.getRelationFor(faction));
+			return this.getRelationFor(faction);
 		}
-		return EReputationState.NEUTRAL;
+		return 0;
 	}
 
 }

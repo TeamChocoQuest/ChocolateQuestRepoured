@@ -1,19 +1,22 @@
 package team.cqr.cqrepoured.faction;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
+import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
@@ -158,15 +161,29 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		return this.getRoughReputationTowards(faction).isAlly();
 	}
 
-	public void decrementReputation(Player player, int score) {
-		if (this.repuMayChange) {
-			FactionRegistry.instance(player).decrementRepuOf(player, this.getId(), score);
-		}
+	public <T extends IFactionRelated & ICapabilityProvider> void decrementReputation(T capProvider, int score, Level level) {
+		this.changeReputation(capProvider, -Math.abs(score), level);
 	}
 
-	public void incrementReputation(Player player, int score) {
-		if (this.repuMayChange) {
-			FactionRegistry.instance(player).incrementRepuOf(player, this.getId(), score);
+	public <T extends IFactionRelated & ICapabilityProvider> void incrementReputation(T capProvider, int score, Level level) {
+		this.changeReputation(capProvider, Math.abs(score), level);
+	}
+	
+	protected <T extends IFactionRelated & ICapabilityProvider> void changeReputation(T capProvider, int score, Level level) {
+		if (this.repuMayChange && !level.getDifficulty().equals(Difficulty.PEACEFUL) && !(capProvider instanceof Player player && (player.isSpectator() || player.isCreative()))) {
+			LazyOptional<IFactionRelationCapability> lOpCap = capProvider.getCapability(IFactionRelationCapability.INSTANCE);
+			if (lOpCap != null && lOpCap.isPresent()) {
+				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
+				if (opCap.isPresent()) {
+					IFactionRelationCapability cap = opCap.get();
+					int currentReputation = capProvider.getExactRelationTowards(this);
+					int newReputation = score + currentReputation;
+					
+					newReputation = Mth.clamp(newReputation, EReputationState.ARCH_ENEMY.getValue(), EReputationState.MEMBER.getValue());
+					
+					cap.setReputationTowards(this, newReputation);
+				}
+			}
 		}
 	}
 
@@ -202,6 +219,11 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	@Override
 	public EReputationStateRough getRoughRelationTowards(Faction faction) {
 		return this.getRoughRelationTowards(faction);
+	}
+
+	@Override
+	public int getExactRelationTowards(Faction faction) {
+		return this.getReputationTowards(faction).getValue();
 	}
 
 }

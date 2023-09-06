@@ -7,8 +7,8 @@ public interface IFactionRelated {
 	public static final IFactionRelated _FALLBACK = new IFactionRelated() {
 		
 		@Override
-		public EReputationState getRelationTowards(Faction faction) {
-			return EReputationState.NEUTRAL;
+		public int getExactRelationTowards(Faction faction) {
+			return 0;
 		}
 	};
 	
@@ -24,7 +24,11 @@ public interface IFactionRelated {
 		return this.getRelationTowards(faction).equals(EReputationState.MEMBER);
 	}
 	
-	public EReputationState getRelationTowards(Faction faction);
+	public int getExactRelationTowards(Faction faction);
+	
+	public default EReputationState getRelationTowards(Faction faction) {
+		return EReputationState.getByInt(this.getExactRelationTowards(faction));
+	}
 	
 	public default EReputationStateRough getRoughRelationTowards(Faction faction) {
 		return EReputationStateRough.getByRepuScore(this.getRelationTowards(faction).getValue());
