@@ -16,6 +16,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
 
@@ -63,7 +64,11 @@ public class ElectricFieldRenderUtil {
 		COUNT_BUFFER.flip();
 
 		renderType.setupRenderState();
-		Pair<DrawState, ByteBuffer> drawInfo = VERTEX_BUFFER.popNextBuffer();
+		
+		// Used to create a pair, during that it adjusted the internal buffers position and changed totalUplaodedBytes, then limited the buffer again and depending on if it was done it reset itself
+		// Pair<DrawState, ByteBuffer> drawInfo = VERTEX_BUFFER.popNextBuffer();
+		// Could get really annoying to update...
+		
 		VertexFormat format = VERTEX_BUFFER.format;
 		//format.setupBufferState(MemoryUtil.memAddress(drawInfo.getSecond()));
 		format.setupBufferState();
