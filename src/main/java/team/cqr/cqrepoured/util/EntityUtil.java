@@ -115,7 +115,7 @@ public class EntityUtil {
 
 	@Nullable
 	public static Entity getEntityByUUID(Level world, UUID uuid) {
-		if (!world.isClientSide) {
+		if (!world.isClientSide()) {
 			return ((ServerLevel) world).getEntity(uuid);
 		}
 
