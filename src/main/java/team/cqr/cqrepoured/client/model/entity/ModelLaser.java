@@ -4,20 +4,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.entity.misc.AbstractEntityLaser;
 
 public class ModelLaser extends EntityModel<AbstractEntityLaser> {
 
-	private final ModelRenderer bone;
+	private final ModelPart bone;
 
 	public ModelLaser() {
 		super(CQRRenderTypes::emissive);
 		this.texWidth = 64;
 		this.texHeight = 32;
 
-		this.bone = new ModelRenderer(this);
+		this.bone = new ModelPart(this);
 		bone.setPos(0.0F, 24.0F, 0.0F);
 		bone.texOffs(0, 0).addBox(-4.0F, -28.0F, -16.0F, 8.0F, 8.0F, 16.0F, 0.0F, false);
 	}

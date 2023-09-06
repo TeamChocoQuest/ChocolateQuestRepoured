@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -26,7 +25,7 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelEnderCalamityGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
@@ -117,9 +116,9 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			stack.mulPose(SPHERE_ROT_AXIS.rotationDegrees((entity.tickCount + partialTicks) * 4.0F));
 
 			float f = 0.7F + 0.15F * Mth.sin((entity.tickCount + partialTicks) * 0.1F);
-			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f);
+			GL11.glColor4f(0.6F, 0.2F, 0.7F, f);
 			SphereRenderer.renderSphere(stack, CQRRenderTypes.sphere(), SPHERE_VBO, GL11.GL_TRIANGLES, null, true, false);
-			RenderSystem.color4f(0.6F, 0.2F, 0.7F, f * 0.35F);
+			GL11.glColor4f(0.6F, 0.2F, 0.7F, f * 0.35F);
 			SphereRenderer.renderSphere(stack, CQRRenderTypes.sphere(), SPHERE_VBO, GL11.GL_TRIANGLES, null, false, true);
 
 			stack.popPose();

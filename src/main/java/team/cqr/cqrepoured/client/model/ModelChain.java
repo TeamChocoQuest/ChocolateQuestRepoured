@@ -2,19 +2,21 @@ package team.cqr.cqrepoured.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.EntityModel;
+
+import net.minecraft.client.model.Model;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.world.entity.Entity;
 
-public class ModelChain extends EntityModel {
+public class ModelChain extends Model {
 
-	private final ModelRenderer bone;
+	private final ModelPart bone;
 
 	public ModelChain() {
 		this.texWidth = 16;
 		this.texHeight = 16;
 
-		this.bone = new ModelRenderer(this);
+		this.bone = new ModelPart(this);
 		this.bone.setPos(0.0F, 0.0F, 0.0F);
 		this.bone.texOffs(0, 0).addBox(-1.5F, -0.5F, -1.0F, 1, 1, 8, 0.0F, false);
 		this.bone.texOffs(0, 0).addBox(0.5F, -0.5F, -1.0F, 1, 1, 8, 0.0F, false);
