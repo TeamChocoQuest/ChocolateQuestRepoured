@@ -5,24 +5,25 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.Random;
 
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.system.MemoryUtil;
 
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
 
 import meldexun.randomutil.FastRandom;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferBuilder.DrawState;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import com.mojang.math.Matrix4f;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
@@ -38,7 +39,7 @@ public class ElectricFieldRenderUtil {
 	private static int vertexCount;
 
 	private static void startLineStripBatch(VertexFormat format) {
-		VERTEX_BUFFER.begin(GL11.GL_LINE_STRIP, format);
+		VERTEX_BUFFER.begin(VertexFormat.Mode.LINE_STRIP, format);
 	}
 
 	private static void addVertex(Matrix4f matrix, float x, float y, float z, boolean endLineStrip) {
@@ -63,8 +64,9 @@ public class ElectricFieldRenderUtil {
 
 		renderType.setupRenderState();
 		Pair<DrawState, ByteBuffer> drawInfo = VERTEX_BUFFER.popNextBuffer();
-		VertexFormat format = VERTEX_BUFFER.getVertexFormat();
-		format.setupBufferState(MemoryUtil.memAddress(drawInfo.getSecond()));
+		VertexFormat format = VERTEX_BUFFER.format;
+		//format.setupBufferState(MemoryUtil.memAddress(drawInfo.getSecond()));
+		format.setupBufferState();
 
 		GL14.glMultiDrawArrays(GL11.GL_LINE_STRIP, FIRST_BUFFER, COUNT_BUFFER);
 
