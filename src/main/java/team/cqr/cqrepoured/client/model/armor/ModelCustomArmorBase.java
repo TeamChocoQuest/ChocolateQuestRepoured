@@ -3,35 +3,35 @@ package team.cqr.cqrepoured.client.model.armor;
 import java.util.function.Function;
 
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelCustomArmorBase<T extends LivingEntity> extends HumanoidModel<T> implements IRenderTypeProvider {
 
-	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
-		this(RenderType::entityCutoutNoCull, scale, 0.0F, textureWidth, textureHeight);
+	public ModelCustomArmorBase(ModelPart root, float scale, int textureWidth, int textureHeight) {
+		this(root, RenderType::entityCutoutNoCull, scale, 0.0F, textureWidth, textureHeight);
 	}
 
-	public ModelCustomArmorBase(Function<ResourceLocation, RenderType> renderType, float scale, int textureWidth, int textureHeight) {
-		this(renderType, scale, 0.0F, textureWidth, textureHeight);
+	public ModelCustomArmorBase(ModelPart root, Function<ResourceLocation, RenderType> renderType, float scale, int textureWidth, int textureHeight) {
+		this(root, renderType, scale, 0.0F, textureWidth, textureHeight);
 	}
 
-	public ModelCustomArmorBase(Function<ResourceLocation, RenderType> renderType, float scale, float inflate, int texWidth, int texHeight) {
-		super(renderType, scale, inflate, texWidth, texHeight);
+	public ModelCustomArmorBase(ModelPart root, Function<ResourceLocation, RenderType> renderType, float scale, float inflate, int texWidth, int texHeight) {
+		super(root, renderType);
 	}
 
 	@Override
 	public void setupAnim(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 		super.setupAnim(pEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
 
-		if (pEntity instanceof ArmorStandEntity) {
-			ArmorStandEntity entityarmorstand = (ArmorStandEntity) pEntity;
+		if (pEntity instanceof ArmorStand) {
+			ArmorStand entityarmorstand = (ArmorStand) pEntity;
 			this.head.xRot = 0.017453292F * entityarmorstand.getHeadPose().getX();
 			this.head.yRot = 0.017453292F * entityarmorstand.getHeadPose().getY();
 			this.head.zRot = 0.017453292F * entityarmorstand.getHeadPose().getZ();
@@ -58,7 +58,7 @@ public class ModelCustomArmorBase<T extends LivingEntity> extends HumanoidModel<
 		}
 	}
 
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+	public void setRotateAngle(ModelPart modelRenderer, float x, float y, float z) {
 		modelRenderer.xRot = x;
 		modelRenderer.yRot = y;
 		modelRenderer.zRot = z;

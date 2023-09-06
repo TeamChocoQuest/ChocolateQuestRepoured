@@ -21,6 +21,7 @@ import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
@@ -58,7 +60,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRGiantTortoise>, IRangedAttackMob, IAnimatable, IAnimationTickable {
+public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRGiantTortoise>, RangedAttackMob, GeoEntity {
 
 	public static class AnimationGecko {
 		private final String animationName;

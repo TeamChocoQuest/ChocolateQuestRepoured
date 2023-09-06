@@ -39,7 +39,7 @@ public class ModelEnderCalamityGeo extends AbstractModelGeoCQRBase<EntityCQREnde
 	 */
 
 	@Override
-	public void setCustomAnimations(EntityCQREnderCalamity entity, long uniqueID, @SuppressWarnings("rawtypes") AnimationState<EntityCQREnderCalamity> customPredicate) {
+	public void setCustomAnimations(EntityCQREnderCalamity entity, long uniqueID, AnimationState<EntityCQREnderCalamity> customPredicate) {
 		// TODO: Fix buggy rotation
 		super.setCustomAnimations(entity, uniqueID, customPredicate);
 		// IBone headBone = this.getAnimationProcessor().getBone(BONE_IDENT_HEAD);

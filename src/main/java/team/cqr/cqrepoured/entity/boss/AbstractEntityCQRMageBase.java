@@ -1,22 +1,15 @@
 package team.cqr.cqrepoured.entity.boss;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
-import team.cqr.cqrepoured.init.CQRItems;
 
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
@@ -48,15 +41,9 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
 		super.actuallyHurt(damageSrc, damageAmount);
 
-		if (!this.level.isClientSide && (this.getHealth() / this.getMaxHealth()) < 0.83F) {
+		if (!this.level().isClientSide() && (this.getHealth() / this.getMaxHealth()) < 0.83F) {
 			this.revealIdentity();
 		}
-	}
-
-	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData setDamageValue, CompoundTag p_213386_5_) {
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.STAFF_VAMPIRIC.get(), 1));
-		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
 	}
 
 	@Override
@@ -73,10 +60,10 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 		}
 	}
 
-	protected static final TextComponent HIDDEN_NAME = new TextComponent("???");
+	protected static final Component HIDDEN_NAME = Component.literal("???");
 	
 	@Override
-	public TextComponent getDisplayName() {
+	public Component getDisplayName() {
 		if (this.isIdentityHidden()) {
 			return HIDDEN_NAME;
 		}

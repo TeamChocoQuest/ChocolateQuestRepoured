@@ -5,46 +5,46 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
-import net.minecraft.entity.effect.LightningBoltEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomSwimmingGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -84,7 +84,7 @@ import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitt
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDontSpreadElectrocution, IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, IAnimatable, IServerAnimationReceiver, IAnimationTickable {
+public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDontSpreadElectrocution, IMechanical, IDontRenderFire, IEntityMultiPart<EntityCQRExterminator>, GeoEntity, IServerAnimationReceiver {
 	// Entity parts
 	// 0 => Backpack
 	// 1 => Emitter left
@@ -277,9 +277,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 		this.entityData.set(IS_STUNNED, value);
 	}
-
+	
 	@Override
-	public void thunderHit(ServerLevel pLevel, LightningBoltEntity pLightning) {
+	public void thunderHit(ServerLevel pLevel, LightningBolt pLightning) {
 		if (this.isStunned()) {
 			this.stunTime += (50 / 3);
 		} else if (TargetUtil.PREDICATE_IS_ELECTROCUTED.apply(this)) {
@@ -305,7 +305,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Override
 	public Level getWorld() {
-		return this.level;
+		return this.level();
 	}
 
 	@Override
@@ -682,7 +682,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Nullable
 	public List<Entity> isSurroundedByGroupWithMinSize(int minSize) {
-		List<Entity> groupInFrontOfMe = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() / 2)).inflate(1));
+		List<Entity> groupInFrontOfMe = this.level().getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() / 2)).inflate(1));
 		groupInFrontOfMe.removeIf((Entity entity) -> (entity instanceof PartEntity || ( entity instanceof Projectile && ((Projectile)entity).getOwner() == this)));
 		if (groupInFrontOfMe.size() >= minSize) {
 			return groupInFrontOfMe;
@@ -721,7 +721,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 				this.entityData.set(PUNCH_IS_KICK, false);
 				if (this.getRandom().nextBoolean() && !this.isCannonRaised()) {
 					// Throw animation
-					List<Entity> affectedEntities = this.level.getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() * 0.75 * this.getSizeVariation())));
+					List<Entity> affectedEntities = this.level().getEntities(this, this.getBoundingBox().move(this.getLookAngle().normalize().scale(this.getBbWidth() * 0.75 * this.getSizeVariation())));
 					this.tryStartThrowingAnimation(affectedEntities, entityIn);
 				}
 			}
@@ -867,13 +867,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			}
 
 			// Copied from EntityLivingBase
-			if (!this.level.isClientSide && this.lastHurtByPlayerTime > 0 && this.shouldDropLoot() && this.level.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+			if (!this.level().isClientSide() && this.lastHurtByPlayerTime > 0 && this.shouldDropLoot() && this.level().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				int i = this.getExperienceReward(this.lastHurtByPlayer);
 				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.lastHurtByPlayer, i);
 				while (i > 0) {
 					int j = ExperienceOrbEntity.getExperienceValue(i);
 					i -= j;
-					this.level.addFreshEntity(new ExperienceOrbEntity(this.level, this.getX(), this.getY(), this.getZ(), j));
+					this.level().addFreshEntity(new ExperienceOrbEntity(this.level(), this.getX(), this.getY(), this.getZ(), j));
 				}
 			}
 
@@ -1049,19 +1049,9 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CQRItems.BATTLE_AXE_BULL.get(), 1));
 	}
 
-	@Override
-	public int tickTimer() {
-		return this.tickCount;
-	}
-
-	@Override
-	public LivingEntity getEntity() {
-		return this;
-	}
-	
 	//No fall damage
 	@Override
-	public boolean causeFallDamage(float p_225503_1_, float p_225503_2_) {
+	public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
 		return false;
 	}
 	
@@ -1071,7 +1061,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	

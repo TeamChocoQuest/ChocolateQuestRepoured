@@ -77,7 +77,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 				float f = (this.random.nextFloat() - 0.5F) * 8.0F;
 				float f1 = (this.random.nextFloat() - 0.5F) * 4.0F;
 				float f2 = (this.random.nextFloat() - 0.5F) * 8.0F;
-				if(this.level().isClientSide) {
+				if(this.level().isClientSide()) {
 					this.level().addParticle(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 0.0D, 0.0D, 0.0D);
 				} else {
 					((ServerLevel)this.level()).sendParticles(this.getDeathAnimParticles(), this.getX() + f, this.getY() + 2.0D + f1, this.getZ() + f2, 1, 0.0D, 0.0D, 0.0D, 1.0);
