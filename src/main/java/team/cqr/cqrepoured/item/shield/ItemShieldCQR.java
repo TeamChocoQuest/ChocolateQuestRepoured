@@ -1,11 +1,10 @@
 package team.cqr.cqrepoured.item.shield;
 
-import net.minecraft.world.entity.LivingEntity;
+import javax.annotation.Nullable;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.ShieldItem;
-
-import javax.annotation.Nullable;
+import net.minecraft.world.item.ShieldItem;
 
 public class ItemShieldCQR extends ShieldItem {
 
@@ -22,10 +21,11 @@ public class ItemShieldCQR extends ShieldItem {
 	public boolean isRepairable(ItemStack repair) {
 		return repair.getItem() == this.repairItem;
 	}
-
-	@Override
+	
+	// No longer used?
+	/*@Override
 	public boolean isShield(ItemStack stack, @Nullable LivingEntity entity) {
 		return stack.getItem() instanceof ShieldItem;
-	}
+	}*/
 
 }
