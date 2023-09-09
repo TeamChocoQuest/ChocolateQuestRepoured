@@ -1,39 +1,46 @@
 package team.cqr.cqrepoured.item.armor;
 
+import java.awt.TextComponent;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import team.cqr.cqrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
 import team.cqr.cqrepoured.client.init.CQRArmorModels;
+import team.cqr.cqrepoured.client.render.armor.RenderArmorBackpack;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemLore;
 
-import java.util.List;
+public class ItemBackpack extends CQRGeoArmorBase implements GeoItem {
 
-import javax.annotation.Nullable;
-
-public class ItemBackpack extends ArmorItem {
-
-	public ItemBackpack(IArmorMaterial materialIn, EquipmentSlot equipmentSlotIn, Properties prop) {
+	public ItemBackpack(ArmorMaterial materialIn, Type equipmentSlotIn, Properties prop) {
 		super(materialIn, equipmentSlotIn, prop);
 	}
 
@@ -63,19 +70,22 @@ public class ItemBackpack extends ArmorItem {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, this.getRegistryName().getPath());
 	}
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
 		return CapabilityItemHandlerItemProvider.createProvider(stack, 36);
 	}
-
-	@SuppressWarnings("unchecked")
-	@OnlyIn(Dist.CLIENT)
+	
 	@Override
-	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-		return (A) CQRArmorModels.BACKPACK;
+	public void registerControllers(ControllerRegistrar arg0) {
+		
+	}
+
+	@Override
+	protected GeoArmorRenderer<?> createRenderer() {
+		return new RenderArmorBackpack();
 	}
 
 }

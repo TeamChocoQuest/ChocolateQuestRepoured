@@ -1,38 +1,38 @@
 package team.cqr.cqrepoured.item.armor;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.client.model.HumanoidModel;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.item.IArmorMaterial;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import team.cqr.cqrepoured.client.init.CQRArmorModels;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import team.cqr.cqrepoured.client.render.armor.RenderArmorBull;
 import team.cqr.cqrepoured.item.ItemLore;
 import team.cqr.cqrepoured.util.ItemUtil;
 
-import java.util.List;
-
-public class ItemArmorBull extends ArmorItem {
+public class ItemArmorBull extends CQRGeoArmorBase {
 
 	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
-	public ItemArmorBull(IArmorMaterial materialIn, EquipmentSlot equipmentSlotIn, Properties prop) {
-		super(materialIn, equipmentSlotIn, prop);
+	public ItemArmorBull(ArmorMaterial materialIn, Type type, Properties prop) {
+		super(materialIn, type, prop);
 
 		Multimap<Attribute, AttributeModifier> attributeMap = getDefaultAttributeModifiers(EquipmentSlot.MAINHAND);
 		ImmutableMultimap.Builder<Attribute, AttributeModifier> modifierBuilder = ImmutableMultimap.builder();
@@ -43,7 +43,7 @@ public class ItemArmorBull extends ArmorItem {
 
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-		if (slot == MobEntity.getEquipmentSlotForItem(stack)) {
+		if (slot == Mob.getEquipmentSlotForItem(stack)) {
 			return this.attributeModifier;
 		}
 		return super.getAttributeModifiers(slot, stack);
@@ -51,13 +51,13 @@ public class ItemArmorBull extends ArmorItem {
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "bull_armor");
 	}
-
+	
 	@Override
-	public void onArmorTick(ItemStack stack, Level world, Player player) {
-		super.onArmorTick(stack, world, player);
+	public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
+		super.onInventoryTick(stack, level, player, slotIndex, selectedIndex);
 		if (ItemUtil.hasFullSet(player, ItemArmorBull.class)) {
 			if (player.isSprinting()) {
 				player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 0, 1, false, false));
@@ -65,11 +65,14 @@ public class ItemArmorBull extends ArmorItem {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	@OnlyIn(Dist.CLIENT)
 	@Override
-	public <A extends HumanoidModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, A _default) {
-		return armorSlot == EquipmentSlot.LEGS ? (A) CQRArmorModels.BULL_ARMOR_LEGS : (A) CQRArmorModels.BULL_ARMOR;
+	public void registerControllers(ControllerRegistrar arg0) {
+		
+	}
+
+	@Override
+	protected GeoArmorRenderer<?> createRenderer() {
+		return new RenderArmorBull();
 	}
 
 }

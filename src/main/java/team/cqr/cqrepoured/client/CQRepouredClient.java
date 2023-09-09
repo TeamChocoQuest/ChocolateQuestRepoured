@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.client;
 
+import com.mojang.blaze3d.platform.ScreenManager;
+
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
 import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.ScreenBadge;
@@ -54,8 +55,6 @@ public class CQRepouredClient {
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
 		ClientRegistry.bindTileEntityRenderer(CQRBlockEntities.FORCE_FIELD_NEXUS.get(), TileEntityForceFieldNexusRenderer::new);
 		
-		GeoArmorRenderer.registerArmorRenderer(ItemArmorCrown.class, () -> new RenderArmorKingCrown());
-
 		event.enqueueWork(() -> {
 			SphereRenderer.init();
 

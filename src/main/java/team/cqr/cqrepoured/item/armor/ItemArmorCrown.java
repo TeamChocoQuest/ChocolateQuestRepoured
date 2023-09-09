@@ -8,7 +8,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,14 +17,14 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
+import team.cqr.cqrepoured.client.render.armor.RenderArmorKingCrown;
 import team.cqr.cqrepoured.item.ItemLore;
 
-public class ItemArmorCrown extends ArmorItem implements GeoItem {
+public class ItemArmorCrown extends CQRGeoArmorBase implements GeoItem {
 
 	public static final String NBT_KEY_CROWN = "CQR Crown";
 
@@ -80,17 +79,15 @@ public class ItemArmorCrown extends ArmorItem implements GeoItem {
 	public static boolean hasCrown(ItemStack stack) {
 		return stack.hasTag() && stack.getTag().contains(NBT_KEY_CROWN, Tag.TAG_COMPOUND);
 	}
-	
-	private final AnimatableInstanceCache factory = GeckoLibUtil.createInstanceCache(this);
 
 	@Override
-	public void registerControllers(ControllerRegistrar data) {
+	public void registerControllers(ControllerRegistrar arg0) {
 		
 	}
 
 	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.factory;
+	protected GeoArmorRenderer<?> createRenderer() {
+		return new RenderArmorKingCrown();
 	}
 
 }
