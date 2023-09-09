@@ -4,24 +4,23 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.UseAction;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -34,7 +33,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	private final float specialAttackDamage;
 	private final int specialAttackCooldown;
 
-	public ItemGreatSword(Properties props, IItemTier material, int cooldown) {
+	public ItemGreatSword(Properties props, Tier material, int cooldown) {
 		super(material, props);
 		this.addAttributeModifiers(CQRConfig.SERVER_CONFIG.materials.itemTiers.great_sword);
 		this.specialAttackDamage = material.getAttackDamageBonus();
@@ -49,7 +48,7 @@ public class ItemGreatSword extends ItemCQRWeapon {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<TextComponent> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		ItemLore.addHoverTextLogic(tooltip, flagIn, "great_sword");
 		/*
 		 * if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
@@ -73,34 +72,34 @@ public class ItemGreatSword extends ItemCQRWeapon {
 
 		AABB bb = new AABB(mx, my, mz, max, may, maz);
 
-		List<MobEntity> entitiesInAABB = worldIn.getEntitiesOfClass(MobEntity.class, bb);
+		List<Mob> entitiesInAABB = worldIn.getEntitiesOfClass(Mob.class, bb);
 
 		for (int i = 0; i < entitiesInAABB.size(); i++) {
-			MobEntity entityInAABB = entitiesInAABB.get(i);
+			Mob entityInAABB = entitiesInAABB.get(i);
 
 			if (this.getUseDuration(stack) - timeLeft <= 30) {
-				entityInAABB.hurt(DamageSource.explosion(entityLiving), this.specialAttackDamage);
+				entityInAABB.hurt(worldIn.damageSources().explosion(entityLiving, entityLiving), this.specialAttackDamage);
 			}
 
 			if (this.getUseDuration(stack) - timeLeft > 30 && this.getUseDuration(stack) - timeLeft <= 60) {
-				entityInAABB.hurt(DamageSource.explosion(entityLiving), this.specialAttackDamage * 3);
+				entityInAABB.hurt(worldIn.damageSources().explosion(entityLiving, entityLiving), this.specialAttackDamage * 3);
 			}
 
 			if (this.getUseDuration(stack) - timeLeft > 60) {
-				entityInAABB.hurt(DamageSource.explosion(entityLiving), this.specialAttackDamage * 4);
+				entityInAABB.hurt(worldIn.damageSources().explosion(entityLiving, entityLiving), this.specialAttackDamage * 4);
 			}
 		}
 
 		if (entityLiving instanceof Player) {
 			Player player = (Player) entityLiving;
 
-			float x = (float) -Math.sin(Math.toRadians(player.yRot));
-			float z = (float) Math.cos(Math.toRadians(player.yRot));
-			float y = (float) -Math.sin(Math.toRadians(player.xRot));
+			float x = (float) -Math.sin(Math.toRadians(player.getYRot()));
+			float z = (float) Math.cos(Math.toRadians(player.getYRot()));
+			float y = (float) -Math.sin(Math.toRadians(player.getXRot()));
 			x *= (1.0F - Math.abs(y));
 			z *= (1.0F - Math.abs(y));
 
-			if (player.isOnGround() && this.getUseDuration(stack) - timeLeft > 40) {
+			if (player.onGround() && this.getUseDuration(stack) - timeLeft > 40) {
 				player.position().add(0.0D, 0.1D, 0.0D);
 				player.getDeltaMovement().add(0.0D, 0.35D, 0.0D);
 				// player.posY += 0.1D;
@@ -121,8 +120,8 @@ public class ItemGreatSword extends ItemCQRWeapon {
 	}
 
 	@Override
-	public UseAction getUseAnimation(ItemStack stack) {
-		return UseAction.BOW;
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.BOW;
 	}
 
 	@Override
