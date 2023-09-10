@@ -4,12 +4,19 @@ import java.io.File;
 import java.nio.file.Path;
 
 import de.dertoaster.multihitboxlib.util.LazyLoadField;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 
 public class CQRConstants {
 	
 	public static final String MODID = "cqrepoured";
+	
+	public static class JEI {
+		public static final ResourceLocation PLUGIN_ID = CQRMain.prefix("jei_plugin");
+		
+		public static final ResourceLocation NPC_TRADE_CATEGORY_UID = CQRMain.prefix("jei/category/npc_trade");
+	}
 	
 	public static class Resources {
 		
