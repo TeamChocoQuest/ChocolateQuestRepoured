@@ -40,7 +40,7 @@ public class ItemDaggerNinja extends ItemDagger {
 			playerIn.getCooldowns().addCooldown(stack.getItem(), 30);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.addParticle(ParticleTypes.PORTAL, playerIn.position().x + random.nextFloat() - 0.5D, playerIn.position().y + random.nextFloat() - 0.5D, playerIn.position().z + random.nextFloat() - 0.5D, random.nextFloat() - 0.5F, random.nextFloat() - 0.5F, random.nextFloat() - 0.5F);
+				worldIn.addParticle(ParticleTypes.PORTAL, playerIn.position().x + playerIn.getRandom().nextFloat() - 0.5D, playerIn.position().y + playerIn.getRandom().nextFloat() - 0.5D, playerIn.position().z + playerIn.getRandom().nextFloat() - 0.5D, playerIn.getRandom().nextFloat() - 0.5F, playerIn.getRandom().nextFloat() - 0.5F, playerIn.getRandom().nextFloat() - 0.5F);
 			}
 
 			double x = -Math.sin(Math.toRadians(playerIn.getYRot()));
@@ -52,7 +52,7 @@ public class ItemDaggerNinja extends ItemDagger {
 
 			BlockPos pos = playerIn.blockPosition().offset(new Vec3i((int)x * dist, (int)y * dist + 1, (int)z * dist));
 
-			if (worldIn.getBlockState(pos).getBlock().getCollisionShape(worldIn.getBlockState(pos), worldIn, pos, CollisionContext.of(playerIn)).isEmpty() && pos.getY() > 0) {
+			if (worldIn.getBlockState(pos).getShape(worldIn, pos, CollisionContext.of(playerIn)).isEmpty() && pos.getY() > 0) {
 				playerIn.setPos(playerIn.position().x + x * dist, playerIn.position().y + y * dist + 1, playerIn.position().z + z * dist);
 				playerIn.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 40, 5, false, false));
 			} else {
@@ -64,7 +64,7 @@ public class ItemDaggerNinja extends ItemDagger {
              });
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.addParticle(ParticleTypes.PORTAL, playerIn.position().x + random.nextFloat() - 0.5D, playerIn.position().y + random.nextFloat() - 0.5D, playerIn.position().z + random.nextFloat() - 0.5D, random.nextFloat() - 0.5F, random.nextFloat() - 0.5F, random.nextFloat() - 0.5F);
+				worldIn.addParticle(ParticleTypes.PORTAL, playerIn.position().x + playerIn.getRandom().nextFloat() - 0.5D, playerIn.position().y + playerIn.getRandom().nextFloat() - 0.5D, playerIn.position().z + playerIn.getRandom().nextFloat() - 0.5D, playerIn.getRandom().nextFloat() - 0.5F, playerIn.getRandom().nextFloat() - 0.5F, playerIn.getRandom().nextFloat() - 0.5F);
 			}
 		} else {
 			return super.use(worldIn, playerIn, handIn);
