@@ -1,31 +1,29 @@
 package team.cqr.cqrepoured.item.staff;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallTorchBlock;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.server.level.ServerLevel;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.ItemLore;
-
-import java.util.Random;
 
 public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 
@@ -41,7 +39,8 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	{
 		boolean flag = super.hurtEnemy(stack, target, attacker);
 
-		if (flag && random.nextInt(5) == 0) {
+		//TODO: MOve to constant
+		if (flag && attacker.getRandom().nextInt(5) == 0) {
 			if (target.getVehicle() != null) {
 				target.stopRiding();
 			}
@@ -65,10 +64,10 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	{
 		Vec3 start = player.getEyePosition(1.0F);
 		Vec3 end = start.add(player.getLookAngle().scale(10.0D)); //#TODO CHECK
-		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.VISUAL, ClipContext.FluidMode.NONE, player));
+		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, player));
 
 		if (result != null && !worldIn.isClientSide) {
-			BlockPos pos = new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z);
+			BlockPos pos = BlockPos.containing(result.getLocation());
 			BlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
 			if(blockStateLookingAt.getBlock() == CQRBlocks.UNLIT_TORCH.get())
@@ -83,10 +82,10 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 	}
 
 	public void shootFromEntity(LivingEntity shooter) {
-		Level world = shooter.level;
+		Level world = shooter.level();
 
 		if (!world.isClientSide) {
-			Random r = shooter.getRandom();
+			RandomSource r = shooter.getRandom();
 			for (int i = 0; i < 20; i++) {
 				// TODO don't send 20 packets
 				Vec3 v = shooter.getLookAngle();
@@ -114,7 +113,7 @@ public class ItemStaffFire extends ItemLore implements IRangedWeapon {
 
 				return shooter.hasLineOfSight(entity);
 			}).forEach(target -> {
-				if (target.hurt(DamageSource.mobAttack(shooter).setIsFire(), 3.0F)) {
+				if (target.hurt(shooter.damageSources().mobAttack(shooter)/*.setIsFire() No longer possible?*/, 3.0F)) {
 					target.setSecondsOnFire(5);
 				}
 			});
