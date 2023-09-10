@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.armor.ItemBackpack;
 
-public class ContainerBackpack extends Container {
+public class ContainerBackpack extends AbstractContainerMenu {
 
     private final ItemStack stack;
 
@@ -27,7 +27,7 @@ public class ContainerBackpack extends Container {
     public ContainerBackpack(int containerID, Inventory playerInv, ItemStack stack) {
         super(CQRContainerTypes.BACKPACK.get(), containerID);
         this.stack = stack;
-        LazyOptional<IItemHandler> inv = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+        LazyOptional<IItemHandler> inv = stack.getCapability(ForgeCapabilities.ITEM_HANDLER);
         int currentItem = playerInv.selected;
 
         for (int i = 0; i < 3; i++) {
