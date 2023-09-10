@@ -1,23 +1,24 @@
 package team.cqr.cqrepoured.tileentity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryResourceLocation;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityExporterChestCustom extends TileEntityExporterChest implements ITileEntitySyncable {
+public class TileEntityExporterChestCustom extends TileEntityExporterChest implements ITileEntitySyncable<TileEntityExporterChestCustom> {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
-	private final DataEntryResourceLocation lootTable = new DataEntryResourceLocation("lootTable", LootTables.EMPTY, true);
+	private final DataEntryResourceLocation lootTable = new DataEntryResourceLocation("lootTable", BuiltInLootTables.EMPTY, true);
 
-	public TileEntityExporterChestCustom() {
-		super(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get());
+	public TileEntityExporterChestCustom(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.EXPORTER_CHEST_CUSTOM.get(), pos, state);
 		this.dataManager.register(this.lootTable);
 	}
 
@@ -27,26 +28,25 @@ public class TileEntityExporterChestCustom extends TileEntityExporterChest imple
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
-		this.dataManager.write(compound);
-		return compound;
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		this.dataManager.write(pTag);
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
-		this.dataManager.read(compound);
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.dataManager.read(pTag);
 	}
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+		return this.saveWithId();
 	}
 
 	@Override

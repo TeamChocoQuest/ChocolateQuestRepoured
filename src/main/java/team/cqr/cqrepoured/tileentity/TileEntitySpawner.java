@@ -4,27 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
-public class TileEntitySpawner extends BlockEntityContainer implements ITileEntitySyncable {
+public class TileEntitySpawner extends BlockEntityContainer implements ITileEntitySyncable<TileEntitySpawner> {
 
 	private static final Random RANDOM = new Random();
 
@@ -38,8 +44,8 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 	private final DataEntryInt activatingRangeFromPlayer = new DataEntryInt("RequiredPlayerRange", 16, true);
 	private final DataEntryInt spawnRange = new DataEntryInt("SpawnRange", 4, true);
 
-	public TileEntitySpawner() {
-		super(CQRBlockEntities.SPAWNER.get(), 9);
+	public TileEntitySpawner(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.SPAWNER.get(), 9, pos, state);
 		this.dataManager.register(this.vanillaSpawner);
 		this.dataManager.register(this.minSpawnDelay);
 		this.dataManager.register(this.maxSpawnDelay);
@@ -50,45 +56,38 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 	}
 
 	@Override
-	public TileEntityDataManager getDataManager() {
-		return this.dataManager;
-	}
-
-	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
+	protected void saveAdditional(CompoundTag compound) {
+		super.saveAdditional(compound);
 		this.dataManager.write(compound);
-		return compound;
 	}
-
+	
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
-		this.dataManager.read(compound);
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.dataManager.read(pTag);
 	}
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+		return this.saveWithId();
 	}
 
 	@Override
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 		this.dataManager.read(pkt.getTag());
 	}
-
+	
 	@Override
-	public void tick() {
-		//if (true) return;
-		if (!this.level.isClientSide && this.level.getDifficulty() != Difficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.SERVER_CONFIG.general.spawnerActivationDistance.get())) {
-			this.turnBackIntoEntity();
+	public void tick(Level pLevel, BlockPos pPos, BlockState pState, TileEntitySpawner pBlockEntity) {
+		if (!pLevel.isClientSide && pLevel.getDifficulty() != Difficulty.PEACEFUL && pBlockEntity.isNonCreativePlayerInRange(CQRConfig.SERVER_CONFIG.general.spawnerActivationDistance.get())) {
+			pBlockEntity.turnBackIntoEntity();
 		} else {
-			this.getDataManager().checkIfDirtyAndSync();
+			ITileEntitySyncable.super.tick(pLevel, pPos, pState, pBlockEntity);
 		}
 	}
 
@@ -147,8 +146,8 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 
 			this.level.addFreshEntity(entity);
 
-			ListTag passengers = entityTag.getList("Passengers", Constants.NBT.TAG_COMPOUND);
-			for (INBT passengerNBT : passengers) {
+			ListTag passengers = entityTag.getList("Passengers", Tag.TAG_COMPOUND);
+			for (Tag passengerNBT : passengers) {
 				Entity passenger = this.spawnEntityFromNBT((CompoundTag) passengerNBT);
 				passenger.startRiding(entity);
 			}
@@ -209,6 +208,22 @@ public class TileEntitySpawner extends BlockEntityContainer implements ITileEnti
 
 	public int getSpawnRange() {
 		return this.spawnRange.getInt();
+	}
+
+	@Override
+	protected Component getDefaultName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
+		return CQRContainerTypes.SPAWNER.get().create(pContainerId, pInventory);
+	}
+
+	@Override
+	public TileEntityDataManager getDataManager() {
+		return this.dataManager;
 	}
 
 }

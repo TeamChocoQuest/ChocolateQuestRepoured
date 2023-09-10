@@ -1,30 +1,34 @@
 package team.cqr.cqrepoured.tileentity;
 
+import java.io.File;
+import java.util.Arrays;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.IntArrayNBT;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.client.packet.CPacketSaveStructureRequest;
-import team.cqr.cqrepoured.network.datasync.*;
+import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
+import team.cqr.cqrepoured.network.datasync.DataEntryInt;
+import team.cqr.cqrepoured.network.datasync.DataEntryObject;
+import team.cqr.cqrepoured.network.datasync.DataEntryString;
+import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
-import java.io.File;
-import java.util.Arrays;
-
-public class TileEntityExporter extends BlockEntity implements ITileEntitySyncable {
+public class TileEntityExporter extends BlockEntity implements ITileEntitySyncable<TileEntityExporter> {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -94,13 +98,13 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 				data[i * 3 + 1] = this.value[i].getY();
 				data[i * 3 + 2] = this.value[i].getZ();
 			}
-			return new IntArrayNBT(data);
+			return new IntArrayTag(data);
 		}
 
 		@Override
 		protected void readInternal(Tag nbt) {
-			if (nbt instanceof IntArrayNBT) {
-				int[] data = ((IntArrayNBT) nbt).getAsIntArray();
+			if (nbt instanceof IntArrayTag) {
+				int[] data = ((IntArrayTag) nbt).getAsIntArray();
 				this.value = new BlockPos[data.length / 3];
 				for (int i = 0; i < this.value.length; i++) {
 					this.value[i] = new BlockPos(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
@@ -125,13 +129,13 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 		}
 	};
 
-	private final BlockPos.Mutable minPos = new BlockPos.Mutable();
-	private final BlockPos.Mutable maxPos = new BlockPos.Mutable();
-	private final BlockPos.Mutable minPosRelative = new BlockPos.Mutable();
-	private final BlockPos.Mutable maxPosRelative = new BlockPos.Mutable();
+	private final MutableBlockPos minPos = new MutableBlockPos();
+	private final MutableBlockPos maxPos = new MutableBlockPos();
+	private final MutableBlockPos minPosRelative = new MutableBlockPos();
+	private final MutableBlockPos maxPosRelative = new MutableBlockPos();
 
-	public TileEntityExporter() {
-		super(CQRBlockEntities.EXPORTER.get());
+	public TileEntityExporter(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.EXPORTER.get(), pos, state);
 		this.dataManager.register(this.structureName);
 		this.dataManager.register(this.startX);
 		this.dataManager.register(this.startY);
@@ -150,27 +154,26 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
-		this.dataManager.write(compound);
-		return compound;
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		this.dataManager.write(pTag);
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
-		this.dataManager.read(compound);
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.dataManager.read(pTag);
 		this.onPositionsChanged();
 	}
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+		return this.saveWithId();
 	}
 
 	@Override
@@ -178,7 +181,7 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 		this.dataManager.read(pkt.getTag());
 		this.onPositionsChanged();
 	}
-
+	
 	@Override
 	public void setPosition(BlockPos posIn) {
 		boolean flag = !this.worldPosition.equals(posIn);
@@ -243,9 +246,9 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 			CQStructure structure = CQStructure.createFromWorld(this.level, this.minPos, this.maxPos, this.ignoreEntities.getBoolean(), Arrays.asList(this.unprotectedBlocks.get()), author.getName().getString());
 			new Thread(() -> {
 				if (structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName.get() + ".nbt"))) {
-					author.sendMessage(new TextComponent("Successfully exported structure: " + this.structureName.get()), null);
+					author.sendSystemMessage(Component.literal("Successfully exported structure: " + this.structureName.get()));
 				} else {
-					author.sendMessage(new TextComponent("Failed to export structure: " + this.structureName.get()), null);
+					author.sendSystemMessage(Component.literal("Failed to export structure: " + this.structureName.get()));
 				}
 			}, "CQR Export Thread").start();
 		} else {
@@ -315,11 +318,11 @@ public class TileEntityExporter extends BlockEntity implements ITileEntitySyncab
 		return this.unprotectedBlocks.get();
 	}
 
-	public BlockPos.Mutable getMinPos() {
+	public MutableBlockPos getMinPos() {
 		return this.minPos;
 	}
 
-	public BlockPos.Mutable getMaxPos() {
+	public MutableBlockPos getMaxPos() {
 		return this.maxPos;
 	}
 

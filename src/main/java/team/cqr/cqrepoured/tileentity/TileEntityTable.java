@@ -15,19 +15,22 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
+import team.cqr.cqrepoured.init.CQRContainerTypes;
+import team.cqr.cqrepoured.inventory.InventoryBlockEntity;
 import team.cqr.cqrepoured.network.datasync.DataEntryByte;
 import team.cqr.cqrepoured.network.datasync.DataEntryInventory;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityTable extends RandomizableContainerBlockEntity implements ITileEntitySyncable {
+public class TileEntityTable extends RandomizableContainerBlockEntity implements ITileEntitySyncable<TileEntityTable> {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
-	private final DataEntryInventory dataEntryInventory = new DataEntryInventory("inventory", this.inventory, false);
+	private InventoryBlockEntity items = new InventoryBlockEntity(this, 1, false);
+	private final DataEntryInventory dataEntryInventory = new DataEntryInventory("inventory", this.items, false);
 	private final DataEntryByte rotation = new DataEntryByte("rotation", (byte) 0, false);
 
-	public TileEntityTable() {
-		super(CQRBlockEntities.TABLE.get(), 1, 1);
+	public TileEntityTable(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.TABLE.get(), pos, state);
 		this.dataManager.register(this.dataEntryInventory);
 		this.dataManager.register(this.rotation);
 	}
@@ -38,18 +41,17 @@ public class TileEntityTable extends RandomizableContainerBlockEntity implements
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
-		this.dataManager.write(compound);
-		return compound;
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		this.dataManager.write(pTag);
 	}
-
+	
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
-		this.dataManager.read(compound);
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.dataManager.read(pTag);
 	}
-
+	
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		return ClientboundBlockEntityDataPacket.create(this, (be) -> {
@@ -59,7 +61,8 @@ public class TileEntityTable extends RandomizableContainerBlockEntity implements
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+		CompoundTag tag = new CompoundTag();
+		return this.dataManager.write(tag);
 	}
 
 	@Override

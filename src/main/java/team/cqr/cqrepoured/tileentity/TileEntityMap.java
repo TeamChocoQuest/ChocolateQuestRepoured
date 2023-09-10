@@ -1,19 +1,20 @@
 package team.cqr.cqrepoured.tileentity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.network.Connection;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryFacing;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
 
-public class TileEntityMap extends BlockEntity implements ITileEntitySyncable {
+public class TileEntityMap extends BlockEntity implements ITileEntitySyncable<TileEntityMap> {
 
 	private final TileEntityDataManager dataManager = new TileEntityDataManager(this);
 
@@ -27,8 +28,8 @@ public class TileEntityMap extends BlockEntity implements ITileEntitySyncable {
 	private final DataEntryBoolean fillMap = new DataEntryBoolean("fillMap", false, true);
 	private final DataEntryInt fillRadius = new DataEntryInt("fillRadius", 256, true);
 
-	public TileEntityMap() {
-		super(CQRBlockEntities.MAP.get());
+	public TileEntityMap(BlockPos pos, BlockState state) {
+		super(CQRBlockEntities.MAP.get(), pos, state);
 		this.dataManager.register(this.scale);
 		this.dataManager.register(this.orientation);
 		this.dataManager.register(this.lockOrientation);
@@ -46,26 +47,25 @@ public class TileEntityMap extends BlockEntity implements ITileEntitySyncable {
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
-		this.dataManager.write(compound);
-		return compound;
+	protected void saveAdditional(CompoundTag pTag) {
+		super.saveAdditional(pTag);
+		this.dataManager.write(pTag);
 	}
 
 	@Override
-	public void load(BlockState state, CompoundTag compound) {
-		super.load(state, compound);
-		this.dataManager.read(compound);
+	public void load(CompoundTag pTag) {
+		super.load(pTag);
+		this.dataManager.read(pTag);
 	}
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.worldPosition, 0, this.dataManager.write(new CompoundTag()));
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
 	public CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+		return this.saveWithId();
 	}
 
 	@Override
