@@ -6,17 +6,19 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TradeInput;
@@ -25,7 +27,7 @@ import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.network.CQRNetworkHooks;
 
-public class ContainerMerchantEditTrade extends Container implements IInteractable {
+public class ContainerMerchantEditTrade extends AbstractContainerMenu implements IInteractable {
 
 	private final AbstractEntityCQR entity;
 	private final Container tradeInventory;
@@ -51,12 +53,12 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 		
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				this.addSlot(new Slot(player.inventory, j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
+				this.addSlot(new Slot(player.getInventory(), j + i * 9 + 9, 72 + j * 18, 60 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			this.addSlot(new Slot(player.inventory, k, 72 + k * 18, 118));
+			this.addSlot(new Slot(player.getInventory(), k, 72 + k * 18, 118));
 		}
 
 		this.tradeInventory = new Inventory(/* "", false, */ 5);
@@ -70,7 +72,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 		if (trade != null) {
 			NonNullList<TradeInput> tradeInputs = trade.getInputItems();
 			for (int i = 0; i < tradeInputs.size() && i < this.tradeInventory.getContainerSize() - 1; i++) {
-				this.tradeInventory.setItem(i, tradeInputs.get(i).getStack());
+				this.tradeInventory.setItem(i, tradeInputs.get(i).stack());
 			}
 			this.tradeInventory.setItem(this.tradeInventory.getContainerSize() - 1, trade.getOutput());
 		}
@@ -153,7 +155,7 @@ public class ContainerMerchantEditTrade extends Container implements IInteractab
 
 				TraderOffer trades = this.entity.getTrades();
 				int reputation = this.getRequriedReputation(reputationName);
-				ResourceLocation advancement = this.getRequiredAdvancement((ServerLevel) player.level, advancementName);
+				ResourceLocation advancement = this.getRequiredAdvancement((ServerLevel) player.level(), advancementName);
 				ItemStack output = this.getOutput();
 				TradeInput[] input = this.getTradeInput(this.getInput(), ignoreMeta, ignoreNBT);
 				Trade trade = new Trade(trades, reputation, advancement, stock, restock, inStock, maxStock, output, input);

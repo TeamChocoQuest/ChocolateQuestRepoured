@@ -1,23 +1,26 @@
 package team.cqr.cqrepoured.inventory;
 
+import java.util.Objects;
+
 import com.mojang.datafixers.util.Pair;
+
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import team.cqr.cqrepoured.CQRMain;
@@ -29,9 +32,7 @@ import team.cqr.cqrepoured.item.ItemBadge;
 import team.cqr.cqrepoured.item.ItemPotionHealing;
 import team.cqr.cqrepoured.item.gun.ItemBullet;
 
-import java.util.Objects;
-
-public class ContainerCQREntity extends Container {
+public class ContainerCQREntity extends AbstractContainerMenu {
 
 	private final AbstractEntityCQR entity;
 	
@@ -55,9 +56,9 @@ public class ContainerCQREntity extends Container {
 		Objects.requireNonNull(playerInventory, "playerInventory cannot be null");
 		int entityID = data.readInt();
 
-		if(playerInventory.player.level.getEntity(entityID) != null && playerInventory.player.level.getEntity(entityID) instanceof AbstractEntityCQR)
+		if(playerInventory.player.level().getEntity(entityID) != null && playerInventory.player.level().getEntity(entityID) instanceof AbstractEntityCQR)
 		{
-			return (AbstractEntityCQR)playerInventory.player.level.getEntity(entityID);
+			return (AbstractEntityCQR)playerInventory.player.level().getEntity(entityID);
 		}
 		throw new IllegalStateException("EntityID is not correct! " + entityID);
 	}
@@ -68,7 +69,7 @@ public class ContainerCQREntity extends Container {
 		if(entity == null) {
 			return;
 		}
-		LazyOptional<IItemHandler> lOpCap = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		LazyOptional<IItemHandler> lOpCap = entity.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
 		IItemHandler inventory = null;
 		if(lOpCap.isPresent()) {
 			inventory = lOpCap.resolve().get();
@@ -293,7 +294,7 @@ public class ContainerCQREntity extends Container {
 	}
 
 	private boolean isHelmet(ItemStack stack) {
-		return (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).getSlot() == EquipmentSlot.HEAD) || stack.getItem().getEquipmentSlot(stack) == EquipmentSlot.HEAD;
+		return (stack.getItem() instanceof ArmorItem && ((ArmorItem) stack.getItem()).getType() == ArmorItem.Type.HELMET) || stack.getItem().getEquipmentSlot(stack) == EquipmentSlot.HEAD;
 	}
 
 }

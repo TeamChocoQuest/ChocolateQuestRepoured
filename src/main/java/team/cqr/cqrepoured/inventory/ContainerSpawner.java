@@ -1,24 +1,24 @@
 package team.cqr.cqrepoured.inventory;
 
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 
-public class ContainerSpawner extends Container {
+public class ContainerSpawner extends AbstractContainerMenu {
 
 	private final TileEntitySpawner tileEntity;
 	private final Container inventory;
 
 	/** Client **/
 	public ContainerSpawner(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
-		this(containerID, playerInv, (TileEntitySpawner) playerInv.player.level.getBlockEntity(data.readBlockPos()));
+		this(containerID, playerInv, (TileEntitySpawner) playerInv.player.level().getBlockEntity(data.readBlockPos()));
 	}
 
 	/** Server **/

@@ -2,27 +2,22 @@ package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 
-public class ContainerBossBlock extends Container {
+public class ContainerBossBlock extends AbstractContainerMenu {
 
 	private final Container inventory;
 
 	/** Client **/
 	public ContainerBossBlock(final int containerID, Inventory playerInv, FriendlyByteBuf data) {
-		this(containerID, playerInv, new Inventory(1) {
-			@Override
-			public int getMaxStackSize() {
-				return 1;
-			}
-		});
+		this(containerID, playerInv, new SimpleContainer(9));
 	}
 
 	/** Server **/

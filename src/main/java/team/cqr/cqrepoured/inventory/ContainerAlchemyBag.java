@@ -1,20 +1,20 @@
 package team.cqr.cqrepoured.inventory;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 
-public class ContainerAlchemyBag extends Container {
+public class ContainerAlchemyBag extends AbstractContainerMenu {
 
     //private final IInventory inventory;
     private final ItemStack stack;
@@ -29,7 +29,7 @@ public class ContainerAlchemyBag extends Container {
 
         this.hand = hand;
         this.stack = playerInv.player.getItemInHand(hand);
-        LazyOptional<IItemHandler> cap = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+        LazyOptional<IItemHandler> cap = stack.getCapability(ForgeCapabilities.ITEM_HANDLER);
         int currentItem = playerInv.selected;
 
         //this.inventory = inventory;
