@@ -32,12 +32,12 @@ public class ItemStaffSpider extends ItemLore implements IRangedWeapon {
 	}
 
 	public void shoot(Level worldIn, Player playerIn, ItemStack stack, InteractionHand handIn) {
-		worldIn.playLocalSound(playerIn.position().x, playerIn.position().y, playerIn.position().z, SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 4.0F, (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playLocalSound(playerIn.position().x, playerIn.position().y, playerIn.position().z, SoundEvents.SLIME_SQUISH, SoundSource.MASTER, 4.0F, (1.0F + (playerIn.getRandom().nextFloat() - playerIn.getRandom().nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swing(handIn);
 
 		if (!worldIn.isClientSide) {
 			ProjectileSpiderBall ball = new ProjectileSpiderBall(playerIn, worldIn);
-			ball.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, 1.5F, 0F);
+			ball.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 1.5F, 0F);
 			worldIn.addFreshEntity(ball);
 			stack.hurtAndBreak(1, playerIn, p -> p.broadcastBreakEvent(handIn));
 			playerIn.getCooldowns().addCooldown(stack.getItem(), 20);

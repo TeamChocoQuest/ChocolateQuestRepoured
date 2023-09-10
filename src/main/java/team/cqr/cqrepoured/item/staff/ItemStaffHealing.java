@@ -39,11 +39,11 @@ public class ItemStaffHealing extends ItemLore implements ISupportWeapon<ItemFak
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-		if (!player.level.isClientSide && entity instanceof LivingEntity && !player.getCooldowns().isOnCooldown(stack.getItem())) {
+		if (!player.level().isClientSide() && entity instanceof LivingEntity && !player.getCooldowns().isOnCooldown(stack.getItem())) {
 			((LivingEntity) entity).heal(HEAL_AMOUNT_ENTITIES);
 			entity.setRemainingFireTicks(0);
-			((ServerLevel) player.level).sendParticles(ParticleTypes.HEART, entity.position().x, entity.position().y + entity.getBbHeight() * 0.5D, entity.position().z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-			player.level.playSound(null, entity.position().x, entity.position().y + entity.getBbHeight() * 0.5D, entity.position().z, CQRSounds.MAGIC, SoundSource.MASTER, 0.6F, 0.6F + random.nextFloat() * 0.2F);
+			((ServerLevel) player.level()).sendParticles(ParticleTypes.HEART, entity.position().x, entity.position().y + entity.getBbHeight() * 0.5D, entity.position().z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			player.level().playSound(null, entity.position().x, entity.position().y + entity.getBbHeight() * 0.5D, entity.position().z, CQRSounds.MAGIC, SoundSource.MASTER, 0.6F, 0.6F + player.getRandom().nextFloat() * 0.2F);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(player.getUsedItemHand()));
 			player.getCooldowns().addCooldown(stack.getItem(), 30);
 		}

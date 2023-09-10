@@ -32,11 +32,11 @@ public class ItemStaffGun extends ItemLore implements IRangedWeapon {
 	}
 
 	public void shootStaff(Level worldIn, Player player, ItemStack stack, InteractionHand handIn) {
-		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, CQRSounds.GUN_SHOOT, SoundSource.MASTER, 4.0F, (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, CQRSounds.GUN_SHOOT, SoundSource.MASTER, 4.0F, (1.0F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isClientSide) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(player, worldIn, false);
-			ball.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 3.5F, 0F);
+			ball.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 3.5F, 0F);
 			worldIn.addFreshEntity(ball);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
 			player.getCooldowns().addCooldown(stack.getItem(), 20);

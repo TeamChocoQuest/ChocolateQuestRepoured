@@ -32,12 +32,12 @@ public class ItemStaffVampiric extends ItemLore implements IRangedWeapon {
 	}
 
 	public void shoot(ItemStack stack, Level worldIn, Player player, InteractionHand handIn) {
-		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, SoundEvents.ENDER_PEARL_THROW, SoundSource.MASTER, 4.0F, (1.0F + (random.nextFloat() - random.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playLocalSound(player.position().x, player.position().y, player.position().z, SoundEvents.ENDER_PEARL_THROW, SoundSource.MASTER, 4.0F, (1.0F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.2F) * 0.7F, false);
 		player.swing(handIn);
 
 		if (!worldIn.isClientSide) {
 			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(player, worldIn);
-			spell.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 2.0F, 0F);
+			spell.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.0F, 0F);
 			worldIn.addFreshEntity(spell);
 			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(handIn));
 			player.getCooldowns().addCooldown(stack.getItem(), 20);

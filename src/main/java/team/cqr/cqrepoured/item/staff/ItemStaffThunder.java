@@ -48,7 +48,7 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 		if (!worldIn.isClientSide) {
 			Vec3 start = player.getEyePosition(1.0F);
 			Vec3 end = start.add(player.getLookAngle().scale(20.0D));
-			HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.COLLIDER, ClipContext.FluidMode.NONE, player));
+			HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 
 			if (result != null) {
 				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.getLocation().x, result.getLocation().y, result.getLocation().z, true, false, 0.0F, 0.0F, 0.75F, 0.25F);
@@ -60,9 +60,9 @@ public class ItemStaffThunder extends ItemLore implements IRangedWeapon {
 	public boolean isNotAirBlock(Level worldIn, Player player) {
 		Vec3 start = player.getEyePosition(1.0F);
 		Vec3 end = start.add(player.getLookAngle().scale(20.0D));
-		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.BlockMode.OUTLINE, ClipContext.FluidMode.NONE, player));
+		HitResult result = worldIn.clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player));
 
-		return result != null && !worldIn.isEmptyBlock(new BlockPos(result.getLocation().x, result.getLocation().y, result.getLocation().z));
+		return result != null && !worldIn.isEmptyBlock(BlockPos.containing(result.getLocation()));
 	}
 
 	@Override
