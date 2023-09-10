@@ -124,14 +124,22 @@ repositories {
 		name = "SBL Maven" // SmartBrainLib
 		url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
     }
+    
     maven {
-		name "Progwm16 Maven" // JEI
-		url "https://dvs1.progwml6.com/files/maven"
+    	// location of the maven that hosts JEI files before January 2023
+    	name = "Progwml6's maven"
+    	url = "https://dvs1.progwml6.com/files/maven/"
     }
-    maven { 
-		name "ModMaven" // JEI Alt
-		url "https://modmaven.dev"
-    }
+    maven {
+    	// location of the maven that hosts JEI files since January 2023
+    	name = "Jared's maven"
+    	url = "https://maven.blamejared.com/"
+  	}
+  	maven {
+    	// location of a maven mirror for JEI files, as a fallback
+    	name = "ModMaven"
+    	url = "https://modmaven.dev"
+  	}
 	
 	maven { 
 		name "Databuddy" // Databuddy repo
@@ -157,8 +165,9 @@ dependencies {
  // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
     // Dependencies (Optional)
-//  compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-//  runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+	compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+	compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
