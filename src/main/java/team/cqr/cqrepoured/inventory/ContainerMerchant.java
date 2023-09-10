@@ -151,7 +151,7 @@ public class ContainerMerchant extends AbstractContainerMenu implements IInterac
 			}
 		} else {
 			for (int i = 0; i < 4; i++) {
-				playerIn.inventory.placeItemBackInInventory(playerIn.level, this.merchantInventory.removeItemNoUpdate(i));
+				playerIn.getInventory().placeItemBackInInventory(this.merchantInventory.removeItemNoUpdate(i));
 			}
 		}
 	}
@@ -179,19 +179,19 @@ public class ContainerMerchant extends AbstractContainerMenu implements IInterac
 	}
 
 	private void fillSlot(int slotIndex, TradeInput input) {
-		if (!input.getStack().isEmpty()) {
+		if (!input.stack().isEmpty()) {
 			for (int i = 0; i < 36; i++) {
 				ItemStack stack1 = this.slots.get(i).getItem();
-				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.getStack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
+				if (!stack1.isEmpty() && CraftingHelper.areItemStacksEqualIgnoreCount(input.stack(), stack1, input.ignoreMeta(), input.ignoreNBT())) {
 					ItemStack stack2 = this.merchantInventory.getItem(slotIndex);
 					int j = stack2.isEmpty() ? 0 : stack2.getCount();
-					int k = Math.min(input.getStack().getMaxStackSize() - j, stack1.getCount());
+					int k = Math.min(input.stack().getMaxStackSize() - j, stack1.getCount());
 					ItemStack stack3 = stack1.copy();
 					int l = j + k;
 					stack1.shrink(k);
 					stack3.setCount(l);
 					this.merchantInventory.setItem(slotIndex, stack3);
-					if (l >= input.getStack().getMaxStackSize()) {
+					if (l >= input.stack().getMaxStackSize()) {
 						break;
 					}
 				}
