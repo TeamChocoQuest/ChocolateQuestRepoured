@@ -1,13 +1,17 @@
 package team.cqr.cqrepoured.integration.jei;
 
+import java.util.List;
+
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import team.cqr.cqrepoured.entity.trade.RestockData;
 import team.cqr.cqrepoured.entity.trade.StockData;
@@ -42,12 +46,31 @@ public class NPCTradeRecipeCategory implements IRecipeCategory<TradeData> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public boolean isHandled(TradeData recipe) {
+		return IRecipeCategory.super.isHandled(recipe);
+	}
+	
+	@Override
+	public void draw(TradeData recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+		IRecipeCategory.super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+		// Draw items and checkboxes (meta, NBT, rules)
+		
+		// Top: Display rules for the customer => just a counter of how many rules, rules are rendered via tooltip!
+		// Bottom: Stock and restock settings
+	}
+	
+	@Override
+	public List<Component> getTooltipStrings(TradeData recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+		// TODO: Add the relevant rules to a certain item
+		return IRecipeCategory.super.getTooltipStrings(recipe, recipeSlotsView, mouseX, mouseY);
+	}
 
 	@Override
 	public void setRecipe(IRecipeLayoutBuilder builder, TradeData recipe, IFocusGroup focuses) {
 		int y = 0;
 		for (TradeInput input : recipe) {
-			// TODO: Generate tooltip for the input stack that explains how it should match
 			builder.addSlot(RecipeIngredientRole.INPUT, 0, y).addIngredient(VanillaTypes.ITEM_STACK, input.stack());
 		}
 		// Displayed on the right
