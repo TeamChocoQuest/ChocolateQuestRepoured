@@ -2,11 +2,11 @@ package team.cqr.cqrepoured.inventory;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.Container;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.trade.Trade;
 import team.cqr.cqrepoured.entity.trade.TraderOffer;
@@ -48,7 +48,7 @@ public class InventoryMerchant implements Container {
 
 	@Override
 	public ItemStack removeItem(int index, int count) {
-		ItemStack stack = ItemStackHelper.removeItem(this.slots, index, index == 5 ? this.slots.get(index).getCount() : count);
+		ItemStack stack = ContainerHelper.removeItem(this.slots, index, index == 5 ? this.slots.get(index).getCount() : count);
 		if (!stack.isEmpty()) {
 			this.resetTradeAndSlots();
 		}
@@ -57,7 +57,7 @@ public class InventoryMerchant implements Container {
 
 	@Override
 	public ItemStack removeItemNoUpdate(int index) {
-		ItemStack stack = ItemStackHelper.takeItem(this.slots, index);
+		ItemStack stack = ContainerHelper.takeItem(this.slots, index);
 		if (!stack.isEmpty()) {
 			this.resetTradeAndSlots();
 		}

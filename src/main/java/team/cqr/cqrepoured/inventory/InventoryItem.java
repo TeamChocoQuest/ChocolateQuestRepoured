@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.inventory;
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-public class InventoryItem extends Inventory {
+public class InventoryItem extends SimpleContainer {
 
 	private final ItemStack stack;
 	private final InteractionHand hand;

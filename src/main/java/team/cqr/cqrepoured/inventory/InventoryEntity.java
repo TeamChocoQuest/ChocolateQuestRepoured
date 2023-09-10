@@ -1,12 +1,13 @@
 package team.cqr.cqrepoured.inventory;
 
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.ItemStackHelper;
 
-public class InventoryEntity extends Inventory {
+public class InventoryEntity extends SimpleContainer {
 
 	private final Entity entity;
 	private final boolean creativeOnly;
@@ -29,12 +30,12 @@ public class InventoryEntity extends Inventory {
 	}
 
 	public CompoundTag save(CompoundTag compound) {
-		ItemStackHelper.saveAllItems(compound, this.items);
+		ContainerHelper.saveAllItems(compound, this.items);
 		return compound;
 	}
 
 	public void load(CompoundTag compound) {
-		ItemStackHelper.loadAllItems(compound, this.items);
+		ContainerHelper.loadAllItems(compound, this.getItems());
 	}
 
 	public Entity getEntity() {
