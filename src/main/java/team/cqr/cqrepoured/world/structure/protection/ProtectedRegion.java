@@ -7,259 +7,97 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.nbt.IntArrayNBT;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
+import net.minecraft.util.SimpleBitStorage;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.NBTCollectors;
-import team.cqr.cqrepoured.util.NBTHelper;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
+import team.cqr.cqrepoured.serialization.CodecUtil;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.ProtectionSettings;
 
-public class ProtectedRegion {
+public record ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies, UpdateInfo updateInfo) {
 
-	public static final String PROTECTED_REGION_VERSION = "1.2.0";
-	public static boolean logVersionWarnings = true;
-	private final Level world;
-	private UUID uuid = Mth.createInsecureUUID();
-	private String name;
-	private BlockPos pos;
-	private BlockPos startPos;
-	private BlockPos endPos;
-	private BlockPos size;
-	private byte[] protectionStates;
-	private boolean preventBlockBreaking = false;
-	private boolean preventBlockPlacing = false;
-	private boolean preventExplosionsTNT = false;
-	private boolean preventExplosionsOther = false;
-	private boolean preventFireSpreading = false;
-	private boolean preventEntitySpawning = false;
-	private boolean ignoreNoBossOrNexus = false;
-	private boolean isGenerating = true;
-	private final Set<UUID> entityDependencies = new HashSet<>();
-	private final Set<BlockPos> blockDependencies = new HashSet<>();
-	private boolean needsSaving = false;
-	private boolean needsSyncing = false;
+	private static class UpdateInfo {
 
-	public ProtectedRegion(Level world, String dungeonName, BlockPos pos, BlockPos startPos, BlockPos endPos) {
-		this.world = world;
-		this.name = dungeonName;
-		this.pos = pos.immutable();
-		this.startPos = DungeonGenUtils.getValidMinPos(startPos, endPos);
-		this.endPos = DungeonGenUtils.getValidMaxPos(startPos, endPos);
-		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
-		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
-		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
-		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
+		private boolean needsSaving;
+		private boolean needsSyncing;
+
+		public UpdateInfo() {
+			this(false, false);
+		}
+
+		public UpdateInfo(boolean needsSaving, boolean needsSyncing) {
+			this.needsSaving = needsSaving;
+			this.needsSyncing = needsSyncing;
+		}
+
 	}
 
-	public ProtectedRegion(Level world, CompoundTag compound) {
-		this.world = world;
-		this.readFromNBT(compound);
-		this.clearNeedsSaving();
-		this.clearNeedsSyncing();
+	public static final Codec<ProtectedRegion> CODEC = RecordCodecBuilder.create(instance -> {
+        return instance.group(
+        		UUIDUtil.CODEC.fieldOf("uuid").forGetter(ProtectedRegion::uuid),
+        		BoundingBox.CODEC.fieldOf("bounding_box").forGetter(ProtectedRegion::boundingBox),
+        		CodecUtil.SIMPLE_BIT_STORAGE.fieldOf("protection_data").forGetter(ProtectedRegion::protectionData),
+        		ProtectionSettings.CODEC.fieldOf("protection_settings").forGetter(ProtectedRegion::protectionSettings),
+        		CodecUtil.set(UUIDUtil.CODEC).fieldOf("entity_dependencies").forGetter(ProtectedRegion::entityDependencies),
+        		CodecUtil.set(BlockPos.CODEC).fieldOf("block_dependencies").forGetter(ProtectedRegion::blockDependencies))
+        		.apply(instance, ProtectedRegion::new);
+	});
+
+	public ProtectedRegion(BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies) {
+		this(Mth.createInsecureUUID(), boundingBox, protectionData, protectionSettings, entityDependencies, blockDependencies);
 	}
 
-	public ProtectedRegion(Level world, FriendlyByteBuf buf) {
-		this.world = world;
-		this.readFromByteBuf(buf);
-		this.clearNeedsSaving();
-		this.clearNeedsSyncing();
-	}
-
-	public CompoundTag writeToNBT() {
-		CompoundTag tag = new CompoundTag();
-		this.writeToNBT(tag);
-		return tag;
+	private ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies) {
+		this(uuid, boundingBox, protectionData, protectionSettings, entityDependencies, blockDependencies, new UpdateInfo());
 	}
 
 	public void markDirty() {
-		this.needsSaving = true;
-		this.needsSyncing = true;
+		this.updateInfo.needsSaving = true;
+		this.updateInfo.needsSyncing = true;
 	}
 
 	public void clearNeedsSaving() {
-		this.needsSaving = false;
+		this.updateInfo.needsSaving = false;
 	}
 
 	public void clearNeedsSyncing() {
-		this.needsSyncing = false;
+		this.updateInfo.needsSyncing = false;
 	}
 
 	public boolean needsSaving() {
-		return this.needsSaving;
+		return this.updateInfo.needsSaving;
 	}
 
 	public boolean needsSyncing() {
-		return this.needsSyncing;
-	}
-
-	public void writeToNBT(CompoundTag compound) {
-		compound.putString("version", PROTECTED_REGION_VERSION);
-		compound.put("uuid", NbtUtils.createUUID(this.uuid));
-		compound.putString("name", this.name);
-		compound.put("pos", NBTHelper.createBlockPos(this.pos));
-		compound.put("startPos", NBTHelper.createBlockPos(this.startPos));
-		compound.put("endPos", NBTHelper.createBlockPos(this.endPos));
-		compound.putByteArray("protectionStates", this.protectionStates);
-
-		compound.putBoolean("preventBlockBreaking", this.preventBlockBreaking);
-		compound.putBoolean("preventBlockPlacing", this.preventBlockPlacing);
-		compound.putBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
-		compound.putBoolean("preventExplosionsOther", this.preventExplosionsOther);
-		compound.putBoolean("preventFireSpreading", this.preventFireSpreading);
-		compound.putBoolean("preventEntitySpawning", this.preventEntitySpawning);
-		compound.putBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
-		compound.putBoolean("isGenerating", this.isGenerating);
-
-		compound.put("entityDependencies", this.entityDependencies.stream()
-				.map(NbtUtils::createUUID)
-				.collect(NBTCollectors.toList()));
-
-		compound.put("blockDependencies", this.blockDependencies.stream()
-				.map(NBTHelper::createBlockPos)
-				.collect(NBTCollectors.toList()));
-	}
-
-	public void readFromNBT(CompoundTag compound) {
-		String version = compound.getString("version");
-		if (logVersionWarnings && !version.equals(PROTECTED_REGION_VERSION)) {
-			CQRMain.logger.warn("Warning! Trying to create protected region from file which was created with an older/newer version of CQR! Expected {} but got {}.", PROTECTED_REGION_VERSION, version);
-		}
-
-		this.uuid = NbtUtils.loadUUID(compound.get("uuid"));
-		this.name = compound.getString("name");
-		this.pos = NBTHelper.loadBlockPos(compound.get("pos"));
-		this.startPos = NBTHelper.loadBlockPos(compound.get("startPos"));
-		this.endPos = NBTHelper.loadBlockPos(compound.get("endPos"));
-		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
-		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
-		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
-		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		this.protectionStates = compound.getByteArray("protectionStates");
-
-		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
-		this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
-		this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
-		this.preventExplosionsOther = compound.getBoolean("preventExplosionsOther");
-		this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
-		this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
-		this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
-		this.isGenerating = compound.getBoolean("isGenerating");
-
-		this.entityDependencies.clear();
-		NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
-				.map(NbtUtils::loadUUID)
-				.forEach(this.entityDependencies::add);
-
-		this.blockDependencies.clear();
-		NBTHelper.stream(compound.get("blockDependencies"), IntArrayNBT.TYPE)
-				.map(NBTHelper::loadBlockPos)
-				.forEach(this.blockDependencies::add);
-
-		this.markDirty();
-	}
-
-	public void writeToByteBuf(FriendlyByteBuf buf) {
-		buf.writeUUID(this.uuid);
-		buf.writeUtf(this.name);
-		buf.writeBlockPos(this.pos);
-		buf.writeBlockPos(this.startPos);
-		buf.writeBlockPos(this.endPos);
-		buf.writeBytes(this.protectionStates);
-
-		byte flags = 0;
-		flags |= this.preventBlockBreaking ? 1 : 0;
-		flags |= this.preventBlockPlacing ? (1 << 1) : 0;
-		flags |= this.preventExplosionsTNT ? (1 << 2) : 0;
-		flags |= this.preventExplosionsOther ? (1 << 3) : 0;
-		flags |= this.preventFireSpreading ? (1 << 4) : 0;
-		flags |= this.preventEntitySpawning ? (1 << 5) : 0;
-		flags |= this.ignoreNoBossOrNexus ? (1 << 6) : 0;
-		flags |= this.isGenerating ? (1 << 7) : 0;
-		buf.writeByte(flags);
-
-		buf.writeInt(this.entityDependencies.size());
-		for (UUID entityUuid : this.entityDependencies) {
-			buf.writeUUID(entityUuid);
-		}
-
-		buf.writeInt(this.blockDependencies.size());
-		for (BlockPos blockPos : this.blockDependencies) {
-			buf.writeBlockPos(blockPos);
-		}
-	}
-
-	public void readFromByteBuf(FriendlyByteBuf buf) {
-		this.uuid = buf.readUUID();
-		this.name = buf.readUtf();
-		this.pos = buf.readBlockPos();
-		this.startPos = buf.readBlockPos();
-		this.endPos = buf.readBlockPos();
-		int sizeX = this.endPos.getX() - this.startPos.getX() + 1;
-		int sizeY = this.endPos.getY() - this.startPos.getY() + 1;
-		int sizeZ = this.endPos.getZ() - this.startPos.getZ() + 1;
-		this.size = new BlockPos(sizeX, sizeY, sizeZ);
-		this.protectionStates = new byte[sizeX * sizeY * sizeZ];
-		buf.readBytes(this.protectionStates);
-
-		byte flags = buf.readByte();
-		this.preventBlockBreaking = (flags & 1) == 1;
-		this.preventBlockPlacing = ((flags >> 1) & 1) == 1;
-		this.preventExplosionsTNT = ((flags >> 2) & 1) == 1;
-		this.preventExplosionsOther = ((flags >> 3) & 1) == 1;
-		this.preventFireSpreading = ((flags >> 4) & 1) == 1;
-		this.preventEntitySpawning = ((flags >> 5) & 1) == 1;
-		this.ignoreNoBossOrNexus = ((flags >> 6) & 1) == 1;
-		this.isGenerating = ((flags >> 7) & 1) == 1;
-
-		this.entityDependencies.clear();
-		for (int i = buf.readInt(); i > 0; i--) {
-			this.entityDependencies.add(buf.readUUID());
-		}
-
-		this.blockDependencies.clear();
-		for (int i = buf.readInt(); i > 0; i--) {
-			this.blockDependencies.add(buf.readBlockPos());
-		}
-
-		this.markDirty();
+		return this.updateInfo.needsSyncing;
 	}
 
 	public boolean isInsideProtectedRegion(BlockPos pos) {
-		if (pos.getX() < this.startPos.getX()) {
-			return false;
-		}
-		if (pos.getY() < this.startPos.getY()) {
-			return false;
-		}
-		if (pos.getZ() < this.startPos.getZ()) {
-			return false;
-		}
-		if (pos.getX() > this.endPos.getX()) {
-			return false;
-		}
-		if (pos.getY() > this.endPos.getY()) {
-			return false;
-		}
-		return pos.getZ() <= this.endPos.getZ();
+		return this.boundingBox.isInside(pos);
 	}
 
 	private int index(BlockPos pos) {
-		if (!this.isInsideProtectedRegion(pos)) {
+		return index(this.boundingBox, pos);
+	}
+
+	private static int index(BoundingBox boundingBox, BlockPos pos) {
+		if (!boundingBox.isInside(pos)) {
 			return -1;
 		}
-		int x = pos.getX() - this.startPos.getX();
-		int y = pos.getY() - this.startPos.getY();
-		int z = pos.getZ() - this.startPos.getZ();
-		return (x * this.size.getY() + y) * this.size.getZ() + z;
+		int x = pos.getX() - boundingBox.minX();
+		int y = pos.getY() - boundingBox.minY();
+		int z = pos.getZ() - boundingBox.minZ();
+		return (x * boundingBox.getYSpan() + y) * boundingBox.getZSpan() + z;
 	}
 
 	public boolean isBreakable(BlockPos pos) {
@@ -271,7 +109,7 @@ public class ProtectedRegion {
 		if (index == -1) {
 			return ProtectionState.UNPROTECTED;
 		}
-		return ProtectionState.byId(this.protectionStates[index]);
+		return ProtectionState.byId(this.protectionData.get(index));
 	}
 
 	public void setProtectionState(BlockPos pos, ProtectionState state) {
@@ -279,102 +117,49 @@ public class ProtectedRegion {
 		if (index == -1) {
 			return;
 		}
-		if (this.protectionStates[index] != state.getId()) {
-			this.protectionStates[index] = state.getId();
+		if (this.protectionData.get(index) != state.getId()) {
+			this.protectionData.set(index, state.getId());
 			this.markDirty();
 		}
 	}
-	
-	@Deprecated
-	public void setProtectionState(BlockPos pos, int value) {
-		this.setProtectionState(pos, ProtectionState.byId((byte)value));
-	}
-
-	public byte[] getProtectionStates() {
-		return this.protectionStates;
-	}
 
 	public boolean isValid() {
-		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty() || this.ignoreNoBossOrNexus;
-	}
-
-	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
-		if (!this.isGenerating) {
-			return;
-		}
-
-		this.preventBlockBreaking = preventBlockBreaking;
-		this.preventBlockPlacing = preventBlockPlacing;
-		this.preventExplosionsTNT = preventExplosionsTNT;
-		this.preventExplosionsOther = preventExplosionsOther;
-		this.preventFireSpreading = preventFireSpreading;
-		this.preventEntitySpawning = preventEntitySpawning;
-		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
-
-		this.markDirty();
-	}
-
-	public Level getWorld() {
-		return this.world;
-	}
-
-	public UUID getUuid() {
-		return this.uuid;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public BlockPos getPos() {
-		return this.pos;
-	}
-
-	public BlockPos getStartPos() {
-		return this.startPos;
-	}
-
-	public BlockPos getEndPos() {
-		return this.endPos;
+		return this.protectionSettings.persistent() || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty();
 	}
 
 	public Stream<ChunkPos> chunkArea() {
-		return ChunkPos.rangeClosed(new ChunkPos(this.startPos), new ChunkPos(this.endPos));
+		return ChunkPos.rangeClosed(new ChunkPos(this.boundingBox.minX() >> 4, this.boundingBox.minZ() >> 4), new ChunkPos(this.boundingBox.maxX() >> 4, this.boundingBox.maxZ() >> 4));
 	}
 
 	public boolean preventBlockBreaking() {
-		return this.preventBlockBreaking;
+		return this.protectionSettings.preventBlockBreaking();
 	}
 
 	public boolean preventBlockPlacing() {
-		return this.preventBlockPlacing;
+		return this.protectionSettings.preventBlockPlacing();
 	}
 
 	public boolean preventExplosionsTNT() {
-		return this.preventExplosionsTNT;
+		return this.protectionSettings.preventExplosionsTNT();
 	}
 
 	public boolean preventExplosionsOther() {
-		return this.preventExplosionsOther;
+		return this.protectionSettings.preventExplosionsOther();
 	}
 
 	public boolean preventFireSpreading() {
-		return this.preventFireSpreading;
+		return this.protectionSettings.preventFireSpreading();
 	}
 
 	public boolean preventEntitySpawning() {
-		return this.preventEntitySpawning;
+		return this.protectionSettings.preventEntitySpawning();
 	}
 
-	public boolean ignoreNoBossOrNexus() {
-		return this.ignoreNoBossOrNexus;
+	public boolean persistent() {
+		return this.protectionSettings.persistent();
 	}
 
 	public void addEntityDependency(UUID uuid) {
-		if (!this.isGenerating) {
-			return;
-		}
-
 		if (this.entityDependencies.add(uuid)) {
 			this.markDirty();
 		}
@@ -395,10 +180,6 @@ public class ProtectedRegion {
 	}
 
 	public void addBlockDependency(BlockPos pos) {
-		if (!this.isGenerating) {
-			return;
-		}
-
 		if (this.blockDependencies.add(pos.immutable())) {
 			this.markDirty();
 		}
@@ -418,173 +199,62 @@ public class ProtectedRegion {
 		return this.blockDependencies.stream();
 	}
 
-	public void finishGenerating() {
-		if (!this.isGenerating) {
-			return;
-		}
-
-		this.isGenerating = false;
-		this.markDirty();
-	}
-
-	public boolean isGenerating() {
-		return this.isGenerating;
-	}
-
 	public static class Builder {
 
-		private final String dungeonName;
-		private final BlockPos dungeonPos;
-		private BlockPos min;
-		private BlockPos max;
-		private boolean protectionSystemEnabled;
-		private boolean preventBlockBreaking;
-		private boolean preventBlockPlacing;
-		private boolean preventEntitySpawning;
-		private boolean preventExplosionsOther;
-		private boolean preventExplosionsTNT;
-		private boolean preventFireSpreading;
-		private boolean ignoreNoBossOrNexus;
-		private final Set<UUID> entityDependencies = new HashSet<>();
-		private final Set<BlockPos> blockDependencies = new HashSet<>();
-		private final Set<BlockPos> unprotectedBlocks = new HashSet<>();
+		private BoundingBox boundingBox;
+		private final ProtectionSettings protectionSettings;
+		private final Set<UUID> entityDependencies;
+		private final Set<BlockPos> blockDependencies;
+		private final Set<BlockPos> unprotectedBlocks;
 
-		public Builder(String dungeonName, BlockPos dungeonPos) {
-			this.dungeonName = dungeonName;
-			this.dungeonPos = dungeonPos.immutable();
-			this.min = this.dungeonPos;
-			this.max = this.dungeonPos;
+		public Builder(BlockPos dungeonPos, ProtectionSettings protectionSettings) {
+			this.boundingBox = BoundingBox.fromCorners(dungeonPos, dungeonPos);
+			this.protectionSettings = protectionSettings;
+			this.entityDependencies = new HashSet<>();
+			this.blockDependencies = new HashSet<>();
+			this.unprotectedBlocks = new HashSet<>();
 		}
 
-		public Builder(DungeonBase dungeonConfig, BlockPos dungeonPos) {
-			this.dungeonName = dungeonConfig.getDungeonName();
-			this.dungeonPos = dungeonPos.immutable();
-			this.min = this.dungeonPos;
-			this.max = this.dungeonPos;
-			this.setup(dungeonConfig);
-		}
-
-		public void setup(boolean enabled, boolean breaking, boolean placing, boolean spawning, boolean explosions, boolean tnt, boolean fire, boolean persistent) {
-			this.protectionSystemEnabled = enabled;
-			this.preventBlockBreaking = breaking;
-			this.preventBlockPlacing = placing;
-			this.preventEntitySpawning = spawning;
-			this.preventExplosionsOther = explosions;
-			this.preventExplosionsTNT = tnt;
-			this.preventFireSpreading = fire;
-			this.ignoreNoBossOrNexus = persistent;
-		}
-
-		public void setup(DungeonBase dungeonConfig) {
-			this.protectionSystemEnabled = dungeonConfig.isProtectionSystemEnabled();
-			this.preventBlockBreaking = dungeonConfig.preventBlockBreaking();
-			this.preventBlockPlacing = dungeonConfig.preventBlockPlacing();
-			this.preventEntitySpawning = dungeonConfig.preventEntitySpawning();
-			this.preventExplosionsOther = dungeonConfig.preventExplosionsOther();
-			this.preventExplosionsTNT = dungeonConfig.preventExplosionsTNT();
-			this.preventFireSpreading = dungeonConfig.preventFireSpreading();
-			this.ignoreNoBossOrNexus = dungeonConfig.ignoreNoBossOrNexus();
-		}
-
-		public Builder(CompoundTag compound) {
-			this.dungeonName = compound.getString("dungeonName");
-			this.dungeonPos = NBTHelper.loadBlockPos(compound.get("dungeonPos"));
-			this.min = NBTHelper.loadBlockPos(compound.get("min"));
-			this.max = NBTHelper.loadBlockPos(compound.get("max"));
-			this.protectionSystemEnabled = compound.getBoolean("protectionSystemEnabled");
-			this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
-			this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
-			this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
-			this.preventExplosionsOther = compound.getBoolean("preventExplosionsOther");
-			this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
-			this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
-			this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
-			NBTHelper.stream(compound.get("entityDependencies"), IntArrayNBT.TYPE)
-					.map(NbtUtils::loadUUID)
-					.forEach(this.entityDependencies::add);
-			NBTHelper.stream(compound.get("blockDependencies"), IntArrayNBT.TYPE)
-					.map(NBTHelper::loadBlockPos)
-					.forEach(this.blockDependencies::add);
-			NBTHelper.stream(compound.get("unprotectedBlocks"), IntArrayNBT.TYPE)
-					.map(NBTHelper::loadBlockPos)
-					.forEach(this.unprotectedBlocks::add);
-		}
-
-		public CompoundTag writeToNBT() {
-			CompoundTag compound = new CompoundTag();
-			compound.putString("dungeonName", this.dungeonName);
-			compound.put("dungeonPos", NBTHelper.createBlockPos(this.dungeonPos));
-			compound.put("min", NBTHelper.createBlockPos(this.min));
-			compound.put("max", NBTHelper.createBlockPos(this.max));
-			compound.putBoolean("protectionSystemEnabled", this.protectionSystemEnabled);
-			compound.putBoolean("preventBlockBreaking", this.preventBlockBreaking);
-			compound.putBoolean("preventBlockPlacing", this.preventBlockPlacing);
-			compound.putBoolean("preventEntitySpawning", this.preventEntitySpawning);
-			compound.putBoolean("preventExplosionsOther", this.preventExplosionsOther);
-			compound.putBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
-			compound.putBoolean("preventFireSpreading", this.preventFireSpreading);
-			compound.putBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
-			compound.put("entityDependencies", this.entityDependencies.stream()
-					.map(NbtUtils::createUUID)
-					.collect(NBTCollectors.toList()));
-			compound.put("blockDependencies", this.blockDependencies.stream()
-					.map(NBTHelper::createBlockPos)
-					.collect(NBTCollectors.toList()));
-			compound.put("unprotectedBlocks", this.unprotectedBlocks.stream()
-					.map(NBTHelper::createBlockPos)
-					.collect(NBTCollectors.toList()));
-			return compound;
+		@SuppressWarnings("deprecation")
+		public void updateBoundingBox(BlockPos pos) {
+			this.boundingBox = this.boundingBox.encapsulate(pos);
 		}
 
 		public void addEntity(Entity entity) {
-			if (!this.protectionSystemEnabled) {
-				return;
-			}
 			this.entityDependencies.add(entity.getUUID());
 		}
 
 		public void addBlock(BlockPos pos) {
-			if (!this.protectionSystemEnabled) {
-				return;
-			}
 			this.blockDependencies.add(pos.immutable());
 		}
 
 		public void excludePos(BlockPos pos) {
-			if (!this.protectionSystemEnabled) {
-				return;
-			}
 			this.unprotectedBlocks.add(pos.immutable());
 		}
 
-		public void updateMin(BlockPos pos) {
-			this.min = new BlockPos(Math.min(pos.getX(), this.min.getX()), Math.min(pos.getY(), this.min.getY()), Math.min(pos.getZ(), this.min.getZ()));
-		}
-
-		public void updateMax(BlockPos pos) {
-			this.max = new BlockPos(Math.max(pos.getX(), this.max.getX()), Math.max(pos.getY(), this.max.getY()), Math.max(pos.getZ(), this.max.getZ()));
-		}
-
 		@Nullable
-		public ProtectedRegion build(Level world) {
-			if (!this.protectionSystemEnabled) {
-				return null;
-			}
-			ProtectedRegion protectedRegion = new ProtectedRegion(world, this.dungeonName, this.dungeonPos, this.min, this.max);
-			protectedRegion.preventBlockBreaking = this.preventBlockBreaking;
-			protectedRegion.preventBlockPlacing = this.preventBlockPlacing;
-			protectedRegion.preventEntitySpawning = this.preventEntitySpawning;
-			protectedRegion.preventExplosionsOther = this.preventExplosionsOther;
-			protectedRegion.preventExplosionsTNT = this.preventExplosionsTNT;
-			protectedRegion.preventFireSpreading = this.preventFireSpreading;
-			protectedRegion.ignoreNoBossOrNexus = this.ignoreNoBossOrNexus;
-			protectedRegion.isGenerating = false;
-			protectedRegion.blockDependencies.addAll(this.blockDependencies);
-			protectedRegion.entityDependencies.addAll(this.entityDependencies);
-			this.unprotectedBlocks.forEach(p -> protectedRegion.setProtectionState(p, ProtectionState.UNPROTECTED));
-			return protectedRegion;
+		public ProtectedRegion build() {
+			BoundingBox boundingBox = new BoundingBox(this.boundingBox.minX(), this.boundingBox.minY(), this.boundingBox.minZ(), this.boundingBox.maxX(),
+					this.boundingBox.maxY(), this.boundingBox.maxZ());
+			int bits = Mth.ceillog2(ProtectionState.values().length);
+			int size = this.boundingBox.getXSpan() * this.boundingBox.getYSpan() * this.boundingBox.getZSpan();
+			SimpleBitStorage protectionData = new SimpleBitStorage(bits, size);
+			this.unprotectedBlocks.forEach(pos -> protectionData.set(ProtectedRegion.index(boundingBox, pos), ProtectionState.UNPROTECTED.getId()));
+			return new ProtectedRegion(boundingBox, protectionData, this.protectionSettings, Set.copyOf(this.entityDependencies),
+					Set.copyOf(this.blockDependencies));
 		}
 
+	}
+
+	public Tag writeToNBT() {
+		return CODEC.encode(this, NbtOps.INSTANCE, new CompoundTag())
+				.getOrThrow(false, CQRMain.logger::error);
+	}
+
+	public static ProtectedRegion readFromNBT(CompoundTag nbt) {
+		return CODEC.decode(NbtOps.INSTANCE, nbt)
+				.getOrThrow(false, CQRMain.logger::error)
+				.getFirst();
 	}
 
 }

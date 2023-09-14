@@ -2,19 +2,19 @@ package team.cqr.cqrepoured.world.structure.protection;
 
 public enum ProtectionState {
 
-	PROTECTED((byte) 0), UNPROTECTED((byte) 1), UNPROTECTED_PLAYER_PLACED((byte) 2);
+	PROTECTED(0), UNPROTECTED(1), UNPROTECTED_PLAYER_PLACED(2);
 
-	private final byte id;
+	private final int id;
 
-	private ProtectionState(byte id) {
+	private ProtectionState(int id) {
 		this.id = id;
 	}
 
-	public byte getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public static ProtectionState byId(byte id) {
+	public static ProtectionState byId(int id) {
 		if (id == 0) {
 			return PROTECTED;
 		}

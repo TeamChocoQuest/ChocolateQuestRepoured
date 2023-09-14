@@ -15,7 +15,7 @@ public interface IProtectedRegionManager {
 	void addProtectedRegion(ProtectedRegion protectedRegion);
 
 	default void removeProtectedRegion(ProtectedRegion protectedRegion) {
-		this.removeProtectedRegion(protectedRegion.getUuid());
+		this.removeProtectedRegion(protectedRegion.uuid());
 	}
 
 	void removeProtectedRegion(UUID uuid);
