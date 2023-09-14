@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -22,6 +24,9 @@ import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import team.cqr.cqrepoured.world.structure.StructureLocator;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 
 @Mixin(ChunkGenerator.class)
 public class MixinChunkGenerator {
@@ -51,6 +56,9 @@ public class MixinChunkGenerator {
 
 					if (structureStart.isValid()) {
 						pStructureManager.setStartForStructure(sectionPos, structure, structureStart, pChunk);
+						ResourceLocation structureName = pRegistryAccess.registryOrThrow(Registries.STRUCTURE).getKey(structure);
+						DungeonDataManager.addDungeonEntry(WorldDungeonGenerator.getLevel(chunkGenerator), structureName, generationStub.position(),
+								DungeonSpawnType.DUNGEON_GENERATION);
 					}
 				});
 	}

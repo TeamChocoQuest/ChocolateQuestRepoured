@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
@@ -94,13 +95,13 @@ public class DungeonDataManager {
 		}
 	}
 
-	public static void addDungeonEntry(Level world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
+	public static void addDungeonEntry(Level world, ResourceLocation name, BlockPos position, DungeonSpawnType spawnType) {
 		if (INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
+			INSTANCES.get(world).addDungeonEntry(name, position, spawnType);
 		}
 	}
 
-	public static Set<String> getSpawnedDungeonNames(Level world) {
+	public static Set<ResourceLocation> getSpawnedDungeonNames(Level world) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getSpawnedDungeonNames();
 		}
@@ -119,6 +120,11 @@ public class DungeonDataManager {
 			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
 		}
 		return false;
+	}
+
+	public static int getDungeonGenerationCount(Level world, ResourceLocation name) {
+		// TODO
+		return 0;
 	}
 
 	public void saveData() {

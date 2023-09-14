@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import com.mojang.datafixers.util.Pair;
 
@@ -9,7 +10,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedEntry.Wrapper;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.StructureManager;
@@ -23,6 +26,7 @@ import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureSet.StructureSelectionEntry;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
 
 public class StructureLocator {
 
@@ -36,10 +40,18 @@ public class StructureLocator {
 	public static Optional<Pair<Structure, GenerationStub>> getStructureAt(ChunkGenerator chunkGenerator, RegistryAccess registryAccess,
 			ChunkGeneratorStructureState structureState, StructureManager structureManager, ChunkPos chunkPos, LevelHeightAccessor levelHeightAccessor,
 			StructureTemplateManager structureTemplateManager) {
+		return getStructureAt(chunkGenerator, registryAccess, structureState, structureManager, chunkPos, levelHeightAccessor, structureTemplateManager,
+				Integer.MAX_VALUE);
+	}
+
+	public static Optional<Pair<Structure, GenerationStub>> getStructureAt(ChunkGenerator chunkGenerator, RegistryAccess registryAccess,
+			ChunkGeneratorStructureState structureState, StructureManager structureManager, ChunkPos chunkPos, LevelHeightAccessor levelHeightAccessor,
+			StructureTemplateManager structureTemplateManager, int maximumPriority) {
 		return structureState.possibleStructureSets()
 				.stream()
 				.map(Holder::value)
 				.filter(StructureLocator::isCQRStructureSet)
+				.filter(structureSet -> ((CQRStructurePlacement) structureSet.placement()).priority() < maximumPriority)
 				.sorted(StructureLocator.structureSetComparator())
 				.map(structureSet -> StructureLocator.getStructureAt(structureSet, chunkGenerator, registryAccess, structureState, structureManager, chunkPos,
 						levelHeightAccessor, structureTemplateManager))
@@ -71,8 +83,9 @@ public class StructureLocator {
 		}
 
 		SimpleWeightedRandomList<Pair<Structure, GenerationStub>> structureList = structureListBuilder.build();
-		return structureList.getRandomValue(random)
-				.filter(structureInfo -> StructureLocator.testStructureGenerationChance(structureSet, structureInfo.getFirst(), structureList.totalWeight));
+		return structureList.getRandom(random)
+				.filter(wrapper -> StructureLocator.testStructureGenerationChance(wrapper, random, structureList.totalWeight))
+				.map(Wrapper::getData);
 	}
 
 	public static boolean isCQRStructureSet(StructureSet structureSet) {
@@ -83,14 +96,18 @@ public class StructureLocator {
 		return Comparator.comparingInt(structureSet -> structureSet.placement() instanceof CQRStructurePlacement cqrPlacement ? cqrPlacement.priority() : 0);
 	}
 
-	private static boolean testStructureGenerationChance(StructureSet structureSet, Structure structure, int totalWeight) {
-		// TODO test structure specific generation chance
-		return false;
+	private static boolean testStructureGenerationChance(Wrapper<Pair<Structure, GenerationStub>> structureEntry, RandomSource random, int totalWeight) {
+		if (structureEntry.getData().getFirst() instanceof StructureCQR cqrStructure) {
+			PlacementSettings placementSettings = cqrStructure.placementSettings();
+			double chanceModifier = 1.0D / Math.pow((double) structureEntry.getWeight().asInt() / totalWeight, placementSettings.rarityFactor());
+			return random.nextFloat() < placementSettings.chance() * chanceModifier;
+		}
+		return true;
 	}
 
-	private static WorldgenRandom makeRandom(long pSeed, ChunkPos pChunkPos) {
+	private static WorldgenRandom makeRandom(long seed, ChunkPos chunkPos) {
 		WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(0L));
-		worldgenrandom.setLargeFeatureSeed(pSeed, pChunkPos.x, pChunkPos.z);
+		worldgenrandom.setLargeFeatureSeed(seed, chunkPos.x, chunkPos.z);
 		return worldgenrandom;
 	}
 

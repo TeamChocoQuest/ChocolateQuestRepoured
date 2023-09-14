@@ -1,24 +1,66 @@
 package team.cqr.cqrepoured.world.structure;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.function.Consumer;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.init.CQRStructureTypes;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonInhabitantMap;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.ProtectionSettings;
+import team.cqr.cqrepoured.world.structure.generation.generators.StructurePieceGenerator;
 
 public class StructureCQR extends Structure {
 
-	public static final Codec<StructureCQR> CODEC = simpleCodec(StructureCQR::new);
+	public static final Codec<StructureCQR> CODEC = RecordCodecBuilder.create(instance -> {
+        return instance.group(
+        		settingsCodec(instance),
+				Codec.BOOL.fieldOf("enabled").forGetter(StructureCQR::enabled),
+				Codec.INT.fieldOf("icon").forGetter(StructureCQR::icon),
+				Codec.list(Codec.STRING).fieldOf("mod_dependencies").forGetter(StructureCQR::modDependencies),
+				PlacementSettings.CODEC.fieldOf("placement_settings").forGetter(StructureCQR::placementSettings),
+				DungeonInhabitantMap.CODEC.fieldOf("inhabitants").forGetter(StructureCQR::inhabitants),
+				Codec.INT.fieldOf("ground_level_delta").forGetter(StructureCQR::groundLevelDelta),
+				ProtectionSettings.CODEC.optionalFieldOf("protection_settings").forGetter(StructureCQR::protectionSettings),
+				StructurePieceGenerator.CODEC.fieldOf("generator").forGetter(StructureCQR::generator))
+        		.apply(instance, StructureCQR::new);
+     });
 
-	public StructureCQR(StructureSettings structureSettings) {
+	private final boolean enabled;
+	private final int icon;
+	private final List<String> modDependencies;
+	private final PlacementSettings placementSettings;
+	private final DungeonInhabitantMap inhabitants;
+	private final int groundLevelDelta;
+	private final Optional<ProtectionSettings> protectionSettings;
+	private final StructurePieceGenerator generator;
+
+	public StructureCQR(StructureSettings structureSettings, boolean enabled, int icon, List<String> modDependencies, PlacementSettings placementSettings,
+			DungeonInhabitantMap inhabitants, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructurePieceGenerator generator) {
 		super(structureSettings);
+		this.enabled = enabled;
+		this.icon = icon;
+		this.modDependencies = modDependencies;
+		this.placementSettings = placementSettings;
+		this.inhabitants = inhabitants;
+		this.groundLevelDelta = groundLevelDelta;
+		this.protectionSettings = protectionSettings;
+		this.generator = generator;
 	}
 
 	@Override
@@ -28,60 +70,84 @@ public class StructureCQR extends Structure {
 
 	@Override
 	protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
+		if (!this.enabled) {
+			return Optional.empty();
+		}
+		if (!this.modDependencies.stream().allMatch(ModList.get()::isLoaded)) {
+			return Optional.empty();
+		}
 		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-		return Optional.ofNullable(WorldDungeonGenerator.getDungeonAt(level, context.chunkPos()))
-				.map(dungeon -> {
-					BlockPos pos = context.chunkPos().getMiddleBlockPosition(0);
-					Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
-					return new GenerationStub(pos, dungeon.createGenerator(context, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
-				});
+		ResourceLocation structureName = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(this);
+		if (DungeonDataManager.getDungeonGenerationCount(level, structureName) >= this.placementSettings.spawnLimit()) {
+			return Optional.empty();
+		}
+		if (!DungeonDataManager.getSpawnedDungeonNames(level).containsAll(this.placementSettings.dungeonDependencies())) {
+			return Optional.empty();
+		}
+		if (!this.placementSettings.positionValidator().validatePosition(context.chunkPos())) {
+			return Optional.empty();
+		}
+		// TODO check for nearby non-cqr structures
+		BlockPos pos = this.placementSettings.positionFinder().findPosition(context, context.chunkPos());
+		return Optional.of(new GenerationStub(pos, this.createGenerator(context, pos)));
 	}
 
-//	public StructureCQR() {
-//		super(NoFeatureConfig.CODEC);
-//	}
-//
-//	@Override
-//	public Decoration step() {
-//		return Decoration.SURFACE_STRUCTURES;
-//	}
-//
-//	@Override
-//	public ChunkPos getPotentialFeatureChunk(StructureSeparationSettings separationSettings, long seed, SharedSeedRandom random, int chunkX, int chunkZ) {
-//		return new ChunkPos(chunkX, chunkZ);
-//	}
-//
-//	@Override
-//	protected boolean isFeatureChunk(ChunkGenerator chunkGenerator, BiomeProvider biomeProvider, long seed, SharedSeedRandom random, int chunkX, int chunkZ,
-//			Biome biome, ChunkPos chunkPos, NoFeatureConfig config) {
-//		ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
-//		return WorldDungeonGenerator.getDungeonAt(level, chunkPos) != null;
-//	}
-//
-//	@Override
-//	public IStartFactory<NoFeatureConfig> getStartFactory() {
-//		return Start::new;
-//	}
-//
-//	public static class Start extends StructureStart<NoFeatureConfig> {
-//
-//		public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int references, long seed) {
-//			super(structure, chunkX, chunkZ, boundingBox, references, seed);
-//		}
-//
-//		@Override
-//		public void generatePieces(DynamicRegistries registries, ChunkGenerator chunkGenerator, TemplateManager templateManager, int chunkX, int chunkZ,
-//				Biome biome, NoFeatureConfig config) {
-//			ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
-//			DungeonBase dungeon = WorldDungeonGenerator.getDungeonAt(level, new ChunkPos(chunkX, chunkZ));
-//			BlockPos pos = new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8);
-//			Random random = WorldDungeonGenerator.getRandomForCoords(level.getSeed(), pos.getX(), pos.getZ());
-//
-//			this.pieces.addAll(dungeon.generate(registries, chunkGenerator, templateManager, pos, random, DungeonSpawnType.DUNGEON_GENERATION));
-//
-//			this.calculateBoundingBox();
-//		}
-//
-//	}
+	private Consumer<StructurePiecesBuilder> createGenerator(GenerationContext context, BlockPos pos) {
+		return structurePiecesBuilder -> structurePiecesBuilder.addPiece(
+				this.generator.createStructurePiece(context, pos, this.inhabitants.get(context, pos), this.groundLevelDelta, this.protectionSettings));
+	}
+
+	public StructureStart createStructureStart(ServerLevel level, BlockPos pos) {
+		ChunkPos chunkPos = new ChunkPos(pos);
+		GenerationContext context = new GenerationContext(
+				level.registryAccess(),
+				level.getChunkSource().getGenerator(),
+				level.getChunkSource().getGenerator().getBiomeSource(),
+				level.getChunkSource().randomState(),
+				level.getStructureManager(),
+				level.getSeed(),
+				chunkPos,
+				level,
+				biome -> true);
+		BlockPos generationPos = this.placementSettings.positionFinder().applyOffsets(context, pos);
+		GenerationStub generationStub = new GenerationStub(generationPos, this.createGenerator(context, generationPos));
+		StructureStart structureStart = new StructureStart(this, chunkPos, 0, generationStub.getPiecesBuilder().build());
+		if (structureStart.isValid()) {
+			return structureStart;
+		}
+		return StructureStart.INVALID_START;
+	}
+
+	public boolean enabled() {
+		return enabled;
+	}
+
+	public int icon() {
+		return icon;
+	}
+
+	public List<String> modDependencies() {
+		return modDependencies;
+	}
+
+	public PlacementSettings placementSettings() {
+		return placementSettings;
+	}
+
+	public DungeonInhabitantMap inhabitants() {
+		return inhabitants;
+	}
+
+	public int groundLevelDelta() {
+		return groundLevelDelta;
+	}
+
+	public Optional<ProtectionSettings> protectionSettings() {
+		return protectionSettings;
+	}
+
+	public StructurePieceGenerator generator() {
+		return generator;
+	}
 
 }
