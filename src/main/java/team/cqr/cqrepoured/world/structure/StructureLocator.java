@@ -76,13 +76,11 @@ public class StructureLocator {
 	}
 
 	public static boolean isCQRStructureSet(StructureSet structureSet) {
-		// TODO check if placement is CQR placement
-		return false;
+		return structureSet.placement() instanceof CQRStructurePlacement;
 	}
 
 	private static Comparator<StructureSet> structureSetComparator() {
-		// TODO create comparator which sorts StructureSets according to the priority of their placement
-		return Comparator.comparingInt(structureSet -> 0);
+		return Comparator.comparingInt(structureSet -> structureSet.placement() instanceof CQRStructurePlacement cqrPlacement ? cqrPlacement.priority() : 0);
 	}
 
 	private static boolean testStructureGenerationChance(StructureSet structureSet, Structure structure, int totalWeight) {
