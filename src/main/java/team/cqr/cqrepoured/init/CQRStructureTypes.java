@@ -7,6 +7,7 @@ import team.cqr.cqrepoured.world.structure.StructureCQR;
 
 public class CQRStructureTypes {
 
-	public static final StructureType<StructureCQR> CQR_STRUCTURE_TYPE = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, "cqr_structure_type", () -> StructureCQR.CODEC);
+	public static final StructureType<StructureCQR> CQR_STRUCTURE_TYPE = Registry.register(BuiltInRegistries.STRUCTURE_TYPE, "cqr_structure",
+			() -> StructureCQR.CODEC);
 
 }

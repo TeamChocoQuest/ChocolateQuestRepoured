@@ -8,6 +8,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDung
 
 public class CQRStructurePieceTypes {
 
-	public static final StructurePieceType CQR_STRUCTURE_PIECE_TYPE = Registry.register(BuiltInRegistries.STRUCTURE_PIECE, "cqr_structure_piece_type", (ContextlessType) GeneratableDungeon::new);
+	public static final StructurePieceType CQR_STRUCTURE_PIECE_TYPE = Registry.register(BuiltInRegistries.STRUCTURE_PIECE, "cqr_structure_piece",
+			(ContextlessType) GeneratableDungeon::new);
 
 }
