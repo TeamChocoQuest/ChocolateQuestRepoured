@@ -39,19 +39,17 @@ import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.NBTHelper;
 
 @SuppressWarnings("deprecation")
-public class CQRSection implements ICQRSection {
+public class CQRSection {
 
 	// TODO copied from ChunkSerializer, does this work?
 	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, Blocks.AIR.defaultBlockState());
 
-	private final CQRLevel level;
 	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
 	private final Int2ObjectMap<BlockEntity> blockEntities;
 	private final List<EntityContainer> entities;
 
-	public CQRSection(CQRLevel level, SectionPos sectionPos) {
-		this.level = level;
+	public CQRSection(SectionPos sectionPos) {
 		this.sectionPos = sectionPos;
 		// TODO this probably doesn't support null as default value
 		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, null, Strategy.SECTION_STATES);
@@ -59,8 +57,7 @@ public class CQRSection implements ICQRSection {
 		this.entities = new ArrayList<>();
 	}
 
-	public CQRSection(CQRLevel level, CompoundTag nbt) {
-		this.level = level;
+	public CQRSection(CompoundTag nbt) {
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
 		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRMain.logger::error).getOrThrow(false, CQRMain.logger::error);
 		this.blockEntities = NBTCollectors.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
@@ -221,7 +218,6 @@ public class CQRSection implements ICQRSection {
 		return (i >> 4) & 15;
 	}
 
-	@Override
 	@Nullable
 	public BlockState getBlockState(BlockPos pos) {
 		return this.getBlockState(index(pos));
@@ -233,7 +229,6 @@ public class CQRSection implements ICQRSection {
 		return this.blocks.get(index);
 	}
 
-	@Override
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.setBlockState(index(pos), state, blockEntityCallback);
 	}
@@ -252,20 +247,17 @@ public class CQRSection implements ICQRSection {
 		}
 	}
 
-	@Override
 	@Nullable
 	public FluidState getFluidState(BlockPos pos) {
 		BlockState blockState = this.getBlockState(pos);
 		return blockState != null ? blockState.getFluidState() : null;
 	}
 
-	@Override
 	@Nullable
 	public BlockEntity getBlockEntity(BlockPos pos) {
 		return this.blockEntities.get(index(pos));
 	}
 
-	@Override
 	public void addEntity(Entity entity) {
 		this.entities.add(new EntityContainer(entity));
 	}

@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
@@ -14,82 +15,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import team.cqr.cqrepoured.util.NBTCollectors;
 
-public class CQRLevel implements ICQRLevel {
-
-	private static final ICQRSection EMPTY = new ICQRSection() {
-
-		@Override
-		public BlockState getBlockState(BlockPos pos) {
-			return null;
-		}
-
-		@Override
-		public void setBlockState(BlockPos pos, BlockState state, Consumer<BlockEntity> blockEntityCallback) {
-
-		}
-
-		@Override
-		public FluidState getFluidState(BlockPos pos) {
-			return null;
-		}
-
-		@Override
-		@Nullable
-		public BlockEntity getBlockEntity(BlockPos pos) {
-			return null;
-		}
-
-		@Override
-		public void addEntity(Entity entity) {
-
-		}
-
-	};
+public class CQRLevel {
 
 	private final SectionPos center;
 	private final long seed;
 	private final Int2ObjectMap<CQRSection> sections;
-	private final BlockGetter blockReader = new BlockGetter() {
-		@Override
-		public FluidState getFluidState(BlockPos pos) {
-			FluidState fluidState = this.getFluidState(pos);
-			return fluidState != null ? fluidState : Fluids.EMPTY.defaultFluidState();
-		}
-
-		@Override
-		public BlockState getBlockState(BlockPos pos) {
-			BlockState blockState = this.getBlockState(pos);
-			return blockState != null ? blockState : Blocks.AIR.defaultBlockState();
-		}
-
-		@Override
-		public BlockEntity getBlockEntity(BlockPos pos) {
-			return this.getBlockEntity(pos);
-		}
-
-		@Override
-		public int getHeight() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getMinBuildHeight() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-	};
 
 	public CQRLevel(SectionPos center, long seed) {
 		this.center = center;
@@ -100,7 +38,7 @@ public class CQRLevel implements ICQRLevel {
 	public CQRLevel(CompoundTag nbt) {
 		this.center = SectionPos.of(nbt.getInt("CenterX"), nbt.getInt("CenterY"), nbt.getInt("CenterZ"));
 		this.seed = nbt.getLong("Seed");
-		this.sections = NBTCollectors.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundTag sectionNbt) -> new CQRSection(this, sectionNbt));
+		this.sections = NBTCollectors.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundTag sectionNbt) -> new CQRSection(sectionNbt));
 	}
 
 	public CompoundTag save() {
@@ -114,19 +52,12 @@ public class CQRLevel implements ICQRLevel {
 	}
 
 	public void generate(WorldGenLevel level, BoundingBox box, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
-		SectionPos.betweenClosedStream(box.minX() >> 4, box.minY() >> 4, box.minZ() >> 4, box.maxX() >> 4, box.maxY() >> 4, box.maxZ() >> 4).forEach(sectionPos -> {
-			CQRSection section = this.sections.get(this.index(sectionPos));
-			if (section != null) {
-				section.generate(level, entityFactory, processors);
-			}
-		});
+		SectionPos.betweenClosedStream(box.minX() >> 4, box.minY() >> 4, box.minZ() >> 4, box.maxX() >> 4, box.maxY() >> 4, box.maxZ() >> 4)
+				.map(sectionPos -> this.sections.get(this.index(sectionPos)))
+				.filter(Objects::nonNull)
+				.forEach(section -> section.generate(level, entityFactory, processors));
 	}
 
-	public SectionPos getCenter() {
-		return center;
-	}
-
-	@Override
 	public long getSeed() {
 		return this.seed;
 	}
@@ -150,58 +81,43 @@ public class CQRLevel implements ICQRLevel {
 		return this.index(blockX >> 4, blockY >> 4, blockZ >> 4);
 	}
 
-	public ICQRSection getSection(SectionPos pos) {
-		ICQRSection section = this.sections.get(this.index(pos));
-		return section != null ? section : EMPTY;
+	@Nullable
+	private CQRSection getSection(BlockPos pos) {
+		return this.sections.get(this.index(pos));
 	}
 
-	public ICQRSection getSection(BlockPos pos) {
-		ICQRSection section = this.sections.get(this.index(pos));
-		return section != null ? section : EMPTY;
+	private CQRSection getOrCreateSection(BlockPos pos) {
+		return this.sections.computeIfAbsent(this.index(pos), k -> new CQRSection(SectionPos.of(pos)));
 	}
 
-	public ICQRSection getOrCreateSection(SectionPos pos) {
-		return this.sections.computeIfAbsent(this.index(pos), k -> new CQRSection(this, pos));
-	}
-
-	public ICQRSection getOrCreateSection(BlockPos pos) {
-		return this.sections.computeIfAbsent(this.index(pos), k -> new CQRSection(this, SectionPos.of(pos)));
-	}
-
-	@Override
 	@Nullable
 	public BlockState getBlockState(BlockPos pos) {
-		return this.getSection(pos).getBlockState(pos);
+		CQRSection section = this.getSection(pos);
+		return section != null ? section.getBlockState(pos) : null;
 	}
 
-	@Override
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.getOrCreateSection(pos).setBlockState(pos, state, blockEntityCallback);
 	}
 
-	@Override
 	@Nullable
 	public FluidState getFluidState(BlockPos pos) {
-		return this.getSection(pos).getFluidState(pos);
+		CQRSection section = this.getSection(pos);
+		return section != null ? section.getFluidState(pos) : null;
 	}
 
-	@Override
 	@Nullable
 	public BlockEntity getBlockEntity(BlockPos pos) {
-		return this.getSection(pos).getBlockEntity(pos);
+		CQRSection section = this.getSection(pos);
+		return section != null ? section.getBlockEntity(pos) : null;
 	}
 
-	@Override
 	public void addEntity(Entity entity) {
 		this.getOrCreateSection(entity.blockPosition()).addEntity(entity);
 	}
 
 	public Collection<CQRSection> getSections() {
 		return Collections.unmodifiableCollection(this.sections.values());
-	}
-
-	public BlockGetter asBlockReader() {
-		return this.blockReader;
 	}
 
 }
