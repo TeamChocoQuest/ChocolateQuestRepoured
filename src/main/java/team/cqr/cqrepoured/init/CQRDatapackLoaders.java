@@ -25,6 +25,7 @@ import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncFaction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncTextureSet;
 import team.cqr.cqrepoured.util.CQRCodecJsonDataManager;
 import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
+import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 @Mod.EventBusSubscriber(modid = CQRConstants.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CQRDatapackLoaders {
@@ -34,6 +35,7 @@ public class CQRDatapackLoaders {
 	public static final CQRCodecJsonDataManager<TextureSetNew> TEXTURE_SETS = new CQRCodecJsonDataManager<>("cqr/texture_sets", TextureSetNew.CODEC);
 	public static final CQRCodecJsonDataManager<Faction> FACTIONS = new CQRCodecJsonDataManager<>("cqr/factions", Faction.CODEC);
 	public static final CQRCodecJsonDataManager<EntityFactionInformation> ENTITY_FACTION_INFORMATIONS = new CQRCodecJsonDataManager<>("entity/cqr_faction_information", EntityFactionInformation.CODEC);
+	public static final CQRCodecJsonDataManager<DungeonInhabitant> DUNGEON_INHABITANTS = new CQRCodecJsonDataManager<>("cqr/dungeon/inhabitant", DungeonInhabitant.CODEC);
 	
 	// TODO: Maybe make this synched for JEI integration?
 	public static final CodecJsonDataManager<TradeProfile> TRADE_PROFILES = new CodecJsonDataManager<>("cqr/trades", TradeProfile.CODEC);
@@ -65,6 +67,10 @@ public class CQRDatapackLoaders {
 	
 	public static Optional<TradeProfile> getTradeProfile(ResourceLocation tradeProfileId) {
 		return getValueGeneral(TRADE_PROFILES, tradeProfileId);
+	}
+	
+	public static Optional<DungeonInhabitant> getDungeonInhabitant(ResourceLocation inhabitantId) {
+		return getValueGeneral(DUNGEON_INHABITANTS, inhabitantId);
 	}
 	
 	@Nullable

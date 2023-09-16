@@ -10,7 +10,9 @@ import java.util.stream.LongStream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.SimpleBitStorage;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CodecUtil {
 
@@ -23,6 +25,10 @@ public class CodecUtil {
 				LONG_ARRAY.fieldOf("data").forGetter(SimpleBitStorage::getRaw))
 				.apply(instance, SimpleBitStorage::new);
 	});
+	
+	public static final Codec<EquipmentSlot> EQUIPMENT_SLOT_CODEC = ExtraCodecs.idResolverCodec(EquipmentSlot::ordinal, id -> {
+		return EquipmentSlot.values()[id];
+	}, -1);
 
 	public static <T> Codec<Set<T>> set(Codec<T> elementCodec) {
 		return Codec.list(elementCodec).xmap(HashSet::new, ArrayList::new);

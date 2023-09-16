@@ -1,97 +1,125 @@
 package team.cqr.cqrepoured.world.structure.generation.inhabitants;
 
-import java.util.Properties;
-import java.util.Random;
+import java.util.Map;
+import java.util.Optional;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.block.banner.EBanners;
-import team.cqr.cqrepoured.util.PropertyFileHelper;
+import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.init.CQREntityTypes;
+import team.cqr.cqrepoured.serialization.CodecUtil;
+import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
-public class DungeonInhabitant {
-
-	private String name;
-
-	private ResourceLocation[] entityIDs = new ResourceLocation[] {};
-	private ResourceLocation[] bossIDs = new ResourceLocation[] {};
-
-	private EBanners assignedBanner = null;
-
-	private Item shieldReplacement = null;
-
-	private String factionOverride = null;
-
-	private static final Random random = new Random();
-	private static final ResourceLocation EMPTY_RES_LOC = new ResourceLocation(CQRConstants.MODID, "dummy");
-
-	public DungeonInhabitant(Properties prop) {
-		this.name = prop.getProperty(ConfigKeys.KEY_NAME, "missingNo");
-		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, this.entityIDs, true);
-		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, this.bossIDs, true);
-		String tmp = prop.getProperty(ConfigKeys.KEY_BANNER, "UNUSED");
-		if (!tmp.equalsIgnoreCase("UNUSED")) {
-			this.assignedBanner = EBanners.valueOf(tmp);
+public class DungeonInhabitant extends AbstractRegistratableObject {
+	
+	CQRWeightedRandom<EntityType<?>> entities;
+	Optional<CQRWeightedRandom<EntityType<?>>> bosses;
+	Optional<ItemStack> customBanner;
+	Optional<DyeColor> customBannerColor;
+	Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap;
+	Optional<Map<ResourceLocation, Integer>> factionOverride;
+	
+	public static final Codec<DungeonInhabitant> CODEC = RecordCodecBuilder.create(instance -> {
+		return instance.group(
+				CQRWeightedRandom.createCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).fieldOf("entities").forGetter(obj -> obj.entities),
+				CQRWeightedRandom.createCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).optionalFieldOf("bosses").forGetter(obj -> obj.bosses),
+				ItemStack.CODEC.optionalFieldOf("banner").forGetter(obj -> obj.customBanner),
+				DyeColor.CODEC.optionalFieldOf("banner-color").forGetter(obj -> obj.customBannerColor),
+				Codec.unboundedMap(CodecUtil.EQUIPMENT_SLOT_CODEC, CQRWeightedRandom.createCodec(ItemStack.CODEC)).optionalFieldOf("default-equipment", Map.of()).forGetter(obj -> obj.equipmentMap),
+				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("reputation-settings").forGetter(obj -> obj.factionOverride)
+			).apply(instance, DungeonInhabitant::new);
+	});
+	
+	public DungeonInhabitant(CQRWeightedRandom<EntityType<?>> entities,	Optional<CQRWeightedRandom<EntityType<?>>> bosses, Optional<ItemStack> customBanner, Optional<DyeColor> customBannerColor, Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap, Optional<Map<ResourceLocation, Integer>> factionOverride) {
+		super();
+		
+		this.entities = entities;
+		this.bosses = bosses;
+		this.customBanner = customBanner;
+		this.customBannerColor = customBannerColor;
+		this.equipmentMap = equipmentMap;
+		this.factionOverride = factionOverride;
+	}
+	
+	public void prepareEntityNBT(final CompoundTag tag, RandomSource random, boolean boss) {
+		if (tag == null || tag.isEmpty()) {
+			return;
 		}
-		tmp = prop.getProperty(ConfigKeys.KEY_FACTION_OVERRIDE, "UNUSED");
-		if (!tmp.equalsIgnoreCase("UNUSED")) {
-			this.factionOverride = tmp;
+		if (tag.getString("id").equals(CQREntityTypes.DUMMY.getId().toString())) {
+			EntityType<?> type = null;
+			if (boss && this.bosses.isPresent()) {
+				type = this.bosses.get().next(random);
+			} else {
+				type = this.entities.next(random);
+			}
+			tag.putString("id", ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
 		}
-		String stTmp = prop.getProperty(ConfigKeys.KEY_SHIELD_ITEM, null);
-		if (stTmp != null && !stTmp.isEmpty() && !stTmp.equalsIgnoreCase("UNUSED")) {
-			ResourceLocation itemResLoc = new ResourceLocation(stTmp);
-			this.shieldReplacement = ForgeRegistries.ITEMS.getValue(itemResLoc);
+	}
+	
+	public Entity createRandomEntity(RandomSource random, final @Nonnull Level level) {
+		EntityType<?> type = this.entities.next(random);
+		Entity result = type.create(level);
+		
+		if (result instanceof Mob mob) {
+			this.prepare(mob, random);
+		}
+		
+		return result;
+	}
+	
+	public void prepare(final BannerBlockEntity banner) {
+		if (banner == null || this.customBanner.isEmpty()) {
+			return;
+		}
+		if (this.customBannerColor.isPresent()) {
+			banner.fromItem(this.customBanner.get(), this.customBannerColor.get());
+		} else {
+			banner.fromItem(this.customBanner.get());
 		}
 	}
-
-	public DungeonInhabitant(EDefaultInhabitants inha) {
-		this.entityIDs = inha.getEntityIDs();
-		this.bossIDs = inha.getBossIDs();
-		this.assignedBanner = inha.getBanner();
-		this.shieldReplacement = inha.getShieldItem().getItem();
-		this.name = inha.name();
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public ResourceLocation getEntityID() {
-		return (this.entityIDs == null || this.entityIDs.length <= 0) ? EMPTY_RES_LOC : this.entityIDs[random.nextInt(this.entityIDs.length)];
-	}
-
-	public ResourceLocation getBossID() {
-		return this.bossIDs.length <= 0 ? null : this.bossIDs[random.nextInt(this.bossIDs.length)];
-	}
-
-	@Nullable
-	public EBanners getBanner() {
-		return this.assignedBanner;
-	}
-
-	public Item getShieldReplacement() {
-		return this.shieldReplacement == null ? Items.SHIELD : this.shieldReplacement;
-	}
-
-	@Nullable
-	public String getFactionOverride() {
-		if (this.factionOverride == null || this.factionOverride.isEmpty()) {
-			return null;
+	
+	public void prepare(final Mob entity, RandomSource random) {
+		if (entity == null) {
+			return;
 		}
-		return this.factionOverride;
-	}
+		
+		if (this.factionOverride.isPresent()) {
+			LazyOptional<IFactionRelationCapability> lOpCap = entity.getCapability(IFactionRelationCapability.INSTANCE);
+			if (lOpCap.isPresent()) {
+				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
+				if (opCap.isPresent()) {
+					IFactionRelationCapability relationCap = opCap.get();
+					this.factionOverride.get().entrySet().forEach(entry -> {
+						relationCap.setReputationTowards(entry.getKey(), entry.getValue());
+					});
+				}
+			}
+		}
 
-	private static class ConfigKeys {
-		public static String KEY_NAME = "name";
-		public static String KEY_ENTITY_ID_LIST = "possibleEntities";
-		public static String KEY_BOSS_ID_LIST = "possibleBosses";
-		public static String KEY_BANNER = "banner";
-		public static String KEY_SHIELD_ITEM = "shieldReplacement";
-		public static String KEY_FACTION_OVERRIDE = "factionOverride";
+		this.equipmentMap.entrySet().forEach(entry -> {
+			ItemStack current = entity.getItemBySlot(entry.getKey());
+			if (current == null || current.isEmpty()) {
+				entity.setItemSlot(entry.getKey(), entry.getValue().next(random));
+			}
+		});
+		
 	}
 
 }
