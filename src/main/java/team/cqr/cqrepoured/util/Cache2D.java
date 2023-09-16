@@ -4,7 +4,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.BlockPos;
+import team.cqr.cqrepoured.serialization.CodecUtil;
 
 public class Cache2D<V> {
 
@@ -12,24 +16,37 @@ public class Cache2D<V> {
 	private final int startZ;
 	private final int endX;
 	private final int endZ;
-	private final int sizeX;
-	private final int sizeZ;
 	private final V defaultValue;
 	private final V[] data;
 
-	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> init) {
+	private Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, V[] data) {
 		this.startX = startX;
 		this.startZ = startZ;
 		this.endX = endX;
 		this.endZ = endZ;
-		this.sizeX = endX - startX + 1;
-		this.sizeZ = endZ - startZ + 1;
 		this.defaultValue = defaultValue;
-		this.data = init.apply(sizeX * sizeZ);
+		this.data = data;
+	}
+
+	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> generator) {
+		this(startX, startZ, endX, endZ, defaultValue, generator.apply((endX - startX + 1) * (endZ - startZ + 1)));
+	}
+
+	public static <T> Codec<Cache2D<T>> codec(Codec<T> elementCodec, IntFunction<T[]> generator) {
+		return RecordCodecBuilder.create(instance -> {
+	        return instance.group(
+	        		Codec.INT.fieldOf("startX").forGetter(c -> c.startX),
+	        		Codec.INT.fieldOf("startZ").forGetter(c -> c.startZ),
+	        		Codec.INT.fieldOf("endX").forGetter(c -> c.endX),
+	        		Codec.INT.fieldOf("endZ").forGetter(c -> c.endZ),
+	        		elementCodec.optionalFieldOf("defaultValue", null).forGetter(c -> c.defaultValue),
+	        		CodecUtil.array(elementCodec, generator).fieldOf("data").forGetter(c -> c.data))
+	        		.apply(instance, Cache2D::new);
+		});
 	}
 
 	private int index(int x, int z) {
-		return (x - startX) * sizeZ + z - startZ;
+		return (x - startX) * (endZ - startZ + 1) + z - startZ;
 	}
 
 	public boolean inBounds(int x, int z) {

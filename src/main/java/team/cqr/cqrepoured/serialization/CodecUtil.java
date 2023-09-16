@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.serialization;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.IntFunction;
 import java.util.stream.LongStream;
 
 import com.mojang.serialization.Codec;
@@ -24,6 +26,10 @@ public class CodecUtil {
 
 	public static <T> Codec<Set<T>> set(Codec<T> elementCodec) {
 		return Codec.list(elementCodec).xmap(HashSet::new, ArrayList::new);
+	}
+
+	public static <T> Codec<T[]> array(Codec<T> elementCodec, IntFunction<T[]> generator) {
+		return Codec.list(elementCodec).xmap(l -> l.toArray(generator), Arrays::asList);
 	}
 
 }
