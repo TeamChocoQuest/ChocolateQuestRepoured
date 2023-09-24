@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class ElectricShockCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
@@ -31,7 +32,7 @@ public class ElectricShockCapabilityProvider implements ICapabilityProvider, INB
 	
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		return IElectricShockCapability.INSTANCE.orEmpty(cap, optionalData);
+		return CQRCapabilities.ELECTRIC_SPREAD.orEmpty(cap, optionalData);
 	}
 
 }
