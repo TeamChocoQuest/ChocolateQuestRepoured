@@ -2,19 +2,14 @@ package team.cqr.cqrepoured.capability.faction;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.INBTSerializable;
 import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.IFactionRelated;
 
+@AutoRegisterCapability
 public interface IFactionRelationCapability extends IFactionRelated, INBTSerializable<CompoundTag> {
-	
-	public static final Capability<IFactionRelationCapability> INSTANCE = CapabilityManager.get(new CapabilityToken<>() {
-		
-	});
 	
 	boolean hasInformationFor(Faction faction);
 

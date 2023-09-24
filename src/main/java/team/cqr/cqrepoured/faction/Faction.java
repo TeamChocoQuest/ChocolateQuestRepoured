@@ -20,6 +20,7 @@ import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
@@ -142,7 +143,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	
 	protected <T extends IFactionRelated & ICapabilityProvider> void changeReputation(T capProvider, int score, Level level) {
 		if (this.repuMayChange && !level.getDifficulty().equals(Difficulty.PEACEFUL) && !(capProvider instanceof Player player && (player.isSpectator() || player.isCreative()))) {
-			LazyOptional<IFactionRelationCapability> lOpCap = capProvider.getCapability(IFactionRelationCapability.INSTANCE);
+			LazyOptional<IFactionRelationCapability> lOpCap = capProvider.getCapability(CQRCapabilities.FACTION_RELATION);
 			if (lOpCap != null && lOpCap.isPresent()) {
 				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
 				if (opCap.isPresent()) {

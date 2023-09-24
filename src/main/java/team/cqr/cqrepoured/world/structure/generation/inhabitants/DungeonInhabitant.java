@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.serialization.CodecUtil;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
@@ -101,7 +102,7 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 		}
 		
 		if (this.factionOverride.isPresent()) {
-			LazyOptional<IFactionRelationCapability> lOpCap = entity.getCapability(IFactionRelationCapability.INSTANCE);
+			LazyOptional<IFactionRelationCapability> lOpCap = entity.getCapability(CQRCapabilities.FACTION_RELATION);
 			if (lOpCap.isPresent()) {
 				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
 				if (opCap.isPresent()) {

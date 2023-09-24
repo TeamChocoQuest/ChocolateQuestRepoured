@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class FactionRelationCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
@@ -31,7 +32,7 @@ public class FactionRelationCapabilityProvider implements ICapabilityProvider, I
 
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		return IFactionRelationCapability.INSTANCE.orEmpty(cap, optionalData);
+		return CQRCapabilities.FACTION_RELATION.orEmpty(cap, optionalData);
 	}
 
 }

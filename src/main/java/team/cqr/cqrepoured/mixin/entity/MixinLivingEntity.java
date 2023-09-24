@@ -13,6 +13,7 @@ import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.IFactionRelated;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
 
@@ -52,8 +53,8 @@ public abstract class MixinLivingEntity extends Entity implements IFactionRelate
 		if (this.FACTION_INFORMATION.get() != null && !this.FACTION_INFORMATION.get().canChangeReputation()) {
 			return this.FACTION_INFORMATION.get();
 		}
-		if (this.getCapability(IFactionRelationCapability.INSTANCE).isPresent()) {
-			Optional<IFactionRelationCapability> opCap = this.getCapability(IFactionRelationCapability.INSTANCE).resolve();
+		if (this.getCapability(CQRCapabilities.FACTION_RELATION).isPresent()) {
+			Optional<IFactionRelationCapability> opCap = this.getCapability(CQRCapabilities.FACTION_RELATION).resolve();
 			if (opCap.isPresent()) {
 				result = opCap.get();
 			}
