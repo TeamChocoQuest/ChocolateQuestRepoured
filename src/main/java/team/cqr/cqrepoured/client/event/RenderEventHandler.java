@@ -6,14 +6,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.HandSide;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent.Stage;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -28,41 +28,40 @@ import team.cqr.cqrepoured.item.gun.ItemMusket;
 import team.cqr.cqrepoured.item.gun.ItemMusketKnife;
 import team.cqr.cqrepoured.item.gun.ItemRevolver;
 
-@OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class RenderEventHandler {
 
-	//@SubscribeEvent
+	@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Item itemMain = player.getMainHandItem().getItem();
 		Item itemOff = player.getOffhandItem().getItem();
 
 		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
-			event.getMatrixStack().pushPose();
+			event.getPoseStack().pushPose();
 		}
 
 		if (itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife) {
-			if (player.getMainArm() == HandSide.LEFT) {
+			if (player.getMainArm() == HumanoidArm.LEFT) {
 				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if (player.getMainArm() == HandSide.LEFT) {
+			if (player.getMainArm() == HumanoidArm.LEFT) {
 				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
 			}
 		}
 		if (itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife) {
-			if ((player.getMainArm() != HandSide.LEFT)) {
+			if ((player.getMainArm() != HumanoidArm.LEFT)) {
 				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getModel().rightArmPose = BOW_AND_ARROW;
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((player.getMainArm() != HandSide.LEFT)) {
+			if ((player.getMainArm() != HumanoidArm.LEFT)) {
 				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getModel().rightArm.xRot -= new Float(Math.toRadians(90));
@@ -70,13 +69,13 @@ public class RenderEventHandler {
 		}
 	}
 
-	//@SubscribeEvent
+	@SubscribeEvent
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		Item itemMain = player.getMainHandItem().getItem();
 		Item itemOff = player.getOffhandItem().getItem();
 		if (itemMain instanceof ItemRevolver && (!(itemMain instanceof ItemMusket) && !(itemMain instanceof ItemMusketKnife))) {
-			if (player.getMainArm() == HandSide.LEFT) {
+			if (player.getMainArm() == HumanoidArm.LEFT) {
 				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 //				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
@@ -84,7 +83,7 @@ public class RenderEventHandler {
 //				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		} else if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
-			if ((player.getMainArm() != HandSide.LEFT)) {
+			if ((player.getMainArm() != HumanoidArm.LEFT)) {
 				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 //				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
@@ -93,7 +92,7 @@ public class RenderEventHandler {
 			}
 		}
 		if (itemOff instanceof ItemRevolver && (!(itemOff instanceof ItemMusket) && !(itemOff instanceof ItemMusketKnife))) {
-			if ((player.getMainArm() != HandSide.LEFT)) {
+			if ((player.getMainArm() != HumanoidArm.LEFT)) {
 				event.getRenderer().getModel().leftArm.xRot -= new Float(Math.toRadians(90));
 //				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
@@ -101,7 +100,7 @@ public class RenderEventHandler {
 //				event.getRenderer().getModel().rightArm.postRender(1F);
 			}
 		} else if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
-			if ((player.getMainArm() != HandSide.LEFT)) {
+			if ((player.getMainArm() != HumanoidArm.LEFT)) {
 				event.getRenderer().getModel().leftArmPose = BOW_AND_ARROW;
 //				event.getRenderer().getModel().leftArm.postRender(1F);
 			} else {
@@ -111,12 +110,15 @@ public class RenderEventHandler {
 		}
 
 		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
-			event.getMatrixStack().popPose();
+			event.getPoseStack().popPose();
 		}
 	}
 
 	@SubscribeEvent
-	public static void onRenderWorldLastEvent(RenderLevelLastEvent event) {
+	public static void onRenderWorldLastEvent(RenderLevelStageEvent event) {
+		if (!event.getStage().equals(Stage.AFTER_LEVEL)) {
+			return;
+		}
 		Minecraft mc = Minecraft.getInstance();
 		for (InteractionHand hand : InteractionHand.values()) {
 			ItemStack stack = mc.player.getItemInHand(hand);
@@ -125,7 +127,7 @@ public class RenderEventHandler {
 			}
 			ItemUnprotectedPositionTool item = (ItemUnprotectedPositionTool) stack.getItem();
 
-			PoseStack matrixStack = event.getMatrixStack();
+			PoseStack matrixStack = event.getPoseStack();
 			double x = mc.gameRenderer.getMainCamera().getPosition().x;
 			double y = mc.gameRenderer.getMainCamera().getPosition().y;
 			double z = mc.gameRenderer.getMainCamera().getPosition().z;
@@ -156,7 +158,7 @@ public class RenderEventHandler {
 		//MagicBellRenderer.getInstance().render(event.getPartialTicks());
 	}
 
-	//@SubscribeEvent
+	@SubscribeEvent
 	public static void onClientTickEvent(TickEvent.ClientTickEvent event) {
 		if (event.phase == Phase.START) {
 			//MagicBellRenderer.getInstance().tick();
