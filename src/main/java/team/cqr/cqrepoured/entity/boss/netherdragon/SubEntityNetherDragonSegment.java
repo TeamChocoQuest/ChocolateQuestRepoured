@@ -1,39 +1,34 @@
 package team.cqr.cqrepoured.entity.boss.netherdragon;
 
-import javax.annotation.Nullable;
-
-
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import net.minecraft.entity.EntitySize;
+
+import de.dertoaster.multihitboxlib.entity.hitbox.SubPartConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.level.Explosion.Mode;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level.ExplosionInteraction;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
+import team.cqr.cqrepoured.entity.multipart.AnimatablePartEntity;
 
-public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire, IAnimatable, IAnimationTickable {
+public class SubEntityNetherDragonSegment extends AnimatablePartEntity<EntityCQRNetherDragon> implements IBlacklistedFromStatues, IDontRenderFire {
 
-	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
 	private boolean isSkeletal = false;
 	
-	public static final EntitySize DEFAULT_SIZE = new EntitySize(1.25F, 1.25F, false);
+	public static final EntityDimensions DEFAULT_SIZE = new EntityDimensions(1.25F, 1.25F, false);
 
-	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
-		super(dragon);
+	public SubEntityNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal, final SubPartConfig spc) {
+		super(dragon, spc);
 
-		this.dragon = dragon;
 		this.partIndex = dragon.INITIAL_SEGMENT_COUNT - partID;
 		this.realID = partID;
+		this.isSkeletal = skeletal;
 
 		// String partName, float width, float height
 		this.setInvisible(false);
@@ -48,16 +43,16 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	}
 
 	public boolean isSkeletal() {
-		return this.isSkeletal || this.dragon == null || this.dragon.getSkeleProgress() >= this.realID;
+		return this.isSkeletal || this.getParent() == null || this.getParent().getSkeleProgress() >= this.realID;
 	}
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (source.isExplosion() || source.isFire() || this.dragon == null) {
+		if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE) || this.getParent() == null) {
 			return false;
 		}
 
-		return this.dragon.hurt(this, source, amount);
+		return super.hurt(source, amount);
 	}
 
 	@Override
@@ -69,39 +64,34 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	public void tick() {
 		super.tick();
 
-		if (this.dragon.getSegmentCount() < this.partIndex) {
+		if (this.getParent().getSegmentCount() < this.partIndex) {
 			// this.world.removeEntityDangerously(this);
-			this.remove();
+			this.discard();
 		}
-		if (this.level.isClientSide && (this.dragon == null || !this.dragon.isAlive())) {
-			this.remove();
+		if (this.level().isClientSide() && (this.getParent() == null || !this.getParent().isAlive())) {
+			this.discard();
 		}
 
 	}
 
 	@Override
 	public InteractionResult interact(Player player, InteractionHand hand) {
-		if (this.dragon == null || !this.dragon.isAlive()) {
+		if (this.getParent() == null || !this.getParent().isAlive()) {
 			return InteractionResult.FAIL;
 		}
-		return this.dragon.interact(player, hand);
-	}
-
-	@Nullable
-	public EntityCQRNetherDragon getParent() {
-		return this.dragon;
+		return this.getParent().interact(player, hand);
 	}
 
 	public void explode() {
-		if (!this.level.isClientSide) {
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
+		if (!this.level().isClientSide()) {
+			this.level().explode(this, this.getX(), this.getY(), this.getZ(), 1, ExplosionInteraction.MOB);
 		}
 	}
 
 	public void switchToSkeletalState() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.isSkeletal = true;
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), 1, Mode.DESTROY);
+			this.level().explode(this, this.getX(), this.getY(), this.getZ(), 1, ExplosionInteraction.MOB);
 		}
 	}
 
@@ -136,31 +126,15 @@ public class SubEntityNetherDragonSegment extends CQRPartEntity<EntityCQRNetherD
 	protected void defineSynchedData() {
 		
 	}
-
-	@Override
-	public void registerControllers(AnimationData data) {
-		
-	}
-
-	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
-	@Override
-	public AnimationFactory getFactory() {
-		return this.factory;
-	}
-
-	@Override
-	public int tickTimer() {
-		if(this.getParent() != null) {
-			return this.getParent().tickCount;
-		}
-		return this.tickCount;
-	}
 	
 	@Override
 	public boolean hasCustomRenderer() {
 		return true;
+	}
+
+	@Override
+	public void registerControllers(ControllerRegistrar arg0) {
+		
 	}
 
 }

@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
@@ -76,7 +77,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, IRangedAttackMob, ICirclingEntity, IDontRenderFire, IAnimationTickable, IAnimatable {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, RangedAttackMob, ICirclingEntity, IDontRenderFire, IAnimationTickable, IAnimatable {
 
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
@@ -180,7 +181,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.dragonBodyParts = new SubEntityNetherDragonSegment[this.segmentCount];
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			this.dragonBodyParts[i] = new SubEntityNetherDragonSegment(this, i + 1, false);
-			this.level.addFreshEntity(this.dragonBodyParts[i]);
+			this.level().addFreshEntity(this.dragonBodyParts[i]);
 		}
 	}
 

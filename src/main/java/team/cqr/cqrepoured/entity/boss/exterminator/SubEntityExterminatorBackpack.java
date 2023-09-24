@@ -6,8 +6,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
-import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.entity.multipart.MultiPartEntityPartSizable;
 
 public class SubEntityExterminatorBackpack extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 

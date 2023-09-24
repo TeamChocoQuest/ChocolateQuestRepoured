@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
-import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.entity.multipart.MultiPartEntityPartSizable;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 

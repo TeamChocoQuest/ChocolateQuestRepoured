@@ -4,7 +4,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import team.cqr.cqrepoured.entity.MultiPartEntityPartSizable;
+import team.cqr.cqrepoured.entity.multipart.MultiPartEntityPartSizable;
 
 public class SubEntityExterminatorHitboxPart extends MultiPartEntityPartSizable<EntityCQRExterminator> {
 
