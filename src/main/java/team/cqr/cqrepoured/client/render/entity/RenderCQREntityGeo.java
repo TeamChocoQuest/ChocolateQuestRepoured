@@ -5,18 +5,12 @@ import java.util.function.Function;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
@@ -25,13 +19,11 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.CQRBlockAndItemGeoLayer;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.CQRItemArmorGeoLayer;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerElectrocuteGeo;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerMagicArmorGeo;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 @OnlyIn(Dist.CLIENT)
@@ -108,37 +100,6 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & GeoEntity
 		super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}*/
 
-	// TODO: Replaced by MHLib, otherwise, move to layer!
-	@Override
-	public void render(T entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn) {
-		super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-
-		if (entity.getParts() != null && entity.getParts().length > 0) {
-			for (PartEntity<?> part : entity.getParts()) {
-				if (part instanceof CQRPartEntity<?>) {
-					CQRPartEntity<?> cpe = (CQRPartEntity<?>) part;
-					if (!cpe.hasCustomRenderer()) {
-						continue;
-					}
-					EntityRenderer<? extends CQRPartEntity<? extends Entity>> renderer = CQREntityRenderers.getRendererFor(cpe, this.entityRenderDispatcher);
-					if (renderer == null) {
-						continue;
-					}
-
-					float f = Mth.lerp(partialTicks, cpe.yRotO, cpe.getYRot());
-
-					stack.pushPose();
-
-					Vec3 translate = cpe.position().subtract(entity.position());
-					stack.translate(translate.x(), translate.y(), translate.z());
-
-					((EntityRenderer<CQRPartEntity<?>>) renderer).render(cpe, f, partialTicks, stack, bufferIn, packedLightIn);
-
-					stack.popPose();
-				}
-			}
-		}
-	}
 	
 	//TODO: Include in layer subclass
 	/*protected HumanoidModel<?> currentArmorModel = null;

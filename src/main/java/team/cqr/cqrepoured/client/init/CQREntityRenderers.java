@@ -74,41 +74,18 @@ import team.cqr.cqrepoured.client.render.projectile.RenderProjectileVampiricSpel
 import team.cqr.cqrepoured.client.render.projectile.RenderProjectileWeb;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
-import team.cqr.cqrepoured.entity.CQRPartEntity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
 import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
 import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
+import team.cqr.cqrepoured.entity.multipart.CQRPartEntity;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class CQREntityRenderers {
 	
 	protected static final Map<Class<? extends CQRPartEntity<?>>, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> ENTITY_PART_RENDERER_PRODUCERS = new ConcurrentHashMap<>();
-	protected static final Map<Class<? extends CQRPartEntity<?>>, EntityRenderer<? extends CQRPartEntity<?>>> ENTITY_PART_RENDERERS = new ConcurrentHashMap<>();
-
-	protected static void registerEntityPartRenderer(final Class<? extends CQRPartEntity<?>> partClass, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>> rendererFactory) {
-		ENTITY_PART_RENDERER_PRODUCERS.put(partClass, rendererFactory);
-	}
-	
-	public static <R extends EntityRenderer<? extends CQRPartEntity<?>>, P extends CQRPartEntity<?>> EntityRenderer<? extends CQRPartEntity<?>> getRendererFor(CQRPartEntity<?> cpe, EntityRenderDispatcher entityRenderDispatcher) {
-		return ENTITY_PART_RENDERERS.computeIfAbsent((Class<? extends CQRPartEntity<?>>) cpe.getClass(), partClass -> {
-			Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>> constructor = null;
-			for(Entry<Class<? extends CQRPartEntity<?>>, Function<EntityRenderDispatcher, ? extends EntityRenderer<? extends CQRPartEntity<?>>>> entry : ENTITY_PART_RENDERER_PRODUCERS.entrySet()) {
-				if(entry.getKey().equals(partClass)) {
-					constructor = entry.getValue();
-					break;
-				} else if(partClass.isAssignableFrom(entry.getKey())) {
-					constructor = entry.getValue();
-				}
-			}
-			if(constructor != null) {
-				return constructor.apply(entityRenderDispatcher);
-			}
-			return null;
-		});
-	}
 	
 	private CQREntityRenderers() {
 	}
@@ -123,13 +100,6 @@ public class CQREntityRenderers {
 		/* } */
 		registerBossRenderers();
 		registerMountRenderers();
-		
-		registerPartRenderers();
-	}
-
-	public static void registerPartRenderers() {
-		registerEntityPartRenderer(SubEntityNetherDragonSegment.class, RenderNetherDragonBodyPart::new);
-		registerEntityPartRenderer(SubEntityExterminatorFieldEmitter.class, RenderExterminatorBackpackPart::new);
 	}
 
 	// Registers a big chungus renderer that renders on april the first
