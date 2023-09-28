@@ -233,7 +233,7 @@ public abstract class DungeonBase {
 		if (DungeonDataManager.isDungeonSpawnLimitMet(world, this)) {
 			return false;
 		}
-		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && pos.getZ() >> 4 < -CQRConfig.wall.distance) {
+		if (this.spawnOnlyBehindWall && world.provider.getDimension() == 0 && CQRConfig.wall.enabled && pos.getZ() >= 0 && (Math.abs(pos.getZ()) >> 4) < Math.abs(CQRConfig.wall.distance)) {
 			return false;
 		}
 		if (!this.isValidBiome(biome)) {
