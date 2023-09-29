@@ -69,8 +69,14 @@ public class CubemapTexture extends AbstractTexture {
 	private void load(ResourceManager resourceManager, ResourceLocation location, int target) throws IOException {
 		Optional<Resource> optResource = resourceManager.getResource(location);
 		optResource.ifPresent(resource -> {
-			NativeImage image = NativeImage.read(resource.open());
-			GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image.pixels);
+			NativeImage image;
+			try {
+				image = NativeImage.read(resource.open());
+				GL11.glTexImage2D(target, 0, GL11.GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, image.pixels);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 	}
 
