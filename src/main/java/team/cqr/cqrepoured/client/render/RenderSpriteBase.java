@@ -1,18 +1,21 @@
 package team.cqr.cqrepoured.client.render;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.PoseStack.Pose;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
+import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.vector.Matrix3f;
-import com.mojang.math.Vector3f;
 
 public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 {
@@ -40,11 +43,11 @@ public class RenderSpriteBase<T extends Entity> extends EntityRenderer<T>
 		//Tessellator tessellator = Tessellator.getInstance();
 		//BufferBuilder bufferbuilder = tessellator.getBuffer();
 		matrixStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		matrixStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		//GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
 		VertexConsumer bufferBuilder = buffer.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity)));
-		PoseStack.Entry entry = matrixStack.last();
+		Pose entry = matrixStack.last();
 		Matrix4f matrix4f = entry.pose();
 		Matrix3f matrix3f = entry.normal();
 
