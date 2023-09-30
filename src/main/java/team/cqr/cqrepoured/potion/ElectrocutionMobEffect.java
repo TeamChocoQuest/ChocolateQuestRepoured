@@ -16,6 +16,7 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,6 +32,18 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class ElectrocutionMobEffect extends ExtendedMobEffect {
+	
+	static final int[] DISTANCE_MAP = generateDistanceMap(5);
+	private static int[] generateDistanceMap(int i) {
+		int[] result = new int[i];
+		
+		for (int j = 0; j < i; j++) {
+			final int value = 8 * (j + 1);
+			result[j] = value * value;
+		}
+		
+		return result;
+	}
 	
 	public static class SpreadTargetData {
 		
@@ -107,6 +120,27 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect {
 					Codec.INT.optionalFieldOf("cooldown", 0).forGetter(SpreadTargetData::getCooldown)
 			).apply(instance, SpreadTargetData::new);
 		});
+
+		public void reset() {
+			this.targetUUID = Optional.empty();
+			this.remainingTicks = 0;
+			this.cooldown = 10;
+			this.remainingSpreads = 0;
+		}
+
+		public void tick() {
+			if (this.cooldown > 0) {
+				this.cooldown--;
+			}
+			if (this.remainingTicks > 0) {
+				this.remainingTicks--;
+			}
+			
+			// Reset target if the remaining ticks are 0
+			if (this.remainingTicks <= 0 || this.cooldown > 0) {
+				this.targetUUID = Optional.empty();
+			}
+		}
 	}
 
 	public static final Color COLOR = Color.ofRGBA(39.0F, 251.0F, 244.0F, 0.8F);
@@ -144,7 +178,7 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void tick(LivingEntity entity, @Nullable MobEffectInstance effectInstance, int amplifier) {
 		super.tick(entity, effectInstance, amplifier);
@@ -161,16 +195,41 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect {
 		if (effectInstance != null ) {
 			SpreadTargetData data = ElectrocutionMobEffect.getSpreadData(entity, effectInstance);
 			
+			data.tick();
+			
 			@Nullable Entity target = data.getTarget(entity.level());
 			
 			if (target != null) {
-				
+				// Validate target
+				// If there is no line of sight => cut the connection
+				// If it is dead => Yeah no
+				// If it is too far away => Cut
+				if (!target.isAlive() || !entity.hasLineOfSight(target) || entity.distanceToSqr(target) >= getMaxDistanceForAmplifier(amplifier) ) {
+					data.reset();
+				} else {
+					// Target is still valid or roughly valid
+					// Check for the effect on the target and update it accordingly
+				}
 			} else {
-				
+				// No target
+				// Check if you can actually choose a target and spread
+				if (effectInstance.isInfiniteDuration() || effectInstance.getDuration() >= 20 /*TODO: Config entry*/) {
+					// Effect will last long enough
+					if (data.getRemainingSpreads() != 0 && data.getCooldown() <= 0 && data.getRemainingTicks() == 0) {
+						// Enough spreads remain and there is no cooldown
+						// Let's search for a valid target
+						// If we found one, set it
+					}
+				}
 			}
 		}
 	}
 	
+	private double getMaxDistanceForAmplifier(final int amplifier) {
+		int index = Mth.clamp(amplifier, 0, DISTANCE_MAP.length - 1);
+		return DISTANCE_MAP[index];
+	}
+
 	@Override
 	public void write(CompoundTag nbt, MobEffectInstance effectInstance) {
 		super.write(nbt, effectInstance);
