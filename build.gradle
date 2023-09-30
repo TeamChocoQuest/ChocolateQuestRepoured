@@ -29,6 +29,9 @@ minecraft {
 			arg "-mixin.config=${mod_id}.mixins.json"
 
 			property 'mixin.debug', 'true'
+			
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -45,6 +48,9 @@ minecraft {
 			arg "-mixin.config=${mod_id}.mixins.json"
 
 			property 'mixin.debug', 'true'
+			
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -126,6 +132,11 @@ repositories {
     }
     
     maven {
+		name = "TslatEffectsLib (TEL) Maven Repo"
+		url = "https://dl.cloudsmith.io/public/tslat/tel/maven/"
+	}
+    
+    maven {
     	// location of the maven that hosts JEI files before January 2023
     	name = "Progwml6's maven"
     	url = "https://dvs1.progwml6.com/files/maven/"
@@ -159,6 +170,7 @@ dependencies {
     // Dependencies (Required)
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
     implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
+    implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
 	implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
 	//implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
 
