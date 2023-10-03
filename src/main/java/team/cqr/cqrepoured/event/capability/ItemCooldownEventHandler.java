@@ -10,8 +10,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandler;
-import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
+import team.cqr.cqrepoured.capability.armor.CapabilityArmorCooldown;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
@@ -20,14 +20,14 @@ public class ItemCooldownEventHandler {
 	@SubscribeEvent
 	public static void onLivingUpdateEvent(LivingTickEvent event) {
 		LivingEntity entity = event.getEntity();
-		LazyOptional<CapabilityCooldownHandler> lOpCap = entity.getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
+		LazyOptional<CapabilityArmorCooldown> lOpCap = entity.getCapability(CQRCapabilities.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 		lOpCap.ifPresent(capa -> capa.tick());
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 		if (!event.getEntity().level().isClientSide()) {
-			LazyOptional<CapabilityCooldownHandler> lOpCap = event.getEntity().getCapability(CapabilityCooldownHandlerProvider.CAPABILITY_ITEM_COOLDOWN_CQR, null);
+			LazyOptional<CapabilityArmorCooldown> lOpCap = event.getEntity().getCapability(CQRCapabilities.CAPABILITY_ITEM_COOLDOWN_CQR, null);
 			
 			if(event.getEntity() instanceof ServerPlayer) {
 				lOpCap.ifPresent(capa -> {
