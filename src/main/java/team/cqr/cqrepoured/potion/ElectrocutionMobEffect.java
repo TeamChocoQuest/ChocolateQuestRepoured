@@ -14,12 +14,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -34,6 +40,7 @@ import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.faction.IFactionRelated;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class ElectrocutionMobEffect extends ExtendedMobEffect implements SynchableMobEffect {
@@ -198,6 +205,12 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 
 		// First: Damage
 		final float damage = 1 * amplifier; // TODO: Move base damage into config
+		Entity caster = null;
+		if (effectInstance != null) {
+			SpreadTargetData data = ElectrocutionMobEffect.getSpreadData(entity, effectInstance);
+			caster = data.getCaster(entity.level());
+		}
+		DamageSource ds2 = new DamageSource(DamageTypes.LIGHTNING_BOLT, caster, entity);
 		DamageSource ds = entity.level().damageSources().lightningBolt();
 		if ((entity instanceof IMechanical || entity.getMobType() == CQRCreatureAttributes.MECHANICAL) && entity.isInWaterOrBubble()) {
 			entity.hurt(ds, damage);
@@ -233,25 +246,50 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 						// Enough spreads remain and there is no cooldown
 						// Let's search for a valid target
 						// If we found one, set it
-						List<LivingEntity> possibleTargets = entity.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range(16).selector(new Predicate<LivingEntity>() {
-							@Override
-							public boolean test(LivingEntity le) {
-								if (le.hasEffect(ElectrocutionMobEffect.this)) {
-									// Only valid if it has no chained target
-								}
-								// Also check factions
-								if (entity instanceof IFactionRelated ifr) {
-									// If it is an ally or member of the original caster => no spread
-								}
-								return true;
-							}
-						}), entity, entity.getBoundingBox().inflate(8, 4, 8));
+						target = getTarget(entity, this, data);
+						data.targetUUID = Optional.ofNullable(target.getUUID());
+						data.remainingSpreads--;
+						// TODO: Move this to config entries
+						data.remainingTicks = 100 + entity.getRandom().nextInt(100);
 					}
 				}
 			}
 		}
 	}
 	
+	private static LivingEntity getTarget(LivingEntity entity, MobEffect effect, SpreadTargetData data) {
+		List<LivingEntity> possibleTargets = entity.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range(16).selector(new Predicate<LivingEntity>() {
+			@Override
+			public boolean test(LivingEntity le) {
+				MobEffectInstance mei = le.getEffect(effect);
+				if (mei != null && mei instanceof ExtendedMobEffectHolder emeh) {
+					// Only valid if it has no chained target
+					Object addData = emeh.getExtendedMobEffectData();
+					if (addData != null && addData instanceof SpreadTargetData std) {
+						if (std.getTargetUUID().isPresent()) {
+							return false;
+						}
+					}
+				}
+				// Also check factions
+				if (le instanceof IFactionRelated ifr) {
+					// If it is an ally or member of the original caster => no spread
+					if (ifr.isAlly(data.getCaster(le.level()))) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}), entity, entity.getBoundingBox().inflate(8, 4, 8));
+		
+		CQRWeightedRandom<LivingEntity> wr = new CQRWeightedRandom<>();
+		possibleTargets.forEach(le -> {
+			wr.add(le, (int) Math.round(entity.distanceToSqr(le)));
+		});
+		
+		return wr.next(entity.getRandom());
+	}
+
 	protected static void addOrUpdateChainedEffect(LivingEntity target, SpreadTargetData data, ElectrocutionMobEffect effect, MobEffectInstance casterInstance) {
 		MobEffectInstance instance = target.getEffect(effect);
 		if (instance == null) {
@@ -259,9 +297,11 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			if (instance instanceof ExtendedMobEffectHolder emeh) {
 				SpreadTargetData targetData = new SpreadTargetData(Optional.ofNullable(data.getCasterUUID().get()), Optional.empty(), 0, data.getRemainingSpreads() - 1, 100);
 				((ExtendedMobEffectHolder) instance).setExtendedMobEffectData(targetData);
+				
+				target.addEffect(instance);
 			}
 		} else if(instance instanceof ExtendedMobEffectHolder emeh) {
-			// Necessary block?
+			// TODO: Reset duration
 		}
 	}
 
