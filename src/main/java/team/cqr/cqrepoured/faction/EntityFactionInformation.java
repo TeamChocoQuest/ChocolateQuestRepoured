@@ -7,6 +7,8 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.world.entity.Entity;
+import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
@@ -56,6 +58,64 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 	@Override
 	public int getExactRelationTowards(Faction faction) {
 		return this.getRelationTowards(faction).getValue();
+	}
+	
+	public EReputationStateRough getRoughReputationOf(Entity entity, Map<Faction, EReputationState> reputationMap) {
+		if (entity instanceof IFactionRelated other) {
+			return this.getRoughReputationOf(other, reputationMap);
+		} else {
+			EntityFactionInformation efi = CQRDatapackLoaders.getEntityFactionInformation(entity.getType());
+			if (efi != null) {
+				return this.getRoughReputationOf(efi, reputationMap);
+			}
+			return EReputationStateRough.NEUTRAL;
+		}
+	}
+
+	@Override
+	public EReputationStateRough getRoughReputationOf(Entity entity) {
+		return getRoughReputationOf(entity, Map.of());
+	}
+
+	private EReputationStateRough getRoughReputationOf(IFactionRelated other, Map<Faction, EReputationState> reputationMap) {
+		int score = 0;
+		if (this.memberFactions.isPresent()) {
+			for (Faction faction : this.memberFactions.get()) {
+				if (other.isAllyOf(faction)) {
+					score++;
+				} else if (other.isEnemyOf(faction)) {
+					score--;
+				}
+			}
+			score *= 2;
+		}
+		// Now the factions that we have a reputation towards...
+		for (Map.Entry<Faction, EReputationState> entry : this.reputationMapping.entrySet()) {
+			if (!reputationMap.containsKey(entry.getKey()) || (reputationMap.containsKey(entry.getKey()) && reputationMap.get(entry.getKey()) == null)) {
+				reputationMap.put(entry.getKey(), entry.getValue());
+			}
+		}
+		for (Map.Entry<Faction, EReputationState> entry : reputationMap.entrySet()) {
+			EReputationStateRough roughReputation = EReputationStateRough.getByRepuScore(entry.getValue().getValue());
+			int scoreTmp = 0;
+			if (other.isAllyOf(entry.getKey())) {
+				scoreTmp++;
+			} else if(other.isEnemyOf(entry.getKey())) {
+				scoreTmp--;
+			}
+			if (roughReputation.isEnemy()) {
+				scoreTmp *= -1;
+			}
+			score += scoreTmp;
+		}
+		
+		if (score == 0) {
+			return EReputationStateRough.NEUTRAL;
+		} else if (score > 0) {
+			return EReputationStateRough.ALLY;
+		} else {
+			return EReputationStateRough.ENEMY;
+		}
 	}
 
 }

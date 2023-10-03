@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.capability.faction;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.INBTSerializable;
 import team.cqr.cqrepoured.faction.EReputationState;
@@ -10,6 +11,9 @@ import team.cqr.cqrepoured.faction.IFactionRelated;
 
 @AutoRegisterCapability
 public interface IFactionRelationCapability extends IFactionRelated, INBTSerializable<CompoundTag> {
+	
+	Entity getHolder();
+	void setHolder(Entity value);
 	
 	boolean hasInformationFor(Faction faction);
 
@@ -35,5 +39,5 @@ public interface IFactionRelationCapability extends IFactionRelated, INBTSeriali
 		}
 		return 0;
 	}
-
+	
 }

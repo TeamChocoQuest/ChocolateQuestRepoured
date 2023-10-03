@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.IFactionRelated;
@@ -57,6 +58,9 @@ public abstract class MixinLivingEntity extends Entity implements IFactionRelate
 			Optional<IFactionRelationCapability> opCap = this.getCapability(CQRCapabilities.FACTION_RELATION).resolve();
 			if (opCap.isPresent()) {
 				result = opCap.get();
+				if (opCap.get().getHolder() != this) {
+					opCap.get().setHolder(this);
+				}
 			}
 		}
 		if (result == null) {
@@ -72,6 +76,10 @@ public abstract class MixinLivingEntity extends Entity implements IFactionRelate
 	@Override
 	public int getExactRelationTowards(Faction faction) {
 		return this.getRelevantObjectForFactionHandling().getExactRelationTowards(faction);
+	}
+	
+	public EReputationStateRough getRoughReputationOf(Entity entity) {
+		return this.getRelevantObjectForFactionHandling().getRoughReputationOf(entity);
 	}
 
 }

@@ -93,7 +93,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	}
 
 	// DONE: Special case for player faction!!
-	public <T extends Entity & IFactionRelated> boolean isEnemy(T ent) {
+	public boolean isEnemy(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return false;
@@ -102,7 +102,12 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent.level().getDifficulty() == Difficulty.PEACEFUL) {
 			return false;
 		}
-		return ent.isEnemyOf(this);
+		if (ent instanceof IFactionRelated ifr) {
+			return ifr.isEnemyOf(this);
+		} else {
+			IFactionRelated efi = CQRDatapackLoaders.getEntityFactionInformation(ent.getType());
+			return efi != null ? efi.isAllyOf(this) : false;
+		}
 	}
 	
 	public EReputationState getReputationTowards(Faction faction) {
@@ -124,13 +129,18 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	}
 
 	// DONE: Special case for player faction!!
-	public <T extends Entity & IFactionRelated> boolean isAlly(T ent) {
+	public boolean isAlly(Entity ent) {
 		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return true;
 			}
 		}
-		return ent.isAllyOf(this);
+		if (ent instanceof IFactionRelated ifr) {
+			return ifr.isAllyOf(this);
+		} else {
+			IFactionRelated efi = CQRDatapackLoaders.getEntityFactionInformation(ent.getType());
+			return efi != null ? efi.isAllyOf(this) : false;
+		}
 	}
 
 	public <T extends IFactionRelated & ICapabilityProvider> void decrementReputation(T capProvider, int score, Level level) {
@@ -191,6 +201,12 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	@Override
 	public int getExactRelationTowards(Faction faction) {
 		return this.getReputationTowards(faction).getValue();
+	}
+
+	@Override
+	public EReputationStateRough getRoughReputationOf(Entity entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
