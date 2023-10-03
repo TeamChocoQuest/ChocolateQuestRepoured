@@ -1,24 +1,23 @@
 package team.cqr.cqrepoured.capability;
 
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.NonNullSupplier;
+import net.minecraftforge.common.util.INBTSerializable;
 
-public class SerializableCapabilityProvider<C> extends BasicCapabilityProvider<C> implements ICapabilitySerializable<Tag> {
+public class SerializableCapabilityProvider<C extends INBTSerializable<CompoundTag>> extends BasicCapabilityProvider<C> implements INBTSerializable<CompoundTag> {
 
-	public SerializableCapabilityProvider(Capability<C> capability, NonNullSupplier<C> instanceSupplier) {
-		super(capability, instanceSupplier);
+	public SerializableCapabilityProvider(Capability<C> capability, C defaultData) {
+		super(capability, defaultData);
 	}
 
 	@Override
-	public Tag serializeNBT() {
-		return this.capability.writeNBT(this.instance.orElseThrow(NullPointerException::new), null);
+	public CompoundTag serializeNBT() {
+		return this.backend.serializeNBT();
 	}
 
 	@Override
-	public void deserializeNBT(Tag nbt) {
-		this.capability.readNBT(this.instance.orElseThrow(NullPointerException::new), null, nbt);
+	public void deserializeNBT(CompoundTag nbt) {
+		this.backend.deserializeNBT(nbt);
 	}
 
 }
