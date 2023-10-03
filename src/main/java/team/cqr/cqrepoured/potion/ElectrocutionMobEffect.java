@@ -1,8 +1,10 @@
 package team.cqr.cqrepoured.potion;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -22,6 +24,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.tslat.effectslib.api.ExtendedMobEffect;
@@ -29,6 +32,7 @@ import net.tslat.effectslib.api.ExtendedMobEffectHolder;
 import software.bernie.geckolib.core.object.Color;
 import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
 import team.cqr.cqrepoured.entity.IMechanical;
+import team.cqr.cqrepoured.faction.IFactionRelated;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
@@ -55,8 +59,8 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 		private int cooldown = 0;
 		
 		// Not saved
-		private WeakReference<Entity> targetEntity;
-		private WeakReference<Entity> casterEntity;
+		private WeakReference<LivingEntity> targetEntity;
+		private WeakReference<LivingEntity> casterEntity;
 		
 		public SpreadTargetData() {
 			
@@ -86,14 +90,18 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			return cooldown;
 		}
 		
-		public Entity getTarget(Level level) {
+		public LivingEntity getTarget(Level level) {
 			if (this.getTargetUUID() == null || this.getTargetUUID().isEmpty()) {
 				return null;
 			}
 			if (this.targetEntity == null) {
 				Entity worldEntity = EntityUtil.getEntityByUUID(level, this.getTargetUUID().get());
-				this.targetEntity = new WeakReference<Entity>(worldEntity);
-				return worldEntity;
+				if (worldEntity instanceof LivingEntity le) {
+					this.targetEntity = new WeakReference<LivingEntity>(le);
+					return le;
+				}
+				this.targetUUID = Optional.empty();
+				return null;
 			} else {
 				return this.targetEntity.get();
 			}
@@ -103,10 +111,14 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			if (this.getCasterUUID() == null || this.getCasterUUID().isEmpty()) {
 				return null;
 			}
-			if (this.targetEntity == null) {
+			if (this.casterEntity == null) {
 				Entity worldEntity = EntityUtil.getEntityByUUID(level, this.getCasterUUID().get());
-				this.casterEntity = new WeakReference<Entity>(worldEntity);
-				return worldEntity;
+				if (worldEntity instanceof LivingEntity le) {
+					this.casterEntity = new WeakReference<LivingEntity>(le);
+					return le;
+				}
+				this.casterUUID = Optional.empty();
+				return null;
 			} else {
 				return this.casterEntity.get();
 			}
@@ -126,7 +138,7 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			this.targetUUID = Optional.empty();
 			this.remainingTicks = 0;
 			this.cooldown = 10;
-			this.remainingSpreads = 0;
+			this.remainingSpreads += 1;
 		}
 
 		public void tick() {
@@ -198,7 +210,7 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			
 			data.tick();
 			
-			@Nullable Entity target = data.getTarget(entity.level());
+			@Nullable LivingEntity target = data.getTarget(entity.level());
 			
 			if (target != null) {
 				// Validate target
@@ -210,6 +222,7 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 				} else {
 					// Target is still valid or roughly valid
 					// Check for the effect on the target and update it accordingly
+					addOrUpdateChainedEffect(target, data, this, effectInstance);
 				}
 			} else {
 				// No target
@@ -220,12 +233,38 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 						// Enough spreads remain and there is no cooldown
 						// Let's search for a valid target
 						// If we found one, set it
+						List<LivingEntity> possibleTargets = entity.level().getNearbyEntities(LivingEntity.class, TargetingConditions.forCombat().range(16).selector(new Predicate<LivingEntity>() {
+							@Override
+							public boolean test(LivingEntity le) {
+								if (le.hasEffect(ElectrocutionMobEffect.this)) {
+									// Only valid if it has no chained target
+								}
+								// Also check factions
+								if (entity instanceof IFactionRelated ifr) {
+									// If it is an ally or member of the original caster => no spread
+								}
+								return true;
+							}
+						}), entity, entity.getBoundingBox().inflate(8, 4, 8));
 					}
 				}
 			}
 		}
 	}
 	
+	protected static void addOrUpdateChainedEffect(LivingEntity target, SpreadTargetData data, ElectrocutionMobEffect effect, MobEffectInstance casterInstance) {
+		MobEffectInstance instance = target.getEffect(effect);
+		if (instance == null) {
+			instance = new MobEffectInstance(effect, 20, Math.max(casterInstance.getAmplifier() - 1, 1), casterInstance.isAmbient(), casterInstance.isVisible(), casterInstance.showIcon());
+			if (instance instanceof ExtendedMobEffectHolder emeh) {
+				SpreadTargetData targetData = new SpreadTargetData(Optional.ofNullable(data.getCasterUUID().get()), Optional.empty(), 0, data.getRemainingSpreads() - 1, 100);
+				((ExtendedMobEffectHolder) instance).setExtendedMobEffectData(targetData);
+			}
+		} else if(instance instanceof ExtendedMobEffectHolder emeh) {
+			// Necessary block?
+		}
+	}
+
 	private double getMaxDistanceForAmplifier(final int amplifier) {
 		int index = Mth.clamp(amplifier, 0, DISTANCE_MAP.length - 1);
 		return DISTANCE_MAP[index];
