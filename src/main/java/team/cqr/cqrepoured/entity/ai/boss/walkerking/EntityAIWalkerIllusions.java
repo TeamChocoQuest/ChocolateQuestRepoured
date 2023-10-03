@@ -25,7 +25,7 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 	@Override
 	public void startCastingSpell() {
 		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		this.entity.level.getEntities(this.entity, new AABB(this.entity.blockPosition().offset(-20, -10, -20), this.entity.blockPosition().offset(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
+		this.entity.level().getEntities(this.entity, new AABB(this.entity.blockPosition().offset(-20, -10, -20), this.entity.blockPosition().offset(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction())).forEach(t -> {
 			if (t instanceof LivingEntity) {
 				((LivingEntity) t).addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40));
 			}
@@ -33,9 +33,9 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntit
 		Vec3 v = new Vec3(2.5, 0, 0);
 		for (int i = 0; i < 3; i++) {
 			Vec3 pos = this.entity.position().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
-			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.level);
+			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.level());
 			illusion.setPos(pos.x, pos.y, pos.z);
-			this.entity.level.addFreshEntity(illusion);
+			this.entity.level().addFreshEntity(illusion);
 		}
 	}
 

@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;

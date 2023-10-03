@@ -1,23 +1,25 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.init.CQRItemTags;
 import team.cqr.cqrepoured.util.EntityUtil;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -71,7 +73,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 			Vec3 vec1 = this.entity.position().add(alertRadius, alertRadius * 0.5D, alertRadius);
 			Vec3 vec2 = this.entity.position().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
 			AABB aabb = new AABB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<Entity> possibleEnts = this.entity.level.getEntities(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
+			List<Entity> possibleEnts = this.entity.level().getEntities(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 
 			if (!possibleEnts.isEmpty()) {
 				Entity e1 = null;
@@ -79,7 +81,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 				double distance = Double.MAX_VALUE;
 				for (Entity e2 : possibleEnts) {
 					AABB aabb1 = new AABB(e2.getX() - 4, e2.getY() - 2, e2.getZ() - 4, e2.getX() + 4, e2.getY() + 2, e2.getZ() + 4);
-					List<Entity> list = e2.level.getEntities(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
+					List<Entity> list = e2.level().getEntities(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 					double d = this.entity.distanceToSqr(e2);
 					if (list.size() > count || (list.size() == count && d < distance)) {
 						e1 = e2;
@@ -133,7 +135,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		if (!this.entity.isBlocking()) {
 			ItemStack offhand = this.entity.getItemInHand(InteractionHand.OFF_HAND);
 
-			if (offhand.getItem().isShield(offhand, this.entity)) {
+			if (offhand.getItem() instanceof ShieldItem || offhand.is(CQRItemTags.SHIELDS)) {
 				this.entity.startUsingItem(InteractionHand.OFF_HAND);;
 			}
 		}
@@ -142,9 +144,9 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 	private boolean canMoveBackwards() {
 		double sin = -Math.sin(Math.toRadians(this.entity.yBodyRot));
 		double cos = Math.cos(Math.toRadians(this.entity.yBodyRot));
-		BlockPos pos = new BlockPos(this.entity.getX() - sin, this.entity.getY() - 0.001D, this.entity.getZ() - cos);
-		BlockState state = this.entity.level.getBlockState(pos);
-		return state.isFaceSturdy(this.entity.level, pos, Direction.UP);
+		BlockPos pos = BlockPos.containing(this.entity.getX() - sin, this.entity.getY() - 0.001D, this.entity.getZ() - cos);
+		BlockState state = this.entity.level().getBlockState(pos);
+		return state.isFaceSturdy(this.entity.level(), pos, Direction.UP);
 	}
 
 	public void startHealing() {

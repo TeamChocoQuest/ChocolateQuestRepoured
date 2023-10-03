@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.entity.ai;
 
 import java.util.EnumSet;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.pathfinder.Node;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR> {
@@ -56,7 +56,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 				for (int l = 0; l <= 4; ++l) {
 					for (int i1 = 0; i1 <= 4; ++i1) {
 						if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.isTeleportFriendlyBlock(i, j, k, l, i1)) {
-							this.entity.getLookControl().setLookAt(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.yRot, this.entity.xRot);
+							this.entity.getLookControl().setLookAt(i + l + 0.5F, k, j + i1 + 0.5F, this.entity.getYRot(), this.entity.getXRot());
 							this.entity.getNavigation().stop();
 							return;
 						}
@@ -64,7 +64,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR>
 				}
 			}
 
-			PathPoint target = this.entity.getNavigation().getPath().getEndNode();
+			Node target = this.entity.getNavigation().getPath().getEndNode();
 
 			if (leader.distanceToSqr(target.x + 0.5D, target.y, target.z + 0.5D) > 16.0D) {
 				this.entity.getNavigation().moveTo(leader, 1.0D);

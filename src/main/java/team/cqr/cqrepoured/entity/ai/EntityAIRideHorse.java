@@ -1,18 +1,17 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.entity.MobEntity;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.PrioritizedGoal;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
-import net.minecraft.entity.passive.horse.HorseEntity;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /*
  * Partly copied from AW2
@@ -29,8 +28,8 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	};
 	private final AttributeModifier moveSpeedModifier;
 
-	protected MobEntity horse;
-	private final List<PrioritizedGoal> horseAI = new ArrayList<>();
+	protected Mob horse;
+	private final List<WrappedGoal> horseAI = new ArrayList<>();
 
 	public EntityAIRideHorse(T entity, double speedFactor) {
 		super(entity);
@@ -51,19 +50,19 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 	}
 
 	protected boolean shouldRideHorse() {
-		return this.horse == null && this.entity.getVehicle() instanceof HorseEntity;
+		return this.horse == null && this.entity.getVehicle() instanceof AbstractHorse;
 	}
 
 	@Override
 	public void start() {
-		this.horse = (MobEntity) this.entity.getVehicle();
+		this.horse = (Mob) this.entity.getVehicle();
 		this.onMountHorse();
 	}
 
 	protected void onMountHorse() {
 		this.removeHorseAI();
-		if (this.horse instanceof AbstractHorseEntity) {
-			AbstractHorseEntity h = (AbstractHorseEntity) this.horse;
+		if (this.horse instanceof AbstractHorse) {
+			AbstractHorse h = (AbstractHorse) this.horse;
 			h.equipSaddle(SoundSource.AMBIENT);
 			h.setEating(false);
 			h.setJumping(false); //Previously setRearing, is this the correct replacement?
@@ -80,14 +79,14 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 
 	protected void onDismountHorse() {
 		this.addHorseAI();
-		if (this.horse instanceof AbstractHorseEntity) {
-			((AbstractHorseEntity) this.horse).equipSaddle(SoundSource.AMBIENT);
+		if (this.horse instanceof AbstractHorse) {
+			((AbstractHorse) this.horse).equipSaddle(SoundSource.AMBIENT);
 			this.removeModifiers();
 		}
 	}
 
 	private void applyModifiers() {
-		if (this.horse instanceof AbstractHorseEntity) {
+		if (this.horse instanceof AbstractHorse) {
 			this.removeModifiers();
 			this.horse.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(this.moveSpeedModifier);
 			this.horse.getAttribute(Attributes.FOLLOW_RANGE).addTransientModifier(FOLLOW_RANGE_MODIFIER);
@@ -101,15 +100,15 @@ public class EntityAIRideHorse<T extends AbstractEntityCQR> extends AbstractCQRE
 
 	private void removeHorseAI() {
 		this.horseAI.clear();
-		this.horseAI.addAll(this.horse.goalSelector.availableGoals);
-		for (PrioritizedGoal task : this.horseAI) {
+		this.horseAI.addAll(this.horse.goalSelector.getAvailableGoals());
+		for (WrappedGoal task : this.horseAI) {
 			this.horse.goalSelector.removeGoal(task.getGoal());
 		}
 	}
 
 	private void addHorseAI() {
-		if (this.horse.goalSelector.availableGoals.isEmpty()) {
-			this.horse.goalSelector.availableGoals.addAll(this.horseAI);
+		if (this.horse.goalSelector.getAvailableGoals().isEmpty()) {
+			this.horse.goalSelector.getAvailableGoals().addAll(this.horseAI);
 		}
 		this.horseAI.clear();
 	}

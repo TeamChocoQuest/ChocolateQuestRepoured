@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
+import java.util.EnumSet;
+import java.util.List;
+
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.EnumSet;
-import java.util.List;
 
 public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -21,7 +21,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 	protected static final boolean FORCE_MOUNTING = true;
 	protected static final double WALK_SPEED_TO_MOUNT = 1.0D;
 
-	protected MobEntity entityToMount = null;
+	protected Mob entityToMount = null;
 
 	public EntityAISearchMount(AbstractEntityCQR entity) {
 		super(entity);
@@ -42,7 +42,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			Vec3 vec1 = this.entity.position().add(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3 vec2 = this.entity.position().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AABB aabb = new AABB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<MobEntity> possibleMounts = this.world.getEntitiesOfClass(MobEntity.class, aabb, input -> {
+			List<Mob> possibleMounts = this.world.getEntitiesOfClass(Mob.class, aabb, input -> {
 				if (!TargetUtil.PREDICATE_MOUNTS.apply(input)) {
 					return false;
 				}
@@ -105,8 +105,8 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 		if (this.entity.distanceTo(this.entityToMount) > DISTANCE_TO_MOUNT) {
 			this.entity.getNavigation().moveTo(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		} else {
-			if (this.entityToMount instanceof AbstractHorseEntity) {
-				AbstractHorseEntity horse = (AbstractHorseEntity) this.entityToMount;
+			if (this.entityToMount instanceof AbstractHorse) {
+				AbstractHorse horse = (AbstractHorse) this.entityToMount;
 				horse.setOwnerUUID(this.entity.getUUID());
 
 				//TODO: Replace

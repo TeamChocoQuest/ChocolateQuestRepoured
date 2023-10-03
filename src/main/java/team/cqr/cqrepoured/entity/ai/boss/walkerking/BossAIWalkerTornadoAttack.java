@@ -4,7 +4,6 @@ import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerTornado;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalkerKing> {
@@ -37,8 +36,8 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 	@Override
 	public void start() {
 		super.start();
-		this.spawnTornadoes(DungeonGenUtils.randomBetween(MIN_TORNADOES, MAX_TORNADOES + 1, this.entity.getRandom()));
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
+		this.spawnTornadoes(this.entity.getRandom().nextIntBetweenInclusive(MIN_TORNADOES, MAX_TORNADOES));
+		this.cooldown = this.entity.getRandom().nextIntBetweenInclusive(MIN_COOLDOWN, MAX_COOLDOWN);
 	}
 
 	private void spawnTornadoes(int count) {
@@ -51,11 +50,11 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalk
 			Vec3 p = this.entity.position().add(v.normalize().scale(0.5));
 			v = v.normalize().scale(0.25);
 			// System.out.println("V=" + v.toString());
-			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.level);
+			EntityWalkerTornado tornado = new EntityWalkerTornado(this.entity.level());
 			tornado.setOwner(this.entity.getUUID());
 			tornado.setPos(p.x, p.y, p.z);
 			tornado.setVelocity(v);
-			this.entity.level.addFreshEntity(tornado);
+			this.entity.level().addFreshEntity(tornado);
 		}
 	}
 

@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.entity.pathfinding;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -283,7 +283,7 @@ public class CQRNPCPath {
 		}
 
 		@Nullable
-		public PathNode getNextNode(Level world, Random rand, @Nullable PathNode prevNode) {
+		public PathNode getNextNode(Level world, RandomSource rand, @Nullable PathNode prevNode) {
 			if (this.connectedNodes.isEmpty()) {
 				return null;
 			}

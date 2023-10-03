@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.entity.ai;
 
-import com.google.common.base.Predicate;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.util.EntityPredicates;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.util.Mth;
-import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
-import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
 import java.util.EnumSet;
 import java.util.List;
+
+import com.google.common.base.Predicate;
+
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -31,7 +32,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 			if (input == null) {
 				return false;
 			}
-			if (!EntityPredicates.LIVING_ENTITY_STILL_ALIVE.test(input)) {
+			if (!EntitySelector.LIVING_ENTITY_STILL_ALIVE.test(input)) {
 				return false;
 			}
 			return EntityAIIdleSit.this.isEntityAlly(input);
@@ -40,7 +41,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean canUse() {
-		if (!this.entity.isOnGround()) {
+		if (!this.entity.onGround()) {
 			return false;
 		}
 		if (this.entity.isOnFire()) {
@@ -83,7 +84,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 				double z = this.entity.position().z;
 				double r = 6.0D;
 				AABB aabb = new AABB(x - r, y - r * 0.5D, z - r, x + r, y + r * 0.5D, z + r);
-				List<AbstractEntityCQR> friends = this.entity.level.getEntitiesOfClass(AbstractEntityCQR.class, aabb, this.predicate);
+				List<AbstractEntityCQR> friends = this.entity.level().getEntitiesOfClass(AbstractEntityCQR.class, aabb, this.predicate);
 				if (!friends.isEmpty()) {
 					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
 				}
@@ -96,8 +97,8 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 					this.entity.getLookControl().setLookAt(this.talkingPartner, 15.0F, 15.0F);
 					double dx = this.talkingPartner.position().x - this.entity.position().x;
 					double dz = this.talkingPartner.position().z - this.entity.position().z;
-					this.entity.yRot = (float) Math.toDegrees(Mth.atan2(dz, dx)) - 90.0F;
-					this.entity.yBodyRot = this.entity.yRot;
+					this.entity.setYRot((float) Math.toDegrees(Mth.atan2(dz, dx)) - 90.0F);
+					this.entity.yBodyRot = this.entity.getYRot();
 				} else {
 					this.talkingPartner = null;
 					this.entity.setChatting(false);

@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.PotionEntity;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.item.LingeringPotionItem;
-import net.minecraft.item.SplashPotionItem;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.world.item.LingeringPotionItem;
+import net.minecraft.world.item.SplashPotionItem;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.attack.EntityAIAttackRanged;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.ItemAlchemyBag;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQR> {
 
@@ -47,7 +47,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 			
 			// Throwable potions
 			if (item instanceof SplashPotionItem || item instanceof LingeringPotionItem) {
-				PotionEntity proj = new PotionEntity(this.world, this.entity/*, stack.copy()*/);
+				ThrownPotion proj = new ThrownPotion(this.world, this.entity/*, stack.copy()*/);
 				proj.setItem(stack.copy());
 				y -= proj.getY();
 				proj.shoot(x, y + distance * 0.06D, z, 1.F, this.entity.getRandom().nextFloat() * 0.25F);
@@ -58,7 +58,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 				}*/
 				proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
 				proj.hasImpulse = true;
-				this.entity.level.addFreshEntity(proj);
+				this.entity.level().addFreshEntity(proj);
 				this.entity.swing(InteractionHand.OFF_HAND);
 				this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 
@@ -68,7 +68,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 				this.prevTimeAttacked = this.entity.tickCount;
 			} else if (item instanceof ItemAlchemyBag) {
-				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).resolve().get();
+				IItemHandler inventory = stack.getCapability(ForgeCapabilities.ITEM_HANDLER, null).resolve().get();
 				int indx = this.entity.getRandom().nextInt(inventory.getSlots());
 				ItemStack st = inventory.getStackInSlot(indx);
 				Set<Integer> usedIDs = new HashSet<>();
@@ -84,7 +84,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 
 					// Now throw it
 					if (potion.getItem() instanceof SplashPotionItem || potion.getItem() instanceof LingeringPotionItem) {
-						PotionEntity proj = new PotionEntity(this.world, this.entity/*, potion*/);
+						ThrownPotion proj = new ThrownPotion(this.world, this.entity/*, potion*/);
 						proj.setItem(potion);
 						y -= proj.getY();
 						proj.shoot(x, y + distance * 0.08D, z, 1.F, this.entity.getRandom().nextFloat() * 0.25F);
@@ -95,7 +95,7 @@ public class EntityAIPotionThrower extends EntityAIAttackRanged<AbstractEntityCQ
 						}*/
 						proj.setDeltaMovement(proj.getDeltaMovement().add(this.entity.getDeltaMovement()));
 						proj.hasImpulse = true;
-						this.entity.level.addFreshEntity(proj);
+						this.entity.level().addFreshEntity(proj);
 						this.entity.swing(InteractionHand.OFF_HAND);
 						this.entity.playSound(SoundEvents.SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}

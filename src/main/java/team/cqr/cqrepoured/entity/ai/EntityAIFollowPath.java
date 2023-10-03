@@ -52,7 +52,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 				}
 			} else if (this.ticksToWait > 0) {
 				this.ticksToWait--;
-				this.entity.yRot = currentNode.getWaitingRotation();
+				this.entity.setYRot(currentNode.getWaitingRotation());
 				long time = this.world.getGameTime() % 24000;
 				if (time < currentNode.getTimeMin() || time > currentNode.getTimeMax()) {
 					this.ticksToWait = 0;

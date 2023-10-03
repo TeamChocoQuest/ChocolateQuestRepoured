@@ -1,22 +1,21 @@
 package team.cqr.cqrepoured.entity.ai.item;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.ISummoner;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.item.ItemCursedBone;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 // TODO: Make entity strafe backwards (like with the bow) while they are casting
 public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEntityCQR> implements ISummoner {
@@ -109,7 +108,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 				ItemCursedBone cursedBone = (ItemCursedBone) stack.getItem();
 				for (int i = 0; i < mobCount; i++) {
 					Vec3 posV = this.entity.position().add(vector);
-					BlockPos pos = new BlockPos(posV.x, posV.y, posV.z);
+					BlockPos pos = BlockPos.containing(posV.x, posV.y, posV.z);
 					Optional<Entity> circle = cursedBone.spawnEntity(pos, this.world, stack, this.entity, this);
 					if (circle.isPresent()) {
 						this.summonedEntities.add(circle.get());
@@ -122,7 +121,7 @@ public class EntityAICursedBoneSummoner extends AbstractCQREntityAI<AbstractEnti
 
 	@Override
 	public void stop() {
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
+		this.cooldown = this.entity.getRandom().nextIntBetweenInclusive(MIN_COOLDOWN, MAX_COOLDOWN);
 		this.chargingTicks = 20;
 		this.prevTimeUsed = this.entity.tickCount;
 		super.stop();

@@ -4,7 +4,6 @@ import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRWalkerKing;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
-import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.VectorUtil;
 
 public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRWalkerKing> {
@@ -23,7 +22,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 
 	@Override
 	public boolean canUse() {
-		if (!this.entity.level.isClientSide && !this.entity.isDeadOrDying() && this.entity.getTarget() != null) {
+		if (!this.entity.level().isClientSide() && !this.entity.isDeadOrDying() && this.entity.getTarget() != null) {
 			this.cooldown--;
 			return this.cooldown <= 0;
 		}
@@ -59,16 +58,16 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRW
 		Vec3 v = new Vec3(this.circleRad, 0, 0);
 		for (int i = 0; i < count; i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle);
-			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.level, this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(this.entity.level(), this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 			lightning.setPos(this.entity.getX() + v.x, this.entity.getY() + v.y, this.entity.getZ() + v.z);
-			this.entity.level.addFreshEntity(lightning);
+			this.entity.level().addFreshEntity(lightning);
 		}
 	}
 
 	@Override
 	public void stop() {
 		this.circleRad = 4;
-		this.cooldown = DungeonGenUtils.randomBetween(MIN_COOLDOWN, MAX_COOLDOWN, this.entity.getRandom());
+		this.cooldown = this.entity.getRandom().nextIntBetweenInclusive(MIN_COOLDOWN, MAX_COOLDOWN);
 		super.stop();
 	}
 
