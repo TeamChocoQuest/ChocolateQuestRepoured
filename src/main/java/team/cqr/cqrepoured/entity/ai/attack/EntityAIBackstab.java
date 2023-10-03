@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.entity.ai.attack;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.Path;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.sword.ItemDagger;
 
@@ -50,10 +50,10 @@ public class EntityAIBackstab extends EntityAIAttack {
 	@Override
 	protected void updatePath(LivingEntity target) {
 		double distance = Math.min(4.0D, this.entity.distanceTo(target) * 0.5D);
-		double rad = Math.toRadians(target.yRot);
+		double rad = Math.toRadians(target.getYRot());
 		double sin = Mth.sin((float) rad);
 		double cos = Mth.cos((float) rad);
-		PathNavigator navigator = this.entity.getNavigation();
+		PathNavigation navigator = this.entity.getNavigation();
 		Path path = null;
 		for (int i = 4; path == null && i >= 0; i--) {
 			double d = distance * i / 4.0D;

@@ -1,13 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
+import java.util.EnumSet;
+
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-
-import java.util.EnumSet;
+import team.cqr.cqrepoured.init.CQRItemTags;
 
 public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -70,7 +72,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 		} else if (this.attackTick + this.getBlockCooldownPeriod() <= this.entity.tickCount && !this.entity.isBlocking()) {
 			ItemStack offhand = this.entity.getMainHandItem();
-			if (offhand.getItem().isShield(offhand, this.entity)) {
+			if (offhand.getItem() instanceof ShieldItem || offhand.is(CQRItemTags.SHIELDS)) {
 				this.entity.startUsingItem(InteractionHand.OFF_HAND);
 			}
 		}

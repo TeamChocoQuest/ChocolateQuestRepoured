@@ -4,23 +4,24 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.ClipContext.Block;
+import net.minecraft.world.level.ClipContext.Fluid;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ClipContext.BlockMode;
-import net.minecraft.world.level.ClipContext.FluidMode;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
@@ -70,12 +71,12 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					return false;
 				}
 				BlockEntity te = this.world.getBlockEntity(mutablePos);
-				if (!(te instanceof ChestTileEntity) || ((ChestTileEntity) te).isEmpty()) {
+				if (!(te instanceof ChestBlockEntity) || ((ChestBlockEntity) te).isEmpty()) {
 					return false;
 				}
-				ClipContext rtc = new ClipContext(vec, new Vec3(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), BlockMode.COLLIDER, FluidMode.ANY, null);
+				ClipContext rtc = new ClipContext(vec, new Vec3(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), Block.COLLIDER, Fluid.ANY, null);
 				HitResult result = this.world.clip(rtc);//this.world.rayTraceBlocks(vec, new Vector3d(mutablePos.getX() + 0.5D, mutablePos.getY() + 0.5D, mutablePos.getZ() + 0.5D), false, true, false);
-				BlockPos.Mutable bp = new BlockPos(result.getLocation()).mutable();
+				MutableBlockPos bp = BlockPos.containing(result.getLocation()).mutable();
 				return result == null || bp.equals(mutablePos);
 			});
 		}
@@ -85,7 +86,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private boolean hasBackpackSpace() {
 		ItemStack backpack = this.entity.getItemBySlot(EquipmentSlot.CHEST);
-		LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		LazyOptional<IItemHandler> lOpCap = backpack.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
 		if(lOpCap.isPresent()) {
 			IItemHandler inventory = lOpCap.resolve().get();
 			for (int i = 0; i < inventory.getSlots(); i++) {
@@ -121,7 +122,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 		if (this.isInLootingRange()) {
 			this.entity.getNavigation().stop();
-			ChestTileEntity tile = (ChestTileEntity) this.world.getBlockEntity(this.currentTarget);
+			ChestBlockEntity tile = (ChestBlockEntity) this.world.getBlockEntity(this.currentTarget);
 			// TODO: let it stay open
 			if (this.currentLootingTime >= 0) {
 				this.currentLootingTime--;
@@ -142,7 +143,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 						this.entity.swing(InteractionHand.MAIN_HAND);
 						this.entity.swing(InteractionHand.OFF_HAND);
 						ItemStack backpack = this.entity.getItemBySlot(EquipmentSlot.CHEST);
-						LazyOptional<IItemHandler> lOpCap = backpack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+						LazyOptional<IItemHandler> lOpCap = backpack.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
 						if(lOpCap.isPresent()) {
 							IItemHandler inventory = lOpCap.resolve().get();
 							for (int i = 0; i < inventory.getSlots(); i++) {
@@ -169,7 +170,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		return this.entity.blockPosition().distSqr(this.currentTarget) <= this.REQUIRED_DISTANCE_TO_LOOT;
 	}
 
-	protected boolean hasBackpack(MobEntity living) {
+	protected boolean hasBackpack(Mob living) {
 		ItemStack chest = living.getItemBySlot(EquipmentSlot.CHEST);
 		return chest != null && chest.getItem() instanceof ItemBackpack;
 	}
@@ -182,7 +183,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 			return false;
 		}
 		BlockEntity tile = this.world.getBlockEntity(this.currentTarget);
-		return tile != null && tile instanceof ChestTileEntity && !((ChestTileEntity) tile).isEmpty();
+		return tile != null && tile instanceof ChestBlockEntity && !((ChestBlockEntity) tile).isEmpty();
 	}
 
 }

@@ -1,14 +1,17 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import net.minecraft.world.damagesource.DamageSource;
+import java.util.List;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.item.*;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
@@ -16,8 +19,6 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.item.IRangedWeapon;
 import team.cqr.cqrepoured.item.sword.ItemDagger;
 import team.cqr.cqrepoured.item.sword.ItemGreatSword;
-
-import java.util.List;
 
 public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpecial {
 
@@ -129,7 +130,7 @@ public class EntityAIAttackSpecialSpinAttack extends AbstractEntityAIAttackSpeci
 				 */
 
 				final float knockbackStrength = 0.6125F * attacker.getSizeVariation();
-				living.hurt(DamageSource.mobAttack(attacker), dmg);
+				living.hurt(attacker.damageSources().mobAttack(attacker), dmg);
 				living.knockback(/*entity,*/ knockbackStrength, 1, 1);//Correct replacement?
 			}
 		});

@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.attack.special;
 
-import net.minecraft.entity.MobEntity;
+import java.util.EnumSet;
+
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileHookShotHook;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
-
-import java.util.EnumSet;
 
 public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 
@@ -128,7 +128,7 @@ public class EntityAIHooker extends AbstractCQREntityAI<AbstractEntityCQR> {
 		this.state = STATE.PREPARING;
 	}
 
-	protected boolean hasHookShoot(MobEntity ent) {
+	protected boolean hasHookShoot(Mob ent) {
 		ItemStack item = ent.getMainHandItem();
 		if (!item.isEmpty()) {
 			return item.getItem() instanceof ItemHookshotBase;

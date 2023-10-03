@@ -1,23 +1,24 @@
 package team.cqr.cqrepoured.entity.ai.attack;
 
+import java.util.EnumSet;
+
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.*;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.item.IRangedWeapon;
-
-import java.util.EnumSet;
 
 public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractCQREntityAI<T> {
 
@@ -146,7 +147,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 					if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ArrowItem)) {
 						arrowItem = new ItemStack(Items.ARROW);
 					}
-					AbstractArrowEntity arrow = ((ArrowItem) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
+					AbstractArrow arrow = ((ArrowItem) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
 					// arrowItem.shrink(1);
 
 					double x = attackTarget.getX() - this.entity.getX();
@@ -160,7 +161,7 @@ public class EntityAIAttackRanged<T extends AbstractEntityCQR> extends AbstractC
 						arrow.motionY += this.entity.motionY;
 					}*/
 					Vec3 shooterVec = this.entity.getDeltaMovement();
-					arrow.setDeltaMovement(arrow.getDeltaMovement().add(shooterVec.x(), this.entity.isOnGround() ? 0 : shooterVec.y(), shooterVec.z()));
+					arrow.setDeltaMovement(arrow.getDeltaMovement().add(shooterVec.x(), this.entity.onGround() ? 0 : shooterVec.y(), shooterVec.z()));
 					this.world.addFreshEntity(arrow);
 					this.entity.playSound(SoundEvents.ARROW_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				} else if (item instanceof IRangedWeapon) {
