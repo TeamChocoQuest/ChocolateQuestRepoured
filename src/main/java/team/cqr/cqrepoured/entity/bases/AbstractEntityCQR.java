@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import java.awt.TextComponent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,11 +10,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.inventory.IInventoryChangedListener;
-import net.minecraft.loot.LootParameterSets;
-import net.minecraft.loot.LootParameters;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -33,11 +27,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.Container;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -50,6 +43,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -64,28 +58,31 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.NameTagItem;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.PacketDistributor;
 import software.bernie.geckolib.core.animation.AnimationState;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
-import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerCQRSpeechbubble;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -126,9 +123,10 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.faction.IFactionRelated;
-import team.cqr.cqrepoured.faction.IHasFaction;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.init.CQRItemTags;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.item.IFakeWeapon;
@@ -258,7 +256,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public void enableBossBar() {
-		if (!this.level().isClientSide && this.bossInfoServer == null) {
+		if (!this.level().isClientSide() && this.bossInfoServer == null) {
 			this.bossInfoServer = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
 			this.bossInfoServer.setVisible(CQRConfig.SERVER_CONFIG.bosses.enableBossBars.get());
 		}
@@ -285,7 +283,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 	
 	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+	protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
 		// Not wanted
 	}
 
@@ -363,7 +361,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 
 		amount = this.handleDamageCap(source, amount);
 
-		if (!this.level().isClientSide && amount > 0.0F && this.canBlockDamageSource(source)) {
+		if (!this.level().isClientSide() && amount > 0.0F && this.canBlockDamageSource(source)) {
 			if (source.getDirectEntity() instanceof LivingEntity && !(source.getDirectEntity() instanceof Player) && ((LivingEntity) source.getDirectEntity()).getMainHandItem().getItem() instanceof AxeItem) {
 				this.lastTickShieldDisabled = this.tickCount;
 			} else {
@@ -383,10 +381,10 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 
 		return flag;
 	}
-
+	
 	@Override
-	public void knockback(float strength, double xRatio, double zRatio) {
-		LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(this, strength, xRatio, zRatio);
+	public void knockback(double strength, double xRatio, double zRatio) {
+		LivingKnockBackEvent event = ForgeHooks.onLivingKnockBack(this, (float) strength, xRatio, zRatio);
 		if (event.isCanceled()) {
 			return;
 		}
@@ -405,7 +403,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		double vZ = currentMovement.z;
 		
 		this.hasImpulse = true;
-		double d = 1.0D / Mth.sqrt(xRatio * xRatio + zRatio * zRatio);
+		double d = 1.0D / Mth.sqrt((float) (xRatio * xRatio + zRatio * zRatio));
 		vX *= 0.5D;
 		vZ *= 0.5D;
 		vX -= xRatio * d * strength;
@@ -531,7 +529,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 	
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance difficulty, MobSpawnType p_213386_3_, ILivingEntityData setDamageValue, CompoundTag p_213386_5_) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag) {
 		this.setHealingPotions(1);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(CQRItems.BADGE.get()));
 		for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -543,7 +541,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		
 		this.setHealth(this.getMaxHealth());
 		
-		return super.finalizeSpawn(p_213386_1_, difficulty, p_213386_3_, setDamageValue, p_213386_5_);
+		return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
 	}
 	
 	@Override
@@ -576,7 +574,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 
 			boolean backpackflag = false;
 			if (itemstack.getItem() instanceof ItemBackpack) {
-				LazyOptional<IItemHandler> invOpt = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				LazyOptional<IItemHandler> invOpt = itemstack.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
 				if(invOpt.isPresent()) {
 					IItemHandler ih = invOpt.resolve().get();
 					for (int i = 0; i < ih.getSlots(); i++) {
@@ -657,7 +655,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		}
 
 		if (compound.contains("factionOverride")) {
-			this.setFaction(compound.getString("factionOverride"));
+			this.setFaction(new ResourceLocation(compound.getString("factionOverride")));
 		}
 
 		this.entityData.set(TEXTURE_INDEX, compound.getInt("textureIndex"));
@@ -731,20 +729,20 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 			ServerPlayer spe = (ServerPlayer) player;
 			if (!player.isCrouching()) {
 				if (player.isCreative() || this.getLeader() == player) {
-					if (!this.level().isClientSide) {
+					if (!this.level().isClientSide()) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.CQR_ENTITY_GUI_ID, this.level, this.getId(), 0, 0);
 						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.CQR_ENTITY_EDITOR.get());
 					}
 					flag = true;
 				} else if (!this.getFaction().isEnemy(player) && this.hasTrades()) {
-					if (!this.level().isClientSide) {
+					if (!this.level().isClientSide()) {
 						//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
 						CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 					}
 					flag = true;
 				}
 			} else if (player.isCreative() || (!this.getFaction().isEnemy(player) && this.hasTrades())) {
-				if (!this.level().isClientSide) {
+				if (!this.level().isClientSide()) {
 					//player.openGui(CQRMain.INSTANCE, GuiHandler.MERCHANT_GUI_ID, this.level, this.getId(), 0, 0);
 					CQRNetworkHooks.openGUI(spe, this.getDisplayName(), buf -> buf.writeInt(this.getId()), CQRContainerTypes.MERCHANT.get());
 				}
@@ -774,13 +772,13 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	protected void dropCustomDeathLoot(DamageSource deathCause, int lootingModifier, boolean wasRecentlyHit) {
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
-			LootTable lootTable = this.level().getServer().getLootTables().get(resourcelocation);
-			LootContext.Builder lootContextBuilder =  this.createLootContext(wasRecentlyHit, deathCause);//new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
+			LootTable lootTable = this.level().getServer().getLootData().getLootTable(resourcelocation);
+			LootParams.Builder lootContextBuilder =  this.createLootContext(wasRecentlyHit, deathCause);//new LootContext.Builder((ServerWorld) this.level).withParameter(LootParameters.THIS_ENTITY, this).withOptionalParameter(LootParameters.DAMAGE_SOURCE, deathCause);
 			if (wasRecentlyHit && this.lastHurtByPlayer != null) {
-				lootContextBuilder = lootContextBuilder.withParameter(LootParameters.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
+				lootContextBuilder = lootContextBuilder.withParameter(LootContextParams.LAST_DAMAGE_PLAYER, this.lastHurtByPlayer).withLuck(this.lastHurtByPlayer.getLuck());
 			}
 
-			for (ItemStack itemstack : lootTable.getRandomItems(lootContextBuilder.withRandom(this.random).create(LootParameterSets.ENTITY))) {
+			for (ItemStack itemstack : lootTable.getRandomItems(lootContextBuilder.withRandom(this.random).create(LootContextParamSets.ENTITY))) {
 				this.spawnAtLocation(itemstack, 0.0F);
 			}
 		}
@@ -792,7 +790,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	protected void dropBadgeContentOnDeath() {
 		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BADGE);
 		if (badge.getItem() instanceof ItemBadge) {
-			LazyOptional<IItemHandler> capabilityOpt = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			LazyOptional<IItemHandler> capabilityOpt = badge.getCapability(ForgeCapabilities.ITEM_HANDLER, null);
 			capabilityOpt.ifPresent(capability -> {
 				for (int i = 0; i < capability.getSlots(); i++) {
 					this.spawnAtLocation(capability.getStackInSlot(i), 0.0F);
@@ -833,16 +831,16 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 
 		super.tick();
 
-		if (!this.level().isClientSide && this.isMagicArmorActive()) {
+		if (!this.level().isClientSide() && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
 		}
-		if (!this.level().isClientSide && !this.isNonBoss() && this.level().getDifficulty() == Difficulty.PEACEFUL) {
+		if (!this.level().isClientSide() && !this.isNonBoss() && this.level().getDifficulty() == Difficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.level(), this.blockPosition());
 			this.discard();
 		}
 
 		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
-		if (!this.level().isClientSide && stack != this.prevPotion) {
+		if (!this.level().isClientSide() && stack != this.prevPotion) {
 			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> this), new SPacketItemStackSync(this.getId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
@@ -865,7 +863,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		this.prevSneaking = this.isCrouching();
 		this.prevSitting = this.isSitting();
 
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			int spellInformation = 0;
 			if (this.spellHandler != null) {
 				if (this.spellHandler.isSpellCharging()) {
@@ -951,7 +949,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	protected void setCustomName(String name) {
-		this.setCustomName(new TextComponent(name));
+		this.setCustomName(Component.literal(name));
 	}
 	
 	@Override
@@ -993,7 +991,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		
 		if (this.getMainHandItem().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof LivingEntity) {
-				if (!this.level().isClientSide) {
+				if (!this.level().isClientSide()) {
 					((LivingEntity) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
 					entityIn.setSecondsOnFire(0);
 					Vec3 pos = entityIn.position();
@@ -1053,7 +1051,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 				ItemStack itemstack = this.getMainHandItem();
 				ItemStack itemstack1 = entityplayer.isUsingItem() ? entityplayer.getUseItem() : ItemStack.EMPTY;
 
-				if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this) && itemstack1.getItem().isShield(itemstack1, entityplayer)) {
+				if (!itemstack.isEmpty() && !itemstack1.isEmpty() && itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this) && (itemstack1.getItem() instanceof ShieldItem || itemstack1.is(CQRItemTags.SHIELDS))) {
 					float f1 = 0.25F + EnchantmentHelper.getBlockEfficiency(this) * 0.05F;
 
 					if (this.random.nextFloat() < f1) {
@@ -1071,9 +1069,10 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		return flag;
 	}
 	
+	//Why?!
 	@Override
 	public void swing(InteractionHand p_184609_1_) {
-		super.swing(p_184609_1_, !this.level().isClientSide);
+		super.swing(p_184609_1_, !this.level().isClientSide());
 	}
 
 	@Override
@@ -1115,7 +1114,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	// #################### Chocolate Quest Repoured ####################
 
 	public void updateLeader() {
-		if (this.level().isClientSide) {
+		if (this.level().isClientSide()) {
 			return;
 		}
 		// sync with clients that this is a leader
@@ -1149,7 +1148,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public void setLeader(LivingEntity leader) {
-		if (this.level().isClientSide) {
+		if (this.level().isClientSide()) {
 			return;
 		}
 		if (leader == null) {
@@ -1195,7 +1194,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public void handleArmorBreaking() {
-		if (!this.level().isClientSide && this.usedPotions + 1 > this.getHealingPotions()) {
+		if (!this.level().isClientSide() && this.usedPotions + 1 > this.getHealingPotions()) {
 			boolean armorBroke = false;
 			float hpPrcntg = this.getHealth() / this.getMaxHealth();
 			float[] thresholds = { 0.8F, 0.6F, 0.4F, 0.2F };
@@ -1236,7 +1235,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
-		LazyOptional<CapabilityExtraItemHandler> lOpCap = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
+		LazyOptional<CapabilityExtraItemHandler> lOpCap = this.getCapability(CQRCapabilities.EXTRA_ITEM_HANDLER, null);
 		if(lOpCap.isPresent()) {
 			return lOpCap.resolve().get().getStackInSlot(slot.getIndex());
 		}
@@ -1244,7 +1243,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
-		LazyOptional<CapabilityExtraItemHandler> capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
+		LazyOptional<CapabilityExtraItemHandler> capability = this.getCapability(CQRCapabilities.EXTRA_ITEM_HANDLER, null);
 		capability.ifPresent(capa -> capa.setStackInSlot(slot.getIndex(), stack));
 	}
 
@@ -1536,12 +1535,12 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		double y = targetPos.y + target.getEyeHeight() - myPos.y - this.getEyeHeight();
 		double xz = Math.sqrt(x * x + z * z);
 		double d1 = Math.toDegrees(Math.atan2(y, xz));
-		return ItemUtil.compareRotations(this.yRot, d1, 50.0D);
+		return ItemUtil.compareRotations(this.getYRot(), d1, 50.0D);
 	}
 
 	public void setHealthScale(double newHealthScale) {
 		if (this.healthScale != newHealthScale) {
-			if (!this.level().isClientSide) {
+			if (!this.level().isClientSide()) {
 				EntityUtil.applyMaxHealthModifier(this, HEALTH_SCALE_SLIDER_ID, "Health Scale Slider", newHealthScale - 1.0D);
 			}
 			this.healthScale = newHealthScale;
@@ -1579,7 +1578,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public boolean isMagicArmorActive() {
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			return this.armorActive;
 		}
 		return this.entityData.get(MAGIC_ARMOR_ACTIVE);
@@ -1721,7 +1720,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	private void spawnShoulderEntity(@Nullable CompoundTag compound) {
-		if (!this.level().isClientSide && compound != null && !compound.isEmpty()) {
+		if (!this.level().isClientSide() && compound != null && !compound.isEmpty()) {
 			Entity entity = EntityList.createEntityFromNBT(compound, this.level());
 
 			if (entity instanceof TamableAnimal) {
@@ -1784,7 +1783,7 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 	}
 
 	public void updateInvisibility() {
-		if (!this.level().isClientSide) {
+		if (!this.level().isClientSide()) {
 			if (this.invisibilityTick > 0) {
 				this.invisibilityTick--;
 				this.entityData.set(INVISIBILITY, Math.min(this.entityData.get(INVISIBILITY) + 1.0F / this.getInvisibilityTurningTime(), 1.0F));
@@ -1923,9 +1922,4 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		return false;
 	}
 
-	@Override
-	public void containerChanged(Container pInvBasic) {
-		// TODO Auto-generated method stub
-		
-	}
 }
