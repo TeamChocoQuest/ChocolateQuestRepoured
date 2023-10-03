@@ -5,7 +5,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import team.cqr.cqrepoured.capability.armor.CapabilityArmorCooldown;
 import team.cqr.cqrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.capability.electric.IElectricShockCapability;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
@@ -17,7 +16,6 @@ public class CQRCapabilities {
 	public static void registerCapabilities() {
 		CapabilityDynamicCrownProvider.register();
 		//CapabilityPathProvider.register();
-		CapabilityElectricShockProvider.register();
 	}
 	
 	public static final Capability<IFactionRelationCapability> FACTION_RELATION = CapabilityManager.get(new CapabilityToken<>() {});

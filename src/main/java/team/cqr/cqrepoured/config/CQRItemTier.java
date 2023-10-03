@@ -2,18 +2,17 @@ package team.cqr.cqrepoured.config;
 
 import java.util.function.Supplier;
 
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.LazyValue;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 
-public class CQRItemTier implements IItemTier {
+public class CQRItemTier implements Tier {
 
 	private final ItemTierConfig config;
-	private final LazyValue<Ingredient> repairIngredient;
+	private final Supplier<Ingredient> repairIngredient;
 
 	public CQRItemTier(ItemTierConfig config, Supplier<Ingredient> repairIngredient) {
 		this.config = config;
-		this.repairIngredient = new LazyValue<>(repairIngredient);
+		this.repairIngredient = repairIngredient;
 	}
 
 	@Override
