@@ -21,11 +21,11 @@ public interface IFactionRelated {
 	public EReputationStateRough getRoughReputationOf(Entity entity);
 	
 	public default boolean isAlly(Entity entity) {
-		return this.getRoughReputationOf(entity).isAlly() || this.getRoughReputationOf(entity).isNeutral();
+		return entity != null && entity.isAlive() && (this.getRoughReputationOf(entity).isAlly() || this.getRoughReputationOf(entity).isNeutral());
 	}
 	
 	public default boolean isEnemy(Entity entity) {
-		return this.getRoughReputationOf(entity).isEnemy();
+		return entity != null && entity.isAlive() && this.getRoughReputationOf(entity).isEnemy();
 	}
 	
 	public default boolean isAllyOf(Faction faction) {
