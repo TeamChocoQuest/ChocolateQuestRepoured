@@ -27,11 +27,12 @@ import net.minecraft.world.level.Level;
 import net.tslat.effectslib.api.ExtendedMobEffect;
 import net.tslat.effectslib.api.ExtendedMobEffectHolder;
 import software.bernie.geckolib.core.object.Color;
+import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.util.EntityUtil;
 
-public class ElectrocutionMobEffect extends ExtendedMobEffect {
+public class ElectrocutionMobEffect extends ExtendedMobEffect implements SynchableMobEffect {
 	
 	static final int[] DISTANCE_MAP = generateDistanceMap(5);
 	private static int[] generateDistanceMap(int i) {
