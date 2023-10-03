@@ -1,45 +1,55 @@
 package team.cqr.cqrepoured.capability.armor;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
-import it.unimi.dsi.fastutil.objects.Object2IntMap.FastEntrySet;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class CapabilityCooldownHandler {
+public class CapabilityCooldownHandler implements CapabilityArmorCooldown {
 
 	private final Object2IntMap<Item> itemCooldownMap = new Object2IntOpenHashMap<>();
 
-	public void tick() {
-		// workaround for the following code, issue is fixed in fastutil 8.5.12
-//		this.itemCooldownMap.object2IntEntrySet().forEach(e -> {
-//			if (e.getIntValue() > 0) {
-//				e.setValue(e.getIntValue() - 1);
-//			}
-//		});
-		ObjectSet<Entry<Item>> entries = this.itemCooldownMap.object2IntEntrySet();
-		(entries instanceof FastEntrySet ? ((FastEntrySet<Item>) entries).fastIterator() : entries.iterator()).forEachRemaining(e -> {
-			if (e.getIntValue() > 0) {
-				e.setValue(e.getIntValue() - 1);
-			}
-		});
-	}
-
-	public int getCooldown(Item item) {
-		return this.itemCooldownMap.getInt(item);
-	}
-
-	public void setCooldown(Item item, int cooldown) {
-		this.itemCooldownMap.put(item, cooldown);
-	}
-
-	public boolean isOnCooldown(Item item) {
-		return this.getCooldown(item) > 0;
-	}
-
 	public Object2IntMap<Item> getItemCooldownMap() {
 		return this.itemCooldownMap;
+	}
+
+	@Override
+	public CompoundTag serializeNBT() {
+		ListTag nbtTagList = new ListTag();
+
+		for (Object2IntMap.Entry<Item> entry : this.getItemCooldownMap().object2IntEntrySet()) {
+			CompoundTag compound = new CompoundTag();
+
+			compound.putString("item", ForgeRegistries.ITEMS.getResourceKey(entry.getKey()).toString());
+			compound.putInt("cooldown", entry.getIntValue());
+			nbtTagList.add(compound);
+		}
+
+		CompoundTag result = new CompoundTag();
+		result.put("cooldowns", nbtTagList);
+		return result;
+	}
+
+	@Override
+	public void deserializeNBT(CompoundTag nbt) {
+		Tag tag = nbt.get("cooldowns");
+		if (tag instanceof ListTag) {
+			ListTag nbtTagList = (ListTag) tag;
+
+			for (int i = 0; i < nbtTagList.size(); i++) {
+				CompoundTag compound = nbtTagList.getCompound(i);
+				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(compound.getString("item")));
+
+				if (item != null) {
+					this.setCooldown(item, compound.getInt("cooldown"));
+				}
+			}
+		}
+		
 	}
 
 }

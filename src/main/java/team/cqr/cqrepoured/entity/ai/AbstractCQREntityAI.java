@@ -14,7 +14,7 @@ public abstract class AbstractCQREntityAI<T extends AbstractEntityCQR> extends G
 
 	protected AbstractCQREntityAI(T entity) {
 		this.entity = entity;
-		this.world = entity.level;
+		this.world = entity.level();
 	}
 
 }

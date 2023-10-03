@@ -2,21 +2,20 @@ package team.cqr.cqrepoured.world.processor;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.feature.template.IStructureProcessorType;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.StructureProcessor;
-import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.Template.BlockInfo;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRStructureProcessors;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
 
 public class ProcessorExtendLowestBlocksToFloor extends StructureProcessor {
 	
@@ -24,7 +23,7 @@ public class ProcessorExtendLowestBlocksToFloor extends StructureProcessor {
 	public static final Codec<ProcessorExtendLowestBlocksToFloor> CODEC = Codec.unit(() -> INSTANCE);
 
 	@Override
-	protected IStructureProcessorType<?> getType() {
+	protected StructureProcessorType<?> getType() {
 		return CQRStructureProcessors.PROCESSOR_EXTEND_LOWEST_TO_FLOOR;
 	}
 
