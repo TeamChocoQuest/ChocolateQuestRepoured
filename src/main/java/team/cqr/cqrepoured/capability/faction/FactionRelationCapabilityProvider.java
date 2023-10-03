@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class FactionRelationCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-	public static final ResourceLocation IDENTIFIER = CQRMain.prefix("faction-relations");
+	public static final ResourceLocation IDENTIFIER = CQRMain.prefix("faction_relations");
 
 	private final IFactionRelationCapability backend = new FactionRelationCapabilityImplementation();
 	private final LazyOptional<IFactionRelationCapability> optionalData = LazyOptional.of(() -> backend);

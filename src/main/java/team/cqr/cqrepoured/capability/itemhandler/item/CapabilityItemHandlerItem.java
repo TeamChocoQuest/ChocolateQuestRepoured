@@ -4,8 +4,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.capability.itemhandler.CapabilityItemHandlerProvider;
+import team.cqr.cqrepoured.capability.itemhandler.CapabilitySerializableItemHandler;
 
-public class CapabilityItemHandlerItem extends ItemStackHandler {
+public class CapabilityItemHandlerItem extends ItemStackHandler implements CapabilitySerializableItemHandler{
 
 	private final ItemStack stack;
 	private boolean hasBeenDeserialized = false;

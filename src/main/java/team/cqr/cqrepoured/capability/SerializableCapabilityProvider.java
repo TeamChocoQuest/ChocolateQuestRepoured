@@ -20,4 +20,5 @@ public class SerializableCapabilityProvider<C extends INBTSerializable<CompoundT
 		this.backend.deserializeNBT(nbt);
 	}
 
+
 }
