@@ -2,23 +2,23 @@ package team.cqr.cqrepoured.client.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
-import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.CachedBlockAccess;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
-@OnlyIn(Dist.CLIENT)
-//@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface
@@ -246,8 +246,8 @@ public class EntityRenderManager {
 	}
 
 	private static boolean isOpaque(final int x, final int y, final int z) {
-		ChunkSection section = CACHED_BLOCK_ACCESS.getChunkSection(x >> 4, y >> 4, z >> 4);
-		if (section == null || section.isEmpty()) {
+		LevelChunkSection section = CACHED_BLOCK_ACCESS.getChunkSection(x >> 4, y >> 4, z >> 4);
+		if (section == null || section.hasOnlyAir()) {
 			return false;
 		}
 		return section.getBlockState(x & 15, y & 15, z & 15).canOcclude();//Correct replacement for isOpaqueCube()?
