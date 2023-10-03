@@ -25,7 +25,7 @@ public class AttributeConfig implements Supplier<Multimap<Attribute, AttributeMo
 	public AttributeConfig(ForgeConfigSpec.Builder builder, String name, Multimap<Attribute, AttributeModifier> attributeModifiers) {
 		this(builder, name, () -> attributeModifiers.entries().stream().map(e -> {
 			return new StringBuilder()
-					.append(e.getKey().getRegistryName()).append(',')
+					.append(ForgeRegistries.ATTRIBUTES.getKey(e.getKey())).append(',')
 					.append(e.getValue().getName()).append(',')
 					.append(e.getValue().getAmount()).append(',')
 					.append(e.getValue().getOperation().toValue())
