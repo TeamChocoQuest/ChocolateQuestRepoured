@@ -6,6 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,6 +18,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.tslat.effectslib.api.ExtendedMobEffectHolder;
+import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
 import team.cqr.cqrepoured.item.armor.ItemArmorBull;
 import team.cqr.cqrepoured.util.ItemUtil;
 
@@ -110,4 +115,21 @@ public abstract class MixinLivingEntity extends Entity {
 		throw new IllegalStateException("Mixin failed to shadow isEffectiveAi()");
 	}
 
+	// Mob effect synching
+	@Inject(
+			at = @At("HEAD"),
+			method = "sendEffectToPassengers(Lnet/minecraft/world/effect/MobEffectInstance;)V",
+			cancellable = true
+	)
+	private void mixinSendEffectToPassengers(MobEffectInstance pEffectInstance, CallbackInfo ci) {
+		if (pEffectInstance instanceof ExtendedMobEffectHolder) {
+			if (pEffectInstance.getEffect() instanceof SynchableMobEffect) {
+				ClientboundUpdateMobEffectPacket packet = new ClientboundUpdateMobEffectPacket(this.getId(), pEffectInstance);
+				
+				((ServerChunkCache)this.getCommandSenderWorld().getChunkSource()).broadcastAndSend(this, packet);
+				
+				ci.cancel();
+			}
+		}
+	}
 }
