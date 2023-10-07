@@ -90,7 +90,6 @@ public class CapabilityPath implements ICapabilityPath {
 		}
 		if (this.path == null) {
 			throw new IllegalStateException("path can not be null!");
-			return;
 		}
 		this.path.readFromNBT(nbt);
 	}
