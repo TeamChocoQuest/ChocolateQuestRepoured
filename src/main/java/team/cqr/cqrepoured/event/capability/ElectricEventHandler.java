@@ -18,12 +18,12 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.capability.electric.IDontSpreadElectrocution;
+import team.cqr.cqrepoured.capability.electric.IElectricShockCapability;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 
@@ -55,7 +55,7 @@ public class ElectricEventHandler {
 			return;
 		}
 		// First, reduce the ticks
-		LazyOptional<CapabilityElectricShock> icapability = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		LazyOptional<IElectricShockCapability> icapability = entity.getCapability(CQRCapabilities.ELECTRIC_SPREAD, null);
 
 		icapability.ifPresent(cap -> cap.setRemainingTicks(-1));
 		// We don't need to send the update ourselves, the capability handles it itself in the setter
@@ -72,11 +72,11 @@ public class ElectricEventHandler {
 	}
 
 	private static boolean checkForCapabilityAndServerSide(LivingEntity entity) {
-		if (entity.level().isClientSide) {
+		if (entity.level().isClientSide()) {
 			// If we are on the remote end, we don't do anything
 			return false;
 		}
-		if (!entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isPresent()) {
+		if (!entity.getCapability(CQRCapabilities.ELECTRIC_SPREAD, null).isPresent()) {
 			return false;
 		}
 		return true;
@@ -90,7 +90,7 @@ public class ElectricEventHandler {
 		}
 
 		// First, reduce the ticks
-		LazyOptional<CapabilityElectricShock> lOp = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		LazyOptional<IElectricShockCapability> lOp = entity.getCapability(CQRCapabilities.ELECTRIC_SPREAD, null);
 		lOp.ifPresent(currentCap -> {
 			currentCap.reduceRemainingTicks();
 
@@ -114,14 +114,14 @@ public class ElectricEventHandler {
 				if (!currentCap.getTarget().isAlive() || !entity.hasLineOfSight(currentCap.getTarget()) || entity.distanceTo(currentCap.getTarget()) > 16) {
 					currentCap.setTarget(null);
 				} else {
-					LazyOptional<CapabilityElectricShock> targetCap = currentCap.getTarget().getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+					LazyOptional<IElectricShockCapability> targetCap = currentCap.getTarget().getCapability(CQRCapabilities.ELECTRIC_SPREAD, null);
 					targetCap.ifPresent(cap -> cap.setRemainingTicks(100));
 				}
 			}
 		});
 	}
 
-	private static void spreadElectrocute(LivingEntity spreader, CapabilityElectricShock sourceCap) {
+	private static void spreadElectrocute(LivingEntity spreader, IElectricShockCapability sourceCap) {
 		// First, get all applicable entities in range
 		List<LivingEntity> entities = spreader.level().getEntitiesOfClass(LivingEntity.class, spreader.getBoundingBox().inflate(12), Predicates.and(TargetUtil.PREDICATE_CAN_BE_ELECTROCUTED, entityLiving -> {
 			if (entityLiving.getUUID().equals(sourceCap.getCasterID())) {
@@ -142,7 +142,7 @@ public class ElectricEventHandler {
 		sourceCap.setTarget(chosen);
 		sourceCap.reduceSpreads();
 
-		LazyOptional<CapabilityElectricShock> lOp = chosen.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		LazyOptional<IElectricShockCapability> lOp = chosen.getCapability(CQRCapabilities.ELECTRIC_SPREAD, null);
 		lOp.ifPresent(targetCap -> {
 			targetCap.setRemainingTicks(100);
 			targetCap.setCasterID(sourceCap.getCasterID());
