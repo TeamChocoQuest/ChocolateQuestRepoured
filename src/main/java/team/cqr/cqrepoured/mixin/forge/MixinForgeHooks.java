@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.mixin.forge;
 
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;
 
 @Mixin(ForgeHooks.class)
@@ -27,7 +27,7 @@ public abstract class MixinForgeHooks {
 			name = "ret"
 	)
 	private static LootTable loadCQRLootTable(LootTable lootTable) {
-		if (lootTable.getLootTableId().getNamespace().equals(CQRMain.MODID)) {
+		if (lootTable.getLootTableId().getNamespace().equals(CQRConstants.MODID)) {
 			return LootTableLoader.fillLootTable(lootTable.getLootTableId(), lootTable);
 		}
 		return lootTable;
