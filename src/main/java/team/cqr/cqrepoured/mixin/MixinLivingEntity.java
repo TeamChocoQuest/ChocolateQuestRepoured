@@ -14,7 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -40,7 +39,7 @@ public abstract class MixinLivingEntity extends Entity {
 					for(EquipmentSlot slot : EquipmentSlot.values()) {
 						if(slot.getType() == EquipmentSlot.Type.ARMOR) {
 							ItemStack stack = ((LivingEntity) pEntity).getItemBySlot(slot);
-							thornLevel += EnchantmentHelper.getItemEnchantmentLevel(Enchantments.THORNS, stack);
+							thornLevel += stack.getEnchantmentLevel(Enchantments.THORNS);
 						}
 					}
 					if(thornLevel > 0) {
