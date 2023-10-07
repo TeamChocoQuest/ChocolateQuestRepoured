@@ -4,6 +4,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -11,6 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
+import team.cqr.cqrepoured.capability.armor.attachment.CapabilityArmorAttachmentProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -35,6 +38,13 @@ public class CapabilityHandler {
 		if (event.getObject() instanceof Player) {
 			event.addCapability(FactionRelationCapabilityProvider.IDENTIFIER, new FactionRelationCapabilityProvider());
 		}
+	}
+	
+	public static void onItemAttachCapabilitiesEvent(AttachCapabilitiesEvent<Item> event) {
+		if (event.getObject() instanceof ArmorItem) {
+			event.addCapability(CapabilityArmorAttachmentProvider.IDENTIFIER, CapabilityArmorAttachmentProvider.createProvider());
+		}
+		
 	}
 
 	@SubscribeEvent
