@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.world;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Region;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.PathNavigationRegion;
+import net.minecraft.world.level.chunk.LevelChunk;
 
-public class ChunkCacheCQR extends Region {
+public class ChunkCacheCQR extends PathNavigationRegion {
 
 	/**
 	 * @param worldIn    The world from which the chunks will get taken.
@@ -24,11 +24,11 @@ public class ChunkCacheCQR extends Region {
 		int chunkZ2 = Math.max(pos2.getZ() >> 4, pos3.getZ() >> 4);
 		int y1 = Math.min(pos1.getY(), pos3.getY());
 		int y2 = Math.max(pos2.getY(), pos3.getY());
-		this.chunks = new Chunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
+		this.chunks = new LevelChunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
 
 		for (int x = this.centerX; x <= chunkX2; x++) {
 			for (int z = this.centerZ; z <= chunkZ2; z++) {
-				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
+				LevelChunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
 				this.chunks[x - this.centerX][z - this.centerZ] = chunk;
 
 				if (this.allEmpty && chunk != null && !chunk.isYSpaceEmpty(y1, y2)) {
@@ -56,7 +56,7 @@ public class ChunkCacheCQR extends Region {
 		int chunkZ2 = (Math.max(pos1.getZ(), pos2.getZ()) + blockRange) >> 4;
 		int y1 = Math.min(pos1.getY(), pos2.getY());
 		int y2 = Math.max(pos1.getY(), pos2.getY());
-		this.chunks = new Chunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
+		this.chunks = new LevelChunk[chunkX2 - this.centerX + 1][chunkZ2 - this.centerZ + 1];
 
 		double lineStartX = pos1.getX() + 0.5D;
 		double lineStartZ = pos1.getZ() + 0.5D;
@@ -68,7 +68,7 @@ public class ChunkCacheCQR extends Region {
 					continue;
 				}
 
-				Chunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
+				LevelChunk chunk = loadChunks ? worldIn.getChunk(x, z) : worldIn.getChunkSource().getChunkNow(x, z);
 				this.chunks[x - this.centerX][z - this.centerZ] = chunk;
 
 				if (this.allEmpty && chunk != null && !chunk.isYSpaceEmpty(y1, y2)) {
