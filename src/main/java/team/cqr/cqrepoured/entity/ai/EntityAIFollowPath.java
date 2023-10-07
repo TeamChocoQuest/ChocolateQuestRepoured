@@ -48,7 +48,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			} else if (this.hasPath) {
 				this.hasPath = false;
 				if (this.entity.distanceToSqr(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D) <= 1.0D) {
-					this.ticksToWait = Mth.nextInt(this.random, currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
+					this.ticksToWait = Mth.nextInt(this.entity.getRandom(), currentNode.getWaitingTimeMin(), currentNode.getWaitingTimeMax());
 				}
 			} else if (this.ticksToWait > 0) {
 				this.ticksToWait--;
