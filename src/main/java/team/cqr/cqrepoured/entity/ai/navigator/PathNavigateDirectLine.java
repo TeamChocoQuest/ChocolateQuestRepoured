@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.entity.ai.navigator;
 
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathFinder;
+import net.minecraft.world.phys.Vec3;
 
-public class PathNavigateDirectLine extends PathNavigator {
+public class PathNavigateDirectLine extends PathNavigation {
 
-	public PathNavigateDirectLine(MobEntity entity, Level world) {
+	public PathNavigateDirectLine(Mob entity, Level world) {
 		super(entity, world);
 	}
 
@@ -35,7 +35,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 		for (int j = Math.min(this.path.getNextNodeIndex() + 6, this.path.getNodeCount() - 1); j > this.path.getNextNodeIndex(); --j) {
 			Vec3 vec3d1 = this.path.getEntityPosAtNode(this.mob, j);
 
-			if (vec3d1.distanceToSqr(vec3d) <= 36.0D && this.canMoveDirectly(vec3d, vec3d1, 0, 0, 0)) {
+			if (vec3d1.distanceToSqr(vec3d) <= 36.0D && this.canMoveDirectly(vec3d, vec3d1)) {
 				this.path.setNextNodeIndex(j);
 				break;
 			}
@@ -53,7 +53,7 @@ public class PathNavigateDirectLine extends PathNavigator {
 	}
 
 	@Override
-	protected boolean canMoveDirectly(Vec3 posVec31, Vec3 posVec32, int sizeX, int sizeY, int sizeZ) {
+	protected boolean canMoveDirectly(Vec3 pPosVec31, Vec3 pPosVec32) {
 		return true;
 	}
 	
