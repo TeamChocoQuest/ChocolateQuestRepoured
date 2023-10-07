@@ -11,7 +11,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
@@ -30,7 +29,6 @@ public class CapabilityHandler {
 		}
 
 		if (event.getObject() instanceof LivingEntity) {
-			event.addCapability(CapabilityElectricShockProvider.REGISTRY_NAME, CapabilityElectricShockProvider.createProvider((LivingEntity) event.getObject()));
 			event.addCapability(FactionRelationCapabilityProvider.IDENTIFIER, new FactionRelationCapabilityProvider());
 		}
 		
