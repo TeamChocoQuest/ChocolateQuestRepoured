@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -62,9 +63,9 @@ public class EventsHandler {
 				return;
 			}
 
-			double d = attacker.getX() + (attacker.level().random.nextDouble() - 0.5D) * 4.0D;
+			double d = attacker.getX() + (attacker.level().getRandom().nextDouble() - 0.5D) * 4.0D;
 			double d1 = attacker.getY();
-			double d2 = attacker.getZ() + (attacker.level().random.nextDouble() - 0.5D) * 4.0D;
+			double d2 = attacker.getZ() + (attacker.level().getRandom().nextDouble() - 0.5D) * 4.0D;
 
 			@SuppressWarnings("unused")
 			double d3 = player.getX();
@@ -80,7 +81,7 @@ public class EventsHandler {
 			BlockPos ep = new BlockPos(i, j, k);
 			BlockPos ep1 = new BlockPos(i, j + 1, k);
 
-			if (world.getCollisions(player, player.getBoundingBox(), entity -> {
+			if (world.getEntities(player, player.getBoundingBox()).stream().filter(entity -> {
 				return entity != player;
 			}).count() == 0 && !world.containsAnyLiquid(attacker.getBoundingBox()) && player.isBlocking() && player.distanceToSqr(attacker) >= 25.0D) {
 				if (world.getBlockState(ep).getCollisionShape(world, ep).isEmpty() && world.getBlockState(ep1).getCollisionShape(world, ep1).isEmpty()) {
@@ -98,7 +99,7 @@ public class EventsHandler {
 					if (player instanceof ServerPlayer) {
 						ServerPlayer playerMP = (ServerPlayer) player;
 
-						playerMP.connection.teleport(d, d1, d2, playerMP.yRot, playerMP.xRot);
+						playerMP.connection.teleport(d, d1, d2, playerMP.getYRot(), playerMP.getXRot());
 						if (!world.isClientSide) {
 							//((ServerWorld) world).addParticle(ParticleTypes.PORTAL, player.getX(), player.getY() + player.getBbHeight() * 0.5D, player.getZ(), 12, 0.25D, 0.25D, 0.25D, 0.0D);
 						}
@@ -118,7 +119,7 @@ public class EventsHandler {
 		CompoundTag tag = entity.getPersistentData();
 
 		if (tag.contains("Items")) {
-			ListTag itemList = tag.getList("Items", Constants.NBT.TAG_COMPOUND);
+			ListTag itemList = tag.getList("Items", Tag.TAG_COMPOUND);
 
 			if (itemList == null) {
 				return;
@@ -129,7 +130,7 @@ public class EventsHandler {
 				ItemStack stack = ItemStack.of(entry);
 
 				if (!stack.isEmpty()) {
-					if (!entity.level().isClientSide) {
+					if (!entity.level().isClientSide()) {
 						entity.level().addFreshEntity(new ItemEntity(entity.level(), entity.getX() + rand.nextDouble(), entity.getY(), entity.getZ() + rand.nextDouble(), stack));
 					}
 				}
