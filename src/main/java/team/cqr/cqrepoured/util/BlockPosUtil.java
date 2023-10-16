@@ -6,8 +6,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -64,7 +62,7 @@ public class BlockPosUtil {
 				for (int chunkY = chunkStartY; chunkY <= chunkEndY; chunkY++) {
 					LevelChunkSection extendedBlockStorage = blockStorageArray[chunkY];
 
-					if (skipAirBlocks && extendedBlockStorage == LevelChunk.EMPTY_SECTION) {
+					if (skipAirBlocks && extendedBlockStorage.hasOnlyAir()) {
 						continue;
 					}
 
