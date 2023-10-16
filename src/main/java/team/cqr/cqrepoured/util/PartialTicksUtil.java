@@ -7,7 +7,7 @@ public class PartialTicksUtil {
 	public static float getCurrentPartialTicks() {
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.isPaused()) {
-			return mc.pausePartialTick;
+			return mc.getPartialTick();
 		}
 		return mc.getFrameTime();
 	}
