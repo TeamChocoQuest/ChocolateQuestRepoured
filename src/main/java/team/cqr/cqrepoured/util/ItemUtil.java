@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.play.server.SEntityVelocityPacket;
+import net.minecraft.network.protocol.game.ServerboundMoveVehiclePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -20,7 +20,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -254,7 +253,7 @@ public class ItemUtil {
 						}
 
 						if (targetEntity instanceof ServerPlayer && targetEntity.hurtMarked) {
-							((ServerPlayer) targetEntity).connection.send(new SEntityVelocityPacket(targetEntity));
+							((ServerPlayer) targetEntity).connection.send(new ServerboundMoveVehiclePacket(targetEntity));
 							targetEntity.hurtMarked = false;
 							targetEntity.setDeltaMovement(motion);
 						}
@@ -290,7 +289,7 @@ public class ItemUtil {
 						Entity entity = targetEntity;
 
 						if (targetEntity instanceof PartEntity) {
-							Entity ientitymultipart = ((PartEntity) targetEntity).getParent();
+							Entity ientitymultipart = ((PartEntity<?>) targetEntity).getParent();
 
 							if (ientitymultipart instanceof LivingEntity) {
 								entity = (LivingEntity) ientitymultipart;
