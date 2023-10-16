@@ -11,6 +11,7 @@ import team.cqr.cqrepoured.customtextures.TextureSetNew;
 public class CQRConstants {
 	
 	public static final String MODID = "cqrepoured";
+	public static final String PACK_RESOURCES_ID = MODID + "_folder_resources";
 	
 	public static class JEI {
 		public static final ResourceLocation PLUGIN_ID = CQRMain.prefix("jei_plugin");
