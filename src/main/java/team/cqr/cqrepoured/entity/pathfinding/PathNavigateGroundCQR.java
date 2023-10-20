@@ -77,7 +77,7 @@ public class PathNavigateGroundCQR extends GroundPathNavigation {
 
 							// TODO better method for calculating the facing from which the door will be entered
 							if (pathnodetype == BlockPathTypes.DOOR_IRON_CLOSED && this.canOpenDoors() && this.canPassDoors()
-									&& EntityAIOpenCloseDoor.canMoveThroughDoor(level, new BlockPos(l, i1, j1), Direction.fromNormal/*Correct replacement???*/(l - pPos.getX(), i1 - pPos.getY(), j1 - pPos.getZ()).getOpposite(), true)) {
+									&& EntityAIOpenCloseDoor.canMoveThroughDoor(level, new BlockPos(l, i1, j1), Direction.getNearest/*Correct replacement???*/(l - pPos.getX(), i1 - pPos.getY(), j1 - pPos.getZ()).getOpposite(), true)) {
 								pathnodetype = BlockPathTypes.WALKABLE;
 							}
 
