@@ -32,7 +32,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 		}
 
 		for (Vec3 v : velocities) {
-			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity, this.entity.level);
+			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity, this.entity.level());
 			// proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
 			/*proj.motionX = v.x * 0.5D;
 			proj.motionY = v.y * 0.5D;
@@ -40,7 +40,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 			proj.velocityChanged = true;*/
 			proj.setDeltaMovement(v.scale(0.5D));
 			proj.hasImpulse = true;
-			this.entity.level.addFreshEntity(proj);
+			this.entity.level().addFreshEntity(proj);
 		}
 	}
 

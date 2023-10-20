@@ -13,6 +13,7 @@ import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -113,6 +114,13 @@ public class DungeonGenUtils {
 	}
 
 	public static int randomBetween(int min, int max, Random rand) {
+		if (min >= max) {
+			return min;
+		}
+		return min + rand.nextInt(max - min + 1);
+	}
+	
+	public static int randomBetween(int min, int max, RandomSource rand) {
 		if (min >= max) {
 			return min;
 		}

@@ -25,7 +25,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 
 	protected AbstractEntityAISpell(T entity, int cooldown, int chargingTicks, int castingTicks) {
 		this.entity = entity;
-		this.world = entity.level;
+		this.world = entity.level();
 		this.cooldown = cooldown;
 		this.chargingTicks = Math.max(chargingTicks, 0);
 		this.castingTicks = Math.max(castingTicks, 1);

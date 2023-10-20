@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.EvokerFangs;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
@@ -74,15 +74,15 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 	}
 
 	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
-		BlockPos blockpos = new BlockPos(x, maxY, z);
+		BlockPos blockpos = BlockPos.containing(x, maxY, z);
 		boolean flag = false;
 		double d0 = 0.0D;
 
 		while (true) {
-			if (this.entity.level.getBlockState(blockpos).isFaceSturdy(this.entity.level, blockpos.below(), Direction.UP)/*!this.entity.level.isBlockNormalCube(blockpos, true) && this.entity.level.isBlockNormalCube(blockpos.below(), true)*/) {
-				if (!this.entity.level.isEmptyBlock(blockpos)) {
-					BlockState iblockstate = this.entity.level.getBlockState(blockpos);
-					AABB axisalignedbb = iblockstate.getShape(this.entity.level, blockpos).bounds();
+			if (this.entity.level().getBlockState(blockpos).isFaceSturdy(this.entity.level(), blockpos.below(), Direction.UP)/*!this.entity.level.isBlockNormalCube(blockpos, true) && this.entity.level.isBlockNormalCube(blockpos.below(), true)*/) {
+				if (!this.entity.level().isEmptyBlock(blockpos)) {
+					BlockState iblockstate = this.entity.level().getBlockState(blockpos);
+					AABB axisalignedbb = iblockstate.getShape(this.entity.level(), blockpos).bounds();
 
 					if (axisalignedbb != null) {
 						d0 = axisalignedbb.maxY;
@@ -101,8 +101,8 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		}
 
 		if (flag) {
-			EvokerFangsEntity entityevokerfangs = new EvokerFangsEntity(this.entity.level, x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
-			this.entity.level.addFreshEntity(entityevokerfangs);
+			EvokerFangs entityevokerfangs = new EvokerFangs(this.entity.level(), x, blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
+			this.entity.level().addFreshEntity(entityevokerfangs);
 		}
 	}
 

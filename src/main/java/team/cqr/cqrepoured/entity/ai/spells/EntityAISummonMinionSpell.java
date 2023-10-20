@@ -96,7 +96,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
 			for (int i = 0; i < minionCount; i++) {
-				spawnPositions[i] = this.entity.blockPosition().offset(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
+				spawnPositions[i] = this.entity.blockPosition().offset(BlockPos.containing(VectorUtil.rotateVectorAroundY(vector, angle * i)));
 			}
 			for (BlockPos p : spawnPositions) {
 				if (this.entity.getNavigation().createPath(p, 3 /* doesn't need to be too accurate... */) != null) {
@@ -121,25 +121,25 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 							texture = ECircleTexture.SKELETON;
 						}
 					}
-					if (this.entity.level.getBlockState(p).isFaceSturdy(this.world, p.below(), Direction.UP)) {
+					if (this.entity.level().getBlockState(p).isFaceSturdy(this.world, p.below(), Direction.UP)) {
 						p = p.offset(0, 1, 0);
 					}
 					if (this.summonViaCircle) {
-						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.level, summon, 1.1F, texture, (ISummoner) this.entity);
+						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.level(), summon, 1.1F, texture, (ISummoner) this.entity);
 						circle.setSummon(summon);
 						circle.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
-						this.entity.level.addFreshEntity(circle);
+						this.entity.level().addFreshEntity(circle);
 						this.summoner.addSummonedEntityToList(circle);
 						this.activeCircles.add(circle);
 					} else {
-						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.level);
+						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.level());
 
 						summoned.setUUID(Mth.createInsecureUUID());
 						summoned.setPos(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
 
-						if(!this.entity.level.isClientSide) {
-							ServerLevel sw = (ServerLevel)this.entity.level;
+						if(!this.entity.level().isClientSide()) {
+							ServerLevel sw = (ServerLevel)this.entity.level();
 							
 							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0F, 0.5F, 0F, 2);
 							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, 0.5F, 0.0F, 0.5F, 1);
@@ -148,7 +148,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 							sw.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 1, -0.5F, 0.0F, -0.5F, 1);
 						}
 
-						this.entity.level.addFreshEntity(summoned);
+						this.entity.level().addFreshEntity(summoned);
 						if (this.summoner != null && !this.summoner.getSummoner().isDeadOrDying()) {
 							this.summoner.setSummonedEntityFaction(summoned);
 							this.summoner.tryEquipSummon(summoned, this.world.random);

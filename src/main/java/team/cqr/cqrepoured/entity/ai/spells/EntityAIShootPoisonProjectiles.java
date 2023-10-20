@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.entity.ai.spells;
 
-import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.projectiles.ProjectilePoisonSpell;
@@ -33,10 +33,10 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		}
 
 		for (Vec3 v : velocities) {
-			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity, this.entity.level);
+			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity, this.entity.level());
 			// proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
 
-			if (this.entity.getMobType() == CreatureAttribute.ARTHROPOD) {
+			if (this.entity.getMobType() == MobType.ARTHROPOD) {
 				proj.enableAuraPlacement();
 			}
 
@@ -46,7 +46,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 			proj.velocityChanged = true;*/
 			proj.setDeltaMovement(v.scale(SPEED_MULTIPLIER));
 			proj.hasImpulse = true;
-			this.entity.level.addFreshEntity(proj);
+			this.entity.level().addFreshEntity(proj);
 		}
 	}
 

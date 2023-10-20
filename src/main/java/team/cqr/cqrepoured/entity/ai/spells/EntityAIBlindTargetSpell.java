@@ -26,10 +26,10 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 		Vec3 vec = attackTarget.position();
 		vec = vec.subtract(attackTarget.getLookAngle().scale(8.0D));
 		vec = vec.subtract(0.0D, 0.001D, 0.0D);
-		BlockPos pos = new BlockPos(vec);
+		BlockPos pos = BlockPos.containing(vec);
 
 		attackTarget.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, this.duration));
-		if (this.entity.level.getBlockState(pos).isFaceSturdy(this.entity.level, pos, Direction.UP)) {
+		if (this.entity.level().getBlockState(pos).isFaceSturdy(this.entity.level(), pos, Direction.UP)) {
 			this.entity.playSound(SoundEvents.ENDERMAN_TELEPORT, 0.7F, 1.1F);
 			this.entity.randomTeleport(vec.x, vec.y, vec.z, true);
 		}

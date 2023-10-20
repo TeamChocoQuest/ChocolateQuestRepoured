@@ -37,7 +37,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 		for (Vec3 p : positions) {
 			if (p != null) {
-				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level);
+				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level());
 				wallPart.setPos(p.x, p.y, p.z);
 				// wallPart.setVelocity(v.x / 2, 0, v.z / 2);
 				/*wallPart.motionX = v.x / 2D;
@@ -46,7 +46,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 				wallPart.velocityChanged = true;*/
 				wallPart.setDeltaMovement(v.x / 2D, 0, v.z / 2D);
 				wallPart.hasImpulse = true;
-				this.entity.level.addFreshEntity(wallPart);
+				this.entity.level().addFreshEntity(wallPart);
 			}
 		}
 	}
