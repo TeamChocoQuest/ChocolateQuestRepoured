@@ -108,6 +108,16 @@ public class DungeonGenUtils {
 		}
 		return rand.nextDouble() < chance;
 	}
+	
+	public static boolean percentageRandom(double chance, RandomSource rand) {
+		if (chance <= 0.0D) {
+			return false;
+		}
+		if (chance >= 1.0D) {
+			return true;
+		}
+		return rand.nextDouble() < chance;
+	}
 
 	public static int randomBetween(int min, int max) {
 		return randomBetween(min, max, RAND);
