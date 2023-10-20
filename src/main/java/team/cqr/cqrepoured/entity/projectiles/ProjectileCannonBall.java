@@ -1,14 +1,15 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -72,18 +73,18 @@ public class ProjectileCannonBall extends ProjectileBase {
 		if(result.getEntity() instanceof LivingEntity)
 		{
 			LivingEntity entity = (LivingEntity)result.getEntity();
-			entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), 10.0F);
+			entity.hurt(this.damageSources().mobProjectile(this, this.shooter), 10.0F);
 		}
-		this.level.explode(this.shooter, this.position().x, this.position().y, this.position().z, 1.5F, Explosion.Mode.NONE);
-		this.remove();
+		this.level().explode(this.shooter, this.position().x, this.position().y, this.position().z, 1.5F, ExplosionInteraction.NONE);
+		this.discard();
 		super.onHitEntity(result);
 	}
 
 	@Override
 	protected void onUpdateInAir() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			if (this.tickCount < 10) {
-				this.level.addParticle(ParticleTypes.SMOKE, this.position().x, this.position().y, this.position().z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.SMOKE, this.position().x, this.position().y, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -134,7 +135,7 @@ public class ProjectileCannonBall extends ProjectileBase {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

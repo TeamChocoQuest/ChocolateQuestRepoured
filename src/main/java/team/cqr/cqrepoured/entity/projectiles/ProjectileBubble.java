@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -64,26 +65,26 @@ public class ProjectileBubble extends ProjectileBase {
 	protected void onDestroyedByBlockImpact() {
 		super.onDestroyedByBlockImpact();
 		
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, -0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, -0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, -0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, -0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, 0);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, -0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0.05);
-		this.level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, 0.05, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, 0.05, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, 0.05, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, 0);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0, -0.05, -0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), 0.05, -0.05, 0.05);
+		this.level().addParticle(ParticleTypes.BUBBLE_COLUMN_UP, this.getX(), this.getY(), this.getZ(), -0.05, -0.05, -0.05);
 	}
 	
 	@Override
@@ -132,29 +133,29 @@ public class ProjectileBubble extends ProjectileBase {
 			return;
 		}
 
-		if (entity instanceof MobEntity && ((MobEntity)entity).getUseItem().getItem() instanceof ShieldItem) {
+		if (entity instanceof Mob && ((Mob)entity).getUseItem().getItem() instanceof ShieldItem) {
 			return;
 		}
 
 		entity.hurt(DamageSource.indirectMagic(this.shooter, this), this.damage);
-		float pitch = (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F;
-		this.level.playLocalSound(this.position().x, this.position().y, this.position().z, SoundEvents.PLAYER_SWIM, SoundSource.PLAYERS, 4, pitch, true);
+		float pitch = (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.2F) * 0.7F;
+		this.level().playLocalSound(this.position().x, this.position().y, this.position().z, SoundEvents.PLAYER_SWIM, SoundSource.PLAYERS, 4, pitch, true);
 
-		EntityBubble bubbles = CQREntityTypes.BUBBLE.get().create(this.level);
-		bubbles.moveTo(entity.blockPosition().offset(0, 0.25, 0), entity.yRot, entity.xRot);
-		this.level.addFreshEntity(bubbles);
+		EntityBubble bubbles = CQREntityTypes.BUBBLE.get().create(this.level());
+		bubbles.moveTo(entity.blockPosition().offset(0, 0.25, 0), entity.getYRot(), entity.getXRot());
+		this.level().addFreshEntity(bubbles);
 
 		entity.startRiding(bubbles, true);
 
-		this.remove();
+		this.discard();
 	}
 
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			if (this.tickCount % 5 == 0) {
-				this.level.addParticle(ParticleTypes.BUBBLE, this.position().x, this.position().y + 0.1D, this.position().z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.BUBBLE, this.position().x, this.position().y + 0.1D, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -165,7 +166,7 @@ public class ProjectileBubble extends ProjectileBase {
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

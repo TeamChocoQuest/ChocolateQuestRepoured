@@ -1,17 +1,17 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -91,15 +91,15 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 			if (EntityUtil.isEntityFlying(entity)) {
 				damage *= 2;
 			}
-			entity.hurt(DamageSource.indirectMobAttack(this, this.shooter), damage);
-			this.remove();
+			entity.hurt(this.damageSources().mobProjectile(this, this.shooter), damage);
+			this.discard();
 		}
 	}
 
 	@Override
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		this.remove();
+		this.discard();
 	}
 
 	/*
@@ -118,9 +118,9 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 
 	@Override
 	protected void onUpdateInAir() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			if (this.tickCount < 10) {
-				this.level.addParticle(ParticleTypes.SMOKE, this.position().x, this.position().y, this.position().z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.SMOKE, this.position().x, this.position().y, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -141,7 +141,7 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

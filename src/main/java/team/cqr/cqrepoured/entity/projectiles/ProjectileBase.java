@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -49,7 +50,7 @@ public abstract class ProjectileBase extends ThrowableProjectile {
 	@Override
 	public void tick() {
 		if (this.tickCount > 400) {
-			this.remove();
+			this.discard();
 		}
 
 		super.tick();
@@ -58,11 +59,11 @@ public abstract class ProjectileBase extends ThrowableProjectile {
 
 	@Override
 	protected void onHitBlock(BlockHitResult result) {
-		BlockState state = this.level.getBlockState(result.getBlockPos());
-		state.onProjectileHit(this.level, state, result, this);
-		if (state.getMaterial().blocksMotion()) {
+		BlockState state = this.level().getBlockState(result.getBlockPos());
+		state.onProjectileHit(this.level(), state, result, this);
+		if (state.blocksMotion()) {
 			this.onDestroyedByBlockImpact();
-			this.remove();
+			this.discard();
 		}
 		
 		super.onHitBlock(result);
@@ -77,7 +78,7 @@ public abstract class ProjectileBase extends ThrowableProjectile {
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

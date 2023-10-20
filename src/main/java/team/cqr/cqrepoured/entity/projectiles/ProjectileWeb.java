@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -75,7 +76,7 @@ public class ProjectileWeb extends ProjectileBase {
 		{
 			GeneratorVolcano.forEachSpherePosition(blockPosition(), DungeonGenUtils.randomBetween(1, 3), t ->
 			{
-				if(ProjectileWeb.this.level.getBlockState(t).getBlock() instanceof AirBlock)
+				if(ProjectileWeb.this.level().getBlockState(t).getBlock() instanceof AirBlock)
 				{
 					//ProjectileWeb.this.level.setBlockAndUpdate(t, CQRBlocks) //#TODO temporary web?
 				}
@@ -95,8 +96,8 @@ public class ProjectileWeb extends ProjectileBase {
 
 			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
 			//entity.makeStuckInBlock(); //Dont now what about this #TODO
-			this.level.setBlockAndUpdate(entity.blockPosition(), CQRBlocks.POISONOUS_WEB.get().defaultBlockState());
-			this.remove();
+			this.level().setBlockAndUpdate(entity.blockPosition(), CQRBlocks.POISONOUS_WEB.get().defaultBlockState());
+			this.discard();
 		}
 		super.onHitEntity(result);
 	}
@@ -112,7 +113,7 @@ public class ProjectileWeb extends ProjectileBase {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 
