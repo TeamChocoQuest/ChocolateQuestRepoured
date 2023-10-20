@@ -1,25 +1,26 @@
 package team.cqr.cqrepoured.client.render.tileentity;
 
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
-import com.mojang.math.Matrix4f;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import team.cqr.cqrepoured.client.init.CQRRenderTypes;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 
 @OnlyIn(Dist.CLIENT)
-public class TileEntityExporterRenderer extends BlockEntityRenderer<TileEntityExporter> {
+public class TileEntityExporterRenderer implements BlockEntityRenderer<TileEntityExporter> {
 
 	public TileEntityExporterRenderer(BlockEntityRenderDispatcher blockEntityRendererDispatcher) {
-		super(blockEntityRendererDispatcher);
+		super();
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class TileEntityExporterRenderer extends BlockEntityRenderer<TileEntityEx
 		double y2 = pos2.getY() + 1.01D;
 		double z2 = pos2.getZ() + 1.01D;
 
-		WorldRenderer.renderLineBox(pMatrixStack, pBuffer.getBuffer(RenderType.lines()), x1, y1, z1, x2, y2, z2, 0.9F, 0.9F, 0.9F, 1.0F, 0.5F, 0.5F, 0.5F);
+		LevelRenderer.renderLineBox(pMatrixStack, pBuffer.getBuffer(RenderType.lines()), x1, y1, z1, x2, y2, z2, 0.9F, 0.9F, 0.9F, 1.0F, 0.5F, 0.5F, 0.5F);
 
 		this.renderUnprotectedBlocks(pBlockEntity, pMatrixStack, pBuffer);
 	}

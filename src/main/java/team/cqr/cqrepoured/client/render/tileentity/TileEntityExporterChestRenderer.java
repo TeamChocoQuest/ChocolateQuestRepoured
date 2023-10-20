@@ -2,25 +2,28 @@ package team.cqr.cqrepoured.client.render.tileentity;
 
 import java.util.Arrays;
 
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 
-public class TileEntityExporterChestRenderer extends ChestTileEntityRenderer<TileEntityExporterChest> {
+public class TileEntityExporterChestRenderer extends ChestRenderer<TileEntityExporterChest> {
 
 	private static final float SCALE = 0.75F;
 	private static final Vector3f[][] FACES = {
@@ -32,8 +35,8 @@ public class TileEntityExporterChestRenderer extends ChestTileEntityRenderer<Til
 			quad(0.9375F, 0.4375F, 0.5F, Direction.NORTH, Direction.UP, SCALE)
 	};
 
-	public TileEntityExporterChestRenderer(BlockEntityRenderDispatcher tileEntityRendererDispatcher) {
-		super(tileEntityRendererDispatcher);
+	public TileEntityExporterChestRenderer(BlockEntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class TileEntityExporterChestRenderer extends ChestTileEntityRenderer<Til
 
 		BlockState state = CQRepouredClient.getBlockEntityBlockState(pBlockEntity);
 		if (state.getBlock() instanceof BlockExporterChest) {
-			ResourceLocation tex = new ResourceLocation(CQRConstants.MODID, "textures/block/" + state.getBlock().getRegistryName().getPath() + ".png");
+			ResourceLocation tex = new ResourceLocation(CQRConstants.MODID, "textures/block/" + ForgeRegistries.BLOCKS.getKey(state.getBlock()).getPath() + ".png");
 			VertexConsumer ivertexbuilder = pBuffer.getBuffer(RenderType.entityCutout(tex));
 
 			pMatrixStack.pushPose();

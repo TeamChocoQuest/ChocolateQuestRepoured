@@ -4,29 +4,31 @@ import java.util.function.Supplier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.util.LazyLoadedValue;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.LazyValue;
 import team.cqr.cqrepoured.client.CQRepouredClient;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 
 public class ItemStackExporterChestRenderer extends BlockEntityWithoutLevelRenderer {
 
-	private final LazyValue<TileEntityExporterChest> tileEntity;
+	private final LazyLoadedValue<TileEntityExporterChest> tileEntity;
 
-	public ItemStackExporterChestRenderer(Supplier<TileEntityExporterChest> supp) {
-		this.tileEntity = new LazyValue<>(supp);
+	public ItemStackExporterChestRenderer(Supplier<TileEntityExporterChest> supp, BlockEntityRenderDispatcher pBlockEntityRenderDispatcher, EntityModelSet pEntityModelSet) {
+		super(pBlockEntityRenderDispatcher, pEntityModelSet);
+		this.tileEntity = new LazyLoadedValue<>(supp);
 	}
-
+	
 	@Override
-	public void renderByItem(ItemStack pStack, TransformType pTransformType, PoseStack pPoseStack,
-                             MultiBufferSource pMultiBuffer, int pCombinedLight, int pCombinedOverlay) {
+	public void renderByItem(ItemStack pStack, ItemDisplayContext pDisplayContext, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
+		super.renderByItem(pStack, pDisplayContext, pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		CQRepouredClient.setBlockEntityItemStack(pStack);
-		BlockEntityRenderDispatcher.instance.renderItem(tileEntity.get(), pPoseStack, pMultiBuffer, pCombinedLight,
-				pCombinedOverlay);
+		Minecraft.getInstance().getBlockEntityRenderDispatcher().renderItem(this.tileEntity.get(), pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
 		CQRepouredClient.setBlockEntityItemStack(null);
 	}
 
