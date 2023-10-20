@@ -1,11 +1,11 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
+import javax.annotation.Nullable;
+
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.projectiles.ProjectileEnergyOrb;
 import team.cqr.cqrepoured.init.CQRSounds;
-
-import javax.annotation.Nullable;
 
 public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	/*
@@ -101,7 +101,7 @@ public class BossAIEnergyTennis extends AbstractBossAIEnderCalamity {
 	public void stop() {
 		super.stop();
 		if (this.tennisball != null) {
-			this.tennisball.remove();
+			this.tennisball.discard();
 		}
 		this.tennisball = null;
 		this.warmupTime = WARMUP_DURATION;

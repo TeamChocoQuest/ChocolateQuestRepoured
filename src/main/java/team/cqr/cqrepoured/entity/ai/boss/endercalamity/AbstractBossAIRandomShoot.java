@@ -66,7 +66,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 				break;
 			case PREPARING_TO_TELEPORT:
 				if (this.projectile != null) {
-					this.projectile.remove();
+					this.projectile.discard();
 				}
 				this.cooldown = 1;
 				this.currentPhase = E_PHASE.TELEPORT;
@@ -103,7 +103,7 @@ public abstract class AbstractBossAIRandomShoot extends AbstractBossAIEnderCalam
 
 	protected void killProjectile() {
 		if (this.projectile != null) {
-			this.projectile.remove();
+			this.projectile.discard();
 		}
 	}
 

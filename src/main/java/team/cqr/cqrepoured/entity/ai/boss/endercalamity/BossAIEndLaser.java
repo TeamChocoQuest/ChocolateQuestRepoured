@@ -76,7 +76,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 		// System.out.println("original eyepos: " + eyePos.toString());
 		// DONE: Calculate new starting position of laser to match animation
 		// Head distance with scale = 100%: 0.75 blocks
-		float yaw = this.entity.yRot;
+		float yaw = this.entity.getYRot();
 		if (this.entity.hasAttackTarget()) {
 			yaw = (float) Math.toDegrees(Math.atan2(-(this.entity.getTarget().getX() - this.entity.getX()), this.entity.getTarget().getZ() - this.entity.getZ()));
 		}
@@ -92,7 +92,7 @@ public class BossAIEndLaser extends AbstractBossAIEnderCalamity {
 	@Override
 	public void stop() {
 		if (this.endlaser != null) {
-			this.endlaser.remove();
+			this.endlaser.discard();
 			this.endlaser = null;
 		}
 		// IMessage message =

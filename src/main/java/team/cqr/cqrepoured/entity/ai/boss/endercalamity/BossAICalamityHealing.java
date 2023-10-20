@@ -66,7 +66,7 @@ public class BossAICalamityHealing extends AbstractBossAIEnderCalamity {
 			direction = direction.normalize().scale(16);
 			double angle = 360 / crystalCount;
 			for (int i = 0; i < crystalCount; i++) {
-				this.spawnCrystal(centralPosition.offset(direction.x, 0, direction.z));
+				this.spawnCrystal(centralPosition.offset((int)direction.x, 0, (int)direction.z));
 
 				direction = VectorUtil.rotateVectorAroundY(direction, angle);
 			}
