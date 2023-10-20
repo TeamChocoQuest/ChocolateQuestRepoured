@@ -676,7 +676,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				case PHASE_TELEPORT_LASER:
 					break;
 				default:
-					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject());
+					this.switchToPhase(EEnderCalamityPhase.PHASE_TELEPORT_EYE_THROWER.getPhaseObject());
 					break;
 				}
 			}
