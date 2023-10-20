@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.client.event;
 
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 //@EventBusSubscriber(modid = CQRConstants.MODID, value = Dist.CLIENT)
 public class GuiEventHandler {
 
 	@SubscribeEvent
-	public static void onInitGuiEvent(GuiScreenEvent.InitGuiEvent.Post event) {
+	public static void onInitGuiEvent(ScreenEvent.Init.Post event) {
 //		if (!(event.getGui() instanceof GuiConfig)) {
 //			return;
 //		}
