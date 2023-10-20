@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.entity.ai;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
-import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
+import team.cqr.cqrepoured.init.CQRPotions;
 
 public class EntityAIPanicElectrocute extends PanicGoal {
 
@@ -18,9 +18,10 @@ public class EntityAIPanicElectrocute extends PanicGoal {
 			return false;
 		}
 
-		if (this.mob.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).isPresent()) {
-			return this.mob.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null).resolve().get().isElectrocutionActive() && this.findRandomPosition();
+		if (this.mob.hasEffect(CQRPotions.ELECTROCUTION.get())) {
+			return this.findRandomPosition();
 		}
+		
 		return false;
 	}
 
