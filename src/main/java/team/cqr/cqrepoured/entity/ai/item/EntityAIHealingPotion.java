@@ -126,8 +126,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		float pitch = (float) Math.toDegrees(Math.atan2(-y, d));
 		this.entity.yBodyRot += Mth.clamp(Mth.wrapDegrees(yaw - this.entity.yBodyRot), -deltaYaw, deltaYaw);
 		this.entity.yBodyRot = Mth.wrapDegrees(this.entity.yBodyRot);
-		this.entity.xRot += Mth.clamp(Mth.wrapDegrees(pitch - this.entity.xRot), -deltaPitch, deltaPitch);
-		this.entity.xRot = Mth.clamp(this.entity.xRot, -90.0F, 90.0F);
+		this.entity.setXRot(this.entity.getXRot() + Mth.clamp(Mth.wrapDegrees(pitch - this.entity.getXRot()), -deltaPitch, deltaPitch));
+		this.entity.setXRot(Mth.clamp(this.entity.getXRot(), -90.0F, 90.0F));
 		this.entity.yHeadRot = this.entity.yBodyRot;
 	}
 
