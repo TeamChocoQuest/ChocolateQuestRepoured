@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.ai.boss.endercalamity;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;
 import team.cqr.cqrepoured.entity.boss.endercalamity.phases.EEnderCalamityPhase;
 import team.cqr.cqrepoured.entity.misc.EntityColoredLightningBolt;
@@ -75,6 +76,17 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 		y += cp.getY();
 		z += cp.getZ();
 
+		float distMin = Math.max(this.entity.getWidth(), this.entity.getHeight());
+		distMin += 1;
+		if (this.entity.getDistance(x, y, z) <= distMin) {
+			BlockPos direction = new BlockPos(x, y, z).subtract(this.entity.getPosition());
+			Vec3d dirVec = new Vec3d(direction);
+			dirVec = dirVec.normalize().scale(distMin);
+			x += dirVec.x;
+			y += dirVec.y;
+			z += dirVec.z;
+		}
+		
 		EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, x, y, z, true, false, 0.8F, 0.01F, 0.98F, 0.4F);
 		this.world.spawnEntity(entitybolt);
 	}
