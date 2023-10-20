@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 
-import net.minecraft.world.InteractionHand;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Explosion.Mode;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
@@ -47,11 +47,11 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		super.start();
 		this.wallsMax = DungeonGenUtils.randomBetween(MIN_WALLS, MAX_WALLS, this.entity.getRandom());
 		this.wallCounter = 0;
-		this.world.explode(this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 2, false, CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionRayDestroysTerrain.get() ? Mode.DESTROY : Mode.NONE);
+		this.world.explode(this.entity, this.entity.getX(), this.entity.getY(), this.entity.getZ(), 2, false, CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionRayDestroysTerrain.get() ? ExplosionInteraction.MOB : ExplosionInteraction.NONE);
 		Vec3 v = this.entity.position().subtract(this.entity.getTarget().position());
 		v = v.normalize().scale(5);
 		Vec3 p = this.entity.getTarget().position().subtract(v);
-		if (this.entity.getNavigation().isStableDestination(new BlockPos(p.x, p.y, p.z))) {
+		if (this.entity.getNavigation().isStableDestination(BlockPos.containing(p.x, p.y, p.z))) {
 			if (this.entity.randomTeleport(p.x, p.y, p.z, true)) {
 				this.ticksAtTeleport = this.entity.tickCount;
 				return;
@@ -99,7 +99,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 
 			for (Vec3 p : positions) {
 				if (p != null) {
-					ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level);
+					ProjectileFireWallPart wallPart = new ProjectileFireWallPart(this.entity, this.entity.level());
 					wallPart.setPos(p.x, p.y, p.z);
 					// wallPart.setVelocity(v.x / 2, 0, v.z / 2);
 					/*wallPart.motionX = v.x / 2D;

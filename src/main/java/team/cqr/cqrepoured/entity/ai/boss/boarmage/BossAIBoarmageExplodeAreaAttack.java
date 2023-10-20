@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.entity.ai.boss.boarmage;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Explosion.Mode;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.EntityCQRBoarmage;
@@ -79,7 +79,7 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 			// EXPLOSION!!!!
 
 			for (BlockPos p : this.explosions) {
-				this.world.explode(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRandom().nextBoolean(), CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionAreaDestroysTerrain.get() ? Mode.DESTROY : Mode.NONE);
+				this.world.explode(this.entity, p.getX(), p.getY(), p.getZ(), 3, this.entity.getRandom().nextBoolean(), CQRConfig.SERVER_CONFIG.bosses.boarmageExplosionAreaDestroysTerrain.get() ? ExplosionInteraction.MOB : ExplosionInteraction.NONE);
 			}
 
 			this.stop();
