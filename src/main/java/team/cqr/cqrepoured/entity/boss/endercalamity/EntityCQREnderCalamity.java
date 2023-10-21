@@ -101,7 +101,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	// AI stuff
 	private boolean isDowned = false;
 
-	private int attackCounter = 0;
+	private float damageTaken = 0;
 	private int currentPhaseTimer = 0;
 	private int currentPhaseRunningTime = 0;
 	private int noTennisCounter = 0;
@@ -691,13 +691,11 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 			if (!this.world.isRemote) {
 				this.dataManager.set(IS_HURT, true);
 				this.cqrHurtTime = HURT_DURATION;
-				this.attackCounter++;
-				if (this.attackCounter >= 2 * this.world.getDifficulty().getId()) {
-					if (this.getRNG().nextBoolean()) {
-						this.dataManager.set(SHIELD_ACTIVE, true);
-						this.attackCounter = 0;
-						this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
-					}
+				this.damageTaken += amount;
+				if (this.damageTaken >= (CQRConfig.bosses.enderCalamityMaxDamagePerCycle / Math.max(1, this.getEntityWorld().getDifficulty().ordinal()))) {
+					this.dataManager.set(SHIELD_ACTIVE, true);
+					this.damageTaken = 0;
+					this.forcePhaseChangeToNextOf(EEnderCalamityPhase.PHASE_IDLE.getPhaseObject());
 				}
 			}
 

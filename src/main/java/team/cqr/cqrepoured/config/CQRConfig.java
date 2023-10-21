@@ -189,6 +189,7 @@ public class CQRConfig {
 		public boolean thrownBlocksDestroyTerrain = true;
 		public boolean thrownBlocksGetPlaced = true;
 		public boolean calamityBlockEquipParticles = true;
+		public float enderCalamityMaxDamagePerCycle = 60;
 		public int netherDragonLength = 28;
 		public int enderCalamityHealingCrystalAbsorbAmount = 40;
 		@RequiresMcRestart
