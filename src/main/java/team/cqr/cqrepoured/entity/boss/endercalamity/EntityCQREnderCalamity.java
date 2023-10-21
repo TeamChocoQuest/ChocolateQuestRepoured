@@ -329,7 +329,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		case "calamity_throw":
 			sound = CQRSounds.ENDER_CALAMITY_THROW_ITEM;
 			pitch = 1.5F;
-			volume = 10.0F;
+			volume = 1.0F;
 			break;
 		default:
 			return;

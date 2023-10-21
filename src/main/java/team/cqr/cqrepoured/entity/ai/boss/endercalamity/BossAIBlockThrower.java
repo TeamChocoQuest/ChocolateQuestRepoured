@@ -150,8 +150,8 @@ public class BossAIBlockThrower extends AbstractBossAIEnderCalamity {
 				double dz = -0.5 + this.entity.getRNG().nextDouble();
 				dz *= 2;
 				ws.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.x, pos.y, pos.z, 10, dx, dy, dz, 0.05);
-				this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 			}
+			this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.5F, 1.25F);
 		}
 	}
 
