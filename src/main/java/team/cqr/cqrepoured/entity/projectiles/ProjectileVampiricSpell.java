@@ -1,12 +1,12 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -66,30 +66,30 @@ public class ProjectileVampiricSpell extends ProjectileBase
 			LivingEntity entity = (LivingEntity)result.getEntity();
 			if(entity.isBlocking())
 			{
-				this.remove();
+				this.discard();
 				return;
 			}
 			float damage = 4.0F;
 
 			if(entity == this.shooter) return;
 
-			entity.hurt(DamageSource.MAGIC, damage);
+			entity.hurt(this.damageSources().magic(), damage);
 
 			if(this.shooter != null && this.shooter.getHealth() < this.shooter.getMaxHealth())
 			{
 				this.shooter.heal(damage / 2);
 			}
 
-			this.remove();
+			this.discard();
 		}
 		super.onHitEntity(result);
 	}
 
 	@Override
 	protected void onUpdateInAir() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			if (this.tickCount < 30) {
-				this.level.addParticle(ParticleTypes.PORTAL, this.position().x, this.position().y + 0.1D, this.position().z, 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.PORTAL, this.position().x, this.position().y + 0.1D, this.position().z, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -100,7 +100,7 @@ public class ProjectileVampiricSpell extends ProjectileBase
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

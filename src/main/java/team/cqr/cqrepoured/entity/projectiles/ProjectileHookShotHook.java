@@ -4,25 +4,25 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.entity.PartEntity;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -91,8 +91,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double x = shooter.getX();
 		double y = shooter.getY() + shooter.getEyeHeight();
 		double z = shooter.getZ();
-		float yaw = shooter.yRot;
-		float pitch = shooter.xRot;
+		float yaw = shooter.getYRot();
+		float pitch = shooter.getXRot();
 		this.shootHook(x, y, z, yaw, pitch, range, speed);
 	}
 
@@ -110,8 +110,8 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		Vec3 v = Vec3.directionFromRotation(pitch, yaw);
 		this.setPos(x, y, z);
 		this.startLocation = new Vec3(x, y, z);
-		this.yRot = yaw;
-		this.xRot = pitch;
+		this.setYRot(yaw);
+		this.setXRot(pitch);
 		this.range = range;
 		this.speed = speed;
 		this.setDeltaMovement(v);
@@ -128,23 +128,23 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		buffer.writeFloat((float) this.startLocation.x);
 		buffer.writeFloat((float) this.startLocation.y);
 		buffer.writeFloat((float) this.startLocation.z);
-		buffer.writeFloat(this.yRot);
-		buffer.writeFloat(this.xRot);
+		buffer.writeFloat(this.getYRot());
+		buffer.writeFloat(this.getXRot());
 	}
 
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData) {
-		this.setOwner(this.level.getEntity(additionalData.readInt()));
+		this.setOwner(this.level().getEntity(additionalData.readInt()));
 		this.range = additionalData.readFloat();
 		this.speed = additionalData.readFloat();
 		double x = additionalData.readFloat();
 		double y = additionalData.readFloat();
 		double z = additionalData.readFloat();
 		this.startLocation = new Vec3(x, y, z);
-		this.yRot = additionalData.readFloat();
-		this.yRotO = this.yRot;
-		this.xRot = additionalData.readFloat();
-		this.xRotO = this.xRot;
+		this.setYRot(additionalData.readFloat());
+		this.yRotO = this.getYRot();
+		this.setXRot(additionalData.readFloat());
+		this.xRotO = this.getXRot();
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			return null;
 		}
 		if (this.latchedEntity == null || this.latchedEntity.getId() != latchedEntityId) {
-			this.latchedEntity = this.level.getEntity(latchedEntityId);
+			this.latchedEntity = this.level().getEntity(latchedEntityId);
 		}
 		return this.latchedEntity;
 	}
@@ -211,14 +211,14 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	@Override
 	public void onAddedToWorld() {
 		super.onAddedToWorld();
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.setHookItemShootingTag(true);
 		}
 	}
 
 	@Override
 	public void onRemovedFromWorld() {
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			if (this.getOwner() instanceof Player) {
 				((Player) this.getOwner()).getCooldowns().addCooldown(this.item, 0);
 			}
@@ -241,12 +241,12 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		this.hookStateMachine();
 
 		// save and restore rotation because mc does weird things otherwise
-		float f1 = this.yRot;
-		float f2 = this.xRot;
+		float f1 = this.getYRot();
+		float f2 = this.getXRot();
 		super.tick();
-		this.yRot = f1;
+		this.setYRot(f1);
 		this.yRotO = f1;
-		this.xRot = f2;
+		this.setXRot(f2);
 		this.xRotO = f2;
 	}
 
@@ -268,13 +268,13 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 			this.handleStatePullShooterToHookLatchedToEntity();
 			break;
 		case STOPPED:
-			this.remove();
+			this.discard();
 			break;
 		}
 	}
 
 	private void handleStateShoot() {
-		Vec3 v = Vec3.directionFromRotation(this.xRot, this.yRot);
+		Vec3 v = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
 		this.setDeltaMovement(this.getDeltaMovement().multiply(this.speed, this.speed, this.speed));
 
 		double x = this.getX() - this.startLocation.x;
@@ -283,7 +283,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double distSqr = x * x + y * y + z * z;
 		double d = this.range;
 		if (distSqr > d * d) {
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.RETRACT);
 			}
 		}
@@ -297,7 +297,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		double d = this.speed + 0.1D;
 		if (distSqr < d * d) {
 			this.setDeltaMovement(Vec3.ZERO);
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 		} else {
@@ -311,12 +311,12 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		
 		Entity latchedEntity = this.getLatchedEntity();
 		if (latchedEntity == null) {
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 			return;
 		}
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.checkForEntityStuck(latchedEntity);
 		}
 
@@ -331,7 +331,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		if (distSqr < d * d) {
 			latchedEntity.setDeltaMovement(Vec3.ZERO);
 			
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 		} else {
@@ -343,7 +343,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 	private void handleStatePullShooterToHookLatchedToBlock() {
 		this.setDeltaMovement(Vec3.ZERO);
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.checkForEntityStuck(this.getOwner());
 		} else {
 			if(this.getOwner() == null || !(this.getOwner() instanceof Player && CQRMain.PROXY.isPlayerCurrentClientPlayer((Player) this.getOwner()))) {
@@ -354,7 +354,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		Vec3 v = this.getLatchedPos();
 		this.setPos(v.x, v.y, v.z);
 
-		Vec3 v1 = Vec3.directionFromRotation(0.0F, this.xRot);
+		Vec3 v1 = Vec3.directionFromRotation(0.0F, this.getXRot());
 		double x = this.getX() - this.getOwner().getX() + v1.x * 0.1D;
 		double y = this.getY() - this.getOwner().getY() + 1.0D;
 		double z = this.getZ() - this.getOwner().getZ() + v1.z * 0.1D;
@@ -366,7 +366,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		if (distSqr < d * d) {
 			this.getOwner().setDeltaMovement(this.getOwner().getDeltaMovement().multiply(0.1, 0.1, 0.1));
 			
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 		} else {
@@ -380,12 +380,12 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 		Entity latchedEntity = this.getLatchedEntity();
 		if (latchedEntity == null) {
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 			return;
 		}
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide()) {
 			this.checkForEntityStuck(this.getOwner());
 		}
 
@@ -403,7 +403,7 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 		if (distSqr < d * d) {
 			this.getOwner().setDeltaMovement(this.getOwner().getDeltaMovement().multiply(0.05, 0.05, 0.05));
 			
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide()) {
 				this.setHookState(EnumHookState.STOPPED);
 			}
 		} else {
@@ -432,10 +432,10 @@ public class ProjectileHookShotHook extends ProjectileBase implements IEntityAdd
 
 	@Override
 	protected void onHit(HitResult result) {
-		if (!this.level.isClientSide && this.getHookState() == EnumHookState.SHOOT) {
+		if (!this.level().isClientSide() && this.getHookState() == EnumHookState.SHOOT) {
 			if (result.getType() == HitResult.Type.BLOCK) {
-				BlockPos hitPos = new BlockPos(result.getLocation().x(), result.getLocation().y(), result.getLocation().z());
-				BlockState state = this.level.getBlockState(hitPos);
+				BlockPos hitPos = BlockPos.containing(result.getLocation().x(), result.getLocation().y(), result.getLocation().z());
+				BlockState state = this.level().getBlockState(hitPos);
 
 				if (this.item.canLatchToBlock(state.getBlock())) {
 					// Hit a valid latch block, start pulling next tick

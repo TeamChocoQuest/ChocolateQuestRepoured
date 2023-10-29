@@ -2,23 +2,23 @@ package team.cqr.cqrepoured.entity.projectiles;
 
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
-import net.minecraft.particles.BlockParticleData;
-import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -64,10 +64,10 @@ public class ProjectileEarthQuake extends ThrowableProjectile {
 		Vec3 vector3d = (new Vec3(pX, pY, pZ)).normalize().add(this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian() * (double) 0.0075F * (double) pInaccuracy, this.random.nextGaussian()
 				* (double) 0.0075F * (double) pInaccuracy).scale((double) pVelocity);
 		this.setDeltaMovement(vector3d);
-		this.yRot = (float) (Mth.atan2(vector3d.x, vector3d.z) * (double) (180F / (float) Math.PI));
+		this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (double) (180F / (float) Math.PI)));
 		// this.xRot = (float)(MathHelper.atan2(vector3d.y, (double)f) * (double)(180F / (float)Math.PI));
-		this.yRotO = this.yRot;
-		this.xRotO = this.xRot;
+		this.yRotO = this.getYRot();
+		this.xRotO = this.getXRot();
 	}
 
 	@Override
@@ -77,13 +77,13 @@ public class ProjectileEarthQuake extends ThrowableProjectile {
 		float f2 = Mth.cos(pY * ((float) Math.PI / 180F)) * Mth.cos(pX * ((float) Math.PI / 180F));
 		this.shoot((double) f, (double) f1, (double) f2, pVelocity, pInaccuracy);
 		Vec3 vector3d = pShooter.getDeltaMovement();
-		this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, pShooter.isOnGround() ? 0.0D : vector3d.y, vector3d.z));
+		this.setDeltaMovement(this.getDeltaMovement().add(vector3d.x, pShooter.onGround() ? 0.0D : vector3d.y, vector3d.z));
 	}
 
 	@Override
 	public void onHitEntity(EntityHitResult entityResult) {
-		if (!this.level.isClientSide) {
-			if (!(entityResult.getEntity() instanceof MobEntity)) {
+		if (!this.level().isClientSide()) {
+			if (!(entityResult.getEntity() instanceof Mob)) {
 				// this.motionY = 0.0D;
 				// setDeltaMovement(getDeltaMovement().x, 0, getDeltaMovement().z);
 			}
@@ -121,12 +121,12 @@ public class ProjectileEarthQuake extends ThrowableProjectile {
 		// this.motionZ *= 1.01D;
 
 		if (this.getOwner() != null && !this.getOwner().isAlive()) {
-			this.remove();
+			this.discard();
 		}
 
 		else {
 			if (this.tickCount++ > 300) {
-				this.remove();
+				this.discard();
 			}
 
 			// this.updateMovement();
@@ -156,31 +156,31 @@ public class ProjectileEarthQuake extends ThrowableProjectile {
 		this.lifeTime -= 1;
 
 		if (this.lifeTime <= 0) {
-			this.remove();
+			this.discard();
 		}
 
-		BlockPos pos = new BlockPos(this.position().x, this.position().y - 1, this.position().z);
-		BlockState iblockstate = this.level.getBlockState(pos);
+		BlockPos pos = BlockPos.containing(this.position().x, this.position().y - 1, this.position().z);
+		BlockState iblockstate = this.level().getBlockState(pos);
 
-		if (iblockstate.getBlock() == null || iblockstate.getBlock().isAir(iblockstate, this.level, pos)) {
+		if (iblockstate.getBlock() == null || iblockstate.isAir()) {
 			iblockstate = Blocks.GLASS.defaultBlockState();
 		}
 
 		double dist = 1.0D;
 		AABB var3 = this.getBoundingBox().expandTowards(dist, 2.0D, dist);
-		List<Entity> list = this.level.getEntitiesOfClass(LivingEntity.class, var3);
+		List<LivingEntity> list = this.level().getEntitiesOfClass(LivingEntity.class, var3);
 
 		for (Entity entity : list) {
-			if (entity instanceof LivingEntity && entity != this.getOwner() && !this.level.isClientSide && entity.isOnGround()) {
+			if (entity instanceof LivingEntity && entity != this.getOwner() && !this.level().isClientSide() && entity.onGround()) {
 				entity.setDeltaMovement(entity.getDeltaMovement().x, entity.getDeltaMovement().y + this.getEntityThrowDistance(), entity.getDeltaMovement().z);
 				// entity.motionY += this.getEntityThrowDistance();
-				entity.hurt(DamageSource.indirectMagic(this, this.getOwner()), 1.0F);
+				entity.hurt(this.damageSources().indirectMagic(this.getOwner(), this), 1.0F);
 			}
 		}
 
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			for (int i = 0; i < 10; i++) {
-				this.level.addParticle(new BlockParticleData(ParticleTypes.BLOCK, iblockstate), this.position().x + this.random.nextFloat() - 0.5D, this.position().y + this.random.nextFloat() - 0.5D, this.position().z + this.random.nextFloat()
+				this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, iblockstate), this.position().x + this.random.nextFloat() - 0.5D, this.position().y + this.random.nextFloat() - 0.5D, this.position().z + this.random.nextFloat()
 						- 0.5D, this.random.nextFloat() - 0.5F, this.random.nextFloat(), this.random.nextFloat() - 0.5F);
 			}
 		}
@@ -196,7 +196,7 @@ public class ProjectileEarthQuake extends ThrowableProjectile {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

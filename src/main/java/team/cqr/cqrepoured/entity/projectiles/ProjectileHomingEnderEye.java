@@ -1,23 +1,24 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.*;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.entity.mobs.EntityCQREnderman;
@@ -56,10 +57,10 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	
 	@Override
 	public void tick() {
-		double dx = this.getX() + (-0.25 + (0.5 * this.level.random.nextDouble()));
-		double dy = 0.125 + this.getY() + (-0.25 + (0.5 * this.level.random.nextDouble()));
-		double dz = this.getZ() + (-0.25 + (0.5 * this.level.random.nextDouble()));
-		this.level.addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
+		double dx = this.getX() + (-0.25 + (0.5 * this.level().getRandom().nextDouble()));
+		double dy = 0.125 + this.getY() + (-0.25 + (0.5 * this.level().getRandom().nextDouble()));
+		double dz = this.getZ() + (-0.25 + (0.5 * this.level().getRandom().nextDouble()));
+		this.level().addParticle(ParticleTypes.DRAGON_BREATH, dx, dy, dz, 0, 0, 0);
 		
 		super.tick();
 	}
@@ -72,7 +73,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onHit(HitResult result)
 	{
-		AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+		AreaEffectCloud entityareaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 		entityareaeffectcloud.setOwner(this.getOwner() instanceof LivingEntity ? (LivingEntity) this.getOwner() : null);
 		entityareaeffectcloud.setParticle(ParticleTypes.DRAGON_BREATH);
 		entityareaeffectcloud.setRadius(2F);
@@ -82,7 +83,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 		entityareaeffectcloud.addEffect(new MobEffectInstance(MobEffects.HARM, 20, 1));
 
-		this.level.addFreshEntity(entityareaeffectcloud);
+		this.level().addFreshEntity(entityareaeffectcloud);
 
 		super.onHit(result);
 	}
@@ -103,28 +104,27 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	@Override
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
-		this.remove();
+		this.level().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, ExplosionInteraction.NONE);
+		this.discard();
 		
 		BlockPos blockPos = this.blockPosition();
-		this.removeBlocksRecursively(blockPos.mutable(), 0, this.level.getDifficulty().ordinal() * 3);
+		this.removeBlocksRecursively(blockPos.mutable(), 0, this.level().getDifficulty().ordinal() * 3);
 	}
 	
-	protected void removeBlocksRecursively(BlockPos.Mutable blockPos, int recursionDepth, final int maxRecursion) {
-		BlockState state = this.level.getBlockState(blockPos);
-		Block block = state.getBlock();
-		if(block.is(CQRBlockTags.HOMING_ENDER_EYE_DESTROYABLE)) {
-			this.level.destroyBlock(blockPos, state.hasTileEntity() || this.level.getRandom().nextBoolean());
+	protected void removeBlocksRecursively(MutableBlockPos blockPos, int recursionDepth, final int maxRecursion) {
+		BlockState state = this.level().getBlockState(blockPos);
+		if(state.is(CQRBlockTags.HOMING_ENDER_EYE_DESTROYABLE)) {
+			this.level().destroyBlock(blockPos, state.hasBlockEntity() || this.level().getRandom().nextBoolean());
 			
-			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.0, 0.025, 0.0);
-			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, 0.025);
-			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, -0.025);
-			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, 0.025);
-			this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, -0.025);
+			this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.0, 0.025, 0.0);
+			this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, 0.025);
+			this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), 0.025, 0.01, -0.025);
+			this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, 0.025);
+			this.level().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY(), this.getZ(), -0.025, 0.01, -0.025);
 			
 			recursionDepth++;
 			if(recursionDepth < maxRecursion) {
-				switch(this.level.getRandom().nextInt(6)) {
+				switch(this.level().getRandom().nextInt(6)) {
 					case 0:
 						this.removeBlocksRecursively(blockPos.above().mutable(), recursionDepth, maxRecursion);
 						break;
@@ -158,28 +158,28 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 		if (entityIn == this.getOwner()) {
 			return;
 		}
-		if (entityIn instanceof ProjectileBase || entityIn instanceof EndermanEntity || entityIn instanceof EntityCQREnderman) {
+		if (entityIn instanceof ProjectileBase || entityIn instanceof EnderMan || entityIn instanceof EntityCQREnderman) {
 			return;
 		}
 		boolean hitTarget = this.target != null && entityIn != this.getOwner();
 		if (hitTarget) {
-			this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
-			this.remove();
+			this.level().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, ExplosionInteraction.NONE);
+			this.discard();
 		}
 		if (this.getOwner() != null && this.getOwner() instanceof LivingEntity) {
-			entityIn.hurt(DamageSource.indirectMobAttack(this, (LivingEntity) this.getOwner()), 2 + this.level.getDifficulty().getId());
+			entityIn.hurt(this.damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 2 + this.level().getDifficulty().getId());
 		}
 	}
 
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (this.tickCount > 400 && !this.level.isClientSide) {
-			this.level.explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, Explosion.Mode.NONE);
-			this.remove();
+		if (this.tickCount > 400 && !this.level().isClientSide()) {
+			this.level().explode(this.getOwner(), this.getX(), this.getY(), this.getZ(), 2, ExplosionInteraction.NONE);
+			this.discard();
 			return;
 		}
-		if (!this.level.isClientSide && this.target != null) {
+		if (!this.level().isClientSide() && this.target != null) {
 			Vec3 v = this.target.position().subtract(this.position());
 			v = v.normalize();
 			v = v.scale(0.2);
@@ -198,7 +198,7 @@ public class ProjectileHomingEnderEye extends ProjectileBase {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 }

@@ -1,35 +1,35 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import java.util.Random;
+
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRSounds;
 
-import java.util.Random;
-
-public class ProjectileEnergyOrb extends DamagingProjectileEntity {
+public class ProjectileEnergyOrb extends AbstractHurtingProjectile {
 
 	private int deflectionsByPlayer = 0;
 	public int innerRotation;
 	public Random rand = new Random();
 	public LivingEntity shootingEntity;
 
-	public ProjectileEnergyOrb(EntityType<? extends DamagingProjectileEntity> entityType, Level worldIn) {
+	public ProjectileEnergyOrb(EntityType<? extends AbstractHurtingProjectile> entityType, Level worldIn) {
 		super(entityType, worldIn);
 		this.innerRotation = this.rand.nextInt(100_000);
 		//this.setSize(1.5F, 1.5F);
@@ -107,7 +107,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 		accelX = accelX + this.rand.nextGaussian() * 0.4D;
 		accelY = accelY + this.rand.nextGaussian() * 0.4D;
 		accelZ = accelZ + this.rand.nextGaussian() * 0.4D;
-		double d0 = Mth.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = Mth.sqrt((float) (accelX * accelX + accelY * accelY + accelZ * accelZ));
 		this.xPower = accelX / d0 * 0.1D;
 		this.yPower = accelY / d0 * 0.1D;
 		this.zPower = accelZ / d0 * 0.1D;
@@ -130,7 +130,7 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	protected void onHitEntity(EntityHitResult result)
 	{
 		super.onHitEntity(result);
-		if (!result.getEntity().hurt(DamageSource.indirectMagic(this, this.shootingEntity), 4)) {
+		if (!result.getEntity().hurt(this.damageSources().indirectMagic(this.shootingEntity, this), 4)) {
 			return;
 		}
 		this.doEnchantDamageEffects(this.shootingEntity, result.getEntity());
@@ -139,8 +139,8 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 	@Override
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		this.level.explode(this.shootingEntity, this.getX(), this.getY(), this.getZ(), 0.0F, Explosion.Mode.NONE);
-		AreaEffectCloudEntity entityareaeffectcloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+		this.level().explode(this.shootingEntity, this.getX(), this.getY(), this.getZ(), 0.0F, ExplosionInteraction.NONE);
+		AreaEffectCloud entityareaeffectcloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 		entityareaeffectcloud.setOwner(this.shootingEntity);
 		entityareaeffectcloud.setParticle(ParticleTypes.WITCH); //SPELL MOB
 		entityareaeffectcloud.setFixedColor(0xFFFF26);// Yellow
@@ -151,10 +151,10 @@ public class ProjectileEnergyOrb extends DamagingProjectileEntity {
 		entityareaeffectcloud.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 		entityareaeffectcloud.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 2));
 
-		this.level.addFreshEntity(entityareaeffectcloud);
+		this.level().addFreshEntity(entityareaeffectcloud);
 
 		this.playSound(CQRSounds.PROJECTILE_ENERGY_SPHERE_IMPACT, 8.0F, 1.0F);
 
-		this.remove();
+		this.discard();
 	}
 }

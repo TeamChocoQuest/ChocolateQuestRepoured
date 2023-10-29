@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.item.ShieldItem;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.level.Explosion;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.config.CQRConfig;
@@ -57,16 +58,16 @@ public class ProjectileHotFireball extends ProjectileBase {
 
 	@Override
 	public void tick() {
-		if(this.level.isClientSide) {
-			double dx = this.getX() + (-0.5 + (this.level.random.nextDouble()));
-			double dy = 0.25 + this.getY() + (-0.5 + (this.level.random.nextDouble()));
-			double dz = this.getZ() + (-0.5 + (this.level.random.nextDouble()));
-			this.level.addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+		if(this.level().isClientSide()) {
+			double dx = this.getX() + (-0.5 + (this.level().getRandom().nextDouble()));
+			double dy = 0.25 + this.getY() + (-0.5 + (this.level().getRandom().nextDouble()));
+			double dz = this.getZ() + (-0.5 + (this.level().getRandom().nextDouble()));
+			this.level().addParticle(ParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
 		}
 		
 		if (this.tickCount > 400) {
-			this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 1.5F, Explosion.Mode.NONE);
-			this.remove();
+			this.level().explode(this.shooter, this.getX(), this.getY(), this.getZ(), 1.5F, ExplosionInteraction.NONE);
+			this.discard();
 		}
 
 		super.tick();
@@ -125,12 +126,12 @@ public class ProjectileHotFireball extends ProjectileBase {
 	@Override
 	protected void onHitBlock(BlockHitResult result) {
 		super.onHitBlock(result);
-		this.level.explode(this.shooter, this.getX(), this.getY(), this.getZ(), 3.0F, CQRConfig.SERVER_CONFIG.bosses.hotFireballsDestroyTerrain.get() ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
-		this.remove();
+		this.level().explode(this.shooter, this.getX(), this.getY(), this.getZ(), 3.0F, CQRConfig.SERVER_CONFIG.bosses.hotFireballsDestroyTerrain.get() ? ExplosionInteraction.MOB : ExplosionInteraction.NONE);
+		this.discard();
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

@@ -1,12 +1,11 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.potion.Potions;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -66,19 +65,19 @@ public class ProjectilePoisonSpell extends ProjectileBase {
 			if(entity == this.shooter) return;
 
 			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
-			entity.hurt(DamageSource.MAGIC, this.damage);
-			this.remove();
+			entity.hurt(this.damageSources().magic(), this.damage);
+			this.discard();
 		}
 	}
 
 	@Override
 	protected void onHit(HitResult result) {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			return;
 		}
 
 		if (this.canPlaceAura && DungeonGenUtils.percentageRandom(0.6)) {
-			AreaEffectCloudEntity cloud = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+			AreaEffectCloud cloud = new AreaEffectCloud(this.level(), this.getX(), this.getY(), this.getZ());
 
 			cloud.setOwner(this.shooter);
 			cloud.setRadius(DungeonGenUtils.randomBetween(1, 3));
@@ -90,7 +89,7 @@ public class ProjectilePoisonSpell extends ProjectileBase {
 			cloud.setFixedColor(35849);
 			cloud.setNoGravity(false);
 
-			this.level.addFreshEntity(cloud);
+			this.level().addFreshEntity(cloud);
 		}
 
 		super.onHit(result);

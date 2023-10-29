@@ -1,15 +1,16 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.Level.ExplosionInteraction;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -38,8 +39,8 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if (!this.level.isClientSide && this.level.getBlockState(this.blockPosition().relative(Direction.DOWN)).isCollisionShapeFullBlock(this.level, this.blockPosition().relative(Direction.DOWN)) && this.random.nextInt(15) == 8) {
-			this.level.setBlockAndUpdate(this.blockPosition(), Blocks.FIRE.defaultBlockState());
+		if (!this.level().isClientSide() && this.level().getBlockState(this.blockPosition().relative(Direction.DOWN)).isCollisionShapeFullBlock(this.level(), this.blockPosition().relative(Direction.DOWN)) && this.random.nextInt(15) == 8) {
+			this.level().setBlockAndUpdate(this.blockPosition(), Blocks.FIRE.defaultBlockState());
 		}
 	}
 	
@@ -65,12 +66,12 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onHitBlock(BlockHitResult result)
 	{
-		BlockState state = this.level.getBlockState(result.getBlockPos());
+		BlockState state = this.level().getBlockState(result.getBlockPos());
 
-		if(!state.getMaterial().blocksMotion())
+		if(!state.blocksMotion())
 		{
-			this.level.explode(this.getOwner(), result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, Explosion.Mode.NONE);
-			this.remove();
+			this.level().explode(this.getOwner(), result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), 0.5F, true, ExplosionInteraction.NONE);
+			this.discard();
 		}
 	}
 
@@ -80,7 +81,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

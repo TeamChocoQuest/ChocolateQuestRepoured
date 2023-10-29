@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.projectiles;
 
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
@@ -77,16 +77,16 @@ public class ProjectileSpiderBall extends ProjectileBase {
 			if(entity == this.shooter) return;
 
 			entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
-			entity.hurt(DamageSource.MAGIC, this.damage);
-			this.remove();
+			entity.hurt(this.damageSources().magic(), this.damage);
+			this.discard();
 		}
 	}
 
 	@Override
 	protected void onUpdateInAir() {
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide()) {
 			if (this.tickCount < 10) {
-				this.level.addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY() + 0.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.ITEM_SLIME, this.getX(), this.getY() + 0.1D, this.getZ(), 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket() {
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 

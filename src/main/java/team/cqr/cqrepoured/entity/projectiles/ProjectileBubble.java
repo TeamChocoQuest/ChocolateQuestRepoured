@@ -5,7 +5,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -137,12 +136,12 @@ public class ProjectileBubble extends ProjectileBase {
 			return;
 		}
 
-		entity.hurt(DamageSource.indirectMagic(this.shooter, this), this.damage);
-		float pitch = (1.0F + (this.level().random.nextFloat() - this.level().random.nextFloat()) * 0.2F) * 0.7F;
+		entity.hurt(this.damageSources().indirectMagic(this.shooter, this), this.damage);
+		float pitch = (1.0F + (this.level().getRandom().nextFloat() - this.level().getRandom().nextFloat()) * 0.2F) * 0.7F;
 		this.level().playLocalSound(this.position().x, this.position().y, this.position().z, SoundEvents.PLAYER_SWIM, SoundSource.PLAYERS, 4, pitch, true);
 
 		EntityBubble bubbles = CQREntityTypes.BUBBLE.get().create(this.level());
-		bubbles.moveTo(entity.blockPosition().offset(0, 0.25, 0), entity.getYRot(), entity.getXRot());
+		bubbles.moveTo(entity.blockPosition(), entity.getYRot(), entity.getXRot());
 		this.level().addFreshEntity(bubbles);
 
 		entity.startRiding(bubbles, true);
