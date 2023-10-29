@@ -1,14 +1,14 @@
 package team.cqr.cqrepoured.entity.bases;
 
-import java.util.Map;
 import java.util.Optional;
 
 import com.mojang.serialization.DataResult;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -138,11 +138,10 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 		if (pSource.is(DamageTypeTags.IS_FIRE) && damageConfig.fireImmune()) {
 			return false;
 		}
-		// TODO: This is not ideal as it will loop through all multipliers
-		for (Map.Entry<ResourceLocation, Float> entry : damageConfig.damageTypeMultipliers().entrySet()) {
-			if (pSource.typeHolder().is(entry.getKey())) {
-				pAmount *= entry.getValue();
-			}
+		RegistryAccess access = this.level().registryAccess();
+		Float value = damageConfig.damageTypeMultipliers().getOrDefault(access.registryOrThrow(Registries.DAMAGE_TYPE).getKey(pSource.type()), null);
+		if (value != null) {
+			pAmount *= value.floatValue();
 		}
 		
 		// Second: min damage
