@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.util.RandomSource;
 import team.cqr.cqrepoured.entity.profile.variant.EntityVariant;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.LazyLoadField;
@@ -52,6 +53,11 @@ public class EntityProfile {
 	
 	@Nullable
 	public EntityVariant getRandomVariant(final Random random) {
+		return this.variantWeightedList.get().next(random);
+	}
+	
+	@Nullable
+	public EntityVariant getRandomVariant(final RandomSource random) {
 		return this.variantWeightedList.get().next(random);
 	}
 	

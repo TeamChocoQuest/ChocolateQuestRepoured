@@ -57,6 +57,8 @@ public class CQRConstants {
 
 	public static class NBT {
 		public static final String KEY_TRADE_PROFILE_DATA = "trade-profile-data";
+		public static final String KEY_ENTITY_VARIANT = "entity-variant";
+		public static final String KEY_ENTITY_VARIANT_ASSETS = "entity-variant-assets";
 	}
 	
 }
