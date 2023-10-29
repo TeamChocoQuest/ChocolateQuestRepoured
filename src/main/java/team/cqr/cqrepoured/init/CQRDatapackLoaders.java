@@ -73,6 +73,14 @@ public class CQRDatapackLoaders {
 		return getValueGeneral(DUNGEON_INHABITANTS, inhabitantId);
 	}
 	
+	public static Optional<EntityProfile> getProfile(EntityType<?> entityType) {
+		return getProfile(ForgeRegistries.ENTITY_TYPES.getKey(entityType));
+	}
+	
+	public static Optional<EntityProfile> getProfile(ResourceLocation profileId) {
+		return getValueGeneral(ENTITY_PROFILES, profileId);
+	}
+	
 	@Nullable
 	public static EntityFactionInformation getEntityFactionInformation(EntityType<?> entityType) {
 		return ENTITY_FACTION_INFORMATIONS.getData().getOrDefault(ForgeRegistries.ENTITY_TYPES.getKey(entityType), null);
