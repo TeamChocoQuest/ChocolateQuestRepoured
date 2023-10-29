@@ -1,0 +1,78 @@
+{
+	"base": {
+		"mounts": [
+			"minecraft:horse",
+			"minecraft:pig"
+		]
+	},
+	"default": {
+		"size": {
+			"width": 0.5,
+			"height": 2.0
+		},
+		"damage": {
+			"min-damage": 3.0,
+			"fire-immune": false,
+			"multipliers": {
+				"minecraft:fall": 2.0,
+				"minecraft:cactus": 0.25
+			}
+		},
+		"attributes": [],
+		"assets": []
+	},
+	"variants": {
+		{
+			"biggerVariant": {
+				"weight": 42,
+				"size": {
+					"width": 0.75,
+					"height": 3.0
+				},
+				"damage": {
+					"damage-cap": {
+						"enabled": false,
+						"max-uncapped-damage": 18.0,
+						"max-damage-in-percent": 0.1
+					},
+					"min-damage": 6.0,
+					"fire-immune": true,
+					"multipliers": {
+						"minecraft:fall": 10.0,
+						"minecraft:wither": 0.5
+					}
+				},
+				"attributes": [
+					{
+						"id": "minecraft:generic.max_health",
+						"value": 40.0,
+					},
+					{
+						"id": "minecraft:generic.movement_speed",
+						"value": 0.8
+					},
+					{
+						"id": "minecraft:generic.attack_knockback",
+						"value": 4.0
+					}
+				],
+				"assets": [
+					{
+						"weight": 1,
+						"texture": "example:texture_1"
+					},
+					{
+						"weight": 1,
+						"model": "example:model_1",
+						"animations": "example:animation_1"
+					},
+					{
+						"weight": 1,
+						"model": "example:model_2",
+						"texture": "example:texture_2"
+					}
+				]
+			}
+		},
+	}
+}
