@@ -14,16 +14,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -210,8 +206,7 @@ public class ElectrocutionMobEffect extends ExtendedMobEffect implements Synchab
 			SpreadTargetData data = ElectrocutionMobEffect.getSpreadData(entity, effectInstance);
 			caster = data.getCaster(entity.level());
 		}
-		DamageSource ds2 = new DamageSource(DamageTypes.LIGHTNING_BOLT, caster, entity);
-		DamageSource ds = entity.level().damageSources().lightningBolt();
+		DamageSource ds = entity.damageSources().source(DamageTypes.LIGHTNING_BOLT, caster);
 		if ((entity instanceof IMechanical || entity.getMobType() == CQRCreatureAttributes.MECHANICAL) && entity.isInWaterOrBubble()) {
 			entity.hurt(ds, damage);
 		} else {
