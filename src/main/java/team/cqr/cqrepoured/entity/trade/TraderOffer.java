@@ -67,7 +67,7 @@ public class TraderOffer {
 	}
 
 	public void onTradesUpdated() {
-		if (!this.entity.level().isClientSide) {
+		if (!this.entity.level().isClientSide()) {
 			this.entity.level().players().stream()
 					.map(p -> p.containerMenu)
 					.filter(Objects::nonNull)
