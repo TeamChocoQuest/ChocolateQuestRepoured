@@ -46,7 +46,7 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 	
 	// Forge crap
 	@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.FORGE)
-	static class EventListener {
+	public static class EventListener {
 		
 		@SubscribeEvent
 		public static void onFinalizeSpawn(FinalizeSpawn event) {
