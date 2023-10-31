@@ -57,7 +57,7 @@ public class Trade {
 		this.output = output.copy();
 
 		for (TradeInput input : inputs) {
-			if (input != null && !input.getStack().isEmpty()) {
+			if (input != null && !input.stack().isEmpty()) {
 				this.inputs.add(input);
 			}
 		}
@@ -122,7 +122,7 @@ public class Trade {
 	private void fixInput() {
 		for (int i = 0; i < this.inputs.size(); i++) {
 			TradeInput input = this.inputs.get(i);
-			ItemStack stack = input.getStack();
+			ItemStack stack = input.stack();
 
 			if (stack.isEmpty()) {
 				this.inputs.remove(i--);

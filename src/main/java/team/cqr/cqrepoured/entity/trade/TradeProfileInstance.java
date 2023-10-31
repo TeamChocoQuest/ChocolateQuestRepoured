@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
@@ -41,6 +42,8 @@ public class TradeProfileInstance {
 	protected final Map<Integer, TradeData> TRADE_OVERRIDES = new Int2ObjectArrayMap<>();
 	protected final Map<Integer, Integer> TRADE_STOCK = new Int2IntArrayMap();
 	
+	private static final RandomSource FALLBACK_RANDOM = RandomSource.create();
+	
 	// Codec to save and load from/to NBT
 	public static final Codec<TradeProfileInstance> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -60,14 +63,47 @@ public class TradeProfileInstance {
 		}
 	}
 	
+	public int getTradeCount() {
+		if (this.hasAnyTrades()) {
+			return this.TRADE_PROFILE.get().size();
+		}
+		return 0;
+	}
+	
 	@Nullable
 	protected final TradeProfile loadTradeProfile() {
 		if (this.referencedProfile == null) {
 			return null;
 		}
-		return CQRDatapackLoaders.getTradeProfile(this.referencedProfile).get();
+		TradeProfile result = CQRDatapackLoaders.getTradeProfile(this.referencedProfile).get();
+		
+		if (this.TRADE_STOCK == null || this.TRADE_STOCK.isEmpty()) {
+			this.rollInitialStockUponProfileLoad(FALLBACK_RANDOM);
+		}
+		return result;
 	}
 	
+	protected void rollInitialStockUponProfileLoad(final RandomSource source) {
+		if (this.TRADE_PROFILE.get() == null) {
+			return;
+		}
+		for (int i = 0; i < this.TRADE_PROFILE.get().size(); i++) {
+			TradeData trade = this.getTradeAt(i);
+			if (trade == null) {
+				continue;
+			}
+			rollStockForTrade(i, trade, source);
+		}
+	}
+
+	protected void rollStockForTrade(int index, final @Nonnull TradeData trade, final RandomSource source) {
+		if (trade.getStockData().isEmpty()) {
+			this.TRADE_STOCK.remove(index);
+		} else {
+			this.TRADE_STOCK.put(index, trade.getStockData().get().defaultStockSupplier().sample(source));
+		}
+	}
+
 	public TradeProfileInstance(final ResourceLocation referencedProfile, final Entity trader) {
 		this.referencedProfile = referencedProfile;
 		if (this.referencedProfile != null) {
@@ -75,6 +111,30 @@ public class TradeProfileInstance {
 			this.TRADE_PROFILE.get();
 		}
 		this.trader = new WeakReference<Entity>(trader);
+	}
+	
+	public boolean setOverride(final int tradeIndex, final TradeData overrideData) {
+		if (this.TRADE_PROFILE.get() == null) {
+			return false;
+		}
+		if (tradeIndex >= 0 && tradeIndex < this.TRADE_PROFILE.get().size()) {
+			if (overrideData == null) {
+				this.TRADE_OVERRIDES.remove(tradeIndex);
+			}
+			else if (this.TRADE_OVERRIDES.getOrDefault(tradeIndex, null) != overrideData) {
+				this.TRADE_OVERRIDES.put(tradeIndex, overrideData);
+			}
+			RandomSource random = FALLBACK_RANDOM;
+			
+			if (this.trader.get() != null) {
+				random = this.trader.get().level().getRandom();
+			}
+			
+			rollStockForTrade(tradeIndex, overrideData, random);
+			
+			return true;
+		}
+		return false;
 	}
 	
 	// Logic
@@ -87,7 +147,10 @@ public class TradeProfileInstance {
 	}
 	
 	@Nullable
-	protected TradeData getTradeAt(final int index) {
+	public TradeData getTradeAt(final int index) {
+		if (!this.hasAnyTrades()) {
+			return null;
+		}
 		if (!this.TRADE_OVERRIDES.containsKey(index) || this.TRADE_PROFILE.get() == null) {
 			return null;
 		}
@@ -170,6 +233,9 @@ public class TradeProfileInstance {
 		ServerLevel sl = (ServerLevel)level;
 		
 		TradeData toRestock = this.getTradeToRestock(sl);
+		if (toRestock == null) {
+			return;
+		}
 		
 		int tradeIndex = this.TRADE_PROFILE.get().indexOf(toRestock);
 		
@@ -179,6 +245,7 @@ public class TradeProfileInstance {
 	
 	// Saving & Loading
 	
+	@Nullable
 	protected TradeData getTradeToRestock(ServerLevel sl) {
 		final long worldTime = sl.getGameTime();
 		
@@ -204,6 +271,10 @@ public class TradeProfileInstance {
 			}
 			return true;
 		});
+
+		if (relevantEntries.isEmpty()) {
+			return null;
+		}
 		
 		Collection<WeightedObject<TradeData>> weightedObjects = new ArrayList<>();
 		relevantEntries.forEach(td -> weightedObjects.add(new WeightedObject<TradeData>(td, td.getStockData().get().restockData().get().restockWeight())));
