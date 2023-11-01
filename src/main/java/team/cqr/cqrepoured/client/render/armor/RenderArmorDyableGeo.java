@@ -35,7 +35,7 @@ public class RenderArmorDyableGeo<T extends Item & GeoItem> extends GeoArmorRend
 
 		float partialTick = mc.getFrameTime();
 		
-		// Use dyable texture when the colored part is being rendered
+		// Use dyable texture when the colored part is being rendered => r g b values are not equal to 3
 		ResourceLocation rs = this.getTextureLocation(animatable);
 		boolean dyedMarker = this.animatable instanceof DyeableLeatherItem && !(red + green + blue == 3.0F);
 		if (dyedMarker) {
