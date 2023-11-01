@@ -61,4 +61,28 @@ public class CQRConstants {
 		public static final String KEY_ENTITY_VARIANT_ASSETS = "entity-variant-assets";
 	}
 	
+	public static class Translation {
+		
+		protected static String prefix(String ident) {
+			return MODID + "." + ident;
+		}
+		
+		protected static String prefixDescription(String ident) {
+			return prefix("description." + ident);
+		}
+		
+		protected static String prefixGui(String gui, String path) {
+			return prefixDescription("gui." + gui + "." + path);
+		}
+		
+		public static class Trade {
+			public static final String TRADE_RESULT_SUCCESS = prefixGui("trade", "result.success");
+			public static final String TRADE_RESULT_NO_TRADE = prefixGui("trade", "result.no_trade");
+			public static final String TRADE_RESULT_NO_INPUT = prefixGui("trade", "result.no_input");
+			public static final String TRADE_RESULT_NO_STOCK = prefixGui("trade", "result.no_stock");
+			public static final String TRADE_RESULT_INPUT_TYPE_INVALID = prefixGui("trade", "result.item_mismatch");
+			public static final String TRADE_RESULT_INPUT_RULES_NOT_MET = prefixGui("trade", "result.input_rules_not_met");
+			public static final String TRADE_RESULT_CUSTOMER_RULES_NOT_MET = prefixGui("trade", "result.customer_rules_not_met");
+		}
+	}
 }
