@@ -23,6 +23,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -200,25 +201,37 @@ public class TradeProfileInstance {
 		return tradeData.matches(inputs);
 	}
 	
-	public ItemStack getTradeResult(final int tradeIndex, final Entity customer, final ItemStack... inputs) {
+	public Tuple<EBuyResult, ItemStack> getTradeResult(final int tradeIndex, final Entity customer, final ItemStack... inputs) {
 		ItemStack result = ItemStack.EMPTY;
+		EBuyResult actionResult = EBuyResult.SUCCESS;
 		
 		TradeData tradeData = this.getTradeAt(tradeIndex);
 		if (tradeData == null) {
-			return result;
+			actionResult = EBuyResult.NO_TRADE;
 		}
 
-		if (!this.isInStock(tradeIndex, customer)) {
-			return result;
+		else if (!this.isInStock(tradeIndex, customer)) {
+			actionResult = EBuyResult.NO_STOCK;
+		}
+
+		else if (inputs == null || inputs.length == 0) {
+			actionResult = EBuyResult.NO_INPUT;
 		}
 		
 		// Now, let's actually ask the trade if we can buy it...
-		if (this.doesCustomerMeetRequirements(tradeIndex, customer) && this.doesInputMeetRequirements(tradeIndex, inputs)) {
-			return tradeData.getResultingItem();
+		else if (!this.doesCustomerMeetRequirements(tradeIndex, customer)) {
+			actionResult = EBuyResult.CUSTOMER_RULES_NOT_MET;
+		}
+		else if (!this.doesInputMeetRequirements(tradeIndex, inputs)) {
+			actionResult = EBuyResult.INPUT_INVALID;
 		}
 		
+		else if (actionResult.isSuccess()){
+			// NOthing to complain
+			result = tradeData.getResultingItem();
+		}
 		
-		return result;
+		return new Tuple<>(actionResult, result);
 	}
 	
 	public void onStockIncrement() {

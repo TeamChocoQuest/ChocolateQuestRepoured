@@ -81,7 +81,6 @@ public class CQRConstants {
 			public static final String TRADE_RESULT_NO_INPUT = prefixGui("trade", "result.no_input");
 			public static final String TRADE_RESULT_NO_STOCK = prefixGui("trade", "result.no_stock");
 			public static final String TRADE_RESULT_INPUT_TYPE_INVALID = prefixGui("trade", "result.item_mismatch");
-			public static final String TRADE_RESULT_INPUT_RULES_NOT_MET = prefixGui("trade", "result.input_rules_not_met");
 			public static final String TRADE_RESULT_CUSTOMER_RULES_NOT_MET = prefixGui("trade", "result.customer_rules_not_met");
 		}
 	}

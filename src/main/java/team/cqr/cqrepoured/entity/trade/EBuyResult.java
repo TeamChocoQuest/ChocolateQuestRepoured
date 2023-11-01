@@ -10,7 +10,6 @@ public enum EBuyResult {
 	NO_INPUT(CQRConstants.Translation.Trade.TRADE_RESULT_NO_INPUT),
 	NO_STOCK(CQRConstants.Translation.Trade.TRADE_RESULT_NO_STOCK),
 	INPUT_INVALID(CQRConstants.Translation.Trade.TRADE_RESULT_INPUT_TYPE_INVALID),
-	INPUT_RULES_NOT_MET(CQRConstants.Translation.Trade.TRADE_RESULT_INPUT_RULES_NOT_MET),
 	CUSTOMER_RULES_NOT_MET(CQRConstants.Translation.Trade.TRADE_RESULT_CUSTOMER_RULES_NOT_MET);
 	
 	private final String translationKey;

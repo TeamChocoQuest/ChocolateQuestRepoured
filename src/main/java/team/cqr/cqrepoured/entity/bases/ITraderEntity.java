@@ -6,8 +6,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import team.cqr.cqrepoured.entity.trade.EBuyResult;
 import team.cqr.cqrepoured.entity.trade.TradeData;
 import team.cqr.cqrepoured.entity.trade.TradeProfileInstance;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
@@ -73,22 +75,21 @@ public interface ITraderEntity {
 		return result;
 	}
 	
-	public default boolean buy(final int tradeIndex, final Entity customer, Consumer<ItemStack> action, final ItemStack... input) {
+	public default EBuyResult buy(final int tradeIndex, final Entity customer, Consumer<ItemStack> action, final ItemStack... input) {
 		if (this.getTradeProfileInstance() == null) {
-			return false;
+			return EBuyResult.NO_TRADE;
 		}
 		if (!this.getTradeProfileInstance().hasAnyTrades()) {
-			return false;
+			return EBuyResult.NO_TRADE;
 		}
-		ItemStack result = this.getTradeProfileInstance().getTradeResult(tradeIndex, customer, input);
+		Tuple<EBuyResult, ItemStack> result = this.getTradeProfileInstance().getTradeResult(tradeIndex, customer, input);
 		if (result == null) {
-			return false;
+			return EBuyResult.NO_TRADE;
 		}
-		if (result.isEmpty()) {
-			return false;
+		if (result.getA().isSuccess() && result.getB() != null) {
+			action.accept(result.getB());
 		}
-		action.accept(result);
-		return true;
+		return result.getA();
 	}
 	
 	public default void callOnReadData(CompoundTag nbt) {
