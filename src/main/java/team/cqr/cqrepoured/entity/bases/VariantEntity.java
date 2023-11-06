@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.mojang.serialization.DataResult;
 
+import de.dertoaster.multihitboxlib.api.ICustomHitboxProfileSupplier;
+import de.dertoaster.multihitboxlib.entity.hitbox.HitboxProfile;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +36,7 @@ import team.cqr.cqrepoured.entity.profile.variant.SizeEntry;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
 
-public class VariantEntity extends Monster implements VariantHolder<EntityVariant> {
+public class VariantEntity extends Monster implements VariantHolder<EntityVariant>, ICustomHitboxProfileSupplier {
 	
 	/*
 	 * Variants can change the following things:
@@ -207,6 +209,13 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 	@Override
 	public EntityVariant getVariant() {
 		return this.variant;
+	}
+	
+	public Optional<HitboxProfile> getHitboxProfile() {
+		if (this.getVariant() != null && this.getVariant().getOptHitboxProfile() != null) {
+			return this.getVariant().getOptHitboxProfile();
+		}
+		return Optional.empty();
 	}
 	
 }

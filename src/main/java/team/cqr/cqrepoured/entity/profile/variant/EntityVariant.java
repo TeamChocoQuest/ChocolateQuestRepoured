@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.entity.profile.variant;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -8,6 +9,7 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import de.dertoaster.multihitboxlib.entity.hitbox.HitboxProfile;
 import net.minecraft.util.RandomSource;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.LazyLoadField;
@@ -18,6 +20,7 @@ public class EntityVariant {
 	protected final DamageEntry damageConfig;
 	protected final List<AttributeEntry> attributes;
 	protected final List<AssetEntry> assets;
+	protected final Optional<HitboxProfile> hitboxConfig;
 	
 	private final LazyLoadField<CQRWeightedRandom<AssetEntry>> assetWeightedList = new LazyLoadField<>(this::generateWeightedAssetList);
 	
@@ -28,17 +31,23 @@ public class EntityVariant {
 				DamageEntry.CODEC.fieldOf("damage").forGetter(EntityVariant::damageConfig),
 				AttributeEntry.CODEC.listOf().fieldOf("attributes").forGetter(EntityVariant::attributes),
 				//TODO: Change to weighted list!
-				AssetEntry.CODEC.listOf().fieldOf("assets").forGetter(ev -> {return ev.assets;})
+				AssetEntry.CODEC.listOf().fieldOf("assets").forGetter(ev -> {return ev.assets;}),
+				HitboxProfile.CODEC.optionalFieldOf("hitbox").forGetter(ev -> {return ev.hitboxConfig;})
 				
 			).apply(instance, EntityVariant::new);
 	});
 	
-	public EntityVariant(int weight, SizeEntry size, DamageEntry damageConfig, List<AttributeEntry> attributes, List<AssetEntry> assets) {
+	public EntityVariant(int weight, SizeEntry size, DamageEntry damageConfig, List<AttributeEntry> attributes, List<AssetEntry> assets, Optional<HitboxProfile> hbProfile) {
 		this.weight = weight;
 		this.size = size;
 		this.damageConfig = damageConfig;
 		this.attributes = attributes;
 		this.assets = assets;
+		this.hitboxConfig = hbProfile;
+	}
+	
+	public Optional<HitboxProfile> getOptHitboxProfile() {
+		return this.hitboxConfig;
 	}
 	
 	private final CQRWeightedRandom<AssetEntry> generateWeightedAssetList() {
