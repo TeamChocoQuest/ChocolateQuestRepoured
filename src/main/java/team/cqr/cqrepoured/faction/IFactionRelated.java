@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.faction;
 
+import java.util.Optional;
+
 import net.minecraft.world.entity.Entity;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 
@@ -17,6 +19,7 @@ public interface IFactionRelated {
 			return EReputationStateRough.NEUTRAL;
 		}
 	};
+	public static final Optional<IFactionRelated> _FALLBACK_OPTIONAL = Optional.ofNullable(_FALLBACK);
 	
 	public EReputationStateRough getRoughReputationOf(Entity entity);
 	

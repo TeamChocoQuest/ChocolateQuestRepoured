@@ -76,7 +76,7 @@ public class FactionRelationCapabilityImplementation implements IFactionRelation
 				Map<Faction, EReputationState> repMap = new HashMap<>(this.reputationStorage.size());
 				this.reputationStorage.forEach((id, val) -> {
 					CQRDatapackLoaders.getFaction(id).ifPresent(f -> {
-						repMap.put(f, EReputationState.getByInt(val));
+						repMap.putIfAbsent(f, EReputationState.getByInt(val));
 					});
 				});
 				return efi.getRoughReputationOf(other, repMap);

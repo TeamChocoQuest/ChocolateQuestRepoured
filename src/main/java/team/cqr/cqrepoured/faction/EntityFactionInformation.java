@@ -64,6 +64,10 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 			return EReputationStateRough.NEUTRAL;
 		}
 	}
+	
+	public boolean hasInformationFor(Faction faction) {
+		return (!this.memberFactions.isEmpty() && this.memberFactions.get().contains(faction)) || this.reputationMapping.containsKey(faction);
+	}
 
 	@Override
 	public EReputationStateRough getRoughReputationOf(Entity entity) {
