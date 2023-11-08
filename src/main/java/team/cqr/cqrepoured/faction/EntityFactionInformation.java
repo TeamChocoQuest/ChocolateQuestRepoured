@@ -17,7 +17,6 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 	private final Map<Faction, EReputationState> reputationMapping;
 	private final Optional<List<Faction>> memberFactions; 
 	private final EReputationState fallbackReputation;
-	private final boolean canChangeReputation;
 	
 	public static final Codec<EntityFactionInformation> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -29,22 +28,16 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 				}),
 				CQRDatapackLoaders.FACTIONS.byNameCodec().listOf().optionalFieldOf("memberships").forGetter((efi) -> {
 					return efi.memberFactions;
-				}), 
-				Codec.BOOL.fieldOf("canChangeReputation").forGetter(EntityFactionInformation::canChangeReputation)
+				})
 		).apply(instance, EntityFactionInformation::new);
 	});
 	
-	EntityFactionInformation(Map<Faction, EReputationState> reputationMapping, EReputationState fallbackReputation, Optional<List<Faction>> memberFactions, boolean canChangeReputation) {
+	EntityFactionInformation(Map<Faction, EReputationState> reputationMapping, EReputationState fallbackReputation, Optional<List<Faction>> memberFactions) {
 		this.reputationMapping = reputationMapping;
 		this.fallbackReputation = fallbackReputation;
 		this.memberFactions = memberFactions;
-		this.canChangeReputation = canChangeReputation;
 	}
 	
-	public boolean canChangeReputation() {
-		return this.canChangeReputation;
-	}
-
 	@Override
 	public boolean isMemberOf(Faction faction) {
 		return this.memberFactions.isPresent() && this.memberFactions.get().contains(faction);
