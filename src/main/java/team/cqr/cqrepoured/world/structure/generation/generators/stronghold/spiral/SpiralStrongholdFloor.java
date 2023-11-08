@@ -26,9 +26,11 @@ public class SpiralStrongholdFloor {
 	private int sideLength;
 	private int roomCount;
 	private EStrongholdRoomType[][] roomGrid;
+	private Tuple[][] previousCoords;
 	private BlockPos[][] coordinateGrid;
+	private boolean isReversed;
 
-	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand, boolean isReversed) {
 		this.generator = generator;
 		this.dungeonBuilder = dungeonBuilder;
 		this.entranceCoordinates = entrancePos;
@@ -38,25 +40,37 @@ public class SpiralStrongholdFloor {
 		this.roomCount = roomCount;
 		this.roomGrid = new EStrongholdRoomType[sideLength][sideLength];
 		this.coordinateGrid = new BlockPos[sideLength][sideLength];
+		this.previousCoords = new Tuple[sideLength][sideLength];
 		this.random = rand;
+		this.isReversed = isReversed;
 	}
 
-	public void calculateRoomGrid(EStrongholdRoomType entranceRoomType, boolean rev) {
+	public void calculateRoomGrid(EStrongholdRoomType entranceRoomType) {
 		int x = this.entranceIndex.getFirst();
 		int z = this.entranceIndex.getSecond();
+		boolean isFirst = true;
+		int lastX = x;
+		int lastZ = z;
 		while (this.roomCount > 0) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				this.previousCoords[x][z] = new Tuple<>(lastX, lastZ);
+			}
+			lastX = x;
+			lastZ = z;
 			this.roomCount--;
 			if (this.roomCount == 0) {
 				this.exitIndex = new Tuple<>(x, z);
 				if (this.isLastFloor) {
 					this.roomGrid[x][z] = EStrongholdRoomType.BOSS;
 				} else {
-					this.roomGrid[x][z] = this.getExitRoomType(x, z, rev);
+					this.roomGrid[x][z] = this.getExitRoomType(x, z, this.isReversed);
 				}
 				break;
 			}
 			if (x == 0 && z == 0) {
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.CURVE_SE;
 					x += 1;
 				} else {
@@ -66,7 +80,7 @@ public class SpiralStrongholdFloor {
 				continue;
 			}
 			if (x == (this.sideLength - 1) && z == (this.sideLength - 1)) {
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.CURVE_NW;
 					x -= 1;
 				} else {
@@ -76,7 +90,7 @@ public class SpiralStrongholdFloor {
 				continue;
 			}
 			if (x == 0 && z == (this.sideLength - 1)) {
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.CURVE_EN;
 					z -= 1;
 				} else {
@@ -86,7 +100,7 @@ public class SpiralStrongholdFloor {
 				continue;
 			}
 			if (x == (this.sideLength - 1) && z == 0) {
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.CURVE_WS;
 					z += 1;
 				} else {
@@ -97,7 +111,7 @@ public class SpiralStrongholdFloor {
 			}
 			if (x == 0) {
 				// Left side
-				if (!rev) {
+				if (!this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
@@ -108,7 +122,7 @@ public class SpiralStrongholdFloor {
 			}
 			if (x == (this.sideLength - 1)) {
 				// Right side
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
@@ -119,7 +133,7 @@ public class SpiralStrongholdFloor {
 			}
 			if (z == 0) {
 				// Bottom side
-				if (rev) {
+				if (this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.HALLWAY_WE;
 					x += 1;
 				} else {
@@ -130,7 +144,7 @@ public class SpiralStrongholdFloor {
 			}
 			if (z == (this.sideLength - 1)) {
 				// Top side
-				if (!rev) {
+				if (!this.isReversed) {
 					this.roomGrid[x][z] = EStrongholdRoomType.HALLWAY_WE;
 					x += 1;
 				} else {
@@ -225,13 +239,30 @@ public class SpiralStrongholdFloor {
 	}
 
 	public void buildRooms(DungeonVolcano dungeon, World world) {
+		File[][] fileMap = new File[this.sideLength][this.sideLength];
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				if ((iX == 0 || iX == (this.sideLength - 1)) || (iZ == 0 || iZ == (this.sideLength - 1))) {
 					EStrongholdRoomType type = this.roomGrid[iX][iZ];
 					if (type != null && type != EStrongholdRoomType.NONE) {
 						if (dungeon != null && world != null) {
+							Tuple<Integer, Integer> prevCoords = this.previousCoords[iX][iZ];
+							File previous = null;
+							EStrongholdRoomType prevType = EStrongholdRoomType.NONE;
+							if (prevCoords != null) {
+								previous = fileMap[prevCoords.getFirst()][prevCoords.getSecond()];
+								prevType = this.roomGrid[prevCoords.getFirst()][prevCoords.getSecond()];
+							}
 							File file = dungeon.getRoomNBTFileForType(type, this.random);
+							final int roomCount = dungeon.getRoomNBTCountForType(prevType);
+							if (file == previous && !prevType.equals(EStrongholdRoomType.NONE) && roomCount > 1 && type.equals(prevType)) {
+								int counter = 0; 
+								while (file.getPath().equalsIgnoreCase(previous.getPath()) && counter < roomCount) {
+									counter++;
+									file = dungeon.getRoomNBTFileForType(type, this.random);
+								}
+							}
+							fileMap[iX][iZ] = file;
 							if (file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
 								room.addAll(this.dungeonBuilder, this.coordinateGrid[iX][iZ], Offset.CENTER);

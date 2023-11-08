@@ -121,8 +121,8 @@ public class SpiralStrongholdBuilder {
 		EStrongholdRoomType firstRoomOverride = entranceType;
 		for (int i = 0; i < this.floors.length; i++) {
 			int floorRoomCount = i < this.floors.length - 1 ? maxRoomsPerFloor : this.roomCount % maxRoomsPerFloor;
-			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonBuilder, posTuple, entranceX, entranceZ, roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount, this.random);
-			floor.calculateRoomGrid(entranceType, (i + 1) % 2 == 0);
+			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonBuilder, posTuple, entranceX, entranceZ, roomCounter <= 0 || i == (this.floors.length - 1), this.floorSideLength, floorRoomCount, this.random, (i + 1) % 2 == 0);
+			floor.calculateRoomGrid(entranceType);
 			floor.calculateCoordinates(y, this.dungeon.getRoomSizeX(), this.dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();
 			if (i != 0) {

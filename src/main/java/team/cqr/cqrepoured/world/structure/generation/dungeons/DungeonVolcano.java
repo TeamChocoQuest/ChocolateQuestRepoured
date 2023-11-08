@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import org.apache.commons.io.FileUtils;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -131,8 +133,8 @@ public class DungeonVolcano extends DungeonBase {
 	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
 	}
-
-	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {
+	
+	private File getDirForRoomType(EStrongholdRoomType type) {
 		File dir = null;
 		switch (type) {
 		case BOSS:
@@ -189,10 +191,24 @@ public class DungeonVolcano extends DungeonBase {
 		default:
 			break;
 		}
+		return dir;
+	}
+
+	public File getRoomNBTFileForType(EStrongholdRoomType type, Random rand) {
+		File dir = this.getDirForRoomType(type);
 		if (dir != null && dir.isDirectory() && dir.list(FileIOUtil.getNBTFileFilter()).length > 0) {
 			return this.getStructureFileFromDirectory(dir, rand);
 		}
 		return null;
+	}
+	
+	public int getRoomNBTCountForType(EStrongholdRoomType type) {
+		File dir = this.getDirForRoomType(type);
+		if (dir != null) {
+			return FileUtils.listFiles(dir, new String[] { "nbt"}, true).size();
+		} else {
+			return 0;
+		}
 	}
 
 	public ResourceLocation getRampMob() {
