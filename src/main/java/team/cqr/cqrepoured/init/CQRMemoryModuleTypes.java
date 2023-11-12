@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
@@ -23,6 +24,10 @@ public class CQRMemoryModuleTypes {
 
 	public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEAREST_ALLIES = register("nearest_allies");
 	public static final RegistryObject<MemoryModuleType<NearestVisibleLivingEntities>> NEAREST_VISIBLE_ALLIES = register("nearest_visible_allies");
+	
+	// Undead
+	public static final RegistryObject<MemoryModuleType<Boolean>> BURIED = register("buried", Codec.BOOL);
+	public static final RegistryObject<MemoryModuleType<List<BlockPos>>> GRAVE_SPOTS = register("grave_spot", BlockPos.CODEC.listOf());
 
 	private static <T> RegistryObject<MemoryModuleType<T>> register(String id) {
 		return register(id, null);
