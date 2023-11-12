@@ -39,6 +39,15 @@ public interface ISynchedDataHelper {
 	@SuppressWarnings("rawtypes")
 	public Map<EntityDataAccessor, DataHolder> accessHolderMap();
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public default <T> void setSided(EntityDataAccessor<T> accessor, T value) {
+		EntityDataAccessor casted = (EntityDataAccessor) accessor;
+		DataHolder holder = this.accessHolderMap().getOrDefault(casted, null);
+		if (holder != null) {
+			this.setSided(accessor, (DataHolder<T>)holder, value);
+		}
+	}
+	
 	public default <T> void setSided(EntityDataAccessor<T> accessor, DataHolder<T> clientHolder, T value) {
 		Entity self = (Entity)this;
 		
