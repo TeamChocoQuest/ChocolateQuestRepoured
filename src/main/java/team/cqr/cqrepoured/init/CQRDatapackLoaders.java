@@ -8,15 +8,18 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 
+import commoble.databuddy.codec.RegistryDispatcher;
 import commoble.databuddy.data.CodecJsonDataManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.entity.profile.EntityProfile;
+import team.cqr.cqrepoured.entity.profile.variant.extradata.IVariantExtraData;
 import team.cqr.cqrepoured.entity.trade.TradeProfile;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
@@ -40,6 +43,12 @@ public class CQRDatapackLoaders {
 	// TODO: Maybe make this synched for JEI integration?
 	public static final CodecJsonDataManager<TradeProfile> TRADE_PROFILES = new CodecJsonDataManager<>("cqr/trades", TradeProfile.CODEC);
 	public static final CodecJsonDataManager<EntityProfile> ENTITY_PROFILES = new CodecJsonDataManager<>("entity/profile", EntityProfile.CODEC);
+	public static final RegistryDispatcher<IVariantExtraData<?>> VARIANT_EXTRA_DATA_DISPATCHER = RegistryDispatcher.makeDispatchForgeRegistry(
+			FMLJavaModLoadingContext.get().getModEventBus(), 
+			CQRMain.prefix("registry/dispatcher/variant/extradata"), 
+			data -> data.getType(),
+			builder -> {}
+	); 
 	
 	public static void init() {
 		TEXTURE_SETS.subscribeAsSyncable(CQRMain.NETWORK, SPacketSyncTextureSet::new);
