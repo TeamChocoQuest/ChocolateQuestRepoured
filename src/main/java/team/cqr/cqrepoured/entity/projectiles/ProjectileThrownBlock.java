@@ -100,8 +100,8 @@ public class ProjectileThrownBlock extends ProjectileBase implements IEntityAddi
 					double dz = -0.5 + this.rand.nextDouble();
 					dz *= particleSpeed;
 					ws.spawnParticle(EnumParticleTypes.BLOCK_CRACK, pos.x, pos.y, pos.z, dx, dy, dz, Block.getStateId(this.state));
-					this.playSound(this.state.getBlock().getSoundType(this.state, this.world, this.getPosition(), this).getPlaceSound(), 1.5F, 1.25F);
 				}
+				this.playSound(this.state.getBlock().getSoundType(this.state, this.world, this.getPosition(), this).getPlaceSound(), 1.5F, 1.25F);
 			}
 		}
 

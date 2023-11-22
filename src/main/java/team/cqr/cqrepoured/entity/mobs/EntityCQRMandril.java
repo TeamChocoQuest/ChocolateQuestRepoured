@@ -9,6 +9,9 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 
 public class EntityCQRMandril extends AbstractEntityCQR {
 
+	private double prevTailAnimationProgress;
+	private double tailAnimationProgress;
+
 	public EntityCQRMandril(World worldIn) {
 		super(worldIn);
 	}
@@ -52,6 +55,19 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	@Override
 	public float getDefaultHeight() {
 		return 1.9F;
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (this.world.isRemote) {
+			this.prevTailAnimationProgress = this.tailAnimationProgress;
+			this.tailAnimationProgress += 1.0D + this.limbSwingAmount * 4.0D;
+		}
+	}
+
+	public double getTailAnimationProgress(float partialTick) {
+		return this.prevTailAnimationProgress + (this.tailAnimationProgress - this.prevTailAnimationProgress) * partialTick;
 	}
 
 }

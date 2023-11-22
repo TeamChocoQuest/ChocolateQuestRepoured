@@ -3,7 +3,10 @@ package team.cqr.cqrepoured.client.model.entity.mobs;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
+import team.cqr.cqrepoured.entity.mobs.EntityCQRMandril;
+import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 /**
  * ModelMonkey - Created by DerToaster Created using Tabula 7.0.1
@@ -129,22 +132,21 @@ public class ModelCQRMandril extends ModelCQRBiped {
 		ModelBase.copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		ModelBase.copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 
-		if (Math.abs(limbSwingAmount) > 0.1) {
-			this.renderTailAnimation(entityIn.ticksExisted, 1.5);
-		} else {
-			this.renderTailAnimation(entityIn.ticksExisted, 1.0);
-		}
-
+		this.renderTailAnimation(((EntityCQRMandril) entityIn).getTailAnimationProgress(PartialTicksUtil.getCurrentPartialTicks()));
 	}
 
-	protected void renderTailAnimation(float ageInTicks, double speedMultiplier) {
-		float angleY = new Float(Math.sin(((2F * Math.PI) / (50 / speedMultiplier)) * ageInTicks)) / 3F;
-		float angleX = new Float(Math.cos(((2F * Math.PI) / (80 / speedMultiplier)) * ageInTicks)) / 4F;
-		float angleZ = new Float(Math.cos(((2F * Math.PI) / (100 / speedMultiplier)) * ageInTicks)) / 3F;
+	protected void renderTailAnimation(double tailAnimationProgress) {
+		float angleY = MathHelper.sin(2.0F * (float) Math.PI * fastModulo(tailAnimationProgress, 50) / 50.0F) / 3.0F;
+		float angleX = MathHelper.cos(2.0F * (float) Math.PI * fastModulo(tailAnimationProgress, 80) / 80.0F) / 4.0F;
+		float angleZ = MathHelper.cos(2.0F * (float) Math.PI * fastModulo(tailAnimationProgress, 100) / 100.0F) / 3.0F;
 		this.tail1.rotateAngleY = angleY;
 		this.tail2.rotateAngleX = angleX * 0.75F;
 		this.tail2.rotateAngleZ = -angleX * 0.5F;
 		this.tail3.rotateAngleX = angleZ;
+	}
+
+	private static float fastModulo(double x, int y) {
+		return (int) x % y + (float) (x - MathHelper.floor(x));
 	}
 
 }
