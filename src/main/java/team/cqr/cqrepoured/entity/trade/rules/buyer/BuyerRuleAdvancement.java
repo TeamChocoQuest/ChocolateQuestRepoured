@@ -47,7 +47,7 @@ public record BuyerRuleAdvancement(
 		}
 		
 		if (!countMatching) {
-			return !this.isBlacklist();
+			return !this.isBlacklist() && matches == advancements.size();
 		} else {
 			if (this.minMatches.isPresent() && this.maxMatches.isPresent()) {
 				return this.minMatches.get() <= matches && this.maxMatches.get() >= matches && !this.isBlacklist();
