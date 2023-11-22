@@ -4,6 +4,7 @@ import java.time.Month;
 import java.time.MonthDay;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigManager;
@@ -225,7 +226,33 @@ public class CQRConfig {
 		public boolean protectionSystemEnabled = true;
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus", "gravestone:gravestone", "openblocks:grave" };
+		public String[] protectionSystemBreakableBlockWhitelist = {
+				Blocks.TALLGRASS.getRegistryName().toString(),
+				Blocks.DOUBLE_PLANT.getRegistryName().toString(),
+				Blocks.MOB_SPAWNER.getRegistryName().toString(),
+				Blocks.TORCH.getRegistryName().toString(),
+				"cqrepoured:unlit_torch", 
+				"cqrepoured:phylactery", 
+				"cqrepoured:force_field_nexus", 
+				"gravestone:gravestone", 
+				"openblocks:grave",
+				Blocks.WHITE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.ORANGE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.PURPLE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.LIGHT_BLUE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.YELLOW_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.LIME_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.PINK_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.GRAY_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.SILVER_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.CYAN_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.PURPLE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.BLUE_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.BROWN_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.GREEN_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.RED_SHULKER_BOX.getRegistryName().toString(),
+				Blocks.BLACK_SHULKER_BOX.getRegistryName().toString(),
+			};
 
 		@Config.Comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
