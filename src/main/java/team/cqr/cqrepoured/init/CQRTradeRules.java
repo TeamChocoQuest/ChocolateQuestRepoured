@@ -7,6 +7,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.entity.trade.rules.buyer.BuyerRuleAdvancement;
+import team.cqr.cqrepoured.entity.trade.rules.buyer.BuyerRuleHasEffect;
+import team.cqr.cqrepoured.entity.trade.rules.buyer.BuyerRuleTimeOfDay;
 import team.cqr.cqrepoured.entity.trade.rules.buyer.ITradeBuyerRule;
 import team.cqr.cqrepoured.entity.trade.rules.input.ITradeMatchRule;
 import team.cqr.cqrepoured.entity.trade.rules.input.MatchEnchantmentList;
@@ -40,5 +42,7 @@ public class CQRTradeRules {
 	public static final RegistryObject<Codec<? extends ITradeMatchRule>> MATCH_ENCHANTMENT_LIST = TRADE_MATCH_RULE_DISPATCHER.registry().register("match_enchantment_list", () -> MatchEnchantmentList.CODEC);
 	
 	public static final RegistryObject<Codec<? extends ITradeBuyerRule>> RULE_ADVANCEMENTS = TRADE_CUSTOMER_RULE_DISPATCHER.registry().register("rule_advancements", () -> BuyerRuleAdvancement.CODEC);
+	public static final RegistryObject<Codec<? extends ITradeBuyerRule>> RULE_MOB_EFFECTS = TRADE_CUSTOMER_RULE_DISPATCHER.registry().register("rule_mob_effects", () -> BuyerRuleHasEffect.CODEC);
+	public static final RegistryObject<Codec<? extends ITradeBuyerRule>> RULE_TIME_OF_DAY = TRADE_CUSTOMER_RULE_DISPATCHER.registry().register("rule_time_of_day", () -> BuyerRuleTimeOfDay.CODEC);
 	
 }
