@@ -1,5 +1,5 @@
 plugins {
-    id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
+    id 'net.neoforged.gradle' version "${neoforge_gradle_version}"
     id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
     id 'eclipse'
     id 'idea'
@@ -160,7 +160,7 @@ repositories {
 
 dependencies {
     // Base
-    minecraft("net.minecraftforge:forge:${mc_version}-${forge_version}")
+    minecraft("net.neoforged:forge:${mc_version}-${neoforge_version}")
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
 
     // Dependencies (Built-in)
