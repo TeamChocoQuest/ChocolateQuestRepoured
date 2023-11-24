@@ -43,7 +43,7 @@ import mod.azure.azurelib3.core.controller.AnimationController;
 import mod.azure.azurelib3.core.event.predicate.AnimationEvent;
 import mod.azure.azurelib3.core.manager.AnimationData;
 import mod.azure.azurelib3.core.manager.AnimationFactory;
-import mod.azure.azurelib3.util.GeckoLibUtil;
+import mod.azure.azurelib3.util.AzureLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.IEntityMultiPart;
 import team.cqr.cqrepoured.entity.ai.EntityAIIdleSit;
@@ -603,7 +603,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 	@OnlyIn(Dist.CLIENT)
 	private int currentAnimationClient/* = 0 */; // Important: For SideOnly fields => DO NOT set an initial value at declaration, that WON'T work
 

@@ -48,7 +48,7 @@ import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.keyframe.event.SoundKeyframeEvent;
 import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.azurelib3.core.IAnimatable;
 import mod.azure.azurelib3.core.builder.AnimationBuilder;
 import mod.azure.azurelib3.core.event.predicate.AnimationEvent;
@@ -183,7 +183,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements Geo
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 
 	// Direct AI access
 	private BossAITeleportAroundHome teleportAI;

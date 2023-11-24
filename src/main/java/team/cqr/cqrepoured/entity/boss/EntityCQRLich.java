@@ -17,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.azurelib3.core.manager.AnimationData;
 import mod.azure.azurelib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRConstants;
@@ -186,7 +186,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 
 	@Override
 	public AnimationFactory getFactory() {

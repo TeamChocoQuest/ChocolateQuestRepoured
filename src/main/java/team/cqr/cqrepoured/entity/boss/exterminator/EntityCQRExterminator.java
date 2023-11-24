@@ -40,7 +40,7 @@ import net.minecraftforge.network.PacketDistributor;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.azurelib3.core.builder.AnimationBuilder;
 import mod.azure.azurelib3.core.event.predicate.AnimationEvent;
 import mod.azure.azurelib3.core.manager.AnimationData;
@@ -107,7 +107,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	protected static final EntityDataAccessor<Boolean> EMITTER_RIGHT_ACTIVE = SynchedEntityData.<Boolean>defineId(EntityCQRExterminator.class, EntityDataSerializers.BOOLEAN);
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 	private boolean partSoundFlag;
 
 	public EntityCQRExterminator(Level world) {

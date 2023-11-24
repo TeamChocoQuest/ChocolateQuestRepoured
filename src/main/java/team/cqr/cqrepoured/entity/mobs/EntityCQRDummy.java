@@ -11,7 +11,7 @@ import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib3.core.manager.AnimationData;
 import mod.azure.azurelib3.core.manager.AnimationFactory;
-import mod.azure.azurelib3.util.GeckoLibUtil;
+import mod.azure.azurelib3.util.AzureLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.AnimationEvent;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
@@ -50,7 +50,7 @@ public class EntityCQRDummy extends AbstractEntityCQR implements IAnimatableCQR 
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 
 	@Override
 	public AnimationFactory getFactory() {

@@ -25,7 +25,7 @@ import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.animation.RawAnimation;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.init.CQREntityTypes;
@@ -256,7 +256,7 @@ public class EntityFlyingSkullMinion extends FlyingMob implements IDontRenderFir
 	}
 
 	// Geckolib
-	private AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {

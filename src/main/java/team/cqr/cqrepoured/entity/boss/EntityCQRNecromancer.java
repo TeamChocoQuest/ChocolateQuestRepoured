@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import mod.azure.azurelib.core.animation.AnimationController;
 import mod.azure.azurelib.core.object.PlayState;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.azurelib3.core.builder.AnimationBuilder;
 import mod.azure.azurelib3.core.event.predicate.AnimationEvent;
 import mod.azure.azurelib3.core.manager.AnimationData;
@@ -219,7 +219,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 	
 	@Override
 	public AnimationFactory getFactory() {

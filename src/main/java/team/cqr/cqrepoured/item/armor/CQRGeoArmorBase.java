@@ -14,7 +14,7 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import mod.azure.azurelib.animatable.GeoItem;
 import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
 import mod.azure.azurelib.renderer.GeoArmorRenderer;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 
 public abstract class CQRGeoArmorBase extends ArmorItem implements GeoItem {
 	
@@ -22,7 +22,7 @@ public abstract class CQRGeoArmorBase extends ArmorItem implements GeoItem {
 		super(pMaterial, pType, pProperties);
 	}
 
-	protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	protected final AnimatableInstanceCache cache = AzureLibUtil.createInstanceCache(this);
 
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {

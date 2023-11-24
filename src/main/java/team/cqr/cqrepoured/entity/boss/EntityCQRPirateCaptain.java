@@ -21,7 +21,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import mod.azure.azurelib.util.AzureLibUtil;
 import mod.azure.azurelib3.core.manager.AnimationData;
 import mod.azure.azurelib3.core.manager.AnimationFactory;
 import team.cqr.cqrepoured.CQRConstants;
@@ -183,7 +183,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss implements IAn
 	}
 
 	// Geckolib
-	private AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private AnimationFactory factory = AzureLibUtil.createFactory(this);
 
 	@Override
 	public AnimationFactory getFactory() {
