@@ -95,6 +95,10 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 				case SITTING:
 					event.setNewSize(EntityDimensions.scalable(sizeEntry.width(), sizeEntry.height()).scale(ve.getScale()).scale(1F, 0.66F), true);
 					break;
+				case DIGGING:
+				case EMERGING:
+					event.setNewSize(EntityDimensions.scalable(sizeEntry.width(), sizeEntry.height()).scale(ve.getScale()).scale(1F, 0.5F), true);
+					break;
 				case SLEEPING:
 					event.setNewSize(EntityDimensions.scalable(sizeEntry.width(), sizeEntry.height()).scale(ve.getScale()).scale(1F, 0.5F), true);
 					break;
