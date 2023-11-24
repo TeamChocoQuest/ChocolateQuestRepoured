@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.GeckoLibCache;
+import mod.azure.azurelib.cache.AzureLibCache;
 import mod.azure.azurelib.constant.DataTickets;
 import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import mod.azure.azurelib.core.animation.Animation;
@@ -105,7 +105,7 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 	protected BakedAnimations[] getAnimationHierarchy(T animatable) {
 		BakedAnimations[] result = new BakedAnimations[this.ANIMATION_HIERARCHY.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = GeckoLibCache.getBakedAnimations().get(this.ANIMATION_HIERARCHY[i]);
+			result[i] = AzureLibCache.getBakedAnimations().get(this.ANIMATION_HIERARCHY[i]);
 		}
 		return result;
 	}

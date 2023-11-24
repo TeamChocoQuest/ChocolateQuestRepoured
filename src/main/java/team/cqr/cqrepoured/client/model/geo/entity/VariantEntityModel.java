@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.GeckoLibCache;
+import mod.azure.azurelib.cache.AzureLibCache;
 import mod.azure.azurelib.loading.object.BakedAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
@@ -57,7 +57,7 @@ public class VariantEntityModel<T extends VariantEntity & GeoEntity> extends Abs
 		BakedAnimations[] result = super.getAnimationHierarchy(entity);
 		if (entity.getClientOverrides().isPresent()) {
 			if (entity.getClientOverrides().get().optAnimations().isPresent()) {
-				BakedAnimations anim = GeckoLibCache.getBakedAnimations().get(entity.getClientOverrides().get().optAnimations().get());
+				BakedAnimations anim = AzureLibCache.getBakedAnimations().get(entity.getClientOverrides().get().optAnimations().get());
 				if (anim != null) {
 					return ArrayUtils.add(result, anim);
 				}
