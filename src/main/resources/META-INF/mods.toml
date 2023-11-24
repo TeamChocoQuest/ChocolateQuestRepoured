@@ -24,9 +24,9 @@ A lot of features are still to be implemented, so please follow updates.
 	side="BOTH"
 	
 [[dependencies.cqrepoured]]
-	modId="forge"
+	modId="neoforge"
 	mandatory=true
-	versionRange="[46,)"
+	versionRange="[47,)"
 	ordering="NONE"
 	side="BOTH"
 
@@ -37,8 +37,8 @@ A lot of features are still to be implemented, so please follow updates.
 
 # Dependencies (Required)
 [[dependencies.cqrepoured]]
-	modId="geckolib"
-	versionRange="[4.2,)"
+	modId="azurelib"
+	versionRange="[2.0.400,)"
 	mandatory=true
 	ordering="NONE"
 	side="BOTH"
