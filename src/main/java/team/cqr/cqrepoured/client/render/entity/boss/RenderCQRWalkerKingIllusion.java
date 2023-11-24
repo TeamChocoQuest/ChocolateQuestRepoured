@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.renderer.layer.AutoGlowingGeoLayer;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.ModelWalkerKingGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;
 import team.cqr.cqrepoured.entity.misc.EntityWalkerKingIllusion;

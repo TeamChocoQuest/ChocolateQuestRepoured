@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.client.model.geo.entity;
 import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.cache.GeckoLibCache;
-import software.bernie.geckolib.loading.object.BakedAnimations;
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib.cache.GeckoLibCache;
+import mod.azure.azurelib.loading.object.BakedAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.bases.VariantEntity;

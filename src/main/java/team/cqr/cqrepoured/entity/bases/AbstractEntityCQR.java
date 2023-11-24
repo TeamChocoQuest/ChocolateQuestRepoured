@@ -80,7 +80,7 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.PacketDistributor;
-import software.bernie.geckolib.core.animation.AnimationState;
+import mod.azure.azurelib.core.animation.AnimationState;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.client.init.ESpeechBubble;

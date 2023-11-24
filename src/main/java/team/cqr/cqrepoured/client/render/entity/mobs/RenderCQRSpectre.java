@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.entity.mobs;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.core.object.Color;
+import mod.azure.azurelib.core.object.Color;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQRSpectreGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;

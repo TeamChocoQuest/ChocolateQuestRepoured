@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.renderer.layer.AutoGlowingGeoLayer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.ModelCQREndermanGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;

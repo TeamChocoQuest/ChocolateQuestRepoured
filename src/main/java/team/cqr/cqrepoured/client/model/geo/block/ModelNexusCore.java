@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.geo.block;
 
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.model.GeoModel;
+import mod.azure.azurelib.model.GeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;

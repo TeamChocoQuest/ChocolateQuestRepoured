@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.model.geo.entity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;

@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.entity.boss;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.renderer.layer.AutoGlowingGeoLayer;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.model.geo.entity.humanoid.boss.mage.AbstractModelMageGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQRBipedBaseGeo;

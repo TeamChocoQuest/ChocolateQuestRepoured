@@ -31,7 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.tslat.effectslib.api.ExtendedMobEffect;
 import net.tslat.effectslib.api.ExtendedMobEffectHolder;
-import software.bernie.geckolib.core.object.Color;
+import mod.azure.azurelib.core.object.Color;
 import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.faction.IFactionRelated;

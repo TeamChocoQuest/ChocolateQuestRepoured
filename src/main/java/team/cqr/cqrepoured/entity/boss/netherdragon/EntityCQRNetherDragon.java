@@ -45,15 +45,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.IAnimationTickable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import mod.azure.azurelib.animatable.GeoEntity;
+import mod.azure.azurelib3.core.IAnimatable;
+import mod.azure.azurelib3.core.IAnimationTickable;
+import mod.azure.azurelib3.core.PlayState;
+import mod.azure.azurelib3.core.builder.AnimationBuilder;
+import mod.azure.azurelib3.core.controller.AnimationController;
+import mod.azure.azurelib3.core.event.predicate.AnimationEvent;
+import mod.azure.azurelib3.core.manager.AnimationData;
+import mod.azure.azurelib3.core.manager.AnimationFactory;
+import mod.azure.azurelib3.util.GeckoLibUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.ICirclingEntity;
 import team.cqr.cqrepoured.entity.IDontRenderFire;
@@ -77,7 +78,7 @@ import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.util.EntityUtil;
 import team.cqr.cqrepoured.util.VectorUtil;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, RangedAttackMob, ICirclingEntity, IDontRenderFire, IAnimationTickable, IAnimatable {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart<EntityCQRNetherDragon>, RangedAttackMob, ICirclingEntity, IDontRenderFire, GeoEntity {
 
 	/**
 	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks

@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
+import mod.azure.azurelib.renderer.layer.BlockAndItemGeoLayer;
+import mod.azure.azurelib.renderer.layer.ItemArmorGeoLayer;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelGiantTortoiseGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;

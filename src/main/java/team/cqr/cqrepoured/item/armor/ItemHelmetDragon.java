@@ -2,14 +2,15 @@ package team.cqr.cqrepoured.item.armor;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.entity.MobEntity;
+
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.item.IArmorMaterial;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemHelmetDragon extends ArmorItem {
@@ -18,7 +19,7 @@ public class ItemHelmetDragon extends ArmorItem {
 	//private AttributeModifier health;
 	private final Multimap<Attribute, AttributeModifier> attributeModifier;
 
-	public ItemHelmetDragon(IArmorMaterial materialIn, EquipmentSlot equipmentSlotIn, Properties props) {
+	public ItemHelmetDragon(ArmorMaterial materialIn, Type equipmentSlotIn, Properties props) {
 		super(materialIn, equipmentSlotIn, props);
 
 		//this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, Operation.ADDITION);
@@ -45,7 +46,7 @@ public class ItemHelmetDragon extends ArmorItem {
 	} */
 	@Override
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-		return slot == MobEntity.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
+		return slot == Mob.getEquipmentSlotForItem(stack) ? this.attributeModifier : super.getAttributeModifiers(slot, stack);
 	}
 
 	/*

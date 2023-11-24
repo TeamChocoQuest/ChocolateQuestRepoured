@@ -3,9 +3,9 @@ package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 import java.util.Optional;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
+import mod.azure.azurelib.renderer.layer.AutoGlowingGeoLayer;
+import mod.azure.azurelib.renderer.layer.BlockAndItemGeoLayer;
+import mod.azure.azurelib.renderer.layer.ItemArmorGeoLayer;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelNetherDragonHeadGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
