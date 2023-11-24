@@ -1,0 +1,6 @@
+{
+  "message_id": "electric",
+  "exhaustion": 0.5,
+  "scaling": "always",
+  "effects": "poking"
+}
