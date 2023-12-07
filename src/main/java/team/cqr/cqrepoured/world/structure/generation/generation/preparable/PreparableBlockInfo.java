@@ -3,16 +3,16 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.util.ByteBufUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
@@ -29,7 +29,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(this.state);
 
@@ -41,7 +41,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			this.tileEntityData.putInt("x", pos.getX());
 			this.tileEntityData.putInt("y", pos.getY());
 			this.tileEntityData.putInt("z", pos.getZ());
-			blockEntity.load(state, this.tileEntityData);
+			blockEntity.load(this.tileEntityData);
 			placement.transform(blockEntity);
 			this.tileEntityData.remove("x");
 			this.tileEntityData.remove("y");
@@ -50,7 +50,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(this.state);
 
@@ -62,7 +62,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			this.tileEntityData.putInt("x", pos.getX());
 			this.tileEntityData.putInt("y", pos.getY());
 			this.tileEntityData.putInt("z", pos.getZ());
-			blockEntity.load(state, this.tileEntityData);
+			blockEntity.load(this.tileEntityData);
 			placement.transform(blockEntity);
 			this.tileEntityData.remove("x");
 			this.tileEntityData.remove("y");

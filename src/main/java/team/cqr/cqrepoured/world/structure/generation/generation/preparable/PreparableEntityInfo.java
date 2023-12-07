@@ -1,17 +1,18 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.item.HangingEntity;
-import net.minecraft.entity.item.PaintingEntity;
-import net.minecraft.nbt.DoubleNBT;
-import net.minecraft.util.Mirror;
-import net.minecraft.core.BlockPos;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.Painting;
+import net.minecraft.world.level.block.Mirror;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
@@ -23,10 +24,10 @@ public class PreparableEntityInfo {
 		this.entityData = IEntityFactory.save(entity);
 		this.entityData.remove("UUIDMost");
 		this.entityData.remove("UUIDLeast");
-		ListTag nbtTagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
-		nbtTagList.set(0, DoubleNBT.valueOf(entity.getX() - templatePos.getX()));
-		nbtTagList.set(1, DoubleNBT.valueOf(entity.getY() - templatePos.getY()));
-		nbtTagList.set(2, DoubleNBT.valueOf(entity.getZ() - templatePos.getZ()));
+		ListTag nbtTagList = this.entityData.getList("Pos", Tag.TAG_DOUBLE);
+		nbtTagList.set(0, DoubleTag.valueOf(entity.getX() - templatePos.getX()));
+		nbtTagList.set(1, DoubleTag.valueOf(entity.getY() - templatePos.getY()));
+		nbtTagList.set(2, DoubleTag.valueOf(entity.getZ() - templatePos.getZ()));
 		if (entity instanceof HangingEntity) {
 			BlockPos blockpos = ((HangingEntity) entity).getPos();
 			this.entityData.putInt("TileX", blockpos.getX() - templatePos.getX());
@@ -39,19 +40,20 @@ public class PreparableEntityInfo {
 		this.entityData = entityData;
 	}
 
-	public void prepare(ICQRLevel level, DungeonPlacement placement) {
+	public void prepare(CQRLevel level, DungeonPlacement placement) {
 		Entity entity = placement.getEntityFactory().createEntity(this.entityData);
 		double x;
 		double y;
 		double z;
-
+		
+		// TODO: Create registry <EntityType<?>, Function<Entity, Vec3> to make this more extendable and customizable
 		if (entity instanceof HangingEntity) {
 			x = this.entityData.getInt("TileX");
 			y = this.entityData.getInt("TileY");
 			z = this.entityData.getInt("TileZ");
-			if (entity instanceof PaintingEntity && placement.getMirror() != Mirror.NONE) {
-				int n = ((((PaintingEntity) entity).motive.getWidth() >> 4) + 1) & 1;
-				switch (((PaintingEntity) entity).getDirection().getCounterClockWise()) {
+			if (entity instanceof Painting && placement.getMirror() != Mirror.NONE) {
+				int n = ((((Painting) entity).getWidth() >> 4) + 1) & 1;
+				switch (((Painting) entity).getDirection().getCounterClockWise()) {
 				case NORTH:
 					z -= n;
 					break;
@@ -73,7 +75,7 @@ public class PreparableEntityInfo {
 			y = pos.getY();
 			z = pos.getZ();
 		} else {
-			ListTag tagList = this.entityData.getList("Pos", Constants.NBT.TAG_DOUBLE);
+			ListTag tagList = this.entityData.getList("Pos", Tag.TAG_DOUBLE);
 			MutableVec3d vec = placement.transform(tagList.getDouble(0), tagList.getDouble(1), tagList.getDouble(2));
 			x = vec.x;
 			y = vec.y;
@@ -81,10 +83,14 @@ public class PreparableEntityInfo {
 		}
 
 		float transformedYaw = placement.transform(entity);
-		entity.moveTo(x, y, z, transformedYaw, entity.xRot);
+		entity.moveTo(x, y, z, transformedYaw, entity.getXRot());
 		if (entity instanceof LivingEntity) {
 			((LivingEntity) entity).setYBodyRot(transformedYaw);
 			((LivingEntity) entity).setYHeadRot(transformedYaw);
+		}
+		
+		if (entity instanceof Mob mob) {
+			placement.getInhabitant().prepare(mob, placement.random());
 		}
 
 		level.addEntity(entity);

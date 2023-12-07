@@ -1,21 +1,21 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.HorizontalBlock;
-import net.minecraft.entity.item.ItemFrameEntity;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 import team.cqr.cqrepoured.util.ByteBufUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
@@ -52,10 +52,10 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		Direction transformedFacing = placement.getRotation().rotate(placement.getMirror().mirror(this.facing));
-		ItemFrameEntity entity = placement.getEntityFactory().createEntity(world -> new ItemFrameEntity(world, transformedPos.immutable(), transformedFacing));
+		ItemFrame entity = placement.getEntityFactory().createEntity(world -> new ItemFrame(world, transformedPos.immutable(), transformedFacing));
 		switch (this.orientation) {
 		case EAST:
 			entity.setRotation(entity.getRotation() + 3);
@@ -152,9 +152,9 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
-		BlockState transformedState = placement.transform(CQRBlocks.MAP_PLACEHOLDER.get().defaultBlockState().setValue(HorizontalBlock.FACING, this.facing));
+		BlockState transformedState = placement.transform(CQRBlocks.MAP_PLACEHOLDER.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, this.facing));
 		level.setBlockState(transformedPos, transformedState, blockEntity -> {
 			if (blockEntity instanceof TileEntityMap) {
 				((TileEntityMap) blockEntity).set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap, this.fillRadius);
@@ -206,7 +206,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntityLazy) {
-			return new PreparableMapInfo(state.getValue(HorizontalBlock.FACING), blockEntityLazy.orElseThrow(NullPointerException::new));
+			return new PreparableMapInfo(state.getValue(HorizontalDirectionalBlock.FACING), blockEntityLazy.orElseThrow(NullPointerException::new));
 		}
 
 	}

@@ -10,15 +10,15 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
 import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
-import net.minecraft.world.level.block.BannerBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.StructureVoidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockBossBlock;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -28,13 +28,13 @@ import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public abstract class PreparablePosInfo {
 
-	public void prepare(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		if (CQRConfig.SERVER_CONFIG.advanced.structureImportMode.get()) {
 			this.prepareDebug(level, pos, placement);
 		} else {
@@ -42,16 +42,16 @@ public abstract class PreparablePosInfo {
 		}
 	}
 
-	protected abstract void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement);
+	protected abstract void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement);
 
-	protected abstract void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement);
+	protected abstract void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement);
 
 	public static class Registry {
 
 		public interface IFactory<T extends BlockEntity> {
 
 			default PreparablePosInfo create(Level level, BlockPos pos, BlockState state) {
-				return this.create(level, pos, state, LazyOptional.of(state.hasTileEntity() ? () -> level.getBlockEntity(pos) : null).cast());
+				return this.create(level, pos, state, LazyOptional.of(state.hasBlockEntity() ? () -> level.getBlockEntity(pos) : null).cast());
 			}
 
 			PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<T> blockEntityLazy);
@@ -61,7 +61,7 @@ public abstract class PreparablePosInfo {
 				if (tileEntity == null) {
 					return null;
 				}
-				CompoundTag compound = tileEntity.save(new CompoundTag());
+				CompoundTag compound = tileEntity.saveWithFullMetadata();
 				compound.remove("x");
 				compound.remove("y");
 				compound.remove("z");

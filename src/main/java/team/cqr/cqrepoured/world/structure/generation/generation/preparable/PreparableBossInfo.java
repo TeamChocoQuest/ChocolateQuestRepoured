@@ -3,33 +3,34 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.entity.*;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.util.ByteBufUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
@@ -49,24 +50,24 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 	@Nullable
 	private static CompoundTag getBossTag(TileEntityBoss tileEntityBoss) {
-		ItemStack stack = tileEntityBoss.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).orElseThrow(NullPointerException::new).getStackInSlot(0);
+		ItemStack stack = tileEntityBoss.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElseThrow(NullPointerException::new).getStackInSlot(0);
 		if (!stack.hasTag()) {
 			return null;
 		}
-		if (!stack.getTag().contains("EntityIn", Constants.NBT.TAG_COMPOUND)) {
+		if (!stack.getTag().contains("EntityIn", Tag.TAG_COMPOUND)) {
 			return null;
 		}
 		return stack.getTag().getCompound("EntityIn");
 	}
 
 	@Override
-	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		Entity entity;
 
 		if (this.bossTag != null) {
 			entity = this.createEntityFromTag(placement, transformedPos);
-		} else if (placement.getInhabitant().getBossID() != null) {
+		} else if (placement.getInhabitant().hasConfiguredBosses()) {
 			entity = this.createEntityFromBossID(placement, transformedPos);
 		} else {
 			entity = this.createEntityFromEntityID(placement, transformedPos);
@@ -74,11 +75,11 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		placement.getProtectedRegionBuilder().addEntity(entity);
 		level.addEntity(entity);
-		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState());
+		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState(), (be) -> {});
 	}
 
 	@Override
-	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		level.setBlockState(transformedPos, CQRBlocks.BOSS_BLOCK.get().defaultBlockState(), blockEntity -> {
@@ -91,7 +92,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromTag(DungeonPlacement placement, BlockPos pos) {
-		Entity entity = PreparableSpawnerInfo.createEntityFromTag(placement, pos, bossTag);
+		Entity entity = PreparableSpawnerInfo.createEntityFromTag(placement, pos, bossTag, true);
 		if (entity instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR) entity).enableBossBar();
 		}
@@ -99,11 +100,14 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromBossID(DungeonPlacement placement, BlockPos pos) {
-		Entity entity = placement.getEntityFactory().createEntity(placement.getInhabitant().getBossID());
+		Entity entity = placement.getInhabitant().createRandomBossEntity(placement.random(), placement.getEntityFactory()::createEntity);
+		if (entity == null) {
+			return null;
+		}
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 
-		if (entity instanceof MobEntity) {
-			MobEntity mobEntity = (MobEntity) entity;
+		if (entity instanceof Mob) {
+			Mob mobEntity = (Mob) entity;
 			placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 			mobEntity.setPersistenceRequired();
 
@@ -118,15 +122,15 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromEntityID(DungeonPlacement placement, BlockPos pos) {
-		Entity entity = placement.getEntityFactory().createEntity(placement.getInhabitant().getEntityID());
+		Entity entity = placement.getInhabitant().createRandomEntity(placement.random(), placement.getEntityFactory()::createEntity);
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-		entity.setCustomName(new TextComponent("Temporary Boss"));
+		entity.setCustomName(Component.literal("Temporary Boss"));
 
 		if (entity instanceof LivingEntity) {
 			LivingEntity livingEntity = (LivingEntity) entity;
 
-			if (entity instanceof MobEntity) {
-				MobEntity mobEntity = (MobEntity) entity;
+			if (entity instanceof Mob) {
+				Mob mobEntity = (Mob) entity;
 				placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 				mobEntity.setPersistenceRequired();
 			}

@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
@@ -17,12 +17,12 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 public class PreparableEmptyInfo extends PreparablePosInfo {
 
 	@Override
-	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 
 	}
 
 	@Override
-	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		level.setBlockState(transformedPos, CQRBlocks.NULL_BLOCK.get().defaultBlockState());

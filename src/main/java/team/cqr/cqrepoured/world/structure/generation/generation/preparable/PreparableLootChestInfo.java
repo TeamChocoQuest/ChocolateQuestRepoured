@@ -1,15 +1,15 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -19,8 +19,8 @@ import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
@@ -36,20 +36,20 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, this.facing));
 
 		level.setBlockState(transformedPos, transformedState, blockEntity -> {
-			if (blockEntity instanceof ChestTileEntity) {
+			if (blockEntity instanceof ChestBlockEntity) {
 				long seed = WorldDungeonGenerator.getSeed(level.getSeed(), pos.getX(), pos.getZ());
-				((ChestTileEntity) blockEntity).setLootTable(this.lootTable, seed);
+				((ChestBlockEntity) blockEntity).setLootTable(this.lootTable, seed);
 			}
 		});
 	}
 
 	@Override
-	protected void prepareDebug(ICQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockExporterChest block = CQRBlocks.BLOCKS.getEntries().stream()
 				.map(RegistryObject::get)

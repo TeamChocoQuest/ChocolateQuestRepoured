@@ -3,17 +3,13 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.item.BannerItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.tileentity.BannerTileEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BannerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.util.ByteBufUtil;
@@ -32,19 +28,16 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	protected void blockEntityCallback(BlockPos pos, BlockState state, BlockEntity blockEntity, DungeonPlacement placement) {
 		super.blockEntityCallback(pos, state, blockEntity, placement);
 
-		if (blockEntity instanceof BannerTileEntity && placement.getInhabitant().getBanner() != null) {
-			ItemStack stack = placement.getInhabitant().getBanner().getBanner();
-			Item item = stack.getItem();
-			DyeColor color = item instanceof BannerItem ? ((BannerItem) item).getColor() : DyeColor.BLACK;
-			((BannerTileEntity) blockEntity).fromItem(stack, color);
+		if (blockEntity instanceof BannerBlockEntity bannerBE) {
+			placement.getInhabitant().prepare(bannerBE);
 		}
 	}
 
-	public static class Factory implements IFactory<BannerTileEntity> {
+	public static class Factory implements IFactory<BannerBlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerTileEntity> blockEntityLazy) {
-			BannerTileEntity blockEntity = blockEntityLazy.orElseThrow(NullPointerException::new);
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerBlockEntity> blockEntityLazy) {
+			BannerBlockEntity blockEntity = blockEntityLazy.orElseThrow(NullPointerException::new);
 			if (BannerHelper.isCQBanner(blockEntity)) {
 				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
 			}
