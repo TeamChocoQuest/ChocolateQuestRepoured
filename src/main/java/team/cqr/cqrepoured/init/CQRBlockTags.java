@@ -10,5 +10,6 @@ public class CQRBlockTags {
 	public static final TagKey<Block> SPIDER_WEBS = BlockTags.create(CQRMain.prefix("spider_webs"));
 	public static final TagKey<Block> HOMING_ENDER_EYE_DESTROYABLE = BlockTags.create(CQRMain.prefix("ender_eye_destroyable"));
 	public static final TagKey<Block> CONDUCTING_BLOCKS = BlockTags.create(CQRMain.prefix("conducting"));
+	public static final TagKey<Block> STRUCTURE_EXPORT_IGNORE = BlockTags.create(CQRMain.prefix("structure_export_ignore"));
 	
 }
