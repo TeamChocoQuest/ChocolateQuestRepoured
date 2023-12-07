@@ -1,21 +1,20 @@
 package team.cqr.cqrepoured.world.template;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.IServerWorld;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import team.cqr.cqrepoured.init.CQRBlockTags;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
-public class ExtendedStructureTemplate extends Template {
+public class ExtendedStructureTemplate extends StructureTemplate {
 	
 	private final CQStructure INNER_DATA_STRUCTURE = new CQStructure();
 	
@@ -23,52 +22,31 @@ public class ExtendedStructureTemplate extends Template {
 	
 	protected final Set<BlockState> BLOCK_STATE_PALETTE = new HashSet<>();
 	
+
 	@Override
-	public void fillFromWorld(Level world, BlockPos origin, BlockPos size, boolean saveEntities, Block blockToIgnore) {
-		//Load from blocks in world
-		super.fillFromWorld(world, origin, size, saveEntities, blockToIgnore);
-	}
-	
-	@Override
-	public List<BlockInfo> filterBlocks(BlockPos pPos, PlacementSettings pSettings, Block pBlock) {
-		return super.filterBlocks(pPos, pSettings, pBlock);
-	}
-	
-	//Gets called by method above
-	//Generatse the blockinfos for placement => Performs rotations and translations and so on...
-	@Override
-	public List<BlockInfo> filterBlocks(BlockPos pPos, PlacementSettings pSettings, Block pBlock, boolean pRelativePosition) {
-		return super.filterBlocks(pPos, pSettings, pBlock, pRelativePosition);
-	}
-	
-	@Override
-	public void placeInWorldChunk(IServerWorld p_237144_1_, BlockPos p_237144_2_, PlacementSettings p_237144_3_, Random p_237144_4_) {
-		//Calls method below
-		super.placeInWorldChunk(p_237144_1_, p_237144_2_, p_237144_3_, p_237144_4_);
-	}
-	
-	@Override
-	public void placeInWorld(IServerWorld p_237152_1_, BlockPos p_237152_2_, PlacementSettings p_237152_3_, Random p_237152_4_) {
-		//Calls method below with flags = 2
-		super.placeInWorld(p_237152_1_, p_237152_2_, p_237152_3_, p_237152_4_);
-	}
-	
-	@Override
-	public boolean placeInWorld(IServerWorld pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings pSettings, Random pRandom, int pFlags) {
-		//Returns true when successful
-		return super.placeInWorld(pServerLevel, p_237146_2_, p_237146_3_, pSettings, pRandom, pFlags);
-	}
-	
-	@Override
-	public CompoundTag save(CompoundTag pTag) {
-		//Saves to nbt file
-		return super.save(pTag);
-	}
-	
-	@Override
-	public void load(CompoundTag pTag) {
-		//loads from nbt file
-		super.load(pTag);
+	public void fillFromWorld(Level pLevel, BlockPos pPos, Vec3i pSize, boolean pWithEntities, Block pToIgnore) {
+		 if (pSize.getX() >= 1 && pSize.getY() >= 1 && pSize.getZ() >= 1) {
+	         BlockPos blockpos = pPos.offset(pSize).offset(-1, -1, -1);
+	         BlockPos blockpos1 = new BlockPos(Math.min(pPos.getX(), blockpos.getX()), Math.min(pPos.getY(), blockpos.getY()), Math.min(pPos.getZ(), blockpos.getZ()));
+	         BlockPos blockpos2 = new BlockPos(Math.max(pPos.getX(), blockpos.getX()), Math.max(pPos.getY(), blockpos.getY()), Math.max(pPos.getZ(), blockpos.getZ()));
+	         this.size = pSize;
+	         
+	         BlockStatePalette pallete = new BlockStatePalette();
+
+	         int counter = 0;
+	         for(BlockPos pos : BlockPos.betweenClosed(blockpos1, blockpos2)) {
+	            BlockPos relativePos = pos.subtract(blockpos1);
+	            BlockState blockstate = pLevel.getBlockState(pos);
+	            
+	            if (pToIgnore == null || !blockstate.is(CQRBlockTags.STRUCTURE_EXPORT_IGNORE)) {
+	               BlockEntity blockentity = pLevel.getBlockEntity(pos);
+	               StructureTemplate.StructureBlockInfo structuretemplate$structureblockinfo;
+	               if (blockentity != null) {
+	               }
+	            }
+	         }
+
+	      }
 	}
 
 }
