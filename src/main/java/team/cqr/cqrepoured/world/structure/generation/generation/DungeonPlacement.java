@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.generation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -40,6 +41,7 @@ public class DungeonPlacement {
 
 	private static final ThreadLocal<MutableBlockPos> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(MutableBlockPos::new);
 	private static final ThreadLocal<MutableVec3d> LOCAL_MUTABLE_VEC3D = ThreadLocal.withInitial(MutableVec3d::new);
+	private final RandomSource random;
 	private final BlockPos pos;
 	private final BlockPos partPos;
 	private final Mirror mirror;
@@ -49,7 +51,7 @@ public class DungeonPlacement {
 	private final ServerEntityFactory entityFactory;
 
 
-	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder, ServerEntityFactory entityFactory) {
+	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
 		this.pos = pos;
 		this.partPos = partPos;
 		this.mirror = mirror;
@@ -57,8 +59,13 @@ public class DungeonPlacement {
 		this.inhabitant = inhabitant;
 		this.protectedRegionBuilder = protectedRegionBuilder;
 		this.entityFactory = entityFactory;
+		this.random = random;
 	}
 
+	public RandomSource random() {
+		return this.random;
+	}
+	
 	public BlockPos getPos() {
 		return this.pos;
 	}
