@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.world.structure.generation.inhabitants;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
@@ -30,12 +31,12 @@ import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
 public class DungeonInhabitant extends AbstractRegistratableObject {
 	
-	CQRWeightedRandom<EntityType<?>> entities;
-	Optional<CQRWeightedRandom<EntityType<?>>> bosses;
-	Optional<ItemStack> customBanner;
-	Optional<DyeColor> customBannerColor;
-	Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap;
-	Optional<Map<ResourceLocation, Integer>> factionOverride;
+	protected CQRWeightedRandom<EntityType<?>> entities;
+	protected Optional<CQRWeightedRandom<EntityType<?>>> bosses;
+	protected Optional<ItemStack> customBanner;
+	protected Optional<DyeColor> customBannerColor;
+	protected Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap;
+	protected Optional<Map<ResourceLocation, Integer>> factionOverride;
 	
 	public static final Codec<DungeonInhabitant> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -75,8 +76,25 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 	}
 	
 	public Entity createRandomEntity(RandomSource random, final @Nonnull Level level) {
-		EntityType<?> type = this.entities.next(random);
-		Entity result = type.create(level);
+		return this.createRandomEntity(random, (type) -> {
+			return type.create(level);
+		});
+	}
+	
+	public Entity createRandomBossEntity(RandomSource random, final @Nonnull Function<EntityType<?>, Entity> createFunction) {
+		if (this.hasConfiguredBosses()) {
+			return this.createRandomEntity(random, createFunction, this.bosses.get());
+		}
+		return null;
+	}
+	
+	public Entity createRandomEntity(RandomSource random, final @Nonnull Function<EntityType<?>, Entity> createFunction) {
+		return this.createRandomEntity(random, createFunction, this.entities);
+	}
+	
+	public Entity createRandomEntity(RandomSource random, final @Nonnull Function<EntityType<?>, Entity> createFunction, CQRWeightedRandom<EntityType<?>> typeList) {
+		EntityType<?> type = typeList.next(random);
+		Entity result = createFunction.apply(type);
 		
 		if (result instanceof Mob mob) {
 			this.prepare(mob, random);
@@ -121,6 +139,10 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 			}
 		});
 		
+	}
+
+	public boolean hasConfiguredBosses() {
+		return this.bosses != null && this.bosses.isPresent() && this.bosses.get().numItems() > 0;
 	}
 
 }
