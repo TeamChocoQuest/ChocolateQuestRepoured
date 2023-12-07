@@ -1,35 +1,38 @@
 package team.cqr.cqrepoured.world.structure.generation.structurefile;
 
-import net.minecraft.nbt.ListTag;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.util.ObjectIntIdentityMap;
+import java.util.Iterator;
 
 import javax.annotation.Nullable;
-import java.util.Iterator;
+
+import net.minecraft.core.HolderGetter;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import team.cqr.cqrepoured.util.ObjectIdentityMap;
 
 public class BlockStatePalette implements Iterable<BlockState> {
 
 	public static final BlockState DEFAULT_BLOCK_STATE = Blocks.AIR.defaultBlockState();
-	private final ObjectIntIdentityMap<BlockState> ids = new ObjectIntIdentityMap<>(16);
+	private final ObjectIdentityMap<BlockState> ids = new ObjectIdentityMap<>(16);
 	private int lastId;
 
 	public BlockStatePalette() {
 
 	}
 
-	public BlockStatePalette(ListTag nbtList) {
-		nbtList.forEach(nbt -> this.idFor(NbtUtils.readBlockState((CompoundTag) nbt)));
+	public BlockStatePalette(HolderGetter<Block> holder, ListTag nbtList) {
+		nbtList.forEach(nbt -> this.idFor(NbtUtils.readBlockState(holder, (CompoundTag) nbt)));
 	}
 
 	public int idFor(BlockState state) {
-		int i = this.ids.getId(state);
+		int i = this.ids.get(state);
 
 		if (i == -1) {
 			i = this.lastId++;
-			this.ids.addMapping(state, i);;
+			this.ids.put(state, i);;
 		}
 
 		return i;
@@ -37,7 +40,7 @@ public class BlockStatePalette implements Iterable<BlockState> {
 
 	@Nullable
 	public BlockState stateFor(int id) {
-		BlockState iblockstate = this.ids.byId(id);
+		BlockState iblockstate = this.ids.getById(id);
 		return iblockstate == null ? DEFAULT_BLOCK_STATE : iblockstate;
 	}
 
@@ -47,7 +50,7 @@ public class BlockStatePalette implements Iterable<BlockState> {
 	}
 
 	public void addMapping(BlockState state, int id) {
-		this.ids.addMapping(state, id);
+		this.ids.put(state, id);
 	}
 
 	public int size() {
