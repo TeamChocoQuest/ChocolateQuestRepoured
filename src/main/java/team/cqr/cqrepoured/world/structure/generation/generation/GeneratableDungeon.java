@@ -228,6 +228,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		private final BlockPos pos;
 		private final DungeonInhabitant defaultInhabitant;
 		private final ServerEntityFactory entityFactory;
+		private final ServerLevel serverLevel;
 		private final CQRLevel level;
 		private final ProtectedRegion.Builder protectedRegionBuilder;
 
@@ -245,6 +246,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 			this.defaultInhabitant = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(defaultInhabitant, level, pos.getX(), pos.getZ());
 			this.entityFactory = new ServerEntityFactory(level);
 			this.level = new CQRLevel(SectionPos.of(pos), level.getSeed());
+			this.serverLevel = level;
 			this.protectedRegionBuilder = new ProtectedRegion.Builder(dungeonName, pos);
 		}
 
@@ -265,7 +267,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		}
 
 		public DungeonPlacement getPlacement(BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
-			return new DungeonPlacement(this.pos, partPos, mirror, rotation, inhabitant, this.protectedRegionBuilder, this.entityFactory);
+			return new DungeonPlacement(this.pos, partPos, mirror, rotation, inhabitant, this.protectedRegionBuilder, this.entityFactory, this.serverLevel.getRandom());
 		}
 
 		public String getDungeonName() {
@@ -284,7 +286,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 			return entityFactory;
 		}
 
-		public ICQRLevel getLevel() {
+		public CQRLevel getLevel() {
 			return level;
 		}
 
@@ -301,7 +303,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 				for (int j = 0; j < blocks[i].length; j++) {
 					for (int k = 0; k < blocks[i][j].length; k++) {
 						if (blocks[i][j][k] != null) {
-							this.getLevel().setBlockState(referenceLoc.offset(i, j, k), blocks[i][j][k]);
+							this.getLevel().setBlockState(referenceLoc.offset(i, j, k), blocks[i][j][k], (b) -> {});
 							if(resetDataInArray) {
 								blocks[i][j][k] = null;
 							}
