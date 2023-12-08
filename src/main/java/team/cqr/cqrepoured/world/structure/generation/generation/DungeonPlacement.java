@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import java.util.Optional;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
@@ -47,11 +49,11 @@ public class DungeonPlacement {
 	private final Mirror mirror;
 	private final Rotation rotation;
 	private final DungeonInhabitant inhabitant;
-	private final ProtectedRegion.Builder protectedRegionBuilder;
+	private final Optional<ProtectedRegion.Builder> protectedRegionBuilder;
 	private final ServerEntityFactory entityFactory;
 
-
-	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
+	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant,
+			Optional<ProtectedRegion.Builder> protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
 		this.pos = pos;
 		this.partPos = partPos;
 		this.mirror = mirror;
@@ -65,7 +67,7 @@ public class DungeonPlacement {
 	public RandomSource random() {
 		return this.random;
 	}
-	
+
 	public BlockPos getPos() {
 		return this.pos;
 	}
@@ -86,7 +88,7 @@ public class DungeonPlacement {
 		return this.inhabitant;
 	}
 
-	public ProtectedRegion.Builder getProtectedRegionBuilder() {
+	public Optional<ProtectedRegion.Builder> getProtectedRegionBuilder() {
 		return this.protectedRegionBuilder;
 	}
 

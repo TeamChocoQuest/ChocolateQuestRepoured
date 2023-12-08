@@ -19,7 +19,7 @@ public interface StructurePieceGenerator {
 
 	default StructurePiece createStructurePiece(GenerationContext context, BlockPos pos, DungeonInhabitant inhabitant, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings) {
 		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-		GeneratableDungeon.Builder structurePieceBuilder = new GeneratableDungeon.Builder(level, pos, inhabitant, groundLevelDelta, protectionSettings);
+		GeneratableDungeon.Builder structurePieceBuilder = new GeneratableDungeon.Builder(level, pos, inhabitant, groundLevelDelta, protectionSettings, context.random());
 		prepare(context, pos.above(groundLevelDelta), structurePieceBuilder);
 		return structurePieceBuilder.build();
 	}
