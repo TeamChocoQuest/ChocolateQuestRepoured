@@ -45,8 +45,16 @@ public class Cache2D<V> {
 		});
 	}
 
+	private int index(BlockPos pos) {
+		return index(pos.getX(), pos.getZ());
+	}
+
 	private int index(int x, int z) {
 		return (x - startX) * (endZ - startZ + 1) + z - startZ;
+	}
+
+	public boolean inBounds(BlockPos pos) {
+		return inBounds(pos.getX(), pos.getZ());
 	}
 
 	public boolean inBounds(int x, int z) {
@@ -79,7 +87,16 @@ public class Cache2D<V> {
 	}
 
 	public V computeIfAbsent(BlockPos pos, Function<BlockPos, V> mappingFunction) {
-		return computeIfAbsent(pos.getX(), pos.getZ(), (x, z) -> mappingFunction.apply(pos));
+		if (!inBounds(pos)) {
+			return this.defaultValue;
+		}
+		int index = index(pos);
+		V v = data[index];
+		if (v == null) {
+			v = mappingFunction.apply(pos);
+			data[index] = v;
+		}
+		return v;
 	}
 
 	public V computeIfAbsent(int x, int z, IntInt2ObjFunction<V> mappingFunction) {
@@ -96,7 +113,16 @@ public class Cache2D<V> {
 	}
 
 	public V computeIfPresent(BlockPos pos, BiFunction<BlockPos, V, V> mappingFunction) {
-		return computeIfPresent(pos.getX(), pos.getZ(), (x, z, v) -> mappingFunction.apply(pos, v));
+		if (!inBounds(pos)) {
+			return this.defaultValue;
+		}
+		int index = index(pos);
+		V v = data[index];
+		if (v != null) {
+			v = mappingFunction.apply(pos, v);
+			data[index] = v;
+		}
+		return v;
 	}
 
 	public V computeIfPresent(int x, int z, IntIntObj2ObjFunction<V, V> mappingFunction) {
@@ -113,7 +139,13 @@ public class Cache2D<V> {
 	}
 
 	public V compute(BlockPos pos, BiFunction<BlockPos, V, V> mappingFunction) {
-		return compute(pos.getX(), pos.getZ(), (x, z, v) -> mappingFunction.apply(pos, v));
+		if (!inBounds(pos)) {
+			return this.defaultValue;
+		}
+		int index = index(pos);
+		V v = mappingFunction.apply(pos, data[index]);
+		data[index] = v;
+		return v;
 	}
 
 	public V compute(int x, int z, IntIntObj2ObjFunction<V, V> mappingFunction) {
