@@ -29,7 +29,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		super.blockEntityCallback(pos, state, blockEntity, placement);
 
 		if (blockEntity instanceof BannerBlockEntity bannerBE) {
-			placement.getInhabitant().prepare(bannerBE);
+			placement.inhabitant().prepare(bannerBE);
 		}
 	}
 

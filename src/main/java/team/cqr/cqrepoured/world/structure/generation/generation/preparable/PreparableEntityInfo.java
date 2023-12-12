@@ -41,7 +41,7 @@ public class PreparableEntityInfo {
 	}
 
 	public void prepare(CQRLevel level, DungeonPlacement placement) {
-		Entity entity = placement.getEntityFactory().createEntity(this.entityData);
+		Entity entity = placement.entityFactory().createEntity(this.entityData);
 		double x;
 		double y;
 		double z;
@@ -51,7 +51,7 @@ public class PreparableEntityInfo {
 			x = this.entityData.getInt("TileX");
 			y = this.entityData.getInt("TileY");
 			z = this.entityData.getInt("TileZ");
-			if (entity instanceof Painting && placement.getMirror() != Mirror.NONE) {
+			if (entity instanceof Painting && placement.mirror() != Mirror.NONE) {
 				int n = ((((Painting) entity).getWidth() >> 4) + 1) & 1;
 				switch (((Painting) entity).getDirection().getCounterClockWise()) {
 				case NORTH:
@@ -90,7 +90,7 @@ public class PreparableEntityInfo {
 		}
 		
 		if (entity instanceof Mob mob) {
-			placement.getInhabitant().prepare(mob, placement.random());
+			placement.inhabitant().prepare(mob, placement.random());
 		}
 
 		level.addEntity(entity);
