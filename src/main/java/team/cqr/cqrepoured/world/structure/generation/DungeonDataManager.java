@@ -9,15 +9,14 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
@@ -44,7 +43,7 @@ public class DungeonDataManager {
 		}
 
 		public void readFromNBT(CompoundTag compound) {
-			if (compound.contains("pos", Constants.NBT.TAG_COMPOUND)) {
+			if (compound.contains("pos", Tag.TAG_COMPOUND)) {
 				this.pos = NbtUtils.readBlockPos(compound.getCompound("pos"));
 			} else {
 				this.pos = NbtUtils.readBlockPos(compound);
@@ -157,7 +156,7 @@ public class DungeonDataManager {
 
 		for (String key : root.getAllKeys()) {
 			Set<DungeonInfo> dungeonInfos = new HashSet<>();
-			for (INBT nbt : root.getList(key, Constants.NBT.TAG_COMPOUND)) {
+			for (Tag nbt : root.getList(key, Tag.TAG_COMPOUND)) {
 				dungeonInfos.add(new DungeonInfo((CompoundTag) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {
