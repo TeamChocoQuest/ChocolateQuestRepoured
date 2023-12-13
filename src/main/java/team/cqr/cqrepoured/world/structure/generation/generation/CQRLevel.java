@@ -58,6 +58,10 @@ public class CQRLevel {
 				.forEach(section -> section.generate(level, entityFactory, processors));
 	}
 
+	public SectionPos getCenter() {
+		return center;
+	}
+
 	public long getSeed() {
 		return this.seed;
 	}

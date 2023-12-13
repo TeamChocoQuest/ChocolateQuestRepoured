@@ -67,13 +67,15 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		if (this.bossTag != null) {
 			entity = this.createEntityFromTag(placement, transformedPos);
-		} else if (placement.getInhabitant().hasConfiguredBosses()) {
+		} else if (placement.inhabitant().hasConfiguredBosses()) {
 			entity = this.createEntityFromBossID(placement, transformedPos);
 		} else {
 			entity = this.createEntityFromEntityID(placement, transformedPos);
 		}
 
-		placement.getProtectedRegionBuilder().addEntity(entity);
+		if (placement.protectedRegionBuilder().isPresent()) {
+			placement.protectedRegionBuilder().get().addEntity(entity);
+		}
 		level.addEntity(entity);
 		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState(), (be) -> {});
 	}
@@ -100,7 +102,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromBossID(DungeonPlacement placement, BlockPos pos) {
-		Entity entity = placement.getInhabitant().createRandomBossEntity(placement.random(), placement.getEntityFactory()::createEntity);
+		Entity entity = placement.inhabitant().createRandomBossEntity(placement.random(), placement.entityFactory()::createEntity);
 		if (entity == null) {
 			return null;
 		}
@@ -108,7 +110,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		if (entity instanceof Mob) {
 			Mob mobEntity = (Mob) entity;
-			placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
+			placement.entityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 			mobEntity.setPersistenceRequired();
 
 			if (entity instanceof AbstractEntityCQR) {
@@ -122,7 +124,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	private Entity createEntityFromEntityID(DungeonPlacement placement, BlockPos pos) {
-		Entity entity = placement.getInhabitant().createRandomEntity(placement.random(), placement.getEntityFactory()::createEntity);
+		Entity entity = placement.inhabitant().createRandomEntity(placement.random(), placement.entityFactory()::createEntity);
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
 		entity.setCustomName(Component.literal("Temporary Boss"));
 
@@ -131,7 +133,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 			if (entity instanceof Mob) {
 				Mob mobEntity = (Mob) entity;
-				placement.getEntityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
+				placement.entityFactory().finalizeSpawn(mobEntity, pos, MobSpawnType.STRUCTURE, null, null);
 				mobEntity.setPersistenceRequired();
 			}
 

@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation;
 
+import java.util.Optional;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.util.RandomSource;
@@ -12,23 +14,14 @@ import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
-public class DungeonPlacement {
+public record DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant,
+		Optional<ProtectedRegion.Builder> protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
 
 	public static class MutableVec3d {
 
 		public double x;
 		public double y;
 		public double z;
-
-		public MutableVec3d() {
-
-		}
-
-		public MutableVec3d(double x, double y, double z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
 
 		public MutableVec3d set(double x, double y, double z) {
 			this.x = x;
@@ -41,58 +34,6 @@ public class DungeonPlacement {
 
 	private static final ThreadLocal<MutableBlockPos> LOCAL_MUTABLE_BLOCKPOS = ThreadLocal.withInitial(MutableBlockPos::new);
 	private static final ThreadLocal<MutableVec3d> LOCAL_MUTABLE_VEC3D = ThreadLocal.withInitial(MutableVec3d::new);
-	private final RandomSource random;
-	private final BlockPos pos;
-	private final BlockPos partPos;
-	private final Mirror mirror;
-	private final Rotation rotation;
-	private final DungeonInhabitant inhabitant;
-	private final ProtectedRegion.Builder protectedRegionBuilder;
-	private final ServerEntityFactory entityFactory;
-
-
-	public DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant, ProtectedRegion.Builder protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
-		this.pos = pos;
-		this.partPos = partPos;
-		this.mirror = mirror;
-		this.rotation = rotation;
-		this.inhabitant = inhabitant;
-		this.protectedRegionBuilder = protectedRegionBuilder;
-		this.entityFactory = entityFactory;
-		this.random = random;
-	}
-
-	public RandomSource random() {
-		return this.random;
-	}
-	
-	public BlockPos getPos() {
-		return this.pos;
-	}
-
-	public BlockPos getPartPos() {
-		return this.partPos;
-	}
-
-	public Mirror getMirror() {
-		return this.mirror;
-	}
-
-	public Rotation getRotation() {
-		return this.rotation;
-	}
-
-	public DungeonInhabitant getInhabitant() {
-		return this.inhabitant;
-	}
-
-	public ProtectedRegion.Builder getProtectedRegionBuilder() {
-		return this.protectedRegionBuilder;
-	}
-
-	public ServerEntityFactory getEntityFactory() {
-		return entityFactory;
-	}
 
 	public MutableBlockPos transform(BlockPos pos) {
 		return transform(pos.getX(), pos.getY(), pos.getZ(), this.partPos, this.mirror, this.rotation);

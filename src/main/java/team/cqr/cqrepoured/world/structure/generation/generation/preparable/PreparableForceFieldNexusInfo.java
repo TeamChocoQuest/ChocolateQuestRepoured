@@ -21,11 +21,11 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
-		if (placement.getProtectedRegionBuilder() == null) {
+		if (placement.protectedRegionBuilder().isEmpty()) {
 			level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState());
 		} else {
 			level.setBlockState(transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.get().defaultBlockState());
-			placement.getProtectedRegionBuilder().addBlock(transformedPos);
+			placement.protectedRegionBuilder().get().addBlock(transformedPos);
 		}
 	}
 

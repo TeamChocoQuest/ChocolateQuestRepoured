@@ -191,9 +191,9 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		entityTag.remove("Pos");
 		
 		// Exchanges the entity type
-		placement.getInhabitant().prepareEntityNBT(entityTag, placement.random(), boss);
+		placement.inhabitant().prepareEntityNBT(entityTag, placement.random(), boss);
 
-		Entity entity = placement.getEntityFactory().createEntity(entityTag);
+		Entity entity = placement.entityFactory().createEntity(entityTag);
 
 		if (entity == null) {
 			return null;

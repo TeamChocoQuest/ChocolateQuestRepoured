@@ -54,8 +54,8 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	@Override
 	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
-		Direction transformedFacing = placement.getRotation().rotate(placement.getMirror().mirror(this.facing));
-		ItemFrame entity = placement.getEntityFactory().createEntity(world -> new ItemFrame(world, transformedPos.immutable(), transformedFacing));
+		Direction transformedFacing = placement.rotation().rotate(placement.mirror().mirror(this.facing));
+		ItemFrame entity = placement.entityFactory().createEntity(world -> new ItemFrame(world, transformedPos.immutable(), transformedFacing));
 		switch (this.orientation) {
 		case EAST:
 			entity.setRotation(entity.getRotation() + 3);
@@ -74,7 +74,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		int z1 = this.offsetZ * (128 << this.scale);
 		int x2 = this.originX;
 		int z2 = this.originZ;
-		switch (placement.getMirror()) {
+		switch (placement.mirror()) {
 		case LEFT_RIGHT:
 			if (!this.lockOrientation) {
 				if (this.orientation.getAxis() == Axis.Z) {
@@ -115,7 +115,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		int z3 = z1;
 		int x4 = x2;
 		int z4 = z2;
-		switch (placement.getRotation()) {
+		switch (placement.rotation()) {
 		case COUNTERCLOCKWISE_90:
 			if (!this.lockOrientation) {
 				entity.setRotation(entity.getRotation() + 1);
