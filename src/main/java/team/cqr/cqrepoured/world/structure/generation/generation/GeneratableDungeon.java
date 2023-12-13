@@ -37,6 +37,9 @@ import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
+// TODO: Change to extends jigsaw structure piece
+// TODO: Move the inhabitants access to a own object
+// TODO: Move protection settings to codec object
 public class GeneratableDungeon extends StructurePiece implements INoiseAffectingStructurePiece {
 
 	private final String dungeonName;
