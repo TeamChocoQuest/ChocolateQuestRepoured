@@ -2,15 +2,15 @@ package team.cqr.cqrepoured.world.structure.generation;
 
 import java.util.Collection;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Block;
 import team.cqr.cqrepoured.util.Perlin3D;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.ICQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableForceFieldNexusInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableLootChestInfo;
@@ -28,27 +28,27 @@ public class GenerationUtil {
 		placement = null;
 	}
 
-	public static void setBoss(ICQRLevel level, BlockPos pos) {
+	public static void setBoss(CQRLevel level, BlockPos pos) {
 		new PreparableBossInfo((CompoundTag) null).prepare(level, pos, placement);
 	}
 
-	public static void setNexus(ICQRLevel level, BlockPos pos) {
+	public static void setNexus(CQRLevel level, BlockPos pos) {
 		new PreparableForceFieldNexusInfo().prepare(level, pos, placement);
 	}
 
-	public static void setLootChest(ICQRLevel level, BlockPos pos, ResourceLocation lootTable, Direction facing) {
+	public static void setLootChest(CQRLevel level, BlockPos pos, ResourceLocation lootTable, Direction facing) {
 		new PreparableLootChestInfo(lootTable, facing).prepare(level, pos, placement);
 	}
 
-	public static void setSpawner(ICQRLevel level, BlockPos pos, Entity... entities) {
+	public static void setSpawner(CQRLevel level, BlockPos pos, Entity... entities) {
 		new PreparableSpawnerInfo(entities).prepare(level, pos, placement);
 	}
 
-	public static void setSpawner(ICQRLevel level, BlockPos pos, Collection<Entity> entities) {
+	public static void setSpawner(CQRLevel level, BlockPos pos, Collection<Entity> entities) {
 		new PreparableSpawnerInfo(entities).prepare(level, pos, placement);
 	}
 
-	public static void makeRandomBlob2(final ICQRLevel level, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, final BlockPos offset) {
+	public static void makeRandomBlob2(final CQRLevel level, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, final BlockPos offset) {
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 	
@@ -86,7 +86,7 @@ public class GenerationUtil {
 	}
 
 	// TODO Create custom DungeonPart class because Perlin3D is to slow to calculate immediately
-	public static void makeRandomBlob(final ICQRLevel level, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, final BlockPos offset) {
+	public static void makeRandomBlob(final CQRLevel level, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, final BlockPos offset) {
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32);
 	
