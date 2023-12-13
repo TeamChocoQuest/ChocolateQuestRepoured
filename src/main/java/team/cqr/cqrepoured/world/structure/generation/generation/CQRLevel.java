@@ -120,4 +120,8 @@ public class CQRLevel {
 		return Collections.unmodifiableCollection(this.sections.values());
 	}
 
+	public void setBlockState(BlockPos transformedPos, BlockState defaultBlockState) {
+		this.setBlockState(transformedPos, defaultBlockState, (b) -> {});
+	}
+
 }
