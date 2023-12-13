@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.client.model.geo;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.cache.AzureLibCache;
 import mod.azure.azurelib.constant.DataTickets;
@@ -12,6 +9,9 @@ import mod.azure.azurelib.core.animation.AnimationState;
 import mod.azure.azurelib.loading.object.BakedAnimations;
 import mod.azure.azurelib.model.GeoModel;
 import mod.azure.azurelib.model.data.EntityModelData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;

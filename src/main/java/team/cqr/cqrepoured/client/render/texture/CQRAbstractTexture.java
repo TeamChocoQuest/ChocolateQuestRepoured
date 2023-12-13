@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.render.texture;
 
 import java.util.function.BiFunction;
 
+import mod.azure.azurelib.cache.texture.GeoAbstractTexture;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-import mod.azure.azurelib.cache.texture.GeoAbstractTexture;
 
 public abstract class CQRAbstractTexture extends GeoAbstractTexture {
 	

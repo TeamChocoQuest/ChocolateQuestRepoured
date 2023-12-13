@@ -1,22 +1,22 @@
 package team.cqr.cqrepoured.world.structure.generation.lootchests;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.loot.ItemLootEntry;
-import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.StandaloneLootEntry;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.loot.conditions.RandomChance;
 import net.minecraft.loot.functions.EnchantWithLevels;
 import net.minecraft.loot.functions.ILootFunction;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.loot.functions.SetDamage;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

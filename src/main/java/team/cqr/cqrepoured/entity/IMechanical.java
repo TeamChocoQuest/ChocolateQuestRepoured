@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.LivingEntity;
 
 public interface IMechanical {
 

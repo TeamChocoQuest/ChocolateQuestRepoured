@@ -6,7 +6,6 @@ import net.minecraft.nbt.INBT;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
-import net.minecraftforge.common.util.Constants;
 
 public class CapabilityDynamicCrownStorage implements IStorage<CapabilityDynamicCrown> {
 

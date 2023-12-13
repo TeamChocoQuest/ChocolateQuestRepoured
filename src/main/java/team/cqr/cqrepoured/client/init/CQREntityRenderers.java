@@ -1,14 +1,11 @@
 package team.cqr.cqrepoured.client.init;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -31,8 +28,6 @@ import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnde
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderCQREnderKing;
 import team.cqr.cqrepoured.client.render.entity.boss.endercalamity.RenderEndLaser;
 import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderCQRExterminator;
-import team.cqr.cqrepoured.client.render.entity.boss.exterminator.RenderExterminatorBackpackPart;
-import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonBodyPart;
 import team.cqr.cqrepoured.client.render.entity.boss.netherdragon.RenderNetherDragonHead;
 import team.cqr.cqrepoured.client.render.entity.boss.spectrelord.RenderCQRSpectreLord;
 import team.cqr.cqrepoured.client.render.entity.mobs.RenderCQRBoarman;
@@ -77,8 +72,6 @@ import team.cqr.cqrepoured.client.render.tileentity.TileEntityTableRenderer;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaser;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityEndLaserTargeting;
 import team.cqr.cqrepoured.entity.boss.exterminator.EntityExterminatorHandLaser;
-import team.cqr.cqrepoured.entity.boss.exterminator.SubEntityExterminatorFieldEmitter;
-import team.cqr.cqrepoured.entity.boss.netherdragon.SubEntityNetherDragonSegment;
 import team.cqr.cqrepoured.entity.multipart.CQRPartEntity;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQREntityTypes;

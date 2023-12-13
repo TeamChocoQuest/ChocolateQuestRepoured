@@ -1,9 +1,9 @@
 package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
 import mod.azure.azurelib.core.animation.AnimationState;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.entity.boss.endercalamity.EntityCQREnderCalamity;

@@ -2,10 +2,10 @@ package team.cqr.cqrepoured.client.model.geo.entity;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import net.minecraft.resources.ResourceLocation;
 import mod.azure.azurelib.animatable.GeoEntity;
 import mod.azure.azurelib.cache.AzureLibCache;
 import mod.azure.azurelib.loading.object.BakedAnimations;
+import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
 import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.bases.VariantEntity;

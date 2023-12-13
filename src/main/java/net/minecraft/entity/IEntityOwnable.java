@@ -1,8 +1,8 @@
 package net.minecraft.entity;
 
-import net.minecraft.world.entity.Entity;
-
 import java.util.UUID;
+
+import net.minecraft.world.entity.Entity;
 
 public interface IEntityOwnable {
 	

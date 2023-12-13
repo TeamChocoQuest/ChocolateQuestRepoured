@@ -2,7 +2,10 @@ package team.cqr.cqrepoured.client.init;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.LivingEntity;
-import team.cqr.cqrepoured.client.model.armor.*;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorHeavy;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorInquisition;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorSpider;
+import team.cqr.cqrepoured.client.model.armor.ModelArmorTransparent;
 
 public class CQRArmorModels {
 

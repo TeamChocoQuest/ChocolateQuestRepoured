@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import mod.azure.azurelib.renderer.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.gui.ScreenAlchemyBag;
 import team.cqr.cqrepoured.client.gui.ScreenBackpack;
 import team.cqr.cqrepoured.client.gui.ScreenBadge;
@@ -21,13 +20,11 @@ import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchant;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchantEditTrade;
 import team.cqr.cqrepoured.client.init.CQREntityRenderers;
 import team.cqr.cqrepoured.client.init.CQRItemProperties;
-import team.cqr.cqrepoured.client.render.armor.RenderArmorKingCrown;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import team.cqr.cqrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import team.cqr.cqrepoured.client.util.SphereRenderer;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
-import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
 public class CQRepouredClient {
 

@@ -1,11 +1,12 @@
 package team.cqr.cqrepoured.client.gui;
 
+import java.awt.TextComponent;
+
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import net.minecraft.client.gui.widget.button.ImageButton;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.resources.ResourceLocation;
 
 public class GuiButtonTextured extends ImageButton implements INumericIDButton {
