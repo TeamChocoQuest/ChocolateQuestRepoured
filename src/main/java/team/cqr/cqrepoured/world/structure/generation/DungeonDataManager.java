@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
+//TODO: Replace with worldSavedData or capability
 public class DungeonDataManager {
 
 	public static class DungeonInfo {
