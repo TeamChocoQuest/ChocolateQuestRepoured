@@ -4,8 +4,8 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
-	id 'com.github.johnrengelman.shadow' version '7.1.2'
-	id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
 }
 
 version = "${mc_version}-${mod_version}"
@@ -15,7 +15,7 @@ archivesBaseName = "${mod_name}"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 configurations {
-	shade
+    shade
 }
 
 minecraft {
@@ -26,12 +26,12 @@ minecraft {
     runs {
         client {
             taskName "runClient ${mod_name} ${mc_version}"
-			arg "-mixin.config=${mod_id}.mixins.json"
+            arg "-mixin.config=${mod_id}.mixins.json"
 
-			property 'mixin.debug', 'true'
-			
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            property 'mixin.debug', 'true'
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -45,12 +45,12 @@ minecraft {
 
         server {
             taskName "runServer ${mod_name} ${mc_version}"
-			arg "-mixin.config=${mod_id}.mixins.json"
+            arg "-mixin.config=${mod_id}.mixins.json"
 
-			property 'mixin.debug', 'true'
-			
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            property 'mixin.debug', 'true'
+
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -97,7 +97,7 @@ configurations {
 
 repositories {
     ivy {
-		name "Github Releases" // Github Releases
+        name "Github Releases" // Github Releases
         url "https://github.com"
 
         patternLayout {
@@ -106,9 +106,9 @@ repositories {
 
         metadataSources { artifact() }
     }
-	
-	ivy {
-		name "Github Releases - DT Versioning" // Github Releases
+
+    ivy {
+        name "Github Releases - DT Versioning" // Github Releases
         url "https://github.com"
 
         patternLayout {
@@ -119,43 +119,43 @@ repositories {
     }
 
     maven {
-		name "Curse Maven" // CurseForge Maven
-		url "https://www.cursemaven.com"
+        name "Curse Maven" // CurseForge Maven
+        url "https://www.cursemaven.com"
     }
     maven { 
-		name "AzureLib Maven" // AzureLib
-		url "https://libs.azuredoom.com:4443/mods"
+        name "AzureLib Maven" // AzureLib
+        url "https://libs.azuredoom.com:4443/mods"
     }
     maven {
-		name = "SBL Maven" // SmartBrainLib
-		url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+        name = "SBL Maven" // SmartBrainLib
+        url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
     }
-    
+
     maven {
-		name = "TslatEffectsLib (TEL) Maven Repo"
-		url = "https://dl.cloudsmith.io/public/tslat/tel/maven/"
-	}
-    
+        name = "TslatEffectsLib (TEL) Maven Repo"
+        url = "https://dl.cloudsmith.io/public/tslat/tel/maven/"
+    }
+
     maven {
-    	// location of the maven that hosts JEI files before January 2023
-    	name = "Progwml6's maven"
-    	url = "https://dvs1.progwml6.com/files/maven/"
+        // location of the maven that hosts JEI files before January 2023
+        name = "Progwml6's maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-    	// location of the maven that hosts JEI files since January 2023
-    	name = "Jared's maven"
-    	url = "https://maven.blamejared.com/"
-  	}
-  	maven {
-    	// location of a maven mirror for JEI files, as a fallback
-    	name = "ModMaven"
-    	url = "https://modmaven.dev"
-  	}
-	
-	maven { 
-		name "Databuddy" // Databuddy repo
-		url "https://cubicinterpolation.net/maven/" 
-	}
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+      }
+      maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+      }
+
+    maven { 
+        name "Databuddy" // Databuddy repo
+        url "https://cubicinterpolation.net/maven/" 
+    }
 }
 
 dependencies {
@@ -168,31 +168,31 @@ dependencies {
     includedDependencies("meldexun:RandomUtil:${randomutil_version}@jar")
 
     // Dependencies (Required)
-	implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
+    implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
     implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
     implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
-	implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
-	//implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
+    implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
+    //implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
 
  // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
     // Dependencies (Optional)
-	compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-	compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-	runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
  // runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
- 
+
     // Databuddy
-	implementation fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
-	shade fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+    implementation fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+    shade fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
 }
 
 shadowJar {
-	configurations = [project.configurations.shade]
-	relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
+    configurations = [project.configurations.shade]
+    relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
 }
 
 reobf {
@@ -216,15 +216,15 @@ jar {
             "Implementation-Version": "${mod_version}",
             "Implementation-Vendor" :"${mod_vendor}",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-	    	"MixinConfigs": "${mod_id}.mixins.json"
+            "MixinConfigs": "${mod_id}.mixins.json"
         ])
     }
 }
 
 processResources {
-	exclude '**/.cache/'
+    exclude '**/.cache/'
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 compileJava {
