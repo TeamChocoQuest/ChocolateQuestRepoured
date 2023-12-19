@@ -5,7 +5,7 @@ plugins {
     id 'net.neoforged.gradle' version "${neoforge_gradle_version}"
     id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
     id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 version = "${mc_version}-${mod_version}"
