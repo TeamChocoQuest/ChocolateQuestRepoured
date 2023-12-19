@@ -1,11 +1,11 @@
 plugins {
-    id 'net.neoforged.gradle' version "${neoforge_gradle_version}"
-    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
+    id 'java'
     id 'eclipse'
     id 'idea'
+    id 'net.neoforged.gradle' version "${neoforge_gradle_version}"
+    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
     id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
     id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'java'
 }
 
 version = "${mc_version}-${mod_version}"
@@ -13,10 +13,6 @@ group = "${mod_group}"
 archivesBaseName = "${mod_name}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-configurations {
-    shade
-}
 
 minecraft {
     mappings channel: "${mappings_channel}", version: "${mappings_version}"
@@ -26,12 +22,6 @@ minecraft {
     runs {
         client {
             taskName "runClient ${mod_name} ${mc_version}"
-            arg "-mixin.config=${mod_id}.mixins.json"
-
-            property 'mixin.debug', 'true'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -45,12 +35,6 @@ minecraft {
 
         server {
             taskName "runServer ${mod_name} ${mc_version}"
-            arg "-mixin.config=${mod_id}.mixins.json"
-
-            property 'mixin.debug', 'true'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'info'
@@ -89,8 +73,7 @@ mixin {
 }
 
 configurations {
-    includedDependencies
-    implementation.extendsFrom(includedDependencies)
+    implementation.extendsFrom(shadow)
 
     buildDependencies
 }
@@ -160,12 +143,13 @@ repositories {
 
 dependencies {
     // Base
-    minecraft("net.neoforged:forge:${mc_version}-${neoforge_version}")
-    annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
+    minecraft "net.neoforged:forge:${mc_version}-${neoforge_version}"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     // Dependencies (Built-in)
-    includedDependencies("meldexun:ReflectionUtil:${reflectionutil_version}@jar")
-    includedDependencies("meldexun:RandomUtil:${randomutil_version}@jar")
+    //shadow "meldexun:ReflectionUtil:${reflectionutil_version}@jar"
+    //shadow "meldexun:RandomUtil:${randomutil_version}@jar"
+    shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
 
     // Dependencies (Required)
     implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
@@ -173,8 +157,7 @@ dependencies {
     implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
     implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
     //implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
-
- // implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
+    //implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
     // Dependencies (Optional)
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
@@ -183,15 +166,11 @@ dependencies {
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
- // runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
-
-    // Databuddy
-    implementation fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
-    shade fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+    //runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
 }
 
 shadowJar {
-    configurations = [project.configurations.shade]
+    configurations = [project.configurations.shadow]
     relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
 }
 
@@ -203,10 +182,6 @@ tasks.build.dependsOn reobfShadowJar
 jar.finalizedBy('reobfJar')
 
 jar {
-    from {
-        configurations.includedDependencies.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
     manifest {
         attributes([
             "Specification-Title": "${mod_name}",
