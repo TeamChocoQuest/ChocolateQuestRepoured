@@ -1,211 +1,241 @@
-plugins {
-    id 'java'
-    id 'eclipse'
-    id 'idea'
-    id 'net.neoforged.gradle' version "${neoforge_gradle_version}"
-    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
-    id 'org.parchmentmc.librarian.forgegradle' version "${parchment_gradle_version}"
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.neoforged.net/releases' }
+        maven { url = 'https://repo.spongepowered.org/maven' }
+        maven { url = 'https://maven.parchmentmc.org' }
+    }
+    dependencies {
+        classpath group: 'net.neoforged', name: 'NeoGradle', version: "${neoforge_gradle_version}"
+        classpath group: 'org.spongepowered', name: 'mixingradle', version: "${mixin_gradle_version}"
+        classpath group: 'org.parchmentmc', name: 'librarian', version: "${parchment_gradle_version}"
+        classpath group: 'com.github.johnrengelman', name: 'shadow', version: '8.1.1'
+    }
 }
 
-version = "${mc_version}-${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_name}"
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'net.neoforged.gradle'
+    apply plugin: 'org.spongepowered.mixin'
+    apply plugin: 'org.parchmentmc.librarian.forgegradle'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+    version = "${mc_version}-${mod_version}"
+    group = "${mod_group}"
+    archivesBaseName = "${mod_name}"
 
-minecraft {
-    mappings channel: "${mappings_channel}", version: "${mappings_version}"
+    java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-    accessTransformer = 'src/main/resources/META-INF/accesstransformer.cfg'
+    minecraft {
+        mappings channel: "${mappings_channel}", version: "${mappings_version}"
 
-    runs {
-        client {
-            taskName "runClient ${mod_name} ${mc_version}"
+        accessTransformer = 'src/main/resources/META-INF/accesstransformer.cfg'
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
+        runs {
+            client {
+                taskName "runClient ${mod_name} ${mc_version}"
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
+                property 'forge.logging.markers', 'REGISTRIES'
+                property 'forge.logging.console.level', 'info'
+
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                    }
+                }
+            }
+
+            server {
+                taskName "runServer ${mod_name} ${mc_version}"
+
+                property 'forge.logging.markers', 'REGISTRIES'
+                property 'forge.logging.console.level', 'info'
+
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                    }
+                }
+            }
+
+            data {
+                taskName "runData ${mod_name} ${mc_version}"
+
+                property 'forge.logging.markers', 'REGISTRIES'
+                property 'forge.logging.console.level', 'info'
+
+                args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                    }
                 }
             }
         }
+    }
 
-        server {
-            taskName "runServer ${mod_name} ${mc_version}"
+    sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
+    mixin {
+        add sourceSets.main, "${mod_id}.refmap.json"
+        config "${mod_id}.mixins.json"
 
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
+        debug.export = true
+    }
+
+    configurations {
+        implementation.extendsFrom(shadow)
+
+        buildDependencies
+    }
+
+    repositories {
+        ivy {
+            name "Github Releases" // Github Releases
+            url "https://github.com"
+
+            patternLayout {
+                artifact "[organisation]/[module]/releases/download/v[revision]/[module]-[revision].[ext]"
             }
+
+            metadataSources { artifact() }
         }
 
-        data {
-            taskName "runData ${mod_name} ${mc_version}"
+        ivy {
+            name "Github Releases - DT Versioning" // Github Releases
+            url "https://github.com"
 
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
-
-            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                }
+            patternLayout {
+                artifact "[organisation]/[module]/releases/download/MC[revision]/[module]-[revision].[ext]"
             }
-        }
-    }
-}
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
-
-    debug.export = true
-}
-
-configurations {
-    implementation.extendsFrom(shadow)
-
-    buildDependencies
-}
-
-repositories {
-    ivy {
-        name "Github Releases" // Github Releases
-        url "https://github.com"
-
-        patternLayout {
-            artifact "[organisation]/[module]/releases/download/v[revision]/[module]-[revision].[ext]"
+            metadataSources { artifact() }
         }
 
-        metadataSources { artifact() }
-    }
-
-    ivy {
-        name "Github Releases - DT Versioning" // Github Releases
-        url "https://github.com"
-
-        patternLayout {
-            artifact "[organisation]/[module]/releases/download/MC[revision]/[module]-[revision].[ext]"
+        maven {
+            name "Curse Maven" // CurseForge Maven
+            url "https://www.cursemaven.com"
+        }
+        maven { 
+            name "AzureLib Maven" // AzureLib
+            url "https://libs.azuredoom.com:4443/mods"
+        }
+        maven {
+            name = "SBL Maven" // SmartBrainLib
+            url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
         }
 
-        metadataSources { artifact() }
+        maven {
+            name = "TslatEffectsLib (TEL) Maven Repo"
+            url = "https://dl.cloudsmith.io/public/tslat/tel/maven/"
+        }
+
+        maven {
+            // location of the maven that hosts JEI files before January 2023
+            name = "Progwml6's maven"
+            url = "https://dvs1.progwml6.com/files/maven/"
+        }
+        maven {
+            // location of the maven that hosts JEI files since January 2023
+            name = "Jared's maven"
+            url = "https://maven.blamejared.com/"
+          }
+          maven {
+            // location of a maven mirror for JEI files, as a fallback
+            name = "ModMaven"
+            url = "https://modmaven.dev"
+          }
+
+        maven { 
+            name "Databuddy" // Databuddy repo
+            url "https://cubicinterpolation.net/maven/" 
+        }
     }
 
-    maven {
-        name "Curse Maven" // CurseForge Maven
-        url "https://www.cursemaven.com"
-    }
-    maven { 
-        name "AzureLib Maven" // AzureLib
-        url "https://libs.azuredoom.com:4443/mods"
-    }
-    maven {
-        name = "SBL Maven" // SmartBrainLib
-        url = "https://dl.cloudsmith.io/public/tslat/sbl/maven/"
+    dependencies {
+        // Base
+        minecraft "net.neoforged:forge:${mc_version}-${neoforge_version}"
+        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+        // Dependencies (Built-in)
+        //shadow "meldexun:ReflectionUtil:${reflectionutil_version}@jar"
+        //shadow "meldexun:RandomUtil:${randomutil_version}@jar"
+        shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+
+        // Dependencies (Required)
+        implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
+        implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
+        implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
+        implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
+        //implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
+        //implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
+
+        // Dependencies (Optional)
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+
+        implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
+
+        //runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
     }
 
-    maven {
-        name = "TslatEffectsLib (TEL) Maven Repo"
-        url = "https://dl.cloudsmith.io/public/tslat/tel/maven/"
+    shadowJar {
+        configurations = [project.configurations.shadow]
+        relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
     }
 
-    maven {
-        // location of the maven that hosts JEI files before January 2023
-        name = "Progwml6's maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+    reobf {
+        shadowJar { }
     }
-    maven {
-        // location of the maven that hosts JEI files since January 2023
-        name = "Jared's maven"
-        url = "https://maven.blamejared.com/"
-      }
-      maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-      }
 
-    maven { 
-        name "Databuddy" // Databuddy repo
-        url "https://cubicinterpolation.net/maven/" 
+    tasks.build.dependsOn reobfShadowJar
+    jar.finalizedBy('reobfJar')
+
+    jar {
+        manifest {
+            attributes([
+                "Specification-Title": "${mod_name}",
+                "Specification-Vendor": "${mod_vendor}",
+                "Specification-Version": "${mod_version}",
+                "Implementation-Title": "${mod_name}",
+                "Implementation-Version": "${mod_version}",
+                "Implementation-Vendor" :"${mod_vendor}",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "${mod_id}.mixins.json"
+            ])
+        }
+    }
+
+    processResources {
+        exclude '**/.cache/'
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    compileJava {
+        classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
     }
 }
 
-dependencies {
-    // Base
-    minecraft "net.neoforged:forge:${mc_version}-${neoforge_version}"
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
-
-    // Dependencies (Built-in)
-    //shadow "meldexun:ReflectionUtil:${reflectionutil_version}@jar"
-    //shadow "meldexun:RandomUtil:${randomutil_version}@jar"
-    shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
-
-    // Dependencies (Required)
-    implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
-    implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
-    implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
-    implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
-    //implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
-    //implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
-
-    // Dependencies (Optional)
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-
-    implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
-
-    //runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
-}
-
-shadowJar {
-    configurations = [project.configurations.shadow]
-    relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
-}
-
-reobf {
-    shadowJar { }
-}
-
-tasks.build.dependsOn reobfShadowJar
-jar.finalizedBy('reobfJar')
-
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "${mod_name}",
-            "Specification-Vendor": "${mod_vendor}",
-            "Specification-Version": "${mod_version}",
-            "Implementation-Title": "${mod_name}",
-            "Implementation-Version": "${mod_version}",
-            "Implementation-Vendor" :"${mod_vendor}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "${mod_id}.mixins.json"
-        ])
-    }
+sourceSets {
+    main.java.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.java ]
+    main.java.srcDirs += [ project(':' + rootProject.name + '-generation').sourceSets.main.java ]
+    main.java.srcDirs += [ project(':' + rootProject.name + '-protection').sourceSets.main.java ]
+    main.resources.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.resources ]
+    main.resources.srcDirs += [ project(':' + rootProject.name + '-generation').sourceSets.main.resources ]
+    main.resources.srcDirs += [ project(':' + rootProject.name + '-protection').sourceSets.main.resources ]
 }
 
 processResources {
-    exclude '**/.cache/'
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-compileJava {
-    classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    from project(':' + rootProject.name + '-common').sourceSets.main.resources
+    from project(':' + rootProject.name + '-generation').sourceSets.main.resources
+    from project(':' + rootProject.name + '-protection').sourceSets.main.resources
 }

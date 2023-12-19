@@ -55,7 +55,7 @@ import team.cqr.cqrepoured.world.structure.debug.TestStructures;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
-@Mod(CQRConstants.MODID)
+//@Mod(CQRConstants.MODID)
 @EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
 public class CQRMain {
 
@@ -71,6 +71,10 @@ public class CQRMain {
 	// @SidedProxy(clientSide = "team.cqr.cqrepoured.proxy.ClientProxy", serverSide = "team.cqr.cqrepoured.proxy.ServerProxy")
 	// public static IProxy proxy;
 
+	/**
+	 * Use {@link CQRepoured#LOGGER} instead.
+	 */
+	@Deprecated
 	public static Logger logger = LogManager.getLogger();
 
 	public static File CQ_CONFIG_FOLDER = null;
@@ -89,6 +93,10 @@ public class CQRMain {
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES_SYNC = null;
 
+	/**
+	 * Use {@link CQRepoured#isWorkspaceEnvironment} instead.
+	 */
+	@Deprecated
 	public static boolean isWorkspaceEnvironment = true;
 	public static boolean isPhosphorInstalled;
 	public static boolean isEntityCullingInstalled;
