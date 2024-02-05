@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.entity.item.TNTEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.ResourceLocation;
@@ -25,6 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.client.world.structure.protection.ProtectionIndicatorHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
+import team.cqr.cqrepoured.init.CQRBlockTags;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -35,17 +37,18 @@ import java.util.stream.Collectors;
 
 public class ProtectedRegionHelper {
 
-	public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
+	// Replaced by Tags
+	/*public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
 	public static final Set<Material> BREAKABLE_MATERIAL_WHITELIST = new HashSet<>();
 	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
-	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();
+	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();*/
 
 	private ProtectedRegionHelper() {
 
 	}
 
 	public static void updateWhitelists() {
-		BREAKABLE_BLOCK_WHITELIST.clear();
+		/*BREAKABLE_BLOCK_WHITELIST.clear();
 		BREAKABLE_MATERIAL_WHITELIST.clear();
 		PLACEABLE_BLOCK_WHITELIST.clear();
 		PLACEABLE_MATERIAL_WHITELIST.clear();
@@ -74,7 +77,7 @@ public class ProtectedRegionHelper {
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
 				// ignore
 			}
-		}
+		}*/
 	}
 
 	public static boolean isBlockBreakingPrevented(Level world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
@@ -111,7 +114,7 @@ public class ProtectedRegionHelper {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isBreakingPrevented = true;
 					break;
@@ -121,7 +124,7 @@ public class ProtectedRegionHelper {
 
 		if (updateProtectedRegions && !isBreakingPrevented) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
-				protectedRegion.setProtectionState(pos, 0);
+				protectedRegion.setProtectionState(pos, ProtectionState.PROTECTED);
 			}
 		}
 
@@ -129,10 +132,7 @@ public class ProtectedRegionHelper {
 	}
 
 	private static boolean isBlockBreakingWhitelisted(BlockState state) {
-		if (BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
-			return true;
-		}
-		return BREAKABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
+		return state.is(CQRBlockTags.PROTECTED_REGIONS_BREAKABLE_WHITELIST);
 	}
 
 	public static boolean isBlockPlacingPrevented(Level world, BlockPos pos, @Nullable Entity entity, BlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
@@ -154,7 +154,7 @@ public class ProtectedRegionHelper {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.getUuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isPlacingPrevented = true;
 					break;
@@ -164,7 +164,7 @@ public class ProtectedRegionHelper {
 
 		if (updateProtectedRegions && !isPlacingPrevented) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
-				protectedRegion.setProtectionState(pos, 2);
+				protectedRegion.setProtectionState(pos, ProtectionState.UNPROTECTED_PLAYER_PLACED);
 			}
 		}
 
@@ -172,10 +172,7 @@ public class ProtectedRegionHelper {
 	}
 
 	private static boolean isBlockPlacingWhitelisted(BlockState state) {
-		if (PLACEABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
-			return true;
-		}
-		return PLACEABLE_MATERIAL_WHITELIST.contains(state.getMaterial());
+		return state.is(CQRBlockTags.PROTECTED_REGIONS_PLACABLE_WHITELIST);
 	}
 
 	public static BlockState getBlockFromItem(ItemStack stack, Level world, BlockPos pos, Direction facing, @Nullable Vec3 hitVec, LivingEntity placer, InteractionHand hand) {
@@ -272,12 +269,12 @@ public class ProtectedRegionHelper {
 			return;
 		}
 
-		boolean flag = explosion.getExploder() instanceof TNTEntity;
+		boolean flag = explosion.getExploder() instanceof PrimedTnt;
 		boolean flag1 = (flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) || (!flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get());
 		boolean flag2 = CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && flag1;
 
 		if (flag2) {
-			BlockPos pos = new BlockPos(explosion.getPosition());
+			BlockPos pos = BlockPos.containing(explosion.getPosition());
 
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 				if ((flag && protectedRegion.preventExplosionsTNT()) || (!flag && protectedRegion.preventExplosionsOther())) {
@@ -298,10 +295,11 @@ public class ProtectedRegionHelper {
 				}
 			}
 		}
-
+		
+		// TODO: What was the purpose of this??
 		for (ProtectedRegion protectedRegion : manager.getProtectedRegions().collect(Collectors.toList())) {
 			for (BlockPos pos1 : affectedBlockPositions) {
-				protectedRegion.setProtectionState(pos1, 0);
+				protectedRegion.setProtectionState(pos1, ProtectionState.PROTECTED);
 			}
 		}
 	}
@@ -358,8 +356,8 @@ public class ProtectedRegionHelper {
 
 		if (manager != null && manager instanceof ServerProtectedRegionManager) {
 			for (ProtectedRegion region : manager.getProtectedRegionsAt(position).collect(Collectors.toList())) {
-				AABB regionAABB = new AABB(region.getStartPos(), region.getEndPos());
-				set.addAll(world.getEntitiesOfClass(entityClass, regionAABB));
+				AABB aabb = new AABB(region.boundingBox().minX(), region.boundingBox().minY(), region.boundingBox().minZ(), region.boundingBox().maxX(), region.boundingBox().maxY(), region.boundingBox().maxZ());
+				set.addAll(world.getEntitiesOfClass(entityClass, aabb));
 			}
 		}
 

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.level.chunk.LevelChunk;
 
 public class ProtectedRegionManager {
 
@@ -53,7 +53,7 @@ public class ProtectedRegionManager {
 		SERVER_INSTANCES.remove(((Level) level).dimension());
 	}
 
-	public static void handleChunkLoad(Level level, Chunk chunk) {
+	public static void handleChunkLoad(Level level, LevelChunk chunk) {
 		if (!(level instanceof ServerLevel)) {
 			return;
 		}
@@ -63,7 +63,7 @@ public class ProtectedRegionManager {
 		}
 	}
 
-	public static void handleChunkUnload(Level level, Chunk chunk) {
+	public static void handleChunkUnload(Level level, LevelChunk chunk) {
 		if (!(level instanceof ServerLevel)) {
 			return;
 		}

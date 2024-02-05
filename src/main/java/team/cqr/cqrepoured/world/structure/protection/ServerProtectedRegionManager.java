@@ -17,12 +17,12 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
@@ -48,10 +48,10 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	public static class ProtectedRegionContainer {
 
 		private final ProtectedRegion protectedRegion;
-		private final Collection<Chunk> loadedChunks;
+		private final Collection<LevelChunk> loadedChunks;
 		private int lastTickForceLoaded;
 
-		public ProtectedRegionContainer(ProtectedRegion protectedRegion, Collection<Chunk> loadedChunks, int time) {
+		public ProtectedRegionContainer(ProtectedRegion protectedRegion, Collection<LevelChunk> loadedChunks, int time) {
 			this.protectedRegion = protectedRegion;
 			this.loadedChunks = loadedChunks;
 			this.lastTickForceLoaded = time;
@@ -65,11 +65,11 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return !this.loadedChunks.isEmpty();
 		}
 
-		public void addLoadedChunk(Chunk chunk) {
+		public void addLoadedChunk(LevelChunk chunk) {
 			this.loadedChunks.add(chunk);
 		}
 
-		public void removeLoadedChunk(Chunk chunk) {
+		public void removeLoadedChunk(LevelChunk chunk) {
 			this.loadedChunks.remove(chunk);
 		}
 
@@ -110,7 +110,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 				});
 	}
 
-	public void handleChunkLoad(Chunk chunk) {
+	public void handleChunkLoad(LevelChunk chunk) {
 		CapabilityProtectedRegionData protectedRegionData = CapabilityProtectedRegionDataProvider.get(chunk);
 
 		protectedRegionData.removeIf(uuid -> this.getProtectedRegion(uuid) == null);
@@ -121,7 +121,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 				.forEach(container -> container.addLoadedChunk(chunk));
 	}
 
-	public void handleChunkUnload(Chunk chunk) {
+	public void handleChunkUnload(LevelChunk chunk) {
 		CapabilityProtectedRegionData protectedRegionData = CapabilityProtectedRegionDataProvider.get(chunk);
 
 		protectedRegionData.getProtectedRegionUuids()
@@ -139,12 +139,12 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		for (ProtectedRegionContainer container : this.protectedRegions.values()) {
 			ProtectedRegion protectedRegion = container.getProtectedRegion();
 			if (!protectedRegion.isValid()) {
-				toRemove.add(protectedRegion.getUuid());
+				toRemove.add(protectedRegion.uuid());
 				return;
 			}
 
 			if (!container.hasLoadedChunk() && this.time - container.getLastTickForceLoaded() > 600) {
-				toUnload.add(protectedRegion.getUuid());
+				toUnload.add(protectedRegion.uuid());
 				return;
 			}
 
@@ -196,23 +196,23 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			return;
 		}
 
-		if (this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
+		if (this.protectedRegions.containsKey(protectedRegion.uuid())) {
+			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
 			return;
 		}
 
 		ProtectedRegionContainer container = this.createContainer(protectedRegion);
-		this.protectedRegions.put(protectedRegion.getUuid(), container);
+		this.protectedRegions.put(protectedRegion.uuid(), container);
 
 		protectedRegion.chunkArea()
 				.map(chunkPos -> this.level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false))
 				.filter(Objects::nonNull)
-				.map(Chunk.class::cast)
+				.map(LevelChunk.class::cast)
 				.map(CapabilityProtectedRegionDataProvider::get)
-				.forEach(protectedRegionData -> protectedRegionData.addProtectedRegionUuid(protectedRegion.getUuid()));
+				.forEach(protectedRegionData -> protectedRegionData.addProtectedRegionUuid(protectedRegion.uuid()));
 
 		protectedRegion.getEntityDependencies()
-				.forEach(entity -> this.entity2protectedRegion.put(entity, protectedRegion.getUuid()));
+				.forEach(entity -> this.entity2protectedRegion.put(entity, protectedRegion.uuid()));
 
 		CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
 		protectedRegion.clearNeedsSyncing();
@@ -229,14 +229,14 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			protectedRegion.chunkArea()
 					.map(chunkPos -> this.level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false))
 					.filter(Objects::nonNull)
-					.map(Chunk.class::cast)
+					.map(LevelChunk.class::cast)
 					.map(CapabilityProtectedRegionDataProvider::get)
-					.forEach(protectedRegionData -> protectedRegionData.removeProtectedRegionUuid(protectedRegion.getUuid()));
+					.forEach(protectedRegionData -> protectedRegionData.removeProtectedRegionUuid(protectedRegion.uuid()));
 
 			protectedRegion.getEntityDependencies()
-					.forEach(entity -> this.entity2protectedRegion.remove(entity, protectedRegion.getUuid()));
+					.forEach(entity -> this.entity2protectedRegion.remove(entity, protectedRegion.uuid()));
 
-			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.getUuid()));
+			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
 			protectedRegion.clearNeedsSyncing();
 		}
 	}
@@ -251,7 +251,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	@Override
 	public Stream<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
-		return CapabilityProtectedRegionDataProvider.get((Chunk) this.level.getChunk(pos))
+		return CapabilityProtectedRegionDataProvider.get((LevelChunk) this.level.getChunk(pos))
 				.getProtectedRegionUuids()
 				.map(this::getProtectedRegion)
 				.filter(Objects::nonNull)
@@ -294,7 +294,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 
 		ProtectedRegionContainer container = this.createContainer(protectedRegion);
-		this.protectedRegions.put(protectedRegion.getUuid(), container);
+		this.protectedRegions.put(protectedRegion.uuid(), container);
 
 		CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
 		protectedRegion.clearNeedsSyncing();
@@ -312,16 +312,16 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 				protectedRegion.clearNeedsSaving();
 			}
 
-			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.getUuid()));
+			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
 			protectedRegion.clearNeedsSyncing();
 		}
 	}
 
 	private ProtectedRegionContainer createContainer(ProtectedRegion protectedRegion) {
-		Collection<Chunk> loadedChunks = protectedRegion.chunkArea()
+		Collection<LevelChunk> loadedChunks = protectedRegion.chunkArea()
 				.map(chunkPos -> this.level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false))
 				.filter(Objects::nonNull)
-				.map(Chunk.class::cast)
+				.map(LevelChunk.class::cast)
 				.collect(Collectors.toSet());
 
 		return new ProtectedRegionContainer(protectedRegion, loadedChunks, this.time);
@@ -360,7 +360,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	private void saveProtectedRegionToFile(ProtectedRegion protectedRegion) {
-		FileIOUtil.writeNBT(this.getFile(protectedRegion), protectedRegion.writeToNBT());
+		FileIOUtil.writeNBT(this.getFile(protectedRegion), (CompoundTag) protectedRegion.writeToNBT());
 	}
 
 	@Nullable
@@ -371,11 +371,11 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 
 		CompoundTag compound = FileIOUtil.readNBT(file);
-		ProtectedRegion protectedRegion = new ProtectedRegion(this.level, compound);
+		ProtectedRegion protectedRegion = ProtectedRegion.readFromNBT(compound);
 
-		if (!ProtectedRegion.PROTECTED_REGION_VERSION.equals(compound.getString("version"))) {
+		/*if (!ProtectedRegion.PROTECTED_REGION_VERSION.equals(compound.getString("version"))) {
 			this.saveProtectedRegionToFile(protectedRegion);
-		}
+		}*/
 
 		return protectedRegion;
 	}
@@ -388,7 +388,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	private File getFile(ProtectedRegion protectedRegion) {
-		return this.getFile(protectedRegion.getUuid());
+		return this.getFile(protectedRegion.uuid());
 	}
 
 	private File getFile(UUID uuid) {

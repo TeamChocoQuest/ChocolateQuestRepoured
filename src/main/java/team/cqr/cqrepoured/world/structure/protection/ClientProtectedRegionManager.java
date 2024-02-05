@@ -26,12 +26,12 @@ public class ClientProtectedRegionManager implements IProtectedRegionManager {
 			return;
 		}
 
-		if (this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
+		if (this.protectedRegions.containsKey(protectedRegion.uuid())) {
+			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
 			return;
 		}
 
-		this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
+		this.protectedRegions.put(protectedRegion.uuid(), protectedRegion);
 	}
 
 	@Override
