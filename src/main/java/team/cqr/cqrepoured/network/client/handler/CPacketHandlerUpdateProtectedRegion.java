@@ -18,8 +18,8 @@ public class CPacketHandlerUpdateProtectedRegion extends AbstractPacketHandler<S
 		IProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(world);
 
 		if (protectedRegionManager != null) {
-			ProtectedRegion protectedRegion = new ProtectedRegion(world, message.getBuffer());
-			protectedRegionManager.removeProtectedRegion(protectedRegion.getUuid());
+			ProtectedRegion protectedRegion = message.getBuffer().readJsonWithCodec(ProtectedRegion.CODEC);
+			protectedRegionManager.removeProtectedRegion(protectedRegion.uuid());
 			protectedRegionManager.addProtectedRegion(protectedRegion);
 		}		
 	}

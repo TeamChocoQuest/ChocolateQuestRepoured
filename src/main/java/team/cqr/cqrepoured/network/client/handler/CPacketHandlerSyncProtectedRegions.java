@@ -1,16 +1,16 @@
 package team.cqr.cqrepoured.network.client.handler;
 
+import java.util.function.Supplier;
+
+import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent.Context;
-import de.dertoaster.multihitboxlib.api.network.AbstractPacketHandler;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
-
-import java.util.function.Supplier;
 
 public class CPacketHandlerSyncProtectedRegions extends AbstractPacketHandler<SPacketSyncProtectedRegions> {
 
@@ -25,7 +25,8 @@ public class CPacketHandlerSyncProtectedRegions extends AbstractPacketHandler<SP
 
 		int protectedRegionsCount = buf.readShort();
 		for (int i = 0; i < protectedRegionsCount; i++) {
-			protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, buf));
+			//protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, buf));
+			protectedRegionManager.addProtectedRegion(buf.readJsonWithCodec(ProtectedRegion.CODEC));
 		}
 	}
 
