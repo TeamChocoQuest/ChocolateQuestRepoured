@@ -5,6 +5,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShock;
 import team.cqr.cqrepoured.capability.electric.CapabilityElectricShockProvider;
+import team.cqr.cqrepoured.capability.electric.IElectricShockCapability;
+import team.cqr.cqrepoured.init.CQRCapabilities;
 import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
 
 public class SPacketUpdateElectrocuteCapability extends AbstractPacket<SPacketUpdateElectrocuteCapability> {
@@ -19,7 +21,7 @@ public class SPacketUpdateElectrocuteCapability extends AbstractPacket<SPacketUp
 
 	public SPacketUpdateElectrocuteCapability(LivingEntity entity) {
 		this.entityId = entity.getId();
-		LazyOptional<CapabilityElectricShock> lOpCap = entity.getCapability(CapabilityElectricShockProvider.ELECTROCUTE_HANDLER_CQR, null);
+		LazyOptional<IElectricShockCapability> lOpCap = entity.getCapability(CQRCapabilities.ELECTRIC_SPREAD, null);
 		lOpCap.ifPresent((cap) -> {
 			// this.electroCharge = cap.getRemainingTicks();
 			this.electroCuted = cap.isElectrocutionActive();

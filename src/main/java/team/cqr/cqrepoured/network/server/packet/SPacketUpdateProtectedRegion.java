@@ -14,7 +14,7 @@ public class SPacketUpdateProtectedRegion extends AbstractPacket<SPacketUpdatePr
 	}
 
 	public SPacketUpdateProtectedRegion(ProtectedRegion protectedRegion) {
-		protectedRegion.writeToByteBuf(this.buffer);
+		this.buffer.writeJsonWithCodec(ProtectedRegion.CODEC, protectedRegion);
 	}
 
 	@Override

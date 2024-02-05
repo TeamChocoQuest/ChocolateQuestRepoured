@@ -19,7 +19,7 @@ public class SPacketSyncProtectedRegions extends AbstractPacket<SPacketSyncProte
 		this.buffer.writeBoolean(clearExisting);
 		this.buffer.writeShort(protectedRegions.size());
 		for (ProtectedRegion protectedRegion : protectedRegions) {
-			protectedRegion.writeToByteBuf(this.buffer);
+			this.buffer.writeJsonWithCodec(ProtectedRegion.CODEC, protectedRegion);
 		}
 	}
 

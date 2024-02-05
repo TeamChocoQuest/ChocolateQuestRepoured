@@ -28,7 +28,7 @@ public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldow
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
 			//Item item = ByteBufUtils.readRegistryEntry(buf, ForgeRegistries.ITEMS);
-			Item item = buf.readRegistryIdSafe(ForgeRegistries.ITEMS.getRegistrySuperType());
+			Item item = buf.readRegistryIdSafe(Item.class);
 			int cooldown = buf.readInt();
 			result.itemCooldownMap.put(item, cooldown);
 		}
@@ -41,7 +41,7 @@ public class SPacketArmorCooldownSync extends AbstractPacket<SPacketArmorCooldow
 		buf.writeInt(packet.itemCooldownMap.size());
 		for (Entry<Item, Integer> entry : packet.itemCooldownMap.entrySet()) {
 			//ByteBufUtils.writeRegistryEntry(buf, entry.getKey());
-			buf.writeRegistryId(entry.getKey());
+			buf.writeRegistryId(ForgeRegistries.ITEMS, entry.getKey());
 			buf.writeInt(entry.getValue());
 		}
 	}
