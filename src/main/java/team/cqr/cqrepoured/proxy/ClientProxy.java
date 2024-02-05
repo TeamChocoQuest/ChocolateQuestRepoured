@@ -8,6 +8,7 @@ import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -42,8 +43,10 @@ public class ClientProxy implements IProxy {
 		}
 		// Since for whatever reason the player renderer is not in the entityRenderMap we need to add it manually...
 		Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().values().forEach(t -> {
-			t.addLayer(new LayerElectrocute<>(t));
-			t.addLayer(new LayerCrownRenderer<>(t));
+			if (t instanceof PlayerRenderer pr) {
+				pr.addLayer(new LayerElectrocute<>(pr));
+				pr.addLayer(new LayerCrownRenderer<>pr));
+			}
 			}
 		);
 	}
