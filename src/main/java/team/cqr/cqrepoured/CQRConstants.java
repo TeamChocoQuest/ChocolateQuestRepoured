@@ -10,6 +10,10 @@ import team.cqr.cqrepoured.customtextures.TextureSetNew;
 
 public class CQRConstants {
 	
+	/**
+	 * Use {@link CQRepoured#MODID} instead.
+	 */
+	@Deprecated
 	public static final String MODID = "cqrepoured";
 	public static final String PACK_RESOURCES_ID = MODID + "_folder_resources";
 	

@@ -34,14 +34,14 @@ public class Cache2D<V> {
 
 	public static <T> Codec<Cache2D<T>> codec(Codec<T> elementCodec, IntFunction<T[]> generator) {
 		return RecordCodecBuilder.create(instance -> {
-	        return instance.group(
-	        		Codec.INT.fieldOf("startX").forGetter(c -> c.startX),
-	        		Codec.INT.fieldOf("startZ").forGetter(c -> c.startZ),
-	        		Codec.INT.fieldOf("endX").forGetter(c -> c.endX),
-	        		Codec.INT.fieldOf("endZ").forGetter(c -> c.endZ),
-	        		elementCodec.optionalFieldOf("defaultValue", null).forGetter(c -> c.defaultValue),
-	        		CodecUtil.array(elementCodec, generator).fieldOf("data").forGetter(c -> c.data))
-	        		.apply(instance, Cache2D::new);
+			return instance.group(
+					Codec.INT.fieldOf("startX").forGetter(c -> c.startX),
+					Codec.INT.fieldOf("startZ").forGetter(c -> c.startZ),
+					Codec.INT.fieldOf("endX").forGetter(c -> c.endX),
+					Codec.INT.fieldOf("endZ").forGetter(c -> c.endZ),
+					elementCodec.optionalFieldOf("defaultValue", null).forGetter(c -> c.defaultValue),
+					CodecUtil.array(elementCodec, generator).fieldOf("data").forGetter(c -> c.data))
+					.apply(instance, Cache2D::new);
 		});
 	}
 

@@ -100,6 +100,10 @@ public class CQRLevel {
 		return section != null ? section.getBlockState(pos) : null;
 	}
 
+	public void setBlockState(BlockPos pos, @Nullable BlockState state) {
+		this.setBlockState(pos, state, null);
+	}
+
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
 		this.getOrCreateSection(pos).setBlockState(pos, state, blockEntityCallback);
 	}
@@ -122,10 +126,6 @@ public class CQRLevel {
 
 	public Collection<CQRSection> getSections() {
 		return Collections.unmodifiableCollection(this.sections.values());
-	}
-
-	public void setBlockState(BlockPos transformedPos, BlockState defaultBlockState) {
-		this.setBlockState(transformedPos, defaultBlockState, (b) -> {});
 	}
 
 }

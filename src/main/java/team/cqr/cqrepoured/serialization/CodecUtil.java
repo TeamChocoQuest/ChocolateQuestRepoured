@@ -8,13 +8,17 @@ import java.util.Set;
 import java.util.function.IntFunction;
 import java.util.stream.LongStream;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.ExtraCodecs;
@@ -46,33 +50,58 @@ public class CodecUtil {
 		return Codec.list(elementCodec).xmap(l -> l.toArray(generator), Arrays::asList);
 	}
 
-	public static <T, I> T decode(final Codec<T> codec, T defaultValue, DynamicOps<I> ops, I input) {
-		if (codec == null || ops == null) {
-			return defaultValue;
-		}
-		return codec.decode(ops, input).getOrThrow(false, CQRMain.logger::error).getFirst();
+	public static <T, I> T decodeOrThrow(Codec<T> codec, DynamicOps<I> ops, I input) {
+		return codec.decode(ops, input)
+				.getOrThrow(false, CQRMain.logger::error)
+				.getFirst();
 	}
-	
-	public static <T> T decodeNBT(final Codec<T> codec, T defaultValue, Tag nbt) {
-		return decode(codec, defaultValue, NbtOps.INSTANCE, nbt);
+
+	public static <T> T decodeOrThrowNBT(Codec<T> codec, Tag nbt) {
+		return decodeOrThrow(codec, NbtOps.INSTANCE, nbt);
 	}
-	
-	public static <T> T decodeJSON(final Codec<T> codec, T defaultValue, JsonElement json) {
-		return decode(codec, defaultValue, JsonOps.INSTANCE, json);
+
+	public static <T> T decodeOrThrowJSON(Codec<T> codec, JsonElement json) {
+		return decodeOrThrow(codec, JsonOps.INSTANCE, json);
 	}
-	
-	public static <T, O> O encode(final Codec<T> codec, O defaultValue, DynamicOps<O> ops, T input) {
-		DataResult<O> dataResult = codec.encodeStart(ops, input);
-		Optional<O> optResult = dataResult.result();
-		return optResult.orElseGet(() -> defaultValue);
+
+	public static <T, I> Optional<T> decode(Codec<T> codec, DynamicOps<I> ops, I input) {
+		return codec.decode(ops, input)
+				.result()
+				.map(Pair::getFirst);
 	}
-	
-	public static <T> Tag encodeNBT(final Codec<T> codec, Tag defaultValue, T input) {
-		return encode(codec, defaultValue, NbtOps.INSTANCE, input);
+
+	public static <T> Optional<T> decodeNBT(Codec<T> codec, Tag nbt) {
+		return decode(codec, NbtOps.INSTANCE, nbt);
 	}
-	
-	public static <T> JsonElement encodeJSON(final Codec<T> codec, JsonElement defaultValue, T input) {
-		return encode(codec, defaultValue, JsonOps.INSTANCE, input);
+
+	public static <T> Optional<T> decodeJSON(Codec<T> codec, JsonElement json) {
+		return decode(codec, JsonOps.INSTANCE, json);
 	}
-	
+
+	public static <T, O> O encodeOrThrow(Codec<T> codec, T input, DynamicOps<O> ops, @Nullable O prefix) {
+		return codec.encode(input, ops, prefix)
+				.getOrThrow(false, CQRMain.logger::error);
+	}
+
+	public static <T> Tag encodeOrThrowNBT(Codec<T> codec, T input, @Nullable CompoundTag prefix) {
+		return encodeOrThrow(codec, input, NbtOps.INSTANCE, prefix);
+	}
+
+	public static <T> JsonElement encodeOrThrowJSON(Codec<T> codec, T input, @Nullable JsonObject prefix) {
+		return encodeOrThrow(codec, input, JsonOps.INSTANCE, prefix);
+	}
+
+	public static <T, O> Optional<O> encode(Codec<T> codec, T input, DynamicOps<O> ops, @Nullable O prefix) {
+		return codec.encode(input, ops, prefix)
+				.result();
+	}
+
+	public static <T> Optional<Tag> encodeNBT(Codec<T> codec, T input, @Nullable CompoundTag prefix) {
+		return encode(codec, input, NbtOps.INSTANCE, prefix);
+	}
+
+	public static <T> Optional<JsonElement> encodeJSON(Codec<T> codec, T input, @Nullable JsonObject prefix) {
+		return encode(codec, input, JsonOps.INSTANCE, prefix);
+	}
+
 }
