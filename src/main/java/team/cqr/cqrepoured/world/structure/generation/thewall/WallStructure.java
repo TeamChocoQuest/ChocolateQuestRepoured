@@ -1,40 +1,39 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall;
 
+import java.util.Optional;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.Heightmap.Type;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.AbstractVillagePiece;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.CQRJigsawManager;
 
-public class WallStructure extends Structure<NoFeatureConfig> {
+public class WallStructure extends Structure {
 
-	public WallStructure() {
-		super(NoFeatureConfig.CODEC);
-	}
-
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory() {
-		return Start::new;
-	}
+	protected final WallFeatureConfig featureConfig;
 	
+	public WallStructure(net.minecraft.world.level.levelgen.structure.Structure.StructureSettings settings, WallFeatureConfig featureConfig) {
+		super(settings);
+		this.featureConfig = featureConfig;
+	}
+
 	@Override
 	public Decoration step() {
 		return Decoration.SURFACE_STRUCTURES;
@@ -92,25 +91,19 @@ public class WallStructure extends Structure<NoFeatureConfig> {
 			this.calculateBoundingBox();
 		}
 		
-		static final int TOTAL_CHUNK_AREA = 256; //16 * 16
-		
-		private boolean isSnowChunk(int chunkX, int chunkZ, ChunkGenerator cg) {
-			int startX = chunkX * 16;
-			int startZ = chunkZ * 16;
-			int snowyBiomeBlocks = 0;
-			for(int ix = startX; ix < startX + 16; ix++) {
-				for(int iz = startZ; iz < startZ + 16; iz++) {
-					int y = cg.getFirstFreeHeight(ix, iz, Type.WORLD_SURFACE);
-					for(Biome b : cg.getBiomeSource().getBiomesWithin(ix, y, iz, 2)) {
-						if(b.getBiomeCategory() == Category.ICY) {
-							snowyBiomeBlocks++;
-						}
-					}
-				}
-			}
-			return (snowyBiomeBlocks / TOTAL_CHUNK_AREA) >= 0.25;
-		}
-		
+	}
+	
+	@Override
+	protected Optional<GenerationStub> findGenerationPoint(GenerationContext pContext) {
+		pContext.
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StructureType<?> type() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
