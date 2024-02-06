@@ -257,7 +257,7 @@
     "item.cqrepoured.cursed_bone": "Cursed Bone",
     "item.cqrepoured.dummy_shield": "Dummy Shield",
     "item.cqrepoured.unprotected_positions_tool": "Unprotected Position Selector Helper",
-    "item.cqrepoured.magic_bell": "Magic Bell",
+    "item.cqrepoured.magic_bell": "Chime of Clairvoyance",
 
     "_comment": "Axes",
     "item.cqrepoured.battle_axe_bull": "Bull Battle Axe",
@@ -543,8 +543,8 @@
     "item.cqrepoured.tooltip.hold_shift": "\u00A79Hold \u00A7f[\u00A7eSHIFT\u00A7f]\u00A79 to view description",
 
     "_comment": "Armor",
-    "item.cqrepoured.spider_armor.tooltip": "\u00A79Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.",
-    "item.cqrepoured.bull_armor.tooltip": "\u00A79Wear the bull to become the bull. A full set allows you to charge forward at great speed, destroying everything in your path.",
+    "item.cqrepoured.spider_armor.tooltip": "\u00A79Wearing a full set allows you to mimic a spider's abilities. You'll jump much higher, and be able to climb walls too!",
+    "item.cqrepoured.bull_armor.tooltip": "\u00A79A full set allows you to charge forward at great speed, destroying everything in your path.",
     
     "item.cqrepoured.turtle_armor.tooltip": "\u00A79The Giant Tortoise's power, should you fashion a full set from its shell, will allow you to regain health much faster. The shell prevents most forms of damage from the rear, as well.",
     "item.cqrepoured.turtle_armor.charging": "Ability on cooldown, Remaining time: %s",
@@ -552,11 +552,11 @@
     "item.cqrepoured.slime_armor.tooltip": "\u00A79With a full set of the regenerating goo touching your skin, you can feel your maximum health overflowing, and whenever you are damaged, a small slime may appear which can restore your health, if you can reach it.",
     "item.cqrepoured.boots_cloud.tooltip": "\u00A79Those who tread to the angels song the prophets say can do no wrong. A single leap becomes a bound, a brisk walk breaks the speed of sound, no fall can stop the chosen few, and with these boots, that extends to you!",
     "_comment": "description.dragon_helmet.name=You can feel the dragon's power coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!",
-    "item.cqrepoured.walker_set.tootlip": "\u00A79Legend has it that any who fired an arrow upon the Walker King would find a blade in their back and a Walker King behind them. Perhaps collecting both his sword and his shield would allow you to utilize a similar ability?",
+    "item.cqrepoured.walker_set.tootlip": "\u00A79Legend has it that any who fired an arrow upon the Walker King would find a blade in their back and the Walker King behind them. Perhaps collecting both his sword and his shield would allow you to utilize a similar ability?",
    
     "_comment": "Weapons",
-    "item.cqrepoured.sword_spider.tooltip": "\u00A79Flowing forth from the fangs that made this simple sword a toxic blade, Shelob's poison can't be stayed once your foe is stuck by this blade.",
-    "item.cqrepoured.bull_battle_axe.tooltip": "\u00A79Grux right-click ground. Make earthquake. Travel forward. Smash enemies real good. Grux like.",
+    "item.cqrepoured.sword_spider.tooltip": "\u00A79Flowing forth from the fangs that made this simple sword a toxic blade, Shelob's poison can't be stayed once foes are stuck by this blade.",
+    "item.cqrepoured.bull_battle_axe.tooltip": "\u00A79Me right-click ground. Make earthquake. Travel forward. Smash enemies real good. Me like.",
     
     "item.cqrepoured.great_sword.tooltip": "\u00A79Hold right click to strike a large area.",
     
@@ -564,8 +564,8 @@
     "item.cqrepoured.rear_damage.tooltip": "%s Rear Damage",
     "item.cqrepoured.leap.tooltip": "\u00A79Right click while moving to leap forward",
      
-    "item.cqrepoured.sword_moonlight.tooltip": "\u00A79The inscription on the blade reads \"My power can only be awakened in the light of the moon\"",
-    "item.cqrepoured.sword_sunshine.tooltip": "\u00A79The inscription on the blade reads \"My power can only be awakened in the light of the sun\"",
+    "item.cqrepoured.sword_moonlight.tooltip": "\u00A79The inscription on the hilt reads \"My power can only be awakened in the light of the moon\"",
+    "item.cqrepoured.sword_sunshine.tooltip": "\u00A79The inscription on the hilt reads \"My power can only be awakened in the light of the sun\"",
     "item.cqrepoured.sword_moonlight.attack_damage_at_night": "%s Attack Damage during the Night",
     "item.cqrepoured.sword_sunshine.attack_damage_at_day": "%s Attack Damage during the Day",
 
@@ -578,7 +578,7 @@
     "item.cqrepoured.staff_healing.tooltip": "§9A magical implement used to apply potion effects by touching the tip to a target. Though historically usually used for healing effects, some generals have made great use of other potions as well. How the staff's potion effect is changed is a closely guarded secret.",
     "item.cqrepoured.staff_vampiric.tooltip": "§9This rod radiates dark energy as you hold it in your hand. If you move it near your ear you will hear its demand. Its call is simple: \"Right-click with me\" and when you do then you will see, a projectile it does emit. Though the damage is slight, if you land it just right, it will heal you when it does hit.",
     "item.cqrepoured.staff_wind.tooltip": "§9Whatever incredible magical power this once held, it is currently completely dormant. (Whatever this is supposed to do, it doesn't work yet. #TODO)",
-    "item.cqrepoured.staff_poison.tooltip": "§9Venom bubbles at the tip, careful that it doesn't drip, it eats through skin and flesh and bone, best be careful it's not your own. Shoot it out at your own peril, and beware that not all would call it a fair kill...",
+    "item.cqrepoured.staff_poison.tooltip": "§9Venom bubbles at the tip, careful that it doesn't drip, it eats through skin and flesh and bone, best be careful it's not your own.",
     "item.cqrepoured.staff.tooltip": "§9A long strong stick. There's probably someone out there who knows how to apply magic to it.",
     "item.cqrepoured.staff_thunder.tooltip": "§9The gem atop this staff sputters and sparks with electric charge. With a right-click, to hit your mark, one could simply redirect the arc.",
   
@@ -595,14 +595,14 @@
     "_comment": "Items",
     "item.cqrepoured.teleport_stone.tooltip": "\u00A79A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.",
     "item.cqrepoured.teleport_stone.tooltip.position": "\u00A79Bound Position:",
-    "item.cqrepoured.magic_bell.tooltip": "\u00A79Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.",
+    "item.cqrepoured.magic_bell.tooltip": "\u00A79The dungeon walls do never age, nor break in storm nor blast nor rage. What can it be that reinforces these walls beyond all natural courses? Sound the chimes and you will learn, what must be gone for the walls to burn. To break, to build, to till a field, you must destroy all that was revealed.",
     "description.charging": "Charging...",
     "item.cqrepoured.potion_healing.tooltip": "\u00A79Drink to restore 2 hearts.",
     "item.cqrepoured.tooltip.contains": "\u00A79Contains: %s",
     "item.cqrepoured.tooltip.contains_nothing": "\u00A79<Empty>",
     "description.empty": "Empty",
     "item.cqrepoured.soul_bottle.tooltip": "\u00A79Left-click a mob to store it, right-click to summon that mob. Sneak and right-click to summon the mob and empty the bottle. Place inside a single-use spawner to set the mobs that spawner will spawn.",
-    "item.cqrepoured.badge.tooltip": "\u00A79Creative only item. Right-click with it to open a GUI. Left-click a mob to attach it to that mob. Items placed inside will be dropped when the attached mob dies.",
+    "item.cqrepoured.badge.tooltip": "\u00A79Creative only item. Right-click with it to open a GUI. Left-click a mob to attach it to that mob. Items placed inside will be dropped when the attached mob dies. Left-clicking with this should not hurt the mob under most circumstances.",
     "item.cqrepoured.backpack.tooltip": "\u00A79Right-click to open.",
     "item.cqrepoured.alchemy_bag.tooltip": "\u00A79Shift-right-click to open. Only stores potions. When right clicking with it, it throws the first potion in the bag it finds.",
     "_comment": "description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.",
@@ -620,7 +620,7 @@
 
     "_comment": "Materials",
     "item.cqrepoured.giant_spider_poison.tooltip": "§9This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.",
-    "item.cqrepoured.feather_golden.tooltip": "\u00A79Take up a feather, gild it in gold, take a great leap and believe in the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.",
+    "item.cqrepoured.feather_golden.tooltip": "\u00A79Take up a feather, gild it in gold, take a great leap and believe the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.",
     "item.cqrepoured.scale_turtle.tooltip": "§9One of a few pieces of the Giant Tortoise's shell you managed to salvage. Its sheer strength is such that none of your tools can even chip it. Perhaps there's someone out there with stronger crafting tools than yours who you can convince to lend you a hand?",
     "item.cqrepoured.horn_bull.tooltip": "§9This horn is tough enough that you could probably make a great weapon with it if you knew how to craft with animal horns. Maybe there's a craftsman out there who's more experiened on the subject.",
     "item.cqrepoured.leather_bull.tooltip": "§9Very high quality leather. The right craftsman could probably use this to forge the most aerodynamic gear you've ever seen!",
