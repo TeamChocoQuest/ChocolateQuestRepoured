@@ -63,6 +63,15 @@ public class CQRConstants {
 		public static final String KEY_TRADE_PROFILE_DATA = "trade-profile-data";
 		public static final String KEY_ENTITY_VARIANT = "entity-variant";
 		public static final String KEY_ENTITY_VARIANT_ASSETS = "entity-variant-assets";
+		
+		public static class StructureTemplate {
+			public static final String KEY_CQR_FILE_VERSION = "cqr-file-version";
+			public static final String KEY_AUTHOR = "author";
+			public static final String KEY_SIZE = "size";
+			public static final String KEY_NBT_TAG_LIST = "block-nbt-data";
+			public static final String KEY_BLOCKSTATES_LIST = "blockstates";
+			public static final String KEY_BLOCKDATA_BYTES = "byte-data";
+		}
 	}
 	
 	public static class Translation {
