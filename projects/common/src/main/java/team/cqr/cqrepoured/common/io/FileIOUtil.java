@@ -19,6 +19,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerLevel;
 
 public class FileIOUtil {
@@ -89,11 +90,11 @@ public class FileIOUtil {
 	}
 
 	public static void writeNBT(Path file, CompoundTag nbt) {
-		write(file, out -> CompressedStreamTools.writeCompressed(nbt, out));
+		write(file, out -> NbtIo.writeCompressed(nbt, out));
 	}
 
 	public static CompoundTag readNBT(Path file) {
-		return read(file, (IOFunction<InputStream, CompoundTag>) CompressedStreamTools::readCompressed);
+		return read(file, (IOFunction<InputStream, CompoundTag>) NbtIo::readCompressed);
 	}
 
 	public static void writeProperties(Path file, Properties properties) {
