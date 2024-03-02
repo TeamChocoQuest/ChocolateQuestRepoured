@@ -20,10 +20,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import team.cqr.cqrepoured.client.util.ClientWorldUtil;
-import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
+import team.cqr.cqrepoured.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ProtectedRegion;
+import team.cqr.cqrepoured.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ServerProtectedRegionManager;
 
 public class EntityUtil {
 

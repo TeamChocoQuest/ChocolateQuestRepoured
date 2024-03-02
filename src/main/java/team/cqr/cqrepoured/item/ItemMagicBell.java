@@ -13,9 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.particles.BlockHighlightParticleData;
-import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ProtectedRegion;
+import team.cqr.cqrepoured.protection.ProtectedRegionManager;
 
 public class ItemMagicBell extends ItemLore {
 

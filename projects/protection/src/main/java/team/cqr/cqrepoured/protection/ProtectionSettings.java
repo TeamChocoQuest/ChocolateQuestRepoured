@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.dungeons;
+package team.cqr.cqrepoured.protection;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

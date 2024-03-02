@@ -16,8 +16,8 @@ import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
 import team.cqr.cqrepoured.capability.armor.attachment.CapabilityArmorAttachmentProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
-import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionDataProvider;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
 public class CapabilityHandler {

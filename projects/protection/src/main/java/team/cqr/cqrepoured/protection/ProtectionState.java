@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.protection;
+package team.cqr.cqrepoured.protection;
 
 public enum ProtectionState {
 

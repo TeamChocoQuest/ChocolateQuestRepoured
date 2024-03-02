@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
 public record DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant,
 		Optional<ProtectedRegion.Builder> protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {

@@ -8,7 +8,6 @@ import de.dertoaster.multihitboxlib.api.network.IMessageHandler;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateOfEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDungeonSync;
@@ -16,14 +15,11 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerHookShotPlayerSt
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerItemStackSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncLaserRotation;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncProtectedRegions;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTrades;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateCQRMultipart;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateEntityPrevPos;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateProtectedRegion;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateReputation;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerCalamityHandUpdateHand;
 import team.cqr.cqrepoured.network.client.handler.endercalamity.CPacketHandlerSyncCalamityRotation;
@@ -48,26 +44,30 @@ import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSaveStructureReq
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerStructureSelector;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSyncEntity;
 import team.cqr.cqrepoured.network.server.handler.SPacketHandlerSyncTileEntity;
-import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
 import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketDungeonSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketHookShotPlayerStop;
 import team.cqr.cqrepoured.network.server.packet.SPacketItemStackSync;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
-import team.cqr.cqrepoured.network.server.packet.SPacketSyncProtectedRegions;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
-import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateCQRMultipart;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketCalamityUpdateHand;
 import team.cqr.cqrepoured.network.server.packet.endercalamity.SPacketSyncCalamityRotation;
 import team.cqr.cqrepoured.network.server.packet.exterminator.SPacketUpdateEmitterTarget;
+import team.cqr.cqrepoured.protection.network.client.handler.CPacketHandlerAddOrResetProtectedRegionIndicator;
+import team.cqr.cqrepoured.protection.network.client.handler.CPacketHandlerSyncProtectedRegions;
+import team.cqr.cqrepoured.protection.network.client.handler.CPacketHandlerUnloadProtectedRegion;
+import team.cqr.cqrepoured.protection.network.client.handler.CPacketHandlerUpdateProtectedRegion;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketSyncProtectedRegions;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketUnloadProtectedRegion;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketUpdateProtectedRegion;
 
 public class CQRMessages {
 

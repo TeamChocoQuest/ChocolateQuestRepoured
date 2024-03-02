@@ -1,9 +1,9 @@
-package team.cqr.cqrepoured.network.server.packet;
+package team.cqr.cqrepoured.protection.network.server.packet;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
+import team.cqr.cqrepoured.protection.ProtectedRegion;
 import de.dertoaster.multihitboxlib.api.network.AbstractPacket;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 
 import java.util.Collection;
 

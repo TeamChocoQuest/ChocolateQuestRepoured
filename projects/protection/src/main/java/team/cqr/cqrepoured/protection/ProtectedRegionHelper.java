@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.protection;
+package team.cqr.cqrepoured.protection;
 
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +23,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.client.world.structure.protection.ProtectionIndicatorHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
 import team.cqr.cqrepoured.init.CQRBlockTags;

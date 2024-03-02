@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.world.structure.protection;
+package team.cqr.cqrepoured.protection;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleTypes;
@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketAddOrResetProtectedRegionIndicator;
 
 import javax.annotation.Nullable;
 import java.util.UUID;

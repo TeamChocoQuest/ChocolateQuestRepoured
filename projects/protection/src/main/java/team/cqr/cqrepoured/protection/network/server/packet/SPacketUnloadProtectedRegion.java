@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.network.server.packet;
+package team.cqr.cqrepoured.protection.network.server.packet;
 
 import net.minecraft.network.FriendlyByteBuf;
 import de.dertoaster.multihitboxlib.api.network.AbstractPacket;

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability.protectedregions;
+package team.cqr.cqrepoured.protection.capability;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability.protectedregions;
+package team.cqr.cqrepoured.protection.capability;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.LevelChunk;

@@ -28,13 +28,13 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.init.CQRStructurePieceTypes;
+import team.cqr.cqrepoured.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ProtectedRegion;
+import team.cqr.cqrepoured.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.util.Cache2D;
 import team.cqr.cqrepoured.util.IntUtil;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
 
 // TODO: Change to extends jigsaw structure piece
 // TODO: Move the inhabitants access to a own object

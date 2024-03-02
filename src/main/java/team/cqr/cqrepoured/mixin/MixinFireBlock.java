@@ -5,6 +5,8 @@ import java.util.Random;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import team.cqr.cqrepoured.protection.ProtectedRegionHelper;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
 @Mixin(FireBlock.class)
 public class MixinFireBlock {

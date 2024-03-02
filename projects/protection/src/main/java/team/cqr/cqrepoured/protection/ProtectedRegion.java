@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.protection;
+package team.cqr.cqrepoured.protection;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.ProtectionSettings;
 
 public record ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies, UpdateInfo updateInfo) {
 

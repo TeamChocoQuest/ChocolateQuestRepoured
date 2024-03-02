@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.protection;
+package team.cqr.cqrepoured.protection;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -25,12 +25,12 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
-import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.common.io.IOConsumer;
-import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
+import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionData;
+import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionDataProvider;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketUnloadProtectedRegion;
+import team.cqr.cqrepoured.protection.network.server.packet.SPacketUpdateProtectedRegion;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 

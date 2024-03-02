@@ -43,11 +43,11 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.armor.ItemArmorDyable;
+import team.cqr.cqrepoured.protection.IProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ProtectedRegionManager;
+import team.cqr.cqrepoured.protection.ServerProtectedRegionManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.EntityUtil;
-import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
-import team.cqr.cqrepoured.world.structure.protection.ServerProtectedRegionManager;
 
 public class EntityCQREnderKing extends AbstractEntityCQRBoss implements IAnimatableCQR {
 

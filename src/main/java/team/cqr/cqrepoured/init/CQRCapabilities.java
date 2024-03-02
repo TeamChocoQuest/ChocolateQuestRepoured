@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandle
 import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.capability.itemhandler.CapabilitySerializableItemHandler;
 import team.cqr.cqrepoured.capability.pathtool.ICapabilityPath;
-import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
+import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionData;
 
 public class CQRCapabilities {
 

@@ -18,11 +18,11 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.init.CQRStructureTypes;
+import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonInhabitantMap;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.generators.StructurePieceGenerator;
 
 public class StructureCQR extends Structure {
