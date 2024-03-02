@@ -24,7 +24,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.world.entity.EquipmentSlot;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRepoured;
 
 public class CodecUtil {
 
@@ -52,7 +52,7 @@ public class CodecUtil {
 
 	public static <T, I> T decodeOrThrow(Codec<T> codec, DynamicOps<I> ops, I input) {
 		return codec.decode(ops, input)
-				.getOrThrow(false, CQRMain.logger::error)
+				.getOrThrow(false, CQRepoured.LOGGER::error)
 				.getFirst();
 	}
 
@@ -80,7 +80,7 @@ public class CodecUtil {
 
 	public static <T, O> O encodeOrThrow(Codec<T> codec, T input, DynamicOps<O> ops, @Nullable O prefix) {
 		return codec.encode(input, ops, prefix)
-				.getOrThrow(false, CQRMain.logger::error);
+				.getOrThrow(false, CQRepoured.LOGGER::error);
 	}
 
 	public static <T> Tag encodeOrThrowNBT(Codec<T> codec, T input, @Nullable CompoundTag prefix) {
