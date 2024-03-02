@@ -1,82 +1,84 @@
 package team.cqr.cqrepoured.protection.capability;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.INBTSerializable;
 
 @AutoRegisterCapability
-public interface ProtectionReferences extends INBTSerializable<CompoundTag> {
+public class ProtectionReferences implements INBTSerializable<LongArrayTag> {
 
-	public Set<UUID> getRegionUUIDs();
-	
-	public LevelChunk getChunk();
-	
-	public Stream<UUID> getProtectedRegionUuids();
+	private final LevelChunk chunk;
+	private final Set<UUID> protectedRegionUuids = new HashSet<>();
 
-	public default void removeIf(Predicate<UUID> predicate) {
-		Iterator<UUID> iterator = this.getRegionUUIDs().iterator();
+	public ProtectionReferences(LevelChunk chunk) {
+		this.chunk = chunk;
+	}
+
+	public Stream<UUID> getProtectedRegionUuids() {
+		return this.protectedRegionUuids.stream();
+	}
+
+	public void removeIf(Predicate<UUID> predicate) {
+		Iterator<UUID> iterator = this.protectedRegionUuids.iterator();
 		while (iterator.hasNext()) {
 			UUID uuid = iterator.next();
 			if (predicate.test(uuid)) {
 				iterator.remove();
-				this.getChunk().setUnsaved(true);
+				this.chunk.setUnsaved(true);
 			}
 		}
 	}
 
-	public default void clearProtectedRegionUuids() {
-		if (!this.getRegionUUIDs().isEmpty()) {
-			this.getRegionUUIDs().clear();
-			this.getChunk().setUnsaved(true);
+	public void clearProtectedRegionUuids() {
+		if (!this.protectedRegionUuids.isEmpty()) {
+			this.protectedRegionUuids.clear();
+			this.chunk.setUnsaved(true);
 		}
 	}
 
-	public default boolean addProtectedRegionUuid(UUID uuid) {
-		if (this.getRegionUUIDs().add(uuid)) {
-			this.getChunk().setUnsaved(true);
+	public boolean addProtectedRegionUuid(UUID uuid) {
+		if (this.protectedRegionUuids.add(uuid)) {
+			this.chunk.setUnsaved(true);
 			return true;
 		}
 		return false;
 	}
 
-	public default boolean removeProtectedRegionUuid(UUID uuid) {
-		if (this.getRegionUUIDs().remove(uuid)) {
-			this.getChunk().setUnsaved(true);
+	public boolean removeProtectedRegionUuid(UUID uuid) {
+		if (this.protectedRegionUuids.remove(uuid)) {
+			this.chunk.setUnsaved(true);
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
-	public default CompoundTag serializeNBT() {
-		CompoundTag compound = new CompoundTag();
-		int[] data = new int[this.getRegionUUIDs().size() * 4];
+	public LongArrayTag serializeNBT() {
+		long[] data = new long[this.protectedRegionUuids.size() << 1];
 		int i = 0;
-		for (UUID uuid : this.getRegionUUIDs()) {
-			data[i * 4] = (int) (uuid.getMostSignificantBits() >> 32);
-			data[i * 4 + 1] = (int) uuid.getMostSignificantBits();
-			data[i * 4 + 2] = (int) (uuid.getLeastSignificantBits() >> 32);
-			data[i * 4 + 3] = (int) uuid.getLeastSignificantBits();
-			i++;
+		for (UUID uuid : this.protectedRegionUuids) {
+			data[i++] = uuid.getMostSignificantBits();
+			data[i++] = uuid.getLeastSignificantBits();
 		}
-		compound.put("protectedRegionUuids", new IntArrayTag(data));
-		return compound;
+		return new LongArrayTag(data);
 	}
 
 	@Override
-	public default void deserializeNBT(CompoundTag compound) {
-		this.getRegionUUIDs().clear();
-		int[] data = compound.getIntArray("protectedRegionUuids");
-		for (int i = 0; i < data.length / 4; i++) {
-			this.getRegionUUIDs().add(new UUID(((long) data[i * 4] << 32) | (data[i * 4 + 1] & 0xFFFFFFFFL), ((long) data[i * 4 + 2] << 32) | (data[i * 4 + 3] & 0xFFFFFFFFL)));
+	public void deserializeNBT(LongArrayTag nbt) {
+		this.protectedRegionUuids.clear();
+
+		long[] data = nbt.getAsLongArray();
+		int i = 0;
+		for (int j = 0; j < data.length >> 1; j++) {
+			this.protectedRegionUuids.add(new UUID(data[i++], data[i++]));
 		}
 	}
 

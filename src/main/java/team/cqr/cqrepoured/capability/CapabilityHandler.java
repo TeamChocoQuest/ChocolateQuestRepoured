@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -17,7 +16,6 @@ import team.cqr.cqrepoured.capability.armor.attachment.CapabilityArmorAttachment
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.protection.capability.ProtectionReferencesProvider;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
 public class CapabilityHandler {
@@ -45,11 +43,6 @@ public class CapabilityHandler {
 			event.addCapability(CapabilityArmorAttachmentProvider.IDENTIFIER, CapabilityArmorAttachmentProvider.createProvider());
 		}
 		
-	}
-
-	@SubscribeEvent
-	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<LevelChunk> event) {
-		event.addCapability(ProtectionReferencesProvider.LOCATION, ProtectionReferencesProvider.createProvider(event.getObject()));
 	}
 
 	public static void writeToItemStackNBT(ItemStack stack, String key, CompoundTag compound) {
