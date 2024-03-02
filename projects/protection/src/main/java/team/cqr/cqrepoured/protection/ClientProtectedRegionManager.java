@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRepoured;
 
 public class ClientProtectedRegionManager implements IProtectedRegionManager {
 
@@ -27,7 +27,7 @@ public class ClientProtectedRegionManager implements IProtectedRegionManager {
 		}
 
 		if (this.protectedRegions.containsKey(protectedRegion.uuid())) {
-			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
+			CQRepoured.LOGGER.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
 			return;
 		}
 

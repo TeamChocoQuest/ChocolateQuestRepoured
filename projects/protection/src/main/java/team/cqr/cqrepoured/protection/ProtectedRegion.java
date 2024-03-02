@@ -20,7 +20,7 @@ import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.CQRepoured;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
 
 public record ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies, UpdateInfo updateInfo) {
@@ -247,12 +247,12 @@ public record ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStora
 
 	public Tag writeToNBT() {
 		return CODEC.encode(this, NbtOps.INSTANCE, new CompoundTag())
-				.getOrThrow(false, CQRMain.logger::error);
+				.getOrThrow(false, CQRepoured.LOGGER::error);
 	}
 
 	public static ProtectedRegion readFromNBT(CompoundTag nbt) {
 		return CODEC.decode(NbtOps.INSTANCE, nbt)
-				.getOrThrow(false, CQRMain.logger::error)
+				.getOrThrow(false, CQRepoured.LOGGER::error)
 				.getFirst();
 	}
 
