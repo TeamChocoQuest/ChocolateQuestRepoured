@@ -1,25 +1,32 @@
 package team.cqr.cqrepoured.common.capability;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullSupplier;
 
 public abstract class BasicCapabilityProvider<C> implements ICapabilityProvider {
 
-	protected final Capability<C> capability;
-	public final C backend;
-	public final LazyOptional<C> optionalData;
+	private final Capability<C> capability;
+	protected final LazyOptional<C> instance;
 
-	public BasicCapabilityProvider(Capability<C> capability, C defaultValue) {
+	public BasicCapabilityProvider(Capability<C> capability, C instance) {
+		this(capability, () -> instance);
+	}
+
+	public BasicCapabilityProvider(Capability<C> capability, NonNullSupplier<C> instanceSupplier) {
 		this.capability = capability;
-		this.backend = defaultValue;
-		this.optionalData = LazyOptional.of(() -> defaultValue);
+		this.instance = LazyOptional.of(instanceSupplier);
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-		return this.capability.orEmpty(cap, optionalData);
+	@NotNull
+	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+		return capability.orEmpty(cap, instance);
 	}
 
 }
