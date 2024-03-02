@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util.data;
+package team.cqr.cqrepoured.common.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

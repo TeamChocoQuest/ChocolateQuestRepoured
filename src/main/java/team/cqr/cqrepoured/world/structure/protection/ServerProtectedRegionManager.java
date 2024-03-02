@@ -27,10 +27,10 @@ import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionData;
 import team.cqr.cqrepoured.capability.protectedregions.CapabilityProtectedRegionDataProvider;
+import team.cqr.cqrepoured.common.io.FileIOUtil;
+import team.cqr.cqrepoured.common.io.IOConsumer;
 import team.cqr.cqrepoured.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateProtectedRegion;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
-import team.cqr.cqrepoured.util.data.IOConsumer;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 

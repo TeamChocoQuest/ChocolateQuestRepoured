@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability;
+package team.cqr.cqrepoured.common.capability;
 
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;

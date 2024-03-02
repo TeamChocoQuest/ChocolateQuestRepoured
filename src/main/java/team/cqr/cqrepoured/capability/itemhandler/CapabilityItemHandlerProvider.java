@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityItemHandlerProvider<C extends IItemHandler & INBTSerializable<CompoundTag>> extends SerializableCapabilityProvider<C> {

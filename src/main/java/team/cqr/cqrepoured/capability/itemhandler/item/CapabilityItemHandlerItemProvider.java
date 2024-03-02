@@ -2,8 +2,8 @@ package team.cqr.cqrepoured.capability.itemhandler.item;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.capability.itemhandler.CapabilitySerializableItemHandler;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityItemHandlerItemProvider extends SerializableCapabilityProvider<CapabilitySerializableItemHandler> {

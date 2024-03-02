@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.serialization.CodecUtil;
+import team.cqr.cqrepoured.common.serialization.CodecUtil;
 
 public class Cache2D<V> {
 

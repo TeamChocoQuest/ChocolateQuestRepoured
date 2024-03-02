@@ -14,11 +14,11 @@ import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRLoottables;
 import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.GeneratorVolcano;
 

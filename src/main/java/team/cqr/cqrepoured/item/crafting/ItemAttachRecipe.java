@@ -28,8 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.capability.armor.attachment.ICapabilityArmorAttachment;
+import team.cqr.cqrepoured.common.serialization.CodecUtil;
 import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.serialization.CodecUtil;
 
 public class ItemAttachRecipe implements Recipe<CraftingContainer> {
 	

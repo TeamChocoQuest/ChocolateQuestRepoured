@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.serialization.CodecUtil;
+import team.cqr.cqrepoured.common.serialization.CodecUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 
 public class CQRStructureTemplate extends StructureTemplate {

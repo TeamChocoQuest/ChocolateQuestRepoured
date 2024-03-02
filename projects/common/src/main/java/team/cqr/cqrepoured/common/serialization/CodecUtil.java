@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.serialization;
+package team.cqr.cqrepoured.common.serialization;
 
 import java.util.ArrayList;
 import java.util.Arrays;

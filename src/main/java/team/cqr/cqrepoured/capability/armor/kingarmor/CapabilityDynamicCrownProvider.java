@@ -4,7 +4,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.NonNullSupplier;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 
 public class CapabilityDynamicCrownProvider extends SerializableCapabilityProvider<CapabilityDynamicCrown> {
 

@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityProtectedRegionDataProvider extends SerializableCapabilityProvider<CapabilityProtectedRegionData> {

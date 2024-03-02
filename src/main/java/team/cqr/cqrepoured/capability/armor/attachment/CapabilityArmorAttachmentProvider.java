@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.capability.armor.attachment;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityArmorAttachmentProvider extends SerializableCapabilityProvider<ICapabilityArmorAttachment> {

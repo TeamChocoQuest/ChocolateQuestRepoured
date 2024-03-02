@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.capability.BasicCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.BasicCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityPathProvider extends BasicCapabilityProvider<ICapabilityPath> {

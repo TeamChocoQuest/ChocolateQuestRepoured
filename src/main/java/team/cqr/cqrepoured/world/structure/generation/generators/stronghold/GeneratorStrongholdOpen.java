@@ -14,7 +14,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
+import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open.StrongholdFloorOpen;

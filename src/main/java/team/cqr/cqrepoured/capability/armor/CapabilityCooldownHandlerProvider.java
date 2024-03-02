@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.capability.armor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.capability.SerializableCapabilityProvider;
+import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 
 public class CapabilityCooldownHandlerProvider extends SerializableCapabilityProvider<CapabilityArmorCooldown> {

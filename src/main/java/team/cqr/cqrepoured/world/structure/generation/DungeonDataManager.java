@@ -17,7 +17,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import team.cqr.cqrepoured.util.data.FileIOUtil;
+import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 //TODO: Replace with worldSavedData or capability
