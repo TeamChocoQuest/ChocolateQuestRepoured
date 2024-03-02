@@ -13,7 +13,7 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.util.INBTSerializable;
 
 @AutoRegisterCapability
-public interface CapabilityProtectedRegionData extends INBTSerializable<CompoundTag> {
+public interface ProtectionReferences extends INBTSerializable<CompoundTag> {
 
 	public Set<UUID> getRegionUUIDs();
 	

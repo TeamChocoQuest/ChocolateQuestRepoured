@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 import net.minecraft.world.level.chunk.LevelChunk;
 
-public class CapabilityProtectedRegionDataImplementation implements CapabilityProtectedRegionData {
+public class ProtectionReferencesImplementation implements ProtectionReferences {
 
 	private final LevelChunk chunk;
 	private final Set<UUID> protectedRegionUuids = new HashSet<>();
@@ -17,7 +17,7 @@ public class CapabilityProtectedRegionDataImplementation implements CapabilityPr
 		return this.protectedRegionUuids;
 	}
 
-	public CapabilityProtectedRegionDataImplementation(LevelChunk chunk) {
+	public ProtectionReferencesImplementation(LevelChunk chunk) {
 		this.chunk = chunk;
 	}
 

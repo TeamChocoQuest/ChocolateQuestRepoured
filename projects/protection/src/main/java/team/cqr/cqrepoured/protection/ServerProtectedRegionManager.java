@@ -27,8 +27,8 @@ import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.common.io.IOConsumer;
-import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionData;
-import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionDataProvider;
+import team.cqr.cqrepoured.protection.capability.ProtectionReferences;
+import team.cqr.cqrepoured.protection.capability.ProtectionReferencesProvider;
 import team.cqr.cqrepoured.protection.network.server.packet.SPacketUnloadProtectedRegion;
 import team.cqr.cqrepoured.protection.network.server.packet.SPacketUpdateProtectedRegion;
 
@@ -111,7 +111,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void handleChunkLoad(LevelChunk chunk) {
-		CapabilityProtectedRegionData protectedRegionData = CapabilityProtectedRegionDataProvider.get(chunk);
+		ProtectionReferences protectedRegionData = ProtectionReferencesProvider.get(chunk);
 
 		protectedRegionData.removeIf(uuid -> this.getProtectedRegion(uuid) == null);
 
@@ -122,7 +122,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 	}
 
 	public void handleChunkUnload(LevelChunk chunk) {
-		CapabilityProtectedRegionData protectedRegionData = CapabilityProtectedRegionDataProvider.get(chunk);
+		ProtectionReferences protectedRegionData = ProtectionReferencesProvider.get(chunk);
 
 		protectedRegionData.getProtectedRegionUuids()
 				.map(this.protectedRegions::get)
@@ -208,7 +208,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 				.map(chunkPos -> this.level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false))
 				.filter(Objects::nonNull)
 				.map(LevelChunk.class::cast)
-				.map(CapabilityProtectedRegionDataProvider::get)
+				.map(ProtectionReferencesProvider::get)
 				.forEach(protectedRegionData -> protectedRegionData.addProtectedRegionUuid(protectedRegion.uuid()));
 
 		protectedRegion.getEntityDependencies()
@@ -230,7 +230,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 					.map(chunkPos -> this.level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.FULL, false))
 					.filter(Objects::nonNull)
 					.map(LevelChunk.class::cast)
-					.map(CapabilityProtectedRegionDataProvider::get)
+					.map(ProtectionReferencesProvider::get)
 					.forEach(protectedRegionData -> protectedRegionData.removeProtectedRegionUuid(protectedRegion.uuid()));
 
 			protectedRegion.getEntityDependencies()
@@ -251,7 +251,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 	@Override
 	public Stream<ProtectedRegion> getProtectedRegionsAt(BlockPos pos) {
-		return CapabilityProtectedRegionDataProvider.get((LevelChunk) this.level.getChunk(pos))
+		return ProtectionReferencesProvider.get((LevelChunk) this.level.getChunk(pos))
 				.getProtectedRegionUuids()
 				.map(this::getProtectedRegion)
 				.filter(Objects::nonNull)

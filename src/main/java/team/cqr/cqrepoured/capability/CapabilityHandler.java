@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.capability.armor.attachment.CapabilityArmorAttachment
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.protection.capability.CapabilityProtectedRegionDataProvider;
+import team.cqr.cqrepoured.protection.capability.ProtectionReferencesProvider;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
 public class CapabilityHandler {
@@ -49,7 +49,7 @@ public class CapabilityHandler {
 
 	@SubscribeEvent
 	public static void onChunkAttachCapabilitiesEvent(AttachCapabilitiesEvent<LevelChunk> event) {
-		event.addCapability(CapabilityProtectedRegionDataProvider.LOCATION, CapabilityProtectedRegionDataProvider.createProvider(event.getObject()));
+		event.addCapability(ProtectionReferencesProvider.LOCATION, ProtectionReferencesProvider.createProvider(event.getObject()));
 	}
 
 	public static void writeToItemStackNBT(ItemStack stack, String key, CompoundTag compound) {
