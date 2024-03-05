@@ -27,7 +27,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.init.CQRStructurePieceTypes;
+import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
