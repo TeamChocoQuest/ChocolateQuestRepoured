@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.material.FluidState;
-import team.cqr.cqrepoured.util.NBTCollectors;
+import team.cqr.cqrepoured.common.nbt.NBTUtil;
 
 public class CQRLevel {
 
@@ -38,7 +38,7 @@ public class CQRLevel {
 	public CQRLevel(CompoundTag nbt) {
 		this.center = SectionPos.of(nbt.getInt("CenterX"), nbt.getInt("CenterY"), nbt.getInt("CenterZ"));
 		this.seed = nbt.getLong("Seed");
-		this.sections = NBTCollectors.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundTag sectionNbt) -> new CQRSection(sectionNbt));
+		this.sections = NBTUtil.toInt2ObjectMap(nbt.getCompound("Sections"), (CompoundTag sectionNbt) -> new CQRSection(sectionNbt));
 	}
 
 	public CompoundTag save() {
@@ -47,7 +47,7 @@ public class CQRLevel {
 		nbt.putInt("CenterY", this.center.y());
 		nbt.putInt("CenterZ", this.center.z());
 		nbt.putLong("Seed", this.seed);
-		nbt.put("Sections", NBTCollectors.collect(this.sections, CQRSection::save));
+		nbt.put("Sections", NBTUtil.collect(this.sections, CQRSection::save));
 		return nbt;
 	}
 

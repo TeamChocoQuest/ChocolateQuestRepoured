@@ -34,9 +34,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.util.IntUtil;
-import team.cqr.cqrepoured.util.NBTCollectors;
-import team.cqr.cqrepoured.util.NBTHelper;
 
 @SuppressWarnings("deprecation")
 public class CQRSection {
@@ -60,10 +59,10 @@ public class CQRSection {
 	public CQRSection(CompoundTag nbt) {
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
 		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRMain.logger::error).getOrThrow(false, CQRMain.logger::error);
-		this.blockEntities = NBTCollectors.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
+		this.blockEntities = NBTUtil.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
 			return BlockEntity.loadStatic(getPos(sectionPos, index), this.getBlockState(index), blockEntityNbt);
 		});
-		this.entities = NBTHelper.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
+		this.entities = NBTUtil.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
 	}
 
 	public SectionPos getPos() {
@@ -76,8 +75,8 @@ public class CQRSection {
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
 		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRMain.logger::error));
-		nbt.put("BlockEntities", NBTCollectors.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
-		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTCollectors.toList()));
+		nbt.put("BlockEntities", NBTUtil.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
+		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTUtil.toList()));
 		return nbt;
 	}
 

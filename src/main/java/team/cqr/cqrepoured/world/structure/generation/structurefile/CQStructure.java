@@ -48,10 +48,10 @@ import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.CQRConstants.NBT;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.block.BlockExporterChest;
+import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
-import team.cqr.cqrepoured.util.NBTCollectors;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
 import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
@@ -180,7 +180,7 @@ public class CQStructure {
 		compound.putByteArray("blockInfoList", Arrays.copyOf(buf.array(), buf.writerIndex()));
 
 		// Save entities
-		compound.put("entityInfoList", this.entityInfoList.stream().map(PreparableEntityInfo::getEntityData).collect(NBTCollectors.toList()));
+		compound.put("entityInfoList", this.entityInfoList.stream().map(PreparableEntityInfo::getEntityData).collect(NBTUtil.toList()));
 
 		// Save block states
 		compound.put("palette", palette.writeToNBT());

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.nbt;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -7,17 +7,24 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagType;
+import net.minecraft.nbt.TagTypes;
+import team.cqr.cqrepoured.util.CollectorImpl;
+import team.cqr.cqrepoured.util.IntObj2ObjFunction;
 
-public class NBTCollectors {
+public class NBTUtil {
 
 	public static <T extends Tag> Collector<T, ListTag, ListTag> toList() {
 		return new CollectorImpl<>(ListTag::new, ListTag::add, (list1, list2) -> {
@@ -87,6 +94,40 @@ public class NBTCollectors {
 					map1.putAll(map2);
 					return map1;
 				}, CollectorImpl.CH_ID));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Tag> Stream<T> stream(Tag tag, TagType<T> expectedElementType) {
+		TagType<?> type = tag.getType();
+		if (type != ListTag.TYPE) {
+			throw new IllegalArgumentException("Expected List-Tag to be of type " + ListTag.TYPE.getName() + ", but found " + type.getName() + ".");
+		}
+		ListTag listNbt = (ListTag) tag;
+		if (listNbt.isEmpty()) {
+			return Stream.empty();
+		}
+		TagType<?> elementType = TagTypes.getType(listNbt.getElementType());
+		if (elementType != expectedElementType) {
+			throw new IllegalArgumentException(
+					"Expected List-Tag elements to be of type " + expectedElementType.getName() + ", but found " + elementType.getName() + ".");
+		}
+		return (Stream<T>) listNbt.stream();
+	}
+
+	public static IntArrayTag writeBlockPos(BlockPos pos) {
+		return new IntArrayTag(new int[] { pos.getX(), pos.getY(), pos.getZ() });
+	}
+
+	public static BlockPos readBlockPos(Tag tag) {
+		TagType<?> type = tag.getType();
+		if (type != IntArrayTag.TYPE) {
+			throw new IllegalArgumentException("Expected BlockPos-Tag to be of type " + IntArrayTag.TYPE.getName() + ", but found " + type.getName() + ".");
+		}
+		int[] data = ((IntArrayTag) tag).getAsIntArray();
+		if (data.length != 3) {
+			throw new IllegalArgumentException("Expected BlockPos-Array to be of length 3, but found " + data.length + ".");
+		}
+		return new BlockPos(data[0], data[1], data[2]);
 	}
 
 }
