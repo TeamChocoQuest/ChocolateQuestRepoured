@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,6 +34,12 @@ import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.util.IntUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRSection;
+import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
+import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.world.structure.generation.generation.NoiseUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.ServerEntityFactory;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 // TODO: Change to extends jigsaw structure piece

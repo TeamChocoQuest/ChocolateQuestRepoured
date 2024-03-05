@@ -6,8 +6,8 @@ import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper;
 
 public class EntranceBuilderHelper {

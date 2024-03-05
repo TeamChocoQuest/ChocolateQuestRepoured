@@ -1,8 +1,8 @@
 package team.cqr.cqrepoured.world.structure.generation.generators;
 
 import net.minecraft.world.level.Level;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 public abstract class AbstractDungeonGenerationComponent<D extends DungeonBase, T extends LegacyDungeonGenerator<D>> {

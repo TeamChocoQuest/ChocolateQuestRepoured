@@ -10,9 +10,9 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece.Builder;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece.Builder;
 
 public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements IDungeonGenerator<T> {
 

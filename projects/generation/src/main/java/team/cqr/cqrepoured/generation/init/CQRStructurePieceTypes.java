@@ -10,7 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.common.CQRepoured;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 
 @EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
 public class CQRStructurePieceTypes {
