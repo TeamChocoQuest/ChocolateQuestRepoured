@@ -47,7 +47,7 @@ public class CQRStructurePlacement extends RandomSpreadStructurePlacement {
 
 	@Override
 	public StructurePlacementType<?> type() {
-		return CQRStructurePlacementTypes.CQR_STRUCTURE_PLACEMENT_TYPE;
+		return CQRStructurePlacementTypes.CQR_STRUCTURE_PLACEMENT_TYPE.get();
 	}
 
 	@Deprecated
