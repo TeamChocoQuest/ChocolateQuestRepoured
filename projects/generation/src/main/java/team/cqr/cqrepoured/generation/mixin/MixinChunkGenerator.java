@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.mixin.structure;
+package team.cqr.cqrepoured.generation.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
