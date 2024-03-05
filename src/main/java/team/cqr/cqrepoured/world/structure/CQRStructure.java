@@ -25,20 +25,20 @@ import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonInhabitant
 import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
 import team.cqr.cqrepoured.world.structure.generation.generators.StructurePieceGenerator;
 
-public class StructureCQR extends Structure {
+public class CQRStructure extends Structure {
 
-	public static final Codec<StructureCQR> CODEC = RecordCodecBuilder.create(instance -> {
+	public static final Codec<CQRStructure> CODEC = RecordCodecBuilder.create(instance -> {
         return instance.group(
         		settingsCodec(instance),
-				Codec.BOOL.fieldOf("enabled").forGetter(StructureCQR::enabled),
-				Codec.INT.fieldOf("icon").forGetter(StructureCQR::icon),
-				Codec.list(Codec.STRING).fieldOf("mod_dependencies").forGetter(StructureCQR::modDependencies),
-				PlacementSettings.CODEC.fieldOf("placement_settings").forGetter(StructureCQR::placementSettings),
-				DungeonInhabitantMap.CODEC.fieldOf("inhabitants").forGetter(StructureCQR::inhabitants),
-				Codec.INT.fieldOf("ground_level_delta").forGetter(StructureCQR::groundLevelDelta),
-				ProtectionSettings.CODEC.optionalFieldOf("protection_settings").forGetter(StructureCQR::protectionSettings),
-				StructurePieceGenerator.CODEC.fieldOf("generator").forGetter(StructureCQR::generator))
-        		.apply(instance, StructureCQR::new);
+				Codec.BOOL.fieldOf("enabled").forGetter(CQRStructure::enabled),
+				Codec.INT.fieldOf("icon").forGetter(CQRStructure::icon),
+				Codec.list(Codec.STRING).fieldOf("mod_dependencies").forGetter(CQRStructure::modDependencies),
+				PlacementSettings.CODEC.fieldOf("placement_settings").forGetter(CQRStructure::placementSettings),
+				DungeonInhabitantMap.CODEC.fieldOf("inhabitants").forGetter(CQRStructure::inhabitants),
+				Codec.INT.fieldOf("ground_level_delta").forGetter(CQRStructure::groundLevelDelta),
+				ProtectionSettings.CODEC.optionalFieldOf("protection_settings").forGetter(CQRStructure::protectionSettings),
+				StructurePieceGenerator.CODEC.fieldOf("generator").forGetter(CQRStructure::generator))
+        		.apply(instance, CQRStructure::new);
      });
 
 	private final boolean enabled;
@@ -50,7 +50,7 @@ public class StructureCQR extends Structure {
 	private final Optional<ProtectionSettings> protectionSettings;
 	private final StructurePieceGenerator generator;
 
-	public StructureCQR(StructureSettings structureSettings, boolean enabled, int icon, List<String> modDependencies, PlacementSettings placementSettings,
+	public CQRStructure(StructureSettings structureSettings, boolean enabled, int icon, List<String> modDependencies, PlacementSettings placementSettings,
 			DungeonInhabitantMap inhabitants, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructurePieceGenerator generator) {
 		super(structureSettings);
 		this.enabled = enabled;

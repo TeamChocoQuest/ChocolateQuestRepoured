@@ -9,13 +9,13 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.common.CQRepoured;
-import team.cqr.cqrepoured.world.structure.StructureCQR;
+import team.cqr.cqrepoured.world.structure.CQRStructure;
 
 @EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
 public class CQRStructureTypes {
 
 	private static final DeferredRegister<StructureType<?>> REGISTER = DeferredRegister.create(Registries.STRUCTURE_TYPE, CQRepoured.MODID);
-	public static final RegistryObject<StructureType<StructureCQR>> CQR_STRUCTURE_TYPE = REGISTER.register("cqr_structure", () -> () -> StructureCQR.CODEC);
+	public static final RegistryObject<StructureType<CQRStructure>> CQR_STRUCTURE_TYPE = REGISTER.register("cqr_structure", () -> () -> CQRStructure.CODEC);
 
 	@SubscribeEvent
 	public static void main(RegisterEvent event) {
