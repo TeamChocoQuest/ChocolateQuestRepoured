@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import team.cqr.cqrepoured.world.structure.CQRStructureLocator;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructureLocator;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;

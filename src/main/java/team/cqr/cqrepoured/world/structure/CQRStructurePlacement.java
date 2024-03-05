@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.storage.LevelData;
 import team.cqr.cqrepoured.generation.init.CQRStructurePlacementTypes;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructureLocator;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 
 public class CQRStructurePlacement extends RandomSpreadStructurePlacement {
