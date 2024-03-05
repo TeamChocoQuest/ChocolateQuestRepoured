@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.structure.Structure.GenerationStub;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureSet.StructureSelectionEntry;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import team.cqr.cqrepoured.world.structure.CQRStructurePlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.placement.CQRStructurePlacement;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
 
 public class CQRStructureLocator {
