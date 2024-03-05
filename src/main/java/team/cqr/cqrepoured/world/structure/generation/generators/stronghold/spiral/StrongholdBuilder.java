@@ -7,19 +7,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 
 public class StrongholdBuilder {
 
 	private final Random random;
-	private GeneratableDungeon.Builder dungeonBuilder;
+	private CQRStructurePiece.Builder dungeonBuilder;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
 	private int blocksRemainingToWall;
 	private Direction direction;
-	private final GeneratableDungeon.Builder builder;
+	private final CQRStructurePiece.Builder builder;
 
-	public StrongholdBuilder(GeneratableDungeon.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, GeneratableDungeon.Builder builder, Random rand) {
+	public StrongholdBuilder(CQRStructurePiece.Builder dungeonBuilder, BlockPos start, int distanceToWall, DungeonVolcano dungeon, Direction expansionDirection, CQRStructurePiece.Builder builder, Random rand) {
 		this.dungeonBuilder = dungeonBuilder;
 		this.startPos = start;
 		this.dungeon = dungeon;
@@ -64,7 +64,7 @@ public class StrongholdBuilder {
 		this.buildStronghold(pos.offset(0, -1, 0), this.builder);
 	}
 
-	private void buildStronghold(BlockPos pos, GeneratableDungeon.Builder builder) {
+	private void buildStronghold(BlockPos pos, CQRStructurePiece.Builder builder) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.dungeonBuilder, ESkyDirection.fromFacing(this.direction), this.dungeon, this.random);
 		stronghold.calculateFloors(pos, builder);
 		stronghold.buildFloors(pos.offset(0, -1, 0), builder);

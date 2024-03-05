@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.SuspensionBridgeHelper;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -116,7 +116,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void preProcess(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void preProcess(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		// Order: Air, Island, Chains, Building
 		int rad = 2 * this.getRadius();
 		int height = this.dungeon.getYFactorHeight() > this.structure.getSize().getY() ? this.dungeon.getYFactorHeight() : this.structure.getSize().getY();
@@ -128,14 +128,14 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void generate(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generate(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		this.buildPlatform(world, this.worldPosition, this.islandRadius, mobType, dungeonBuilder);
 		if (this.structure != null) {
 			this.structure.addAll(dungeonBuilder, this.worldPosition.above(), Offset.CENTER);
 		}
 	}
 
-	private void buildPlatform(Level world, BlockPos center, int radius, DungeonInhabitant mobType, GeneratableDungeon.Builder dungeonBuilder) {
+	private void buildPlatform(Level world, BlockPos center, int radius, DungeonInhabitant mobType, CQRStructurePiece.Builder dungeonBuilder) {
 		Map<BlockPos, BlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.05D * radius);
@@ -208,7 +208,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void generatePost(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generatePost(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		if (this.dungeon.isConstructBridges()) {
 			for (SuspensionBridgeHelper bridge : this.bridges) {
 				Map<BlockPos, BlockState> stateMap = new HashMap<>();

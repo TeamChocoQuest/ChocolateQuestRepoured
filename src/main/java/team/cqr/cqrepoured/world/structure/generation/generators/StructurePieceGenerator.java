@@ -10,7 +10,7 @@ import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 public interface StructurePieceGenerator {
@@ -19,11 +19,11 @@ public interface StructurePieceGenerator {
 
 	default StructurePiece createStructurePiece(GenerationContext context, BlockPos pos, DungeonInhabitant inhabitant, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings) {
 		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-		GeneratableDungeon.Builder structurePieceBuilder = new GeneratableDungeon.Builder(level, pos, inhabitant, groundLevelDelta, protectionSettings, context.random());
+		CQRStructurePiece.Builder structurePieceBuilder = new CQRStructurePiece.Builder(level, pos, inhabitant, groundLevelDelta, protectionSettings, context.random());
 		prepare(context, pos.above(groundLevelDelta), structurePieceBuilder);
 		return structurePieceBuilder.build();
 	}
 
-	void prepare(GenerationContext context, BlockPos pos, GeneratableDungeon.Builder dungeonBuilder);
+	void prepare(GenerationContext context, BlockPos pos, CQRStructurePiece.Builder dungeonBuilder);
 
 }

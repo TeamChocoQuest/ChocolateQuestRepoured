@@ -11,15 +11,15 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece.Builder;
 
 public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements IDungeonGenerator<T> {
 
 	protected BlockPos pos;
 	protected T dungeon;
 	protected Random random;
-	protected final GeneratableDungeon.Builder dungeonBuilder;
+	protected final CQRStructurePiece.Builder dungeonBuilder;
 	protected final ServerLevel level;
 	protected final ChunkGenerator chunkGenerator;
 
@@ -30,7 +30,7 @@ public abstract class LegacyDungeonGenerator<T extends DungeonBase> implements I
 		ServerLevel level = StreamSupport.stream(ServerLifecycleHooks.getCurrentServer().getAllLevels().spliterator(), false).filter(serverWorld -> serverWorld.getChunkSource().getGenerator() == chunkGenerator).findFirst().get();
 		this.level = level;
 		this.chunkGenerator = chunkGenerator;
-		this.dungeonBuilder = new GeneratableDungeon.Builder(level, pos, dungeon);
+		this.dungeonBuilder = new CQRStructurePiece.Builder(level, pos, dungeon);
 	}
 
 	@Deprecated

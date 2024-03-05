@@ -10,7 +10,7 @@ import net.minecraft.util.registry.DynamicRegistries;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonTemplateSurface;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece.Builder;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 

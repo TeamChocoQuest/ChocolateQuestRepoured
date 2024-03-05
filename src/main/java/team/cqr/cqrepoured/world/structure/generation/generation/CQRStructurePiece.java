@@ -39,7 +39,7 @@ import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabit
 // TODO: Change to extends jigsaw structure piece
 // TODO: Move the inhabitants access to a own object
 // TODO: Move protection settings to codec object
-public class GeneratableDungeon extends StructurePiece implements INoiseAffectingStructurePiece {
+public class CQRStructurePiece extends StructurePiece implements INoiseAffectingStructurePiece {
 
 	private static final Codec<Cache2D<HeightInfo>> HEIGHT_MAP_CODEC = Cache2D.codec(HeightInfo.CODEC, HeightInfo[]::new);
 	private final CQRLevel level;
@@ -76,7 +76,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 
 	}
 	
-	protected GeneratableDungeon(BlockPos pos, CQRLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
+	protected CQRStructurePiece(BlockPos pos, CQRLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), 0, calculateBoundingBox(level));
 		this.level = level;
 		this.protectedRegion = protectedRegion;
@@ -145,7 +145,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 		return heightMap;
 	}
 
-	public GeneratableDungeon(CompoundTag nbt) {
+	public CQRStructurePiece(CompoundTag nbt) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), nbt);
 		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegion = Optional.of("protected_region")
@@ -223,8 +223,8 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 			this(pos, new CQRLevel(SectionPos.of(pos), level.getSeed()), inhabitant, new ServerEntityFactory(level), groundLevelDelta, protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings)), random);
 		}
 
-		public GeneratableDungeon build() {
-			return new GeneratableDungeon(this.pos, this.level, this.protectedRegionBuilder.map(ProtectedRegion.Builder::build), this.groundLevelDelta);
+		public CQRStructurePiece build() {
+			return new CQRStructurePiece(this.pos, this.level, this.protectedRegionBuilder.map(ProtectedRegion.Builder::build), this.groundLevelDelta);
 		}
 
 		public DungeonPlacement getPlacement(BlockPos partPos) {

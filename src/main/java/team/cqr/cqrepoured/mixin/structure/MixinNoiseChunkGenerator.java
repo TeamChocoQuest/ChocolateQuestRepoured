@@ -20,7 +20,7 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
 @Mixin(NoiseChunkGenerator.class)
@@ -46,8 +46,8 @@ public abstract class MixinNoiseChunkGenerator {
 				.filter(INoiseAffectingStructurePiece.class::isInstance)
 				.filter(structurePiece -> {
 					//Ignore structures that don't have support hills enabled
-					if(structurePiece instanceof GeneratableDungeon) {
-						GeneratableDungeon gd = (GeneratableDungeon) structurePiece;
+					if(structurePiece instanceof CQRStructurePiece) {
+						CQRStructurePiece gd = (CQRStructurePiece) structurePiece;
 						Optional<DungeonBase> optDunBase = gd.getDungeonConfig();
 						
 						if(optDunBase.isPresent()) {

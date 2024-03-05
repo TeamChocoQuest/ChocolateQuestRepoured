@@ -55,7 +55,7 @@ import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
 import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBannerInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBlockInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
@@ -308,23 +308,23 @@ public class CQStructure {
 		return this.author;
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset) {
+	public void addAll(CQRStructurePiece.Builder builder, BlockPos pos, Offset offset) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE)));
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
+	public void addAll(CQRStructurePiece.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation));
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
+	public void addAll(CQRStructurePiece.Builder builder, BlockPos pos, Offset offset, DungeonInhabitant inhabitant) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, Mirror.NONE, Rotation.NONE), inhabitant));
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
+	public void addAll(CQRStructurePiece.Builder builder, BlockPos pos, Offset offset, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant) {
 		this.addAll(builder, builder.getPlacement(offset.apply(pos, this, mirror, rotation), mirror, rotation, inhabitant));
 	}
 
-	public void addAll(GeneratableDungeon.Builder builder, DungeonPlacement placement) {
+	public void addAll(CQRStructurePiece.Builder builder, DungeonPlacement placement) {
 		int i = 0;
 		Mutable mutable = new Mutable();
 		for (int x = 0; x < this.size.getX(); x++) {

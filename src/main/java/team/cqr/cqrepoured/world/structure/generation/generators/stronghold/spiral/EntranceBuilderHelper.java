@@ -7,14 +7,14 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.volcano.StairCaseHelper;
 
 public class EntranceBuilderHelper {
 
 	public static final int SEGMENT_LENGTH = 3;
 
-	public static void buildEntranceSegment(BlockPos startPosCentered, GeneratableDungeon.Builder partBuilder, Direction direction) {
+	public static void buildEntranceSegment(BlockPos startPosCentered, CQRStructurePiece.Builder partBuilder, Direction direction) {
 		// COrner 2 is always the reference location for the part (!)
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2;
 		corner1 = null;
@@ -80,7 +80,7 @@ public class EntranceBuilderHelper {
 		}
 	}
 
-	private static void buildPillar(BlockPos bottom, GeneratableDungeon.Builder partBuilder) {
+	private static void buildPillar(BlockPos bottom, CQRStructurePiece.Builder partBuilder) {
 		for (int iY = 1; iY <= 4; iY++) {
 			BlockPos pos = bottom.offset(0, iY, 0);
 			partBuilder.getLevel().setBlockState(pos, CQRBlocks.GRANITE_PILLAR.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y), null);
@@ -88,7 +88,7 @@ public class EntranceBuilderHelper {
 		partBuilder.getLevel().setBlockState(bottom.offset(0, 5, 0), CQRBlocks.GRANITE_CARVED.get().defaultBlockState(), null);
 	}
 
-	private static void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, GeneratableDungeon.Builder partBuilder) {
+	private static void buildFloorAndCeiling(BlockPos start, BlockPos end, int ceilingHeight, CQRStructurePiece.Builder partBuilder) {
 		BlockPos endP = new BlockPos(end.getX(), start.getY(), end.getZ());
 
 		// Floor

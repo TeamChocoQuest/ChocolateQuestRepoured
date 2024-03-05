@@ -13,7 +13,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -87,7 +87,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void preProcess(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void preProcess(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		Vector3i v = new Vector3i(this.generator.getDungeon().getRoomSizeX() / 2, 0, this.generator.getDungeon().getRoomSizeZ() / 2);
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
@@ -115,7 +115,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void generate(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generate(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos pos = this.roomGrid[x][z];
@@ -146,7 +146,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Dung
 	}
 
 	@Override
-	public void generatePost(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generatePost(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}

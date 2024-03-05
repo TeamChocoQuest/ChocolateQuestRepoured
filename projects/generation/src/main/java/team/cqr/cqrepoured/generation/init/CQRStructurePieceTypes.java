@@ -10,14 +10,14 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.common.CQRepoured;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 
 @EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
 public class CQRStructurePieceTypes {
 
 	private static final DeferredRegister<StructurePieceType> REGISTER = DeferredRegister.create(Registries.STRUCTURE_PIECE, CQRepoured.MODID);
 	public static final RegistryObject<StructurePieceType> CQR_STRUCTURE_PIECE_TYPE = REGISTER.register("cqr_structure_piece",
-			() -> (ContextlessType) GeneratableDungeon::new);
+			() -> (ContextlessType) CQRStructurePiece::new);
 
 	@SubscribeEvent
 	public static void main(RegisterEvent event) {

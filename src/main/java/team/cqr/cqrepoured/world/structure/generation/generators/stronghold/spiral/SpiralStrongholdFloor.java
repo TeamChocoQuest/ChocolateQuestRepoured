@@ -6,7 +6,7 @@ import java.util.Random;
 import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 public class SpiralStrongholdFloor {
 
 	private final Random random;
-	private GeneratableDungeon.Builder dungeonBuilder;
+	private CQRStructurePiece.Builder dungeonBuilder;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
 	private Tuple<Integer, Integer> exitCoordinates;
@@ -25,7 +25,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 
-	public SpiralStrongholdFloor(GeneratableDungeon.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
+	public SpiralStrongholdFloor(CQRStructurePiece.Builder dungeonBuilder, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount, Random rand) {
 		this.dungeonBuilder = dungeonBuilder;
 		this.entranceCoordinates = entrancePos;
 		this.entranceIndex = new Tuple<>(entranceX, entranceZ);
@@ -220,7 +220,7 @@ public class SpiralStrongholdFloor {
 		return this.roomGrid;
 	}
 
-	public void buildRooms(DungeonVolcano dungeon, GeneratableDungeon.Builder builder) {
+	public void buildRooms(DungeonVolcano dungeon, CQRStructurePiece.Builder builder) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				if ((iX == 0 || iX == (this.sideLength - 1)) || (iZ == 0 || iZ == (this.sideLength - 1))) {

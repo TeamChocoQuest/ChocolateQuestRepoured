@@ -9,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
@@ -140,7 +140,7 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonS
 		}
 	}
 
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, GeneratableDungeon.Builder dungeonBuilder, Level world, DungeonInhabitant mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, CQRStructurePiece.Builder dungeonBuilder, Level world, DungeonInhabitant mobType) {
 		for (int iX = 0; iX < this.sideLength; iX++) {
 			for (int iZ = 0; iZ < this.sideLength; iZ++) {
 				EStrongholdRoomType room = this.roomPattern[iX][iZ];
@@ -236,17 +236,17 @@ public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonS
 	}
 
 	@Override
-	public void preProcess(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void preProcess(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 
 	@Override
-	public void generate(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generate(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 
 	@Override
-	public void generatePost(Level world, GeneratableDungeon.Builder dungeonBuilder, DungeonInhabitant mobType) {
+	public void generatePost(Level world, CQRStructurePiece.Builder dungeonBuilder, DungeonInhabitant mobType) {
 
 	}
 

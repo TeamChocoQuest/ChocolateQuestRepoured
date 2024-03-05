@@ -10,18 +10,18 @@ import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
+import team.cqr.cqrepoured.world.structure.generation.generation.CQRStructurePiece;
 
 public interface IDungeonGenerator<T extends DungeonBase> {
 
 	default StructurePiece prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config) {
 		ServerLevel level = WorldDungeonGenerator.getLevel(chunkGenerator);
-		GeneratableDungeon.Builder dungeonBuilder = new GeneratableDungeon.Builder(level, pos, config);
+		CQRStructurePiece.Builder dungeonBuilder = new CQRStructurePiece.Builder(level, pos, config);
 		prepare(dynamicRegistries, chunkGenerator, templateManager, pos, random, config, dungeonBuilder);
 		return dungeonBuilder.build();
 	}
 
-	void prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config, GeneratableDungeon.Builder dungeonBuilder);
+	void prepare(DynamicRegistries dynamicRegistries, ChunkGenerator chunkGenerator, TemplateManager templateManager, BlockPos pos, Random random, T config, CQRStructurePiece.Builder dungeonBuilder);
 
 	T getDungeon();
 	
