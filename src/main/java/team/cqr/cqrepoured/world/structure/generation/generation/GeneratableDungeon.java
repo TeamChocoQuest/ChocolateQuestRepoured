@@ -77,7 +77,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 	
 	protected GeneratableDungeon(BlockPos pos, CQRLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
-		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE, 0, calculateBoundingBox(level));
+		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), 0, calculateBoundingBox(level));
 		this.level = level;
 		this.protectedRegion = protectedRegion;
 		this.heightMap = calculateHeightMap(pos, this.boundingBox, level, groundLevelDelta);
@@ -146,7 +146,7 @@ public class GeneratableDungeon extends StructurePiece implements INoiseAffectin
 	}
 
 	public GeneratableDungeon(CompoundTag nbt) {
-		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE, nbt);
+		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), nbt);
 		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegion = Optional.of("protected_region")
 				.filter(nbt::contains)
