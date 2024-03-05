@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.util;
 
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -28,6 +29,10 @@ public class Cache2D<V> {
 		this.data = data;
 	}
 
+	private Cache2D(int startX, int startZ, int endX, int endZ, Optional<V> defaultValue, V[] data) {
+		this(startX, startZ, endX, endZ, defaultValue.orElse(null), data);
+	}
+
 	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> generator) {
 		this(startX, startZ, endX, endZ, defaultValue, generator.apply((endX - startX + 1) * (endZ - startZ + 1)));
 	}
@@ -39,7 +44,7 @@ public class Cache2D<V> {
 					Codec.INT.fieldOf("startZ").forGetter(c -> c.startZ),
 					Codec.INT.fieldOf("endX").forGetter(c -> c.endX),
 					Codec.INT.fieldOf("endZ").forGetter(c -> c.endZ),
-					elementCodec.optionalFieldOf("defaultValue", null).forGetter(c -> c.defaultValue),
+					elementCodec.optionalFieldOf("defaultValue").forGetter(c -> Optional.ofNullable(c.defaultValue)),
 					CodecUtil.array(elementCodec, generator).fieldOf("data").forGetter(c -> c.data))
 					.apply(instance, Cache2D::new);
 		});
