@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.List;
 import java.util.Optional;
