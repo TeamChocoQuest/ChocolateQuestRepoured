@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.init;
+package team.cqr.cqrepoured.generation.init;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
