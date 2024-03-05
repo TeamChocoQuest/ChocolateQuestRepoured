@@ -24,7 +24,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.world.entity.EquipmentSlot;
-import team.cqr.cqrepoured.CQRepoured;
+import team.cqr.cqrepoured.common.CQRepoured;
 
 public class CodecUtil {
 

@@ -6,7 +6,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import team.cqr.cqrepoured.CQRepoured;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.capability.SerializableCapabilityProvider;
 
 public class ProtectionReferencesProvider extends SerializableCapabilityProvider<ProtectionReferences, LongArrayTag> {

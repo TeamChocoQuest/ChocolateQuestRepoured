@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import de.dertoaster.multihitboxlib.util.LazyLoadField;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.customtextures.TextureSetNew;
 
 public class CQRConstants {

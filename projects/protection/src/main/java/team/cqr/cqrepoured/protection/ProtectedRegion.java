@@ -20,7 +20,7 @@ import net.minecraft.util.SimpleBitStorage;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import team.cqr.cqrepoured.CQRepoured;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
 
 public record ProtectedRegion(UUID uuid, BoundingBox boundingBox, SimpleBitStorage protectionData, ProtectionSettings protectionSettings, Set<UUID> entityDependencies, Set<BlockPos> blockDependencies, UpdateInfo updateInfo) {

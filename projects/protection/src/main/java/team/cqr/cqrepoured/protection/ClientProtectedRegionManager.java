@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import team.cqr.cqrepoured.CQRepoured;
+import team.cqr.cqrepoured.common.CQRepoured;
 
 public class ClientProtectedRegionManager implements IProtectedRegionManager {
 
