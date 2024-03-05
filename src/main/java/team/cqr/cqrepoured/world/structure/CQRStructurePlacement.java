@@ -66,7 +66,7 @@ public class CQRStructurePlacement extends RandomSpreadStructurePlacement {
 				.getGeneratorState(), chunkPos.x, chunkPos.z)) {
 			return false;
 		}
-		return StructureLocator.getStructureAt(level, chunkPos)
+		return CQRStructureLocator.getStructureAt(level, chunkPos)
 				.isEmpty();
 	}
 

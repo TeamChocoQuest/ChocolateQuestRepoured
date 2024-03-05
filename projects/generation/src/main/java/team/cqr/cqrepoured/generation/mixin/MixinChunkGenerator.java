@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import team.cqr.cqrepoured.world.structure.StructureLocator;
+import team.cqr.cqrepoured.world.structure.CQRStructureLocator;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
@@ -33,7 +33,7 @@ public class MixinChunkGenerator {
 
 	@Inject(method = "lambda$createStructures$1", cancellable = true, at = @At("HEAD"))
 	private void skipCQRStructureSets(Holder<StructureSet> structureSetHolder, CallbackInfo info) {
-		if (StructureLocator.isCQRStructureSet(structureSetHolder.value())) {
+		if (CQRStructureLocator.isCQRStructureSet(structureSetHolder.value())) {
 			info.cancel();
 		}
 	}
@@ -44,7 +44,7 @@ public class MixinChunkGenerator {
 		ChunkGenerator chunkGenerator = (ChunkGenerator) (Object) this;
 		ChunkPos chunkPos = pChunk.getPos();
 
-		StructureLocator.getStructureAt(chunkGenerator, pRegistryAccess, pStructureState, pStructureManager, chunkPos, pChunk, pStructureTemplateManager)
+		CQRStructureLocator.getStructureAt(chunkGenerator, pRegistryAccess, pStructureState, pStructureManager, chunkPos, pChunk, pStructureTemplateManager)
 				.ifPresent(structureInfo -> {
 					Structure structure = structureInfo.getFirst();
 					GenerationStub generationStub = structureInfo.getSecond();

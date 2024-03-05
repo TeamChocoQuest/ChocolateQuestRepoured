@@ -28,11 +28,11 @@ import net.minecraft.world.level.levelgen.structure.StructureSet.StructureSelect
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
 
-public class StructureLocator {
+public class CQRStructureLocator {
 
 	public static Optional<Structure> getStructureAt(ServerLevel level, ChunkPos chunkPos) {
 		ServerChunkCache chunkSource = level.getChunkSource();
-		return StructureLocator.getStructureAt(chunkSource.getGenerator(), level.registryAccess(), chunkSource.getGeneratorState(), level.structureManager(),
+		return CQRStructureLocator.getStructureAt(chunkSource.getGenerator(), level.registryAccess(), chunkSource.getGeneratorState(), level.structureManager(),
 				chunkPos, level, level.getStructureManager())
 				.map(Pair::getFirst);
 	}
@@ -40,7 +40,7 @@ public class StructureLocator {
 	public static Optional<Pair<Structure, GenerationStub>> getStructureAt(ChunkGenerator chunkGenerator, RegistryAccess registryAccess,
 			ChunkGeneratorStructureState structureState, StructureManager structureManager, ChunkPos chunkPos, LevelHeightAccessor levelHeightAccessor,
 			StructureTemplateManager structureTemplateManager) {
-		return getStructureAt(chunkGenerator, registryAccess, structureState, structureManager, chunkPos, levelHeightAccessor, structureTemplateManager,
+		return CQRStructureLocator.getStructureAt(chunkGenerator, registryAccess, structureState, structureManager, chunkPos, levelHeightAccessor, structureTemplateManager,
 				Integer.MAX_VALUE);
 	}
 
@@ -50,10 +50,10 @@ public class StructureLocator {
 		return structureState.possibleStructureSets()
 				.stream()
 				.map(Holder::value)
-				.filter(StructureLocator::isCQRStructureSet)
+				.filter(CQRStructureLocator::isCQRStructureSet)
 				.filter(structureSet -> ((CQRStructurePlacement) structureSet.placement()).priority() < maximumPriority)
-				.sorted(StructureLocator.structureSetComparator())
-				.map(structureSet -> StructureLocator.getStructureAt(structureSet, chunkGenerator, registryAccess, structureState, structureManager, chunkPos,
+				.sorted(CQRStructureLocator.structureSetComparator())
+				.map(structureSet -> CQRStructureLocator.getStructureAt(structureSet, chunkGenerator, registryAccess, structureState, structureManager, chunkPos,
 						levelHeightAccessor, structureTemplateManager))
 				.filter(Optional::isPresent)
 				.map(Optional::get)
@@ -84,7 +84,7 @@ public class StructureLocator {
 
 		SimpleWeightedRandomList<Pair<Structure, GenerationStub>> structureList = structureListBuilder.build();
 		return structureList.getRandom(random)
-				.filter(wrapper -> StructureLocator.testStructureGenerationChance(wrapper, random, structureList.totalWeight))
+				.filter(wrapper -> CQRStructureLocator.testStructureGenerationChance(wrapper, random, structureList.totalWeight))
 				.map(Wrapper::getData);
 	}
 
@@ -97,7 +97,7 @@ public class StructureLocator {
 	}
 
 	private static boolean testStructureGenerationChance(Wrapper<Pair<Structure, GenerationStub>> structureEntry, RandomSource random, int totalWeight) {
-		if (structureEntry.getData().getFirst() instanceof StructureCQR cqrStructure) {
+		if (structureEntry.getData().getFirst() instanceof CQRStructure cqrStructure) {
 			PlacementSettings placementSettings = cqrStructure.placementSettings();
 			double chanceModifier = 1.0D / Math.pow((double) structureEntry.getWeight().asInt() / totalWeight, placementSettings.rarityFactor());
 			return random.nextFloat() < placementSettings.chance() * chanceModifier;
