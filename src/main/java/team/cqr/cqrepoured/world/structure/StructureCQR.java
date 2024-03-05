@@ -65,7 +65,7 @@ public class StructureCQR extends Structure {
 
 	@Override
 	public StructureType<?> type() {
-		return CQRStructureTypes.CQR_STRUCTURE_TYPE;
+		return CQRStructureTypes.CQR_STRUCTURE_TYPE.get();
 	}
 
 	@Override
