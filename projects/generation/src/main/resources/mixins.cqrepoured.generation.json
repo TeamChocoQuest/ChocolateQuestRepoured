@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "team.cqr.cqrepoured.generation.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.cqrepoured.generation.refmap.json",
+  "mixins": [
+    "MixinChunkGenerator"
+  ]
+}

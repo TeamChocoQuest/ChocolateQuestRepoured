@@ -1,5 +1,10 @@
 base.archivesName = "${mod_name}-generation"
 
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.generation.refmap.json"
+    config "mixins.${mod_id}.generation.json"
+}
+
 sourceSets {
     main.java.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.java ]
     main.java.srcDirs += [ project(':' + rootProject.name + '-protection').sourceSets.main.java ]
