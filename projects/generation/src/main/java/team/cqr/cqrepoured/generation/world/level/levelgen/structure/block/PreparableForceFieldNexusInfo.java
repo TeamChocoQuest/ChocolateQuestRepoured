@@ -6,8 +6,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -48,12 +48,12 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {
 
 		@Override
-		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableForceFieldNexusInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			return new PreparableForceFieldNexusInfo();
 		}
 

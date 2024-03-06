@@ -9,8 +9,8 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -91,7 +91,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableBlockInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			int data = (palette.idFor(preparable.state) << 1) | (preparable.tileEntityData != null ? 1 : 0);
 			ByteBufUtil.writeVarInt(buf, data, 5);
 			if (preparable.tileEntityData != null) {
@@ -101,7 +101,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBlockInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableBlockInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
 			BlockState state = palette.stateFor(data >>> 1);
 			CompoundTag tileEntityData = null;

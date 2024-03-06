@@ -6,9 +6,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -43,12 +43,12 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableTNTCQRInfo> {
 
 		@Override
-		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableTNTCQRInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			return new PreparableTNTCQRInfo();
 		}
 

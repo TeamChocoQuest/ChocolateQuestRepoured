@@ -21,10 +21,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -179,7 +179,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBossInfo> {
 
 		@Override
-		public void write(PreparableBossInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableBossInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			ByteBufUtil.writeVarInt(buf, preparable.bossTag != null ? (nbtList.size() << 1) | 1 : 0, 5);
 			if (preparable.bossTag != null) {
 				nbtList.add(preparable.bossTag);
@@ -187,7 +187,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBossInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableBossInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
 			CompoundTag bossTag = null;
 			if ((data & 1) == 1) {

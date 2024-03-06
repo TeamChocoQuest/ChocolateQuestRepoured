@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StructureVoidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockBossBlock;
 import team.cqr.cqrepoured.block.BlockExporterChest;
@@ -28,7 +29,6 @@ import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 
@@ -72,9 +72,9 @@ public abstract class PreparablePosInfo {
 
 		public interface ISerializer<T extends PreparablePosInfo> {
 
-			void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList);
+			void write(T preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList);
 
-			T read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList);
+			T read(ByteBuf buf, SimplePalette palette, ListTag nbtList);
 
 		}
 
@@ -142,7 +142,7 @@ public abstract class PreparablePosInfo {
 		}
 
 		@SuppressWarnings("unchecked")
-		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, ListTag compoundList) {
+		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, SimplePalette palette, ListTag compoundList) {
 			if (!CLASS_2_ID.containsKey(preparable.getClass())) {
 				throw new IllegalArgumentException("Class not registered: " + preparable.getClass().getSimpleName());
 			}
@@ -152,7 +152,7 @@ public abstract class PreparablePosInfo {
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, ListTag compoundList) {
+		public static PreparablePosInfo read(ByteBuf buf, SimplePalette palette, ListTag compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);

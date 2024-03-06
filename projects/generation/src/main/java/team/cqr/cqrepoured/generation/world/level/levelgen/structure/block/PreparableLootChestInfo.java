@@ -10,11 +10,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockExporterChestFixed;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
@@ -88,13 +88,13 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableLootChestInfo> {
 
 		@Override
-		public void write(PreparableLootChestInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableLootChestInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			ByteBufUtil.writeUTF8String(buf, preparable.lootTable.toString());
 			buf.writeByte(preparable.facing.get2DDataValue());
 		}
 
 		@Override
-		public PreparableLootChestInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableLootChestInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			ResourceLocation lootTable = new ResourceLocation(ByteBufUtil.readUTF8String(buf));
 			Direction facing = Direction.from2DDataValue(buf.readByte());
 			return new PreparableLootChestInfo(lootTable, facing);

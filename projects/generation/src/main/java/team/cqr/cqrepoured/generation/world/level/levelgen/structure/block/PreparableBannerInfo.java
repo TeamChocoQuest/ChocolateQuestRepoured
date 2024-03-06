@@ -10,9 +10,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
@@ -49,7 +49,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	public static class Serializer implements ISerializer<PreparableBannerInfo> {
 
 		@Override
-		public void write(PreparableBannerInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableBannerInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			int data = (palette.idFor(preparable.getState()) << 1) | (preparable.getTileEntityData() != null ? 1 : 0);
 			ByteBufUtil.writeVarInt(buf, data, 5);
 			if (preparable.getTileEntityData() != null) {
@@ -59,7 +59,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		}
 
 		@Override
-		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableBannerInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			int data = ByteBufUtil.readVarInt(buf, 5);
 			BlockState state = palette.stateFor(data >>> 1);
 			CompoundTag tileEntityData = null;

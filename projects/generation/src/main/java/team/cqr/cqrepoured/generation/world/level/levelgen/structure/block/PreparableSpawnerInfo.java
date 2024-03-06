@@ -24,9 +24,9 @@ import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -282,13 +282,13 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableSpawnerInfo> {
 
 		@Override
-		public void write(PreparableSpawnerInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableSpawnerInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
 			nbtList.add(preparable.tileEntityData);
 		}
 
 		@Override
-		public PreparableSpawnerInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableSpawnerInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			CompoundTag tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
 			return new PreparableSpawnerInfo(tileEntityData);
 		}

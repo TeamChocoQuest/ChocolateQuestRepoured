@@ -10,8 +10,8 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -214,7 +214,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableMapInfo> {
 
 		@Override
-		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public void write(PreparableMapInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			CompoundTag compound = new CompoundTag();
 			compound.putByte("facing", (byte) preparable.facing.get2DDataValue());
 			compound.putByte("scale", preparable.scale);
@@ -231,7 +231,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette palette, ListTag nbtList) {
+		public PreparableMapInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
 			CompoundTag compound = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
 			Direction facing = Direction.from2DDataValue(compound.getInt("facing"));
 			byte scale = compound.getByte("scale");

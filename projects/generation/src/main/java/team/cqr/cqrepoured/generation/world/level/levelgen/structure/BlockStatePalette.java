@@ -11,8 +11,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import team.cqr.cqrepoured.util.ObjectIdentityMap;
 
+/**
+ * Use {@link SimplePalette} instead.
+ */
+@Deprecated
 public class BlockStatePalette implements Iterable<BlockState> {
 
 	public static final BlockState DEFAULT_BLOCK_STATE = Blocks.AIR.defaultBlockState();
