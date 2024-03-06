@@ -15,11 +15,11 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open.StrongholdFloorOpen;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 

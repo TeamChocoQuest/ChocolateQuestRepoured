@@ -51,6 +51,7 @@ import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableBannerInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableBlockInfo;
@@ -63,7 +64,6 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;
 import team.cqr.cqrepoured.util.datafixer.DataFixerWorld;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 public class CQStructure {
 

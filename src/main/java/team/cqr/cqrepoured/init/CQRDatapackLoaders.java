@@ -23,12 +23,12 @@ import team.cqr.cqrepoured.entity.profile.variant.extradata.IVariantExtraData;
 import team.cqr.cqrepoured.entity.trade.TradeProfile;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncFaction;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncTextureSet;
 import team.cqr.cqrepoured.util.CQRCodecJsonDataManager;
 import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 @Mod.EventBusSubscriber(modid = CQRConstants.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CQRDatapackLoaders {

@@ -22,14 +22,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitantManager;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
 import team.cqr.cqrepoured.network.datasync.DataEntryBoolean;
 import team.cqr.cqrepoured.network.datasync.DataEntryInt;
 import team.cqr.cqrepoured.network.datasync.TileEntityDataManager;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
 public class TileEntitySpawner extends BlockEntityContainer implements ITileEntitySyncable<TileEntitySpawner> {
 

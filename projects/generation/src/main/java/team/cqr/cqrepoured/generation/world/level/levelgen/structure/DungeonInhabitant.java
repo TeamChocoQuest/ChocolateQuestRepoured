@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.inhabitants;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.Map;
 import java.util.Optional;

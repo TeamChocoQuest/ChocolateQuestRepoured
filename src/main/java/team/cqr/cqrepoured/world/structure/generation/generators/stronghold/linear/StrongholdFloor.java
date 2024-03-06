@@ -8,12 +8,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 

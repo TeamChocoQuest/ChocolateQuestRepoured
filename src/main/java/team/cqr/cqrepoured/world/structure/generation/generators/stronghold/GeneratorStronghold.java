@@ -5,13 +5,13 @@ import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitantManager;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.linear.StrongholdFloor;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 

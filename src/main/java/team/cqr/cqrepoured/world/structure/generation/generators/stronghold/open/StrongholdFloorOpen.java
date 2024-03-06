@@ -13,10 +13,10 @@ import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.vector.Vector3i;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStrongholdOpen;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 

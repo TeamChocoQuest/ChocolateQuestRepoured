@@ -24,14 +24,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap.Type;
 import software.bernie.geckolib3.core.util.Axis;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitantManager;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.GearedMobFactory;
 import team.cqr.cqrepoured.util.VectorUtil;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVegetatedCave;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
-import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
