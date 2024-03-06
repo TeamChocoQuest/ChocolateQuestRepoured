@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generators;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.generator;
 
 import java.util.Optional;
 
