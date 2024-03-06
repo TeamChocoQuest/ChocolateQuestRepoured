@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +37,7 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.util.IntUtil;
+import team.cqr.cqrepoured.world.structure.generation.generation.EntityContainer;
 
 @SuppressWarnings("deprecation")
 public class CQRSection {

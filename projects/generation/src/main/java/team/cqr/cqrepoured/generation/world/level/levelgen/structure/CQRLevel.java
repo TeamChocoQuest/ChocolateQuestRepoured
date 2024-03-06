@@ -23,7 +23,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.material.FluidState;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRSection;
 
 public class CQRLevel {
 
