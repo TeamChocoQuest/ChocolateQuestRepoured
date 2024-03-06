@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.primitive;
 
 import team.cqr.cqrepoured.common.function.IntIntConsumer;
 import team.cqr.cqrepoured.common.function.IntIntIntConsumer;

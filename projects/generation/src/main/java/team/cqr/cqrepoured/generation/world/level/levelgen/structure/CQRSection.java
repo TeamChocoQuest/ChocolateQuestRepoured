@@ -35,9 +35,9 @@ import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
+import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityContainer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
-import team.cqr.cqrepoured.util.IntUtil;
 
 @SuppressWarnings("deprecation")
 public class CQRSection {
