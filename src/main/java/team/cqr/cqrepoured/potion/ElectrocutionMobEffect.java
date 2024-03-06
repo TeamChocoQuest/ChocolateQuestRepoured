@@ -33,10 +33,10 @@ import net.tslat.effectslib.api.ExtendedMobEffect;
 import net.tslat.effectslib.api.ExtendedMobEffectHolder;
 import mod.azure.azurelib.core.object.Color;
 import team.cqr.cqrepoured.api.effect.SynchableMobEffect;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
 import team.cqr.cqrepoured.entity.IMechanical;
 import team.cqr.cqrepoured.faction.IFactionRelated;
 import team.cqr.cqrepoured.init.CQRCreatureAttributes;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.EntityUtil;
 
 public class ElectrocutionMobEffect extends ExtendedMobEffect implements SynchableMobEffect {

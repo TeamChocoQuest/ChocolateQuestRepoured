@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.random;
 
 import java.util.ArrayList;
 import java.util.Collection;

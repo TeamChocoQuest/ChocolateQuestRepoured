@@ -17,7 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
 
 public class TextureSetNew extends AbstractRegistratableObject {

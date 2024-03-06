@@ -29,9 +29,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom.WeightedObject;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.CQRWeightedRandom.WeightedObject;
 import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
 
 public class TradeProfileInstance {

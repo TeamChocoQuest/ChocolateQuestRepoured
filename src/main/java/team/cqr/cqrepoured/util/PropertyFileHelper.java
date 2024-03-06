@@ -15,6 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
 import team.cqr.cqrepoured.world.processor.IReplaceBlocksProcessor;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 

@@ -11,9 +11,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import de.dertoaster.multihitboxlib.entity.hitbox.HitboxProfile;
 import net.minecraft.util.RandomSource;
+import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
 import team.cqr.cqrepoured.entity.profile.variant.extradata.IVariantExtraData;
 import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.CQRWeightedRandom;
 import team.cqr.cqrepoured.util.LazyLoadField;
 
 public class EntityVariant {
