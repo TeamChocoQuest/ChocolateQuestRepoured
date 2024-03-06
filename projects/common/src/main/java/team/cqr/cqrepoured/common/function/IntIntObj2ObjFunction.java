@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.function;
 
 @FunctionalInterface
 public interface IntIntObj2ObjFunction<T, R> {

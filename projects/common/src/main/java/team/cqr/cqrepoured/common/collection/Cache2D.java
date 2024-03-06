@@ -10,8 +10,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.common.function.IntInt2ObjFunction;
+import team.cqr.cqrepoured.common.function.IntIntObj2ObjFunction;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
-import team.cqr.cqrepoured.util.IntIntObj2ObjFunction;
 
 public class Cache2D<V> {
 
