@@ -31,12 +31,12 @@ import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.util.IntUtil;
-import team.cqr.cqrepoured.world.structure.generation.generation.NoiseUtil;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 // TODO: Change to extends jigsaw structure piece

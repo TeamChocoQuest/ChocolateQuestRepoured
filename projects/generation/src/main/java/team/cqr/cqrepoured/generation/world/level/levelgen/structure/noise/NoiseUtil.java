@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise;
 
 import net.minecraft.Util;
 import team.cqr.cqrepoured.util.IntUtil;
