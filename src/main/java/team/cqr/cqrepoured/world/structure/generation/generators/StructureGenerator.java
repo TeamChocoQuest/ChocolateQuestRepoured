@@ -13,9 +13,9 @@ import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
-public interface StructurePieceGenerator {
+public interface StructureGenerator {
 
-	Codec<StructurePieceGenerator> CODEC = null;
+	Codec<StructureGenerator> CODEC = null;
 
 	default StructurePiece createStructurePiece(GenerationContext context, BlockPos pos, DungeonInhabitant inhabitant, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings) {
 		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());

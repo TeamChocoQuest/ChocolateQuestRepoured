@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonInhabitantMap;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.PlacementSettings;
-import team.cqr.cqrepoured.world.structure.generation.generators.StructurePieceGenerator;
+import team.cqr.cqrepoured.world.structure.generation.generators.StructureGenerator;
 
 public class CQRStructure extends Structure {
 
@@ -37,7 +37,7 @@ public class CQRStructure extends Structure {
 				DungeonInhabitantMap.CODEC.fieldOf("inhabitants").forGetter(CQRStructure::inhabitants),
 				Codec.INT.fieldOf("ground_level_delta").forGetter(CQRStructure::groundLevelDelta),
 				ProtectionSettings.CODEC.optionalFieldOf("protection_settings").forGetter(CQRStructure::protectionSettings),
-				StructurePieceGenerator.CODEC.fieldOf("generator").forGetter(CQRStructure::generator))
+				StructureGenerator.CODEC.fieldOf("generator").forGetter(CQRStructure::generator))
         		.apply(instance, CQRStructure::new);
      });
 
@@ -48,10 +48,10 @@ public class CQRStructure extends Structure {
 	private final DungeonInhabitantMap inhabitants;
 	private final int groundLevelDelta;
 	private final Optional<ProtectionSettings> protectionSettings;
-	private final StructurePieceGenerator generator;
+	private final StructureGenerator generator;
 
 	public CQRStructure(StructureSettings structureSettings, boolean enabled, int icon, List<String> modDependencies, PlacementSettings placementSettings,
-			DungeonInhabitantMap inhabitants, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructurePieceGenerator generator) {
+			DungeonInhabitantMap inhabitants, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructureGenerator generator) {
 		super(structureSettings);
 		this.enabled = enabled;
 		this.icon = icon;
@@ -146,7 +146,7 @@ public class CQRStructure extends Structure {
 		return protectionSettings;
 	}
 
-	public StructurePieceGenerator generator() {
+	public StructureGenerator generator() {
 		return generator;
 	}
 
