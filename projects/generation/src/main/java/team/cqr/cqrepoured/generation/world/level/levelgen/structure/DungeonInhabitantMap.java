@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.dungeons;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import com.mojang.serialization.Codec;
 
