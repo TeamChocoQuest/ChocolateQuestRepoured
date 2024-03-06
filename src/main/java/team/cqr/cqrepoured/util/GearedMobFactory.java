@@ -19,8 +19,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.init.CQRItems;
-import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
 public class GearedMobFactory {
 
@@ -47,7 +47,7 @@ public class GearedMobFactory {
 		this.random = rng;
 	}
 
-	public Entity getGearedEntityByFloor(int floor, IEntityFactory entityFactory) {
+	public Entity getGearedEntityByFloor(int floor, EntityFactory entityFactory) {
 		Entity entity = entityFactory.createEntity(entityID);
 
 		EArmorType armorType = this.getGearTier(floor);
@@ -211,7 +211,7 @@ public class GearedMobFactory {
 		return entity;
 	}
 
-	public Entity getGearedEntity(IEntityFactory entityFactory) {
+	public Entity getGearedEntity(EntityFactory entityFactory) {
 		return this.getGearedEntityByFloor(this.random.nextInt(this.floorCount + 1), entityFactory);
 	}
 

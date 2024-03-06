@@ -35,6 +35,7 @@ import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.util.IntUtil;
 
 @SuppressWarnings("deprecation")
@@ -80,7 +81,7 @@ public class CQRSection {
 		return nbt;
 	}
 
-	public void generate(WorldGenLevel level, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+	public void generate(WorldGenLevel level, EntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
 		DiscreteVoxelShape voxelShapePart = new BitSetDiscreteVoxelShape(16, 16, 16);
 
 		this.placeBlocks(level, voxelShapePart, processors);
@@ -181,7 +182,7 @@ public class CQRSection {
 		});
 	}
 
-	private void addEntities(WorldGenLevel level, IEntityFactory entityFactory) {
+	private void addEntities(WorldGenLevel level, EntityFactory entityFactory) {
 		this.entities.stream().map(entityContainer -> entityContainer.getEntity(entityFactory)).forEach(level::addFreshEntity);
 	}
 

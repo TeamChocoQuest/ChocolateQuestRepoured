@@ -11,11 +11,12 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 public record DungeonPlacement(BlockPos pos, BlockPos partPos, Mirror mirror, Rotation rotation, DungeonInhabitant inhabitant,
-		Optional<ProtectedRegion.Builder> protectedRegionBuilder, ServerEntityFactory entityFactory, RandomSource random) {
+		Optional<ProtectedRegion.Builder> protectedRegionBuilder, EntityFactory entityFactory, RandomSource random) {
 
 	public static class MutableVec3d {
 

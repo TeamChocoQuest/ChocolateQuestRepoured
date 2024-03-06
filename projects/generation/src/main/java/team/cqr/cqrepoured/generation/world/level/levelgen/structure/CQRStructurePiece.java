@@ -29,6 +29,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
@@ -39,7 +40,6 @@ import team.cqr.cqrepoured.world.structure.generation.generation.CQRSection;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generation.NoiseUtil;
-import team.cqr.cqrepoured.world.structure.generation.generation.ServerEntityFactory;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
 
 // TODO: Change to extends jigsaw structure piece
@@ -189,7 +189,7 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 			}
 		}
 
-		this.level.generate(pLevel, pBox, new ServerEntityFactory(pLevel.getLevel()), this.processors.list());
+		this.level.generate(pLevel, pBox, new EntityFactory(pLevel.getLevel()), this.processors.list());
 	}
 
 	@Override
@@ -223,10 +223,10 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 		return maxNoise;
 	}
 
-	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, ServerEntityFactory entityFactory, int groundLevelDelta, Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
+	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta, Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
 
 		public Builder(ServerLevel level, BlockPos pos, DungeonInhabitant inhabitant, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, RandomSource random) {
-			this(pos, new CQRLevel(SectionPos.of(pos), level.getSeed()), inhabitant, new ServerEntityFactory(level), groundLevelDelta, protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings)), random);
+			this(pos, new CQRLevel(SectionPos.of(pos), level.getSeed()), inhabitant, new EntityFactory(level), groundLevelDelta, protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings)), random);
 		}
 
 		public CQRStructurePiece build() {

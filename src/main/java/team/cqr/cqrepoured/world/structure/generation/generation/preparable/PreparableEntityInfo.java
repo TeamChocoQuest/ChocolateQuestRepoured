@@ -11,17 +11,17 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.level.block.Mirror;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
-import team.cqr.cqrepoured.world.structure.generation.generation.IEntityFactory;
 
 public class PreparableEntityInfo {
 
 	private final CompoundTag entityData;
 
 	public PreparableEntityInfo(BlockPos templatePos, Entity entity) {
-		this.entityData = IEntityFactory.save(entity);
+		this.entityData = EntityFactory.save(entity);
 		this.entityData.remove("UUIDMost");
 		this.entityData.remove("UUIDLeast");
 		ListTag nbtTagList = this.entityData.getList("Pos", Tag.TAG_DOUBLE);

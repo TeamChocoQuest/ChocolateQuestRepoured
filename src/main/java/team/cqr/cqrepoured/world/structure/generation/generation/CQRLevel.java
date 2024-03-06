@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.material.FluidState;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 public class CQRLevel {
 
@@ -51,7 +52,7 @@ public class CQRLevel {
 		return nbt;
 	}
 
-	public void generate(WorldGenLevel level, BoundingBox box, IEntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+	public void generate(WorldGenLevel level, BoundingBox box, EntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
 		SectionPos.betweenClosedStream(box.minX() >> 4, box.minY() >> 4, box.minZ() >> 4, box.maxX() >> 4, box.maxY() >> 4, box.maxZ() >> 4)
 				.map(sectionPos -> this.sections.get(this.index(sectionPos)))
 				.filter(Objects::nonNull)
