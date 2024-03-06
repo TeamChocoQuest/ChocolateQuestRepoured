@@ -14,6 +14,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockExporterChestFixed;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
@@ -23,7 +24,6 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 import team.cqr.cqrepoured.util.ByteBufUtil;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableLootChestInfo extends PreparablePosInfo {
 

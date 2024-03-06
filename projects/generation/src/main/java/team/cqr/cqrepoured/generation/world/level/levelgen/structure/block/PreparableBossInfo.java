@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
@@ -33,7 +34,6 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 import team.cqr.cqrepoured.util.ByteBufUtil;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableBossInfo extends PreparablePosInfo {
 

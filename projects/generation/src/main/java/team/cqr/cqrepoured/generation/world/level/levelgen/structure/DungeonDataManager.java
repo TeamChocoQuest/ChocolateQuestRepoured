@@ -18,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 
 //TODO: Replace with worldSavedData or capability
 public class DungeonDataManager {
@@ -59,7 +58,7 @@ public class DungeonDataManager {
 
 	private static final Map<Level, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
 
-	private final Map<String, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
+	private final Map<ResourceLocation, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
 	private final File file;
 	private boolean modifiedSinceLastSave = false;
 
@@ -108,36 +107,36 @@ public class DungeonDataManager {
 		return Collections.emptySet();
 	}
 
-	public static Set<DungeonInfo> getLocationsOfDungeon(Level world, DungeonBase dungeon) {
+	public static Set<DungeonInfo> getLocationsOfDungeon(Level world, ResourceLocation dungeon) {
 		if (INSTANCES.containsKey(world)) {
 			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
 		}
 		return Collections.emptySet();
 	}
 
-	public static boolean isDungeonSpawnLimitMet(Level world, DungeonBase dungeon) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
-		}
-		return false;
-	}
+//	public static boolean isDungeonSpawnLimitMet(Level world, DungeonBase dungeon) {
+//		if (INSTANCES.containsKey(world)) {
+//			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
+//		}
+//		return false;
+//	}
 
 	public static int getDungeonGenerationCount(Level world, ResourceLocation name) {
 		// TODO
-		return 0;
+		return -1;
 	}
 
 	public void saveData() {
 		if (this.modifiedSinceLastSave) {
 			CompoundTag root = new CompoundTag();
-			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
+			for (Map.Entry<ResourceLocation, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
 				Set<DungeonInfo> dungeonInfos = data.getValue();
 				if (!dungeonInfos.isEmpty()) {
 					ListTag nbtTagList = new ListTag();
 					for (DungeonInfo dungeonInfo : dungeonInfos) {
 						nbtTagList.add(dungeonInfo.writeToNBT());
 					}
-					root.put(data.getKey(), nbtTagList);
+					root.put(data.getKey().toString(), nbtTagList);
 				}
 			}
 			FileIOUtil.writeNBT(this.file, root);
@@ -161,38 +160,38 @@ public class DungeonDataManager {
 				dungeonInfos.add(new DungeonInfo((CompoundTag) nbt));
 			}
 			if (!dungeonInfos.isEmpty()) {
-				this.dungeonData.put(key, dungeonInfos);
+				this.dungeonData.put(new ResourceLocation(key), dungeonInfos);
 			}
 		}
 	}
 
-	private void addDungeonEntry(DungeonBase dungeon, BlockPos location, DungeonSpawnType spawnType) {
-		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon.getDungeonName(), key -> Collections.synchronizedSet(new HashSet<>()));
+	private void addDungeonEntry(ResourceLocation dungeon, BlockPos location, DungeonSpawnType spawnType) {
+		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon, key -> Collections.synchronizedSet(new HashSet<>()));
 		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
 			this.modifiedSinceLastSave = true;
 		}
 	}
 
-	private Set<String> getSpawnedDungeonNames() {
+	private Set<ResourceLocation> getSpawnedDungeonNames() {
 		return this.dungeonData.keySet();
 	}
 
-	private Set<DungeonInfo> getLocationsOfDungeon(DungeonBase dungeon) {
-		return this.dungeonData.getOrDefault(dungeon.getDungeonName(), Collections.emptySet());
+	private Set<DungeonInfo> getLocationsOfDungeon(ResourceLocation dungeon) {
+		return this.dungeonData.getOrDefault(dungeon, Collections.emptySet());
 	}
 
-	private boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
-		if (dungeon.getSpawnLimit() < 0) {
-			return false;
-		}
-		if (this.dungeonData.isEmpty()) {
-			return false;
-		}
-		Set<DungeonInfo> spawnedLocs = this.dungeonData.get(dungeon.getDungeonName());
-		if (spawnedLocs == null) {
-			return false;
-		}
-		return spawnedLocs.stream().filter(dungeonInfo -> dungeonInfo.spawnType == DungeonSpawnType.DUNGEON_GENERATION).count() >= dungeon.getSpawnLimit();
-	}
+//	private boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
+//		if (dungeon.getSpawnLimit() < 0) {
+//			return false;
+//		}
+//		if (this.dungeonData.isEmpty()) {
+//			return false;
+//		}
+//		Set<DungeonInfo> spawnedLocs = this.dungeonData.get(dungeon.getDungeonName());
+//		if (spawnedLocs == null) {
+//			return false;
+//		}
+//		return spawnedLocs.stream().filter(dungeonInfo -> dungeonInfo.spawnType == DungeonSpawnType.DUNGEON_GENERATION).count() >= dungeon.getSpawnLimit();
+//	}
 
 }

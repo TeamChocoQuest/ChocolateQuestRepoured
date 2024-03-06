@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.init.CQRBlocks;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableTNTCQRInfo extends PreparablePosInfo {
 

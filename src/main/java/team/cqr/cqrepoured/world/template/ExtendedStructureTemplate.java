@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.init.CQRBlockTags;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 
 public class ExtendedStructureTemplate extends StructureTemplate {
