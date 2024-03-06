@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
 import javax.annotation.Nullable;
 
@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.util.ByteBufUtil;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableBlockInfo extends PreparablePosInfo {

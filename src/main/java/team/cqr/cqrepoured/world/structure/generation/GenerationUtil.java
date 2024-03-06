@@ -10,11 +10,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableBossInfo;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableForceFieldNexusInfo;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableLootChestInfo;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.util.Perlin3D;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableBossInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableForceFieldNexusInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableLootChestInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableSpawnerInfo;
 
 public class GenerationUtil {
 

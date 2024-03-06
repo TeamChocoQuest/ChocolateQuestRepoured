@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Mirror;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement.MutableVec3d;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 public class PreparableEntityInfo {
 

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
 import java.util.HashMap;
 import java.util.Map;
