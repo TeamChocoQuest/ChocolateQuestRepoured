@@ -20,7 +20,6 @@ import net.minecraftforge.fml.ModList;
 import team.cqr.cqrepoured.generation.init.CQRStructureTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.generator.StructureGenerator;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 
 public class CQRStructure extends Structure {
 

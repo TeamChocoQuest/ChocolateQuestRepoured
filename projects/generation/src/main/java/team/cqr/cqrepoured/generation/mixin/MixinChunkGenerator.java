@@ -24,9 +24,9 @@ import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructureLocator;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonDataManager;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonDataManager.DungeonSpawnType;
 
 @Mixin(ChunkGenerator.class)
 public class MixinChunkGenerator {

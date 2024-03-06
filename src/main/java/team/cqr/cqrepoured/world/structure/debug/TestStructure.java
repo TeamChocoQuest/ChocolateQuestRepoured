@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 

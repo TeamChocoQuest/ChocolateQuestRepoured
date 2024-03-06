@@ -39,11 +39,11 @@ import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 import team.cqr.cqrepoured.faction.FactionRegistry;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonDataManager;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.IEquipListener;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
 public class EventsHandler {
