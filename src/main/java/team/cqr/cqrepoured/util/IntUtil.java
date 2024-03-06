@@ -1,15 +1,9 @@
 package team.cqr.cqrepoured.util;
 
 import team.cqr.cqrepoured.common.function.IntIntConsumer;
+import team.cqr.cqrepoured.common.function.IntIntIntConsumer;
 
 public class IntUtil {
-
-	@FunctionalInterface
-	public interface TriIntConsumer {
-
-		void accept(int x, int y, int z);
-
-	}
 
 	/**
 	 * x: 0 -> 15<br>
@@ -96,9 +90,9 @@ public class IntUtil {
 	 * y: 0 -> 15<br>
 	 * z: 0 -> 15<br>
 	 * <br>
-	 * See {@link #forEachXYZ(int, TriIntConsumer)}
+	 * See {@link #forEachXYZ(int, IntIntIntConsumer)}
 	 */
-	public static void forEachSectionCoord(TriIntConsumer consumer) {
+	public static void forEachSectionCoord(IntIntIntConsumer consumer) {
 		forEachXYZ(16, consumer);
 	}
 
@@ -107,9 +101,9 @@ public class IntUtil {
 	 * y: 0 -> size-1<br>
 	 * z: 0 -> size-1<br>
 	 * <br>
-	 * See {@link #forEachXYZ(int, int, int, TriIntConsumer)}
+	 * See {@link #forEachXYZ(int, int, int, IntIntIntConsumer)}
 	 */
-	public static void forEachXYZ(int size, TriIntConsumer consumer) {
+	public static void forEachXYZ(int size, IntIntIntConsumer consumer) {
 		forEachXYZ(size, size, size, consumer);
 	}
 
@@ -118,9 +112,9 @@ public class IntUtil {
 	 * y: 0 -> sizeY-1<br>
 	 * z: 0 -> sizeZ-1<br>
 	 * <br>
-	 * See {@link #forEachXYZ(int, int, int, int, int, int, TriIntConsumer)}
+	 * See {@link #forEachXYZ(int, int, int, int, int, int, IntIntIntConsumer)}
 	 */
-	public static void forEachXYZ(int sizeX, int sizeY, int sizeZ, TriIntConsumer consumer) {
+	public static void forEachXYZ(int sizeX, int sizeY, int sizeZ, IntIntIntConsumer consumer) {
 		forEachXYZ(0, 0, 0, sizeX, sizeY, sizeZ, consumer);
 	}
 
@@ -133,7 +127,7 @@ public class IntUtil {
 	 * @param maxZ     exclusive
 	 * @param consumer
 	 */
-	public static void forEachXYZ(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, TriIntConsumer consumer) {
+	public static void forEachXYZ(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntIntConsumer consumer) {
 		for (int x = minX; x < maxX; x++) {
 			for (int y = minY; y < maxY; y++) {
 				for (int z = minZ; z < maxZ; z++) {
@@ -148,9 +142,9 @@ public class IntUtil {
 	 * y: 0 -> size<br>
 	 * z: 0 -> size<br>
 	 * <br>
-	 * See {@link #forEachXYZClosed(int, int, int, TriIntConsumer)}
+	 * See {@link #forEachXYZClosed(int, int, int, IntIntIntConsumer)}
 	 */
-	public static void forEachXYZClosed(int size, TriIntConsumer consumer) {
+	public static void forEachXYZClosed(int size, IntIntIntConsumer consumer) {
 		forEachXYZClosed(size, size, size, consumer);
 	}
 
@@ -159,9 +153,9 @@ public class IntUtil {
 	 * y: 0 -> sizeY<br>
 	 * z: 0 -> sizeZ<br>
 	 * <br>
-	 * See {@link #forEachXYZClosed(int, int, int, int, int, int, TriIntConsumer)}
+	 * See {@link #forEachXYZClosed(int, int, int, int, int, int, IntIntIntConsumer)}
 	 */
-	public static void forEachXYZClosed(int sizeX, int sizeY, int sizeZ, TriIntConsumer consumer) {
+	public static void forEachXYZClosed(int sizeX, int sizeY, int sizeZ, IntIntIntConsumer consumer) {
 		forEachXYZClosed(0, 0, 0, sizeX, sizeY, sizeZ, consumer);
 	}
 
@@ -174,7 +168,7 @@ public class IntUtil {
 	 * @param maxZ     inclusive
 	 * @param consumer
 	 */
-	public static void forEachXYZClosed(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, TriIntConsumer consumer) {
+	public static void forEachXYZClosed(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntIntConsumer consumer) {
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int z = minZ; z <= maxZ; z++) {
