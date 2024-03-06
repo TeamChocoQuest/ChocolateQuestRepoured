@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.generation.init;
 
+import java.lang.reflect.Method;
 import java.util.function.Supplier;
 
 import net.minecraft.core.Registry;
@@ -13,6 +14,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryBuilder;
+import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.generator.StructureGeneratorType;
 
@@ -28,7 +30,13 @@ public class CQRStructureGeneratorTypes {
 
 	@SubscribeEvent
 	public static void main(NewRegistryEvent event) {
-		DEFERRED_REGISTER.createRegistry(event);
+		try {
+			Method createRegistry = DeferredRegister.class.getDeclaredMethod("createRegistry", NewRegistryEvent.class);
+			createRegistry.setAccessible(true);
+			createRegistry.invoke(DEFERRED_REGISTER, event);
+		} catch (ReflectiveOperationException e) {
+			throw new UnsupportedOperationException(e);
+		}
 	}
 
 	@SubscribeEvent
