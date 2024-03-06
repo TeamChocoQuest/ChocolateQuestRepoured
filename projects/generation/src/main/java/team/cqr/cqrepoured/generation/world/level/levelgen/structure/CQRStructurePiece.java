@@ -35,7 +35,6 @@ import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.util.IntUtil;
-import team.cqr.cqrepoured.world.structure.generation.generation.CQRLevel;
 import team.cqr.cqrepoured.world.structure.generation.generation.CQRSection;
 import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.generation.NoiseUtil;
