@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="[47,48)"
-license="MIT-license"
+license="MIT"
 
 [[mods]]
 modId="cqrepoured"
