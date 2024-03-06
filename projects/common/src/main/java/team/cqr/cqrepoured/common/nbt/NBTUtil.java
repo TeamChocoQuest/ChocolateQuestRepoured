@@ -22,7 +22,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagType;
 import net.minecraft.nbt.TagTypes;
 import team.cqr.cqrepoured.common.function.IntObj2ObjFunction;
-import team.cqr.cqrepoured.util.CollectorImpl;
+import team.cqr.cqrepoured.common.stream.CollectorImpl;
 
 public class NBTUtil {
 

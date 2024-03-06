@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.stream;
 
 import java.util.Collections;
 import java.util.EnumSet;
