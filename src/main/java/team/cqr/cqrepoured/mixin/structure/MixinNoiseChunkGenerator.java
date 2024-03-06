@@ -20,8 +20,8 @@ import net.minecraft.world.gen.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.INoiseAffectingStructurePiece;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
 
 @Mixin(NoiseChunkGenerator.class)
 public abstract class MixinNoiseChunkGenerator {

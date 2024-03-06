@@ -25,7 +25,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.world.structure.generation.generation.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.INoiseAffectingStructurePiece;
 
 @EventBusSubscriber(modid = CQRConstants.MODID)
 public class TestStructures {

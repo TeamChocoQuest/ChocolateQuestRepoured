@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.generation;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise;
 
 import java.util.ArrayList;
 import java.util.List;
