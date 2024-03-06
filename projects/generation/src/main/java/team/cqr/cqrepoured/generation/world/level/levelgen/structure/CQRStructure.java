@@ -21,7 +21,6 @@ import team.cqr.cqrepoured.generation.init.CQRStructureTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.generator.StructureGenerator;
 import team.cqr.cqrepoured.protection.ProtectionSettings;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
-import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 
 public class CQRStructure extends Structure {
 

@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.PreparableEntityInfo;
-import team.cqr.cqrepoured.world.structure.generation.WorldDungeonGenerator;
 
 public class BlockStateGenArray {
 
