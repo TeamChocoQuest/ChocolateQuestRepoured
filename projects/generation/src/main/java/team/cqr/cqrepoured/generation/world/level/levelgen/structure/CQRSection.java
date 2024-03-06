@@ -226,7 +226,6 @@ public class CQRSection {
 
 	@Nullable
 	private BlockState getBlockState(int index) {
-		// TODO make method visible via AT
 		return this.blocks.get(index);
 	}
 
@@ -235,7 +234,6 @@ public class CQRSection {
 	}
 
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
-		// TODO make method visible via AT
 		this.blocks.set(index, state);
 		if (state != null && state.hasBlockEntity()) {
 			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(sectionPos, index), state);
