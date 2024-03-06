@@ -1,4 +1,4 @@
-modLoader="javafml" #mandatory
+modLoader="javafml"
 loaderVersion="[47,48)"
 license="MIT"
 
@@ -11,49 +11,49 @@ credits="Everyone who made textures, dungeons and other content, developers and 
 authors="At first we want to thank and credit Chocolatin for creating the original Chocolate Quest and with that gave the base and motivation for this (even if this is a complete rewrite from scratch)\n\nProject Lead:\n  > ArloTheEpic\nCoders:\n  > DerToaster98 - Pretty much everything except some items and the randomized castles\n  > Meldexun - Entities & everywhere a bit\n  > jdawg3636 - Assisting & Fixing\n  > KalgogSmash - Castles & Random structures\n  > MrMarnic - Protection System and Help with Tile-Entities\n  > Tiviacz1337 - Items\nArtists:\n  > Sir Squidly - Blocks\n  > Silentine - Items"
 description='''
 A complete rewrite of the Chocolate Quest mod by Chocolatin, who disappeared. 
-	
+
 A lot of features are still to be implemented, so please follow updates.
 '''
 
 # Base
 [[dependencies.cqrepoured]]
-	modId="minecraft"
-	mandatory=true
-	versionRange="[1.20.1]"
-	ordering="NONE"
-	side="BOTH"
-	
-[[dependencies.cqrepoured]]
-	modId="forge"
-	mandatory=true
-	versionRange="[47,48)"
-	ordering="NONE"
-	side="BOTH"
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="NONE"
+    side="BOTH"
 
 [[dependencies.cqrepoured]]
-	modId="mixinbootstrap"
-	mandatory=false # MixinBootstrap isn't a mod!
-	side="BOTH"
+    modId="forge"
+    mandatory=true
+    versionRange="[47,48)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.cqrepoured]]
+    modId="mixinbootstrap"
+    mandatory=false # MixinBootstrap isn't a mod!
+    side="BOTH"
 
 # Dependencies (Required)
 [[dependencies.cqrepoured]]
-	modId="azurelib"
-	versionRange="[2.0.400,)"
-	mandatory=true
-	ordering="NONE"
-	side="BOTH"
+    modId="azurelib"
+    versionRange="[2.0.400,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"
 
 [[dependencies.cqrepoured]]
-        modId="smartbrainlib"
-        versionRange="[1.11,)"
-        mandatory=true
-        ordering="NONE"
-        side="SERVER"
+    modId="smartbrainlib"
+    versionRange="[1.11,)"
+    mandatory=true
+    ordering="NONE"
+    side="SERVER"
 
 # Dependencies (Extras)
 [[dependencies.cqrepoured]]
-        modId="theoneprobe"
-        versionRange="[1.20.0-9.0.0,)"
-        mandatory=false
-        ordering="NONE"
-        side="BOTH"
+    modId="theoneprobe"
+    versionRange="[1.20.0-9.0.0,)"
+    mandatory=false
+    ordering="NONE"
+    side="BOTH"
