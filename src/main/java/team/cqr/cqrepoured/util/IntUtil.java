@@ -1,13 +1,8 @@
 package team.cqr.cqrepoured.util;
 
+import team.cqr.cqrepoured.common.function.IntIntConsumer;
+
 public class IntUtil {
-
-	@FunctionalInterface
-	public interface BiIntConsumer {
-
-		void accept(int x, int y);
-
-	}
 
 	@FunctionalInterface
 	public interface TriIntConsumer {
@@ -20,9 +15,9 @@ public class IntUtil {
 	 * x: 0 -> 15<br>
 	 * y: 0 -> 15<br>
 	 * <br>
-	 * See {@link #forEachXY(int, BiIntConsumer)}
+	 * See {@link #forEachXY(int, IntIntConsumer)}
 	 */
-	public static void forEachChunkCoord(BiIntConsumer consumer) {
+	public static void forEachChunkCoord(IntIntConsumer consumer) {
 		forEachXY(16, consumer);
 	}
 
@@ -30,9 +25,9 @@ public class IntUtil {
 	 * x: 0 -> size-1<br>
 	 * y: 0 -> size-1<br>
 	 * <br>
-	 * See {@link #forEachXY(int, int, BiIntConsumer)}
+	 * See {@link #forEachXY(int, int, IntIntConsumer)}
 	 */
-	public static void forEachXY(int size, BiIntConsumer consumer) {
+	public static void forEachXY(int size, IntIntConsumer consumer) {
 		forEachXY(size, size, consumer);
 	}
 
@@ -40,9 +35,9 @@ public class IntUtil {
 	 * x: 0 -> sizeX-1<br>
 	 * y: 0 -> sizeY-1<br>
 	 * <br>
-	 * See {@link #forEachXY(int, int, int, int, BiIntConsumer)}
+	 * See {@link #forEachXY(int, int, int, int, IntIntConsumer)}
 	 */
-	public static void forEachXY(int sizeX, int sizeY, BiIntConsumer consumer) {
+	public static void forEachXY(int sizeX, int sizeY, IntIntConsumer consumer) {
 		forEachXY(0, 0, sizeX, sizeY, consumer);
 	}
 
@@ -53,7 +48,7 @@ public class IntUtil {
 	 * @param maxY     exclusive
 	 * @param consumer
 	 */
-	public static void forEachXY(int minX, int minY, int maxX, int maxY, BiIntConsumer consumer) {
+	public static void forEachXY(int minX, int minY, int maxX, int maxY, IntIntConsumer consumer) {
 		for (int x = minX; x < maxX; x++) {
 			for (int y = minY; y < maxY; y++) {
 				consumer.accept(x, y);
@@ -65,9 +60,9 @@ public class IntUtil {
 	 * x: 0 -> size<br>
 	 * y: 0 -> size<br>
 	 * <br>
-	 * See {@link #forEachXYClosed(int, int, TriIntConsumer)}
+	 * See {@link #forEachXYClosed(int, int, IntIntConsumer)}
 	 */
-	public static void forEachXYClosed(int size, BiIntConsumer consumer) {
+	public static void forEachXYClosed(int size, IntIntConsumer consumer) {
 		forEachXYClosed(size, size, consumer);
 	}
 
@@ -75,9 +70,9 @@ public class IntUtil {
 	 * x: 0 -> sizeX<br>
 	 * y: 0 -> sizeY<br>
 	 * <br>
-	 * See {@link #forEachXYClosed(int, int, int, int, TriIntConsumer)}
+	 * See {@link #forEachXYClosed(int, int, int, int, IntIntConsumer)}
 	 */
-	public static void forEachXYClosed(int sizeX, int sizeY, BiIntConsumer consumer) {
+	public static void forEachXYClosed(int sizeX, int sizeY, IntIntConsumer consumer) {
 		forEachXYClosed(0, 0, sizeX, sizeY, consumer);
 	}
 
@@ -88,7 +83,7 @@ public class IntUtil {
 	 * @param maxY     inclusive
 	 * @param consumer
 	 */
-	public static void forEachXYClosed(int minX, int minY, int maxX, int maxY, BiIntConsumer consumer) {
+	public static void forEachXYClosed(int minX, int minY, int maxX, int maxY, IntIntConsumer consumer) {
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				consumer.accept(x, y);
