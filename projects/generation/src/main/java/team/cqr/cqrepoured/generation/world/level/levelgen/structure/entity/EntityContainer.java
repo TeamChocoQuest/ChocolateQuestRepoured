@@ -1,8 +1,7 @@
-package team.cqr.cqrepoured.world.structure.generation.generation;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 import org.apache.commons.lang3.Validate;
 
