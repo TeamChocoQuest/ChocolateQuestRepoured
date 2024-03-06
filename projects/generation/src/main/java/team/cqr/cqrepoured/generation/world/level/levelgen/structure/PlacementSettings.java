@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.dungeons;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.resources.ResourceLocation;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.PositionFinder;
+import team.cqr.cqrepoured.world.structure.generation.dungeons.PositionValidator;
 
 public record PlacementSettings(double chance, double rarityFactor, List<ResourceLocation> dungeonDependencies, int spawnLimit, PositionValidator positionValidator, List<ResourceLocation> structuresPreventingGeneration, int structureCheckRadius, PositionFinder positionFinder) {
 
