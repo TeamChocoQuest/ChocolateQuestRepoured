@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
@@ -156,7 +156,7 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 				.map(nbt::getCompound)
 				.map(ProtectedRegion::readFromNBT);
 		this.heightMap = HEIGHT_MAP_CODEC.decode(NbtOps.INSTANCE, nbt.get("height_map"))
-				.getOrThrow(false, CQRMain.logger::error)
+				.getOrThrow(false, CQRepoured.LOGGER::error)
 				.getFirst();
 	}
 
@@ -167,7 +167,7 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 			nbt.put("protected_region", protectedRegion.writeToNBT());
 		});
 		nbt.put("height_map", HEIGHT_MAP_CODEC.encode(this.heightMap, NbtOps.INSTANCE, new CompoundTag())
-				.getOrThrow(false, CQRMain.logger::error));
+				.getOrThrow(false, CQRepoured.LOGGER::error));
 	}
 
 	@Override

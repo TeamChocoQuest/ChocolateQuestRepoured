@@ -15,7 +15,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.ForgeEventFactory;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 
 public class EntityFactory {
 
@@ -37,7 +37,7 @@ public class EntityFactory {
 	public Entity createEntity(ResourceLocation registryName) {
 		Entity entity = EntityType.byString(registryName.toString()).map(this::createEntity).orElse(null);
 		if (entity == null) {
-			CQRMain.logger.warn("Skipping Entity with id {}", registryName);
+			CQRepoured.LOGGER.warn("Skipping Entity with id {}", registryName);
 			return null;
 		}
 		return entity;
@@ -47,7 +47,7 @@ public class EntityFactory {
 	public Entity createEntity(CompoundTag nbt) {
 		Entity entity = EntityType.by(nbt).map(this::createEntity).orElse(null);
 		if (entity == null) {
-			CQRMain.logger.warn("Skipping Entity with id {}", nbt.getString("id"));
+			CQRepoured.LOGGER.warn("Skipping Entity with id {}", nbt.getString("id"));
 			return null;
 		}
 		entity.load(nbt);

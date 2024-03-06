@@ -33,7 +33,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityContainer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
@@ -60,7 +60,7 @@ public class CQRSection {
 
 	public CQRSection(CompoundTag nbt) {
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
-		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRMain.logger::error).getOrThrow(false, CQRMain.logger::error);
+		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRepoured.LOGGER::error).getOrThrow(false, CQRepoured.LOGGER::error);
 		this.blockEntities = NBTUtil.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
 			return BlockEntity.loadStatic(getPos(sectionPos, index), this.getBlockState(index), blockEntityNbt);
 		});
@@ -76,7 +76,7 @@ public class CQRSection {
 		nbt.putInt("X", this.sectionPos.x());
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
-		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRMain.logger::error));
+		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRepoured.LOGGER::error));
 		nbt.put("BlockEntities", NBTUtil.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTUtil.toList()));
 		return nbt;
