@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[46,)"
+loaderVersion="[47,48)"
 license="MIT-license"
 
 [[mods]]
@@ -19,14 +19,14 @@ A lot of features are still to be implemented, so please follow updates.
 [[dependencies.cqrepoured]]
 	modId="minecraft"
 	mandatory=true
-	versionRange="[1.20,)"
+	versionRange="[1.20.1]"
 	ordering="NONE"
 	side="BOTH"
 	
 [[dependencies.cqrepoured]]
-	modId="neoforge"
+	modId="forge"
 	mandatory=true
-	versionRange="[47,)"
+	versionRange="[47,48)"
 	ordering="NONE"
 	side="BOTH"
 
