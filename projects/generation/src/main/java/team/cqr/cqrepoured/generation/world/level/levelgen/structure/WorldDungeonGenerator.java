@@ -1,21 +1,11 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
-import java.util.Objects;
 import java.util.Random;
-import java.util.function.Predicate;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Predicates;
 
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraftforge.server.ServerLifecycleHooks;
-import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
-import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -23,27 +13,6 @@ import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
  * GitHub: https://github.com/DerToaster98
  */
 public class WorldDungeonGenerator {
-
-	/**
-	 * @return the dungeon that will be generated in this chunk
-	 */
-	@Nullable
-	public static DungeonBase getDungeonAt(ServerLevel world, ChunkPos chunkPos) {
-		return getDungeonAt(world, chunkPos, Predicates.alwaysTrue());
-	}
-
-	/**
-	 * @return the dungeon that will be generated in this chunk
-	 */
-	@Nullable
-	public static DungeonBase getDungeonAt(ServerLevel world, ChunkPos chunkPos, Predicate<DungeonGrid> gridPredicate) {
-		DungeonBase locationSpecificDungeon = DungeonRegistry.getInstance().getLocationSpecificDungeon(world, chunkPos);
-		if (locationSpecificDungeon != null) {
-			return locationSpecificDungeon;
-		}
-
-		return GridRegistry.getInstance().getGrids().stream().filter(gridPredicate).map(grid -> grid.getDungeonAt(world, chunkPos)).filter(Objects::nonNull).findFirst().orElse(null);
-	}
 
 	public static Random getRandomForCoords(long seed, int x, int z) {
 		return new Random(getSeed(seed, x, z));
