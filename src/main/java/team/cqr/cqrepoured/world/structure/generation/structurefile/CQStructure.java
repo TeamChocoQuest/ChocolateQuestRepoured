@@ -52,7 +52,6 @@ import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.BlockStatePalette;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableBannerInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableBlockInfo;
@@ -61,6 +60,7 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.Prepa
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparableSpawnerInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.PreparableEntityInfo;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;

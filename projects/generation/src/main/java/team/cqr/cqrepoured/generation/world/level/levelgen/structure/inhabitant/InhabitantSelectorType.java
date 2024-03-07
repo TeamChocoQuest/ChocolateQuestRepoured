@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant;
 
 import java.util.Locale;
 

@@ -16,7 +16,7 @@ import team.cqr.cqrepoured.common.datapack.DatapackLoaderHelper;
 import team.cqr.cqrepoured.entity.profile.EntityProfile;
 import team.cqr.cqrepoured.entity.profile.variant.extradata.IVariantExtraData;
 import team.cqr.cqrepoured.entity.trade.TradeProfile;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 
 @Mod.EventBusSubscriber(modid = CQRepoured.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
