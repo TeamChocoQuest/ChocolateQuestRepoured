@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured;
+package team.cqr.cqrepoured.common;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -6,8 +6,7 @@ import java.nio.file.Path;
 import de.dertoaster.multihitboxlib.util.LazyLoadField;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
-import team.cqr.cqrepoured.common.CQRepoured;
-import team.cqr.cqrepoured.customtextures.TextureSetNew;
+import team.cqr.cqrepoured.common.registration.RegistrationIDSupplier;
 
 public class CQRConstants {
 	
@@ -19,9 +18,9 @@ public class CQRConstants {
 	public static final String PACK_RESOURCES_ID = MODID + "_folder_resources";
 	
 	public static class JEI {
-		public static final ResourceLocation PLUGIN_ID = CQRMain.prefix("jei_plugin");
+		public static final ResourceLocation PLUGIN_ID = CQRepoured.prefix("jei_plugin");
 		
-		public static final ResourceLocation NPC_TRADE_CATEGORY_UID = CQRMain.prefix("jei/category/npc_trade");
+		public static final ResourceLocation NPC_TRADE_CATEGORY_UID = CQRepoured.prefix("jei/category/npc_trade");
 	}
 	
 	public static class Resources {
@@ -44,11 +43,11 @@ public class CQRConstants {
 			public static final String GEO_MODEL_PACK_DOMAIN = "geo";
 			public static final String GEO_ANIMATION_PACK_DOMAIN = "animations";
 			
-			public static final String generateCTSDomain(final TextureSetNew ts) {
-				if (ts.getId() == null) {
+			public static final String generateCTSDomain(final RegistrationIDSupplier ris) {
+				if (ris.getId() == null) {
 					throw new IllegalStateException("Texture sets have not been initialized yet!");
 				}
-				String[] split = ts.getId().getPath().split("/");
+				String[] split = ris.getId().getPath().split("/");
 				return CTS_DOMAIN_BASE + "_" + split[split.length - 1];
 			}
 		}
