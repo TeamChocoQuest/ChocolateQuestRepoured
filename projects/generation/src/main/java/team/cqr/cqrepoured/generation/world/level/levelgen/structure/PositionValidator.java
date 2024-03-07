@@ -6,8 +6,10 @@ import net.minecraft.world.level.ChunkPos;
 
 public interface PositionValidator {
 
-	public static final Codec<PositionValidator> CODEC = null;
+	Codec<PositionValidator> CODEC = PositionValidatorType.CODEC.dispatch(PositionValidator::type, PositionValidatorType::codec);
 
 	boolean validatePosition(ChunkPos chunkPos);
+
+	PositionValidatorType type();
 
 }
