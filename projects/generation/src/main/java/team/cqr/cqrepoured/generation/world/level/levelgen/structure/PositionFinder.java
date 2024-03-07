@@ -8,10 +8,12 @@ import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
 
 public interface PositionFinder {
 
-	public static final Codec<PositionFinder> CODEC = null;
+	Codec<PositionFinder> CODEC = PositionFinderType.CODEC.dispatch(PositionFinder::type, PositionFinderType::codec);
 
 	BlockPos findPosition(GenerationContext context, ChunkPos chunkPos);
 
 	BlockPos applyOffsets(GenerationContext context, BlockPos pos);
+
+	PositionFinderType type();
 
 }
