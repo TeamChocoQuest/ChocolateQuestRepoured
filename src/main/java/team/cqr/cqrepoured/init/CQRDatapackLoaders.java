@@ -34,11 +34,11 @@ public class CQRDatapackLoaders implements DatapackLoaderHelper {
 	}
 	
 	public static Optional<TradeProfile> getTradeProfile(ResourceLocation tradeProfileId) {
-		return getValueGeneral(TRADE_PROFILES, tradeProfileId);
+		return DatapackLoaderHelper.getValueGeneral(TRADE_PROFILES, tradeProfileId);
 	}
 	
 	public static Optional<DungeonInhabitant> getDungeonInhabitant(ResourceLocation inhabitantId) {
-		return getValueGeneral(DUNGEON_INHABITANTS, inhabitantId);
+		return DatapackLoaderHelper.getValueGeneral(DUNGEON_INHABITANTS, inhabitantId);
 	}
 	
 
