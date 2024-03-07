@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.datapack;
 
 import java.util.Map;
 
@@ -10,8 +10,7 @@ import commoble.databuddy.data.CodecJsonDataManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.registration.RegistrationIDSupplier;
+import team.cqr.cqrepoured.common.registration.RegistrationIDSupplier;
 
 public class CQRCodecJsonDataManager<T extends Object & RegistrationIDSupplier> extends CodecJsonDataManager<T> {
 
@@ -22,7 +21,7 @@ public class CQRCodecJsonDataManager<T extends Object & RegistrationIDSupplier> 
 	}
 	
 	protected Codec<T> createByNameCodec() {
-		return CQRDatapackLoaders.byNameCodec(this.getData()::get);
+		return DatapackLoaderHelper.byNameCodec(this.getData()::get);
 	}
 
 	public CQRCodecJsonDataManager(String folderName, Codec<T> codec, Gson gson) {

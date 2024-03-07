@@ -5,12 +5,12 @@ import de.dertoaster.multihitboxlib.api.event.server.SynchAssetFinderRegistratio
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.mhlib.assetsynch.enforcers.CQRAssetEnforcer;
 import team.cqr.cqrepoured.mhlib.assetsynch.finders.CQRAssetFinder;
 
-@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.MOD)
+@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
 public class MHLibEvents {
 	
 	@SubscribeEvent

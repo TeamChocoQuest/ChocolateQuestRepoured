@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.reference;
 
 import java.lang.ref.WeakReference;
 

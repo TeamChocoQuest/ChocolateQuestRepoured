@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util.registration;
+package team.cqr.cqrepoured.common.registration;
 
 import javax.annotation.Nullable;
 

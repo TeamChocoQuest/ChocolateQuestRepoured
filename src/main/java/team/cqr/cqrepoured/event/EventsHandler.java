@@ -32,8 +32,8 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.customtextures.TextureSetManager;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
@@ -45,7 +45,7 @@ import team.cqr.cqrepoured.item.IEquipListener;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 
-@EventBusSubscriber(modid = CQRConstants.MODID)
+@EventBusSubscriber(modid = CQRepoured.MODID)
 public class EventsHandler {
 
 	//@SubscribeEvent

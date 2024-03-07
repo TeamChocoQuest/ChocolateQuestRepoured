@@ -11,7 +11,7 @@ import de.dertoaster.multihitboxlib.assetsynch.impl.TextureEnforcementManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import meldexun.reflectionutil.ReflectionMethod;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.common.CQRConstants;
 
 public class CQRAssetEnforcer extends AbstractAssetEnforcementManager {
 	
