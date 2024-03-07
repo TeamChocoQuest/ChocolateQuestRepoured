@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.profile;
+package team.cqr.cqrepoured.common.entity.profile;
 
 import java.util.List;
 

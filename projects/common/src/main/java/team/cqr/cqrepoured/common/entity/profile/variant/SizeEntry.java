@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.profile.variant;
+package team.cqr.cqrepoured.common.entity.profile.variant;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

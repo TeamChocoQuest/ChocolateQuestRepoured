@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.profile;
+package team.cqr.cqrepoured.common.entity.profile;
 
 import java.util.Collections;
 import java.util.Map;
@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import de.dertoaster.multihitboxlib.util.LazyLoadField;
 import net.minecraft.util.RandomSource;
+import team.cqr.cqrepoured.common.entity.profile.variant.EntityVariant;
 import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
-import team.cqr.cqrepoured.entity.profile.variant.EntityVariant;
-import team.cqr.cqrepoured.util.LazyLoadField;
 
 public class EntityProfile {
 	

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.bases;
+package team.cqr.cqrepoured.common.entity;
 
 import java.util.Optional;
 
@@ -25,16 +25,17 @@ import net.minecraftforge.event.entity.living.MobSpawnEvent.FinalizeSpawn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import team.cqr.cqrepoured.CQRConstants;
-import team.cqr.cqrepoured.entity.profile.EntityProfile;
-import team.cqr.cqrepoured.entity.profile.variant.AssetEntry;
-import team.cqr.cqrepoured.entity.profile.variant.AttributeEntry;
-import team.cqr.cqrepoured.entity.profile.variant.DamageCap;
-import team.cqr.cqrepoured.entity.profile.variant.DamageEntry;
-import team.cqr.cqrepoured.entity.profile.variant.EntityVariant;
-import team.cqr.cqrepoured.entity.profile.variant.SizeEntry;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
+import team.cqr.cqrepoured.common.CQRConstants;
+import team.cqr.cqrepoured.common.CQRepoured;
+import team.cqr.cqrepoured.common.datapack.EntityProfileDatapackLoaders;
+import team.cqr.cqrepoured.common.entity.profile.EntityProfile;
+import team.cqr.cqrepoured.common.entity.profile.variant.AssetEntry;
+import team.cqr.cqrepoured.common.entity.profile.variant.AttributeEntry;
+import team.cqr.cqrepoured.common.entity.profile.variant.DamageCap;
+import team.cqr.cqrepoured.common.entity.profile.variant.DamageEntry;
+import team.cqr.cqrepoured.common.entity.profile.variant.EntityVariant;
+import team.cqr.cqrepoured.common.entity.profile.variant.SizeEntry;
+import team.cqr.cqrepoured.common.reference.WeakReferenceLazyLoadField;
 
 public class VariantEntity extends Monster implements VariantHolder<EntityVariant>, ICustomHitboxProfileSupplier {
 	
@@ -47,14 +48,14 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 	 */
 	
 	// Forge crap
-	@EventBusSubscriber(modid = CQRConstants.MODID, bus = Bus.FORGE)
+	@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.FORGE)
 	public static class EventListener {
 		
 		@SubscribeEvent
 		public static void onFinalizeSpawn(FinalizeSpawn event) {
 			if (event.getEntity() instanceof VariantEntity ve) {
 				EntityType<?> type = ve.getType();
-				Optional<EntityProfile> profile = CQRDatapackLoaders.getProfile(type);
+				Optional<EntityProfile> profile = EntityProfileDatapackLoaders.getProfile(type);
 				if (profile.isPresent()) {
 					EntityVariant variant = profile.get().getRandomVariant(ve.getRandom());
 					if (variant != null) {
@@ -80,7 +81,6 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 			}
 		}
 		
-		@SuppressWarnings("deprecation")
 		public static void onEntitySize(EntityEvent.Size event) {
 			Entity entity = event.getEntity();
 			if (entity != null && entity instanceof VariantEntity ve) {

@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.profile.variant.extradata;
+package team.cqr.cqrepoured.common.entity.profile.variant.extradata;
 
 import com.mojang.serialization.Codec;
 

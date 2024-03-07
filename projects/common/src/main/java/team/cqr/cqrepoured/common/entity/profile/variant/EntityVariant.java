@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.profile.variant;
+package team.cqr.cqrepoured.common.entity.profile.variant;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +10,11 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import de.dertoaster.multihitboxlib.entity.hitbox.HitboxProfile;
+import de.dertoaster.multihitboxlib.util.LazyLoadField;
 import net.minecraft.util.RandomSource;
+import team.cqr.cqrepoured.common.datapack.EntityProfileDatapackLoaders;
+import team.cqr.cqrepoured.common.entity.profile.variant.extradata.IVariantExtraData;
 import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
-import team.cqr.cqrepoured.entity.profile.variant.extradata.IVariantExtraData;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.LazyLoadField;
 
 public class EntityVariant {
 	protected final int weight;
@@ -35,7 +35,7 @@ public class EntityVariant {
 				AttributeEntry.CODEC.listOf().fieldOf("attributes").forGetter(EntityVariant::attributes),
 				AssetEntry.CODEC.listOf().fieldOf("assets").forGetter(ev -> {return ev.assets;}),
 				HitboxProfile.CODEC.optionalFieldOf("hitbox").forGetter(ev -> {return ev.hitboxConfig;}),
-				CQRDatapackLoaders.VARIANT_EXTRA_DATA_DISPATCHER.dispatchedCodec().optionalFieldOf("extra-data").forGetter(EntityVariant::extraData)
+				EntityProfileDatapackLoaders.VARIANT_EXTRA_DATA_DISPATCHER.dispatchedCodec().optionalFieldOf("extra-data").forGetter(EntityVariant::extraData)
 				
 			).apply(instance, EntityVariant::new);
 	});
