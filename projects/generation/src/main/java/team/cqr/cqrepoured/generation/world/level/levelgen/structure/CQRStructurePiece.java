@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -48,7 +49,7 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 	private final CQRLevel level;
 	private Optional<ProtectedRegion> protectedRegion;
 	private final Cache2D<HeightInfo> heightMap;
-	private final StructureProcessorList processors = null;
+	private final StructureProcessorList processors = new StructureProcessorList(List.of());
 
 	private static class HeightInfo {
 
