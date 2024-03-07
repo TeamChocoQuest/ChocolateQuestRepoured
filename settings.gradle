@@ -1,6 +1,8 @@
 include rootProject.name + '-common'
+include rootProject.name + '-faction'
 include rootProject.name + '-generation'
 include rootProject.name + '-protection'
 project(':' + rootProject.name + '-common').projectDir = file('projects/common')
+project(':' + rootProject.name + '-faction').projectDir = file('projects/faction')
 project(':' + rootProject.name + '-generation').projectDir = file('projects/generation')
 project(':' + rootProject.name + '-protection').projectDir = file('projects/protection')

@@ -227,15 +227,18 @@ allprojects {
 
 sourceSets {
     main.java.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.java ]
+    main.java.srcDirs += [ project(':' + rootProject.name + '-faction').sourceSets.main.java ]
     main.java.srcDirs += [ project(':' + rootProject.name + '-generation').sourceSets.main.java ]
     main.java.srcDirs += [ project(':' + rootProject.name + '-protection').sourceSets.main.java ]
     main.resources.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.resources ]
+    main.resources.srcDirs += [ project(':' + rootProject.name + '-faction').sourceSets.main.resources ]
     main.resources.srcDirs += [ project(':' + rootProject.name + '-generation').sourceSets.main.resources ]
     main.resources.srcDirs += [ project(':' + rootProject.name + '-protection').sourceSets.main.resources ]
 }
 
 processResources {
     from project(':' + rootProject.name + '-common').sourceSets.main.resources
+    from project(':' + rootProject.name + '-faction').sourceSets.main.resources
     from project(':' + rootProject.name + '-generation').sourceSets.main.resources
     from project(':' + rootProject.name + '-protection').sourceSets.main.resources
 }
