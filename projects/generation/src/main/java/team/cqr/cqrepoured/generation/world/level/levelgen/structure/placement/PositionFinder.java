@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.placement;
 
 import com.mojang.serialization.Codec;
 
