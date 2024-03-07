@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.datapack.CQRCodecJsonDataManager;
 import team.cqr.cqrepoured.common.datapack.DatapackLoaderHelper;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.network.datapacksynch.packet.SPacketSyncFaction;
@@ -28,8 +29,8 @@ public class FactionDatapackLoaders implements DatapackLoaderHelper {
 	public static final CQRCodecJsonDataManager<EntityFactionInformation> ENTITY_FACTION_INFORMATIONS = new CQRCodecJsonDataManager<>("entity/cqr_faction_information", EntityFactionInformation.CODEC);
 	
 	public static void init() {
-		TEXTURE_SETS.subscribeAsSyncable(CQRepoured.NETWORK, SPacketSyncTextureSet::new);
-		FACTIONS.subscribeAsSyncable(CQRepoured.NETWORK, SPacketSyncFaction::new);
+		TEXTURE_SETS.subscribeAsSyncable(CQRServices.NETWORK.network(), SPacketSyncTextureSet::new);
+		FACTIONS.subscribeAsSyncable(CQRServices.NETWORK.network(), SPacketSyncFaction::new);
 	}
 	
 	/* Access methods */

@@ -27,7 +27,7 @@ public class EntityProfileDatapackLoaders implements DatapackLoaderHelper {
 	}
 	
 	public static Optional<EntityProfile> getProfile(ResourceLocation profileId) {
-		return getValueGeneral(ENTITY_PROFILES, profileId);
+		return DatapackLoaderHelper.getValueGeneral(ENTITY_PROFILES, profileId);
 	}
 
 }
