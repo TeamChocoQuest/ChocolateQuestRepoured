@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.customtextures;
+package team.cqr.cqrepoured.faction.textureset;
 
 import javax.annotation.Nonnull;
 

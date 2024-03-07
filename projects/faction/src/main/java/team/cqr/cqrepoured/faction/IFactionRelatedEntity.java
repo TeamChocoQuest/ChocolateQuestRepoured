@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.world.entity.Entity;
-import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
+import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
 
 public interface IFactionRelatedEntity extends IFactionRelated {
 	
