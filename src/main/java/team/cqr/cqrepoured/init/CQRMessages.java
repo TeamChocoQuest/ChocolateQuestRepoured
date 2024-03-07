@@ -1,13 +1,6 @@
 package team.cqr.cqrepoured.init;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
-
-import de.dertoaster.multihitboxlib.api.network.IMessage;
-import de.dertoaster.multihitboxlib.api.network.IMessageHandler;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor.PacketTarget;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerAnimationUpdateOfEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerArmorCooldownSync;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerDungeonSync;
@@ -17,7 +10,6 @@ import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncLaserRotation;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTileEntity;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerSyncTrades;
-import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateCQRMultipart;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateEntityPrevPos;
 import team.cqr.cqrepoured.network.client.handler.CPacketHandlerUpdateReputation;
@@ -53,7 +45,6 @@ import team.cqr.cqrepoured.network.server.packet.SPacketSyncLaserRotation;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTileEntity;
 import team.cqr.cqrepoured.network.server.packet.SPacketSyncTrades;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
-import team.cqr.cqrepoured.network.server.packet.SPacketUpdateCQRMultipart;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateElectrocuteCapability;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateEntityPrevPos;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdatePlayerReputation;
@@ -105,96 +96,42 @@ public class CQRMessages {
 		// CQRMain.NETWORK.registerMessage(SPacketHandlerContainerClickButton.class, CPacketContainerClickButton.class, messageID++, Dist.DEDICATED_SERVER);
 
 		// 1.16
-		registerServerToClient(SPacketDungeonSync.class, CPacketHandlerDungeonSync.class);
-		registerServerToClient(SPacketArmorCooldownSync.class, CPacketHandlerArmorCooldownSync.class);
-		registerServerToClient(SPacketItemStackSync.class, CPacketHandlerItemStackSync.class);
-		registerServerToClient(SPacketHookShotPlayerStop.class, CPacketHandlerHookShotPlayerStop.class);
-		registerServerToClient(SPacketSyncProtectedRegions.class, CPacketHandlerSyncProtectedRegions.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketDungeonSync.class, CPacketHandlerDungeonSync.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketArmorCooldownSync.class, CPacketHandlerArmorCooldownSync.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketItemStackSync.class, CPacketHandlerItemStackSync.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketHookShotPlayerStop.class, CPacketHandlerHookShotPlayerStop.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncProtectedRegions.class, CPacketHandlerSyncProtectedRegions.class);
 		// registerServerToClient(SPacketSyncProtectionConfig.class, CPacketHandlerSyncProtectionConfig.class);
-		registerServerToClient(SPacketUpdateProtectedRegion.class, CPacketHandlerUpdateProtectedRegion.class);
-		registerServerToClient(SPacketUnloadProtectedRegion.class, CPacketHandlerUnloadProtectedRegion.class);
-		registerServerToClient(SPacketAddOrResetProtectedRegionIndicator.class, CPacketHandlerAddOrResetProtectedRegionIndicator.class);
-		registerServerToClient(SPacketUpdatePlayerReputation.class, CPacketHandlerUpdateReputation.class);
-		registerServerToClient(SPacketSyncTileEntity.class, CPacketHandlerSyncTileEntity.class);
-		registerServerToClient(SPacketUpdateEntityPrevPos.class, CPacketHandlerUpdateEntityPrevPos.class);
-		registerServerToClient(SPacketSyncLaserRotation.class, CPacketHandlerSyncLaserRotation.class);
-		registerServerToClient(SPacketUpdateAnimationOfEntity.class, CPacketHandlerAnimationUpdateOfEntity.class);
-		registerServerToClient(SPacketCalamityUpdateHand.class, CPacketHandlerCalamityHandUpdateHand.class);
-		registerServerToClient(SPacketSyncCalamityRotation.class, CPacketHandlerSyncCalamityRotation.class);
-		registerServerToClient(SPacketUpdateElectrocuteCapability.class, CPacketHandlerUpdateElectrocuteCapability.class);
-		registerServerToClient(SPacketUpdateEmitterTarget.class, CPacketHandlerUpdateEmitterTarget.class);
-		registerServerToClient(SPacketSyncTrades.class, CPacketHandlerSyncTrades.class);
-		registerServerToClient(SPacketSyncEntity.class, CPacketHandlerSyncEntity.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdateProtectedRegion.class, CPacketHandlerUpdateProtectedRegion.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUnloadProtectedRegion.class, CPacketHandlerUnloadProtectedRegion.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketAddOrResetProtectedRegionIndicator.class, CPacketHandlerAddOrResetProtectedRegionIndicator.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdatePlayerReputation.class, CPacketHandlerUpdateReputation.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncTileEntity.class, CPacketHandlerSyncTileEntity.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdateEntityPrevPos.class, CPacketHandlerUpdateEntityPrevPos.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncLaserRotation.class, CPacketHandlerSyncLaserRotation.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdateAnimationOfEntity.class, CPacketHandlerAnimationUpdateOfEntity.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketCalamityUpdateHand.class, CPacketHandlerCalamityHandUpdateHand.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncCalamityRotation.class, CPacketHandlerSyncCalamityRotation.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdateElectrocuteCapability.class, CPacketHandlerUpdateElectrocuteCapability.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketUpdateEmitterTarget.class, CPacketHandlerUpdateEmitterTarget.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncTrades.class, CPacketHandlerSyncTrades.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncEntity.class, CPacketHandlerSyncEntity.class);
 		//No longer needed, part of MHLIB
 		//registerServerToClient(SPacketUpdateCQRMultipart.class, CPacketHandlerUpdateCQRMultipart.class);
 
-		registerClientToServer(CPacketSaveStructureRequest.class, SPacketHandlerSaveStructureRequest.class);
-		registerClientToServer(CPacketStructureSelector.class, SPacketHandlerStructureSelector.class);
-		registerClientToServer(CPacketSyncEntity.class, SPacketHandlerSyncEntity.class);
-		registerClientToServer(CPacketOpenMerchantGui.class, SPacketHandlerOpenMerchantGui.class);
-		registerClientToServer(CPacketSyncTileEntity.class, SPacketHandlerSyncTileEntity.class);
-		registerClientToServer(CPacketAddPathNode.class, SPacketHandlerAddPathNode.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketSaveStructureRequest.class, SPacketHandlerSaveStructureRequest.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketStructureSelector.class, SPacketHandlerStructureSelector.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketSyncEntity.class, SPacketHandlerSyncEntity.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketOpenMerchantGui.class, SPacketHandlerOpenMerchantGui.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketSyncTileEntity.class, SPacketHandlerSyncTileEntity.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketAddPathNode.class, SPacketHandlerAddPathNode.class);
 		// registerClientToServer(CPacketCloseMapPlaceholderGuiSimple.class, SPacketHandlerCloseMapPlaceholderGuiSimple.class);
-		registerClientToServer(CPacketContainerClickButton.class, SPacketHandlerContainerClickButton.class);
+		CQRServices.NETWORK.registerClientToServer(CPacketContainerClickButton.class, SPacketHandlerContainerClickButton.class);
 		
 		// Datapacksynch
-		registerServerToClient(SPacketSyncTextureSet.class, SPacketHandlerSyncTextureSet.class);
-		registerServerToClient(SPacketSyncFaction.class, SPacketHandlerSyncFaction.class);
-		registerServerToClient(SPacketSyncEntityProfiles.class, SPacketHandlerSyncEntityProfiles.class);
-	}
-
-	// Start the IDs at 1 so any unregistered messages (ID 0) throw a more obvious exception when received
-	private static int messageID = 0;
-
-	public static <T extends Object> void send(T packet, PacketTarget target) {
-		CQRMain.NETWORK.send(target, packet);
-	}
-
-	public static <T extends Object> void sendToServer(T packet) {
-		CQRMain.NETWORK.sendToServer(packet);
-	}
-
-	protected static <MSG> void registerClientToServer(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler) {
-		register(clsMessage, clsHandler, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-	}
-
-	protected static <MSG> void registerServerToClient(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler) {
-		register(clsMessage, clsHandler, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-	}
-
-	protected static <MSG> void register(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler) {
-		register(clsMessage, clsHandler, Optional.empty());
-	}
-
-	protected static <MSG> void register(Class<? extends IMessage<MSG>> clsMessage, Class<? extends IMessageHandler<MSG>> clsHandler, final Optional<NetworkDirection> networkDirection) {
-		IMessage<MSG> message = null;
-		IMessageHandler<MSG> handler = null;
-		try {
-			message = clsMessage.getConstructor(new Class[] {}).newInstance();
-			handler = clsHandler.getConstructor(new Class[] {}).newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}
-		if (handler != null && message != null)
-			register(message, handler, networkDirection);
-	}
-
-	protected static <MSG> void register(IMessage<MSG> message, IMessageHandler<MSG> handler) {
-		register(message, handler, Optional.empty());
-	}
-
-	protected static <MSG> void register(IMessage<MSG> message, IMessageHandler<MSG> handler, final Optional<NetworkDirection> networkDirection) {
-		CQRMain.NETWORK.registerMessage(messageID++, message.getPacketClass(), message::toBytes, message::fromBytes, handler::handlePacket, networkDirection);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncTextureSet.class, SPacketHandlerSyncTextureSet.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncFaction.class, SPacketHandlerSyncFaction.class);
+		CQRServices.NETWORK.registerServerToClient(SPacketSyncEntityProfiles.class, SPacketHandlerSyncEntityProfiles.class);
 	}
 
 }
