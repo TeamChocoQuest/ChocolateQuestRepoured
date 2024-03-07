@@ -7,8 +7,8 @@ import com.mojang.serialization.Codec;
 
 import de.dertoaster.multihitboxlib.api.network.AbstractSPacketSyncDatapackContent;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.entity.profile.EntityProfile;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.common.datapack.EntityProfileDatapackLoaders;
+import team.cqr.cqrepoured.common.entity.profile.EntityProfile;
 
 public class SPacketSyncEntityProfiles extends AbstractSPacketSyncDatapackContent<EntityProfile, SPacketSyncEntityProfiles> {
 	
@@ -30,7 +30,7 @@ public class SPacketSyncEntityProfiles extends AbstractSPacketSyncDatapackConten
 
 	@Override
 	public BiConsumer<ResourceLocation, EntityProfile> consumer() {
-		return CQRDatapackLoaders.ENTITY_PROFILES.getData()::putIfAbsent;
+		return EntityProfileDatapackLoaders.ENTITY_PROFILES.getData()::putIfAbsent;
 	}
 
 	@Override
