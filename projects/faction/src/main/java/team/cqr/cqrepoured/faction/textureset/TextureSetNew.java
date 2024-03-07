@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.customtextures;
+package team.cqr.cqrepoured.faction.textureset;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,9 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.common.CQRConstants;
 import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
-import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
+import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
 
 public class TextureSetNew extends AbstractRegistratableObject {
 	

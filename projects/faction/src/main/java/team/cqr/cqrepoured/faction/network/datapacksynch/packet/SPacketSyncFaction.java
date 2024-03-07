@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.network.datapacksynch.packet;
+package team.cqr.cqrepoured.faction.network.datapacksynch.packet;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -8,7 +8,7 @@ import com.mojang.serialization.Codec;
 import de.dertoaster.multihitboxlib.api.network.AbstractSPacketSyncDatapackContent;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
 public class SPacketSyncFaction extends AbstractSPacketSyncDatapackContent<Faction, SPacketSyncFaction> {
 
@@ -30,7 +30,7 @@ public class SPacketSyncFaction extends AbstractSPacketSyncDatapackContent<Facti
 
 	@Override
 	public BiConsumer<ResourceLocation, Faction> consumer() {
-		return CQRDatapackLoaders.FACTIONS.getData()::putIfAbsent;
+		return FactionDatapackLoaders.FACTIONS.getData()::putIfAbsent;
 	}
 
 	@Override

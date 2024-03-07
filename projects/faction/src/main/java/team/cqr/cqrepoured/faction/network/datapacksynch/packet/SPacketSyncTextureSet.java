@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.network.datapacksynch.packet;
+package team.cqr.cqrepoured.faction.network.datapacksynch.packet;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -7,8 +7,8 @@ import com.mojang.serialization.Codec;
 
 import de.dertoaster.multihitboxlib.api.network.AbstractSPacketSyncDatapackContent;
 import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.customtextures.TextureSetNew;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
+import team.cqr.cqrepoured.faction.textureset.TextureSetNew;
 
 public class SPacketSyncTextureSet extends AbstractSPacketSyncDatapackContent<TextureSetNew, SPacketSyncTextureSet> {
 
@@ -30,7 +30,7 @@ public class SPacketSyncTextureSet extends AbstractSPacketSyncDatapackContent<Te
 
 	@Override
 	public BiConsumer<ResourceLocation, TextureSetNew> consumer() {
-		return CQRDatapackLoaders.TEXTURE_SETS.getData()::putIfAbsent;
+		return FactionDatapackLoaders.TEXTURE_SETS.getData()::putIfAbsent;
 	}
 
 	@Override

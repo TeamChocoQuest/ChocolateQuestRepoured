@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.bases;
+package team.cqr.cqrepoured.faction.entity;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,13 +14,14 @@ import net.tslat.smartbrainlib.api.core.SmartBrainProvider;
 import net.tslat.smartbrainlib.api.core.sensor.ExtendedSensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
-import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.common.entity.VariantEntity;
+import team.cqr.cqrepoured.common.reference.WeakReferenceLazyLoadField;
 import team.cqr.cqrepoured.entity.ai.sensor.NearbyAlliesSensor;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.IFactionRelatedEntity;
-import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.WeakReferenceLazyLoadField;
+import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
+import team.cqr.cqrepoured.faction.init.FactionCapabilities;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
 public class FactionEntity<T extends LivingEntity & IFactionRelatedEntity & SmartBrainOwner<T>> extends VariantEntity implements IFactionRelatedEntity, SmartBrainOwner<T>{
 	
@@ -32,13 +33,13 @@ public class FactionEntity<T extends LivingEntity & IFactionRelatedEntity & Smar
 
 	@Override
 	public EntityFactionInformation getEntityFactionInformation() {
-		return CQRDatapackLoaders.getEntityFactionInformation(this.getType());
+		return FactionDatapackLoaders.getEntityFactionInformation(this.getType());
 	}
 
 	
 	@Override
 	public Optional<IFactionRelationCapability> getFactionOverrides() {
-		LazyOptional<IFactionRelationCapability> opCap = this.getCapability(CQRCapabilities.FACTION_RELATION);
+		LazyOptional<IFactionRelationCapability> opCap = this.getCapability(FactionCapabilities.FACTION_RELATION);
 		if (opCap.isPresent()) {
 			return opCap.resolve();
 		}

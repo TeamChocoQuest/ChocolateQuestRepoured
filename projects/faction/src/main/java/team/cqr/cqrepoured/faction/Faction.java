@@ -16,13 +16,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.customtextures.TextureSetNew;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
-import team.cqr.cqrepoured.init.CQRCapabilities;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
+import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
+import team.cqr.cqrepoured.faction.init.FactionCapabilities;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
+import team.cqr.cqrepoured.faction.textureset.TextureSetNew;
 
 public class Faction extends AbstractRegistratableObject implements IFactionRelated {
 	
@@ -47,7 +47,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 				Codec.unboundedMap(ResourceLocation.CODEC, EReputationState.CODEC).fieldOf("relations").forGetter(Faction::getRelations),
 				Codec.BOOL.fieldOf("changeableReputation").forGetter(Faction::canRepuChange),
 				ReputationSettings.CODEC.fieldOf("reputation").forGetter(Faction::getReputationSettings),
-				CQRDatapackLoaders.TEXTURE_SETS.byNameCodec().optionalFieldOf("textureSet").forGetter(Faction::getTextureSet)
+				FactionDatapackLoaders.TEXTURE_SETS.byNameCodec().optionalFieldOf("textureSet").forGetter(Faction::getTextureSet)
 		).apply(instance, Faction::new);
 	});
 	
@@ -105,7 +105,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent instanceof IFactionRelated ifr) {
 			return ifr.isEnemyOf(this);
 		} else {
-			IFactionRelated efi = CQRDatapackLoaders.getEntityFactionInformation(ent.getType());
+			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType());
 			return efi != null ? efi.isAllyOf(this) : false;
 		}
 	}
@@ -138,7 +138,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent instanceof IFactionRelated ifr) {
 			return ifr.isAllyOf(this);
 		} else {
-			IFactionRelated efi = CQRDatapackLoaders.getEntityFactionInformation(ent.getType());
+			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType());
 			return efi != null ? efi.isAllyOf(this) : false;
 		}
 	}
@@ -153,7 +153,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 	
 	protected <T extends IFactionRelated & ICapabilityProvider> void changeReputation(T capProvider, int score, Level level) {
 		if (this.repuMayChange && !level.getDifficulty().equals(Difficulty.PEACEFUL) && !(capProvider instanceof Player player && (player.isSpectator() || player.isCreative()))) {
-			LazyOptional<IFactionRelationCapability> lOpCap = capProvider.getCapability(CQRCapabilities.FACTION_RELATION);
+			LazyOptional<IFactionRelationCapability> lOpCap = capProvider.getCapability(FactionCapabilities.FACTION_RELATION);
 			if (lOpCap != null && lOpCap.isPresent()) {
 				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
 				if (opCap.isPresent()) {

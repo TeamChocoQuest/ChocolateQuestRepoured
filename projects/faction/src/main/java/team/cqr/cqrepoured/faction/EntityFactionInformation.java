@@ -8,9 +8,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.entity.Entity;
+import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
-import team.cqr.cqrepoured.util.registration.AbstractRegistratableObject;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
 public class EntityFactionInformation extends AbstractRegistratableObject implements IFactionRelated {
 	
@@ -20,13 +20,13 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 	
 	public static final Codec<EntityFactionInformation> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
-				Codec.unboundedMap(CQRDatapackLoaders.FACTIONS.byNameCodec(), EReputationState.CODEC).fieldOf("relations").forGetter((efi) -> {
+				Codec.unboundedMap(FactionDatapackLoaders.FACTIONS.byNameCodec(), EReputationState.CODEC).fieldOf("relations").forGetter((efi) -> {
 					return efi.reputationMapping;
 				}),
 				EReputationState.CODEC.fieldOf("defaultReputation").forGetter((efi) -> {
 					return efi.fallbackReputation;
 				}),
-				CQRDatapackLoaders.FACTIONS.byNameCodec().listOf().optionalFieldOf("memberships").forGetter((efi) -> {
+				FactionDatapackLoaders.FACTIONS.byNameCodec().listOf().optionalFieldOf("memberships").forGetter((efi) -> {
 					return efi.memberFactions;
 				})
 		).apply(instance, EntityFactionInformation::new);
@@ -57,7 +57,7 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 		if (entity instanceof IFactionRelated other) {
 			return this.getRoughReputationOf(other, reputationMap);
 		} else {
-			EntityFactionInformation efi = CQRDatapackLoaders.getEntityFactionInformation(entity.getType());
+			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(entity.getType());
 			if (efi != null) {
 				return this.getRoughReputationOf(efi, reputationMap);
 			}
