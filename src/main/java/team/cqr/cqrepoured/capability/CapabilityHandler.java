@@ -3,21 +3,19 @@ package team.cqr.cqrepoured.capability;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.capability.armor.CapabilityCooldownHandlerProvider;
 import team.cqr.cqrepoured.capability.armor.attachment.CapabilityArmorAttachmentProvider;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
-import team.cqr.cqrepoured.capability.faction.FactionRelationCapabilityProvider;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-@EventBusSubscriber(modid = CQRConstants.MODID)
+@EventBusSubscriber(modid = CQRepoured.MODID)
 public class CapabilityHandler {
 
 	@SubscribeEvent
@@ -29,13 +27,6 @@ public class CapabilityHandler {
 			event.addCapability(CapabilityExtraItemHandlerProvider.REGISTRY_NAME, CapabilityExtraItemHandlerProvider.createProvider(3));
 		}
 
-		if (event.getObject() instanceof LivingEntity) {
-			event.addCapability(FactionRelationCapabilityProvider.IDENTIFIER, new FactionRelationCapabilityProvider());
-		}
-		
-		if (event.getObject() instanceof Player) {
-			event.addCapability(FactionRelationCapabilityProvider.IDENTIFIER, new FactionRelationCapabilityProvider());
-		}
 	}
 	
 	public static void onItemAttachCapabilitiesEvent(AttachCapabilitiesEvent<Item> event) {

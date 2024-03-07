@@ -3,10 +3,10 @@ package team.cqr.cqrepoured.entity.ai.behaviour;
 import java.util.List;
 import java.util.function.Predicate;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.task.FindNewAttackTargetTask;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.EntityPredicates;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import team.cqr.cqrepoured.entity.ai.sensor.FactionBasedAttackTargetSensor;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;

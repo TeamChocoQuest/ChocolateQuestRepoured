@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.entity.trade;
 
 import net.minecraft.network.chat.Component;
-import team.cqr.cqrepoured.CQRConstants;
+import team.cqr.cqrepoured.common.CQRConstants;
 
 public enum EBuyResult {
 	

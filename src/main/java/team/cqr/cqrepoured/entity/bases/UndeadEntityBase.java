@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
 import net.tslat.smartbrainlib.api.core.BrainActivityGroup;
+import team.cqr.cqrepoured.common.entity.VariantEntity;
 
 public class UndeadEntityBase<T extends UndeadEntityBase<T>> extends WalkingEntityBase<T> implements ISynchedDataHelper {
 	

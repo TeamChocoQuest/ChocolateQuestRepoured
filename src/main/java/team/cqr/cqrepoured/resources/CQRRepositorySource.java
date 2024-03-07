@@ -10,8 +10,8 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.Pack.Position;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
-import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRConstants;
 
 public class CQRRepositorySource implements RepositorySource {
 
