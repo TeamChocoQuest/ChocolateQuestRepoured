@@ -223,7 +223,7 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
 			Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
 
-		public static Builder create(GenerationContext context, BlockPos pos, DungeonInhabitantMap inhabitantMap, int groundLevelDelta,
+		public static Builder create(GenerationContext context, BlockPos pos, InhabitantSelector inhabitantMap, int groundLevelDelta,
 				Optional<ProtectionSettings> protectionSettings) {
 			ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
 			CQRLevel structureLevel = new CQRLevel(SectionPos.of(pos), level.getSeed());

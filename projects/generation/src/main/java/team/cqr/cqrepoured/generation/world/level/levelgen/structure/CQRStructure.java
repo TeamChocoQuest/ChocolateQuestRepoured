@@ -30,7 +30,7 @@ public class CQRStructure extends Structure {
 				Codec.INT.fieldOf("icon").forGetter(CQRStructure::icon),
 				Codec.list(Codec.STRING).fieldOf("mod_dependencies").forGetter(CQRStructure::modDependencies),
 				PlacementSettings.CODEC.fieldOf("placement_settings").forGetter(CQRStructure::placementSettings),
-				DungeonInhabitantMap.CODEC.fieldOf("inhabitants").forGetter(CQRStructure::inhabitants),
+				InhabitantSelector.CODEC.fieldOf("inhabitant_selector").forGetter(CQRStructure::inhabitantSelector),
 				Codec.INT.fieldOf("ground_level_delta").forGetter(CQRStructure::groundLevelDelta),
 				ProtectionSettings.CODEC.optionalFieldOf("protection_settings").forGetter(CQRStructure::protectionSettings),
 				StructureGenerator.CODEC.fieldOf("generator").forGetter(CQRStructure::generator))
@@ -41,19 +41,19 @@ public class CQRStructure extends Structure {
 	private final int icon;
 	private final List<String> modDependencies;
 	private final PlacementSettings placementSettings;
-	private final DungeonInhabitantMap inhabitants;
+	private final InhabitantSelector inhabitantSelector;
 	private final int groundLevelDelta;
 	private final Optional<ProtectionSettings> protectionSettings;
 	private final StructureGenerator generator;
 
 	public CQRStructure(StructureSettings structureSettings, boolean enabled, int icon, List<String> modDependencies, PlacementSettings placementSettings,
-			DungeonInhabitantMap inhabitants, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructureGenerator generator) {
+			InhabitantSelector inhabitantSelector, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, StructureGenerator generator) {
 		super(structureSettings);
 		this.enabled = enabled;
 		this.icon = icon;
 		this.modDependencies = modDependencies;
 		this.placementSettings = placementSettings;
-		this.inhabitants = inhabitants;
+		this.inhabitantSelector = inhabitantSelector;
 		this.groundLevelDelta = groundLevelDelta;
 		this.protectionSettings = protectionSettings;
 		this.generator = generator;
@@ -90,7 +90,7 @@ public class CQRStructure extends Structure {
 
 	private Consumer<StructurePiecesBuilder> createGenerator(GenerationContext context, BlockPos pos) {
 		return structurePiecesBuilder -> {
-			CQRStructurePiece.Builder structurePieceBuilder = CQRStructurePiece.Builder.create(context, pos, inhabitants, groundLevelDelta, protectionSettings);
+			CQRStructurePiece.Builder structurePieceBuilder = CQRStructurePiece.Builder.create(context, pos, inhabitantSelector, groundLevelDelta, protectionSettings);
 			generator.prepare(context, pos.above(groundLevelDelta), structurePieceBuilder);
 			structurePiecesBuilder.addPiece(structurePieceBuilder.build());
 		};
@@ -133,8 +133,8 @@ public class CQRStructure extends Structure {
 		return placementSettings;
 	}
 
-	public DungeonInhabitantMap inhabitants() {
-		return inhabitants;
+	public InhabitantSelector inhabitantSelector() {
+		return inhabitantSelector;
 	}
 
 	public int groundLevelDelta() {
