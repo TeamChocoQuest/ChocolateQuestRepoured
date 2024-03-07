@@ -89,8 +89,11 @@ public class CQRStructure extends Structure {
 	}
 
 	private Consumer<StructurePiecesBuilder> createGenerator(GenerationContext context, BlockPos pos) {
-		return structurePiecesBuilder -> structurePiecesBuilder.addPiece(
-				this.generator.createStructurePiece(context, pos, this.inhabitants.get(context, pos), this.groundLevelDelta, this.protectionSettings));
+		return structurePiecesBuilder -> {
+			CQRStructurePiece.Builder structurePieceBuilder = CQRStructurePiece.Builder.create(context, pos, inhabitants, groundLevelDelta, protectionSettings);
+			generator.prepare(context, pos.above(groundLevelDelta), structurePieceBuilder);
+			structurePiecesBuilder.addPiece(structurePieceBuilder.build());
+		};
 	}
 
 	public StructureStart createStructureStart(ServerLevel level, BlockPos pos) {

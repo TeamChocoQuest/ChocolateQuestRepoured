@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
@@ -219,10 +220,18 @@ public class CQRStructurePiece extends StructurePiece implements INoiseAffecting
 		return maxNoise;
 	}
 
-	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta, Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
+	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
+			Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
 
-		public Builder(ServerLevel level, BlockPos pos, DungeonInhabitant inhabitant, int groundLevelDelta, Optional<ProtectionSettings> protectionSettings, RandomSource random) {
-			this(pos, new CQRLevel(SectionPos.of(pos), level.getSeed()), inhabitant, new EntityFactory(level), groundLevelDelta, protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings)), random);
+		public static Builder create(GenerationContext context, BlockPos pos, DungeonInhabitantMap inhabitantMap, int groundLevelDelta,
+				Optional<ProtectionSettings> protectionSettings) {
+			ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
+			CQRLevel structureLevel = new CQRLevel(SectionPos.of(pos), level.getSeed());
+			DungeonInhabitant inhabitant = inhabitantMap.get(context, pos);
+			EntityFactory entityFactory = new EntityFactory(level);
+			Optional<ProtectedRegion.Builder> protectedRegionBuilder = protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings));
+			RandomSource random = context.random();
+			return new Builder(pos, structureLevel, inhabitant, entityFactory, groundLevelDelta, protectedRegionBuilder, random);
 		}
 
 		public CQRStructurePiece build() {
