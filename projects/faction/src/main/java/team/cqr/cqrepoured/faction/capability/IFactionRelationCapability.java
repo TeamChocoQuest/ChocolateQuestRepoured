@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability.faction;
+package team.cqr.cqrepoured.faction.capability;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;

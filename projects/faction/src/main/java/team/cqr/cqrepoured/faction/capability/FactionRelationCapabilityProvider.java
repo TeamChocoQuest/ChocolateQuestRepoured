@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability.faction;
+package team.cqr.cqrepoured.faction.capability;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,12 +10,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.init.CQRCapabilities;
+import team.cqr.cqrepoured.common.CQRepoured;
+import team.cqr.cqrepoured.faction.init.FactionCapabilities;
 
 public class FactionRelationCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-	public static final ResourceLocation IDENTIFIER = CQRMain.prefix("faction_relations");
+	public static final ResourceLocation IDENTIFIER = CQRepoured.prefix("faction_relations");
 
 	private final IFactionRelationCapability backend = new FactionRelationCapabilityImplementation();
 	private final LazyOptional<IFactionRelationCapability> optionalData = LazyOptional.of(() -> backend);
@@ -32,7 +32,7 @@ public class FactionRelationCapabilityProvider implements ICapabilityProvider, I
 
 	@Override
 	public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-		return CQRCapabilities.FACTION_RELATION.orEmpty(cap, optionalData);
+		return FactionCapabilities.FACTION_RELATION.orEmpty(cap, optionalData);
 	}
 
 }

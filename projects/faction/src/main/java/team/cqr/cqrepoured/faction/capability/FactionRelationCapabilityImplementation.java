@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.capability.faction;
+package team.cqr.cqrepoured.faction.capability;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.faction.EReputationState;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.init.CQRDatapackLoaders;
+import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
 public class FactionRelationCapabilityImplementation implements IFactionRelationCapability {
 	
@@ -71,11 +71,11 @@ public class FactionRelationCapabilityImplementation implements IFactionRelation
 	public EReputationStateRough getRoughReputationOf(Entity other) {
 		Entity holder = this.getHolder();
 		if (holder != null) {
-			EntityFactionInformation efi = CQRDatapackLoaders.getEntityFactionInformation(holder.getType());
+			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(holder.getType());
 			if (efi != null) {
 				Map<Faction, EReputationState> repMap = new HashMap<>(this.reputationStorage.size());
 				this.reputationStorage.forEach((id, val) -> {
-					CQRDatapackLoaders.getFaction(id).ifPresent(f -> {
+					FactionDatapackLoaders.getFaction(id).ifPresent(f -> {
 						repMap.putIfAbsent(f, EReputationState.getByInt(val));
 					});
 				});
