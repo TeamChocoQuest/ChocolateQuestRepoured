@@ -21,7 +21,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,14 +35,14 @@ import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
+import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityContainer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 @SuppressWarnings("deprecation")
 public class CQRSection {
 
-	// TODO copied from ChunkSerializer, does this work?
-	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, Blocks.AIR.defaultBlockState());
+	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, CQRBlocks.PLACEHOLDER.get().defaultBlockState());
 
 	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
@@ -52,8 +51,7 @@ public class CQRSection {
 
 	public CQRSection(SectionPos sectionPos) {
 		this.sectionPos = sectionPos;
-		// TODO this probably doesn't support null as default value
-		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, null, Strategy.SECTION_STATES);
+		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, CQRBlocks.PLACEHOLDER.get().defaultBlockState(), Strategy.SECTION_STATES);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
@@ -226,7 +224,8 @@ public class CQRSection {
 
 	@Nullable
 	private BlockState getBlockState(int index) {
-		return this.blocks.get(index);
+		BlockState state = this.blocks.get(index);
+		return state != CQRBlocks.PLACEHOLDER.get().defaultBlockState() ? state : null;
 	}
 
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
@@ -234,6 +233,10 @@ public class CQRSection {
 	}
 
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
+		if (state == null) {
+			state = CQRBlocks.PLACEHOLDER.get().defaultBlockState();
+		}
+
 		this.blocks.set(index, state);
 		if (state != null && state.hasBlockEntity()) {
 			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(sectionPos, index), state);
