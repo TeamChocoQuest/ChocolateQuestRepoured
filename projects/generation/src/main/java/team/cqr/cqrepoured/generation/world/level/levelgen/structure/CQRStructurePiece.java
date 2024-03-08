@@ -33,7 +33,7 @@ import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributor;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
@@ -43,7 +43,7 @@ import team.cqr.cqrepoured.protection.ProtectionSettings;
 // TODO: Change to extends jigsaw structure piece
 // TODO: Move the inhabitants access to a own object
 // TODO: Move protection settings to codec object
-public class CQRStructurePiece extends StructurePiece implements INoiseAffectingStructurePiece {
+public class CQRStructurePiece extends StructurePiece implements NoiseContributor {
 
 	private static final Codec<Cache2D<HeightInfo>> HEIGHT_MAP_CODEC = Cache2D.codec(HeightInfo.CODEC, HeightInfo[]::new);
 	private final CQRLevel level;

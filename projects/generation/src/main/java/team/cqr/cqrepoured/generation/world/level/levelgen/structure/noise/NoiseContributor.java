@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.world.level.levelgen.structure.Structure;
 
-public interface INoiseAffectingStructurePiece {
+public interface NoiseContributor {
 
 	List<Structure> NOISE_AFFECTING_STRUCTURES = new ArrayList<>();
 

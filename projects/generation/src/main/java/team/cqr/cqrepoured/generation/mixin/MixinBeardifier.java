@@ -18,24 +18,24 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.levelgen.Beardifier;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.INoiseAffectingStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributor;
 
 @Mixin(Beardifier.class)
 public class MixinBeardifier {
 
 	@Unique
-	private ObjectListIterator<INoiseAffectingStructurePiece> noiseAffectingStructurePieces;
+	private ObjectListIterator<NoiseContributor> noiseContributors;
 	@Unique
 	private DensityFunction.FunctionContext context;
 
 	@Inject(method = "forStructuresInChunk", at = @At("RETURN"))
 	private static void forStructuresInChunk(StructureManager pStructureManager, ChunkPos pChunkPos, CallbackInfoReturnable<Beardifier> info) {
-		((MixinBeardifier) (Object) info.getReturnValue()).noiseAffectingStructurePieces = pStructureManager.startsForStructure(pChunkPos, structure -> true)
+		((MixinBeardifier) (Object) info.getReturnValue()).noiseContributors = pStructureManager.startsForStructure(pChunkPos, structure -> true)
 				.stream()
 				.map(StructureStart::getPieces)
 				.flatMap(Collection::stream)
-				.filter(INoiseAffectingStructurePiece.class::isInstance)
-				.map(INoiseAffectingStructurePiece.class::cast)
+				.filter(NoiseContributor.class::isInstance)
+				.map(NoiseContributor.class::cast)
 				.collect(Collectors.toCollection(ObjectArrayList::new))
 				.iterator();
 	}
@@ -48,11 +48,11 @@ public class MixinBeardifier {
 
 	@ModifyVariable(method = "compute", at = @At(value = "RETURN", shift = Shift.BEFORE), index = 5, ordinal = 0, name = "d0")
 	private double compute(double d0) {
-		while (noiseAffectingStructurePieces.hasNext()) {
-			INoiseAffectingStructurePiece noiseAffectingStructurePiece = noiseAffectingStructurePieces.next();
-			d0 += noiseAffectingStructurePiece.getContribution(context.blockX(), context.blockY(), context.blockZ());
+		while (noiseContributors.hasNext()) {
+			NoiseContributor noiseContributor = noiseContributors.next();
+			d0 += noiseContributor.getContribution(context.blockX(), context.blockY(), context.blockZ());
 		}
-		noiseAffectingStructurePieces.back(Integer.MAX_VALUE);
+		noiseContributors.back(Integer.MAX_VALUE);
 		return d0;
 	}
 
