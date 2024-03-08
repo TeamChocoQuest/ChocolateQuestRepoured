@@ -8,7 +8,7 @@ import net.minecraft.util.StringRepresentable;
 
 public enum PositionFinderType implements StringRepresentable {
 
-	;
+	HEIGHTMAP(HeightmapPositionFinder.CODEC);
 
 	public static final Codec<PositionFinderType> CODEC = StringRepresentable.fromEnum(PositionFinderType::values);
 	private final Codec<? extends PositionFinder> codec;
