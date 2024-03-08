@@ -16,11 +16,8 @@ import net.minecraft.util.RandomSource;
 public class CQRWeightedRandom<T> {
 	
 	public static <T> Codec<CQRWeightedRandom<T>> createCodec(final Codec<T> innerCodec) {
-		return RecordCodecBuilder.create(instance -> {
-			return instance.group(
-					WeightedObject.<T>createCodec(innerCodec).listOf().fieldOf("entries").forGetter(CQRWeightedRandom::getEntries)
-			).apply(instance, CQRWeightedRandom::new);
-		});
+		return Codec.list(WeightedObject.createCodec(innerCodec))
+				.xmap(CQRWeightedRandom::new, CQRWeightedRandom::getEntries);
 	}
 
 	public static record WeightedObject<T>(T object, int weight) {
