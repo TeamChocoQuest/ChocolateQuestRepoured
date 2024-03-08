@@ -33,6 +33,8 @@ import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.InhabitantSelector;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributor;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
