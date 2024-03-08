@@ -4,7 +4,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.PacketDistributor;
-import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.network.server.packet.SPacketUpdateAnimationOfEntity;
 
 public interface IServerAnimationReceiver {
@@ -23,7 +23,7 @@ public interface IServerAnimationReceiver {
 		SPacketUpdateAnimationOfEntity message = SPacketUpdateAnimationOfEntity.builder(this).animate(animationName).build();
 		LivingEntity entity = this.getSelf();
 		if(entity != null) {
-			CQRMain.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
+			CQRServices.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
 		}
 	}
 

@@ -12,11 +12,15 @@ public interface NetworkService {
 	
 	public SimpleChannel network();
 	
-	default <T extends Object> void send(T packet, PacketTarget target) {
+	default public <T extends Object> void send(T packet, PacketTarget target) {
+		network().send(target, packet);
+	}
+	
+	default public <T extends Object> void send(PacketTarget target, T packet) {
 		network().send(target, packet);
 	}
 
-	default <T extends Object> void sendToServer(T packet) {
+	default public <T extends Object> void sendToServer(T packet) {
 		network().sendToServer(packet);
 	}
 	
