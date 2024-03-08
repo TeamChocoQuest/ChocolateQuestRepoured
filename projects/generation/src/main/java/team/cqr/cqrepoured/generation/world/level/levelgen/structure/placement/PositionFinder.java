@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.placement;
 
+import java.util.Set;
+
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
@@ -10,7 +12,7 @@ public interface PositionFinder {
 
 	Codec<PositionFinder> CODEC = PositionFinderType.CODEC.dispatch(PositionFinder::type, PositionFinderType::codec);
 
-	BlockPos findPosition(GenerationContext context, ChunkPos chunkPos);
+	Set<BlockPos> findPosition(GenerationContext context, ChunkPos chunkPos, Set<BlockPos> positions);
 
 	BlockPos applyOffsets(GenerationContext context, BlockPos pos);
 

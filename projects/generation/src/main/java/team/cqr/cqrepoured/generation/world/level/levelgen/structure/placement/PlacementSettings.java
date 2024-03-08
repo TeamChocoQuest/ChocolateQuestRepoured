@@ -2,22 +2,25 @@ package team.cqr.cqrepoured.generation.world.level.levelgen.structure.placement;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
+import team.cqr.cqrepoured.common.random.RandomUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonDataManager;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
 
 public record PlacementSettings(double chance, double rarityFactor, int spawnLimit, List<ResourceLocation> dungeonDependencies,
 		List<PositionValidator> positionValidators, List<ResourceLocation> structuresPreventingGeneration, int structureCheckRadius,
-		PositionFinder positionFinder) {
+		List<PositionFinder> positionFinders) {
 
 	public static final Codec<PlacementSettings> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -28,7 +31,7 @@ public record PlacementSettings(double chance, double rarityFactor, int spawnLim
 				Codec.list(PositionValidator.CODEC).fieldOf("position_validators").forGetter(PlacementSettings::positionValidators),
 				Codec.list(ResourceLocation.CODEC).fieldOf("structures_preventing_generation").forGetter(PlacementSettings::structuresPreventingGeneration),
 				Codec.INT.fieldOf("structure_check_radius").forGetter(PlacementSettings::structureCheckRadius),
-				PositionFinder.CODEC.fieldOf("position_finder").forGetter(PlacementSettings::positionFinder))
+				Codec.list(PositionFinder.CODEC).fieldOf("position_finders").forGetter(PlacementSettings::positionFinders))
 				.apply(instance, PlacementSettings::new);
 	});
 
@@ -47,7 +50,28 @@ public record PlacementSettings(double chance, double rarityFactor, int spawnLim
 			return Optional.empty();
 		}
 		// TODO check for nearby non-cqr structures
-		return Optional.of(this.positionFinder.findPosition(context, context.chunkPos()));
+		return findPosition(context);
+	}
+
+	private Optional<BlockPos> findPosition(GenerationContext context) {
+		Set<BlockPos> positions = new ObjectOpenHashSet<>();
+
+		if (!this.positionFinders.isEmpty()) {
+			for (PositionFinder positionFinder : this.positionFinders) {
+				positions = positionFinder.findPosition(context, context.chunkPos(), positions);
+			}
+		}
+
+		return RandomUtil.random(positions, context.random());
+	}
+
+	public BlockPos applyOffsets(GenerationContext context, BlockPos pos) {
+		if (!this.positionFinders.isEmpty()) {
+			for (PositionFinder positionFinder : this.positionFinders) {
+				pos = positionFinder.applyOffsets(context, pos);
+			}
+		}
+		return pos;
 	}
 
 }

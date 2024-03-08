@@ -99,7 +99,7 @@ public class CQRStructure extends Structure {
 				chunkPos,
 				level,
 				biome -> true);
-		BlockPos generationPos = this.placementSettings.positionFinder().applyOffsets(context, pos);
+		BlockPos generationPos = this.placementSettings.applyOffsets(context, pos);
 		GenerationStub generationStub = new GenerationStub(generationPos, this.createGenerator(context, generationPos));
 		StructureStart structureStart = new StructureStart(this, chunkPos, 0, generationStub.getPiecesBuilder().build());
 		if (structureStart.isValid()) {
