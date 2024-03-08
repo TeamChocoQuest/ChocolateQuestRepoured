@@ -57,27 +57,34 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 		private static final Codec<HeightInfo> CODEC = RecordCodecBuilder.create(instance -> {
 			return instance.group(
-					Codec.INT.fieldOf("min").forGetter(groundData -> groundData.min),
-					Codec.INT.fieldOf("max").forGetter(groundData -> groundData.max))
+					Codec.BOOL.fieldOf("valid").forGetter(heightInfo -> heightInfo.valid),
+					Codec.INT.fieldOf("min").forGetter(heightInfo -> heightInfo.min),
+					Codec.INT.fieldOf("max").forGetter(heightInfo -> heightInfo.max))
 					.apply(instance, HeightInfo::new);
 		});
+		private boolean valid;
 		private int min;
 		private int max;
 
-		public HeightInfo(int minMax) {
-			this(minMax, minMax);
+		public HeightInfo() {
+			this(false, 0, 0);
 		}
 
-		public HeightInfo(int min, int max) {
+		private HeightInfo(boolean valid, int min, int max) {
+			this.valid = valid;
 			this.min = min;
 			this.max = max;
 		}
 
 		public void update(int height) {
-			if (height < min)
+			if (!valid) {
+				valid = true;
 				min = height;
-			if (height > max)
 				max = height;
+			} else {
+				min = Math.min(min, height);
+				max = Math.max(max, height);
+			}
 		}
 
 	}
@@ -121,7 +128,8 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 	}
 
 	private static Cache2D<HeightInfo> calculateHeightMap(BlockPos pos, BoundingBox boundingBox, CQRLevel level, int groundLevelDelta) {
-		Cache2D<HeightInfo> heightMap = new Cache2D<>(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ(), null, HeightInfo[]::new);
+		Cache2D<HeightInfo> heightMap = new Cache2D<>(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ(), null, HeightInfo[]::new,
+				HeightInfo::new);
 		MutableBlockPos mutablePos = new MutableBlockPos();
 		
 		level.getSections().forEach(section -> {
@@ -138,13 +146,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 					return;
 				}
 
-				heightMap.compute(mutablePos, (k, v) -> {
-					if (v == null) {
-						return new HeightInfo(k.getY());
-					}
-					v.update(k.getY());
-					return v;
-				});
+				heightMap.get(mutablePos).update(mutablePos.getY());
 			});
 		});
 		

@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -37,6 +39,14 @@ public class Cache2D<V> {
 
 	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> generator) {
 		this(startX, startZ, endX, endZ, defaultValue, generator.apply((endX - startX + 1) * (endZ - startZ + 1)));
+	}
+
+	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> generator, IntFunction<V> valueSupplier) {
+		this(startX, startZ, endX, endZ, defaultValue, IntStream.range(0, (endX - startX + 1) * (endZ - startZ + 1)).mapToObj(valueSupplier).toArray(generator));
+	}
+
+	public Cache2D(int startX, int startZ, int endX, int endZ, V defaultValue, IntFunction<V[]> generator, Supplier<V> valueSupplier) {
+		this(startX, startZ, endX, endZ, defaultValue, generator, i -> valueSupplier.get());
 	}
 
 	public static <T> Codec<Cache2D<T>> codec(Codec<T> elementCodec, IntFunction<T[]> generator) {
