@@ -32,11 +32,13 @@ public record PlacementSettings(double chance, double rarityFactor, List<Resourc
 
 	public Optional<BlockPos> findGenerationPoint(Structure structure, GenerationContext context) {
 		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-		ResourceLocation structureName = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(structure);
-		if (DungeonDataManager.getDungeonGenerationCount(level, structureName) >= this.spawnLimit) {
-			return Optional.empty();
+		if (this.spawnLimit > 0) {
+			ResourceLocation structureName = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(structure);
+			if (DungeonDataManager.getDungeonGenerationCount(level, structureName) >= this.spawnLimit) {
+				return Optional.empty();
+			}
 		}
-		if (!DungeonDataManager.getSpawnedDungeonNames(level).containsAll(this.dungeonDependencies)) {
+		if (!this.dungeonDependencies.isEmpty() && !DungeonDataManager.getSpawnedDungeonNames(level).containsAll(this.dungeonDependencies)) {
 			return Optional.empty();
 		}
 		if (!this.positionValidator.validatePosition(context.chunkPos())) {

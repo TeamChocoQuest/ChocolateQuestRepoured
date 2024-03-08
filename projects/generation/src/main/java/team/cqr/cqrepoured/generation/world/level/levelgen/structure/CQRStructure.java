@@ -69,7 +69,7 @@ public class CQRStructure extends Structure {
 		if (!this.enabled) {
 			return Optional.empty();
 		}
-		if (!this.modDependencies.stream().allMatch(ModList.get()::isLoaded)) {
+		if (!this.modDependencies.isEmpty() && !this.modDependencies.stream().allMatch(ModList.get()::isLoaded)) {
 			return Optional.empty();
 		}
 		Optional<BlockPos> pos = this.placementSettings.findGenerationPoint(this, context);
