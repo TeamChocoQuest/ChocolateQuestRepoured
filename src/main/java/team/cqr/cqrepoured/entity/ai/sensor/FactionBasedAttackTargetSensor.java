@@ -14,7 +14,6 @@ import net.tslat.smartbrainlib.util.BrainUtils;
 import team.cqr.cqrepoured.entity.ai.target.TargetUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.faction.Faction;
-import team.cqr.cqrepoured.faction.IHasFaction;
 import team.cqr.cqrepoured.init.CQRSensors;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;

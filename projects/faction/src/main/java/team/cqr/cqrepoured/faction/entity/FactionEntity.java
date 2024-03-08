@@ -16,10 +16,10 @@ import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyPlayersSensor;
 import team.cqr.cqrepoured.common.entity.VariantEntity;
 import team.cqr.cqrepoured.common.reference.WeakReferenceLazyLoadField;
-import team.cqr.cqrepoured.entity.ai.sensor.NearbyAlliesSensor;
 import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.IFactionRelatedEntity;
 import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
+import team.cqr.cqrepoured.faction.entity.ai.sensor.NearbyAlliesSensor;
 import team.cqr.cqrepoured.faction.init.FactionCapabilities;
 import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
