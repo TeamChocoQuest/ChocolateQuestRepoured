@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity.ai.sensor;
+package team.cqr.cqrepoured.faction.entity.ai.sensor;
 
 import java.util.Comparator;
 import java.util.List;
@@ -15,11 +15,11 @@ import net.tslat.smartbrainlib.api.core.sensor.vanilla.NearbyLivingEntitySensor;
 import net.tslat.smartbrainlib.object.SquareRadius;
 import net.tslat.smartbrainlib.util.BrainUtils;
 import net.tslat.smartbrainlib.util.EntityRetrievalUtil;
-import team.cqr.cqrepoured.init.CQRMemoryModuleTypes;
-import team.cqr.cqrepoured.init.CQRSensors;
+import team.cqr.cqrepoured.faction.init.FactionMemoryModuleTypes;
+import team.cqr.cqrepoured.faction.init.FactionSensors;
 
 public class NearbyAlliesSensor<E extends LivingEntity> extends NearbyLivingEntitySensor<E> {
-	private static final List<MemoryModuleType<?>> MEMORIES = ObjectArrayList.of(CQRMemoryModuleTypes.NEAREST_ALLIES.get(), CQRMemoryModuleTypes.NEAREST_VISIBLE_ALLIES.get());
+	private static final List<MemoryModuleType<?>> MEMORIES = ObjectArrayList.of(FactionMemoryModuleTypes.NEAREST_ALLIES.get(), FactionMemoryModuleTypes.NEAREST_VISIBLE_ALLIES.get());
 	
 	@Override
 	public List<MemoryModuleType<?>> memoriesUsed() {
@@ -28,7 +28,7 @@ public class NearbyAlliesSensor<E extends LivingEntity> extends NearbyLivingEnti
 	
 	@Override
 	public SensorType<? extends ExtendedSensor<?>> type() {
-		return CQRSensors.NEARBY_ALLIES.get();
+		return FactionSensors.NEARBY_ALLIES.get();
 	}
 	
 	@Override
@@ -45,8 +45,8 @@ public class NearbyAlliesSensor<E extends LivingEntity> extends NearbyLivingEnti
 
 		entities.sort(Comparator.comparingDouble(entity::distanceToSqr));
 
-		BrainUtils.setMemory(entity, CQRMemoryModuleTypes.NEAREST_ALLIES.get(), entities);
-		BrainUtils.setMemory(entity, CQRMemoryModuleTypes.NEAREST_VISIBLE_ALLIES.get(), new NearestVisibleLivingEntities(entity, entities));
+		BrainUtils.setMemory(entity, FactionMemoryModuleTypes.NEAREST_ALLIES.get(), entities);
+		BrainUtils.setMemory(entity, FactionMemoryModuleTypes.NEAREST_VISIBLE_ALLIES.get(), new NearestVisibleLivingEntities(entity, entities));
 	}
 
 }
