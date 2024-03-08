@@ -11,6 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.entity.profile.EntityProfile;
 import team.cqr.cqrepoured.common.entity.profile.variant.extradata.IVariantExtraData;
+import team.cqr.cqrepoured.common.services.CQRServices;
+import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 
 public class EntityProfileDatapackLoaders implements DatapackLoaderHelper {
 	
@@ -24,6 +26,10 @@ public class EntityProfileDatapackLoaders implements DatapackLoaderHelper {
 	
 	public static Optional<EntityProfile> getProfile(EntityType<?> entityType) {
 		return getProfile(ForgeRegistries.ENTITY_TYPES.getKey(entityType));
+	}
+	
+	public static void init() {
+		ENTITY_PROFILES.subscribeAsSyncable(CQRServices.NETWORK.network(), SPacketSyncEntityProfiles::new);
 	}
 	
 	public static Optional<EntityProfile> getProfile(ResourceLocation profileId) {
