@@ -19,7 +19,8 @@ public enum PositionValidatorType implements StringRepresentable {
 		public PositionValidatorType type() {
 			return EVERYWHERE;
 		}
-	}));
+	})),
+	BOX(BoxPositionValidator.CODEC);
 
 	public static final Codec<PositionValidatorType> CODEC = StringRepresentable.fromEnum(PositionValidatorType::values);
 	private final Codec<? extends PositionValidator> codec;
