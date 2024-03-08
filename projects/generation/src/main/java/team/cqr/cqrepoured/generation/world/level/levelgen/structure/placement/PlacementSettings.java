@@ -24,13 +24,13 @@ public record PlacementSettings(double chance, double rarityFactor, int spawnLim
 
 	public static final Codec<PlacementSettings> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
-				Codec.DOUBLE.fieldOf("chance").forGetter(PlacementSettings::chance),
-				Codec.DOUBLE.fieldOf("rarity_factor").forGetter(PlacementSettings::rarityFactor),
-				Codec.INT.fieldOf("spawn_limit").forGetter(PlacementSettings::spawnLimit),
-				Codec.list(ResourceLocation.CODEC).fieldOf("dungeon_dependencies").forGetter(PlacementSettings::dungeonDependencies),
-				Codec.list(PositionValidator.CODEC).fieldOf("position_validators").forGetter(PlacementSettings::positionValidators),
-				Codec.list(ResourceLocation.CODEC).fieldOf("structures_preventing_generation").forGetter(PlacementSettings::structuresPreventingGeneration),
-				Codec.INT.fieldOf("structure_check_radius").forGetter(PlacementSettings::structureCheckRadius),
+				Codec.DOUBLE.optionalFieldOf("chance", 1.0D).forGetter(PlacementSettings::chance),
+				Codec.DOUBLE.optionalFieldOf("rarity_factor", 0.0D).forGetter(PlacementSettings::rarityFactor),
+				Codec.INT.optionalFieldOf("spawn_limit", 0).forGetter(PlacementSettings::spawnLimit),
+				Codec.list(ResourceLocation.CODEC).optionalFieldOf("dungeon_dependencies", List.of()).forGetter(PlacementSettings::dungeonDependencies),
+				Codec.list(PositionValidator.CODEC).optionalFieldOf("position_validators", List.of()).forGetter(PlacementSettings::positionValidators),
+				Codec.list(ResourceLocation.CODEC).optionalFieldOf("structures_preventing_generation", List.of()).forGetter(PlacementSettings::structuresPreventingGeneration),
+				Codec.INT.optionalFieldOf("structure_check_radius", 0).forGetter(PlacementSettings::structureCheckRadius),
 				Codec.list(PositionFinder.CODEC).fieldOf("position_finders").forGetter(PlacementSettings::positionFinders))
 				.apply(instance, PlacementSettings::new);
 	});
