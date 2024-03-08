@@ -16,7 +16,8 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonData
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
 
 public record PlacementSettings(double chance, double rarityFactor, int spawnLimit, List<ResourceLocation> dungeonDependencies,
-		PositionValidator positionValidator, List<ResourceLocation> structuresPreventingGeneration, int structureCheckRadius, PositionFinder positionFinder) {
+		List<PositionValidator> positionValidators, List<ResourceLocation> structuresPreventingGeneration, int structureCheckRadius,
+		PositionFinder positionFinder) {
 
 	public static final Codec<PlacementSettings> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
@@ -24,7 +25,7 @@ public record PlacementSettings(double chance, double rarityFactor, int spawnLim
 				Codec.DOUBLE.fieldOf("rarity_factor").forGetter(PlacementSettings::rarityFactor),
 				Codec.INT.fieldOf("spawn_limit").forGetter(PlacementSettings::spawnLimit),
 				Codec.list(ResourceLocation.CODEC).fieldOf("dungeon_dependencies").forGetter(PlacementSettings::dungeonDependencies),
-				PositionValidator.CODEC.fieldOf("position_validator").forGetter(PlacementSettings::positionValidator),
+				Codec.list(PositionValidator.CODEC).fieldOf("position_validators").forGetter(PlacementSettings::positionValidators),
 				Codec.list(ResourceLocation.CODEC).fieldOf("structures_preventing_generation").forGetter(PlacementSettings::structuresPreventingGeneration),
 				Codec.INT.fieldOf("structure_check_radius").forGetter(PlacementSettings::structureCheckRadius),
 				PositionFinder.CODEC.fieldOf("position_finder").forGetter(PlacementSettings::positionFinder))
@@ -42,7 +43,7 @@ public record PlacementSettings(double chance, double rarityFactor, int spawnLim
 		if (!this.dungeonDependencies.isEmpty() && !DungeonDataManager.getSpawnedDungeonNames(level).containsAll(this.dungeonDependencies)) {
 			return Optional.empty();
 		}
-		if (!this.positionValidator.validatePosition(context.chunkPos())) {
+		if (!this.positionValidators.isEmpty() && !this.positionValidators.stream().allMatch(v -> v.validatePosition(context.chunkPos()))) {
 			return Optional.empty();
 		}
 		// TODO check for nearby non-cqr structures
