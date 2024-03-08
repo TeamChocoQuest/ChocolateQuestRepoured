@@ -1,6 +1,7 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise;
 
 import net.minecraft.Util;
+import net.minecraft.util.Mth;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 
 public class NoiseUtil {
@@ -14,12 +15,11 @@ public class NoiseUtil {
 	});
 
 	private static double computeContribution(int x, int y, int z) {
-		double d0 = x * x + z * z;
-		double d1 = y - 0.5D;
-		double d2 = d1 * d1;
-		double d3 = Math.pow(Math.E, -(d2 / 16.0D + d0 / 16.0D));
-		double d4 = -d1 / Math.sqrt(d2 / 2.0D + d0 / 2.0D) / 2.0D;
-		return d4 * d3;
+		double y1 = y - 0.5D;
+		double l = Mth.lengthSquared(x, y1, z);
+		double d0 = -y1 / Math.sqrt(l / 2.0D) / 2.0D;
+		double d1 = Math.pow(Math.E, -l / 16.0D);
+		return d0 * d1;
 	}
 
 	private static int index(int x, int y, int z) {
