@@ -8,8 +8,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -74,20 +72,11 @@ public class CQRStructure extends Structure {
 		if (!this.modDependencies.stream().allMatch(ModList.get()::isLoaded)) {
 			return Optional.empty();
 		}
-		ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-		ResourceLocation structureName = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(this);
-		if (DungeonDataManager.getDungeonGenerationCount(level, structureName) >= this.placementSettings.spawnLimit()) {
+		Optional<BlockPos> pos = this.placementSettings.findGenerationPoint(this, context);
+		if (pos.isEmpty()) {
 			return Optional.empty();
 		}
-		if (!DungeonDataManager.getSpawnedDungeonNames(level).containsAll(this.placementSettings.dungeonDependencies())) {
-			return Optional.empty();
-		}
-		if (!this.placementSettings.positionValidator().validatePosition(context.chunkPos())) {
-			return Optional.empty();
-		}
-		// TODO check for nearby non-cqr structures
-		BlockPos pos = this.placementSettings.positionFinder().findPosition(context, context.chunkPos());
-		return Optional.of(new GenerationStub(pos, this.createGenerator(context, pos)));
+		return Optional.of(new GenerationStub(pos.get(), this.createGenerator(context, pos.get())));
 	}
 
 	private Consumer<StructurePiecesBuilder> createGenerator(GenerationContext context, BlockPos pos) {
