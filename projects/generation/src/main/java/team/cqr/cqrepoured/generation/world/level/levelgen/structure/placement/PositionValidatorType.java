@@ -5,10 +5,21 @@ import java.util.Locale;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.ChunkPos;
 
 public enum PositionValidatorType implements StringRepresentable {
 
-	;
+	EVERYWHERE(Codec.unit(new PositionValidator() {
+		@Override
+		public boolean validatePosition(ChunkPos chunkPos) {
+			return true;
+		}
+
+		@Override
+		public PositionValidatorType type() {
+			return EVERYWHERE;
+		}
+	}));
 
 	public static final Codec<PositionValidatorType> CODEC = StringRepresentable.fromEnum(PositionValidatorType::values);
 	private final Codec<? extends PositionValidator> codec;
