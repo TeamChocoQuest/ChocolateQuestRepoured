@@ -120,8 +120,12 @@ allprojects {
             url "https://www.cursemaven.com"
         }
         maven { 
-            name "AzureLib Maven" // AzureLib
-            url "https://libs.azuredoom.com:4443/mods"
+            name "GeckoLib Maven" // GeckoLib
+            url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+			content {
+					includeGroupByRegex("software\\.bernie.*")
+					includeGroup("com.eliotlash.mclib")
+			}
         }
         maven {
             name = "SBL Maven" // SmartBrainLib
@@ -166,7 +170,7 @@ allprojects {
         shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
 
         // Dependencies (Required)
-        implementation fg.deobf("mod.azure.azurelib:azurelib-neo-${mc_version}:${azurelib_version}")
+        implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
         implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
         implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
         implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
