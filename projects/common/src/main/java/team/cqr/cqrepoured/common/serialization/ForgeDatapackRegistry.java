@@ -2,6 +2,7 @@ package team.cqr.cqrepoured.common.serialization;
 
 import com.mojang.serialization.Codec;
 
+import de.dertoaster.multihitboxlib.api.DatapackRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryFileCodec;
@@ -9,6 +10,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.common.CQRepoured;
 
+/**
+ * Use {@link DatapackRegistry} instead.
+ */
+@Deprecated
 public record ForgeDatapackRegistry<T>(
 		ResourceKey<Registry<T>> registryKey,
 		Codec<T> objectCodec,
