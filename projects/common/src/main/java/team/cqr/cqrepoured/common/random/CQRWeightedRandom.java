@@ -12,7 +12,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 
+/**
+ * Use {@link SimpleWeightedRandomList} instead.
+ */
+@Deprecated
 public class CQRWeightedRandom<T> {
 	
 	public static <T> Codec<CQRWeightedRandom<T>> createCodec(final Codec<T> innerCodec) {
