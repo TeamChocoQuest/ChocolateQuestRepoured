@@ -15,7 +15,7 @@ public class CQRDataPackRegistries {
 
 	@SubscribeEvent
 	public static void register(DataPackRegistryEvent.NewRegistry event) {
-		INHABITANTS.registerSynchable(event);
+		INHABITANTS.register(event);
 	}
 
 }
