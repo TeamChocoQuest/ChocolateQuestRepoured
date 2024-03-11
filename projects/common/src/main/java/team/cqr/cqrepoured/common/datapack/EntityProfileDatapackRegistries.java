@@ -14,7 +14,7 @@ import team.cqr.cqrepoured.common.entity.profile.variant.extradata.IVariantExtra
 import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.network.datapacksynch.packet.SPacketSyncEntityProfiles;
 
-public class EntityProfileDatapackLoaders implements DatapackLoaderHelper {
+public class EntityProfileDatapackRegistries implements DatapackLoaderHelper {
 	
 	public static final CodecJsonDataManager<EntityProfile> ENTITY_PROFILES = new CodecJsonDataManager<>("entity/profile", EntityProfile.CODEC);
 	public static final RegistryDispatcher<IVariantExtraData<?>> VARIANT_EXTRA_DATA_DISPATCHER = RegistryDispatcher.makeDispatchForgeRegistry(
