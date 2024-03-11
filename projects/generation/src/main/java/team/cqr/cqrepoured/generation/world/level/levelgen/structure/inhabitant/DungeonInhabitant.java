@@ -20,13 +20,11 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
 import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
 import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
-import team.cqr.cqrepoured.init.CQRCapabilities;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class DungeonInhabitant extends AbstractRegistratableObject {
@@ -119,17 +117,10 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 			return;
 		}
 		
-		if (this.factionOverride.isPresent()) {
-			LazyOptional<IFactionRelationCapability> lOpCap = entity.getCapability(CQRCapabilities.FACTION_RELATION);
-			if (lOpCap.isPresent()) {
-				Optional<IFactionRelationCapability> opCap = lOpCap.resolve();
-				if (opCap.isPresent()) {
-					IFactionRelationCapability relationCap = opCap.get();
-					this.factionOverride.get().entrySet().forEach(entry -> {
-						relationCap.setReputationTowards(entry.getKey(), entry.getValue());
-					});
-				}
-			}
+		if (this.factionOverride.isPresent() && CQRServices.FACTION.hasFactionCapabiltiy(entity)) {
+            this.factionOverride.get().entrySet().forEach(entry -> {
+                CQRServices.FACTION.setReputation(entity, entry.getKey(), entry.getValue());
+            });
 		}
 
 		this.equipmentMap.entrySet().forEach(entry -> {
