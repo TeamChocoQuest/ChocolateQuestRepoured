@@ -3,11 +3,11 @@ package team.cqr.cqrepoured.entity;
 import java.util.Optional;
 import java.util.Set;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.core.animation.AnimationState;
-import mod.azure.azurelib.core.object.PlayState;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.object.PlayState;
 import mod.azure.azurelib3.core.IAnimatable;
 import mod.azure.azurelib3.core.builder.AnimationBuilder;
 import mod.azure.azurelib3.core.event.predicate.AnimationEvent;

@@ -7,10 +7,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.object.BakedGeoModel;
-import mod.azure.azurelib.renderer.GeoEntityRenderer;
-import mod.azure.azurelib.renderer.layer.GeoRenderLayer;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.client.render.entity.layer.IElectrocuteLayerRenderLogic;
 
 public class LayerElectrocuteGeo<T extends LivingEntity & GeoEntity> extends GeoRenderLayer<T> implements IElectrocuteLayerRenderLogic<T> {

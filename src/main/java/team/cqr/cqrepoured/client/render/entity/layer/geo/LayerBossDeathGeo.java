@@ -5,10 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.object.BakedGeoModel;
-import mod.azure.azurelib.renderer.GeoEntityRenderer;
-import mod.azure.azurelib.renderer.layer.GeoRenderLayer;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import team.cqr.cqrepoured.client.util.BossDeathRayHelper;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 

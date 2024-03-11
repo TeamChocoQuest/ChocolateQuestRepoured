@@ -45,7 +45,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
-import mod.azure.azurelib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.GeoEntity;
 import mod.azure.azurelib3.core.IAnimatable;
 import mod.azure.azurelib3.core.IAnimationTickable;
 import mod.azure.azurelib3.core.PlayState;

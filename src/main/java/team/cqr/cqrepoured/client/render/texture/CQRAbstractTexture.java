@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.texture;
 
 import java.util.function.BiFunction;
 
-import mod.azure.azurelib.cache.texture.GeoAbstractTexture;
+import software.bernie.geckolib.cache.texture.GeoAbstractTexture;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;

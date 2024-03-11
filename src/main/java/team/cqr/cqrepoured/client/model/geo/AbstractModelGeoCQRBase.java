@@ -1,24 +1,24 @@
 package team.cqr.cqrepoured.client.model.geo;
 
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.cache.AzureLibCache;
-import mod.azure.azurelib.constant.DataTickets;
-import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
-import mod.azure.azurelib.core.animation.Animation;
-import mod.azure.azurelib.core.animation.AnimationState;
-import mod.azure.azurelib.loading.object.BakedAnimations;
-import mod.azure.azurelib.model.GeoModel;
-import mod.azure.azurelib.model.data.EntityModelData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import team.cqr.cqrepoured.CQRConstants;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.GeckoLibCache;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.loading.object.BakedAnimations;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
-import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
+import team.cqr.cqrepoured.common.CQRConstants;
 import team.cqr.cqrepoured.entity.ITextureVariants;
+import team.cqr.cqrepoured.faction.textureset.IHasTextureOverride;
 
 public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> extends GeoModel<T> {
-
+	
 	protected final ResourceLocation MODEL_RESLOC;
 	protected final ResourceLocation TEXTURE_DEFAULT;
 	protected final String ENTITY_REGISTRY_PATH_NAME;
@@ -105,7 +105,7 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 	protected BakedAnimations[] getAnimationHierarchy(T animatable) {
 		BakedAnimations[] result = new BakedAnimations[this.ANIMATION_HIERARCHY.length];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = AzureLibCache.getBakedAnimations().get(this.ANIMATION_HIERARCHY[i]);
+			result[i] = GeckoLibCache.getBakedAnimations().get(this.ANIMATION_HIERARCHY[i]);
 		}
 		return result;
 	}

@@ -2,9 +2,9 @@ package team.cqr.cqrepoured.entity.multipart;
 
 import de.dertoaster.multihitboxlib.entity.hitbox.SubPartConfig;
 import net.minecraft.world.entity.Entity;
-import mod.azure.azurelib.animatable.GeoEntity;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.util.AzureLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.util.AzureLibUtil;
 
 public abstract class AnimatablePartEntity<T extends Entity> extends CQRPartEntity<T> implements GeoEntity {
 

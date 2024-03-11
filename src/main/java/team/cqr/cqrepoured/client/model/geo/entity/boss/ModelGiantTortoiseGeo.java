@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.geo.entity.boss;
 
-import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
-import mod.azure.azurelib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
 import net.minecraft.resources.ResourceLocation;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;

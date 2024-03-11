@@ -3,12 +3,12 @@ package team.cqr.cqrepoured.tileentity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import mod.azure.azurelib.animatable.GeoBlockEntity;
-import mod.azure.azurelib.constant.DefaultAnimations;
-import mod.azure.azurelib.core.animatable.instance.AnimatableInstanceCache;
-import mod.azure.azurelib.core.animation.AnimatableManager.ControllerRegistrar;
-import mod.azure.azurelib.core.animation.AnimationController;
-import mod.azure.azurelib.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import team.cqr.cqrepoured.init.CQRBlockEntities;
 
 public class TileEntityForceFieldNexus extends BlockEntity implements GeoBlockEntity {

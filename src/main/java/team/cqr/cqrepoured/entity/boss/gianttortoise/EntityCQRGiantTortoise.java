@@ -34,7 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.network.NetworkHooks;
-import mod.azure.azurelib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.GeoEntity;
 import mod.azure.azurelib3.core.IAnimatable;
 import mod.azure.azurelib3.core.IAnimationTickable;
 import mod.azure.azurelib3.core.PlayState;

@@ -13,9 +13,9 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.model.GeoModel;
-import mod.azure.azurelib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 public class RenderArmorDyableGeo<T extends Item & GeoItem> extends GeoArmorRenderer<T> {
 	

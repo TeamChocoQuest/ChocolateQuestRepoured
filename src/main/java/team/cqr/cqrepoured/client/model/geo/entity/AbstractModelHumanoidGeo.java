@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.client.model.geo.entity;
 
-import mod.azure.azurelib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;

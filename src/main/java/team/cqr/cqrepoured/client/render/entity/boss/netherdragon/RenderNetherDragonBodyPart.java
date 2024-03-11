@@ -3,7 +3,7 @@ package team.cqr.cqrepoured.client.render.entity.boss.netherdragon;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
-import mod.azure.azurelib.model.GeoModel;
+import software.bernie.geckolib.model.GeoModel;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.boss.ModelNetherDragonBodyGeo;
 import team.cqr.cqrepoured.client.render.entity.RenderEntityGeo;

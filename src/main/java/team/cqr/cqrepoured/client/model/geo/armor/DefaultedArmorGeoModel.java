@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.model.geo.armor;
 
-import mod.azure.azurelib.animatable.GeoItem;
-import mod.azure.azurelib.model.DefaultedGeoModel;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.model.DefaultedGeoModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 

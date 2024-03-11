@@ -2,7 +2,7 @@ package team.cqr.cqrepoured.client.render.entity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.resources.ResourceLocation;
-import mod.azure.azurelib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.geo.entity.ModelCQRFlyingSkullGeo;
 import team.cqr.cqrepoured.entity.misc.EntityFlyingSkullMinion;

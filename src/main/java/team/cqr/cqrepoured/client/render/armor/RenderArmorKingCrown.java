@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.client.render.armor;
 
-import mod.azure.azurelib.cache.object.GeoBone;
-import mod.azure.azurelib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.renderer.GeoArmorRenderer;
 import team.cqr.cqrepoured.client.model.geo.armor.ModelKingCrownGeo;
 import team.cqr.cqrepoured.item.armor.ItemArmorCrown;
 
