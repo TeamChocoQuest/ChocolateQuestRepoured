@@ -71,11 +71,11 @@ public class FactionRelationCapabilityImplementation implements IFactionRelation
 	public EReputationStateRough getRoughReputationOf(Entity other) {
 		Entity holder = this.getHolder();
 		if (holder != null) {
-			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(holder.getType());
+			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(holder.getType(), holder.level().registryAccess());
 			if (efi != null) {
 				Map<Faction, EReputationState> repMap = new HashMap<>(this.reputationStorage.size());
 				this.reputationStorage.forEach((id, val) -> {
-					FactionDatapackLoaders.getFaction(id).ifPresent(f -> {
+					FactionDatapackLoaders.getFaction(id, holder.level().registryAccess()).ifPresent(f -> {
 						repMap.putIfAbsent(f, EReputationState.getByInt(val));
 					});
 				});

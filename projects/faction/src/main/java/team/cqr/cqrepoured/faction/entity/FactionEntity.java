@@ -33,7 +33,7 @@ public class FactionEntity<T extends LivingEntity & IFactionRelatedEntity & Smar
 
 	@Override
 	public EntityFactionInformation getEntityFactionInformation() {
-		return FactionDatapackLoaders.getEntityFactionInformation(this.getType());
+		return FactionDatapackLoaders.getEntityFactionInformation(this.getType(), this.level().registryAccess());
 	}
 
 	

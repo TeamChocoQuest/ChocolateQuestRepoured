@@ -105,7 +105,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent instanceof IFactionRelated ifr) {
 			return ifr.isEnemyOf(this);
 		} else {
-			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType());
+			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType(), ent.level().registryAccess());
 			return efi != null ? efi.isAllyOf(this) : false;
 		}
 	}
@@ -138,7 +138,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 		if (ent instanceof IFactionRelated ifr) {
 			return ifr.isAllyOf(this);
 		} else {
-			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType());
+			IFactionRelated efi = FactionDatapackLoaders.getEntityFactionInformation(ent.getType(), ent.level().registryAccess());
 			return efi != null ? efi.isAllyOf(this) : false;
 		}
 	}

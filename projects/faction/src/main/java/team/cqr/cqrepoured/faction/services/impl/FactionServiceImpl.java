@@ -35,7 +35,7 @@ public class FactionServiceImpl implements FactionService {
 		Optional<IFactionRelationCapability> opCap = this.getFactionRelationOf(entity);
 		if (opCap.isPresent()) {
 			IFactionRelationCapability relationCap = opCap.get();
-			Optional<Faction> optFactionObj = FactionDatapackLoaders.getFaction(faction);
+			Optional<Faction> optFactionObj = FactionDatapackLoaders.getFaction(faction, entity.level().registryAccess());
 			if (optFactionObj.isPresent() && relationCap.hasInformationFor(optFactionObj.get())) {
 				return Optional.of(relationCap.getExactRelationTowards(optFactionObj.get()));
 			}

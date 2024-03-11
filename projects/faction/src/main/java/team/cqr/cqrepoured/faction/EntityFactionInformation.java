@@ -57,7 +57,7 @@ public class EntityFactionInformation extends AbstractRegistratableObject implem
 		if (entity instanceof IFactionRelated other) {
 			return this.getRoughReputationOf(other, reputationMap);
 		} else {
-			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(entity.getType());
+			EntityFactionInformation efi = FactionDatapackLoaders.getEntityFactionInformation(entity.getType(), entity.level().registryAccess());
 			if (efi != null) {
 				return this.getRoughReputationOf(efi, reputationMap);
 			}

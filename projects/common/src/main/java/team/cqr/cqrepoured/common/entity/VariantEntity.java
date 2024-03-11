@@ -27,7 +27,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import team.cqr.cqrepoured.common.CQRConstants;
 import team.cqr.cqrepoured.common.CQRepoured;
-import team.cqr.cqrepoured.common.datapack.EntityProfileDatapackLoaders;
+import team.cqr.cqrepoured.common.datapack.EntityProfileDatapackRegistries;
 import team.cqr.cqrepoured.common.entity.profile.EntityProfile;
 import team.cqr.cqrepoured.common.entity.profile.variant.AssetEntry;
 import team.cqr.cqrepoured.common.entity.profile.variant.AttributeEntry;
@@ -55,7 +55,7 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 		public static void onFinalizeSpawn(FinalizeSpawn event) {
 			if (event.getEntity() instanceof VariantEntity ve) {
 				EntityType<?> type = ve.getType();
-				Optional<EntityProfile> profile = EntityProfileDatapackLoaders.getProfile(type);
+				Optional<EntityProfile> profile = EntityProfileDatapackRegistries.getProfile(type, event.getLevel().registryAccess());
 				if (profile.isPresent()) {
 					EntityVariant variant = profile.get().getRandomVariant(ve.getRandom());
 					if (variant != null) {
