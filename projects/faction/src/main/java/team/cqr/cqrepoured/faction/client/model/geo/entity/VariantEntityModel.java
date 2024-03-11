@@ -1,14 +1,14 @@
-package team.cqr.cqrepoured.client.model.geo.entity;
+package team.cqr.cqrepoured.faction.client.model.geo.entity;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.loading.object.BakedAnimations;
-import net.minecraft.resources.ResourceLocation;
-import team.cqr.cqrepoured.client.model.geo.AbstractModelGeoCQRBase;
-import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
-import team.cqr.cqrepoured.entity.bases.VariantEntity;
+import team.cqr.cqrepoured.common.entity.VariantEntity;
+import team.cqr.cqrepoured.faction.client.model.geo.AbstractModelGeoCQRBase;
+import team.cqr.cqrepoured.faction.textureset.IHasTextureOverride;
 
 public class VariantEntityModel<T extends VariantEntity & GeoEntity> extends AbstractModelGeoCQRBase<T> {
 

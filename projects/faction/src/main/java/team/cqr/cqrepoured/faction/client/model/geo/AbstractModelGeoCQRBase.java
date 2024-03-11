@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.model.geo;
+package team.cqr.cqrepoured.faction.client.model.geo;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -14,11 +14,12 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.common.CQRConstants;
-import team.cqr.cqrepoured.entity.ITextureVariants;
+import team.cqr.cqrepoured.common.entity.ITextureVariants;
 import team.cqr.cqrepoured.faction.textureset.IHasTextureOverride;
 
 public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> extends GeoModel<T> {
 	
+	// TODO: Change models and textures to be hierarchical too?
 	protected final ResourceLocation MODEL_RESLOC;
 	protected final ResourceLocation TEXTURE_DEFAULT;
 	protected final String ENTITY_REGISTRY_PATH_NAME;
