@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.entity;
+package team.cqr.cqrepoured.common.entity;
 
 import net.minecraft.util.RandomSource;
 
