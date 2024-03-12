@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.entity.profile.EntityProfile;
 import team.cqr.cqrepoured.common.entity.profile.variant.extradata.IVariantExtraData;
 
-@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
+//@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
 public class EntityProfileDatapackRegistries implements DatapackLoaderHelper {
 	
 	public static final DatapackRegistry<EntityProfile> ENTITY_PROFILES = new DatapackRegistry<>(CQRepoured.prefix("entity/profile"), EntityProfile.CODEC);
