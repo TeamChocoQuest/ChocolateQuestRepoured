@@ -1,6 +1,15 @@
 package team.cqr.cqrepoured.common.primitive;
 
+import java.util.function.Function;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import team.cqr.cqrepoured.common.function.IntInt2DoubleFunction;
+import team.cqr.cqrepoured.common.function.IntInt2ObjFunction;
 import team.cqr.cqrepoured.common.function.IntIntConsumer;
+import team.cqr.cqrepoured.common.function.IntIntInt2DoubleFunction;
+import team.cqr.cqrepoured.common.function.IntIntInt2ObjFunction;
 import team.cqr.cqrepoured.common.function.IntIntIntConsumer;
 
 public class IntUtil {
@@ -176,6 +185,134 @@ public class IntUtil {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     exclusive
+	 * @param maxX     exclusive
+	 * @param function
+	 */
+	public static <T> Stream<T> streamXY(int minX, int minY, int maxX, int maxY, IntInt2ObjFunction<T> function) {
+		return IntStream.range(minX, maxX)
+				.mapToObj(x -> IntStream.range(minY, maxY)
+						.mapToObj(y -> function.apply(x, y)))
+				.flatMap(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     exclusive
+	 * @param maxY     exclusive
+	 * @param maxZ     exclusive
+	 * @param function
+	 */
+	public static <T> Stream<T> streamXYZ(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntInt2ObjFunction<T> function) {
+		return IntStream.range(minX, maxX)
+				.mapToObj(x -> IntStream.range(minY, maxY)
+						.mapToObj(y -> IntStream.range(minZ, maxZ)
+								.mapToObj(z -> function.apply(x, y, z)))
+						.flatMap(Function.identity()))
+				.flatMap(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     inclusive
+	 * @param function
+	 */
+	public static <T> Stream<T> streamXYClosed(int minX, int minY, int maxX, int maxY, IntInt2ObjFunction<T> function) {
+		return IntStream.rangeClosed(minX, maxX)
+				.mapToObj(x -> IntStream.rangeClosed(minY, maxY)
+						.mapToObj(y -> function.apply(x, y)))
+				.flatMap(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     inclusive
+	 * @param maxY     inclusive
+	 * @param maxZ     inclusive
+	 * @param function
+	 */
+	public static <T> Stream<T> streamXYZClosed(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntInt2ObjFunction<T> function) {
+		return IntStream.rangeClosed(minX, maxX)
+				.mapToObj(x -> IntStream.rangeClosed(minY, maxY)
+						.mapToObj(y -> IntStream.rangeClosed(minZ, maxZ)
+								.mapToObj(z -> function.apply(x, y, z)))
+						.flatMap(Function.identity()))
+				.flatMap(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     exclusive
+	 * @param maxX     exclusive
+	 * @param function
+	 */
+	public static DoubleStream streamXY(int minX, int minY, int maxX, int maxY, IntInt2DoubleFunction function) {
+		return IntStream.range(minX, maxX)
+				.mapToObj(x -> IntStream.range(minY, maxY)
+						.mapToDouble(y -> function.apply(x, y)))
+				.flatMapToDouble(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     exclusive
+	 * @param maxY     exclusive
+	 * @param maxZ     exclusive
+	 * @param function
+	 */
+	public static DoubleStream streamXYZ(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntInt2DoubleFunction function) {
+		return IntStream.range(minX, maxX)
+				.mapToObj(x -> IntStream.range(minY, maxY)
+						.mapToObj(y -> IntStream.range(minZ, maxZ)
+								.mapToDouble(z -> function.apply(x, y, z)))
+						.flatMapToDouble(Function.identity()))
+				.flatMapToDouble(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     inclusive
+	 * @param function
+	 */
+	public static DoubleStream streamXYClosed(int minX, int minY, int maxX, int maxY, IntInt2DoubleFunction function) {
+		return IntStream.rangeClosed(minX, maxX)
+				.mapToObj(x -> IntStream.rangeClosed(minY, maxY)
+						.mapToDouble(y -> function.apply(x, y)))
+				.flatMapToDouble(Function.identity());
+	}
+
+	/**
+	 * @param minX     inclusive
+	 * @param minY     inclusive
+	 * @param minZ     inclusive
+	 * @param maxX     inclusive
+	 * @param maxY     inclusive
+	 * @param maxZ     inclusive
+	 * @param function
+	 */
+	public static DoubleStream streamXYZClosed(int minX, int minY, int minZ, int maxX, int maxY, int maxZ, IntIntInt2DoubleFunction function) {
+		return IntStream.rangeClosed(minX, maxX)
+				.mapToObj(x -> IntStream.rangeClosed(minY, maxY)
+						.mapToObj(y -> IntStream.rangeClosed(minZ, maxZ)
+								.mapToDouble(z -> function.apply(x, y, z)))
+						.flatMapToDouble(Function.identity()))
+				.flatMapToDouble(Function.identity());
 	}
 
 }
