@@ -3,10 +3,13 @@ package team.cqr.cqrepoured.common.serialization;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +19,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.Keyable;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.nbt.CompoundTag;
@@ -102,6 +106,18 @@ public class CodecUtil {
 
 	public static <T> Optional<JsonElement> encodeJSON(Codec<T> codec, T input, @Nullable JsonObject prefix) {
 		return encode(codec, input, JsonOps.INSTANCE, prefix);
+	}
+
+	public static <K, V> Codec<Map<K, V>> stringMap(Function<K, String> keyToString, Function<String, K> stringToKey, Codec<V> valueCodec, K[] keys) {
+		return Codec.simpleMap(ExtraCodecs.stringResolverCodec(keyToString, stringToKey), valueCodec, new Keyable() {
+			@Override
+			public <T> Stream<T> keys(DynamicOps<T> ops) {
+				return Arrays.stream(keys)
+						.map(keyToString)
+						.map(ops::createString);
+			}
+		})
+				.codec();
 	}
 
 }
