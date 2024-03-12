@@ -6,6 +6,7 @@
   "refmap": "mixins.cqrepoured.generation.refmap.json",
   "mixins": [
     "MixinBeardifier",
-    "MixinChunkGenerator"
+    "MixinChunkGenerator",
+    "MixinNoiseBasedChunkGenerator"
   ]
 }
