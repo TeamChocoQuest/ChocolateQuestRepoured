@@ -132,7 +132,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 		if (boundingBox.get() == null) {
 			// TODO empty structure -> log warning? throw error?
-			return new BoundingBox(level.getCenter().center());
+			boundingBox.set(new BoundingBox(level.getCenter().center()));
 		}
 
 		return DEFAULT_NOISE_CONFIGURATION.extend(boundingBox.get());
