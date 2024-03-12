@@ -10,10 +10,11 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.SectionPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -36,7 +37,8 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.Enti
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.InhabitantSelector;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributor;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil2;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseUtil2.NoiseConfiguration;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
@@ -47,12 +49,19 @@ import team.cqr.cqrepoured.protection.ProtectionSettings;
 // TODO: Move protection settings to codec object
 public class CQRStructurePiece extends StructurePiece implements NoiseContributor {
 
+	@Deprecated
 	private static final Codec<Cache2D<HeightInfo>> HEIGHT_MAP_CODEC = Cache2D.codec(HeightInfo.CODEC, HeightInfo[]::new);
+	private static final NoiseConfiguration DEFAULT_NOISE_CONFIGURATION = new NoiseConfiguration(6, 24, 1.0D, 1.0D);
+	private final BlockPos pos;
 	private final CQRLevel level;
 	private Optional<ProtectedRegion> protectedRegion;
+	@Deprecated
 	private final Cache2D<HeightInfo> heightMap;
 	private final StructureProcessorList processors = new StructureProcessorList(List.of());
+	private final NoiseUtil2 noiseUtil = NoiseUtil2.get(DEFAULT_NOISE_CONFIGURATION);
+	private final BoundingBox unextendedBoundingBox;
 
+	@Deprecated
 	private static class HeightInfo {
 
 		private static final Codec<HeightInfo> CODEC = RecordCodecBuilder.create(instance -> {
@@ -91,9 +100,11 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 	
 	protected CQRStructurePiece(BlockPos pos, CQRLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), 0, calculateBoundingBox(level));
+		this.pos = pos;
 		this.level = level;
 		this.protectedRegion = protectedRegion;
 		this.heightMap = calculateHeightMap(pos, this.boundingBox, level, groundLevelDelta);
+		this.unextendedBoundingBox = DEFAULT_NOISE_CONFIGURATION.unextend(this.boundingBox);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -124,9 +135,10 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 			return new BoundingBox(level.getCenter().center());
 		}
 
-		return boundingBox.get().inflatedBy(16);
+		return DEFAULT_NOISE_CONFIGURATION.extend(boundingBox.get());
 	}
 
+	@Deprecated
 	private static Cache2D<HeightInfo> calculateHeightMap(BlockPos pos, BoundingBox boundingBox, CQRLevel level, int groundLevelDelta) {
 		Cache2D<HeightInfo> heightMap = new Cache2D<>(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ(), null, HeightInfo[]::new,
 				HeightInfo::new);
@@ -155,6 +167,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 	public CQRStructurePiece(CompoundTag nbt) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), nbt);
+		this.pos = NbtUtils.readBlockPos(nbt.getCompound("pos"));
 		this.level = new CQRLevel(nbt.getCompound("level"));
 		this.protectedRegion = Optional.of("protected_region")
 				.filter(nbt::contains)
@@ -163,6 +176,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 		this.heightMap = HEIGHT_MAP_CODEC.decode(NbtOps.INSTANCE, nbt.get("height_map"))
 				.getOrThrow(false, CQRepoured.LOGGER::error)
 				.getFirst();
+		this.unextendedBoundingBox = DEFAULT_NOISE_CONFIGURATION.unextend(this.boundingBox);
 	}
 
 	@Override
@@ -196,33 +210,20 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 	@Override
 	public double getContribution(int x, int y, int z) {
-		double maxNoise = 0.0D;
-
-		for (int dx = -NoiseUtil.RADIUS; dx <= NoiseUtil.RADIUS; dx++) {
-			if (!heightMap.inBoundsX(x + dx)) {
+		if (!this.boundingBox.isInside(x, y, z)) {
+			return 0.0D;
+		}
+		for (Vec3i offset : this.noiseUtil.getNearestPositions()) {
+			if (!this.unextendedBoundingBox.isInside(x - offset.getX(), y - offset.getY(), z - offset.getZ())) {
 				continue;
 			}
-
-			for (int dz = -NoiseUtil.RADIUS; dz <= NoiseUtil.RADIUS; dz++) {
-				if (!heightMap.inBoundsZ(z + dz)) {
-					continue;
-				}
-
-				HeightInfo data = heightMap.getUnchecked(x + dx, z + dz);
-				if (data == null) {
-					continue;
-				}
-
-				if (y < data.min - NoiseUtil.RADIUS || y > data.max + NoiseUtil.RADIUS) {
-					continue;
-				}
-
-				int dy = y - Mth.clamp(y, data.min, data.max);
-				maxNoise = Math.max(NoiseUtil.getContribution(dx, dy, dz), maxNoise);
+			BlockState blockState = this.level.getBlockState(x - offset.getX(), y - offset.getY(), z - offset.getZ());
+			if (blockState == null || blockState == Blocks.AIR.defaultBlockState()) {
+				continue;
 			}
+			return this.noiseUtil.getBeardContribution(-offset.getX(), -offset.getY(), -offset.getZ(), this.pos.getY());
 		}
-
-		return maxNoise;
+		return 0.0D;
 	}
 
 	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
