@@ -167,22 +167,22 @@ allprojects {
         // Dependencies (Built-in)
         //shadow "meldexun:ReflectionUtil:${reflectionutil_version}@jar"
         //shadow "meldexun:RandomUtil:${randomutil_version}@jar"
-        shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
+        //shadow fg.deobf("commoble.databuddy:${databuddy_branch}:${databuddy_version}")
 
         // Dependencies (Required)
-        implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
-        implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
-        implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
+        //implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
+        //implementation fg.deobf("net.tslat.smartbrainlib:SmartBrainLib-forge-1.20:${sbl_version}")
+        //implementation fg.deobf("net.tslat.effectslib:TslatEffectsLib-forge-${mc_version}:${tel_version}")
         implementation fg.deobf("dertoaster98:multihitboxlib:${mc_version}-${multihitboxlib_version}@jar")
         //implementation fg.deobf("curse.maven:multihitboxlib-899090:${multihitboxlib_version}")
         //implementation fg.deobf("curse.maven:ReachFix-556777:${reachfix_version}")
 
         // Dependencies (Optional)
-        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-        compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-        runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+        //compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
+        //compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
+        //runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
 
-        implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
+        //implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
         //runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
     }
