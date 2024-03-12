@@ -1,0 +1,35 @@
+{
+	"ground_level_delta": 0,
+	"generator": {
+		"type": "template",
+		"templatePool": "minecraft:ancient_city/structures"
+	},
+	"placement_settings": {
+		"position_validators": [],
+		"structures_preventing_generation": [],
+		"structure_check_radius": 0,
+		"position_finders": [
+			{
+				"type": "heightmap",
+				"heightmap": "WORLD_SURFACE"
+			}
+		],
+		"chance": 1,
+		"rarity_factor": 0,
+		"dungeon_dependencies": [],
+		"spawn_limit": 0
+	},
+	"inhabitant_selector": {
+		"type": "random",
+		"inhabitants": [
+			"cqrepoured:test"
+		]
+	},
+	"biomes": [ "minecraft:plains", "minecraft:ocean", "minecraft:forest", "minecraft:taiga", "minecraft:savanna", "minecraft:jungle", "minecraft:desert" ],
+	"spawn_overrides": {},
+	"step": "surface_structures",
+	"enabled": true,
+	"icon": 0,
+	"mod_dependencies": [],
+	"type": "cqrepoured:cqr_structure"
+}

@@ -1,0 +1,16 @@
+{
+	"structures": [
+		{
+			"structure": "cqrepoured:test",
+			"weight": 1
+		}
+	],
+	"placement": {
+		"separation": 7,
+		"minimum_distance_to_spawn": 0,
+		"priority": 0,
+		"salt": 0,
+		"spacing": 8,
+		"type": "cqrepoured:cqr_structure_placement"
+	}
+}
