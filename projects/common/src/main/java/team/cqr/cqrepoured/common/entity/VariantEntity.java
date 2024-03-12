@@ -48,7 +48,7 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 	 */
 	
 	// Forge crap
-	@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.FORGE)
+//	@EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.FORGE)
 	public static class EventListener {
 		
 		@SubscribeEvent
