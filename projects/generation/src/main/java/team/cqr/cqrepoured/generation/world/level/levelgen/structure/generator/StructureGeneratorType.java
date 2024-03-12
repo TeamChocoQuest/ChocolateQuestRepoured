@@ -8,7 +8,7 @@ import net.minecraft.util.StringRepresentable;
 
 public enum StructureGeneratorType implements StringRepresentable {
 
-	;
+	TEMPLATE(TemplateStructureGenerator.CODEC);
 
 	public static final Codec<StructureGeneratorType> CODEC = StringRepresentable.fromEnum(StructureGeneratorType::values);
 	private final Codec<? extends StructureGenerator> codec;
