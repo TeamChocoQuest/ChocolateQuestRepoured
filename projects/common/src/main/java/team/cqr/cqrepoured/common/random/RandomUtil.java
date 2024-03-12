@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 
 public class RandomUtil {
 
@@ -53,6 +54,10 @@ public class RandomUtil {
 			return Optional.empty();
 		}
 		return Optional.of(randomUnsafe(collection, random));
+	}
+
+	public static <T> T getOrThrow(SimpleWeightedRandomList<T> weightedRandomList, RandomSource random) {
+		return weightedRandomList.getRandomValue(random).orElseThrow();
 	}
 
 }

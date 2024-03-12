@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.common.random.CQRWeightedRandom;
+import team.cqr.cqrepoured.capability.faction.IFactionRelationCapability;
+import team.cqr.cqrepoured.common.random.RandomUtil;
 import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
 import team.cqr.cqrepoured.common.services.CQRServices;
@@ -29,25 +31,25 @@ import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class DungeonInhabitant extends AbstractRegistratableObject {
 	
-	protected CQRWeightedRandom<EntityType<?>> entities;
-	protected Optional<CQRWeightedRandom<EntityType<?>>> bosses;
+	protected SimpleWeightedRandomList<EntityType<?>> entities;
+	protected Optional<SimpleWeightedRandomList<EntityType<?>>> bosses;
 	protected Optional<ItemStack> customBanner;
 	protected Optional<DyeColor> customBannerColor;
-	protected Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap;
+	protected Map<EquipmentSlot, SimpleWeightedRandomList<ItemStack>> equipmentMap;
 	protected Optional<Map<ResourceLocation, Integer>> factionOverride;
 	
 	public static final Codec<DungeonInhabitant> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
-				CQRWeightedRandom.createCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).fieldOf("entities").forGetter(obj -> obj.entities),
-				CQRWeightedRandom.createCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).optionalFieldOf("bosses").forGetter(obj -> obj.bosses),
+				SimpleWeightedRandomList.wrappedCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).fieldOf("entities").forGetter(obj -> obj.entities),
+				SimpleWeightedRandomList.wrappedCodec(ForgeRegistries.ENTITY_TYPES.getCodec()).optionalFieldOf("bosses").forGetter(obj -> obj.bosses),
 				ItemStack.CODEC.optionalFieldOf("banner").forGetter(obj -> obj.customBanner),
 				DyeColor.CODEC.optionalFieldOf("banner-color").forGetter(obj -> obj.customBannerColor),
-				Codec.unboundedMap(CodecUtil.EQUIPMENT_SLOT_CODEC, CQRWeightedRandom.createCodec(ItemStack.CODEC)).optionalFieldOf("default-equipment", Map.of()).forGetter(obj -> obj.equipmentMap),
+				Codec.unboundedMap(CodecUtil.EQUIPMENT_SLOT_CODEC, SimpleWeightedRandomList.wrappedCodec(ItemStack.CODEC)).optionalFieldOf("default-equipment", Map.of()).forGetter(obj -> obj.equipmentMap),
 				Codec.unboundedMap(ResourceLocation.CODEC, Codec.INT).optionalFieldOf("reputation-settings").forGetter(obj -> obj.factionOverride)
 			).apply(instance, DungeonInhabitant::new);
 	});
 	
-	public DungeonInhabitant(CQRWeightedRandom<EntityType<?>> entities,	Optional<CQRWeightedRandom<EntityType<?>>> bosses, Optional<ItemStack> customBanner, Optional<DyeColor> customBannerColor, Map<EquipmentSlot, CQRWeightedRandom<ItemStack>> equipmentMap, Optional<Map<ResourceLocation, Integer>> factionOverride) {
+	public DungeonInhabitant(SimpleWeightedRandomList<EntityType<?>> entities,	Optional<SimpleWeightedRandomList<EntityType<?>>> bosses, Optional<ItemStack> customBanner, Optional<DyeColor> customBannerColor, Map<EquipmentSlot, SimpleWeightedRandomList<ItemStack>> equipmentMap, Optional<Map<ResourceLocation, Integer>> factionOverride) {
 		super();
 		
 		this.entities = entities;
@@ -65,9 +67,9 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 		if (tag.getString("id").equals(CQREntityTypes.DUMMY.getId().toString())) {
 			EntityType<?> type = null;
 			if (boss && this.bosses.isPresent()) {
-				type = this.bosses.get().next(random);
+				type = RandomUtil.getOrThrow(this.bosses.get(), random);
 			} else {
-				type = this.entities.next(random);
+				type = RandomUtil.getOrThrow(this.entities, random);
 			}
 			tag.putString("id", ForgeRegistries.ENTITY_TYPES.getKey(type).toString());
 		}
@@ -90,8 +92,8 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 		return this.createRandomEntity(random, createFunction, this.entities);
 	}
 	
-	public Entity createRandomEntity(RandomSource random, final @Nonnull Function<EntityType<?>, Entity> createFunction, CQRWeightedRandom<EntityType<?>> typeList) {
-		EntityType<?> type = typeList.next(random);
+	public Entity createRandomEntity(RandomSource random, final @Nonnull Function<EntityType<?>, Entity> createFunction, SimpleWeightedRandomList<EntityType<?>> typeList) {
+		EntityType<?> type = RandomUtil.getOrThrow(typeList, random);
 		Entity result = createFunction.apply(type);
 		
 		if (result instanceof Mob mob) {
@@ -126,14 +128,14 @@ public class DungeonInhabitant extends AbstractRegistratableObject {
 		this.equipmentMap.entrySet().forEach(entry -> {
 			ItemStack current = entity.getItemBySlot(entry.getKey());
 			if (current == null || current.isEmpty()) {
-				entity.setItemSlot(entry.getKey(), entry.getValue().next(random));
+				entity.setItemSlot(entry.getKey(), RandomUtil.getOrThrow(entry.getValue(), random));
 			}
 		});
 		
 	}
 
 	public boolean hasConfiguredBosses() {
-		return this.bosses != null && this.bosses.isPresent() && this.bosses.get().numItems() > 0;
+		return this.bosses != null && this.bosses.isPresent() && !this.bosses.get().isEmpty();
 	}
 
 }
