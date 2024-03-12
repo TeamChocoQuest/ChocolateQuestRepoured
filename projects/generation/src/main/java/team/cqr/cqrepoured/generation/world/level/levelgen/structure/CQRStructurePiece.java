@@ -221,7 +221,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 			if (blockState == null || blockState == Blocks.AIR.defaultBlockState()) {
 				continue;
 			}
-			return this.noiseUtil.getBeardContribution(-offset.getX(), -offset.getY(), -offset.getZ(), this.pos.getY());
+			return this.noiseUtil.getBeardContribution(-offset.getX(), -offset.getY(), -offset.getZ(), y - this.pos.getY());
 		}
 		return 0.0D;
 	}
