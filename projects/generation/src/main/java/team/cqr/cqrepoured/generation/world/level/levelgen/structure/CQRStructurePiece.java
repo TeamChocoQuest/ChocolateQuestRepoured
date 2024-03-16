@@ -29,7 +29,9 @@ import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.InhabitantSelector;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributionCache.NoiseConfiguration;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseContributor;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.noise.NoiseMap;
 import team.cqr.cqrepoured.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.protection.ProtectedRegion;
 import team.cqr.cqrepoured.protection.ProtectedRegionManager;
@@ -40,13 +42,17 @@ import team.cqr.cqrepoured.protection.ProtectionSettings;
 // TODO: Move protection settings to codec object
 public class CQRStructurePiece extends StructurePiece implements NoiseContributor {
 
+	private static final NoiseConfiguration NOISE_CONFIG_NEGATIVE = new NoiseConfiguration(8, 8, 8, 1.0D, 1.0D, 1.0D);
+	private static final NoiseConfiguration NOISE_CONFIG_POSITIVE = new NoiseConfiguration(8, 24, 8, 1.0D, 0.25D, 1.0D);
 	private final CQRLevel level;
+	private final NoiseMap noiseMap;
 	private Optional<ProtectedRegion> protectedRegion;
 	private final StructureProcessorList processors = new StructureProcessorList(List.of());
 	
-	protected CQRStructurePiece(CQRLevel level, Optional<ProtectedRegion> protectedRegion) {
+	protected CQRStructurePiece(CQRLevel level, NoiseMap noiseMap, Optional<ProtectedRegion> protectedRegion) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), 0, calculateBoundingBox(level));
 		this.level = level;
+		this.noiseMap = noiseMap;
 		this.protectedRegion = protectedRegion;
 	}
 
@@ -75,10 +81,10 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 		if (boundingBox.get() == null) {
 			// TODO empty structure -> log warning? throw error?
-			boundingBox.set(new BoundingBox(level.getCenter().center()));
+			return new BoundingBox(level.getCenter().center());
 		}
 
-		return boundingBox.get();
+		return NOISE_CONFIG_POSITIVE.extend(boundingBox.get());
 	}
 
 	public CQRStructurePiece(CompoundTag nbt) {
@@ -88,6 +94,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 				.filter(nbt::contains)
 				.map(nbt::getCompound)
 				.map(ProtectedRegion::readFromNBT);
+		this.noiseMap = new NoiseMap(nbt.getCompound("noise"));
 	}
 
 	@Override
@@ -96,6 +103,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 		this.protectedRegion.ifPresent(protectedRegion -> {
 			nbt.put("protected_region", protectedRegion.writeToNBT());
 		});
+		nbt.put("noise", this.noiseMap.save());
 	}
 
 	@Override
@@ -119,7 +127,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 	@Override
 	public double getContribution(int x, int y, int z) {
-		return 0.0D;
+		return noiseMap.get(x, y, z);
 	}
 
 	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
@@ -137,7 +145,8 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 		}
 
 		public CQRStructurePiece build() {
-			return new CQRStructurePiece(this.level, this.protectedRegionBuilder.map(ProtectedRegion.Builder::build));
+			NoiseMap noiseMap = new NoiseMap(this.level, this.pos.getY() + this.groundLevelDelta, NOISE_CONFIG_NEGATIVE, NOISE_CONFIG_POSITIVE);
+			return new CQRStructurePiece(this.level, noiseMap, this.protectedRegionBuilder.map(ProtectedRegion.Builder::build));
 		}
 
 		public DungeonPlacement getPlacement(BlockPos partPos) {
