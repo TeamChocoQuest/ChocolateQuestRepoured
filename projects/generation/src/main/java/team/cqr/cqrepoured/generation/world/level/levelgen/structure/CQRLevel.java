@@ -69,12 +69,6 @@ public class CQRLevel extends SectionMap<CQRSection, CompoundTag> {
 		return section != null ? section.getBlockState(pos) : null;
 	}
 
-	@Nullable
-	public BlockState getBlockState(int x, int y, int z) {
-		CQRSection section = this.sections.get(indexFromBlock(x, y, z));
-		return section != null ? section.getBlockState(x, y, z) : null;
-	}
-
 	public void setBlockState(BlockPos pos, @Nullable BlockState state) {
 		this.setBlockState(pos, state, null);
 	}

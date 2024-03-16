@@ -186,11 +186,6 @@ public class CQRSection extends Section<CompoundTag> {
 	}
 
 	@Nullable
-	public BlockState getBlockState(int x, int y, int z) {
-		return this.getBlockState(SectionUtil.index(x & 15, y & 15, z & 15));
-	}
-
-	@Nullable
 	private BlockState getBlockState(int index) {
 		BlockState state = this.blocks.get(index);
 		return state != CQRBlocks.PLACEHOLDER.get().defaultBlockState() ? state : null;
