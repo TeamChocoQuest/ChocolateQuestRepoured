@@ -36,28 +36,28 @@ import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRBlocks;
+import team.cqr.cqrepoured.generation.util.Section;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityContainer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 @SuppressWarnings("deprecation")
-public class CQRSection {
+public class CQRSection extends Section<CompoundTag> {
 
 	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, CQRBlocks.PLACEHOLDER.get().defaultBlockState());
 
-	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
 	private final Int2ObjectMap<BlockEntity> blockEntities;
 	private final List<EntityContainer> entities;
 
 	public CQRSection(SectionPos sectionPos) {
-		this.sectionPos = sectionPos;
+		super(sectionPos);
 		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, CQRBlocks.PLACEHOLDER.get().defaultBlockState(), Strategy.SECTION_STATES);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
 
-	public CQRSection(CompoundTag nbt) {
-		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
+	public CQRSection(SectionPos sectionPos, CompoundTag nbt) {
+		super(sectionPos);
 		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRepoured.LOGGER::error).getOrThrow(false, CQRepoured.LOGGER::error);
 		this.blockEntities = NBTUtil.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
 			return BlockEntity.loadStatic(getPos(sectionPos, index), this.getBlockState(index), blockEntityNbt);
@@ -65,15 +65,9 @@ public class CQRSection {
 		this.entities = NBTUtil.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
 	}
 
-	public SectionPos getPos() {
-		return this.sectionPos;
-	}
-
+	@Override
 	public CompoundTag save() {
 		CompoundTag nbt = new CompoundTag();
-		nbt.putInt("X", this.sectionPos.x());
-		nbt.putInt("Y", this.sectionPos.y());
-		nbt.putInt("Z", this.sectionPos.z());
 		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRepoured.LOGGER::error));
 		nbt.put("BlockEntities", NBTUtil.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
 		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTUtil.toList()));
@@ -102,7 +96,7 @@ public class CQRSection {
 			int x = x(i);
 			int y = y(i);
 			int z = z(i);
-			setPos(mutablePos, this.sectionPos, x, y, z);
+			setPos(mutablePos, this.getPos(), x, y, z);
 
 			if (!processors.isEmpty()) {
 				// TODO check if this works as intended as this differs a lot from StructureTemplate#processBlockInfos
@@ -133,7 +127,7 @@ public class CQRSection {
 		MutableBlockPos mutablePosNeighbour = new MutableBlockPos();
 
 		voxelShapePart.forAllFaces((direction, x, y, z) -> {
-			setPos(mutablePos, this.sectionPos, x, y, z);
+			setPos(mutablePos, this.getPos(), x, y, z);
 			mutablePosNeighbour.setWithOffset(mutablePos, direction);
 			BlockState state = level.getBlockState(mutablePos);
 			BlockState stateNeighbour = level.getBlockState(mutablePosNeighbour);
@@ -158,7 +152,7 @@ public class CQRSection {
 				return;
 			}
 
-			setPos(mutablePos, this.sectionPos, x, y, z);
+			setPos(mutablePos, this.getPos(), x, y, z);
 			BlockState state = level.getBlockState(mutablePos);
 			BlockState updatedState = Block.updateFromNeighbourShapes(state, level, mutablePos);
 			if (state != updatedState) {
@@ -173,7 +167,7 @@ public class CQRSection {
 		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		this.blockEntities.int2ObjectEntrySet().forEach(entry -> {
-			setPos(mutablePos, this.sectionPos, entry.getIntKey());
+			setPos(mutablePos, this.getPos(), entry.getIntKey());
 			BlockEntity blockEntity = level.getBlockEntity(mutablePos);
 			if (blockEntity != null) {
 				blockEntity.setChanged();
@@ -244,7 +238,7 @@ public class CQRSection {
 
 		this.blocks.set(index, state);
 		if (state != null && state.hasBlockEntity()) {
-			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(sectionPos, index), state);
+			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(this.getPos(), index), state);
 			this.blockEntities.put(index, blockEntity);
 			if (blockEntityCallback != null) {
 				blockEntityCallback.accept(blockEntity);
