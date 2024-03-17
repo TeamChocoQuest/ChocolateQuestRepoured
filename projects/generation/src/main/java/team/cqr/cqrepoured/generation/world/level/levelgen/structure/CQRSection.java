@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
@@ -26,9 +25,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.PalettedContainer.Strategy;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
 import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
@@ -80,17 +76,17 @@ public class CQRSection {
 		return nbt;
 	}
 
-	public void generate(WorldGenLevel level, EntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+	public void generate(WorldGenLevel level, EntityFactory entityFactory) {
 		DiscreteVoxelShape voxelShapePart = new BitSetDiscreteVoxelShape(16, 16, 16);
 
-		this.placeBlocks(level, voxelShapePart, processors);
+		this.placeBlocks(level, voxelShapePart);
 		this.updateShapeAtEdge(level, voxelShapePart);
 		this.updateFromNeighbourShapes(level, voxelShapePart);
 		this.setBlockEntitiesChanged(level);
 		this.addEntities(level, entityFactory);
 	}
 
-	private void placeBlocks(WorldGenLevel level, DiscreteVoxelShape voxelShapePart, @Nonnull List<StructureProcessor> processors) {
+	private void placeBlocks(WorldGenLevel level, DiscreteVoxelShape voxelShapePart) {
 		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		for (int i = 0; i < 4096; i++) {
@@ -103,19 +99,6 @@ public class CQRSection {
 			int y = y(i);
 			int z = z(i);
 			setPos(mutablePos, this.sectionPos, x, y, z);
-
-			if (!processors.isEmpty()) {
-				// TODO check if this works as intended as this differs a lot from StructureTemplate#processBlockInfos
-				BlockEntity blockEntity = this.blockEntities.get(i);
-				StructureBlockInfo blockInfo = new StructureBlockInfo(mutablePos, state, blockEntity != null ? blockEntity.saveWithFullMetadata() : null);
-				StructureBlockInfo blockInfo1 = new StructureBlockInfo(mutablePos, state, blockInfo.nbt() != null ? blockInfo.nbt().copy() : null);
-				StructurePlaceSettings placeSettings = new StructurePlaceSettings();
-				for (StructureProcessor processor : processors) {
-					blockInfo1 = processor.process(level, mutablePos, mutablePos, blockInfo, blockInfo1, placeSettings, null);
-				}
-				state = blockInfo1.state();
-				blockEntity.load(blockInfo1.nbt());
-			}
 
 			if (level.setBlock(mutablePos, state, 0)) {
 				voxelShapePart.fill(x, y, z);

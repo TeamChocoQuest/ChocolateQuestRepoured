@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -27,7 +26,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure.GenerationContext;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
@@ -51,7 +49,6 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 	private final CQRLevel level;
 	private Optional<ProtectedRegion> protectedRegion;
 	private final Cache2D<HeightInfo> heightMap;
-	private final StructureProcessorList processors = new StructureProcessorList(List.of());
 
 	private static class HeightInfo {
 
@@ -191,7 +188,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 			}
 		}
 
-		this.level.generate(pLevel, pBox, new EntityFactory(pLevel.getLevel()), this.processors.list());
+		this.level.generate(pLevel, pBox, new EntityFactory(pLevel.getLevel()));
 	}
 
 	@Override

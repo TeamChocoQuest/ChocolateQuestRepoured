@@ -2,11 +2,9 @@ package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -19,7 +17,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.material.FluidState;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
@@ -52,11 +49,11 @@ public class CQRLevel {
 		return nbt;
 	}
 
-	public void generate(WorldGenLevel level, BoundingBox box, EntityFactory entityFactory, @Nonnull List<StructureProcessor> processors) {
+	public void generate(WorldGenLevel level, BoundingBox box, EntityFactory entityFactory) {
 		SectionPos.betweenClosedStream(box.minX() >> 4, box.minY() >> 4, box.minZ() >> 4, box.maxX() >> 4, box.maxY() >> 4, box.maxZ() >> 4)
 				.map(sectionPos -> this.sections.get(this.index(sectionPos)))
 				.filter(Objects::nonNull)
-				.forEach(section -> section.generate(level, entityFactory, processors));
+				.forEach(section -> section.generate(level, entityFactory));
 	}
 
 	public SectionPos getCenter() {
