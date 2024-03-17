@@ -19,7 +19,7 @@ import net.minecraft.world.level.material.FluidState;
 import team.cqr.cqrepoured.generation.util.SectionMap;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
-public class CQRLevel extends SectionMap<CQRSection, CompoundTag> {
+public class CQRLevel extends SectionMap<StructureSection, CompoundTag> {
 
 	private final long seed;
 
@@ -41,13 +41,13 @@ public class CQRLevel extends SectionMap<CQRSection, CompoundTag> {
 	}
 
 	@Override
-	protected CQRSection readSectionFromTag(SectionPos pos, CompoundTag sectionNbt) {
-		return new CQRSection(pos, sectionNbt);
+	protected StructureSection readSectionFromTag(SectionPos pos, CompoundTag sectionNbt) {
+		return new StructureSection(pos, sectionNbt);
 	}
 
 	@Override
-	protected CQRSection createSection(SectionPos pos) {
-		return new CQRSection(pos);
+	protected StructureSection createSection(SectionPos pos) {
+		return new StructureSection(pos);
 	}
 
 	public void generate(WorldGenLevel level, BoundingBox box, EntityFactory entityFactory) {
@@ -63,7 +63,7 @@ public class CQRLevel extends SectionMap<CQRSection, CompoundTag> {
 
 	@Nullable
 	public BlockState getBlockState(BlockPos pos) {
-		CQRSection section = this.getSection(pos);
+		StructureSection section = this.getSection(pos);
 		return section != null ? section.getBlockState(pos) : null;
 	}
 
@@ -77,13 +77,13 @@ public class CQRLevel extends SectionMap<CQRSection, CompoundTag> {
 
 	@Nullable
 	public FluidState getFluidState(BlockPos pos) {
-		CQRSection section = this.getSection(pos);
+		StructureSection section = this.getSection(pos);
 		return section != null ? section.getFluidState(pos) : null;
 	}
 
 	@Nullable
 	public CompoundTag getBlockEntity(BlockPos pos) {
-		CQRSection section = this.getSection(pos);
+		StructureSection section = this.getSection(pos);
 		return section != null ? section.getBlockEntity(pos) : null;
 	}
 

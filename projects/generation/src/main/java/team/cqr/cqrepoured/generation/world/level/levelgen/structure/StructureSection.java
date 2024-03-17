@@ -34,7 +34,7 @@ import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 @SuppressWarnings("deprecation")
-public class CQRSection extends Section<CompoundTag> {
+public class StructureSection extends Section<CompoundTag> {
 
 	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, CQRBlocks.PLACEHOLDER.get().defaultBlockState());
 
@@ -42,14 +42,14 @@ public class CQRSection extends Section<CompoundTag> {
 	private final Int2ObjectMap<CompoundTag> blockEntities;
 	private final List<CompoundTag> entities;
 
-	public CQRSection(SectionPos sectionPos) {
+	public StructureSection(SectionPos sectionPos) {
 		super(sectionPos);
 		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, CQRBlocks.PLACEHOLDER.get().defaultBlockState(), Strategy.SECTION_STATES);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
 
-	public CQRSection(SectionPos sectionPos, CompoundTag nbt) {
+	public StructureSection(SectionPos sectionPos, CompoundTag nbt) {
 		super(sectionPos);
 		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRepoured.LOGGER::error).getOrThrow(false, CQRepoured.LOGGER::error);
 		this.blockEntities = NBTUtil.toInt2ObjectMap(nbt.getCompound("BlockEntities"), Function.identity());
