@@ -47,7 +47,7 @@ import team.cqr.cqrepoured.protection.ProtectionSettings;
 public class CQRStructurePiece extends StructurePiece implements NoiseContributor {
 
 	private static final Codec<Cache2D<HeightInfo>> HEIGHT_MAP_CODEC = Cache2D.codec(HeightInfo.CODEC, HeightInfo[]::new);
-	private final CQRLevel level;
+	private final StructureLevel level;
 	private Optional<ProtectedRegion> protectedRegion;
 	private final Cache2D<HeightInfo> heightMap;
 
@@ -87,7 +87,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 	}
 	
-	protected CQRStructurePiece(BlockPos pos, CQRLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
+	protected CQRStructurePiece(BlockPos pos, StructureLevel level, Optional<ProtectedRegion> protectedRegion, int groundLevelDelta) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), 0, calculateBoundingBox(level));
 		this.level = level;
 		this.protectedRegion = protectedRegion;
@@ -95,7 +95,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 	}
 
 	@SuppressWarnings("deprecation")
-	private static BoundingBox calculateBoundingBox(CQRLevel level) {
+	private static BoundingBox calculateBoundingBox(StructureLevel level) {
 		AtomicReference<BoundingBox> boundingBox = new AtomicReference<>();
 		MutableBlockPos mutablePos = new MutableBlockPos();
 
@@ -125,7 +125,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 		return boundingBox.get().inflatedBy(16);
 	}
 
-	private static Cache2D<HeightInfo> calculateHeightMap(BlockPos pos, BoundingBox boundingBox, CQRLevel level, int groundLevelDelta) {
+	private static Cache2D<HeightInfo> calculateHeightMap(BlockPos pos, BoundingBox boundingBox, StructureLevel level, int groundLevelDelta) {
 		Cache2D<HeightInfo> heightMap = new Cache2D<>(boundingBox.minX(), boundingBox.minZ(), boundingBox.maxX(), boundingBox.maxZ(), null, HeightInfo[]::new,
 				HeightInfo::new);
 		MutableBlockPos mutablePos = new MutableBlockPos();
@@ -153,7 +153,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 
 	public CQRStructurePiece(CompoundTag nbt) {
 		super(CQRStructurePieceTypes.CQR_STRUCTURE_PIECE_TYPE.get(), nbt);
-		this.level = new CQRLevel(nbt.getCompound("level"));
+		this.level = new StructureLevel(nbt.getCompound("level"));
 		this.protectedRegion = Optional.of("protected_region")
 				.filter(nbt::contains)
 				.map(nbt::getCompound)
@@ -223,13 +223,13 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 		return maxNoise;
 	}
 
-	public static record Builder(BlockPos pos, CQRLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
+	public static record Builder(BlockPos pos, StructureLevel level, DungeonInhabitant inhabitant, EntityFactory entityFactory, int groundLevelDelta,
 			Optional<ProtectedRegion.Builder> protectedRegionBuilder, RandomSource random) {
 
 		public static Builder create(GenerationContext context, BlockPos pos, InhabitantSelector inhabitantMap, int groundLevelDelta,
 				Optional<ProtectionSettings> protectionSettings) {
 			ServerLevel level = WorldDungeonGenerator.getLevel(context.chunkGenerator());
-			CQRLevel structureLevel = new CQRLevel(SectionPos.of(pos), level.getSeed());
+			StructureLevel structureLevel = new StructureLevel(SectionPos.of(pos), level.getSeed());
 			DungeonInhabitant inhabitant = inhabitantMap.get(context, pos);
 			EntityFactory entityFactory = new EntityFactory(level);
 			Optional<ProtectedRegion.Builder> protectedRegionBuilder = protectionSettings.map(settings -> new ProtectedRegion.Builder(pos, settings));

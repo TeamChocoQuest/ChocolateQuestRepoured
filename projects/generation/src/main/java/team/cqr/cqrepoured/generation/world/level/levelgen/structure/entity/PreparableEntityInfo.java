@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.level.block.Mirror;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement.MutableVec3d;
 
@@ -39,7 +39,7 @@ public class PreparableEntityInfo {
 		this.entityData = entityData;
 	}
 
-	public void prepare(CQRLevel level, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, DungeonPlacement placement) {
 		Entity entity = placement.entityFactory().createEntity(this.entityData);
 		double x;
 		double y;

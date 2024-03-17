@@ -29,12 +29,12 @@ import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 
 public abstract class PreparablePosInfo {
 
-	public void prepare(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		if (CQRConfig.SERVER_CONFIG.advanced.structureImportMode.get()) {
 			this.prepareDebug(level, pos, placement);
 		} else {
@@ -42,9 +42,9 @@ public abstract class PreparablePosInfo {
 		}
 	}
 
-	protected abstract void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement);
+	protected abstract void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement);
 
-	protected abstract void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement);
+	protected abstract void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement);
 
 	public static class Registry {
 

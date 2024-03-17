@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
@@ -65,7 +65,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		if (this.tileEntityData.getBoolean("vanillaSpawner")) {
@@ -84,7 +84,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState state = CQRBlocks.SPAWNER.get().defaultBlockState();
 
@@ -101,7 +101,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		});
 	}
 
-	private void vanillaSpawnerReadFromNBT(CQRLevel level, BlockPos pos, DungeonPlacement placement, SpawnerBlockEntity tileEntity) {
+	private void vanillaSpawnerReadFromNBT(StructureLevel level, BlockPos pos, DungeonPlacement placement, SpawnerBlockEntity tileEntity) {
 		BaseSpawner spawnerBaseLogic = tileEntity.getSpawner();
 		CompoundTag compound = new CompoundTag();
 
@@ -151,7 +151,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		spawnerBaseLogic.load(compound);
 	}
 
-	private void cqrSpawnerReadFromNBT(CQRLevel level, BlockPos pos, DungeonPlacement placement, TileEntitySpawner tileEntity) {
+	private void cqrSpawnerReadFromNBT(StructureLevel level, BlockPos pos, DungeonPlacement placement, TileEntitySpawner tileEntity) {
 		ListTag items = this.tileEntityData.getCompound("inventory").getList("Items", Tag.TAG_COMPOUND);
 
 		for (int i = 0; i < items.size() && i < tileEntity.getInventory().getContainerSize(); i++) {

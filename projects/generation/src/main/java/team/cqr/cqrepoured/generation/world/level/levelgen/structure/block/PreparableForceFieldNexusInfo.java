@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
 	@Override
-	protected void prepareNormal(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		if (placement.protectedRegionBuilder().isEmpty()) {
@@ -30,7 +30,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(CQRLevel level, BlockPos pos, DungeonPlacement placement) {
+	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		level.setBlockState(transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.get().defaultBlockState());

@@ -19,16 +19,16 @@ import net.minecraft.world.level.material.FluidState;
 import team.cqr.cqrepoured.generation.util.SectionMap;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
-public class CQRLevel extends SectionMap<StructureSection, CompoundTag> {
+public class StructureLevel extends SectionMap<StructureSection, CompoundTag> {
 
 	private final long seed;
 
-	public CQRLevel(SectionPos center, long seed) {
+	public StructureLevel(SectionPos center, long seed) {
 		super(center, new Int2ObjectOpenHashMap<>());
 		this.seed = seed;
 	}
 
-	public CQRLevel(CompoundTag nbt) {
+	public StructureLevel(CompoundTag nbt) {
 		super(nbt);
 		this.seed = nbt.getLong("Seed");
 	}
