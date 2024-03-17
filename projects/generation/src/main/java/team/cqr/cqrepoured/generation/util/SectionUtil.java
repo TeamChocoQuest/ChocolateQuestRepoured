@@ -55,11 +55,11 @@ public class SectionUtil {
 	}
 
 	public static int index(BlockPos pos) {
-		return index(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+		return index(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public static int index(int x, int y, int z) {
-		return y << 8 | z << 4 | x;
+		return (y & 15) << 8 | (z & 15) << 4 | (x & 15);
 	}
 
 	public static int x(int i) {
