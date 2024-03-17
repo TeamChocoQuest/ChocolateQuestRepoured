@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -12,9 +11,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FluidState;
@@ -102,8 +103,8 @@ public class CQRLevel {
 		this.setBlockState(pos, state, null);
 	}
 
-	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
-		this.getOrCreateSection(pos).setBlockState(pos, state, blockEntityCallback);
+	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
+		this.getOrCreateSection(pos).setBlockState(pos, state, blockEntityTag);
 	}
 
 	@Nullable
@@ -113,13 +114,21 @@ public class CQRLevel {
 	}
 
 	@Nullable
-	public BlockEntity getBlockEntity(BlockPos pos) {
+	public CompoundTag getBlockEntity(BlockPos pos) {
 		CQRSection section = this.getSection(pos);
 		return section != null ? section.getBlockEntity(pos) : null;
 	}
 
 	public void addEntity(Entity entity) {
-		this.getOrCreateSection(entity.blockPosition()).addEntity(entity);
+		this.addEntity(EntityFactory.save(entity));
+	}
+
+	public void addEntity(CompoundTag entityTag) {
+		ListTag posTag = entityTag.getList("Pos", Tag.TAG_DOUBLE);
+		int x = Mth.floor(posTag.getDouble(0));
+		int y = Mth.floor(posTag.getDouble(1));
+		int z = Mth.floor(posTag.getDouble(2));
+		this.getOrCreateSection(new BlockPos(x, y, z)).addEntity(entityTag);
 	}
 
 	public Collection<CQRSection> getSections() {

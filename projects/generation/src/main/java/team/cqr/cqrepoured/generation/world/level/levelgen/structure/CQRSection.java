@@ -2,8 +2,7 @@ package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -17,10 +16,8 @@ import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.PalettedContainer;
@@ -32,7 +29,6 @@ import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRBlocks;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityContainer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 @SuppressWarnings("deprecation")
@@ -42,8 +38,8 @@ public class CQRSection {
 
 	private final SectionPos sectionPos;
 	private final PalettedContainer<BlockState> blocks;
-	private final Int2ObjectMap<BlockEntity> blockEntities;
-	private final List<EntityContainer> entities;
+	private final Int2ObjectMap<CompoundTag> blockEntities;
+	private final List<CompoundTag> entities;
 
 	public CQRSection(SectionPos sectionPos) {
 		this.sectionPos = sectionPos;
@@ -55,10 +51,8 @@ public class CQRSection {
 	public CQRSection(CompoundTag nbt) {
 		this.sectionPos = SectionPos.of(nbt.getInt("X"), nbt.getInt("Y"), nbt.getInt("Z"));
 		this.blocks = BLOCK_STATE_CODEC.parse(NbtOps.INSTANCE, nbt.get("BlockStates")).promotePartial(CQRepoured.LOGGER::error).getOrThrow(false, CQRepoured.LOGGER::error);
-		this.blockEntities = NBTUtil.<CompoundTag, BlockEntity>toInt2ObjectMap(nbt.getCompound("BlockEntities"), (index, blockEntityNbt) -> {
-			return BlockEntity.loadStatic(getPos(sectionPos, index), this.getBlockState(index), blockEntityNbt);
-		});
-		this.entities = NBTUtil.stream(nbt.get("Entities"), CompoundTag.TYPE).map(EntityContainer::new).collect(Collectors.toList());
+		this.blockEntities = NBTUtil.toInt2ObjectMap(nbt.getCompound("BlockEntities"), Function.identity());
+		this.entities = NBTUtil.stream(nbt.get("Entities"), CompoundTag.TYPE).collect(Collectors.toList());
 	}
 
 	public SectionPos getPos() {
@@ -71,8 +65,8 @@ public class CQRSection {
 		nbt.putInt("Y", this.sectionPos.y());
 		nbt.putInt("Z", this.sectionPos.z());
 		nbt.put("BlockStates", BLOCK_STATE_CODEC.encodeStart(NbtOps.INSTANCE, this.blocks).getOrThrow(false, CQRepoured.LOGGER::error));
-		nbt.put("BlockEntities", NBTUtil.collect(this.blockEntities, blockEntity -> blockEntity.saveWithFullMetadata()));
-		nbt.put("Entities", this.entities.stream().map(EntityContainer::getEntityNbt).filter(Objects::nonNull).collect(NBTUtil.toList()));
+		nbt.put("BlockEntities", NBTUtil.collect(this.blockEntities, Function.identity()));
+		nbt.put("Entities", this.entities.stream().collect(NBTUtil.toList()));
 		return nbt;
 	}
 
@@ -103,9 +97,12 @@ public class CQRSection {
 			if (level.setBlock(mutablePos, state, 0)) {
 				voxelShapePart.fill(x, y, z);
 
-				BlockEntity tileEntity = this.blockEntities.get(i);
-				if (tileEntity != null) {
-					level.getChunk(mutablePos).setBlockEntity(tileEntity);
+				CompoundTag blockEntityTag = this.blockEntities.get(i);
+				if (blockEntityTag != null) {
+					BlockEntity blockEntity = level.getBlockEntity(mutablePos);
+					if (blockEntity != null) {
+						blockEntity.load(blockEntityTag);
+					}
 				}
 			}
 		}
@@ -165,7 +162,7 @@ public class CQRSection {
 	}
 
 	private void addEntities(WorldGenLevel level, EntityFactory entityFactory) {
-		this.entities.stream().map(entityContainer -> entityContainer.getEntity(entityFactory)).forEach(level::addFreshEntity);
+		this.entities.stream().map(entityFactory::createEntity).forEach(level::addFreshEntity);
 	}
 
 	private static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int index) {
@@ -174,10 +171,6 @@ public class CQRSection {
 
 	public static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int x, int y, int z) {
 		return mutablePos.set(sectionPos.minBlockX() | x, sectionPos.minBlockY() | y, sectionPos.minBlockZ() | z);
-	}
-
-	private static BlockPos getPos(SectionPos sectionPos, int index) {
-		return new BlockPos(sectionPos.minBlockX() | x(index), sectionPos.minBlockY() | y(index), sectionPos.minBlockZ() | z(index));
 	}
 
 	private static int index(BlockPos pos) {
@@ -211,22 +204,18 @@ public class CQRSection {
 		return state != CQRBlocks.PLACEHOLDER.get().defaultBlockState() ? state : null;
 	}
 
-	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
-		this.setBlockState(index(pos), state, blockEntityCallback);
+	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
+		this.setBlockState(index(pos), state, blockEntityTag);
 	}
 
-	private void setBlockState(int index, @Nullable BlockState state, @Nullable Consumer<BlockEntity> blockEntityCallback) {
+	private void setBlockState(int index, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
 		if (state == null) {
 			state = CQRBlocks.PLACEHOLDER.get().defaultBlockState();
 		}
 
 		this.blocks.set(index, state);
-		if (state != null && state.hasBlockEntity()) {
-			BlockEntity blockEntity = ((EntityBlock) state.getBlock()).newBlockEntity(getPos(sectionPos, index), state);
-			this.blockEntities.put(index, blockEntity);
-			if (blockEntityCallback != null) {
-				blockEntityCallback.accept(blockEntity);
-			}
+		if (state != null && state.hasBlockEntity() && blockEntityTag != null) {
+			this.blockEntities.put(index, blockEntityTag);
 		} else {
 			this.blockEntities.remove(index);
 		}
@@ -239,12 +228,12 @@ public class CQRSection {
 	}
 
 	@Nullable
-	public BlockEntity getBlockEntity(BlockPos pos) {
+	public CompoundTag getBlockEntity(BlockPos pos) {
 		return this.blockEntities.get(index(pos));
 	}
 
-	public void addEntity(Entity entity) {
-		this.entities.add(new EntityContainer(entity));
+	public void addEntity(CompoundTag entityTag) {
+		this.entities.add(entityTag);
 	}
 
 }
