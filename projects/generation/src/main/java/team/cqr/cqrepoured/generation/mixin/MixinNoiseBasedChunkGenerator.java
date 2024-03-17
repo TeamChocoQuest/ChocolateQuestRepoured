@@ -1,8 +1,5 @@
 package team.cqr.cqrepoured.generation.mixin;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,21 +19,19 @@ import team.cqr.cqrepoured.common.CQRepoured;
 public class MixinNoiseBasedChunkGenerator {
 
 	@Unique
-	private static final DecimalFormat FORMAT = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
-	@Unique
 	private static final ThreadLocal<AtomicLong> TEMP = ThreadLocal.withInitial(AtomicLong::new);
 
 	@Inject(method = "doFill", at = @At("HEAD"))
 	private void pre(Blender pBlender, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk, int pMinCellY, int pCellCountY,
 			CallbackInfoReturnable<ChunkAccess> info) {
-		TEMP.get().set(System.nanoTime());
+		TEMP.get().set(System.currentTimeMillis());
 	}
 
 	@Inject(method = "doFill", at = @At("RETURN"))
 	private void post(Blender pBlender, StructureManager pStructureManager, RandomState pRandom, ChunkAccess pChunk, int pMinCellY, int pCellCountY,
 			CallbackInfoReturnable<ChunkAccess> info) {
-		long t = System.nanoTime() - TEMP.get().get();
-		CQRepoured.LOGGER.warn("Noise Time ({}): {}ms", pChunk.getPos(), FORMAT.format(t / 1_000_000.0));
+		long t = System.currentTimeMillis() - TEMP.get().get();
+		CQRepoured.LOGGER.info("Computing noise chunk ({}) took {}ms", pChunk.getPos(), t);
 	}
 
 }

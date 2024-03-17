@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.ByteArrayTag;
 import net.minecraft.nbt.CompoundTag;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.generation.util.SectionMap;
 import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRLevel;
@@ -17,6 +18,7 @@ public class NoiseMap extends SectionMap<NoiseSection, ByteArrayTag> {
 	public NoiseMap(CQRLevel level, int groundLevel, NoiseConfiguration noiseConfigNegative, NoiseConfiguration noiseConfigPositive) {
 		super(level.getCenter(), new Int2ObjectOpenHashMap<>());
 
+		long t = System.currentTimeMillis();
 		BlockMap blockMap = new BlockMap(level, groundLevel);
 		NoiseContributionCache noiseUtilNegative = new NoiseContributionCache(noiseConfigNegative);
 		NoiseContributionCache noiseUtilPositive = new NoiseContributionCache(noiseConfigPositive);
@@ -92,6 +94,7 @@ public class NoiseMap extends SectionMap<NoiseSection, ByteArrayTag> {
 				}
 			}
 		}
+		CQRepoured.LOGGER.info("Computing noise map took {}ms", System.currentTimeMillis() - t);
 	}
 
 	public NoiseMap(CompoundTag nbt) {
