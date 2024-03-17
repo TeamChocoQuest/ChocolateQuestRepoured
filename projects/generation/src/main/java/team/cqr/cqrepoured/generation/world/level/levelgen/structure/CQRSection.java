@@ -30,6 +30,7 @@ import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.util.Section;
+import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 
 @SuppressWarnings("deprecation")
@@ -83,10 +84,10 @@ public class CQRSection extends Section<CompoundTag> {
 				continue;
 			}
 
-			int x = x(i);
-			int y = y(i);
-			int z = z(i);
-			setPos(mutablePos, this.getPos(), x, y, z);
+			int x = SectionUtil.x(i);
+			int y = SectionUtil.y(i);
+			int z = SectionUtil.z(i);
+			SectionUtil.setPos(mutablePos, this.getPos(), x, y, z);
 
 			if (level.setBlock(mutablePos, state, 0)) {
 				voxelShapePart.fill(x, y, z);
@@ -107,7 +108,7 @@ public class CQRSection extends Section<CompoundTag> {
 		MutableBlockPos mutablePosNeighbour = new MutableBlockPos();
 
 		voxelShapePart.forAllFaces((direction, x, y, z) -> {
-			setPos(mutablePos, this.getPos(), x, y, z);
+			SectionUtil.setPos(mutablePos, this.getPos(), x, y, z);
 			mutablePosNeighbour.setWithOffset(mutablePos, direction);
 			BlockState state = level.getBlockState(mutablePos);
 			BlockState stateNeighbour = level.getBlockState(mutablePosNeighbour);
@@ -132,7 +133,7 @@ public class CQRSection extends Section<CompoundTag> {
 				return;
 			}
 
-			setPos(mutablePos, this.getPos(), x, y, z);
+			SectionUtil.setPos(mutablePos, this.getPos(), x, y, z);
 			BlockState state = level.getBlockState(mutablePos);
 			BlockState updatedState = Block.updateFromNeighbourShapes(state, level, mutablePos);
 			if (state != updatedState) {
@@ -147,7 +148,7 @@ public class CQRSection extends Section<CompoundTag> {
 		MutableBlockPos mutablePos = new MutableBlockPos();
 
 		this.blockEntities.int2ObjectEntrySet().forEach(entry -> {
-			setPos(mutablePos, this.getPos(), entry.getIntKey());
+			SectionUtil.setPos(mutablePos, this.getPos(), entry.getIntKey());
 			BlockEntity blockEntity = level.getBlockEntity(mutablePos);
 			if (blockEntity != null) {
 				blockEntity.setChanged();
@@ -159,37 +160,9 @@ public class CQRSection extends Section<CompoundTag> {
 		this.entities.stream().map(entityFactory::createEntity).forEach(level::addFreshEntity);
 	}
 
-	private static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int index) {
-		return setPos(mutablePos, sectionPos, x(index), y(index), z(index));
-	}
-
-	public static MutableBlockPos setPos(MutableBlockPos mutablePos, SectionPos sectionPos, int x, int y, int z) {
-		return mutablePos.set(sectionPos.minBlockX() | x, sectionPos.minBlockY() | y, sectionPos.minBlockZ() | z);
-	}
-
-	private static int index(BlockPos pos) {
-		return index(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
-	}
-
-	private static int index(int x, int y, int z) {
-		return y << 8 | z << 4 | x;
-	}
-
-	private static int x(int i) {
-		return i & 15;
-	}
-
-	private static int y(int i) {
-		return i >> 8;
-	}
-
-	private static int z(int i) {
-		return (i >> 4) & 15;
-	}
-
 	@Nullable
 	public BlockState getBlockState(BlockPos pos) {
-		return this.getBlockState(index(pos));
+		return this.getBlockState(SectionUtil.index(pos));
 	}
 
 	@Nullable
@@ -199,7 +172,7 @@ public class CQRSection extends Section<CompoundTag> {
 	}
 
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
-		this.setBlockState(index(pos), state, blockEntityTag);
+		this.setBlockState(SectionUtil.index(pos), state, blockEntityTag);
 	}
 
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
@@ -223,7 +196,7 @@ public class CQRSection extends Section<CompoundTag> {
 
 	@Nullable
 	public CompoundTag getBlockEntity(BlockPos pos) {
-		return this.blockEntities.get(index(pos));
+		return this.blockEntities.get(SectionUtil.index(pos));
 	}
 
 	public void addEntity(CompoundTag entityTag) {

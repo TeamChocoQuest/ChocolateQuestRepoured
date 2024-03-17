@@ -30,6 +30,7 @@ import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.collection.Cache2D;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.init.CQRStructurePieceTypes;
+import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.InhabitantSelector;
@@ -102,7 +103,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 			SectionPos sectionPos = section.getPos();
 			
 			IntUtil.forEachSectionCoord((x, y, z) -> {
-				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
+				SectionUtil.setPos(mutablePos, sectionPos, x, y, z);
 				BlockState state = section.getBlockState(mutablePos);
 				if (state == null || state == Blocks.AIR.defaultBlockState()) {
 					return;
@@ -133,7 +134,7 @@ public class CQRStructurePiece extends StructurePiece implements NoiseContributo
 			SectionPos sectionPos = section.getPos();
 			
 			IntUtil.forEachSectionCoord((x, y, z) -> {
-				CQRSection.setPos(mutablePos, sectionPos, x, y, z);
+				SectionUtil.setPos(mutablePos, sectionPos, x, y, z);
 				if (mutablePos.getY() >= pos.getY() + groundLevelDelta) {
 					return;
 				}
