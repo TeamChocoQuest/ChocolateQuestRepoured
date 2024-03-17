@@ -43,7 +43,7 @@ public class NBTUtil {
 		}, CollectorImpl.CH_NOID);
 	}
 
-	public static <T> Collector<T, CompoundTag, CompoundTag> toCompound(Function<T, ?> keyFunc, Function<T, Tag> valueFunc) {
+	public static <T> Collector<T, CompoundTag, CompoundTag> toCompound(Function<T, ?> keyFunc, Function<T, ? extends Tag> valueFunc) {
 		return toCompound((compound, t) -> compound.put(String.valueOf(keyFunc.apply(t)), valueFunc.apply(t)));
 	}
 
@@ -55,25 +55,25 @@ public class NBTUtil {
 		}, CollectorImpl.CH_ID);
 	}
 
-	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<K, ?> keyFunc, Function<V, Tag> valueFunc) {
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<K, ?> keyFunc, Function<V, ? extends Tag> valueFunc) {
 		return toCompound(keyFunc.compose(Map.Entry::getKey), valueFunc.compose(Map.Entry::getValue));
 	}
 
-	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<V, Tag> valueFunc) {
+	public static <K, V> Collector<Map.Entry<K, V>, CompoundTag, CompoundTag> entryToCompound(Function<V, ? extends Tag> valueFunc) {
 		return entryToCompound(Function.identity(), valueFunc);
 	}
 
-	public static <K, V> CompoundTag collect(Map<K, V> map, Function<K, ?> keyFunc, Function<V, Tag> valueFunc) {
+	public static <K, V> CompoundTag collect(Map<K, V> map, Function<K, ?> keyFunc, Function<V, ? extends Tag> valueFunc) {
 		return map.entrySet()
 				.stream()
 				.collect(entryToCompound(keyFunc, valueFunc));
 	}
 
-	public static <K, V> CompoundTag collect(Map<K, V> map, Function<V, Tag> valueFunc) {
+	public static <K, V> CompoundTag collect(Map<K, V> map, Function<V, ? extends Tag> valueFunc) {
 		return collect(map, Function.identity(), valueFunc);
 	}
 
-	public static <V> CompoundTag collect(Int2ObjectMap<V> map, Function<V, Tag> valueFunc) {
+	public static <V> CompoundTag collect(Int2ObjectMap<V> map, Function<V, ? extends Tag> valueFunc) {
 		return map.int2ObjectEntrySet()
 				.stream()
 				.collect(toCompound(Int2ObjectMap.Entry::getIntKey, valueFunc.compose(Int2ObjectMap.Entry::getValue)));
