@@ -9,13 +9,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.util.ESkyDirection;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdLinear;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.GeneratorStronghold;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 public class StrongholdFloor extends AbstractDungeonGenerationComponent<DungeonStrongholdLinear, GeneratorStronghold> {
 

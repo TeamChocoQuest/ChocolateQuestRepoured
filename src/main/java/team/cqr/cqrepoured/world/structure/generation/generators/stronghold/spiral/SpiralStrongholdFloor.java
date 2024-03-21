@@ -6,10 +6,10 @@ import java.util.Random;
 import net.minecraft.util.Tuple;
 import net.minecraft.core.BlockPos;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonVolcano;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.EStrongholdRoomType;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 public class SpiralStrongholdFloor {
 

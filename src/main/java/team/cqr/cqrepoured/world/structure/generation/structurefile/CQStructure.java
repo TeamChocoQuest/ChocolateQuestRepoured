@@ -61,6 +61,7 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.Prepa
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.PreparableEntityInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.datafixer.DataFixerUtil;

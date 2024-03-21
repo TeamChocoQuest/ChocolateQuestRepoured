@@ -17,11 +17,11 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitantManager;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonStrongholdOpen;
 import team.cqr.cqrepoured.world.structure.generation.generators.LegacyDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.generators.stronghold.open.StrongholdFloorOpen;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98

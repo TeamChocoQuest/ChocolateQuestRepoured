@@ -28,11 +28,11 @@ import net.minecraft.world.phys.Vec3;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.world.structure.generation.DungeonRegistry;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 /**
  * Copyright (c) 29.04.2019<br>

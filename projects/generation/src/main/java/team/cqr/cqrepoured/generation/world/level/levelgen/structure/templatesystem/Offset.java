@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.world.structure.generation.structurefile;
+package team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Mirror;

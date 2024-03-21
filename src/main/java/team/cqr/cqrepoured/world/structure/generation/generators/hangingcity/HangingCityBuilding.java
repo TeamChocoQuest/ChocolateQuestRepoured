@@ -15,13 +15,13 @@ import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem.Offset;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.GenerationUtil;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonHangingCity;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerationComponent;
 import team.cqr.cqrepoured.world.structure.generation.generators.SuspensionBridgeHelper;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.Offset;
 
 public class HangingCityBuilding extends AbstractDungeonGenerationComponent<DungeonHangingCity, GeneratorHangingCity> {
 
