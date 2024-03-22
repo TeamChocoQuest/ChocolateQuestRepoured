@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.util;
+package team.cqr.cqrepoured.common.buffer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;

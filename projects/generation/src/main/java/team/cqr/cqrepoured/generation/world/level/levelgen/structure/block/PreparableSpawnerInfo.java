@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
+import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
@@ -35,7 +36,6 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.Enti
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
-import team.cqr.cqrepoured.util.ByteBufUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 
 public class PreparableSpawnerInfo extends PreparablePosInfo {
