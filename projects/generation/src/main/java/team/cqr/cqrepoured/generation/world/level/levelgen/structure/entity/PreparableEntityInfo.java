@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.decoration.HangingEntity;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement.MutableVec3d;
@@ -19,19 +20,19 @@ public class PreparableEntityInfo {
 
 	private final CompoundTag entityData;
 
-	public PreparableEntityInfo(BlockPos templatePos, Entity entity) {
+	public PreparableEntityInfo(Entity entity, BoundingBox boundingBox) {
 		this.entityData = EntityFactory.save(entity);
 		this.entityData.remove("UUIDMost");
 		this.entityData.remove("UUIDLeast");
 		ListTag nbtTagList = this.entityData.getList("Pos", Tag.TAG_DOUBLE);
-		nbtTagList.set(0, DoubleTag.valueOf(entity.getX() - templatePos.getX()));
-		nbtTagList.set(1, DoubleTag.valueOf(entity.getY() - templatePos.getY()));
-		nbtTagList.set(2, DoubleTag.valueOf(entity.getZ() - templatePos.getZ()));
+		nbtTagList.set(0, DoubleTag.valueOf(entity.getX() - boundingBox.minX()));
+		nbtTagList.set(1, DoubleTag.valueOf(entity.getY() - boundingBox.minY()));
+		nbtTagList.set(2, DoubleTag.valueOf(entity.getZ() - boundingBox.minZ()));
 		if (entity instanceof HangingEntity) {
 			BlockPos blockpos = ((HangingEntity) entity).getPos();
-			this.entityData.putInt("TileX", blockpos.getX() - templatePos.getX());
-			this.entityData.putInt("TileY", blockpos.getY() - templatePos.getY());
-			this.entityData.putInt("TileZ", blockpos.getZ() - templatePos.getZ());
+			this.entityData.putInt("TileX", blockpos.getX() - boundingBox.minX());
+			this.entityData.putInt("TileY", blockpos.getY() - boundingBox.minY());
+			this.entityData.putInt("TileZ", blockpos.getZ() - boundingBox.minZ());
 		}
 	}
 

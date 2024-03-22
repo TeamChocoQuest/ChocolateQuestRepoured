@@ -315,4 +315,14 @@ public class IntUtil {
 				.flatMapToDouble(Function.identity());
 	}
 
+	public static <T> Stream<T> streamXY(int[] array, IntInt2ObjFunction<T> function) {
+		return IntStream.range(0, array.length / 2)
+				.mapToObj(i -> function.apply(array[i * 2], array[i * 2 + 1]));
+	}
+
+	public static <T> Stream<T> streamXYZ(int[] array, IntIntInt2ObjFunction<T> function) {
+		return IntStream.range(0, array.length / 3)
+				.mapToObj(i -> function.apply(array[i * 3], array[i * 3 + 1], array[i * 3 + 2]));
+	}
+
 }
