@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.templatesystem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -11,14 +10,15 @@ import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -41,6 +41,8 @@ import team.cqr.cqrepoured.common.primitive.IntUtil;
 import team.cqr.cqrepoured.generation.util.BlockStatePaletteUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructurePiece;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.BlockInfoFactories;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.BlockInfoSerializers;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.PreparableEntityInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
@@ -52,7 +54,6 @@ public class CQRStructureTemplate extends StructureTemplate {
 	private static final String CQR_VERSION_TAG = "cqr_template_version";
 	private static final String CQR_BLOCKS_TAG = "cqr_blocks";
 	private static final String CQR_BLOCK_STATES_TAG = "cqr_block_states";
-	private static final String CQR_BLOCK_TAGS_TAG = "cqr_block_tags";
 	private static final String CQR_ENTITIES_TAG = "cqr_entities";
 	private static final String CQR_UNPROTECTED_BLOCKS_TAG = "cqr_unprotected_blocks";
 
@@ -85,11 +86,10 @@ public class CQRStructureTemplate extends StructureTemplate {
 	public void load(HolderGetter<Block> pBlockGetter, CompoundTag pTag) {
 		super.load(pBlockGetter, pTag);
 
-		ByteBuf buf = Unpooled.wrappedBuffer(pTag.getByteArray(CQR_BLOCKS_TAG));
+		ByteArrayDataInput in = ByteStreams.newDataInput(pTag.getByteArray(CQR_BLOCKS_TAG));
 		SimplePalette palette = BlockStatePaletteUtil.readSimplePalette(pBlockGetter, pTag.getList(CQR_BLOCK_STATES_TAG, Tag.TAG_COMPOUND));
-		ListTag tagList = pTag.getList(CQR_BLOCK_TAGS_TAG, Tag.TAG_COMPOUND);
 		this.blocks = IntStream.range(0, this.size.getX() * this.size.getY() * this.size.getZ())
-				.mapToObj(i -> PreparablePosInfo.Registry.read(buf, palette, tagList))
+				.mapToObj(i -> BlockInfoSerializers.read(in, palette))
 				.toList();
 
 		this.entities = pTag.getList(CQR_ENTITIES_TAG, Tag.TAG_COMPOUND)
@@ -107,13 +107,11 @@ public class CQRStructureTemplate extends StructureTemplate {
 
 		pTag.putString(CQR_VERSION_TAG, VERSION);
 
-		ByteBuf buf = Unpooled.buffer(this.blocks.size() * 2);
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		SimplePalette palette = new SimplePalette();
-		ListTag tagList = new ListTag();
-		this.blocks.forEach(blockInfo -> PreparablePosInfo.Registry.write(blockInfo, buf, palette, tagList));
-		pTag.putByteArray(CQR_BLOCKS_TAG, Arrays.copyOf(buf.array(), buf.writerIndex()));
+		this.blocks.forEach(blockInfo -> BlockInfoSerializers.write(blockInfo, out, palette));
+		pTag.putByteArray(CQR_BLOCKS_TAG, out.toByteArray());
 		pTag.put(CQR_BLOCK_STATES_TAG, BlockStatePaletteUtil.writeSimplePalette(palette));
-		pTag.put(CQR_BLOCK_TAGS_TAG, tagList);
 
 		pTag.put(CQR_ENTITIES_TAG, this.entities.stream()
 				.map(PreparableEntityInfo::getEntityData)
@@ -165,7 +163,7 @@ public class CQRStructureTemplate extends StructureTemplate {
 						CQRepoured.LOGGER.warn("Exporting unbreakable block: {} from {}", state, pos);
 					}
 
-					return PreparablePosInfo.Registry.create(level, pos, state);
+					return BlockInfoFactories.create(level, pos, state);
 				})
 				.toList();
 	}
