@@ -20,6 +20,7 @@ import team.cqr.cqrepoured.faction.EntityFactionInformation;
 import team.cqr.cqrepoured.faction.IFactionRelatedEntity;
 import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
 import team.cqr.cqrepoured.faction.entity.ai.sensor.NearbyAlliesSensor;
+import team.cqr.cqrepoured.faction.entity.ai.sensor.NearbyEnemiesSensor;
 import team.cqr.cqrepoured.faction.init.FactionCapabilities;
 import team.cqr.cqrepoured.faction.init.FactionDatapackLoaders;
 
@@ -59,7 +60,9 @@ public class FactionEntity<T extends LivingEntity & IFactionRelatedEntity & Smar
 				new NearbyLivingEntitySensor<T>()
 					.setPredicate((target, self) -> !self.isAlliedTo(target) && self.isEnemy(target)),
 				new NearbyAlliesSensor<T>()
-					.setPredicate((ally, self) -> self.isAlliedTo(ally) || self.isAlly(ally))
+					.setPredicate((ally, self) -> self.isAlliedTo(ally) || self.isAlly(ally)),
+				new NearbyEnemiesSensor<T>()
+					.setPredicate((enemy, self) -> !self.isAlliedTo(enemy) || self.isEnemy(enemy))
 		);
 	}
 
