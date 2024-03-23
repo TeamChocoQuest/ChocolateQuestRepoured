@@ -85,13 +85,12 @@ import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import team.cqr.cqrepoured.client.init.ESpeechBubble;
 import team.cqr.cqrepoured.client.render.entity.layer.geo.LayerCQRSpeechbubble;
+import team.cqr.cqrepoured.common.entity.ITextureVariants;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.customtextures.IHasTextureOverride;
 import team.cqr.cqrepoured.entity.EntityEquipmentExtraSlot;
 import team.cqr.cqrepoured.entity.IAnimatableCQR;
 import team.cqr.cqrepoured.entity.IIsBeingRiddenHelper;
 import team.cqr.cqrepoured.entity.ISizable;
-import team.cqr.cqrepoured.entity.ITextureVariants;
 import team.cqr.cqrepoured.entity.ITradeRestockOverTime;
 import team.cqr.cqrepoured.entity.ai.EntityAIFireFighter;
 import team.cqr.cqrepoured.entity.ai.EntityAIFollowAttackTarget;
@@ -123,6 +122,7 @@ import team.cqr.cqrepoured.faction.EDefaultFaction;
 import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.faction.IFactionRelated;
+import team.cqr.cqrepoured.faction.textureset.IHasTextureOverride;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.init.CQRContainerTypes;
@@ -298,8 +298,8 @@ public abstract class AbstractEntityCQR extends PathfinderMob implements IEntity
 		//Nope
 	}
 
-	public static AttributeSupplier.MutableAttribute createCQRAttributes() {
-		AttributeSupplier.MutableAttribute map = PathfinderMob.createMobAttributes()
+	public static AttributeSupplier.Builder createCQRAttributes() {
+		AttributeSupplier.Builder map = PathfinderMob.createMobAttributes()
 				.add(Attributes.ATTACK_DAMAGE)
 				.add(Attributes.MOVEMENT_SPEED, 0.25D)
 				.add(Attributes.MAX_HEALTH, 20.0D)
