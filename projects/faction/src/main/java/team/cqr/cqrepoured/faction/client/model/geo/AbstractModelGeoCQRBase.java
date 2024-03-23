@@ -12,8 +12,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
-import team.cqr.cqrepoured.client.init.CQRAnimations;
 import team.cqr.cqrepoured.common.CQRConstants;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.entity.ITextureVariants;
 import team.cqr.cqrepoured.faction.textureset.IHasTextureOverride;
 
@@ -26,13 +26,15 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 
 	protected ResourceLocation[] textureVariantCache = null;
 	protected final ResourceLocation[] ANIMATION_HIERARCHY;
+	
+	public static final ResourceLocation _EMPTY = CQRepoured.prefixAnimation("_empty");
 
 	public AbstractModelGeoCQRBase(ResourceLocation model, ResourceLocation textureDefault, final String entityName) {
 		super();
 		this.MODEL_RESLOC = model;
 		this.TEXTURE_DEFAULT = textureDefault;
 		this.ENTITY_REGISTRY_PATH_NAME = entityName;
-		this.ANIMATION_HIERARCHY = new ResourceLocation[] { CQRAnimations._EMPTY };
+		this.ANIMATION_HIERARCHY = new ResourceLocation[] { _EMPTY };
 		this.turnsHead = false;
 	}
 	
@@ -41,7 +43,7 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 		this.MODEL_RESLOC = model;
 		this.TEXTURE_DEFAULT = textureDefault;
 		this.ENTITY_REGISTRY_PATH_NAME = entityName;
-		this.ANIMATION_HIERARCHY = merge(CQRAnimations._EMPTY, animationHierarchy);
+		this.ANIMATION_HIERARCHY = merge(_EMPTY, animationHierarchy);
 		this.turnsHead = false;
 	}
 	
@@ -113,7 +115,7 @@ public abstract class AbstractModelGeoCQRBase<T extends Entity & GeoEntity> exte
 
 	@Override
 	public ResourceLocation getAnimationResource(T animatable) {
-		return CQRAnimations._EMPTY;
+		return _EMPTY;
 	}
 	
 	private final boolean turnsHead;
