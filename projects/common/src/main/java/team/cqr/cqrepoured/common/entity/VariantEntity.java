@@ -18,6 +18,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.VariantHolder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -70,11 +71,12 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 							Attribute attribute = entry.attribute();
 							double value = entry.value();
 							
-							if (ve.getAttribute(attribute) == null) {
-								// TODO: Warning
-							} else {
-								ve.getAttribute(attribute).setBaseValue(value);
+							if (!ve.getAttributes().hasAttribute(attribute)) {
+								// Add it lol
+								AttributeInstance attributeInstance = new AttributeInstance(attribute, (a) -> {});
+								ve.getAttributes().supplier.instances.putIfAbsent(attribute, attributeInstance);
 							}
+							ve.getAttribute(attribute).setBaseValue(value);
 						}
 					}
 				}
@@ -179,7 +181,7 @@ public class VariantEntity extends Monster implements VariantHolder<EntityVarian
 	public void addAdditionalSaveData(CompoundTag pCompound) {
 		super.addAdditionalSaveData(pCompound);
 		
-		if (this.variant != null) {
+		if (this.getVariant() != null) {
 			DataResult<Tag> dataResult = EntityVariant.CODEC.encodeStart(NbtOps.INSTANCE, this.getVariant());
 			Optional<Tag> optResult = dataResult.result();
 			if (optResult.isPresent()) {
