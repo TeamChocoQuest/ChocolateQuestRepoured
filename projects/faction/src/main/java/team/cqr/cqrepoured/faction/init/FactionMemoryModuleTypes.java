@@ -11,6 +11,8 @@ import team.cqr.cqrepoured.common.services.CQRServices;
 public class FactionMemoryModuleTypes {
 	
 	public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEAREST_ALLIES = CQRServices.ENTITY_AI.registerMemoryModuleType("nearest_allies");
-	public static final RegistryObject<MemoryModuleType<NearestVisibleLivingEntities>> NEAREST_VISIBLE_ALLIES = CQRServices.ENTITY_AI.registerMemoryModuleType("nearest_visible_allies");
+	public static final RegistryObject<MemoryModuleType<NearestVisibleLivingEntities>> NEAREST_VISIBLE_ALLIES = CQRServices.ENTITY_AI.registerMemoryModuleType("nearest_visible_enemies");
+	public static final RegistryObject<MemoryModuleType<List<LivingEntity>>> NEAREST_ENEMIES = CQRServices.ENTITY_AI.registerMemoryModuleType("nearest_allies");
+	public static final RegistryObject<MemoryModuleType<NearestVisibleLivingEntities>> NEAREST_VISIBLE_ENEMIES = CQRServices.ENTITY_AI.registerMemoryModuleType("nearest_visible_enemies");
 
 }
