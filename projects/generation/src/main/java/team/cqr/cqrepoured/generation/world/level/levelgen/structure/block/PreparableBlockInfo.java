@@ -1,21 +1,22 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
+import team.cqr.cqrepoured.common.io.DataIOUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
@@ -63,27 +64,26 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableBlockInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableBlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = (palette.idFor(preparable.blockState) << 1) | (preparable.blockEntityTag != null ? 1 : 0);
-			ByteBufUtil.writeVarInt(buf, data, 5);
-			if (preparable.blockEntityTag != null) {
-				ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
-				nbtList.add(preparable.blockEntityTag);
+		public void write(PreparableBlockInfo blockInfo, DataOutput out, SimplePalette palette) throws IOException {
+			int data = (palette.idFor(blockInfo.blockState) << 1) | (blockInfo.blockEntityTag != null ? 1 : 0);
+			DataIOUtil.writeVarInt(out, data);
+			if (blockInfo.blockEntityTag != null) {
+				NbtIo.write(blockInfo.blockEntityTag, out);
 			}
 		}
 
 		@Override
-		public PreparableBlockInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = ByteBufUtil.readVarInt(buf, 5);
-			BlockState state = palette.stateFor(data >>> 1);
-			CompoundTag tileEntityData = null;
+		public PreparableBlockInfo read(DataInput in, SimplePalette palette) throws IOException {
+			int data = DataIOUtil.readVarInt(in);
+			BlockState blockState = palette.stateFor(data >>> 1);
+			CompoundTag blockEntityTag = null;
 			if ((data & 1) == 1) {
-				tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
+				blockEntityTag = NbtIo.read(in);
 			}
-			return new PreparableBlockInfo(state, tileEntityData);
+			return new PreparableBlockInfo(blockState, blockEntityTag);
 		}
 
 	}
