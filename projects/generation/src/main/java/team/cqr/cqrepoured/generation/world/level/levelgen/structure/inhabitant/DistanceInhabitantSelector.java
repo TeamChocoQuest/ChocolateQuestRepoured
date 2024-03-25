@@ -13,7 +13,8 @@ import team.cqr.cqrepoured.generation.init.CQRDataPackRegistries;
 public record DistanceInhabitantSelector(
 		double sectionRadius, 
 		boolean randomOutsideRange, 
-		HolderSet<DungeonInhabitant> inhabitants) implements InhabitantSelector {
+		HolderSet<DungeonInhabitant> inhabitants
+	) implements InhabitantSelector {
 
 	public static final Codec<DistanceInhabitantSelector> CODEC = RecordCodecBuilder.create(instance -> {
 		return instance.group(
