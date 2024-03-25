@@ -11,9 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
 
@@ -33,20 +33,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(this.state);
 
-		level.setBlockState(transformedPos, transformedState, blockEntity -> this.blockEntityCallback(transformedPos, transformedState, blockEntity, placement));
-	}
-
-	protected void blockEntityCallback(BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, DungeonPlacement placement) {
-		if (blockEntity != null && this.tileEntityData != null) {
-			this.tileEntityData.putInt("x", pos.getX());
-			this.tileEntityData.putInt("y", pos.getY());
-			this.tileEntityData.putInt("z", pos.getZ());
-			blockEntity.load(this.tileEntityData);
-			placement.transform(blockEntity);
-			this.tileEntityData.remove("x");
-			this.tileEntityData.remove("y");
-			this.tileEntityData.remove("z");
-		}
+		level.setBlockState(transformedPos, transformedState, this.tileEntityData);
 	}
 
 	@Override
@@ -54,20 +41,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(this.state);
 
-		level.setBlockState(transformedPos, transformedState, blockEntity -> this.blockEntityCallbackDebug(transformedPos, transformedState, blockEntity, placement));
-	}
-
-	protected void blockEntityCallbackDebug(BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, DungeonPlacement placement) {
-		if (blockEntity != null && this.tileEntityData != null) {
-			this.tileEntityData.putInt("x", pos.getX());
-			this.tileEntityData.putInt("y", pos.getY());
-			this.tileEntityData.putInt("z", pos.getZ());
-			blockEntity.load(this.tileEntityData);
-			placement.transform(blockEntity);
-			this.tileEntityData.remove("x");
-			this.tileEntityData.remove("y");
-			this.tileEntityData.remove("z");
-		}
+		level.setBlockState(transformedPos, transformedState, this.tileEntityData);
 	}
 
 	public BlockState getState() {
