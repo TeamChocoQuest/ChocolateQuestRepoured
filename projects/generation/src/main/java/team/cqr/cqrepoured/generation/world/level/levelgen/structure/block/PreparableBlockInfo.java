@@ -53,11 +53,12 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		return this.blockEntityTag;
 	}
 
-	public static class Factory implements IFactory<BlockEntity> {
+	public static class Factory implements IBlockInfoFactory<BlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BlockEntity> blockEntityLazy) {
-			return new PreparableBlockInfo(state, blockEntityLazy.map(IFactory::writeTileEntityToNBT).orElse(null));
+		public PreparablePosInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<BlockEntity> blockEntitySupplier) {
+			return new PreparableBlockInfo(blockState, blockEntitySupplier.map(IBlockInfoFactory::writeBlockEntityToNBT)
+					.orElse(null));
 		}
 
 	}
