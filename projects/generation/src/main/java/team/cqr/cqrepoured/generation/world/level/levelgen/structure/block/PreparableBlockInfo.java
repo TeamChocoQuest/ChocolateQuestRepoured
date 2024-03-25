@@ -19,38 +19,38 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.Prepa
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
-	private final BlockState state;
+	private final BlockState blockState;
 	@Nullable
-	private final CompoundTag tileEntityData;
+	private final CompoundTag blockEntityTag;
 
-	public PreparableBlockInfo(BlockState state, @Nullable CompoundTag tileEntityData) {
-		this.state = state;
-		this.tileEntityData = tileEntityData;
+	public PreparableBlockInfo(BlockState blockState, @Nullable CompoundTag blockEntityTag) {
+		this.blockState = blockState;
+		this.blockEntityTag = blockEntityTag;
 	}
 
 	@Override
 	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
-		BlockState transformedState = placement.transform(this.state);
+		BlockState transformedBlockState = placement.transform(this.blockState);
 
-		level.setBlockState(transformedPos, transformedState, this.tileEntityData);
+		level.setBlockState(transformedPos, transformedBlockState, this.blockEntityTag);
 	}
 
 	@Override
 	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
-		BlockState transformedState = placement.transform(this.state);
+		BlockState transformedBlockState = placement.transform(this.blockState);
 
-		level.setBlockState(transformedPos, transformedState, this.tileEntityData);
+		level.setBlockState(transformedPos, transformedBlockState, this.blockEntityTag);
 	}
 
-	public BlockState getState() {
-		return this.state;
+	public BlockState getBlockState() {
+		return this.blockState;
 	}
 
 	@Nullable
-	public CompoundTag getTileEntityData() {
-		return this.tileEntityData;
+	public CompoundTag getBlockEntityTag() {
+		return this.blockEntityTag;
 	}
 
 	public static class Factory implements IFactory<BlockEntity> {
@@ -66,11 +66,11 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		public void write(PreparableBlockInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = (palette.idFor(preparable.state) << 1) | (preparable.tileEntityData != null ? 1 : 0);
+			int data = (palette.idFor(preparable.blockState) << 1) | (preparable.blockEntityTag != null ? 1 : 0);
 			ByteBufUtil.writeVarInt(buf, data, 5);
-			if (preparable.tileEntityData != null) {
+			if (preparable.blockEntityTag != null) {
 				ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
-				nbtList.add(preparable.tileEntityData);
+				nbtList.add(preparable.blockEntityTag);
 			}
 		}
 
