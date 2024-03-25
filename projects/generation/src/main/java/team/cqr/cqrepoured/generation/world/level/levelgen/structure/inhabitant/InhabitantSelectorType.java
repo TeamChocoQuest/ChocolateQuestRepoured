@@ -8,7 +8,9 @@ import net.minecraft.util.StringRepresentable;
 
 public enum InhabitantSelectorType implements StringRepresentable {
 
-	RANDOM(RandomInhabitantSelector.CODEC);
+	FIXED(FixedInhabitantSelector.CODEC),
+	RANDOM(RandomInhabitantSelector.CODEC),
+	DISTANCE(DistanceInhabitantSelector.CODEC);
 
 	public static final Codec<InhabitantSelectorType> CODEC = StringRepresentable.fromEnum(InhabitantSelectorType::values);
 	private final Codec<? extends InhabitantSelector> codec;
