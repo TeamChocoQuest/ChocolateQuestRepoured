@@ -11,12 +11,12 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public interface IBlockInfoFactory<T extends BlockEntity> {
 
-	default PreparablePosInfo create(Level level, BlockPos pos, BlockState blockState) {
+	default IBlockInfo create(Level level, BlockPos pos, BlockState blockState) {
 		return this.create(level, pos, blockState, LazyOptional.of(blockState.hasBlockEntity() ? () -> level.getBlockEntity(pos) : null)
 				.cast());
 	}
 
-	PreparablePosInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<T> blockEntitySupplier);
+	IBlockInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<T> blockEntitySupplier);
 
 	@Nullable
 	static CompoundTag writeBlockEntityToNBT(@Nullable BlockEntity blockEntity) {

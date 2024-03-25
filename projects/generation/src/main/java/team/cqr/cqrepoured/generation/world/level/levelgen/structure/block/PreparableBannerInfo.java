@@ -15,8 +15,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
 import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 
 public class PreparableBannerInfo extends PreparableBlockInfo {
 
@@ -36,7 +36,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	public static class Factory implements IFactory<BannerBlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerBlockEntity> blockEntityLazy) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerBlockEntity> blockEntityLazy) {
 			BannerBlockEntity blockEntity = blockEntityLazy.orElseThrow(NullPointerException::new);
 			if (BannerHelper.isCQBanner(blockEntity)) {
 				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(blockEntity));

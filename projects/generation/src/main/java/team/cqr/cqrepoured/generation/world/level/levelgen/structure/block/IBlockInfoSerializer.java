@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 
-public interface IBlockInfoSerializer<T extends PreparablePosInfo> {
+public interface IBlockInfoSerializer<T extends IBlockInfo> {
 
 	void write(T blockInfo, DataOutput out, SimplePalette palette) throws IOException;
 

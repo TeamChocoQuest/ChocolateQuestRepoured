@@ -20,7 +20,7 @@ public class BlockInfoFactories {
 		FACTORIES.put(blockClass, factory);
 	}
 
-	public static <T extends BlockEntity> PreparablePosInfo create(Level level, BlockPos pos, BlockState blockState) {
+	public static <T extends BlockEntity> IBlockInfo create(Level level, BlockPos pos, BlockState blockState) {
 		return getFactoryOrThrow(blockState).create(level, pos, blockState);
 	}
 

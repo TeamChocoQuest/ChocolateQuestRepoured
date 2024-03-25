@@ -14,13 +14,13 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 public class BlockInfoSerializers {
 
-	private static final Object2IntMap<Class<? extends PreparablePosInfo>> CLASS_2_ID = new Object2IntOpenHashMap<>();
+	private static final Object2IntMap<Class<? extends IBlockInfo>> CLASS_2_ID = new Object2IntOpenHashMap<>();
 	private static final CrudeIncrementalIntIdentityHashBiMap<IBlockInfoSerializer<?>> SERIALIZERS = CrudeIncrementalIntIdentityHashBiMap.create(16);
 	static {
 		CLASS_2_ID.defaultReturnValue(-1);
 	}
 
-	public static <T extends PreparablePosInfo> void register(Class<T> blockInfoClass, IBlockInfoSerializer<T> serializer) {
+	public static <T extends IBlockInfo> void register(Class<T> blockInfoClass, IBlockInfoSerializer<T> serializer) {
 		if (CLASS_2_ID.containsKey(blockInfoClass)) {
 			throw new IllegalArgumentException("Duplicate BlockInfoSerializer for class: " + blockInfoClass.getSimpleName());
 		}
@@ -34,7 +34,7 @@ public class BlockInfoSerializers {
 		CLASS_2_ID.put(blockInfoClass, (byte) id);
 	}
 
-	public static <T extends PreparablePosInfo> void write(T blockInfo, ByteArrayDataOutput out, SimplePalette palette) {
+	public static <T extends IBlockInfo> void write(T blockInfo, ByteArrayDataOutput out, SimplePalette palette) {
 		try {
 			write(blockInfo, (DataOutput) out, palette);
 		} catch (IOException e) {
@@ -42,17 +42,17 @@ public class BlockInfoSerializers {
 		}
 	}
 
-	public static <T extends PreparablePosInfo> void write(T blockInfo, DataOutput out, SimplePalette palette) throws IOException {
+	public static <T extends IBlockInfo> void write(T blockInfo, DataOutput out, SimplePalette palette) throws IOException {
 		byte id = getIdOrThrow(blockInfo);
 		out.writeByte(id);
 		getSerializerOrThrow(id).write(blockInfo, out, palette);
 	}
 
-	private static byte getIdOrThrow(PreparablePosInfo blockInfo) {
+	private static byte getIdOrThrow(IBlockInfo blockInfo) {
 		return getIdOrThrow(blockInfo.getClass());
 	}
 
-	private static byte getIdOrThrow(Class<? extends PreparablePosInfo> blockInfoClass) {
+	private static byte getIdOrThrow(Class<? extends IBlockInfo> blockInfoClass) {
 		int id = CLASS_2_ID.getInt(blockInfoClass);
 		if (id == -1) {
 			throw new IllegalArgumentException("No BlockInfoSerializer registered for class: " + blockInfoClass.getSimpleName());
@@ -61,7 +61,7 @@ public class BlockInfoSerializers {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T extends PreparablePosInfo> IBlockInfoSerializer<T> getSerializerOrThrow(byte id) {
+	private static <T extends IBlockInfo> IBlockInfoSerializer<T> getSerializerOrThrow(byte id) {
 		IBlockInfoSerializer<T> serializer = (IBlockInfoSerializer<T>) SERIALIZERS.byId(id);
 		if (serializer == null) {
 			throw new IllegalArgumentException("No BlockInfoSerializer registered for id: " + id);
@@ -69,7 +69,7 @@ public class BlockInfoSerializers {
 		return serializer;
 	}
 
-	public static PreparablePosInfo read(ByteArrayDataInput in, SimplePalette palette) {
+	public static IBlockInfo read(ByteArrayDataInput in, SimplePalette palette) {
 		try {
 			return read((DataInput) in, palette);
 		} catch (IOException e) {
@@ -77,7 +77,7 @@ public class BlockInfoSerializers {
 		}
 	}
 
-	public static PreparablePosInfo read(DataInput in, SimplePalette palette) throws IOException {
+	public static IBlockInfo read(DataInput in, SimplePalette palette) throws IOException {
 		return getSerializerOrThrow(in.readByte()).read(in, palette);
 	}
 

@@ -43,7 +43,7 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.CQRStructur
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.BlockInfoFactories;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.BlockInfoSerializers;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.PreparableEntityInfo;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 
@@ -60,7 +60,7 @@ public class CQRStructureTemplate extends StructureTemplate {
 	private static final List<Predicate<BlockState>> IGNORED_UNBREAKABLE_BLOCK_PREDICATES = new ArrayList<>();
 	private static final Set<ResourceLocation> WHITELISTED_ENTITY_TYPES = new HashSet<>();
 
-	private List<PreparablePosInfo> blocks = List.of();
+	private List<IBlockInfo> blocks = List.of();
 	private List<PreparableEntityInfo> entities = List.of();
 	private List<BlockPos> unprotectedBlocks = List.of();
 
@@ -249,7 +249,7 @@ public class CQRStructureTemplate extends StructureTemplate {
 				.ifPresent(protectedRegionBuilder -> this.unprotectedBlocks.forEach(protectedRegionBuilder::excludePos));
 	}
 
-	private void forEachBlockInfo(BiConsumer<BlockPos, PreparablePosInfo> action) {
+	private void forEachBlockInfo(BiConsumer<BlockPos, IBlockInfo> action) {
 		MutableBlockPos pos = new MutableBlockPos();
 		for (int i = 0; i < this.blocks.size(); i++) {
 			action.accept(this.setPos(pos, i), this.blocks.get(i));

@@ -30,15 +30,15 @@ import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 
-public class PreparableSpawnerInfo extends PreparablePosInfo {
+public class PreparableSpawnerInfo implements IBlockInfo {
 
 	private final CompoundTag tileEntityData;
 
@@ -65,7 +65,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		if (this.tileEntityData.getBoolean("vanillaSpawner")) {
@@ -84,7 +84,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState state = CQRBlocks.SPAWNER.get().defaultBlockState();
 
@@ -237,7 +237,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntitySpawner> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntitySpawner> blockEntityLazy) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntitySpawner> blockEntityLazy) {
 			return new PreparableSpawnerInfo(getNBTFromTileEntity(level, pos, blockEntityLazy.orElseThrow(NullPointerException::new)));
 		}
 

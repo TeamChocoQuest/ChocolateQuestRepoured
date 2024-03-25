@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.common.io.DataIOUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 
-public class PreparableBlockInfo extends PreparablePosInfo {
+public class PreparableBlockInfo implements IBlockInfo {
 
 	private final BlockState blockState;
 	@Nullable
@@ -30,7 +30,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedBlockState = placement.transform(this.blockState);
 
@@ -38,7 +38,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedBlockState = placement.transform(this.blockState);
 
@@ -57,7 +57,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	public static class Factory implements IBlockInfoFactory<BlockEntity> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<BlockEntity> blockEntitySupplier) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<BlockEntity> blockEntitySupplier) {
 			return new PreparableBlockInfo(blockState, blockEntitySupplier.map(IBlockInfoFactory::writeBlockEntityToNBT)
 					.orElse(null));
 		}

@@ -15,12 +15,12 @@ import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
-public class PreparableMapInfo extends PreparablePosInfo {
+public class PreparableMapInfo implements IBlockInfo {
 
 	private final Direction facing;
 	private final byte scale;
@@ -52,7 +52,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		Direction transformedFacing = placement.rotation().rotate(placement.mirror().mirror(this.facing));
 		ItemFrame entity = placement.entityFactory().createEntity(world -> new ItemFrame(world, transformedPos.immutable(), transformedFacing));
@@ -152,7 +152,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(CQRBlocks.MAP_PLACEHOLDER.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, this.facing));
 		level.setBlockState(transformedPos, transformedState, blockEntity -> {
@@ -205,7 +205,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityMap> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntityLazy) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntityLazy) {
 			return new PreparableMapInfo(state.getValue(HorizontalDirectionalBlock.FACING), blockEntityLazy.orElseThrow(NullPointerException::new));
 		}
 

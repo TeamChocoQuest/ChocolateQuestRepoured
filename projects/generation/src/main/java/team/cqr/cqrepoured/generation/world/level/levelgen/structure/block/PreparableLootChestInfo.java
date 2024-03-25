@@ -19,13 +19,13 @@ import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 
-public class PreparableLootChestInfo extends PreparablePosInfo {
+public class PreparableLootChestInfo implements IBlockInfo {
 
 	private final ResourceLocation lootTable;
 	private final Direction facing;
@@ -36,7 +36,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockState transformedState = placement.transform(Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, this.facing));
 
@@ -49,7 +49,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		BlockExporterChest block = CQRBlocks.BLOCKS.getEntries().stream()
 				.map(RegistryObject::get)
@@ -79,7 +79,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityExporterChest> {
 
 		@Override
-		public PreparablePosInfo create(Level world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntityLazy) {
+		public IBlockInfo create(Level world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntityLazy) {
 			return new PreparableLootChestInfo(blockEntityLazy.orElseThrow(NullPointerException::new).getLootTable(), state.getValue(ChestBlock.FACING));
 		}
 

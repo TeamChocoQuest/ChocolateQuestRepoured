@@ -10,15 +10,15 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityForceFieldNexus;
 
-public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
+public class PreparableForceFieldNexusInfo implements IBlockInfo {
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		if (placement.protectedRegionBuilder().isEmpty()) {
@@ -30,7 +30,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		level.setBlockState(transformedPos, CQRBlocks.FORCE_FIELD_NEXUS.get().defaultBlockState());
@@ -39,7 +39,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityForceFieldNexus> blockEntityLazy) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityForceFieldNexus> blockEntityLazy) {
 			return new PreparableForceFieldNexusInfo();
 		}
 

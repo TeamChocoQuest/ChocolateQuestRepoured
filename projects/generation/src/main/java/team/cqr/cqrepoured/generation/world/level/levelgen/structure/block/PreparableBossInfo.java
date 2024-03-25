@@ -28,14 +28,14 @@ import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.PreparablePosInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 
-public class PreparableBossInfo extends PreparablePosInfo {
+public class PreparableBossInfo implements IBlockInfo {
 
 	@Nullable
 	private final CompoundTag bossTag;
@@ -61,7 +61,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareNormal(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 		Entity entity;
 
@@ -81,7 +81,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected void prepareDebug(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
+	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
 		level.setBlockState(transformedPos, CQRBlocks.BOSS_BLOCK.get().defaultBlockState(), blockEntity -> {
@@ -170,7 +170,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	public static class Factory implements IFactory<TileEntityBoss> {
 
 		@Override
-		public PreparablePosInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntityLazy) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntityLazy) {
 			return new PreparableBossInfo(blockEntityLazy.orElseThrow(NullPointerException::new));
 		}
 
