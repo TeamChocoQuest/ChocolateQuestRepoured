@@ -18,13 +18,13 @@ import team.cqr.cqrepoured.common.io.DataIOUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 
-public class PreparableBlockInfo implements IBlockInfo {
+public class BlockInfo implements IBlockInfo {
 
 	private final BlockState blockState;
 	@Nullable
 	private final CompoundTag blockEntityTag;
 
-	public PreparableBlockInfo(BlockState blockState, @Nullable CompoundTag blockEntityTag) {
+	public BlockInfo(BlockState blockState, @Nullable CompoundTag blockEntityTag) {
 		this.blockState = blockState;
 		this.blockEntityTag = blockEntityTag;
 	}
@@ -58,16 +58,16 @@ public class PreparableBlockInfo implements IBlockInfo {
 
 		@Override
 		public IBlockInfo create(Level level, BlockPos pos, BlockState blockState, LazyOptional<BlockEntity> blockEntitySupplier) {
-			return new PreparableBlockInfo(blockState, blockEntitySupplier.map(IBlockInfoFactory::writeBlockEntityToNBT)
+			return new BlockInfo(blockState, blockEntitySupplier.map(IBlockInfoFactory::writeBlockEntityToNBT)
 					.orElse(null));
 		}
 
 	}
 
-	public static class Serializer implements IBlockInfoSerializer<PreparableBlockInfo> {
+	public static class Serializer implements IBlockInfoSerializer<BlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo blockInfo, DataOutput out, SimplePalette palette) throws IOException {
+		public void write(BlockInfo blockInfo, DataOutput out, SimplePalette palette) throws IOException {
 			int data = (palette.idFor(blockInfo.blockState) << 1) | (blockInfo.blockEntityTag != null ? 1 : 0);
 			DataIOUtil.writeVarInt(out, data);
 			if (blockInfo.blockEntityTag != null) {
@@ -76,14 +76,14 @@ public class PreparableBlockInfo implements IBlockInfo {
 		}
 
 		@Override
-		public PreparableBlockInfo read(DataInput in, SimplePalette palette) throws IOException {
+		public BlockInfo read(DataInput in, SimplePalette palette) throws IOException {
 			int data = DataIOUtil.readVarInt(in);
 			BlockState blockState = palette.stateFor(data >>> 1);
 			CompoundTag blockEntityTag = null;
 			if ((data & 1) == 1) {
 				blockEntityTag = NbtIo.read(in);
 			}
-			return new PreparableBlockInfo(blockState, blockEntityTag);
+			return new BlockInfo(blockState, blockEntityTag);
 		}
 
 	}

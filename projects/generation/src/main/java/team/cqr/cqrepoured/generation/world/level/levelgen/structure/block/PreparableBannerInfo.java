@@ -18,7 +18,7 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlac
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 
-public class PreparableBannerInfo extends PreparableBlockInfo {
+public class PreparableBannerInfo extends BlockInfo {
 
 	public PreparableBannerInfo(BlockState state, @Nullable CompoundTag tileEntityData) {
 		super(state, tileEntityData);
@@ -41,7 +41,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 			if (BannerHelper.isCQBanner(blockEntity)) {
 				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
 			}
-			return new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
+			return new BlockInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
 		}
 
 	}
