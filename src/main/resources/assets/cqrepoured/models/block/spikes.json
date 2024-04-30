@@ -1,0 +1,113 @@
+{
+	"credit": "Made by Sir Squidly",
+	"textures": {
+		"0": "cqrepoured:block/spikes_floor",
+		"1": "cqrepoured:block/spikes",
+		"particle": "cqrepoured:block/spikes"
+	},
+	"elements": [
+		{
+			"name": "floor",
+			"from": [0, 0.1, 0],
+			"to": [16, 0.1, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "spikeN",
+			"from": [0, 0, 3.5],
+			"to": [16, 16, 3.5],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 0], "texture": "#1"}
+			}
+		},
+		{
+			"name": "spikeS",
+			"from": [0, 0, 12.5],
+			"to": [16, 16, 12.5],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 0], "texture": "#1"}
+			}
+		},
+		{
+			"name": "spikeE",
+			"from": [12.5, 0, 0],
+			"to": [12.5, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 0], "rotation": 270, "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 0], "rotation": 90, "texture": "#1"}
+			}
+		},
+		{
+			"name": "spikeW",
+			"from": [3.5, 0, 0],
+			"to": [3.5, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 16], "texture": "#1"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 0], "rotation": 270, "texture": "#1"},
+				"down": {"uv": [0, 0, 16, 0], "rotation": 90, "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [45, 45, 0],
+			"translation": [0, 3, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [45, 45, 0],
+			"translation": [0, 3, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [30, -135, 0],
+			"translation": [0, 0.25, 0],
+			"scale": [0.69, 0.69, 0.69]
+		},
+		"head": {
+			"translation": [0, 14.5, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -8]
+		}
+	},
+	"groups": [
+		0,
+		{
+			"name": "spikes_bone",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"nbt": "{}",
+			"children": [1, 2, 3, 4]
+		}
+	]
+}
