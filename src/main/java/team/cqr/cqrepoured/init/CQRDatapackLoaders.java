@@ -11,7 +11,7 @@ import team.cqr.cqrepoured.common.datapack.DatapackLoaderHelper;
 import team.cqr.cqrepoured.entity.trade.TradeProfile;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.inhabitant.DungeonInhabitant;
 
-@Mod.EventBusSubscriber(modid = CQRepoured.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = CQRepoured.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CQRDatapackLoaders implements DatapackLoaderHelper {
 	
 	// TODO: Create reload listener that forces all holders to reload
@@ -28,7 +28,5 @@ public class CQRDatapackLoaders implements DatapackLoaderHelper {
 	public static Optional<DungeonInhabitant> getDungeonInhabitant(ResourceLocation inhabitantId) {
 		return DatapackLoaderHelper.getValueGeneral(DUNGEON_INHABITANTS, inhabitantId);
 	}
-	
-
 	
 }
