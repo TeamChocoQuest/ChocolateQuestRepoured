@@ -1,0 +1,10 @@
+base.archivesName = "${mod_name}-blocks"
+
+sourceSets {
+    main.java.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.java ]
+    main.resources.srcDirs += [ project(':' + rootProject.name + '-common').sourceSets.main.resources ]
+}
+
+processResources {
+    from project(':' + rootProject.name + '-common').sourceSets.main.resources
+}
