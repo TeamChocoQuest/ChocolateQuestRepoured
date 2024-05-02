@@ -8,13 +8,13 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.network.PacketDistributor;
-import team.cqr.cqrepoured.CQRConstants;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.capability.armor.CapabilityArmorCooldown;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.init.CQRCapabilities;
 import team.cqr.cqrepoured.network.server.packet.SPacketArmorCooldownSync;
 
-@EventBusSubscriber(modid = CQRConstants.MODID)
+@EventBusSubscriber(modid = CQRepoured.MODID)
 public class ItemCooldownEventHandler {
 
 	@SubscribeEvent
