@@ -28,15 +28,6 @@ public class FileIOUtil {
 		return (dir, name) -> name.endsWith(".nbt");
 	}
 
-	public static File getCQRDataFile(ServerLevel level, String fileName) {
-		return new File(level.getDataStorage().dataFolder, "CQR/" + fileName);
-	}
-
-	public static Path getCQRDataPath(ServerLevel level, String fileName) {
-		return level.getDataStorage().dataFolder.toPath()
-				.resolve("CQR/" + fileName);
-	}
-
 	public static void writeNBT(File file, CompoundTag nbt) {
 		writeNBT(file.toPath(), nbt);
 	}
