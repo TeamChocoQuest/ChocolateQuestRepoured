@@ -1,28 +1,55 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
-import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.Level;
-import team.cqr.cqrepoured.common.io.FileIOUtil;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import team.cqr.cqrepoured.common.CQRepoured;
+import team.cqr.cqrepoured.common.serialization.CodecUtil;
 
 //TODO: Replace with worldSavedData or capability
-public class DungeonDataManager {
+public class DungeonDataManager extends SavedData {
+	
+	public enum DungeonSpawnType implements StringRepresentable {
+		DUNGEON_GENERATION, 
+		LOCKED_COORDINATE, 
+		DUNGEON_PLACER_ITEM;
+
+		public static final Codec<DungeonSpawnType> CODEC = StringRepresentable.fromEnum(DungeonSpawnType::values);
+		
+		@Override
+		public String getSerializedName() {
+			return this.name();
+		}
+	}
 
 	public static class DungeonInfo {
+		
+		public static final Codec<DungeonInfo> CODEC = RecordCodecBuilder.create(instance -> {
+			return instance.group(
+					BlockPos.CODEC.fieldOf("position").forGetter(di -> di.pos),
+					DungeonSpawnType.CODEC.fieldOf("type").forGetter(di -> di.spawnType)
+				).apply(instance, DungeonInfo::new);
+		});
+		
 		private BlockPos pos;
 		private DungeonSpawnType spawnType;
 
@@ -52,66 +79,51 @@ public class DungeonDataManager {
 		}
 	}
 
-	public enum DungeonSpawnType {
-		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
+	private final Map<ResourceLocation, List<DungeonInfo>> dungeonData;
+	
+	public static final Codec<DungeonDataManager> CODEC = RecordCodecBuilder.create(instance -> {
+		return instance.group(
+				Codec.unboundedMap(ResourceLocation.CODEC, DungeonInfo.CODEC.listOf()).fieldOf("dungeondata").forGetter(dm -> dm.dungeonData)
+			).apply(instance, DungeonDataManager::new);
+	});
+
+	private DungeonDataManager(Map<ResourceLocation, List<DungeonInfo>> data) {
+		this.dungeonData = data;
 	}
-
-	private static final Map<Level, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
-
-	private final Map<ResourceLocation, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
-	private final File file;
-	private boolean modifiedSinceLastSave = false;
-
-	public DungeonDataManager(Level world) {
-		this.file = FileIOUtil.getCQRDataFile((ServerLevel) world, "CQR/structures.nbt");
+	
+	private static DungeonDataManager fromNBT(CompoundTag tag) {
+		return CodecUtil.decodeNBT(DungeonDataManager.CODEC, tag).get();
 	}
+	
+	private DungeonDataManager() {
+		this.dungeonData = new Object2ObjectArrayMap<ResourceLocation, List<DungeonInfo>>();
+	}
+	
+	public static final String KEY = CQRepoured.prefix("dungeondata").toString();
 
 	@Nullable
 	public static DungeonDataManager getInstance(Level world) {
-		if (!world.isClientSide()) {
-			return INSTANCES.get(world);
+		if (world instanceof ServerLevel sl) {
+			DimensionDataStorage storage = sl.getDataStorage();
+			return storage.computeIfAbsent(DungeonDataManager::fromNBT, DungeonDataManager::new, KEY);
 		}
 		return null;
 	}
 
-	public static void handleWorldLoad(Level world) {
-		if (!world.isClientSide() && !INSTANCES.containsKey(world)) {
-			INSTANCES.put(world, new DungeonDataManager(world));
-			INSTANCES.get(world).readData();
-		}
-	}
-
-	public static void handleWorldSave(Level world) {
-		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
-		}
-	}
-
-	public static void handleWorldUnload(Level world) {
-		if (!world.isClientSide() && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
-			INSTANCES.remove(world);
-		}
-	}
-
-	public static void addDungeonEntry(Level world, ResourceLocation name, BlockPos position, DungeonSpawnType spawnType) {
-		if (INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).addDungeonEntry(name, position, spawnType);
-		}
-	}
-
 	public static Set<ResourceLocation> getSpawnedDungeonNames(Level world) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).getSpawnedDungeonNames();
+		DungeonDataManager instance = getInstance(world);
+		if (instance != null) {
+			return instance.dungeonData.keySet();
 		}
 		return Collections.emptySet();
 	}
 
-	public static Set<DungeonInfo> getLocationsOfDungeon(Level world, ResourceLocation dungeon) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
+	public static List<DungeonInfo> getLocationsOfDungeon(Level world, ResourceLocation dungeon) {
+		DungeonDataManager instance = getInstance(world);
+		if (instance != null) {
+			return instance.dungeonData.getOrDefault(dungeon, Collections.emptyList());
 		}
-		return Collections.emptySet();
+		return Collections.emptyList();
 	}
 
 //	public static boolean isDungeonSpawnLimitMet(Level world, DungeonBase dungeon) {
@@ -122,53 +134,18 @@ public class DungeonDataManager {
 //	}
 
 	public static int getDungeonGenerationCount(Level world, ResourceLocation name) {
-		// TODO
-		return -1;
-	}
-
-	public void saveData() {
-		if (this.modifiedSinceLastSave) {
-			CompoundTag root = new CompoundTag();
-			for (Map.Entry<ResourceLocation, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
-				Set<DungeonInfo> dungeonInfos = data.getValue();
-				if (!dungeonInfos.isEmpty()) {
-					ListTag nbtTagList = new ListTag();
-					for (DungeonInfo dungeonInfo : dungeonInfos) {
-						nbtTagList.add(dungeonInfo.writeToNBT());
-					}
-					root.put(data.getKey().toString(), nbtTagList);
-				}
-			}
-			FileIOUtil.writeNBT(this.file, root);
-
-			this.modifiedSinceLastSave = false;
-		}
-	}
-
-	public void readData() {
-		this.dungeonData.clear();
-
-		if (!this.file.exists()) {
-			return;
-		}
-
-		CompoundTag root = FileIOUtil.readNBT(this.file);
-
-		for (String key : root.getAllKeys()) {
-			Set<DungeonInfo> dungeonInfos = new HashSet<>();
-			for (Tag nbt : root.getList(key, Tag.TAG_COMPOUND)) {
-				dungeonInfos.add(new DungeonInfo((CompoundTag) nbt));
-			}
-			if (!dungeonInfos.isEmpty()) {
-				this.dungeonData.put(new ResourceLocation(key), dungeonInfos);
-			}
+		DungeonDataManager instance = getInstance(world);
+		if (instance != null) {
+			return instance.getLocationsOfDungeon(name).size();
+		} else {
+			return -1;
 		}
 	}
 
 	private void addDungeonEntry(ResourceLocation dungeon, BlockPos location, DungeonSpawnType spawnType) {
-		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon, key -> Collections.synchronizedSet(new HashSet<>()));
+		List<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon, key -> Collections.emptyList());
 		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
-			this.modifiedSinceLastSave = true;
+			this.setDirty(true);
 		}
 	}
 
@@ -176,8 +153,26 @@ public class DungeonDataManager {
 		return this.dungeonData.keySet();
 	}
 
-	private Set<DungeonInfo> getLocationsOfDungeon(ResourceLocation dungeon) {
-		return this.dungeonData.getOrDefault(dungeon, Collections.emptySet());
+	private List<DungeonInfo> getLocationsOfDungeon(ResourceLocation dungeon) {
+		return this.dungeonData.getOrDefault(dungeon, Collections.emptyList());
+	}
+
+	// TODO: Correct??
+	@Override
+	public CompoundTag save(CompoundTag pCompoundTag) {
+		Optional<Tag> optTag = CodecUtil.encodeNBT(CODEC, this, pCompoundTag);
+		if (optTag.isPresent() && optTag.get() instanceof CompoundTag) {
+			return (CompoundTag) optTag.get();
+		} else {
+			return new CompoundTag();
+		}
+	}
+
+	public static void addDungeonEntry(ServerLevel level, ResourceLocation structureName, BlockPos position, DungeonSpawnType dungeonGeneration) {
+		DungeonDataManager instance = getInstance(level);
+		if (instance != null) {
+			instance.addDungeonEntry(structureName, position, dungeonGeneration);
+		}
 	}
 
 //	private boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
