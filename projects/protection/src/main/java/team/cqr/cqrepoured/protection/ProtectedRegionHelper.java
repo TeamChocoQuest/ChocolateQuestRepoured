@@ -1,82 +1,40 @@
 package team.cqr.cqrepoured.protection;
 
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.material.Material;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.registries.ForgeRegistries;
-import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.entity.misc.EntityTNTPrimedCQR;
-import team.cqr.cqrepoured.init.CQRBlockTags;
-
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ProtectedRegionHelper {
+import javax.annotation.Nullable;
 
-	// Replaced by Tags
-	/*public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
-	public static final Set<Material> BREAKABLE_MATERIAL_WHITELIST = new HashSet<>();
-	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
-	public static final Set<Material> PLACEABLE_MATERIAL_WHITELIST = new HashSet<>();*/
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import team.cqr.cqrepoured.common.services.CQRServices;
+import team.cqr.cqrepoured.protection.init.CQRProtectionBlockTags;
+import team.cqr.cqrepoured.protection.init.CQRProtectionEntityTags;
+
+public class ProtectedRegionHelper {
 
 	private ProtectedRegionHelper() {
 
-	}
-
-	public static void updateWhitelists() {
-		/*BREAKABLE_BLOCK_WHITELIST.clear();
-		BREAKABLE_MATERIAL_WHITELIST.clear();
-		PLACEABLE_BLOCK_WHITELIST.clear();
-		PLACEABLE_MATERIAL_WHITELIST.clear();
-		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemBreakableBlockWhitelist.get()) {
-			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
-			if (b != null) {
-				BREAKABLE_BLOCK_WHITELIST.add(b);
-			}
-		}
-		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemBreakableMaterialWhitelist.get()) {
-			try {
-				BREAKABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
-				// ignore
-			}
-		}
-		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemPlaceableBlockWhitelist.get()) {
-			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
-			if (b != null) {
-				PLACEABLE_BLOCK_WHITELIST.add(b);
-			}
-		}
-		for (String s : CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemPlaceableMaterialWhitelist.get()) {
-			try {
-				PLACEABLE_MATERIAL_WHITELIST.add((Material) Material.class.getField(s.toUpperCase()).get(null));
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassCastException e) {
-				// ignore
-			}
-		}*/
 	}
 
 	public static boolean isBlockBreakingPrevented(Level world, BlockPos pos, @Nullable Entity entity, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
@@ -109,11 +67,11 @@ public class ProtectedRegionHelper {
 
 		boolean isBreakingPrevented = false;
 
-		if (!isBlockDependency && CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockBreaking.get() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
+		if (!isBlockDependency && CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() && CQRServices.CONFIG.protectionConfig().preventBlockBreakingInActiveRegions() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockBreakingWhitelisted(world.getBlockState(pos))) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockBreaking() && !protectedRegion.isBreakable(pos)) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.boundingBox(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isBreakingPrevented = true;
 					break;
@@ -131,7 +89,7 @@ public class ProtectedRegionHelper {
 	}
 
 	private static boolean isBlockBreakingWhitelisted(BlockState state) {
-		return state.is(CQRBlockTags.PROTECTED_REGIONS_BREAKABLE_WHITELIST);
+		return state.is(CQRProtectionBlockTags.BREAKABLE_IN_ACTIVE_REGION);
 	}
 
 	public static boolean isBlockPlacingPrevented(Level world, BlockPos pos, @Nullable Entity entity, BlockState state, boolean updateProtectedRegions, boolean addOrResetProtectedRegionIndicator) {
@@ -149,11 +107,11 @@ public class ProtectedRegionHelper {
 
 		boolean isPlacingPrevented = false;
 
-		if (CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventBlockPlacing.get() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
+		if (CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() && CQRServices.CONFIG.protectionConfig().preventBlockPlacingInActiveRegions() && (!(entity instanceof Player) || !((Player) entity).isCreative()) && !isBlockPlacingWhitelisted(state)) {
 			for (ProtectedRegion protectedRegion : protectedRegions) {
 				if (protectedRegion.preventBlockPlacing()) {
 					if (addOrResetProtectedRegionIndicator) {
-						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.getStartPos(), protectedRegion.getEndPos(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+						ProtectionIndicatorHelper.addOrResetProtectedRegionIndicator(world, protectedRegion.uuid(), protectedRegion.boundingBox(), pos, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
 					}
 					isPlacingPrevented = true;
 					break;
@@ -171,7 +129,7 @@ public class ProtectedRegionHelper {
 	}
 
 	private static boolean isBlockPlacingWhitelisted(BlockState state) {
-		return state.is(CQRBlockTags.PROTECTED_REGIONS_PLACABLE_WHITELIST);
+		return state.is(CQRProtectionBlockTags.PLACABLE_IN_ACTIVE_REGION);
 	}
 
 	public static BlockState getBlockFromItem(ItemStack stack, Level world, BlockPos pos, Direction facing, @Nullable Vec3 hitVec, LivingEntity placer, InteractionHand hand) {
@@ -201,7 +159,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionTNTPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) {
+		if (!CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() || !CQRServices.CONFIG.protectionConfig().preventTNTExplosionsInActiveRegions()) {
 			return false;
 		}
 
@@ -226,7 +184,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionOtherPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get()) {
+		if (!CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() || !CQRServices.CONFIG.protectionConfig().preventOtherExplosionsInActiveRegions()) {
 			return false;
 		}
 
@@ -264,13 +222,13 @@ public class ProtectedRegionHelper {
 		}
 
 		// If the exploder is our own custom tnt => let it blow!
-		if (explosion.getExploder() instanceof EntityTNTPrimedCQR) {
+		if (explosion.getExploder().getType().is(CQRProtectionEntityTags.IGNORED_EXPLOSION_SOURCE)) {
 			return;
 		}
 
 		boolean flag = explosion.getExploder() instanceof PrimedTnt;
-		boolean flag1 = (flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionTNT.get()) || (!flag && CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventExplosionOther.get());
-		boolean flag2 = CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() && flag1;
+		boolean flag1 = (flag && CQRServices.CONFIG.protectionConfig().preventTNTExplosionsInActiveRegions()) || (!flag && CQRServices.CONFIG.protectionConfig().preventOtherExplosionsInActiveRegions());
+		boolean flag2 = CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() && flag1;
 
 		if (flag2) {
 			BlockPos pos = BlockPos.containing(explosion.getPosition());
@@ -304,7 +262,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isFireSpreadingPrevented(Level world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventFireSpreading.get()) {
+		if (!CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() || !CQRServices.CONFIG.protectionConfig().preventFireSpreadingInActiveRegions()) {
 			return false;
 		}
 
@@ -329,7 +287,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isEntitySpawningPrevented(Level world, BlockPos pos) {
-		if (!CQRConfig.SERVER_CONFIG.dungeonProtection.protectionSystemEnabled.get() || !CQRConfig.SERVER_CONFIG.dungeonProtection.enablePreventEntitySpawning.get()) {
+		if (!CQRServices.CONFIG.protectionConfig().protectionSystemEnabled() || !CQRServices.CONFIG.protectionConfig().preventEntitySpawningInActiveRegions()) {
 			return false;
 		}
 
