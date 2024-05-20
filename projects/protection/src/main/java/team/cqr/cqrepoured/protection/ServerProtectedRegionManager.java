@@ -25,8 +25,10 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.common.io.IOConsumer;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.protection.capability.ProtectionReferences;
 import team.cqr.cqrepoured.protection.capability.ProtectionReferencesProvider;
 import team.cqr.cqrepoured.protection.network.server.packet.SPacketUnloadProtectedRegion;
@@ -34,15 +36,11 @@ import team.cqr.cqrepoured.protection.network.server.packet.SPacketUpdateProtect
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
-	private static final String FOLDER_PATH = "protected_regions";
-	private static final String ENTITY_REFERENCES_FILE_NAME = "entityReferences.data";
-
 	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
 	private final Multimap<UUID, UUID> entity2protectedRegion = MultimapBuilder.hashKeys()
 			.hashSetValues()
 			.build();
 	private final ServerLevel level;
-	private final File entityReferenceFile;
 	private int time;
 
 	public static class ProtectedRegionContainer {
@@ -153,7 +151,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			}
 
 			if (protectedRegion.needsSyncing()) {
-				CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
+				CQRServices.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
 				protectedRegion.clearNeedsSyncing();
 			}
 		}
@@ -197,7 +195,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}
 
 		if (this.protectedRegions.containsKey(protectedRegion.uuid())) {
-			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
+			CQRepoured.LOGGER.warn("Protected region with uuid {} already exists.", protectedRegion.uuid());
 			return;
 		}
 
@@ -214,7 +212,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		protectedRegion.getEntityDependencies()
 				.forEach(entity -> this.entity2protectedRegion.put(entity, protectedRegion.uuid()));
 
-		CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
+		CQRServices.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
 		protectedRegion.clearNeedsSyncing();
 	}
 
@@ -236,7 +234,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 			protectedRegion.getEntityDependencies()
 					.forEach(entity -> this.entity2protectedRegion.remove(entity, protectedRegion.uuid()));
 
-			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
+			CQRServices.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
 			protectedRegion.clearNeedsSyncing();
 		}
 	}
@@ -296,7 +294,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		ProtectedRegionContainer container = this.createContainer(protectedRegion);
 		this.protectedRegions.put(protectedRegion.uuid(), container);
 
-		CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
+		CQRServices.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUpdateProtectedRegion(protectedRegion));
 		protectedRegion.clearNeedsSyncing();
 
 		return protectedRegion;
@@ -312,7 +310,7 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 				protectedRegion.clearNeedsSaving();
 			}
 
-			CQRMain.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
+			CQRServices.NETWORK.send(PacketDistributor.DIMENSION.with(this.level::dimension), new SPacketUnloadProtectedRegion(protectedRegion.uuid()));
 			protectedRegion.clearNeedsSyncing();
 		}
 	}
@@ -378,21 +376,6 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		}*/
 
 		return protectedRegion;
-	}
-
-	private void deleteProtectedRegionFile(UUID uuid) {
-		File file = this.getFile(uuid);
-		if (file.exists()) {
-			file.delete();
-		}
-	}
-
-	private File getFile(ProtectedRegion protectedRegion) {
-		return this.getFile(protectedRegion.uuid());
-	}
-
-	private File getFile(UUID uuid) {
-		return FileIOUtil.getCQRDataFile(this.level, FOLDER_PATH + "/" + uuid + ".nbt");
 	}
 
 }
