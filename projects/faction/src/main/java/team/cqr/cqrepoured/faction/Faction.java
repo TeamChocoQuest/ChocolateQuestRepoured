@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.common.registration.AbstractRegistratableObject;
-import team.cqr.cqrepoured.config.CQRConfig;
+import team.cqr.cqrepoured.common.services.CQRServices;
 import team.cqr.cqrepoured.faction.EReputationState.EReputationStateRough;
 import team.cqr.cqrepoured.faction.capability.IFactionRelationCapability;
 import team.cqr.cqrepoured.faction.init.FactionCapabilities;
@@ -94,7 +94,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 
 	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
-		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
+		if (CQRServices.CONFIG.factionConfig().enableTeamsForFactionAssignment()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return false;
 			}
@@ -130,7 +130,7 @@ public class Faction extends AbstractRegistratableObject implements IFactionRela
 
 	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
-		if (CQRConfig.SERVER_CONFIG.advanced.enableOldFactionMemberTeams.get()) {
+		if (CQRServices.CONFIG.factionConfig().enableTeamsForFactionAssignment()) {
 			if (ent.getTeam() != null && ent.getTeam().getName().equalsIgnoreCase(this.getId().toString())) {
 				return true;
 			}
