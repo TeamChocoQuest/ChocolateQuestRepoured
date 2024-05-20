@@ -6,6 +6,17 @@ public interface ConfigService {
 		boolean enableTeamsForFactionAssignment();
 	}
 	
+	public static interface ProtectionConfig {
+		boolean protectionSystemEnabled();
+		boolean preventEntitySpawningInActiveRegions();
+		boolean preventFireSpreadingInActiveRegions();
+		boolean preventTNTExplosionsInActiveRegions();
+		boolean preventOtherExplosionsInActiveRegions();
+		boolean preventBlockPlacingInActiveRegions();
+		boolean preventBlockBreakingInActiveRegions();
+	}
+	
 	FactionConfig factionConfig();
+	ProtectionConfig protectionConfig();
 
 }
