@@ -4,6 +4,7 @@ buildscript {
         maven { url = 'https://maven.neoforged.net/releases' }
         maven { url = 'https://repo.spongepowered.org/maven' }
         maven { url = 'https://maven.parchmentmc.org' }
+		maven { url = "https://repo.essential.gg/repository/maven-public"}
     }
     dependencies {
         classpath group: 'net.neoforged', name: 'NeoGradle', version: "${neoforge_gradle_version}"
@@ -185,12 +186,21 @@ allprojects {
         implementation fg.deobf("curse.maven:the-one-probe-245211:${top_version}")
 
         //runtimeOnly fg.deobf("curse.maven:WorldEdit-225608:${worldedit_version}")
+		// Elementa (shadowed)
+		implementation("gg.essential:elementa-${mc_version}-forge:${elementa_version}")
     }
 
     shadowJar {
         configurations = [project.configurations.shadow]
         relocate 'commoble.databuddy', "${project.group}.shadow.commoble.databuddy"
+		
+		archiveClassifier.set(null)
+		relocate("gg.essential.elementa", "${project.group}.shadow.essential.elementa")
+		relocate("gg.essential.universalcraft", "${project.group}.shadow.essential.universalcraft")
     }
+	//tasks.named("reobfJar").configure {
+	//	dependsOn(tasks.named("shadowJar"))
+	//}
 
     reobf {
         shadowJar { }
