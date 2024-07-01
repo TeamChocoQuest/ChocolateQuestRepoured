@@ -2,7 +2,6 @@ package team.cqr.cqrepoured.generation.world.level.levelgen.structure;
 
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import com.mojang.datafixers.util.Pair;
 
