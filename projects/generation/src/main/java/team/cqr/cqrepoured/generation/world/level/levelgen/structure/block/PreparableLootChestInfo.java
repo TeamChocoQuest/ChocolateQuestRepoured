@@ -1,9 +1,11 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
-import io.netty.buffer.ByteBuf;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -15,13 +17,10 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockExporterChestFixed;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
+import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.WorldDungeonGenerator;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
-import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChest;
 import team.cqr.cqrepoured.tileentity.TileEntityExporterChestCustom;
 
@@ -76,27 +75,27 @@ public class PreparableLootChestInfo implements IBlockInfo {
 		return this.facing;
 	}
 
-	public static class Factory implements IFactory<TileEntityExporterChest> {
+	public static class Factory implements IBlockInfoFactory<TileEntityExporterChest> {
 
 		@Override
-		public IBlockInfo create(Level world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntityLazy) {
-			return new PreparableLootChestInfo(blockEntityLazy.orElseThrow(NullPointerException::new).getLootTable(), state.getValue(ChestBlock.FACING));
+		public IBlockInfo create(Level world, BlockPos pos, BlockState state, LazyOptional<TileEntityExporterChest> blockEntitySupplier) {
+			return new PreparableLootChestInfo(blockEntitySupplier.orElseThrow(NullPointerException::new).getLootTable(), state.getValue(ChestBlock.FACING));
 		}
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableLootChestInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableLootChestInfo> {
 
 		@Override
-		public void write(PreparableLootChestInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			ByteBufUtil.writeUTF8String(buf, preparable.lootTable.toString());
-			buf.writeByte(preparable.facing.get2DDataValue());
+		public void write(PreparableLootChestInfo lootChestInfo, DataOutput out, SimplePalette palette) throws IOException {
+			out.writeUTF(lootChestInfo.lootTable.toString());
+			out.writeByte(lootChestInfo.facing.get2DDataValue());
 		}
 
 		@Override
-		public PreparableLootChestInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			ResourceLocation lootTable = new ResourceLocation(ByteBufUtil.readUTF8String(buf));
-			Direction facing = Direction.from2DDataValue(buf.readByte());
+		public PreparableLootChestInfo read(DataInput in, SimplePalette palette) throws IOException {
+			ResourceLocation lootTable = new ResourceLocation(in.readUTF());
+			Direction facing = Direction.from2DDataValue(in.readByte());
 			return new PreparableLootChestInfo(lootTable, facing);
 		}
 

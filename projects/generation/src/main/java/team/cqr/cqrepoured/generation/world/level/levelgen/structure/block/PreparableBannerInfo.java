@@ -1,11 +1,14 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -13,10 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
 import team.cqr.cqrepoured.block.banner.BannerHelper;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
+import team.cqr.cqrepoured.common.io.DataIOUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
 
 public class PreparableBannerInfo extends BlockInfo {
 
@@ -33,40 +34,39 @@ public class PreparableBannerInfo extends BlockInfo {
 		}
 	}
 
-	public static class Factory implements IFactory<BannerBlockEntity> {
+	public static class Factory implements IBlockInfoFactory<BannerBlockEntity> {
 
 		@Override
-		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerBlockEntity> blockEntityLazy) {
-			BannerBlockEntity blockEntity = blockEntityLazy.orElseThrow(NullPointerException::new);
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BannerBlockEntity> blockEntitySupplier) {
+			BannerBlockEntity blockEntity = blockEntitySupplier.orElseThrow(NullPointerException::new);
 			if (BannerHelper.isCQBanner(blockEntity)) {
-				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
+				return new PreparableBannerInfo(state, IBlockInfoFactory.writeBlockEntityToNBT(blockEntity));
 			}
-			return new BlockInfo(state, IFactory.writeTileEntityToNBT(blockEntity));
+			return new BlockInfo(state, IBlockInfoFactory.writeBlockEntityToNBT(blockEntity));
 		}
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableBannerInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableBannerInfo> {
 
 		@Override
-		public void write(PreparableBannerInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = (palette.idFor(preparable.getState()) << 1) | (preparable.getTileEntityData() != null ? 1 : 0);
-			ByteBufUtil.writeVarInt(buf, data, 5);
-			if (preparable.getTileEntityData() != null) {
-				ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
-				nbtList.add(preparable.getTileEntityData());
+		public void write(PreparableBannerInfo bannerInfo, DataOutput out, SimplePalette palette) throws IOException {
+			int data = (palette.idFor(bannerInfo.getBlockState()) << 1) | (bannerInfo.getBlockEntityTag() != null ? 1 : 0);
+			DataIOUtil.writeVarInt(out, data);
+			if (bannerInfo.getBlockEntityTag() != null) {
+				NbtIo.write(bannerInfo.getBlockEntityTag(), out);
 			}
 		}
 
 		@Override
-		public PreparableBannerInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = ByteBufUtil.readVarInt(buf, 5);
-			BlockState state = palette.stateFor(data >>> 1);
-			CompoundTag tileEntityData = null;
+		public PreparableBannerInfo read(DataInput in, SimplePalette palette) throws IOException {
+			int data = DataIOUtil.readVarInt(in);
+			BlockState blockState = palette.stateFor(data >>> 1);
+			CompoundTag blockEntityTag = null;
 			if ((data & 1) == 1) {
-				tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
+				blockEntityTag = NbtIo.read(in);
 			}
-			return new PreparableBannerInfo(state, tileEntityData);
+			return new PreparableBannerInfo(blockState, blockEntityTag);
 		}
 
 	}

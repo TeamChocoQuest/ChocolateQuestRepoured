@@ -1,11 +1,14 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -24,13 +27,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
+import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
-import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
 import team.cqr.cqrepoured.tileentity.TileEntityBoss;
@@ -77,7 +77,7 @@ public class PreparableBossInfo implements IBlockInfo {
 			placement.protectedRegionBuilder().get().addEntity(entity);
 		}
 		level.addEntity(entity);
-		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState(), (be) -> {});
+		level.setBlockState(transformedPos, Blocks.AIR.defaultBlockState());
 	}
 
 	@Override
@@ -167,31 +167,30 @@ public class PreparableBossInfo implements IBlockInfo {
 		return this.bossTag;
 	}
 
-	public static class Factory implements IFactory<TileEntityBoss> {
+	public static class Factory implements IBlockInfoFactory<TileEntityBoss> {
 
 		@Override
-		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntityLazy) {
-			return new PreparableBossInfo(blockEntityLazy.orElseThrow(NullPointerException::new));
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntitySupplier) {
+			return new PreparableBossInfo(blockEntitySupplier.orElseThrow(NullPointerException::new));
 		}
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableBossInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableBossInfo> {
 
 		@Override
-		public void write(PreparableBossInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			ByteBufUtil.writeVarInt(buf, preparable.bossTag != null ? (nbtList.size() << 1) | 1 : 0, 5);
-			if (preparable.bossTag != null) {
-				nbtList.add(preparable.bossTag);
+		public void write(PreparableBossInfo bossInfo, DataOutput out, SimplePalette palette) throws IOException {
+			out.writeBoolean(bossInfo.bossTag != null);
+			if (bossInfo.bossTag != null) {
+				NbtIo.write(bossInfo.bossTag, out);
 			}
 		}
 
 		@Override
-		public PreparableBossInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			int data = ByteBufUtil.readVarInt(buf, 5);
+		public PreparableBossInfo read(DataInput in, SimplePalette palette) throws IOException {
 			CompoundTag bossTag = null;
-			if ((data & 1) == 1) {
-				bossTag = nbtList.getCompound(data >>> 1);
+			if (in.readBoolean()) {
+				bossTag = NbtIo.read(in);
 			}
 			return new PreparableBossInfo(bossTag);
 		}

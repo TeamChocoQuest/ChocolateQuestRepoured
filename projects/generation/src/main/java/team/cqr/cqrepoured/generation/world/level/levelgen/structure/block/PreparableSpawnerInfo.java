@@ -1,19 +1,22 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -26,14 +29,11 @@ import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
+import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
-import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.tileentity.TileEntitySpawner;
 import team.cqr.cqrepoured.util.SpawnerFactory;
@@ -234,11 +234,11 @@ public class PreparableSpawnerInfo implements IBlockInfo {
 		return this.tileEntityData;
 	}
 
-	public static class Factory implements IFactory<TileEntitySpawner> {
+	public static class Factory implements IBlockInfoFactory<TileEntitySpawner> {
 
 		@Override
-		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntitySpawner> blockEntityLazy) {
-			return new PreparableSpawnerInfo(getNBTFromTileEntity(level, pos, blockEntityLazy.orElseThrow(NullPointerException::new)));
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntitySpawner> blockEntitySupplier) {
+			return new PreparableSpawnerInfo(getNBTFromTileEntity(level, pos, blockEntitySupplier.orElseThrow(NullPointerException::new)));
 		}
 
 		private static CompoundTag getNBTFromTileEntity(Level world, BlockPos pos, TileEntitySpawner tileEntity) {
@@ -251,7 +251,10 @@ public class PreparableSpawnerInfo implements IBlockInfo {
 				CompoundTag itemTag = items.getCompound(i);
 				CompoundTag itemTagCompound = itemTag.getCompound("tag");
 				CompoundTag entityTag = itemTagCompound.getCompound("EntityIn");
-				Entity entity = createEntityForExporting(entityTag, world, pos);
+				Entity entity = EntityType.loadEntityRecursive(entityTag, world, e -> {
+					e.setPos(pos.getCenter());
+					return e;
+				});
 				if (entity != null) {
 					CompoundTag newEntityTag = new CompoundTag();
 					entity.save(newEntityTag);
@@ -261,36 +264,36 @@ public class PreparableSpawnerInfo implements IBlockInfo {
 			return compound;
 		}
 
-		private static Entity createEntityForExporting(CompoundTag entityTag, Level world, BlockPos pos) {
-			Entity entity = EntityList.createEntityFromNBT(entityTag, world);
-			if (entity != null) {
-				entity.setPos(pos.getX(), pos.getY(), pos.getZ());
-				if (entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onExportFromWorld();
+		private static Optional<Entity> createEntityForExporting(CompoundTag entityTag, Level world, BlockPos pos) {
+			Optional<Entity> entity = EntityType.create(entityTag, world);
+			entity.ifPresent(e -> {
+				e.setPos(pos.getX(), pos.getY(), pos.getZ());
+				if (e instanceof AbstractEntityCQR) {
+					((AbstractEntityCQR) e).onExportFromWorld();
 				}
 				ListTag passengers = entityTag.getList("Passengers", Tag.TAG_COMPOUND);
 				for (Tag passengerNBT : passengers) {
-					Entity passenger = createEntityForExporting((CompoundTag) passengerNBT, world, pos);
-					passenger.startRiding(entity);
+					Optional<Entity> passenger = createEntityForExporting((CompoundTag) passengerNBT, world, pos);
+					if (passenger.isPresent()) {
+						passenger.get().startRiding(e);
+					}
 				}
-			}
+			});
 			return entity;
 		}
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableSpawnerInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableSpawnerInfo> {
 
 		@Override
-		public void write(PreparableSpawnerInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
-			nbtList.add(preparable.tileEntityData);
+		public void write(PreparableSpawnerInfo spawnerInfo, DataOutput out, SimplePalette palette) throws IOException {
+			NbtIo.write(spawnerInfo.tileEntityData, out);
 		}
 
 		@Override
-		public PreparableSpawnerInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			CompoundTag tileEntityData = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
-			return new PreparableSpawnerInfo(tileEntityData);
+		public PreparableSpawnerInfo read(DataInput in, SimplePalette palette) throws IOException {
+			return new PreparableSpawnerInfo(NbtIo.read(in));
 		}
 
 	}

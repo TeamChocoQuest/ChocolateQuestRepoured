@@ -1,23 +1,21 @@
 package team.cqr.cqrepoured.generation.world.level.levelgen.structure.block;
 
-import io.netty.buffer.ByteBuf;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
-import team.cqr.cqrepoured.common.buffer.ByteBufUtil;
+import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.IFactory;
-import team.cqr.cqrepoured.generation.world.level.levelgen.structure.block.IBlockInfo.Registry.ISerializer;
-import team.cqr.cqrepoured.init.CQRBlocks;
+import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.tileentity.TileEntityMap;
 
 public class PreparableMapInfo implements IBlockInfo {
@@ -202,47 +200,43 @@ public class PreparableMapInfo implements IBlockInfo {
 		return this.fillRadius;
 	}
 
-	public static class Factory implements IFactory<TileEntityMap> {
+	public static class Factory implements IBlockInfoFactory<TileEntityMap> {
 
 		@Override
-		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntityLazy) {
-			return new PreparableMapInfo(state.getValue(HorizontalDirectionalBlock.FACING), blockEntityLazy.orElseThrow(NullPointerException::new));
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityMap> blockEntitySupplier) {
+			return new PreparableMapInfo(state.getValue(HorizontalDirectionalBlock.FACING), blockEntitySupplier.orElseThrow(NullPointerException::new));
 		}
 
 	}
 
-	public static class Serializer implements ISerializer<PreparableMapInfo> {
+	public static class Serializer implements IBlockInfoSerializer<PreparableMapInfo> {
 
 		@Override
-		public void write(PreparableMapInfo preparable, ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			CompoundTag compound = new CompoundTag();
-			compound.putByte("facing", (byte) preparable.facing.get2DDataValue());
-			compound.putByte("scale", preparable.scale);
-			compound.putByte("orientation", (byte) preparable.orientation.get2DDataValue());
-			compound.putBoolean("lockOrientation", preparable.lockOrientation);
-			compound.putByte("originX", (byte) preparable.originX);
-			compound.putByte("originZ", (byte) preparable.originZ);
-			compound.putByte("offsetX", (byte) preparable.offsetX);
-			compound.putByte("offsetZ", (byte) preparable.offsetZ);
-			compound.putBoolean("fillMap", preparable.fillMap);
-			compound.putShort("fillRadius", (short) preparable.fillRadius);
-			ByteBufUtil.writeVarInt(buf, nbtList.size(), 5);
-			nbtList.add(compound);
+		public void write(PreparableMapInfo mapInfo, DataOutput out, SimplePalette palette) throws IOException {
+			out.writeByte(mapInfo.facing.get2DDataValue());
+			out.writeByte(mapInfo.scale);
+			out.writeByte(mapInfo.orientation.get2DDataValue());
+			out.writeBoolean(mapInfo.lockOrientation);
+			out.writeByte(mapInfo.originX);
+			out.writeByte(mapInfo.originZ);
+			out.writeByte(mapInfo.offsetX);
+			out.writeByte(mapInfo.offsetZ);
+			out.writeBoolean(mapInfo.fillMap);
+			out.writeShort(mapInfo.fillRadius);
 		}
 
 		@Override
-		public PreparableMapInfo read(ByteBuf buf, SimplePalette palette, ListTag nbtList) {
-			CompoundTag compound = nbtList.getCompound(ByteBufUtil.readVarInt(buf, 5));
-			Direction facing = Direction.from2DDataValue(compound.getInt("facing"));
-			byte scale = compound.getByte("scale");
-			Direction orientation = Direction.from2DDataValue(compound.getInt("orientation"));
-			boolean lockOrientation = compound.getBoolean("lockOrientation");
-			byte originX = compound.getByte("originX");
-			byte originZ = compound.getByte("originZ");
-			byte offsetX = compound.getByte("offsetX");
-			byte offsetZ = compound.getByte("offsetZ");
-			boolean fillMap = compound.getBoolean("fillMap");
-			short fillRadius = compound.getShort("fillRadius");
+		public PreparableMapInfo read(DataInput in, SimplePalette palette) throws IOException {
+			Direction facing = Direction.from2DDataValue(in.readByte());
+			byte scale = in.readByte();
+			Direction orientation = Direction.from2DDataValue(in.readByte());
+			boolean lockOrientation = in.readBoolean();
+			byte originX = in.readByte();
+			byte originZ = in.readByte();
+			byte offsetX = in.readByte();
+			byte offsetZ = in.readByte();
+			boolean fillMap = in.readBoolean();
+			short fillRadius = in.readShort();
 			return new PreparableMapInfo(facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		}
 
