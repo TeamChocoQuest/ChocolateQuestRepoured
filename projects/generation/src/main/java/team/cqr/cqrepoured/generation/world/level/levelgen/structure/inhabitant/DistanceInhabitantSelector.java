@@ -47,7 +47,7 @@ public record DistanceInhabitantSelector(
 
 	@Override
 	public InhabitantSelectorType type() {
-		return InhabitantSelectorType.RANDOM;
+		return InhabitantSelectorType.DISTANCE;
 	}
 
 }
