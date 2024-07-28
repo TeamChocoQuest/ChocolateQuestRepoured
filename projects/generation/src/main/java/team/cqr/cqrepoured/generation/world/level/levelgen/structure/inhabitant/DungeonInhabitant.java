@@ -10,6 +10,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
@@ -22,10 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraftforge.registries.ForgeRegistries;
+import team.cqr.cqrepoured.common.init.CQRCommonEntityTags;
 import team.cqr.cqrepoured.common.random.RandomUtil;
 import team.cqr.cqrepoured.common.serialization.CodecUtil;
 import team.cqr.cqrepoured.common.services.CQRServices;
-import team.cqr.cqrepoured.init.CQREntityTypes;
 
 public class DungeonInhabitant {
 
@@ -59,10 +60,19 @@ public class DungeonInhabitant {
 	}
 
 	public void prepareEntityNBT(final CompoundTag tag, RandomSource random, boolean boss) {
-		if (tag == null || tag.isEmpty()) {
+		if (tag == null || tag.isEmpty() || !tag.contains("id", Tag.TAG_STRING)) {
 			return;
 		}
-		if (tag.getString("id").equals(CQREntityTypes.DUMMY.getId().toString())) {
+		ResourceLocation id = ResourceLocation.tryParse(tag.getString("id"));
+		if (id == null) {
+			return;
+		}
+		EntityType<?> entityType = ForgeRegistries.ENTITY_TYPES.getValue(id);
+		// Should NEVER happen
+		if (entityType == null) {
+			return;
+		}
+		if (entityType.is(CQRCommonEntityTags.DUMMY_ENTITIES)) {
 			EntityType<?> type = null;
 			if (boss && this.bosses.isPresent()) {
 				type = RandomUtil.getOrThrow(this.bosses.get(), random);
