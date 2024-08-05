@@ -111,7 +111,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (!EntityOcclusionTester.shouldEntityBeRendered(entity)) {
+		if (!EntityOcclusionTester.isNotOccluded(entity)) {
 			return;
 		}
 
