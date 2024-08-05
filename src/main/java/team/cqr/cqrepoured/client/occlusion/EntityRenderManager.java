@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.client.event;
+package team.cqr.cqrepoured.client.occlusion;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -7,10 +7,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
@@ -20,7 +16,6 @@ import team.cqr.cqrepoured.util.CachedBlockAccess;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 @SideOnly(Side.CLIENT)
-@EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 public class EntityRenderManager {
 
 	@FunctionalInterface
@@ -38,27 +33,25 @@ public class EntityRenderManager {
 	private static double camY;
 	private static double camZ;
 
-	@SubscribeEvent
-	public static void onRenderTickEvent(RenderTickEvent event) {
+	public static void onPreRenderTickEvent() {
 		Minecraft mc = Minecraft.getMinecraft();
+		CACHED_BLOCK_ACCESS.setupCached(mc.world);
 
-		if (event.phase == Phase.START) {
-			CACHED_BLOCK_ACCESS.setupCached(mc.world);
-
-			Entity entity = mc.getRenderViewEntity();
-			if (entity != null) {
-				double partialTick = PartialTicksUtil.getCurrentPartialTicks();
-				x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
-				y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTick;
-				z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTick;
-				Vec3d cam = ActiveRenderInfo.getCameraPosition();
-				camX = x + cam.x;
-				camY = y + cam.y;
-				camZ = z + cam.z;
-			}
-		} else {
-			CACHED_BLOCK_ACCESS.clearCache();
+		Entity entity = mc.getRenderViewEntity();
+		if (entity != null) {
+			double partialTick = PartialTicksUtil.getCurrentPartialTicks();
+			x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTick;
+			y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTick;
+			z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTick;
+			Vec3d cam = ActiveRenderInfo.getCameraPosition();
+			camX = x + cam.x;
+			camY = y + cam.y;
+			camZ = z + cam.z;
 		}
+	}
+
+	public static void onPostRenderTickEvent() {
+		CACHED_BLOCK_ACCESS.clearCache();
 	}
 
 	public static boolean shouldEntityBeRendered(AbstractEntityCQR entity) {

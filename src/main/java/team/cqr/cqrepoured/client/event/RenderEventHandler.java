@@ -19,9 +19,11 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
+import team.cqr.cqrepoured.client.occlusion.EntityRenderManager;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
@@ -32,6 +34,16 @@ import team.cqr.cqrepoured.item.gun.ItemRevolver;
 @SideOnly(Side.CLIENT)
 @EventBusSubscriber(modid = CQRMain.MODID, value = Side.CLIENT)
 public class RenderEventHandler {
+
+	@SubscribeEvent
+	public static void onPreRenderTickEvent(RenderTickEvent event) {
+		if (event.phase == Phase.START) {
+			EntityRenderManager.onPreRenderTickEvent();
+		}
+		if (event.phase == Phase.END) {
+			EntityRenderManager.onPostRenderTickEvent();
+		}
+	}
 
 	@SubscribeEvent
 	public static void onRenderPlayerPre(RenderPlayerEvent.Pre event) {
