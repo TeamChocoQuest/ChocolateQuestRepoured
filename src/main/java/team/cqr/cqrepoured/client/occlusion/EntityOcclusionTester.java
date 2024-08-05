@@ -15,7 +15,7 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 @SideOnly(Side.CLIENT)
-public class EntityRenderManager {
+public class EntityOcclusionTester {
 
 	@FunctionalInterface
 	private interface BiDoublePredicate {

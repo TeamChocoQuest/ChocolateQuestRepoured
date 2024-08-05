@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.model.entity.ModelCQRBiped;
-import team.cqr.cqrepoured.client.occlusion.EntityRenderManager;
+import team.cqr.cqrepoured.client.occlusion.EntityOcclusionTester;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQREntityArmor;
 import team.cqr.cqrepoured.client.render.entity.layer.equipment.LayerCQREntityCape;
@@ -111,7 +111,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (!EntityRenderManager.shouldEntityBeRendered(entity)) {
+		if (!EntityOcclusionTester.shouldEntityBeRendered(entity)) {
 			return;
 		}
 

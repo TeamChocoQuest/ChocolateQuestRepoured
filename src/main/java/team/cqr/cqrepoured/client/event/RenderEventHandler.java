@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
-import team.cqr.cqrepoured.client.occlusion.EntityRenderManager;
+import team.cqr.cqrepoured.client.occlusion.EntityOcclusionTester;
 import team.cqr.cqrepoured.client.render.MagicBellRenderer;
 import team.cqr.cqrepoured.item.ItemHookshotBase;
 import team.cqr.cqrepoured.item.ItemUnprotectedPositionTool;
@@ -38,10 +38,10 @@ public class RenderEventHandler {
 	@SubscribeEvent
 	public static void onPreRenderTickEvent(RenderTickEvent event) {
 		if (event.phase == Phase.START) {
-			EntityRenderManager.onPreRenderTickEvent();
+			EntityOcclusionTester.onPreRenderTickEvent();
 		}
 		if (event.phase == Phase.END) {
-			EntityRenderManager.onPostRenderTickEvent();
+			EntityOcclusionTester.onPostRenderTickEvent();
 		}
 	}
 
