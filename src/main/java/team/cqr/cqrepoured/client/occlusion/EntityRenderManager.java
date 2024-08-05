@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.util.CachedBlockAccess;
 import team.cqr.cqrepoured.util.PartialTicksUtil;
 
 @SideOnly(Side.CLIENT)
