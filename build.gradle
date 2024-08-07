@@ -52,7 +52,7 @@ dependencies {
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
-    implementation fg.deobf('curse.maven:geckolib-388172:4020277')
+    atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')
 
     atDependencies 'curse.maven:ReachFix-556777:3584670'
     atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
@@ -68,6 +68,7 @@ minecraft {
     def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
     accessTransformer = files(
         'src/main/resources/META-INF/accesstransformer.cfg',
+        atDepFileTree.matching { include 'META-INF/geckolib_at.cfg' },
         atDepFileTree.matching { include 'META-INF/jei_at.cfg' },
         atDepFileTree.matching { include 'META-INF/accesstransformer.cfg' }
     )
