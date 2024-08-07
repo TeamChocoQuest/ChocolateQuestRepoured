@@ -39,7 +39,12 @@ repositories {
     }
 
     // CurseForge
-    maven { url 'https://www.cursemaven.com' }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
