@@ -1,19 +1,11 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.69', changing: true
-    }
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
 }
-apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
 
-version = '1.12.2-2.6.16B'
-group = 'team.cqr.cqrepoured'
-archivesBaseName = 'Chocolate_Quest_Repoured'
+version = "${mc_version}-${mod_version}"
+group = "${mod_group}"
+archivesBaseName = "${mod_name}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
@@ -48,14 +40,13 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
     includedDependencies 'meldexun:ASMUtil:1.0.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')
-
-    atDependencies fg.deobf('curse.maven:ReachFix-556777:5543551')
+    atDependencies fg.deobf('curse.maven:reach-fix-556777:5543551')
     atDependencies fg.deobf('curse.maven:jei-238222:5101347')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
@@ -64,33 +55,41 @@ dependencies {
 }
 
 minecraft {
-    mappings channel: 'stable', version: '39-1.12'
+    mappings channel: "${mappings_channel}", version: "${mappings_version}"
 
     accessTransformer = files(
         'src/main/resources/META-INF/accesstransformer.cfg',
         files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree().matching {
             include 'META-INF/geckolib_at.cfg'
-            include 'META-INF/jei_at.cfg'
             include 'META-INF/accesstransformer.cfg'
+            include 'META-INF/jei_at.cfg'
         }
     )
 
     runs {
         client {
-            taskName 'runClient CQR 1.12'
-            environment 'MC_VERSION', '1.12.2'
+            taskName "runClient ${mod_name} ${mc_version}"
+            environment 'MC_VERSION', "${mc_version}"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
         }
 
         server {
-            taskName 'runServer CQR 1.12'
-            environment 'MC_VERSION', '1.12.2'
+            taskName "runServer ${mod_name} ${mc_version}"
+            environment 'MC_VERSION', "${mc_version}"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'info'
-            property 'fml.coreMods.load', 'team.cqr.cqrepoured.asm.CQRPlugin,meldexun.reachfix.asm.ReachFixPlugin'
+            property 'fml.coreMods.load', "${mod_plugin_class},${dependency_plugin_classes}"
         }
+    }
+}
+
+processResources {
+    inputs.property('version', "${mod_version}")
+
+    filesMatching('mcmod.info') {
+        expand version: inputs.properties.get('version')
     }
 }
 
@@ -100,11 +99,13 @@ jar {
     }
 
     manifest {
-        attributes 'FMLCorePlugin': 'team.cqr.cqrepoured.asm.CQRPlugin'
-        attributes 'FMLCorePluginContainsFMLMod': 'true'
         attributes 'FMLAT': 'accesstransformer.cfg'
+        attributes 'FMLCorePlugin': "${mod_plugin_class}"
+        attributes 'FMLCorePluginContainsFMLMod': 'true'
     }
 }
+
+jar.finalizedBy('reobfJar')
 
 compileJava {
     classpath = sourceSets.main.compileClasspath + configurations.buildDependencies
