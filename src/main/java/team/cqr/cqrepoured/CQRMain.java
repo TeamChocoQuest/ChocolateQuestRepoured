@@ -61,12 +61,11 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WorldWallGenerator;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-@Mod(modid = CQRMain.MODID, version = CQRMain.VERSION, acceptedMinecraftVersions = CQRMain.ACCEPTED_MINECRAFT_VERSIONS)
+@Mod(modid = CQRMain.MODID, version = CQRMain.VERSION)
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
 	public static final String VERSION = "2.6.16B";
-	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12,1.12.2]";
 
 	@Instance
 	public static CQRMain INSTANCE;
