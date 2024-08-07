@@ -61,11 +61,10 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
 import team.cqr.cqrepoured.world.structure.generation.thewall.WorldWallGenerator;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
-@Mod(modid = CQRMain.MODID, version = CQRMain.VERSION)
+@Mod(modid = CQRMain.MODID)
 public class CQRMain {
 
 	public static final String MODID = "cqrepoured";
-	public static final String VERSION = "2.6.16B";
 
 	@Instance
 	public static CQRMain INSTANCE;
