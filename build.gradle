@@ -66,12 +66,13 @@ dependencies {
 minecraft {
     mappings channel: 'stable', version: '39-1.12'
 
-    def atDepFileTree = files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree()
     accessTransformer = files(
         'src/main/resources/META-INF/accesstransformer.cfg',
-        atDepFileTree.matching { include 'META-INF/geckolib_at.cfg' },
-        atDepFileTree.matching { include 'META-INF/jei_at.cfg' },
-        atDepFileTree.matching { include 'META-INF/accesstransformer.cfg' }
+        files(configurations.atDependencies.collect { zipTree(it) }).getAsFileTree().matching {
+            include 'META-INF/geckolib_at.cfg'
+            include 'META-INF/jei_at.cfg'
+            include 'META-INF/accesstransformer.cfg'
+        }
     )
 
     runs {
