@@ -1,24 +1,15 @@
-# ChocolateQuestRepoured
-CQ Repoured is a rewrite of the classic Chocolate Quest, Better Dungeons, and Dungeon Items Minecraft mods.
+# Chocolate Quest Repoured
+Chocolate Quest Repoured is a rewrite of the mod [Chocolate Quest/Better Dungeons](https://www.curseforge.com/minecraft/mc-mods/better-dungeons) by Chocolatin.
 
-Currently we're busy with updating our codebase to 1.20.1. 
-If you're experienced with modding and want to help, please join the [discord](https://discord.gg/StWzzFw) and let us know!
+Currently, we're busy updating our codebase to 1.20.1.<br>
+If you're experienced with modding and want to help, please join our discord server and let us know!
 
-To use, please head to our Website or curseforge page and download the latest stable build.
-Please refer to the curseforge page, our website, the wiki or our discord for informations as those are more up to date than this readme file.
+You can download the latest release of this mod from our website or the CurseForge page.<br>
+The mod is dependent on [Reach Fix](https://www.curseforge.com/minecraft/mc-mods/reach-fix) and [GeckoLib](https://www.curseforge.com/minecraft/mc-mods/geckolib).
 
-The mod is dependant on reachfix and geckolib.
+For additional information, please refer to the CurseForge page, our website, the wiki, or our discord server as those are more up-to-date than this readme file.
 
-## Links
-
-[Discord](https://discord.gg/StWzzFw)
-
-[Wiki(WIP)](http://wiki.cq-repoured.net)
-
-[Website](https://cq-repoured.net)
-
-[Curseforge](https://curse.cq-repoured.net)
-
-~~[Jenkins](http://jenkins.thechocolatequest.gq:8080/job/The%20Chocolate%20Quest/)
-The jenkins does N O T run yet as we dont want to bother with players complaining about instability.
-The jenkins will be active once we got the first alpha out and the mod is playable in terms of stability.~~
+[<img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Discord" height="40"/>](https://discord.gg/StWzzFw)
+[<img src="https://img.shields.io/badge/Wiki-B69A22" alt="Wiki" height="40"/>](http://wiki.cq-repoured.net)
+[<img src="https://img.shields.io/badge/Website-7A1616" alt="Website" height="40"/>](https://cq-repoured.net)
+[<img src="https://img.shields.io/badge/CurseForge-F16436?logo=CurseForge&logoColor=white" alt="CurseForge" height="40"/>](https://www.curseforge.com/minecraft/mc-mods/cqrepoured)
