@@ -38,10 +38,6 @@ repositories {
         metadataSources { artifact() } 
     }
 
-    // JEI
-    maven { url 'https://dvs1.progwml6.com/files/maven' }
-    maven { url 'https://modmaven.k-4u.nl' }
-
     // CurseForge
     maven { url 'https://www.cursemaven.com' }
 }
@@ -55,7 +51,7 @@ dependencies {
     atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')
 
     atDependencies fg.deobf('curse.maven:ReachFix-556777:5543551')
-    atDependencies fg.deobf('mezz.jei:jei_1.12.2:4.16.1.1012')
+    atDependencies fg.deobf('curse.maven:jei-238222:5101347')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
     buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
