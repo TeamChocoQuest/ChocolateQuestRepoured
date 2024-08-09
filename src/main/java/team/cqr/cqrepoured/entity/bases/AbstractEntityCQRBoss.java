@@ -3,9 +3,7 @@ package team.cqr.cqrepoured.entity.bases;
 import com.github.alexthe666.iceandfire.entity.IBlacklistedFromStatues;
 
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -20,20 +18,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 		super(worldIn);
 		this.experienceValue = 50;
 		this.enableBossBar();
-	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		int nearbyPlayerCount = 0;
-		for (EntityPlayer player : this.world.playerEntities) {
-			if (this.getDistanceSq(player) < 100.0D * 100.0D) {
-				nearbyPlayerCount++;
-			}
-		}
-		for (int i = 0; i < nearbyPlayerCount - 1; i++) {
-			amount *= 1.0F - CQRConfig.mobs.bossDamageReductionPerPlayer;
-		}
-		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
