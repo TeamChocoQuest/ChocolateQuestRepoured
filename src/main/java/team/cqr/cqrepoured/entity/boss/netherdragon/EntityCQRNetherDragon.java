@@ -206,7 +206,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return this.attackEntityFromPart(null, source, amount);
+	}
+
+	@Override
+	public boolean attackEntityFromPart(@Nullable MultiPartEntityPart part, DamageSource source, float damage) {
+		if (source.isFireDamage() || source.isExplosion()) {
+			return false;
+		}
+
 		if (this.phase == 0) {
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
 			if (damage >= this.getHealth()) {
@@ -226,13 +235,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		if (this.phase == 2) {
 			this.handleAttackedInSkeletalPhase(damage, source);
-			return super.attackEntityFrom(source, 0, true);
+			return super.attackEntityFrom(source, 0);
 		}
 		if (this.phase == 0) {
-			return this.attackEntityFrom(source, damage, true);
+			return super.attackEntityFrom(source, damage);
 		}
 
-		return super.attackEntityFrom(source, damage, true);
+		return super.attackEntityFrom(source, damage);
 	}
 
 	private void handleAttackedInSkeletalPhase(float damage, final DamageSource source) {
@@ -243,7 +252,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			damage = this.getMaxHealth() / (this.INITIAL_SEGMENT_COUNT - this.SEGMENT_COUNT_ON_DEATH);
 			this.setHealth(this.getHealth() - damage);
 			if (damage >= this.getHealth()) {
-				super.attackEntityFrom(source, damage + 1, true);
+				super.attackEntityFrom(source, damage + 1);
 			}
 		}
 		this.updateSegmentCount();
@@ -266,40 +275,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			segment.onRemovedFromBody();
 		}
 		// world.removeEntityDangerously(segment);
-	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.canHarmInCreative()) {
-			return super.attackEntityFrom(source, amount);
-		}
-
-		if (source.isFireDamage() || source.isExplosion()) {
-			return false;
-		}
-
-		// Phase change
-		if (this.phase == 0 && amount >= this.getHealth()) {
-			if (!this.world.isRemote) {
-				this.phase++;
-				this.dataManager.set(PHASE, this.phase);
-				this.setHealth(this.getMaxHealth() - 1);
-			}
-			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-			// DONE: Init phase 2!!
-			amount = 0;
-			return false;
-		} else if (this.phase != 0 && amount > 0) {
-			// Play blaze sound
-			this.playSound(SoundEvents.ENTITY_BLAZE_HURT, 2F, 1.5F);
-			if (this.phase == 2) {
-				this.handleAttackedInSkeletalPhase(amount / 2, source);
-				return super.attackEntityFrom(source, 0, true);
-			}
-			return false;
-		}
-
-		return super.attackEntityFrom(source, amount, false);
 	}
 
 	@Override

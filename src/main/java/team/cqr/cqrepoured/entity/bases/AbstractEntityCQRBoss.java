@@ -23,7 +23,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean attackEntityFrom(DamageSource source, float amount) {
 		int nearbyPlayerCount = 0;
 		for (EntityPlayer player : this.world.playerEntities) {
 			if (this.getDistanceSq(player) < 100.0D * 100.0D) {
@@ -33,7 +33,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR implements
 		for (int i = 0; i < nearbyPlayerCount - 1; i++) {
 			amount *= 1.0F - CQRConfig.mobs.bossDamageReductionPerPlayer;
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

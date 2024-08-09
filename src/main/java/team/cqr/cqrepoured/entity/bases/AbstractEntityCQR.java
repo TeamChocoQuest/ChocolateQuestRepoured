@@ -296,10 +296,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		return this.attackEntityFrom(source, amount, false);
-	}
-
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		// Start IceAndFire compatibility
 		if (CQRConfig.advanced.enableSpecialFeatures && source.getTrueSource() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());

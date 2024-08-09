@@ -610,13 +610,13 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		boolean isMainHBPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
-		return this.attackEntityFrom(source, damage, isMainHBPart);
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return this.attackEntityFromPart(null, source, amount);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean attackEntityFromPart(@Nullable MultiPartEntityPart part, DamageSource source, float amount) {
+		boolean sentFromPart = ((part != this.parts[3]) && (part != this.parts[4])) || part == null;
 		this.handleAttackedByLargeGroups();
 
 		boolean overrideFlag = false;
@@ -630,7 +630,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 
 		if (source.getImmediateSource() instanceof ProjectileCannonBall && source.getTrueSource() != this) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.attackEntityFrom(source, amount);
 		}
 
 		if (source.isExplosion() && source.getTrueSource() != null && source.getTrueSource() == this) {
@@ -638,7 +638,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 
 		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.attackEntityFrom(source, amount);
 		}
 
 		if (source.isFireDamage()) {
@@ -666,7 +666,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 		}
 		this.partSoundFlag = false;
 
-		overrideFlag |= super.attackEntityFrom(source, amount, sentFromPart);
+		overrideFlag |= super.attackEntityFrom(source, amount);
 
 		return overrideFlag;
 	}

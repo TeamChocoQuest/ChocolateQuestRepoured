@@ -206,11 +206,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.heal(1F);
 	}
 
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount) {
-		return super.attackEntityFrom(source, amount);
-	}
-
 	private void backStabAttacker(DamageSource source) {
 		if (source.getTrueSource() != null) {
 			if (this.teleportBehindEntity(source.getTrueSource())) {
@@ -289,7 +284,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source == DamageSource.WITHER) {
 			this.heal(amount / 2);
 			return true;
@@ -328,7 +323,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if (source.getImmediateSource() != null) {
 			if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 				amount *= 2;
-				super.attackEntityFrom(source, amount, sentFromPart);
+				super.attackEntityFrom(source, amount);
 				return true;
 			}
 			if ((source.getImmediateSource() instanceof EntityThrowable || source.getImmediateSource() instanceof EntityArrow) && !this.world.isRemote) {
@@ -394,7 +389,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 			}
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

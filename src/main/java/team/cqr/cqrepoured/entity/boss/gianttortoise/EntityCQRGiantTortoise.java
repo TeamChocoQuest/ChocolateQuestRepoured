@@ -3,6 +3,8 @@ package team.cqr.cqrepoured.entity.boss.gianttortoise;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -228,14 +230,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-		return this.attackEntityFrom(source, damage, true);
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return this.attackEntityFromPart(null, source, amount);
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+	public boolean attackEntityFromPart(@Nullable MultiPartEntityPart part, DamageSource source, float amount) {
+		boolean sentFromPart = part != null;
 		if (source.canHarmInCreative() || source == DamageSource.OUT_OF_WORLD || (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative())) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.attackEntityFrom(source, amount);
 		}
 
 		/*
@@ -261,7 +264,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			if (this.stunned) {
 				amount *= 2F;
 			}
-			return super.attackEntityFrom(source, amount, sentFromPart);
+			return super.attackEntityFrom(source, amount);
 		}
 		return true;
 	}
