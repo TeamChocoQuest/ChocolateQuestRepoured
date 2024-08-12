@@ -136,7 +136,6 @@ public class CQRBlocks {
 	public static final RegistryObject<BlockBossBlock> BOSS_BLOCK = register("boss_block", BlockBossBlock::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 	public static final RegistryObject<BlockForceFieldNexus> FORCE_FIELD_NEXUS = register("force_field_nexus", BlockForceFieldNexus::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 	public static final RegistryObject<BlockMapPlaceholder> MAP_PLACEHOLDER = register("map_placeholder", BlockMapPlaceholder::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
-	public static final RegistryObject<BlockTNTCQR> TNT = register("tnt", BlockTNTCQR::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 
 	// Loot Chests
 	// CQR
