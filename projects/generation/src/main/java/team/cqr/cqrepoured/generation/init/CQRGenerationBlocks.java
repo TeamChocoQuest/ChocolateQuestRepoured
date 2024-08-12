@@ -12,7 +12,7 @@ import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.common.CQRepoured;
 
 @EventBusSubscriber(modid = CQRepoured.MODID, bus = Bus.MOD)
-public class CQRBlocks {
+public class CQRGenerationBlocks {
 
 	private static final DeferredRegister<Block> REGISTER = DeferredRegister.create(Registries.BLOCK, CQRepoured.MODID);
 	public static final RegistryObject<Block> PLACEHOLDER = REGISTER.register("placeholder", () -> new Block(BlockBehaviour.Properties.of()));

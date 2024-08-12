@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.nbt.NBTUtil;
 import team.cqr.cqrepoured.common.primitive.IntUtil;
-import team.cqr.cqrepoured.generation.init.CQRBlocks;
+import team.cqr.cqrepoured.generation.init.CQRGenerationBlocks;
 import team.cqr.cqrepoured.generation.util.Section;
 import team.cqr.cqrepoured.generation.util.SectionUtil;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.EntityFactory;
@@ -36,7 +36,7 @@ import team.cqr.cqrepoured.generation.world.level.levelgen.structure.entity.Enti
 @SuppressWarnings("deprecation")
 public class StructureSection extends Section<CompoundTag> {
 
-	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, CQRBlocks.PLACEHOLDER.get().defaultBlockState());
+	private static final Codec<PalettedContainer<BlockState>> BLOCK_STATE_CODEC = PalettedContainer.codecRW(Block.BLOCK_STATE_REGISTRY, BlockState.CODEC, PalettedContainer.Strategy.SECTION_STATES, CQRGenerationBlocks.PLACEHOLDER.get().defaultBlockState());
 
 	private final PalettedContainer<BlockState> blocks;
 	private final Int2ObjectMap<CompoundTag> blockEntities;
@@ -44,7 +44,7 @@ public class StructureSection extends Section<CompoundTag> {
 
 	public StructureSection(SectionPos sectionPos) {
 		super(sectionPos);
-		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, CQRBlocks.PLACEHOLDER.get().defaultBlockState(), Strategy.SECTION_STATES);
+		this.blocks = new PalettedContainer<>(Block.BLOCK_STATE_REGISTRY, CQRGenerationBlocks.PLACEHOLDER.get().defaultBlockState(), Strategy.SECTION_STATES);
 		this.blockEntities = new Int2ObjectOpenHashMap<>();
 		this.entities = new ArrayList<>();
 	}
@@ -168,7 +168,7 @@ public class StructureSection extends Section<CompoundTag> {
 	@Nullable
 	private BlockState getBlockState(int index) {
 		BlockState state = this.blocks.get(index);
-		return state != CQRBlocks.PLACEHOLDER.get().defaultBlockState() ? state : null;
+		return state != CQRGenerationBlocks.PLACEHOLDER.get().defaultBlockState() ? state : null;
 	}
 
 	public void setBlockState(BlockPos pos, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
@@ -177,7 +177,7 @@ public class StructureSection extends Section<CompoundTag> {
 
 	private void setBlockState(int index, @Nullable BlockState state, @Nullable CompoundTag blockEntityTag) {
 		if (state == null) {
-			state = CQRBlocks.PLACEHOLDER.get().defaultBlockState();
+			state = CQRGenerationBlocks.PLACEHOLDER.get().defaultBlockState();
 		}
 
 		this.blocks.set(index, state);
