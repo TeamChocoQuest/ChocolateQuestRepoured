@@ -24,7 +24,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.PacketDistributor;
-import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.common.CQRepoured;
 import team.cqr.cqrepoured.common.io.FileIOUtil;
 import team.cqr.cqrepoured.common.io.IOConsumer;
@@ -35,12 +34,16 @@ import team.cqr.cqrepoured.protection.network.server.packet.SPacketUnloadProtect
 import team.cqr.cqrepoured.protection.network.server.packet.SPacketUpdateProtectedRegion;
 
 public class ServerProtectedRegionManager implements IProtectedRegionManager {
+	
+    private static final String FOLDER_PATH = "protected_regions";
+    private static final String ENTITY_REFERENCES_FILE_NAME = "entityReferences.data";
 
 	private final Map<UUID, ProtectedRegionContainer> protectedRegions = new HashMap<>();
 	private final Multimap<UUID, UUID> entity2protectedRegion = MultimapBuilder.hashKeys()
 			.hashSetValues()
 			.build();
 	private final ServerLevel level;
+	private final File entityReferenceFile;
 	private int time;
 
 	public static class ProtectedRegionContainer {
@@ -377,5 +380,21 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 
 		return protectedRegion;
 	}
+	
+    private void deleteProtectedRegionFile(UUID uuid) {
+        File file = this.getFile(uuid);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    private File getFile(ProtectedRegion protectedRegion) {
+        return this.getFile(protectedRegion.uuid());
+    }
+
+    private File getFile(UUID uuid) {
+        return FileIOUtil.getCQRDataFile(this.level, FOLDER_PATH + "/" + uuid + ".nbt");
+    }
+
 
 }
