@@ -29,7 +29,8 @@ public class FileIOUtil {
 	}
 
 	public static File getCQRDataFile(ServerLevel level, String fileName) {
-		return new File(level.getDataStorage().dataFolder, "CQR/" + fileName);
+		//return new File(level.getDataStorage().dataFolder, "CQR/" + fileName);
+		return level.getDataStorage().getDataFile("CQR/" + fileName);
 	}
 
 	public static Path getCQRDataPath(ServerLevel level, String fileName) {
