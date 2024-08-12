@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.generation.init.CQRBlocks;
+import team.cqr.cqrepoured.blocks.init.CQRBlocksBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 
@@ -25,7 +25,7 @@ public class PreparableEmptyInfo implements IBlockInfo {
 	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
-		level.setBlockState(transformedPos, CQRBlocks.NULL_BLOCK.get().defaultBlockState());
+		level.setBlockState(transformedPos, CQRBlocksBlocks.NULL.get().defaultBlockState());
 	}
 
 	public static class Factory implements IBlockInfoFactory<BlockEntity> {

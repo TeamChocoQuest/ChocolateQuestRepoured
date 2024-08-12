@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.util.LazyOptional;
-import team.cqr.cqrepoured.block.BlockTNTCQR;
-import team.cqr.cqrepoured.generation.init.CQRBlocks;
+import team.cqr.cqrepoured.blocks.block.CQRTNTBlock;
+import team.cqr.cqrepoured.blocks.init.CQRBlocksBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 
@@ -21,14 +21,14 @@ public class PreparableTNTCQRInfo implements IBlockInfo {
 	public void prepare(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
-		level.setBlockState(transformedPos, CQRBlocks.TNT.get().defaultBlockState().setValue(BlockTNTCQR.HIDDEN, true));
+		level.setBlockState(transformedPos, CQRBlocksBlocks.CQR_TNT.get().defaultBlockState().setValue(CQRTNTBlock.HIDDEN, true));
 	}
 
 	@Override
 	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
-		level.setBlockState(transformedPos, CQRBlocks.TNT.get().defaultBlockState().setValue(BlockTNTCQR.HIDDEN, false));
+		level.setBlockState(transformedPos, CQRBlocksBlocks.CQR_TNT.get().defaultBlockState().setValue(CQRTNTBlock.HIDDEN, false));
 	}
 
 	public static class Factory implements IBlockInfoFactory<BlockEntity> {

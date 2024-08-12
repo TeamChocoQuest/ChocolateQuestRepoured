@@ -27,20 +27,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.SimplePalette;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import team.cqr.cqrepoured.blocks.block.entity.BossBlockEntity;
+import team.cqr.cqrepoured.blocks.init.CQRBlocksBlocks;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
-import team.cqr.cqrepoured.generation.init.CQRBlocks;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.DungeonPlacement;
 import team.cqr.cqrepoured.generation.world.level.levelgen.structure.StructureLevel;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.item.ItemSoulBottle;
-import team.cqr.cqrepoured.tileentity.TileEntityBoss;
 
 public class PreparableBossInfo implements IBlockInfo {
 
 	@Nullable
 	private final CompoundTag bossTag;
 
-	public PreparableBossInfo(TileEntityBoss tileEntityBoss) {
+	public PreparableBossInfo(BossBlockEntity tileEntityBoss) {
 		this(getBossTag(tileEntityBoss));
 	}
 
@@ -49,7 +49,7 @@ public class PreparableBossInfo implements IBlockInfo {
 	}
 
 	@Nullable
-	private static CompoundTag getBossTag(TileEntityBoss tileEntityBoss) {
+	private static CompoundTag getBossTag(BossBlockEntity tileEntityBoss) {
 		ItemStack stack = tileEntityBoss.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElseThrow(NullPointerException::new).getStackInSlot(0);
 		if (!stack.hasTag()) {
 			return null;
@@ -84,11 +84,11 @@ public class PreparableBossInfo implements IBlockInfo {
 	public void prepareNoProcessing(StructureLevel level, BlockPos pos, DungeonPlacement placement) {
 		BlockPos transformedPos = placement.transform(pos);
 
-		level.setBlockState(transformedPos, CQRBlocks.BOSS_BLOCK.get().defaultBlockState(), blockEntity -> {
-			if (blockEntity instanceof TileEntityBoss && this.bossTag != null) {
+		level.setBlockState(transformedPos, CQRBlocksBlocks.BOSS.get().defaultBlockState(), blockEntity -> {
+			if (blockEntity instanceof BossBlockEntity && this.bossTag != null) {
 				ItemStack stack = new ItemStack(CQRItems.SOUL_BOTTLE.get());
 				stack.addTagElement(ItemSoulBottle.ENTITY_IN_TAG, this.bossTag);
-				((TileEntityBoss) blockEntity).getInventory().setItem(0, stack);
+				((BossBlockEntity) blockEntity).getInventory().setItem(0, stack);
 			}
 		});
 	}
@@ -123,6 +123,7 @@ public class PreparableBossInfo implements IBlockInfo {
 		return entity;
 	}
 
+	// TODO: MOve to a service
 	private Entity createEntityFromEntityID(DungeonPlacement placement, BlockPos pos) {
 		Entity entity = placement.inhabitant().createRandomEntity(placement.random(), placement.entityFactory()::createEntity);
 		entity.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
@@ -167,10 +168,10 @@ public class PreparableBossInfo implements IBlockInfo {
 		return this.bossTag;
 	}
 
-	public static class Factory implements IBlockInfoFactory<TileEntityBoss> {
+	public static class Factory implements IBlockInfoFactory<BossBlockEntity> {
 
 		@Override
-		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<TileEntityBoss> blockEntitySupplier) {
+		public IBlockInfo create(Level level, BlockPos pos, BlockState state, LazyOptional<BossBlockEntity> blockEntitySupplier) {
 			return new PreparableBossInfo(blockEntitySupplier.orElseThrow(NullPointerException::new));
 		}
 
