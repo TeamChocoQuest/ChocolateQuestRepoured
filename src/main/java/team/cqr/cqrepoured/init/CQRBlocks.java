@@ -131,7 +131,6 @@ public class CQRBlocks {
 
 	// Creative
 	public static final RegistryObject<BlockExporter> EXPORTER = register("exporter", BlockExporter::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
-	public static final RegistryObject<BlockNull> NULL_BLOCK = register("null_block", BlockNull::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 	public static final RegistryObject<BlockSpawner> SPAWNER = register("spawner", BlockSpawner::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 	public static final RegistryObject<BlockBossBlock> BOSS_BLOCK = register("boss_block", BlockBossBlock::new, CQRMain.CQR_CREATIVE_TOOL_TAB);
 	public static final RegistryObject<BlockForceFieldNexus> FORCE_FIELD_NEXUS = register("force_field_nexus", BlockForceFieldNexus::new, CQRMain.CQR_CREATIVE_TOOL_TAB);

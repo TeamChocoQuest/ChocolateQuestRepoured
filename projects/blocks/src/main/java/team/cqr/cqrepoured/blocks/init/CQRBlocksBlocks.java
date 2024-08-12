@@ -9,6 +9,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.registries.RegistryObject;
 import team.cqr.cqrepoured.blocks.block.BossBlock;
 import team.cqr.cqrepoured.blocks.block.CQRTNTBlock;
+import team.cqr.cqrepoured.blocks.block.NullBlock;
 import team.cqr.cqrepoured.blocks.block.SpikeBlock;
 import team.cqr.cqrepoured.common.services.CQRServices;
 
@@ -36,6 +37,17 @@ public class CQRBlocksBlocks {
 	
 	public static final RegistryObject<CQRTNTBlock> CQR_TNT = CQRServices.BLOCK.registerBlock("tnt", () -> new CQRTNTBlock(
 			Properties.copy(Blocks.TNT)
+	));
+	
+	public static final RegistryObject<NullBlock> NULL = CQRServices.BLOCK.registerBlock("null", () -> new NullBlock(
+			BlockBehaviour.Properties.of()
+				.sound(SoundType.GLASS)
+				.strength(-1.0F, 3600000.0F)
+				.noOcclusion()
+				.isValidSpawn((bs, l, p, e) -> false)
+				.isRedstoneConductor((bs, l, p) -> false)
+				.isSuffocating((bs, l, p) -> false)
+				.isViewBlocking((bs, l, p) -> false)
 	));
 	
 	

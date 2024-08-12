@@ -1,4 +1,4 @@
-package team.cqr.cqrepoured.block;
+package team.cqr.cqrepoured.blocks.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -8,7 +8,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.GlassBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -17,20 +16,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlockNull extends GlassBlock {
-
+public class NullBlock extends GlassBlock {
+	
 	public static final BooleanProperty PASSABLE = BooleanProperty.create("passable");
 
-	public BlockNull() {
-		super(Properties.of()
-				.sound(SoundType.GLASS)
-				.strength(-1.0F, 3600000.0F)
-				.noOcclusion()
-				.isValidSpawn((bs, l, p, e) -> false)
-				.isRedstoneConductor((bs, l, p) -> false)
-				.isSuffocating((bs, l, p) -> false)
-				.isViewBlocking((bs, l, p) -> false)
-		);
+	public NullBlock(Properties props) {
+		super(props);
 		this.registerDefaultState(this.stateDefinition.any().setValue(PASSABLE, false));
 	}
 
