@@ -7,6 +7,8 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -35,6 +37,40 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 					popNode1
 			));
 		});
+
+		registry.add("net.minecraft.pathfinding.Path", "getVectorFromIndex", "func_75881_a", "(Lnet/minecraft/entity/Entity;I)Lnet/minecraft/util/math/Vec3d;", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+			methodNode.instructions.insert(ASMUtil.listOf(
+					// PathPoint point = this.points[index];
+					new VarInsnNode(Opcodes.ALOAD, 0),
+					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/Path", "field_75884_a", "[Lnet/minecraft/pathfinding/PathPoint;"), // points
+					new VarInsnNode(Opcodes.ILOAD, 2),
+					new InsnNode(Opcodes.AALOAD),
+					new VarInsnNode(Opcodes.ASTORE, 3),
+					
+					// return new Vec3d(point.x + 0.5, point.y, point.z + 0.5);
+					new TypeInsnNode(Opcodes.NEW, "net/minecraft/util/math/Vec3d"),
+					new InsnNode(Opcodes.DUP),
+					
+					new VarInsnNode(Opcodes.ALOAD, 3),
+					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75839_a", "I"), // x
+					new InsnNode(Opcodes.I2D),
+					new LdcInsnNode(0.5D),
+					new InsnNode(Opcodes.DADD),
+					
+					new VarInsnNode(Opcodes.ALOAD, 3),
+					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75837_b", "I"), // y
+					new InsnNode(Opcodes.I2D),
+					
+					new VarInsnNode(Opcodes.ALOAD, 3),
+					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75838_c", "I"), // z
+					new InsnNode(Opcodes.I2D),
+					new LdcInsnNode(0.5D),
+					new InsnNode(Opcodes.DADD),
+					
+					new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/util/math/Vec3d", "<init>", "(DDD)V", false),
+					new InsnNode(Opcodes.ARETURN)
+			));
+		});
 		// @formatter:on
 
 		this.changeCreatureAttributeOfEntity(registry, "net.minecraft.entity.boss.EntityDragon", "VOID");
@@ -57,6 +93,10 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 
 	private static MethodNode createObfMethod(String owner, int access, String name, String desc, String signature, String[] exceptions) {
 		return new MethodNode(access, FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(owner, name, desc), desc, signature, exceptions);
+	}
+
+	public static FieldInsnNode createObfFieldInsn(int opcode, String owner, String name, String desc) {
+		return new FieldInsnNode(opcode, owner, FMLDeobfuscatingRemapper.INSTANCE.mapFieldName(owner, name, desc), desc);
 	}
 
 }
