@@ -22,7 +22,7 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	@Override
 	protected void registerTransformers(IClassTransformerRegistry registry) {
 		// @formatter:off
-		registry.add("net.minecraft.entity.projectile.EntityPotion", "isWaterSensitiveEntity", "(Lnet/minecraft/entity/EntityLivingBase;)Z", "c", "(Lnet/minecraft/entity/EntityLivingBase;)Z", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+		registry.add("net.minecraft.entity.projectile.EntityPotion", "isWaterSensitiveEntity", "func_190544_c", "(Lnet/minecraft/entity/EntityLivingBase;)Z", ClassWriter.COMPUTE_FRAMES, methodNode -> {
 			AbstractInsnNode popNode1 = new LabelNode();
 
 			methodNode.instructions.insert(ASMUtil.listOf(

@@ -4,8 +4,10 @@ import java.util.Map;
 
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
 
 @MCVersion("1.12.2")
+@SortingIndex(1010)
 public class CQRPlugin implements IFMLLoadingPlugin {
 
 	@Override
