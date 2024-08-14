@@ -5,9 +5,11 @@ import java.util.Map;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.SortingIndex;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @MCVersion("1.12.2")
 @SortingIndex(1010)
+@TransformerExclusions("team.cqr.cqrepoured.asm")
 public class CQRPlugin implements IFMLLoadingPlugin {
 
 	@Override
