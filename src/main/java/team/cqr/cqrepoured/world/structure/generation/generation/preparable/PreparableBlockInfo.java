@@ -45,12 +45,11 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
-			tileEntity = transformedState.getBlock().createTileEntity(world, transformedState);
+			this.tileEntityData.setInteger("x", pos.getX());
+			this.tileEntityData.setInteger("y", pos.getY());
+			this.tileEntityData.setInteger("z", pos.getZ());
+			tileEntity = TileEntity.create(world, this.tileEntityData);
 			if (tileEntity != null) {
-				this.tileEntityData.setInteger("x", pos.getX());
-				this.tileEntityData.setInteger("y", pos.getY());
-				this.tileEntityData.setInteger("z", pos.getZ());
-				tileEntity.readFromNBT(this.tileEntityData);
 				if (tileEntity instanceof TileEntitySkull) {
 					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
 						TileEntitySkull skull = (TileEntitySkull) tileEntity;
@@ -61,10 +60,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 					tileEntity.mirror(placement.getMirror());
 					tileEntity.rotate(placement.getRotation());
 				}
-				this.tileEntityData.removeTag("x");
-				this.tileEntityData.removeTag("y");
-				this.tileEntityData.removeTag("z");
 			}
+			this.tileEntityData.removeTag("x");
+			this.tileEntityData.removeTag("y");
+			this.tileEntityData.removeTag("z");
 		}
 
 		return this.prepare(world, placement, pos, transformedState, tileEntity);
@@ -76,12 +75,11 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
-			tileEntity = transformedState.getBlock().createTileEntity(world, transformedState);
+			this.tileEntityData.setInteger("x", pos.getX());
+			this.tileEntityData.setInteger("y", pos.getY());
+			this.tileEntityData.setInteger("z", pos.getZ());
+			tileEntity = TileEntity.create(world, this.tileEntityData);
 			if (tileEntity != null) {
-				this.tileEntityData.setInteger("x", pos.getX());
-				this.tileEntityData.setInteger("y", pos.getY());
-				this.tileEntityData.setInteger("z", pos.getZ());
-				tileEntity.readFromNBT(this.tileEntityData);
 				if (tileEntity instanceof TileEntitySkull) {
 					if (transformedState.getValue(BlockSkull.FACING) == EnumFacing.UP) {
 						TileEntitySkull skull = (TileEntitySkull) tileEntity;
@@ -92,10 +90,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 					tileEntity.mirror(placement.getMirror());
 					tileEntity.rotate(placement.getRotation());
 				}
-				this.tileEntityData.removeTag("x");
-				this.tileEntityData.removeTag("y");
-				this.tileEntityData.removeTag("z");
 			}
+			this.tileEntityData.removeTag("x");
+			this.tileEntityData.removeTag("y");
+			this.tileEntityData.removeTag("z");
 		}
 
 		return this.prepareDebug(world, placement, pos, transformedState, tileEntity);

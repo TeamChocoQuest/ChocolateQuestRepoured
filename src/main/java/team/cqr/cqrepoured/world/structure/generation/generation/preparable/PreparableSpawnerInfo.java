@@ -110,18 +110,17 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		TileEntity tileEntity = null;
 
 		if (this.tileEntityData != null) {
-			tileEntity = transformedState.getBlock().createTileEntity(world, transformedState);
+			this.tileEntityData.setInteger("x", pos.getX());
+			this.tileEntityData.setInteger("y", pos.getY());
+			this.tileEntityData.setInteger("z", pos.getZ());
+			tileEntity = TileEntity.create(world, this.tileEntityData);
 			if (tileEntity != null) {
-				this.tileEntityData.setInteger("x", pos.getX());
-				this.tileEntityData.setInteger("y", pos.getY());
-				this.tileEntityData.setInteger("z", pos.getZ());
-				tileEntity.readFromNBT(this.tileEntityData);
 				tileEntity.mirror(placement.getMirror());
 				tileEntity.rotate(placement.getRotation());
-				this.tileEntityData.removeTag("x");
-				this.tileEntityData.removeTag("y");
-				this.tileEntityData.removeTag("z");
 			}
+			this.tileEntityData.removeTag("x");
+			this.tileEntityData.removeTag("y");
+			this.tileEntityData.removeTag("z");
 		}
 
 		return new GeneratableBlockInfo(pos, transformedState, tileEntity);
