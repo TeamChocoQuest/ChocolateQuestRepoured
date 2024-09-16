@@ -17,18 +17,15 @@ import team.cqr.cqrepoured.item.sword.ItemGreatSword;
 
 public class ModelCQRBiped extends ModelBiped {
 
-	public ModelRenderer bipedLeftArmwear = null;
-	public ModelRenderer bipedRightArmwear = null;
-	public ModelRenderer bipedLeftLegwear = null;
-	public ModelRenderer bipedRightLegwear = null;
-	public ModelRenderer bipedBodyWear = null;
-	public ModelRenderer bipedCape = null;
-
-	public boolean hasExtraLayers = true;
+	public ModelRenderer bipedLeftArmwear;
+	public ModelRenderer bipedRightArmwear;
+	public ModelRenderer bipedLeftLegwear;
+	public ModelRenderer bipedRightLegwear;
+	public ModelRenderer bipedBodyWear;
+	public ModelRenderer bipedCape;
 
 	public ModelCQRBiped(int textureWidthIn, int textureHeightIn, boolean hasExtraLayer) {
 		super(0.0F, 0.0F, textureWidthIn, textureHeightIn);
-		this.hasExtraLayers = hasExtraLayer;
 
 		this.bipedCape = new ModelRenderer(this, 0, 0);
 		this.bipedCape.setTextureSize(64, 32);
@@ -41,15 +38,6 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedLeftLeg = new ModelRenderer(this, 16, 48);
 		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
-
-		this.initExtraLayer();
-		this.setClothingLayerVisible(hasExtraLayer);
-	}
-
-	protected void initExtraLayer() {
-		this.bipedLeftArm = new ModelRenderer(this, 32, 48);
-		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
-		this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
 
 		this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
 		this.bipedRightArmwear.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.25F);
@@ -70,6 +58,14 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedBodyWear = new ModelRenderer(this, 16, 32);
 		this.bipedBodyWear.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.25F);
 		this.bipedBodyWear.setRotationPoint(0.0F, 0.0F, 0.0F);
+
+		if (!hasExtraLayer) {
+			this.bipedLeftArmwear.isHidden = true;
+			this.bipedRightArmwear.isHidden = true;
+			this.bipedLeftLegwear.isHidden = true;
+			this.bipedRightLegwear.isHidden = true;
+			this.bipedBodyWear.isHidden = true;
+		}
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -223,11 +219,12 @@ public class ModelCQRBiped extends ModelBiped {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
+		this.bipedLeftArmwear.showModel = visible;
+		this.bipedRightArmwear.showModel = visible;
+		this.bipedLeftLegwear.showModel = visible;
+		this.bipedRightLegwear.showModel = visible;
+		this.bipedBodyWear.showModel = visible;
 		this.bipedCape.showModel = visible;
-
-		if (this.hasExtraLayers) {
-			this.setClothingLayerVisible(visible);
-		}
 	}
 
 	@Override
@@ -249,6 +246,11 @@ public class ModelCQRBiped extends ModelBiped {
 			this.bipedRightLeg.render(scale);
 			this.bipedLeftLeg.render(scale);
 			this.bipedHeadwear.render(scale);
+			this.bipedLeftLegwear.render(scale);
+			this.bipedRightLegwear.render(scale);
+			this.bipedLeftArmwear.render(scale);
+			this.bipedRightArmwear.render(scale);
+			this.bipedBodyWear.render(scale);
 		} else {
 			if (entityIn.isSneaking()) {
 				GlStateManager.translate(0.0F, 0.2F, 0.0F);
@@ -261,12 +263,6 @@ public class ModelCQRBiped extends ModelBiped {
 			this.bipedRightLeg.render(scale);
 			this.bipedLeftLeg.render(scale);
 			this.bipedHeadwear.render(scale);
-		}
-
-		GlStateManager.popMatrix();
-		GlStateManager.pushMatrix();
-
-		if (this.hasExtraLayers) {
 			this.bipedLeftLegwear.render(scale);
 			this.bipedRightLegwear.render(scale);
 			this.bipedLeftArmwear.render(scale);
@@ -275,28 +271,6 @@ public class ModelCQRBiped extends ModelBiped {
 		}
 
 		GlStateManager.popMatrix();
-	}
-
-	protected void setClothingLayerVisible(boolean visible) {
-		try {
-			this.bipedLeftArmwear.showModel = visible;
-			this.bipedRightArmwear.showModel = visible;
-			this.bipedLeftLegwear.showModel = visible;
-			this.bipedRightLegwear.showModel = visible;
-			this.bipedBodyWear.showModel = visible;
-		} catch (NullPointerException npe) {
-			// Can occur cause by default these fields are null
-			// However this can be ignored
-		}
-	}
-
-	public static void copyModelRotationPoint(ModelRenderer source, ModelRenderer target) {
-		if (source == null || target == null) {
-			return;
-		}
-		target.rotationPointX = source.rotationPointX;
-		target.rotationPointY = source.rotationPointY;
-		target.rotationPointZ = source.rotationPointZ;
 	}
 
 }
