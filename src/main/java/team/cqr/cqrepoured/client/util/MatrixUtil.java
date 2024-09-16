@@ -5,88 +5,56 @@ import java.nio.FloatBuffer;
 import javax.vecmath.Matrix4f;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// Copied from https://github.com/mchorse/mclib/blob/1.12/src/main/java/mchorse/mclib/utils/MatrixUtils.java
 @SideOnly(Side.CLIENT)
 public class MatrixUtil {
-	/**
-	 * Model view matrix buffer
-	 */
-	public static final FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
 
-	/**
-	 * Float array for transferring data from FloatBuffer to the matrix
-	 */
-	public static final float[] floats = new float[16];
+	public static final FloatBuffer FLOAT_BUFFER = BufferUtils.createFloatBuffer(16);
 
-	/**
-	 * Model view matrix captured here
-	 */
-	public static Matrix4f matrix;
-
-	/**
-	 * Read OpenGL's model view matrix
-	 */
-	public static Matrix4f readModelView(Matrix4f matrix4f) {
-		buffer.clear();
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
-		buffer.get(floats);
-
-		matrix4f.set(floats);
-		matrix4f.transpose();
-
-		return matrix4f;
+	public static Matrix4f createMatrixFromBuffer() {
+		return loadMatrixFromBuffer(new Matrix4f());
 	}
 
-	/**
-	 * Replace model view matrix with given matrix
-	 */
-	public static void loadModelView(Matrix4f matrix4f) {
-		matrixToFloat(floats, matrix4f);
-
-		buffer.clear();
-		buffer.put(floats);
-		buffer.rewind();
-		GL11.glLoadMatrix(buffer);
+	public static Matrix4f loadMatrixFromBuffer(Matrix4f matrix) {
+		matrix.m00 = FLOAT_BUFFER.get(0);
+		matrix.m10 = FLOAT_BUFFER.get(4);
+		matrix.m20 = FLOAT_BUFFER.get(8);
+		matrix.m30 = FLOAT_BUFFER.get(12);
+		matrix.m01 = FLOAT_BUFFER.get(16);
+		matrix.m11 = FLOAT_BUFFER.get(20);
+		matrix.m21 = FLOAT_BUFFER.get(24);
+		matrix.m31 = FLOAT_BUFFER.get(28);
+		matrix.m02 = FLOAT_BUFFER.get(32);
+		matrix.m12 = FLOAT_BUFFER.get(36);
+		matrix.m22 = FLOAT_BUFFER.get(40);
+		matrix.m32 = FLOAT_BUFFER.get(44);
+		matrix.m03 = FLOAT_BUFFER.get(48);
+		matrix.m13 = FLOAT_BUFFER.get(52);
+		matrix.m23 = FLOAT_BUFFER.get(56);
+		matrix.m33 = FLOAT_BUFFER.get(60);
+		return matrix;
 	}
 
-	/**
-	 * Private method to fill the float array with values from the matrix
-	 */
-	public static void matrixToFloat(float[] floats, Matrix4f matrix4f) {
-		floats[0] = matrix4f.m00;
-		floats[1] = matrix4f.m01;
-		floats[2] = matrix4f.m02;
-		floats[3] = matrix4f.m03;
-		floats[4] = matrix4f.m10;
-		floats[5] = matrix4f.m11;
-		floats[6] = matrix4f.m12;
-		floats[7] = matrix4f.m13;
-		floats[8] = matrix4f.m20;
-		floats[9] = matrix4f.m21;
-		floats[10] = matrix4f.m22;
-		floats[11] = matrix4f.m23;
-		floats[12] = matrix4f.m30;
-		floats[13] = matrix4f.m31;
-		floats[14] = matrix4f.m32;
-		floats[15] = matrix4f.m33;
+	public static void storeMatrixInBuffer(Matrix4f matrix) {
+		FLOAT_BUFFER.put(0, matrix.m00);
+		FLOAT_BUFFER.put(4, matrix.m10);
+		FLOAT_BUFFER.put(8, matrix.m20);
+		FLOAT_BUFFER.put(12, matrix.m30);
+		FLOAT_BUFFER.put(16, matrix.m01);
+		FLOAT_BUFFER.put(20, matrix.m11);
+		FLOAT_BUFFER.put(24, matrix.m21);
+		FLOAT_BUFFER.put(28, matrix.m31);
+		FLOAT_BUFFER.put(32, matrix.m02);
+		FLOAT_BUFFER.put(36, matrix.m12);
+		FLOAT_BUFFER.put(40, matrix.m22);
+		FLOAT_BUFFER.put(44, matrix.m32);
+		FLOAT_BUFFER.put(48, matrix.m03);
+		FLOAT_BUFFER.put(52, matrix.m13);
+		FLOAT_BUFFER.put(56, matrix.m23);
+		FLOAT_BUFFER.put(60, matrix.m33);
 	}
 
-	public static boolean captureMatrix() {
-		if (matrix == null) {
-			matrix = MatrixUtil.readModelView(new Matrix4f());
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public static void releaseMatrix() {
-		matrix = null;
-	}
 }

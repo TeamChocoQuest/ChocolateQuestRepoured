@@ -3,7 +3,6 @@ package team.cqr.cqrepoured.client.render.entity;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Matrix4f;
 
 import org.lwjgl.opengl.GL11;
 
@@ -167,22 +166,12 @@ public abstract class RenderCQREntityGeo<T extends AbstractEntityCQR & IAnimatab
 		BlockRenderUtil.renderBlockAtEntity(iBlockState, currentEntity, this);
 	}
 
-	// Code by McHorse
-	private static Matrix4f matrix = new Matrix4f();
-
 	/**
 	 * Multiply given matrix stack onto OpenGL's matrix stack
 	 */
 	public static void multiplyMatrix(MatrixStack stack, GeoBone bone) {
-		matrix.set(stack.getModelMatrix());
-		matrix.transpose();
-
-		MatrixUtil.matrixToFloat(MatrixUtil.floats, matrix);
-		MatrixUtil.buffer.clear();
-		MatrixUtil.buffer.put(MatrixUtil.floats);
-		MatrixUtil.buffer.flip();
-
-		GlStateManager.multMatrix(MatrixUtil.buffer);
+		MatrixUtil.storeMatrixInBuffer(stack.getModelMatrix());
+		GlStateManager.multMatrix(MatrixUtil.FLOAT_BUFFER);
 		GlStateManager.translate(bone.rotationPointX / 16, bone.rotationPointY / 16, bone.rotationPointZ / 16);
 	}
 
