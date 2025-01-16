@@ -229,27 +229,26 @@ public class MagicBellRenderer {
 		});
 		mc.getRenderManager().setRenderOutlines(false);
 
+		GlStateManager.enableColorMaterial();
+		GlStateManager.depthMask(false);
 		this.cqrOutlineShader.render(partialTicks);
 
-		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		mc.getFramebuffer().bindFramebuffer(false);
-		GlStateManager.enableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.disableLight(0);
+		GlStateManager.disableLight(1);
 		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
-
-		this.cqrOutlineFramebuffer.framebufferRenderExt(mc.displayWidth, mc.displayHeight, false);
-
+		GlStateManager.enableDepth();
+		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GlStateManager.disableTexture2D();
 		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-		GlStateManager.enableCull();
-		GlStateManager.disableFog();
-		GlStateManager.depthFunc(GL11.GL_LEQUAL);
-		GlStateManager.depthMask(true);
-		GlStateManager.enableDepth();
-		GlStateManager.disableBlend();
-		GlStateManager.disableColorMaterial();
-		GlStateManager.disableLighting();
+
+		this.cqrOutlineFramebuffer.framebufferRenderExt(mc.displayWidth, mc.displayHeight, false);
+
 		GlStateManager.enableAlpha();
+		GlStateManager.disableBlend();
+		GlStateManager.enableDepth();
 	}
 
 }
