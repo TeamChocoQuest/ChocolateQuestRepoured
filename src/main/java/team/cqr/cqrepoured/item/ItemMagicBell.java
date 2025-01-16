@@ -46,10 +46,10 @@ public class ItemMagicBell extends ItemLore {
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(new BlockPos(entityLiving));
 
 			protectedRegions.stream().map(ProtectedRegion::getEntityDependencies).flatMap(Collection::stream).map(uuid -> EntityUtil.getEntityByUUID(worldIn, uuid)).filter(Objects::nonNull)
-					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0xC00000, entity.getEntityId()));
+					.forEach(entity -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 600, 0xC00000, entity.getEntityId()));
 
 			protectedRegions.stream().map(ProtectedRegion::getBlockDependencies).flatMap(Collection::stream)
-					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, 0x4050D0, pos.getX(), pos.getY(), pos.getZ()));
+					.forEach(pos -> CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 600, 0x4050D0, pos.getX(), pos.getY(), pos.getZ()));
 
 			protectedRegions.forEach(pr -> {
 				BlockPos start = pr.getStartPos();
@@ -62,7 +62,7 @@ public class ItemMagicBell extends ItemLore {
 						int x = i / size.getZ() / size.getY();
 						int y = i / size.getZ() % size.getY();
 						int z = i % size.getZ();
-						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 200, color, start.getX() + x, start.getY() + y, start.getZ() + z);
+						CQRParticleType.spawnParticles(CQRParticleType.BLOCK_HIGHLIGHT, worldIn, entityLiving.posX, entityLiving.posY, entityLiving.posZ, 0, 0, 0, 1, 0, 0, 0, 600, color, start.getX() + x, start.getY() + y, start.getZ() + z);
 					}
 				}
 			});
