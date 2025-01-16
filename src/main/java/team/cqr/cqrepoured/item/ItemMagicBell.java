@@ -69,11 +69,7 @@ public class ItemMagicBell extends ItemLore {
 
 			worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, CQRSounds.BELL_USE, entityLiving.getSoundCategory(), 0.5F, 1.0F);
 			if (entityLiving instanceof EntityPlayer) {
-				if (protectedRegions.isEmpty()) {
-					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 60);
-				} else {
-					((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 200);
-				}
+				((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 40);
 			}
 		}
 
