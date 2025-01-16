@@ -2,14 +2,19 @@ package team.cqr.cqrepoured.command;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import team.cqr.cqrepoured.util.EntityUtil;
+import team.cqr.cqrepoured.util.IndentableStringBuilder;
 import team.cqr.cqrepoured.world.structure.protection.IProtectedRegionManager;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegion;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionManager;
@@ -43,34 +48,48 @@ public class CommandGetProtectedRegion extends CommandBase {
 		if (protectedRegionManager != null) {
 			List<ProtectedRegion> protectedRegions = protectedRegionManager.getProtectedRegionsAt(pos);
 
-			StringBuilder sb = new StringBuilder("Protected Regions at (");
-			sb.append(pos.getX());
-			sb.append(',');
-			sb.append(' ');
-			sb.append(pos.getY());
-			sb.append(',');
-			sb.append(' ');
-			sb.append(pos.getZ());
-			sb.append(')');
-			sb.append(':');
-			sb.append('\n');
+			IndentableStringBuilder sb = new IndentableStringBuilder();
+			sb.append("Protected Regions at (%d, %d, %d):", pos.getX(), pos.getY(), pos.getZ()).newLine();
+			sb.incrementIndentation();
+
 			if (protectedRegions.isEmpty()) {
-				sb.append(" NONE");
+				sb.append("NONE");
 			} else {
 				for (int i = 0; i < protectedRegions.size(); i++) {
 					ProtectedRegion protectedRegion = protectedRegions.get(i);
-					sb.append(' ');
-					sb.append(i);
-					sb.append(':');
-					sb.append(' ');
-					sb.append(protectedRegion.getName());
-					sb.append(' ');
-					sb.append(protectedRegion.getUuid());
-					if (i < protectedRegions.size() - 1) {
-						sb.append('\n');
+					sb.append(i).append(':').newLine();
+					sb.incrementIndentation();
+
+					sb.append("Name: %s", protectedRegion.getName()).newLine();
+					sb.append("UUID: %s", protectedRegion.getUuid()).newLine();
+
+					sb.append("Entities: [").newLine();
+					sb.incrementIndentation();
+					for (UUID entityUUID : protectedRegion.getEntityDependencies()) {
+						Entity entity = EntityUtil.getEntityByUUID(sender.getEntityWorld(), entityUUID);
+						if (entity != null) {
+							sb.append("%s (%d, %d, %d)", entity.getClass().getSimpleName(),
+									MathHelper.ceil(entity.posX), MathHelper.ceil(entity.posY),
+									MathHelper.ceil(entity.posZ)).newLine();
+						} else {
+							sb.append(entityUUID).newLine();
+						}
 					}
+					sb.decrementIndentation();
+					sb.append("]").newLine();
+
+					sb.append("Blocks: [").newLine();
+					sb.incrementIndentation();
+					for (BlockPos blockPos : protectedRegion.getBlockDependencies()) {
+						sb.append("%d, %d, %d", blockPos.getX(), blockPos.getY(), blockPos.getZ()).newLine();
+					}
+					sb.decrementIndentation();
+					sb.append("]");
 				}
 			}
+
+			sb.decrementIndentation();
+
 			sender.sendMessage(new TextComponentString(sb.toString()));
 		}
 	}
