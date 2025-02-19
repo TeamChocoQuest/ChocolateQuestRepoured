@@ -83,10 +83,6 @@ public class CQRConfig {
 		@Config.Comment("If enabled, a faction will consider you as ally when you are on a team with the same name as the faction.")
 		public boolean enableOldFactionMemberTeams = false;
 
-		@Config.Comment("When enabled, the number or health of enemies in a dungeon scales up in multiplayer by (player count in dungeon region -1) * entityCountGrowPerPlayer")
-		public boolean scaleEntitiesOnPlayerCount = false;
-		public double entityCountGrowPerPlayer = 0.25D;
-
 		public boolean structureImportMode = false;
 
 	}
