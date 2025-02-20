@@ -1,6 +1,5 @@
 package team.cqr.cqrepoured.util;
 
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumFacing;
@@ -20,7 +19,6 @@ import team.cqr.cqrepoured.client.gui.GuiSpawner;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiCQREntity;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchant;
 import team.cqr.cqrepoured.client.gui.npceditor.GuiMerchantEditTrade;
-import team.cqr.cqrepoured.client.gui.npceditor.GuiReputation;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 import team.cqr.cqrepoured.inventory.ContainerAlchemyBag;
 import team.cqr.cqrepoured.inventory.ContainerBackpack;
@@ -124,10 +122,6 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == EXPORTER_GUI_ID) {
 			return new GuiExporter((TileEntityExporter) world.getTileEntity(new BlockPos(x, y, z)));
-		}
-
-		if (ID == REPUTATION_GUI_ID) {
-			return new GuiReputation((EntityPlayerSP) player);
 		}
 
 		if (ID == EXPORTER_CHEST_GUI_ID) {

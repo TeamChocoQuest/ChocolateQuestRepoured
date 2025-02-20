@@ -1,7 +1,5 @@
 package team.cqr.cqrepoured.proxy;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -9,7 +7,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.integrated.IntegratedServer;
@@ -17,7 +14,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import team.cqr.cqrepoured.client.gui.GuiAddPathNode;
 import team.cqr.cqrepoured.client.gui.IUpdatableGui;
@@ -31,10 +27,6 @@ import team.cqr.cqrepoured.customtextures.CTResourcepack;
 import team.cqr.cqrepoured.util.GuiHandler;
 
 public class ClientProxy implements IProxy {
-
-	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
-
-	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
 	@Override
 	public void preInit() {
@@ -50,7 +42,7 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public void init() {
-		ClientRegistry.registerKeyBinding(keybindReputationGUI);
+
 	}
 
 	@Override
