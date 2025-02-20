@@ -1,18 +1,25 @@
+#Русский перевод для мода Chocolate Quest обновлён!
+#Этот мод был переведён ENEIZEM (https://vk.com/pomazuevmaksim) с использованием устаревшего перевода Chocolate Quest
 
+#DamageSources
+death.attack.ray=%1$s был испепелён лазером!
+death.attack.ray.player=%1$s был испепелён лазером %2$s!
 
-//CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=CQR Блоки
-itemGroup.ChocolateQuestRepouredItemsTab=CQR Предметы
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Подземелья
-itemGroup.ChocolateQuestRepouredBannerTab=Баннеры
-itemGroup.ChocolateQuestRepouredExporterChests=Экспортер Сундуки
+#CreativeTabs
+itemGroup.cqrepoured_blocks=CQR Блоки
+itemGroup.cqrepoured_items=CQR Предметы
+itemGroup.cqrepoured_banners=CQR Баннеры
+itemGroup.cqrepoured_creative_tools=CQR Инструменты для Творческого Режима
+itemGroup.cqrepoured_dungeon_placers=CQR Подземелья
+itemGroup.cqrepoured_exporter_chests=CQR Экспортёр Сундуки
+itemGroup.cqrepoured_spawn_eggs=CQR Яйца Призыва
 
-//Banners
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.orange=CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.magenta=CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.light_blue=CQR-маркер баннера
-item.banner.cqrepoured_cq_blank.yellow=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.yellow=CQR-CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.lime=CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.pink=CQR-маркер баннера
 item.banner.cqrepoured_cq_blank.gray=CQR-маркер баннера
@@ -93,6 +100,7 @@ item.banner.cqrepoured_cq_emerald.green=Зеленый изумрудный са
 item.banner.cqrepoured_cq_emerald.red=Красный изумрудный самоцвет
 item.banner.cqrepoured_cq_emerald.black=Черный изумрудный самоцвет
 
+
 item.banner.cqrepoured_cq_bones.white=Белые кости мертвых
 item.banner.cqrepoured_cq_bones.orange=Oранжевые кости мертвых
 item.banner.cqrepoured_cq_bones.magenta=Пурпурные кости мертвых
@@ -147,7 +155,7 @@ item.banner.cqrepoured_walker_border.black=Черный выступающий �
 
 item.banner.cqrepoured_walker_inner_border.white=Белая рваное полотно
 item.banner.cqrepoured_walker_inner_border.orange=Oранжевое рваное полотно
-item.banner.cqrepoured_walker_inner_border.magenta=Пуропурное рваное полотно
+item.banner.cqrepoured_walker_inner_border.magenta=Пурпурное рваное полотно
 item.banner.cqrepoured_walker_inner_border.light_blue=Светло-Синее рваное полотно
 item.banner.cqrepoured_walker_inner_border.yellow=Желтое рваное полотно
 item.banner.cqrepoured_walker_inner_border.lime=Лаймовое рваное полотно
@@ -163,79 +171,100 @@ item.banner.cqrepoured_walker_inner_border.red=Красное рваное по�
 item.banner.cqrepoured_walker_inner_border.black=Черное рваное полотно
 
 
-item.banner.cqrepoured_walker_skull.white=Белое лицо ходока
-item.banner.cqrepoured_walker_skull.orange=Oранжевое лицо ходока
-item.banner.cqrepoured_walker_skull.magenta=Пурпурное лицо ходока
-item.banner.cqrepoured_walker_skull.light_blue=Светло-Синее лицо ходока
-item.banner.cqrepoured_walker_skull.yellow=Желтое лицо ходока
-item.banner.cqrepoured_walker_skull.lime=Лаймовое лицо ходока
-item.banner.cqrepoured_walker_skull.pink=Розовое лицо ходока
-item.banner.cqrepoured_walker_skull.gray=Серое лицо ходока
-item.banner.cqrepoured_walker_skull.silver=Серебристое лицо ходока
-item.banner.cqrepoured_walker_skull.cyan=Голубое лицо ходока
-item.banner.cqrepoured_walker_skull.purple=Фиолетовое лицо ходока
-item.banner.cqrepoured_walker_skull.blue=Синее лицо ходока
-item.banner.cqrepoured_walker_skull.brown=Коричневое лицо ходока
-item.banner.cqrepoured_walker_skull.green=Зеленое лицо ходока
-item.banner.cqrepoured_walker_skull.red=Красное лицо ходока
-item.banner.cqrepoured_walker_skull.black=Черное лицо ходока
+item.banner.cqrepoured_walker_skull.white=Белое лицо ходячего
+item.banner.cqrepoured_walker_skull.orange=Oранжевое лицо ходячего
+item.banner.cqrepoured_walker_skull.magenta=Пурпурное лицо ходячего
+item.banner.cqrepoured_walker_skull.light_blue=Светло-Синее ходячего
+item.banner.cqrepoured_walker_skull.yellow=Желтое лицо ходячего
+item.banner.cqrepoured_walker_skull.lime=Лаймовое лицо ходячего
+item.banner.cqrepoured_walker_skull.pink=Розовое лицо ходячего
+item.banner.cqrepoured_walker_skull.gray=Серое лицо ходячего
+item.banner.cqrepoured_walker_skull.silver=Серебристое лицо ходячего item.banner.cqrepoured_walker_skull.cyan=Голубое лицо ходячего
+item.banner.cqrepoured_walker_skull.purple=Фиолетовое лицо ходячего
+item.banner.cqrepoured_walker_skull.blue=Синее лицо ходячего
+item.banner.cqrepoured_walker_skull.brown=Коричневое лицо ходячего item.banner.cqrepoured_walker_skull.green=Зеленое лицо ходячего
+item.banner.cqrepoured_walker_skull.red=Красное лицо ходячего
+item.banner.cqrepoured_walker_skull.black=Черное лицо ходячего
 
 
-//Gui
+#Banners
+item.banner.pirate_banner.name=Баннер Пирата
+item.banner.walker_banner.name=Баннер Ходячего
+item.banner.pigman_banner.name=Баннер Свинозомби
+item.banner.enderman_banner.name=Баннер Странника Края
+item.banner.enderman_banner2.name=Баннер Странника Края 2
+item.banner.npc_banner.name=Баннер NPC
+item.banner.skeleton_banner.name=Баннер Скелета
+item.banner.illager_banner.name=Баннер Поборника
+item.banner.walker_ordo.name=Баннер Ходячего 2
+item.banner.gremlin_banner.name=Баннер Гремлина
+
+#Gui
 gui.repu.name=Репутация
 gui.repu.faction=Фракция
 gui.repu.reputation=Ваша репутация
-gui.repu.memberskilled=Убитые участники
+gui.repu.memberskilled=Убийства
 gui.repu.dungeonsconquered=Разрушенные дома
 gui.drops.name=Дроп
 gui.backpack.name=Рюкзак
 gui.alchemy_bag.name=Алхимический Мешок
 description.gui_exporter.name=Креативный блок, только для экспорта подземелий. Выберите область, которую вы хотите экспортировать, а затем сохраните ее.
+description.gui_exporter_part_mode.name=Разделяет структуру на области размером 16x16x16, что обычно ускоряет экспорт и генерацию. Рекомендуется контролировать этот процесс.
+description.gui_exporter_relative_mode.name=Использует координаты относительно Блока Экспортёра. Предмет "Помощник Выбора" контролирует этот процесс.
+description.gui_exporter_ignore_entities.name=Игнорирует все сущности, которые не указаны в cqrepoured.cfg -> advanced -> specialEntities. Рекомендуется контролировать этот процесс.
 
-//Other
-item.super_tool.name=Супер Инструмент(Только Творческий)
+#Other
+item.super_tool.name=Супер-Инструмент (Только Творческий Режим)
 item.potion_healing.name=Целебное зелье
-item.teleport_stone.name=Телепортационный Камень
+item.teleport_stone.name=Камень Телепортации
 item.soul_bottle.name=Бутылка Души
 item.mob_to_spawner_tool.name=Инструмент для спавнера мобов
-item.spawner_converter.name=Преобразователь Спавнера
+item.spawner_converter.name=Преобразователь Рассадника монстров
 item.badge.name=Значок
 item.backpack.name=Рюкзак
+item.spiked_glove.name=Шипастая Перчатка
 item.alchemy_bag.name=Алхимический Мешок
-item.structure_selector.name=Помощьник селектора селекции
+item.structure_selector.name=Помощник выбора селектора
+item.path_tool.name=Инструмент Пути
+item.cursed_bone.name=Проклятая Кость
+item.dummy_shield.name=Муляж Щита
+item.unprotected_positions_tool.name=Незащищённый помощник выбора позиции
+item.magic_bell.name=Волшебный Колокольчик
 
-//Dragon Items
+#Axes
+item.battle_axe_bull.name=Бычий боевой топор
+
+#Dragon Items
 item.helmet_dragon.name=Драконий шлем
 
-//Daggers
+#Daggers
 item.dagger_iron.name=Железный Кинжал
 item.dagger_diamond.name=Алмазный Кинжал
-item.dagger_monking.name=Монашеский Кинжал
+item.dagger_monking.name=Кинжал Монаха
 item.dagger_ninja.name=Кинжал Ниндзя
 
-//Swords
+#Swords
 item.sword_turtle.name=Черепаший Меч
 item.sword_spider.name=Паучий Меч
-item.battle_axe_bull.name=Бычий Боевой Топор
 item.sword_moonlight.name=Лунный Свет
 item.sword_sunshine.name=Солнечное Сияние
 
-//Shields
+#Shields
 item.cqr_shield_r01.name=Щит Свинозомби
 item.cqr_shield_r02.name=Щит Пирата
 item.cqr_shield_r03.name=Щит Призрака
 item.cqr_shield_r04.name=Щит Гоблина
 item.cqr_shield_r05.name=Щит Мумии
 item.cqr_shield_r06.name=Радужный Щит
-item.cqr_shield_r07.name=Проржавевший Щит
+item.cqr_shield_r07.name=Ржавый Щит
 item.cqr_shield_r08.name=Черепаший Щит
 item.cqr_shield_r09.name=Щит Тритона
 
-//Walker set
-item.sword_walker.name=Меч Ходока
-item.shield_walker_king.name=Королевский Щит Ходока
+#Walker set
+item.sword_walker.name=Меч Ходячего
+item.shield_walker_king.name=Щит Короля Бездны 
 
-//Shields
+#Shields
 item.shield_bull.name=Щит Ледяного Быка
 item.shield_carl.name=Карл
 item.shield_dragonslayer.name=Драконий Щит
@@ -258,21 +287,22 @@ item.shield_tomb.name=Могильный Щит
 item.shield_triton.name=Щит Тритона
 item.shield_turtle.name=Черепаший Пехотный Щит
 item.shield_warped.name=Деформированный Щит
-item.shield_walker.name=Щит Ходока
-item.shield_walker_normal.name=Щит Ходока
+item.shield_walker.name=Щит Ходячего
+item.shield_walker_normal.name=Щит Ходячего
 item.shield_zombie.name=Щит Зомби
 
-//Great Swords
-item.great_sword_monking.name=Монашеский Великий Меч
+#Great Swords
+item.great_sword_monking.name=Великий Меч Монаха
 item.great_sword_bull.name=Большой Меч Быка
 item.great_sword_diamond.name=Алмазный Большой Меч
 item.great_sword_iron.name=Железный Большой Меч
 
-//Spears
+#Spears
 item.spear_diamond.name=Алмазное Копье
 item.spear_iron.name=Железное Копье
+attribute.name.generic.attackRange=Дальность Атаки
 
-//Staves
+#Staves
 item.staff.name=Посох
 item.staff_fire.name=Огненный Посох
 item.staff_vampiric.name=Вампирский Посох
@@ -283,38 +313,45 @@ item.staff_gun.name=Оружейный Посох
 item.staff_healing.name=Исцеляющий Посох
 item.staff_thunder.name=Громовой Посох
 
-//Guns
+
+#Guns
 item.revolver.name=Револьвер
 item.captain_revolver.name=Револьвер Капитана
 item.musket.name=Mушкет
 item.musket_dagger_iron.name=Мушкет с железным кинжалом
 item.musket_dagger_diamond.name=Мушкет с алмазным кинжалом
-item.musket_dagger_monking.name=Мушкет с монашеским кинжалом
+item.musket_dagger_monking.name=Мушкет с кинжалом монаха
 item.bullet_iron.name=Железные Пули
 item.bullet_gold.name=Золотые Пули
 item.bullet_diamond.name=Алмазные Пули
 item.bullet_fire.name=Огненные Пули
 item.cannon_ball.name=Пушечное ядро
 item.flamethrower.name=Огнемет
+item.bubble_pistol.name=Пузырьковый Пистолет
+item.bubble_rifle.name=Пузырьковое Ружьё
 
-//Hookshots
+#Hookshots
 item.hookshot.name=Выстрел крюком
 item.longshot.name=Длинный выстрел
+item.spiderhook.name=Паучий выстрел
 
-//Cloud Items
+#Cloud Items
 item.boots_cloud.name=Облачные Ботинки
 item.feather_golden.name=Золотое Перо
 
-//Monking Items
-item.bone_monking.name=Монашеская Кость
+#Monking Items
+item.bone_monking.name=Кость Монаха
 
-//Inquisition Armor
+#King Armor
+item.king_crown.name=Королевская Корона
+
+#Inquisition Armor
 item.helmet_inquisition.name=Шлем Инквизиции
 item.chestplate_inquisition.name=Нагрудник Инквизиции
 item.leggings_inquisition.name=Поножи Инквизиции
 item.boots_inquisition.name=Ботинки Инквизиции
 
-//Bull Armor
+#Bull Armor
 item.helmet_bull.name=Бычий Шлем
 item.chestplate_bull.name=Бычий Нагрудник
 item.leggings_bull.name=Бычьи Поножи
@@ -322,57 +359,57 @@ item.boots_bull.name=Бычьи Ботинки
 item.leather_bull.name=Бычья Кожа
 item.horn_bull.name=Бычий Рог
 
-//Turtle Armor
+#Turtle Armor
 item.helmet_turtle.name=Черепаший Шлем
 item.chestplate_turtle.name=Черепаший Нагрудник
 item.leggings_turtle.name=Черепашьи Поножи
 item.boots_turtle.name=Черепашьи Ботинки
-item.scale_turtle.name=Черепашья Пластина
+item.scale_turtle.name=Фрагмент Панциря черепахи
 
-//Slime Armor
+#Slime Armor
 item.helmet_slime.name=Шлем из Слизи
 item.chestplate_slime.name=Нагрудник из Слизи
 item.leggings_slime.name=Поножи из Слизи
 item.boots_slime.name=Ботинки из Слизи
 item.ball_slime.name=Регенерирующий Слизистый Шар
 
-//Spider Armor
+#Spider Armor
 item.helmet_spider.name=Паучий Шлем
 item.chestplate_spider.name=Паучий Нагрудник
 item.leggings_spider.name=Паучьи Поножи
-item.boots_spider.name=Паучьи Батинки
+item.boots_spider.name=Паучьи Бoтинки
 item.leather_spider.name=Паучья Кожа
-item.giant_spider_poison.name=Гигантский Ядовитый Паук
+item.giant_spider_poison.name=Яд Гигантского Паука
 
-//Heavy Diamond Armor
+#Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Тяжелый Алмазный Шлем
 item.chestplate_heavy_diamond.name=Тяжелый Алмазный Нагрудник
 item.leggings_heavy_diamond.name=Тяжелые Алмазные Поножи
 item.boots_heavy_diamond.name=Тяжелые Алмазные Ботинки
 
-//Heavy Iron Armor
+#Heavy Iron Armor
 item.helmet_heavy_iron.name=Тяжелый Железный Шлем
 item.chestplate_heavy_iron.name=Тяжелый Железный Нагрудник
 item.leggings_heavy_iron.name=Тяжелые Железные Поножи
 item.boots_heavy_iron.name=Тяжелые Железные Ботинки
 
-//Dyable Iron Armor
+#Dyable Iron Armor
 item.helmet_iron_dyable.name=Покрашенный Железный Шлем
 item.chestplate_iron_dyable.name=Покрашенный Железный Нагрудник
 item.leggings_iron_dyable.name=Покрашенные Железные Поножи
 item.boots_iron_dyable.name=Покрашенные Железные Ботинки
 
-//Dyable Diamond Armor
+#Dyable Diamond Armor
 item.helmet_diamond_dyable.name=Покрашенный Алмазный Шлем
 item.chestplate_diamond_dyable.name=Покрашенный Алмазный Нагрудник
 item.leggings_diamond_dyable.name=Покрашенные Алмазные Поножи
 item.boots_diamond_dyable.name=Покрашенные Алмазные Ботинки
 
-//Blocks
+#Blocks
 tile.exporter.name=Блок Экспортер
-tile.spawner.name=Спавнер
+tile.spawner.name=Рассадник Монстров
 tile.null_block.name=Нулевой блок
-tile.unlit_torch.name=Незажженый факел
+tile.unlit_torch.name=Незажжёный факел
 tile.table_oak.name=Дубовый стол
 tile.table_spruce.name=Еловый стол
 tile.table_birch.name=Березовый стол
@@ -381,8 +418,9 @@ tile.table_acacia.name=Aкациевый стол
 tile.table_dark.name=Темно-Дубовый стол
 tile.boss_block.name=Босс Блок
 tile.force_field_nexus.name=Силовое Поле Нексуса (NYI)
+tile.map_placeholder.name=Рамка для Карты
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Резной Андезит
 tile.andesite_pillar.name=Андезитовый Столб
 tile.andesite_cube.name=Андезитовый Куб
@@ -391,7 +429,7 @@ tile.andesite_square.name=Андезитовая Площадь
 tile.andesite_small.name=Маленькие Андезитовые Кирпичи
 tile.andesite_large.name=Большие Андезитовые Кирпичи
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Резной Диорит
 tile.diorite_pillar.name=Диоритовый Столб
 tile.diorite_cube.name=Диоритовый Куб
@@ -400,7 +438,7 @@ tile.diorite_square.name=Диоритовая Площадь
 tile.diorite_small.name=Маленькие Диоритовые Кирпичи
 tile.diorite_large.name=Большие Диоритовые Кирпичи
 
-//Diorite blocks
+#Diorite blocks
 tile.granite_carved.name=Резной Гранит
 tile.granite_pillar.name=Гранитный Столб
 tile.granite_cube.name=Гранитный Куб
@@ -409,7 +447,7 @@ tile.granite_square.name=Гранитная Площадь
 tile.granite_small.name=Маленькие Гранитные Кирпичи
 tile.granite_large.name=Большие Гранитные Кирпичи
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Резной Призмарин
 tile.prismarine_pillar.name=Призмариновый Столб
 tile.prismarine_cube.name=Призмариновый Куб
@@ -417,7 +455,7 @@ tile.prismarine_square.name=Призмариновая Площадь
 tile.prismarine_small.name=Маленькие Призмариновые Кирпичи
 tile.prismarine_large.name=Большие Призмариновые Кирпичи
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Резной Эндстоун
 tile.endstone_pillar.name=Эндстоуновый Столб
 tile.endstone_cube.name=Эндстоуновый Куб
@@ -425,14 +463,14 @@ tile.endstone_scale.name=Эндстоуновая Шкала
 tile.endstone_square.name=Эндстоуновая Площадь
 tile.endstone_small.name=Маленькие Эндстоуновые Кирпичи
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Резной Пурпур
 tile.purpur_cube.name=Пурпурный Столб
 tile.purpur_scale.name=Пурпурная Шкала
 tile.purpur_small.name=Маленькие Пурпурные Кирпичи
 tile.purpur_large.name=Большие Пурпурные Кирпичи
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Резной Красный Незерак
 tile.red_netherbrick_pillar.name=Столб из Красного Незерака
 tile.red_netherbrick_cube.name=Куб из Красного Незерака
@@ -440,64 +478,51 @@ tile.red_netherbrick_scale.name=Шкала из Красного Незерак�
 tile.red_netherbrick_square.name=Площадь из Красного Незерака
 tile.red_netherbrick_large.name=Большой Красный Незерак
 
-//Stone blocks
+#Stone blocks
 tile.stone_pillar.name=Каменный Столб
 tile.stone_cube.name=Каменный Куб
 tile.stone_scale.name=Каменная Шкала
 tile.stone_square.name=Каменная Площадь
 tile.stone_small.name=Маленькие Каменные Кирпичи
 
-//Exporter chests
-tile.exporter_chest_valuable.name=Экспортер Сундук Сокровища
-tile.exporter_chest_food.name=Экспортер Сундук Еда
-tile.exporter_chest_equipment.name=Экспортер Сундук Оборудование
-tile.exporter_chest_utility.name=Экспортер Сундук Утилиты
-tile.exporter_chest_vanilla_blacksmith.name=Экспортер Сундук - Деревенский Кузнец
-tile.exporter_chest_vanilla_bonus.name=Экспортер Сундук - Бонусный сундук
-tile.exporter_chest_vanilla_dungeon.name=Экспортер Сундук - Подземелье
-tile.exporter_chest_vanilla_end_city.name=Экспортер Сундук - Город Края
-tile.exporter_chest_vanilla_igloo.name=Экспортер Сундук - Иглу
-tile.exporter_chest_vanilla_jungle.name=Экспортер Сундук - Сундук джунглей
-tile.exporter_chest_vanilla_jungle_dispenser.name=Экспортер Сундук - Дозатор джунглей
-tile.exporter_chest_vanilla_mansion.name=Экспортер Сундук - Лесной Особняк
-tile.exporter_chest_vanilla_mineshaft.name=Экспортер Сундук - Шахта
-tile.exporter_chest_vanilla_nether.name=Экспортер Сундук - Крепость незера
-tile.exporter_chest_vanilla_pyramid.name=Экспортер Сундук - Пирамида
-tile.exporter_chest_vanilla_stronghold.name=Экспортер Сундук - Крепостной Коридор
-tile.exporter_chest_vanilla_stronghold_library.name=Экспортер Сундук - Крепостная Библиотека
-tile.exporter_chest_vanilla_stronghold_storeroom.name=Экспортер Сундук - Крепостная Шахта
-tile.exporter_chest_custom_1.name=Экспортер Сундук - Custom 1
-tile.exporter_chest_custom_2.name=Экспортер Сундук - Custom 2
-tile.exporter_chest_custom_3.name=Экспортер Сундук - Custom 3
-tile.exporter_chest_custom_4.name=Экспортер Сундук - Custom 4
-tile.exporter_chest_custom_5.name=Экспортер Сундук - Custom 5
-tile.exporter_chest_custom_6.name=Экспортер Сундук - Custom 6
-tile.exporter_chest_custom_7.name=Экспортер Сундук - Custom 7
-tile.exporter_chest_custom_8.name=Экспортер Сундук - Custom 8
-tile.exporter_chest_custom_9.name=Экспортер Сундук - Custom 9
-tile.exporter_chest_custom_10.name=Экспортер Сундук - Custom 10
-tile.exporter_chest_custom_11.name=Экспортер Сундук - Custom 11
-tile.exporter_chest_custom_12.name=Экспортер Сундук - Custom 12
-tile.exporter_chest_custom_13.name=Экспортер Сундук - Custom 13
-tile.exporter_chest_custom_14.name=Экспортер Сундук - Custom 14
+#Exporter chests
+tile.exporter_chest_valuable.name=Экспортёр Сундук Сокровища
+tile.exporter_chest_food.name=Экспортёр Сундук Еда
+tile.exporter_chest_equipment.name=Экспортёр Сундук Оборудование
+tile.exporter_chest_utility.name=Экспортёр Сундук Утилиты
+tile.exporter_chest_clutter.name=Экспортёр Сундук Беспорядка
+tile.exporter_chest_vanilla_blacksmith.name=Экспортёр Сундук - Деревенский Кузнец
+tile.exporter_chest_vanilla_bonus.name=Экспортёр Сундук - Бонусный сундук
+tile.exporter_chest_vanilla_dungeon.name=Экспортёр Сундук - Подземелье
+tile.exporter_chest_vanilla_end_city.name=Экспортёр Сундук - Город Края
+tile.exporter_chest_vanilla_igloo.name=Экспортёр Сундук - Иглу
+tile.exporter_chest_vanilla_jungle.name=Экспортёр Сундук - Сундук джунглей
+tile.exporter_chest_vanilla_jungle_dispenser.name=Экспортёр Сундук - Дозатор джунглей
+tile.exporter_chest_vanilla_mansion.name=Экспортёр Сундук - Лесной Особняк
+tile.exporter_chest_vanilla_mineshaft.name=Экспортёр Сундук - Шахта
+tile.exporter_chest_vanilla_nether.name=Экспортёр Сундук - Крепость Нижнего Мира
+tile.exporter_chest_vanilla_pyramid.name=Экспортёр Сундук - Пирамида
+tile.exporter_chest_vanilla_stronghold.name=Экспортёр Сундук - Крепостной Коридор
+tile.exporter_chest_vanilla_stronghold_library.name=Экспортёр Сундук - Крепостная Библиотека
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Экспортёр Сундук - Крепостная Шахта
+tile.exporter_chest_custom.name=Настраиваемый Сундук Экспортёр
 
-//technical
+#technical
 tile.phylactery.name=Талисман Лича
+tile.temporary_web.name=Разлагающаяся Паутина
 
-//Descriptions
+#Descriptions
 description.spider_armor.name=Носите паука, чтобы стать пауком. Полный комплект позволяет лазить по стенам и прыгать гораздо выше.
-description.spider_sword.name=Вытекая из клыков, которые сделали этот простой меч клинком героя, яд Шелоба не может быть остановлен, как только ваш враг был ранен этим клинком.
-description.bull_armor.name=Носите быка, чтобы стать быком. Полный комплект позволяет вам мчаться вперед с огромной скоростью и уничтожать все на своем пути.
-description.great_sword.name=Удерживайте правую кнопку мыши, чтобы нанести удар по большой площади.
-description.turtle_armor.name=Сила черепахи, если вы создадите полный комплект из ее панциря, позволит вам гораздо быстрее восстановить здоровье. Панцирь предотвращает большую часть повреждений сзади.
-description.slime_armor.name=С полным набором регенерирующей слизи, касающейся вашей кожи, вы можете чувствовать, что ваше максимальное здоровье переполняется, и всякий раз, когда вы повреждены, может появиться небольшая слизь, которая может восстановить ваше здоровье, если вы сможете достичь ее.
-description.cloud_boots.name=Те, кто ступает к ангелам, как говорят пророки, не могут сделать ничего плохого. Один прыжок становится прыжком, быстрая ходьба нарушает скорость звука, никакое падение не может остановить избранных, и с этими ботинками это включает вас.
-//description.dragon_helmet.name=Вы можете чувствовать, как сила дракона течет по вашим венам. Атаки, которые когда-то были угрозой для вас, теперь кажутся бессмысленными, но ваши собственные удары вдвое сильнее!
-description.dagger.name=Щелкните правой кнопкой мыши во время движения, чтобы прыгнуть вперед
-description.ninja_dagger.name=Щелкните правой кнопкой мыши во время движения, чтобы прыгнуть вперед. Говорят, что обладатель этого кинжала мог по своему желанию исчезнуть без следа. Вы, вероятно, можете имитировать это поведение с помощью Shift + правой кнопкой мыши , но пока вы исчезнете из поля зрения, вы не уйдете далеко.
-description.bull_battle_axe.name=Грукс щелкнуть правой кнопкой мыши по земле. Произвести землетрясение. Путешествие вперед. Разбивает очень хорошо  врагов. Грукс отличный.
-description.walker_set.name=Легенда гласит, что любой, кто выпустил стрелу по ходячему королю, обнаружил меч в своей спине и короля за ними. Может быть, сбор его меча и щита даст вам ту же способность?
-description.gun.name=Кликните правой кнопкой мыши, чтобы выстрелить, требуются пули.
+description.turtle_armor.name=Сила черепахи, которую вы получите, если создадите полный комплект из ее панциря, позволит вам гораздо быстрее восстанавливать здоровье. Панцирь предотвращает получения большей части урона со спины
+description.slime_armor.name=С полным набором регенерирующей слизи, касающейся вашей кожи, вы можете почувствовать, что ваше максимальное здоровье переполняется, и всякий раз, когда вы получите урон, может появляться небольшая слизь, которая восстановит ваше здоровье.
+description.cloud_boots.name=Те, кто ступает к ангелам, как говорят пророки, не могут сделать ничего плохого. Один прыжок становится прыжками, быстрая ходьба преодолевает скорость звука, и никакое падение не может остановить избранных, и с этими ботинками это включает вас.
+#description.dragon_helmet.name=Вы можете чувствовать, как сила дракона течет по вашим венам. Атаки, которые когда-то были для вас угрозой, теперь кажутся бессмысленными, но ваши собственные удары стали вдвое сильнее!
+description.dagger.name=Нажмите ПКМ во время движения, чтобы прыгнуть вперед
+description.ninja_dagger.name=Нажмите ПКМ во время движения, чтобы прыгнуть вперед. Говорят, что обладатель этого кинжала мог по своему желанию исчезнуть без следа. Вы, вероятно, можете также с помощью Shift + ПКМ, но пока вы исчезаете из поля зрения, вы далеко не уйдёте.
+description.bull_battle_axe.name=Грукс щёлкнуть правой кнопкой мыши по земле. Произвести землетрясение. Путешествие вперед. Разбивает очень хорошо врагов. Грукс отличный.
+description.walker_set.name=Легенда гласит, что любой, кто выпускал стрелу по Королю Бездны, обнаруживал меч в своей спине и самого короля за собой. Может быть, если вы получите его меч и щит, у вас будет какая же способность?
+description.magic_bell.name=Позвоните в колокольчик, и вы увидите путь к Талисману Лича. Сломайте блоки, на которые указывает колокольчик, и стены подземелья поддадутся вам.
+description.gun.name=Нажмите ПКМ, чтобы стрелять пулями.
 description.bullet_damage.name=Пулевое повреждение
 description.bullet_fire.name=Поджигает при попадании
 description.fire_rate.name=Скорострельность
@@ -505,72 +530,167 @@ description.accuracy.name=Точность
 description.click_shift.name=Удерживайте Shift для просмотра описания
 description.rear_damage.name=Тыльное повреждение
 description.charging.name=Зарядка...
-description.turtle_armor_charging.name=Способность к перезарядке, оставшееся время: 
+description.turtle_armor_charging.name=Перезарядка, оставшееся время: 
 description.healing_potion.name=Пейте, чтобы восстановить 2 сердца.
-description.teleport_stone.name=Мистический объект, созданный древней расой. Удерживайте правую кнопку мыши, чтобы установить позицию, а затем сделайте это снова, чтобы телепортироваться туда. Shift+Правый клик, чтобы удалить сохраненное местоположение.
+description.teleport_stone.name=Мистический объект, созданный древней расой. Удерживайте ПКМ, чтобы сохранить свою позицию, а затем нажмите ПКМ ещё раз, чтобы телепортироваться туда. Нажмите Shift + ПКМ, чтобы удалить сохраненное местоположение.
 description.teleport_stone_position.name=Текущее Положение
-description.staff_fire.name=Огонь пожирает тех, кто встанет на вашем пути, просто щелкните правой кнопкой мыши, и они почувствуют ваш гнев. Также зажигаются факелы.
-description.staff_spider.name=Щелкните правой кнопкой мыши, чтобы стрелять
-description.staff_gun.name=Это пистолет на палке. Черт, эти гномы - гении!
-description.staff_healing.name=Клик левой кнопкой мыши восстанавливает здоровье, которое вам нужно, я на самом деле не помню, что это делает, но мне пришлось сделать описания для всех этих вещей из жадности.
+description.staff_fire.name=Огонь пожирает тех, кто встанет на вашем пути. Просто нажмите ПКМ, и враги почувствуют ваш гнев. Огнём можно зажечь и факелы.
+description.staff_spider.name=Нажмите ПКМ, чтобы стрелять
+description.staff_gun.name=Это пистолет на палке. Чёрт, эти Гномы - гении!
+description.staff_healing.name=Нажатие ЛКМ восстанавливает необходимое вам здоровье.
 description.contains.name=Содержит:
 description.empty.name=Пусто
-description.soul_bottle.name=Кликни левой кнопкой мыши по мобу, чтобы сохранить ее, а правой-чтобы вызвать этого моба. Может быть превращен в спавнер и для этого моба.
-description.flamethrower.name=Опытный образец Undertech Fyrebird mk7 22 мм сопло пламегаситель блок. Н ажатие п равой кнопки мыши должно выбрасывать огонь прямо в перед. Внутренние гелевые картриджи должны быть способны извлекать слизь из любой точки инвентаря. Текущая модель требует регулярной перезагрузки, так как никакого регенерирующего источника слизи обнаружено не было
-description.badge.name=Только творческий элемент. Щелкните правой кнопкой мыши с ним, чтобы открыть графический интерфейс , элементы, помещенные в этот графический интерфейс, могут быть доступны позже, щелкнув левой кнопкой мыши любой моб с этим значком снова, и будут отброшены, когда прикрепленный моб будет убит.
-description.backpack.name=Щелкните правой кнопкой мыши, чтобы открыть его.
-description.alchemy_bag.name=Щелкните правой кнопкой мыши, чтобы открыть его. Хранит только зелья.
-//description.woodshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в деревянный блок, вы будете притянуты к нему.
-description.hookshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в блок, вы будете притянуты к нему.
-description.longshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в блок, вы будете притянуты к нему.
-//description.manualhook.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
-//description.spidershot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
-//description.hooksword.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
+description.soul_bottle.name=Нажмите ЛКМ по мобу, чтобы сохранить его, а ПКМ - чтобы вызвать этого моба. Может быть превращен в рассадник этого моба.
+description.flamethrower.name=Прототип Undertech Fyrebird mk7 22 мм с сопловым пламегасителем. Нажатие ПКМ должно выбрасывать огонь прямо вперёд. Внутренние гелевые картриджи должны извлекать слизь из любого места инвентаря. Текущая модель требует регулярной перезарядки, так как никакого регенерирующего источника слизи ещё обнаружено не было
+description.badge.name=Предмет только для творческого режима. Нажмите ПКМ, чтобы открыть графический интерфейс. Щелкните ЛКМ по мобу, чтобы прикрепить этот предмет к этому мобу. Предметы, помещенные внутрь, выпадут, когда прикрепленный моб умрет.
+description.backpack.name=Нажмите ПКМ, чтобы открыть его.
+description.alchemy_bag.name=Нажмите ПКМ, чтобы открыть его. Хранит только зелья.
+#description.woodshot.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк попадёт в деревянный блок, вы тут же притянитесь к нему.
+description.hookshot.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк попадёт в блок, вы тут же притянитесь к нему.
+description.longshot.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк попадёт в блок, вы тут же притянитесь к нему.
+#description.manualhook.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк коснётся блока, удерживайте ПКМ чтобы приблизиться к блоку, и крадитесь, чтобы отойти от него.
+//description.spidershot.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк коснётся блока, удерживайте ПКМ чтобы приблизиться к блоку, и крадитесь, чтобы отойти от него.
+#description.hooksword.name=Нажмите ПКМ, чтобы выстрелить крюком. Как только крюк коснётся блока, удерживайте ПКМ чтобы приблизиться к блоку, и крадитесь, чтобы отойти от него.
 description.moonlight.name=Надпись на клинке гласит: «Мою силу можно разбудить только при свете луны».
 description.sunshine.name=Надпись на клинке гласит: «Мою силу можно разбудить только при свете солнца».
-description.attack_damage_at_night.name=Урон от атаки в течение ночи
-description.attack_damage_at_day.name=Урон от атаки в течение дня
-description.staff_vampiric.name=Этот стержень излучает темную энергию, когда вы держите его в руке. Если вы поднесете его к уху, то услышите его требование. Его призыв прост: "щелкните правой кнопкой мыши со мной", и когда вы это сделаете, то увидите, что снаряд он действительно испускает. Хотя повреждение незначительное, если вы посадите его правильно, Он исцелит вас, когда ударит.
-description.staff_wind.name=Что бы это ни должно было сделать, оно пока не работает. #TODO
-description.staff_poison.name=Что бы это ни должно было сделать, оно пока не работает.. #TODO
-description.staff.name=Недостающий #TODO
-description.staff_thunder.name=Недостающий #TODO
-description.spear_diamond.name=Хорошо сделанное оружие с большей досягаемостью, чем мечи. Щелкните правой кнопкой мыши, чтобы зарядить удлиненную тягу.
 
-// Mobs
-entity.cqr_boarman.name=Человек-Кабан
+description.attack_damage_at_night.name=Урон от атаки в течении Ночи
+description.attack_damage_at_day.name=Урон от атаки в течении Дня
+description.staff_vampiric.name=Этот посох излучает тёмную энергию, когда вы держите его в руке. Если поднести посох к уху, вы услышите его требование, оно простое: «Нажми правую кнопку мыши вместе со мной». Если вы сделаете это, вы увидите, что он выпускает снаряды. Хоть урон таких снарядов и незначителен, посох исцелит вас, если, конечно, вы попадёте точно в цель.
+description.staff_wind.name=Какой бы невероятной магической силой эта вещь не обладала, сейчас она не работает #TODO
+description.staff_poison.name=Лучше быть осторожным, ведь на кончике скапливается яд. Следите, чтобы он не капнул случайно на вас, иначе он разъест кожу, плоть и кости. Пользуйтесь им на свой страх и риск и помните, что не все назвали бы убийство этим посохом честным
+description.staff.name=Весьма длинная крепкая палка. Вероятно, есть кто-то, кто знает, как его применить.
+description.staff_thunder.name=Драгоценный камень на вершине этого посоха шипит и искрится электрическими зарядами. Нажмите ПКМ, чтобы навести дуговой разряд на цель.
+description.spiked_glove.name=С когтями зверя и силой вашей руки эти перчатки уведут вас далеко от опасности. Вооружившись двумя такими перчатками, вы можете наслаждаться видом природы, ведь стены больше не помеха для вас
+description.spear_diamond.name=Хорошо сделанное оружие, имеющее большую дальность действия, чем меч. Нажмите ПКМ, чтобы нанести расширенный удар.
+description.cursed_bone.name=Моб, которого нужно призвать:
+description.dummy_shield.name=Приблизительное представление о том, как должен выглядеть щит. Не защитит вас от атак. Вероятно, манекен, который сейчас держит настоящий щит, вместо этого муляжа, сражается с такими же искусственными монстрами из ненастоящего подземелья.
+description.giant_spider_poison.name=Эта дрянь безумно едкая! Она определённо слишком опасна для использования, но, возможно, есть эксперт по токсинам, с которым вы можете обсудить применение в крафтах этого яда.
+description.feather_golden.name=Возьмите перо, позолотите его, совершите большой прыжок с высоты и поверьте в древнюю силу. Вы не получите вреда, если вооружены золотым пером. Но используйте его экономно, мой падающий друг, если перо сломается, ваша жизнь может оборваться.
+description.scale_turtle.name=Один из немногих фрагментов панциря гигантской черепахи, которые сохранились. Его абсолютная прочность такова, что ни один из ваших инструментов не сможет его и даже поцарапать. Возможно, есть кто-то с более мощными инструментами, чем твоими, кого ты можешь убедить помочь?
+description.horn_bull.name=Этот рог достаточно прочный, и вы, вероятно, могли бы сделать из него отличное оружие, если бы знали, как. Может быть, есть мастер, который более опытен в этом вопросе.
+description.leather_bull.name=Эта кожа очень высокого качества. Настоящий мастер, вероятно, сможет использовать её, чтобы выковать самое аэродинамическое снаряжение, которое вы когда-либо видели!
+description.ball_slime.name=Поразительно. Слизь с способностями к регенерации. Тот факт, что она всегда возвращается к одной и той же форме, усложняет работу, но правильный мастер, вероятно, сможет использовать её для создания какого-либо снаряжения со свойством манипулировать здоровьем, а любое оружие, использующее эту слизь в качестве боеприпасов, принесет много пользы
+description.bone_monking.name=Какая бы первобытная энергия ни делала этого Монаха намного могущественнее своих собратьев, она все еще живет в его костях. Возможно, настоящий мастер знает, как работать с такой мощью?
+description.leather_spider.name=Шкура Гигантского Паука по-прежнему прилипает ко всему, чего касается. Работать с ней в течение долгого времени слишком мерзко, но ремесленник, который более привык к такой работе, возможно, сможет сделать из неё что-то изящное.
+description.king_crown.name=Можно носить как отдельно, так и в сочетании со шлемом. В любом случае, вы будете выглядеть так же по-королевски, каким всегда себя ощущали.
+description.bubble_pistol.name=Коммерческий Undertech Turbo Dampener 33.6 mm для выдувания пузырей. Нажатие ПКМ приведёт к быстрому выбросу пузырей, достаточно больших, чтобы схватить лошадь и унести ее наверх. Пузыри не смертельны, но о падении из них такого сказать нельзя. Удерживайте ПКМ для выброса непрерывного потока пузырей.
+description.bubble_rifle.name=Усовершенствованный прототип Undertech Turbo Dampener. Не для публичного пользования. Выбрасывает пузыри быстрее и дальше, чем традиционный пузырьковый пистолет, но удерживание ПКМ теперь длится дольше. К сожалению, перезарядка происходит гораздо медленнее.
+description.path_tool.name=Крадитесь и нажмите ЛКМ по сущности для применения пути к этой сущности.%sНажмите ЛКМ по сущности для копирования пути этой сущности.%sКрадитесь и нажмите ПКМ по блоку для добавления нового узла пути.%sНажмите ПКМ по блоку для выбора существующего узла пути.%sКрадитесь и нажмите ПКМ по воздуху для очистки текущего пути.
+description.unprotected_positions_tool.name=Какой бы невероятной магической силой эта вещь не обладала, сейчас она не работает #TODO
+
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=Если включено, то входные данные не обязательно должны быть одинаковы с точки зрения метаданных. Например, если вы устанавливаете в качестве входных данных алмазный меч, то поврежденные алмазные мечи также будут приниматься.
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=Если включено, то входные данные не обязательно должны быть аналогичны данным NBT. Например, если вы устанавливаете в качестве входных данных алмазный меч, то зачарованные алмазные мечи также будут приниматься.
+description.gui_merchant_edit_trade.reputation_button.name=Для совершения этой торговой сделки требуется репутация у фракции торговцев. Установите значение «NONE», чтобы не требовать никакой репутации.
+description.gui_merchant_edit_trade.advancement_text_field.name=Для совершения этой торговой сделки требуется прогресс. Укажите местоположение ресурсов прогресса (например, «minecraft:story/mine_stone») или оставьте это поле пустым, чтобы не требовать никакого прогресса.
+description.gui_merchant_edit_trade.stock_check_box.name=Включите, чтобы указать, что в этой торговле есть акции. Это означает, что лимит этой торговой сделки будет ограничен.
+description.gui_merchant_edit_trade.restock_text_field.name=Лимит совершения для одних торговых сделок будет увеличиваться, каждый раз, когда вы совершаете другие торговые сделки, лимит которых не исчерпан.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Лимит совершения для одной торговой сделки.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Наибольшее количество совершений для одной торговой сделки
+description.gui_button_trade.unlocked.name=Торговля разблокирована.
+description.gui_button_trade.locked.name=Торговля еще не разблокирована!
+description.gui_button_trade.out_of_stock.name=Распродано! Этот товар может снова появиться в наличии, если совершать торговые сделки по другим товаром.
+
+#Enchantments
+enchantment.lightning_protection=Защита от Молний
+enchantment.cqrepoured.lightning_protection.desc=Шлем, на который наложено это зачарование, защищает от молний. С каждым уровнем зачарования, получаемый урон от молний уменьшается на 10%.
+enchantment.spectral=Спектральная эссенция
+enchantment.cqrepoured.spectral.desc=Наносит увеличенный урон по Ходячим Бездны и Странникам Края. Настоятельно рекомендуется для сражения с Королём Бездны.
+
+#Mobs
 entity.cqr_dummy.name=Чучело
-entity.cqr_dwarf.name=Гном
-entity.cqr_enderman.name=Эндермен
-entity.cqr_goblin.name=Гоблин
-entity.cqr_golem.name=Голем
+entity.cqr_boarman.name=Человек-Кабан
+entity.cqr_enderman.name=Странник Края
 entity.cqr_gremlin.name=Гремлин
-entity.cqr_illager.name=Иллагер
-entity.cqr_npc.name=NPC
+entity.cqr_human.name=Человек
+entity.cqr_illager.name=Поборник
 entity.cqr_mandril.name=Мандрил
-entity.cqr_minotaur.name=Mинотавр
-entity.cqr_mummy.name=Mумия
-entity.cqr_ogre.name=Oгр
-entity.cqr_orc.name=Oрк
+entity.cqr_minotaur.name=Минотавр
+entity.cqr_ogre.name=Огр
+entity.cqr_mummy.name=Мумия
 entity.cqr_pirate.name=Пират
-entity.cqr_skeleton.name=Скелетон
+entity.cqr_skeleton.name=Скелет
 entity.cqr_spectre.name=Призрак
-entity.cqr_triton.name=Tритон
-entity.cqr_walker.name=Ходок Бездны
-entity.cqr_zombie.name=Зомбие
+entity.cqr_walker.name=Ходячий Бездны
+entity.cqr_zombie.name=Зомби
 
-//Mounts
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=Гном
+entity.cqr_golem.name=Голем
+entity.cqr_orc.name=Орк
+entity.cqr_goblin.name=Гоблин
+entity.cqr_triton.name=Тритон
+
+#Mounts
 entity.cqr_giant_endermite.name=Гигантский Эндермит
-entity.cqr_giant_silverfish.name=Гигантская Серебряная Рыба
-entity.cqr_giant_silverfish1.name=Гигантская Лавовая Серебряная Рыба
-entity.cqr_giant_silverfish2.name=Гигантская БолотнаяСеребряная Рыба
+entity.cqr_giant_silverfish.name=Гигантская Чешуйница
+entity.cqr_giant_silverfish1.name=Гигантская Лавовая Чешуйница
+entity.cqr_giant_silverfish2.name=Гигантская Болотная Чешуйница
 
-// Bosses
-entity.cqr_nether_dragon.name=Незер-Дракон
+#Bosses
+entity.cqr_nether_dragon.name=Дракон Нижнего Мира
 entity.cqr_giant_tortoise.name=Гигантская Черепаха
 entity.cqr_lich.name=Лич
 entity.cqr_necromancer.name=Некромант
 entity.cqr_boar_mage.name=Маг-Кабан
+entity.cqr_walker_king.name=Король Бездны
+entity.cqr_pirate_captain.name=Капитан Пиратов
+entity.cqr_giant_spider.name=Шелоб
+entity.cqr_ender_king.name=Владыка Края
+entity.cqr_ender_calamity.name=Погибель Края
+entity.cqr_exterminator.name=Прототип Уничтожителя
 
-//Misc Entities
-entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>вызывающая пентаграмма
+#Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>призывающая пентаграмма
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=Король Бездны
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Торнадо Ходячих
+entity.cqr_pirate_parrot.name=Попугай-Предатель
+entity.cqr_flying_skull.name=Летающий Череп
+entity.cqr_ice_spike.name=Ледяной Шип 'о' Гибель
+entity.cqr_wasp.name=Оса (WIP)
+entity.cqr_pollo.name=Мерзость (WIP)
+
+#Advancements
+advancements.cqrepoured.root.title=Chocolate Quest Repoured
+advancements.cqrepoured.root.description=Добро пожаловать в Chocolate Quest Repured!
+advancements.cqrepoured.ha_got_you.title=Ха! Попался!
+advancements.cqrepoured.ha_got_you.description=Умрите от рук моба из CQR
+advancements.cqrepoured.not_so_strong.title=Недостойный
+advancements.cqrepoured.not_so_strong.description=Проиграйте боссу из CQR
+advancements.cqrepoured.not_so_friendly.title=Не очень то и дружелюбно...
+advancements.cqrepoured.not_so_friendly.description=Встретьте ходячего бездны
+advancements.cqrepoured.challenger.title=Претендент на Шоколад
+advancements.cqrepoured.challenger.description=Победите босса из CQR
+advancements.cqrepoured.champion.title=Шоколадный чемпион
+advancements.cqrepoured.champion.description=Победите каждого босса из CQR хотя бы один раз
+advancements.cqrepoured.wear_the_turtle.title=Черепаший прикид
+advancements.cqrepoured.wear_the_turtle.description=Я танк! Получите полный комплект черепашьей брони
+advancements.cqrepoured.kill_boar_mage.title=Эта девушка в огне
+advancements.cqrepoured.kill_boar_mage.description=Победите Мага-Кабана
+advancements.cqrepoured.kill_lich.title=Убить мёртвого
+advancements.cqrepoured.kill_lich.description=Победите Лича
+advancements.cqrepoured.kill_walker_king.title=Достойный противник
+advancements.cqrepoured.kill_walker_king.description=Победите короля бездны
+advancements.cqrepoured.kill_necromancer.title=Восстань и умри
+advancements.cqrepoured.kill_necromancer.description=Победите Некроманта
+advancements.cqrepoured.kill_nether_dragon.title=Это вовсе не Годзилла
+advancements.cqrepoured.kill_nether_dragon.description=Победите дракона нижнего мира
+advancements.cqrepoured.kill_giant_tortoise.title=Черепаший суп
+advancements.cqrepoured.kill_giant_tortoise.description=Победите гигантскую черепаху
+advancements.cqrepoured.kill_pirate_captain.title=Теперь я - капитан
+advancements.cqrepoured.kill_pirate_captain.description=Победите капитана пиратов
+advancements.cqrepoured.new_captain.title=Обратное пиратство
+advancements.cqrepoured.new_captain.description=Получите оружие капитана пиратов
+advancements.cqrepoured.kill_giant_spider.title=Хорооший паук...
+advancements.cqrepoured.kill_giant_spider.description=...это мёртвый паук! Победите гигантского паука
+advancements.cqrepoured.kill_ender_king.title=И это всё?!
+advancements.cqrepoured.kill_ender_king.description=Убейте грозного повелителя странников, великого владыку края!
+advancements.cqrepoured.kill_ender_calamity.title=Да, на этом всё!
+advancements.cqrepoured.kill_ender_calamity.description=Выиграйте героический волейбольный матч смерти против наколдованного зла.
+advancements.cqrepoured.kill_exterminator.title=Электрик
+advancements.cqrepoured.kill_exterminator.description=Победите технологичное чудовище поборника
+
+effect.cqrepoured.twohanded=Двуручность
