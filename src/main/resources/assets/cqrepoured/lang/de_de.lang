@@ -1,15 +1,37 @@
-The English US language file for Chocolate Quest Repoured Mod!
-This translation was created by MrMarnic
+#The English US language file for Chocolate Quest Repoured Mod!
+#This translation was created by MrMarnic
 
+#DamageSources
+death.attack.ray=%1$s was fired by mah lazor!
+death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
-//CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blöcke
-itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Plazierer
-itemGroup.ChocolateQuestRepouredBannerTab=Banner
-itemGroup.ChocolateQuestRepouredExporterChests=Exporter Kisten
+#CreativeTabs
+itemGroup.cqrepoured_blocks=Chocolate Quest Repoured Blöcke
+itemGroup.cqrepoured_items=Chocolate Quest Repoured Items
+itemGroup.cqrepoured_banners=Banner
+itemGroup.cqrepoured_creative_tools=CQR Creative Tools
+itemGroup.cqrepoured_dungeon_placers=CQR Dungeon Plazierer
+itemGroup.cqrepoured_exporter_chests=Exporter Kisten
+itemGroup.cqrepoured_spawn_eggs=CQR Spawn Eggs
 
-//Banners
+#Banner Patterns
+item.banner.cqrepoured_cq_blank.white=CQR-banner marker
+item.banner.cqrepoured_cq_blank.orange=CQR-banner marker
+item.banner.cqrepoured_cq_blank.magenta=CQR-banner marker
+item.banner.cqrepoured_cq_blank.light_blue=CQR-banner marker
+item.banner.cqrepoured_cq_blank.yellow=CQR-banner marker
+item.banner.cqrepoured_cq_blank.lime=CQR-banner marker
+item.banner.cqrepoured_cq_blank.pink=CQR-banner marker
+item.banner.cqrepoured_cq_blank.gray=CQR-banner marker
+item.banner.cqrepoured_cq_blank.silver=CQR-banner marker
+item.banner.cqrepoured_cq_blank.cyan=CQR-banner marker
+item.banner.cqrepoured_cq_blank.purple=CQR-banner marker
+item.banner.cqrepoured_cq_blank.blue=CQR-banner marker
+item.banner.cqrepoured_cq_blank.brown=CQR-banner marker
+item.banner.cqrepoured_cq_blank.green=CQR-banner marker
+item.banner.cqrepoured_cq_blank.red=CQR-banner marker
+item.banner.cqrepoured_cq_blank.black=CQR-banner marker
+
 item.banner.cqrepoured_cq_wither_eyes.white=Weiße Augen des Wither Schädels
 item.banner.cqrepoured_cq_wither_eyes.orange=Orange Augen des Wither Schädels
 item.banner.cqrepoured_cq_wither_eyes.magenta=Magenta Augen des Wither Schädels
@@ -43,6 +65,7 @@ item.banner.cqrepoured_cq_wither_skull.brown=Brauner Wither Schädel
 item.banner.cqrepoured_cq_wither_skull.green=Grüner Wither Schädel 
 item.banner.cqrepoured_cq_wither_skull.red=Roter Wither Schädel 
 item.banner.cqrepoured_cq_wither_skull.black=Schwarzer 
+
 item.banner.cqrepoured_cq_fire.white=Weiße Flammen
 item.banner.cqrepoured_cq_fire.orange=Orange Flammen
 item.banner.cqrepoured_cq_fire.magenta=Magenta Flammen
@@ -111,7 +134,6 @@ item.banner.cqrepoured_walker_black_bg.green=Stoff mit grüner Flagge
 item.banner.cqrepoured_walker_black_bg.red=Stoff mit roter Flagge
 item.banner.cqrepoured_walker_black_bg.black=Stoff mit schwarzer Flagge
 
-
 item.banner.cqrepoured_walker_border.white=Weiße Grenze
 item.banner.cqrepoured_walker_border.orange=Orange Grenze
 item.banner.cqrepoured_walker_border.magenta=Magentarne Grenze
@@ -146,7 +168,6 @@ item.banner.cqrepoured_walker_inner_border.green=Grüner zerlumpter Stoff
 item.banner.cqrepoured_walker_inner_border.red=Roter zerlumpter Stoff
 item.banner.cqrepoured_walker_inner_border.black=Schwarzer zerlumpter Stoff
 
-
 item.banner.cqrepoured_walker_skull.white=Weißes Walker Gesicht
 item.banner.cqrepoured_walker_skull.orange=Oranges Walker Gesicht
 item.banner.cqrepoured_walker_skull.magenta=Magentanes Walker Gesicht
@@ -164,39 +185,69 @@ item.banner.cqrepoured_walker_skull.green=Grünes Walker Gesicht
 item.banner.cqrepoured_walker_skull.red=Rotes Walker Gesicht
 item.banner.cqrepoured_walker_skull.black=Schwarzes Walker Gesicht
 
+#Banners
+item.banner.pirate_banner.name=Pirate Banner
+item.banner.walker_banner.name=Walker Banner
+item.banner.pigman_banner.name=Pigman Banner
+item.banner.enderman_banner.name=Enderman Banner
+item.banner.enderman_banner2.name=Enderman Banner 2
+item.banner.npc_banner.name=NPC Banner
+item.banner.skeleton_banner.name=Skeleton Banner
+item.banner.illager_banner.name=Illager Banner
+item.banner.walker_ordo.name=Walker Banner 2
+item.banner.gremlin_banner.name=Gremlin Banner
 
-//Gui
+#Gui
+gui.repu.name=Reputation
+gui.repu.faction=Faction
+gui.repu.reputation=Your reputation
+gui.repu.memberskilled=Killed members
+gui.repu.dungeonsconquered=Homes destroyed
 gui.drops.name=Drops
 gui.backpack.name=Rucksack
 gui.alchemy_bag.name=Alchemie Beutel
 description.gui_exporter.name=Block für Dungeon Exportierung (Kreativ Modus). Wähle das Gebiet aus, das du exportieren möchtest und speichere es.
+description.gui_exporter_part_mode.name=Splits the structure into 16x16x16 cubes for usually faster exportation and generation. Recommended to keep checked.
+description.gui_exporter_relative_mode.name=Uses coordinates relative to the exporter block. The Selection Helper item takes care whether this is checked or not.
+description.gui_exporter_ignore_entities.name=Ignores all entities which are not listed in cqrepoured.cfg -> advanced -> specialEntities. It is recommended to keep checked.
 
-//Other
+#Other
+item.super_tool.name=Super Tool (Creative Only)
 item.potion_healing.name=Heiltrank
 item.teleport_stone.name=Teleportations Stein
 item.soul_bottle.name=Seelen Flasche
 item.mob_to_spawner_tool.name=Tier zu Spawner Werkzeug
+item.spawner_converter.name=Spawner Converter
 item.badge.name=Abzeichen
 item.backpack.name=Rucksack
+item.spiked_glove.name=Spiked Glove
 item.alchemy_bag.name=Alchemie Beutel
+item.structure_selector.name=Selection Selector Helper
+item.path_tool.name=Path Tool
+item.cursed_bone.name=Cursed Bone
+item.dummy_shield.name=Dummy Shield
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
-//Dragon Items
+#Axes
+item.battle_axe_bull.name=Bullen Kampf Axt
+
+#Dragon Items
 item.helmet_dragon.name=Drachen Helm
 
-//Daggers
+#Daggers
 item.dagger_iron.name=Eiserner Dolch
 item.dagger_diamond.name=Diamant Dolch
 item.dagger_monking.name=Monking Dolch
 item.dagger_ninja.name=Ninja Dolch
 
-//Swords
+#Swords
 item.sword_turtle.name=Schildkröten Schwert
 item.sword_spider.name=Spinnen Schwert
-item.battle_axe_bull.name=Bullen Kampf Axt
 item.sword_moonlight.name=Mondschein
 item.sword_sunshine.name=Sonnelicht
 
-//Shields
+#Shields
 item.cqr_shield_r01.name=Pigman Schild
 item.cqr_shield_r02.name=Piraten Schild
 item.cqr_shield_r03.name=Specter Schild
@@ -207,11 +258,11 @@ item.cqr_shield_r07.name=Verostetes Schild
 item.cqr_shield_r08.name=Schildkröten Schild
 item.cqr_shield_r09.name=Triton Schild
 
-//Walker set
+#Walker set
 item.sword_walker.name=Walker Sword
 item.shield_walker_king.name=Walker König Schild
 
-//Shields
+#Shields
 item.shield_bull.name=Schild des Eis Bullen
 item.shield_carl.name=Carl
 item.shield_dragonslayer.name=Drachen Schild
@@ -238,13 +289,18 @@ item.shield_walker.name=Walker Schild
 item.shield_walker_normal.name=Walker Schild
 item.shield_zombie.name=Zombie Schild
 
-//Great Swords
+#Great Swords
 item.great_sword_monking.name=Monking Great Sword
 item.great_sword_bull.name=Bull Greatsword
 item.great_sword_diamond.name=Diamand Greatsword
 item.great_sword_iron.name=Eisen Greatsword
 
-//Staves
+#Spears
+item.spear_diamond.name=Diamond Spear
+item.spear_iron.name=Iron Spear
+attribute.name.generic.attackRange=Attack Range
+
+#Staves
 item.staff.name=Stab
 item.staff_fire.name=Feuer Stab
 item.staff_vampiric.name=Vampier Stab
@@ -255,38 +311,44 @@ item.staff_gun.name=Pistolen Stab
 item.staff_healing.name=Heilungs Stab
 item.staff_thunder.name=Sturm Stab
 
-//Guns
+#Guns
 item.revolver.name=Revolver
 item.captain_revolver.name=Captain Revolver
 item.musket.name=Muskete
-item.musket_iron.name=Muskete mit Eisen Dolch
-item.musket_diamond.name=Muskete with Diamant Dolch
-item.musket_monking.name=Muskete with Monking Dolch
+item.musket_dagger_iron.name=Muskete mit Eisen Dolch
+item.musket_dagger_diamond.name=Muskete with Diamant Dolch
+item.musket_dagger_monking.name=Muskete with Monking Dolch
 item.bullet_iron.name=Eiserne Kugeln
 item.bullet_gold.name=Goldene Kugeln
 item.bullet_diamond.name=Diamant Kugeln
 item.bullet_fire.name=Feurige Kugeln
 item.cannon_ball.name=Kanonen Kugel
 item.flamethrower.name=Flammenwerfer
+item.bubble_pistol.name=Bubble Gun
+item.bubble_rifle.name=Bubble Launcher
 
-//Hookshots
+#Hookshots
 item.hookshot.name=Fehlt #TODO
 item.longshot.name=Fehlt #TODO
+item.spiderhook.name=Spiderhookshot
 
-//Cloud Items
+#Cloud Items
 item.boots_cloud.name=Wolken Schuhe
 item.feather_golden.name=Goldene Feder
 
-//Monking Items
+#Monking Items
 item.bone_monking.name=Monking Knochen
 
-//Inquisition Armor
+#King Armor
+item.king_crown.name=King Crown
+
+#Inquisition Armor
 item.helmet_inquisition.name=Inquisition Hlem
 item.chestplate_inquisition.name=Inquisition Brustpanzer
 item.leggings_inquisition.name=Inquisition Hose
 item.boots_inquisition.name=Inquisition Schuhe
 
-//Bull Armor
+#Bull Armor
 item.helmet_bull.name=Bullen Helm
 item.chestplate_bull.name=Bullen Brustpanzer
 item.leggings_bull.name=Bullen Hose
@@ -294,21 +356,21 @@ item.boots_bull.name=Bullen Schuhe
 item.leather_bull.name=Bullen Leder
 item.horn_bull.name=Bullen Horn
 
-//Turtle Armor
+#Turtle Armor
 item.helmet_turtle.name=Schildkröten Hlem
 item.chestplate_turtle.name=Schildkröten Brustpanzer
 item.leggings_turtle.name=Schildkröten Hose
 item.boots_turtle.name=Schildkröten Schuhe
 item.scale_turtle.name=Schildkröten Panzer
 
-//Slime Armor
+#Slime Armor
 item.helmet_slime.name=Schleim Helm
 item.chestplate_slime.name=Schleim Brustpanzer
 item.leggings_slime.name=Schleim Hose
 item.boots_slime.name=Schleim Schuhe
 item.ball_slime.name=Regenerierender Schleim Ball
 
-//Spider Armor
+#Spider Armor
 item.helmet_spider.name=Spinnen Helm
 item.chestplate_spider.name=Spinnen Brustpanzer
 item.leggings_spider.name=Spinnen Hose
@@ -316,19 +378,31 @@ item.boots_spider.name=Spinnen Schuhe
 item.leather_spider.name=Spinnen Leder
 item.giant_spider_poison.name=Giant Spinnen Gift
 
-//Heavy Diamond Armor
+#Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Schwerer Diamant Helm
 item.chestplate_heavy_diamond.name=Schwerer Diamant Brustpanzer
 item.leggings_heavy_diamond.name=Schwere Diamant Hose
 item.boots_heavy_diamond.name=Schwere Diamant Schuhe
 
-//Heavy Iron Armor
+#Heavy Iron Armor
 item.helmet_heavy_iron.name=Schwerer Eisen Helm
 item.chestplate_heavy_iron.name=Schwerer Eisen Brustpanzer
 item.leggings_heavy_iron.name=Schwere Eisen Hose
 item.boots_heavy_iron.name=Schwere Eisen Schuhe
 
-//Blocks
+#Dyable Iron Armor
+item.helmet_iron_dyable.name=Dyable Iron Helmet
+item.chestplate_iron_dyable.name=Dyable Iron Chestplate
+item.leggings_iron_dyable.name=Dyable Iron Leggings
+item.boots_iron_dyable.name=Dyable Iron Boots
+
+#Dyable Diamond Armor
+item.helmet_diamond_dyable.name=Dyable Diamond Helmet
+item.chestplate_diamond_dyable.name=Dyable Diamond Chestplate
+item.leggings_diamond_dyable.name=Dyable Diamond Leggings
+item.boots_diamond_dyable.name=Dyable Diamond Boots
+
+#Blocks
 tile.exporter.name=Exporter Block
 tile.spawner.name=Spawner
 tile.null_block.name=Null Block
@@ -339,8 +413,11 @@ tile.table_birch.name=Birkenholz Tisch
 tile.table_jungle.name=Tropenholz Tisch
 tile.table_acacia.name=Akazieholz Tisch
 tile.table_dark.name=Dunkler Eichenholz Tisch
+tile.boss_block.name=Boss Block
+tile.force_field_nexus.name=Force Field Nexus
+tile.map_placeholder.name=Map Placeholder
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Geschnitzter Andesit
 tile.andesite_pillar.name=Andesit Säule
 tile.andesite_cube.name=Andesit Würfel
@@ -349,7 +426,7 @@ tile.andesite_square.name=Andesit Quadrat
 tile.andesite_small.name=Kleiner Andesit Ziegel
 tile.andesite_large.name=Großer Andesit Ziegel
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Geschnitzter Diorit
 tile.diorite_pillar.name=Diorit Säule
 tile.diorite_cube.name=Diorit Würfel
@@ -358,7 +435,7 @@ tile.diorite_square.name=Diorit Quadrat
 tile.diorite_small.name=Kleiner Diorit Ziegel
 tile.diorite_large.name=Großer Diorit Ziegel
 
-//Diorite blocks
+#Granite blocks
 tile.granite_carved.name=Geschnitzter Granit
 tile.granite_pillar.name=Granit Säule
 tile.granite_cube.name=Granit Würfel
@@ -367,7 +444,7 @@ tile.granite_square.name=Granit Quadrat
 tile.granite_small.name=Kleiner Granit Ziegel
 tile.granite_large.name=Großer Granit Ziegel
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Geschnitztes Prismarin
 tile.prismarine_pillar.name=Prismarin Säule
 tile.prismarine_cube.name=Prismarin Würfel
@@ -375,7 +452,7 @@ tile.prismarine_square.name=Prismarin Quadrat
 tile.prismarine_small.name=Kleiner Prismarin Ziegel
 tile.prismarine_large.name=Großer Prismarin Ziegel
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Geschnitzter Endstein
 tile.endstone_pillar.name=Endstein Säule
 tile.endstone_cube.name=Endstein Würfel
@@ -383,14 +460,14 @@ tile.endstone_scale.name=Endstein Rahmen
 tile.endstone_square.name=Endstein Quadrat
 tile.endstone_small.name=Kleiner Endstein Ziegel
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Geschnitztes Purpur
 tile.purpur_cube.name=Purpur Würfel
 tile.purpur_scale.name=Purpur Rahmen
 tile.purpur_small.name=Kleiner Purpur Ziegel
 tile.purpur_large.name=Großer Purpur Ziegel
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Geschnitzter Roter Netherziegel
 tile.red_netherbrick_pillar.name=Rote Netherziegel Säule
 tile.red_netherbrick_cube.name=Roter Netherziegel Würfel
@@ -398,18 +475,19 @@ tile.red_netherbrick_scale.name=Roter Netherziegel Rahmen
 tile.red_netherbrick_square.name=Rotes Netherziegel Quadrat
 tile.red_netherbrick_large.name=Großer Roter Netherziegel
 
-//Stone blocks
+#Stone blocks
 tile.stone_pillar.name=Stein Säule
 tile.stone_cube.name=Stein Würfel
 tile.stone_scale.name=Stein Rahmen
 tile.stone_square.name=Stein Quadrat
 tile.stone_small.name=Kleiner Stein Ziegel
 
-//Exporter chests
+#Exporter chests
 tile.exporter_chest_valuable.name=Exporter Kiste Schatz
 tile.exporter_chest_food.name=Exporter Kiste Essen
 tile.exporter_chest_equipment.name=Exporter Kiste Equipment
 tile.exporter_chest_utility.name=Exporter Kiste Utility
+tile.exporter_chest_clutter.name=Exporter Chest Clutter
 tile.exporter_chest_vanilla_blacksmith.name=Exporter Kiste - Dorf Schmied
 tile.exporter_chest_vanilla_bonus.name=Exporter Kiste - Bonus Kiste
 tile.exporter_chest_vanilla_dungeon.name=Exporter Kiste - Dungeon
@@ -424,22 +502,13 @@ tile.exporter_chest_vanilla_pyramid.name=Exporter Kiste - Pyramide
 tile.exporter_chest_vanilla_stronghold.name=Exporter Kiste - Festungs Gang
 tile.exporter_chest_vanilla_stronghold_library.name=Exporter Kiste - Festungs Bibliothek
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Kiste - Festungs Miene
-tile.exporter_chest_custom_1.name=Exporter Kiste - Custom 1
-tile.exporter_chest_custom_2.name=Exporter Kiste - Custom 2
-tile.exporter_chest_custom_3.name=Exporter Kiste - Custom 3
-tile.exporter_chest_custom_4.name=Exporter Kiste - Custom 4
-tile.exporter_chest_custom_5.name=Exporter Kiste - Custom 5
-tile.exporter_chest_custom_6.name=Exporter Kiste - Custom 6
-tile.exporter_chest_custom_7.name=Exporter Kiste - Custom 7
-tile.exporter_chest_custom_8.name=Exporter Kiste - Custom 8
-tile.exporter_chest_custom_9.name=Exporter Kiste - Custom 9
-tile.exporter_chest_custom_10.name=Exporter Kiste - Custom 10
-tile.exporter_chest_custom_11.name=Exporter Kiste - Custom 11
-tile.exporter_chest_custom_12.name=Exporter Kiste - Custom 12
-tile.exporter_chest_custom_13.name=Exporter Kiste - Custom 13
-tile.exporter_chest_custom_14.name=Exporter Kiste - Custom 14
+tile.exporter_chest_custom.name=Exporter Kiste - Custom
 
-//Descriptions
+#technical
+tile.phylactery.name=Lich Phylactery
+tile.temporary_web.name=Decaying Web
+
+#Descriptions
 description.spider_armor.name=Trage die Spinne um eine Spinne zu werden. Die volle Rüstung erlaubt es dir an Wänden zu klettern und viel höher zu springen.
 description.spider_sword.name=Shelobs Gift fließt aus den Fängen hervor, die dieses einfache Schwert zur Klinge eines Helden gemacht haben, und kann nicht zurückgehalten werden, wenn die Klinge in deinem Feind steckt.
 description.bull_armor.name=Trage den Bullen um zum Bullen zu werden. Die volle Rüstung erlaubt es dir mit großer Geschwindigkeit nach vorne zu sprinten und alles in deinem Weg zu zerstören.
@@ -447,11 +516,12 @@ description.great_sword.name=Halte Rechtsklick um eine große Fläche zu treffen
 description.turtle_armor.name=Die Kraft der Schildkröte ermöglicht es dir, wenn du die volle Rüstung besitzt, Gesundheit viel schneller wiederzugewinnen. Die Schale verhindert auch die meisten Schäden von hinten.
 description.slime_armor.name=Mit der vollständigen Rüstung kannst du deine Leben zum überfließen bringen und wenn du angegriffen wirst kann ein kleiner Schleim erscheinen, der bei Berührung deine Leben wiederherstellt.
 description.cloud_boots.name=Die Schuhe werden dein Leben beflügeln und dir das Leben einfacher machen. Kein Fall, mag er auch so tief sein, kann dich mehr stoppen.
-//description.dragon_helmet.name=Du kannst die Macht des Drachen durch deine Adern spüren. Ehemalige Gefahren erscheinen dir klein und nichtig, aber deine eigene Kraft ist nun doppel so stark.
+#description.dragon_helmet.name=Du kannst die Macht des Drachen durch deine Adern spüren. Ehemalige Gefahren erscheinen dir klein und nichtig, aber deine eigene Kraft ist nun doppel so stark.
 description.dagger.name=Drücke Rechtsklick während des Sprintens um weiter vorwärts zu kommen.
 description.ninja_dagger.name=Drücke Rechtsklick während des Sprintens um weiter vorwärts zu kommen. Man sagt, dass der Träger des Dolches von Zeit zu Zeit verschwinden kann. Der Prophezeiung nach muss man sneaken und rechtsklicken. Man wird aber nicht weit kommen.
 description.bull_battle_axe.name=Grux rechtsklicken auf Boden. Erdbeben machen. Laufen. Gegener kaputt machen. Grux mögen.
 description.walker_set.name=Die Legende besagt, dass jeder, der einen Pfeil auf den Walker König abfeuerte, ein Schwert im Rücken und den König hinter sich finden würde. Vielleicht würde es dir die gleiche Fähigkeit ermöglichen, wenn du sowhohl das Schwert als auch sein Schild einsammelst?
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
 description.gun.name=Rechtsklicken zum Schießen (benötigt Munition)
 description.bullet_damage.name=Kugel Schaden
 description.bullet_fire.name=Entündet beim Auftreffen
@@ -475,12 +545,12 @@ description.flamethrower.name=Undertech Prototyp Fyrebird mk7 22mm nozzle Flamme
 description.badge.name=Kreavtiv Modus Item. Linksklicke auf einen Mob um ein GUI zu öffnen. Items, die in das GUI hineingelegt wurden, können später mit einem Linksklick mit einem Abzeichen wiedererlangt werden. Wenn der Mob getötet wird droppen die Items.
 description.backpack.name=Rechtsklicken zum Öffnen.
 description.alchemy_bag.name=Rechtsklicken zum Öffnen. Enthält nur Tränke.
-//description.woodshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Holz Block trifft, wirst du zu ihm gezogen.
+#description.woodshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Holz Block trifft, wirst du zu ihm gezogen.
 description.hookshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, wirst du zu ihm gezogen.
 description.longshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, wirst du zu ihm gezogen.
-//description.manualhook.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
-//description.spidershot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
-//description.hooksword.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+#description.manualhook.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+#description.spidershot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+#description.hooksword.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
 description.moonlight.name=Die Inschrifft besagt: "Meine Kraft erwacht nur im Mondschein"
 description.sunshine.name=Die Inschrifft besagt: "Meine Kraft erwacht nur im Sonnenlicht"
 description.attack_damage_at_night.name=Angriffsschaden während der Nacht
@@ -490,27 +560,137 @@ description.staff_wind.name=Nicht funktional. #TODO
 description.staff_poison.name=Nicht funktional. #TODO
 description.staff.name=Fehlt #TODO
 description.staff_thunder.name=Fehlt #TODO
+description.spiked_glove.name=With the claws of a beast, and the strength of your arm, these gloves shall lead you far from harm. While wielding two, enjoy the view, for walls no longer hinder you.
 description.spear_diamond.name=Fehlt #TODO
+description.cursed_bone.name=Mob to be summoned:
+description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
+description.giant_spider_poison.name=This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.
+description.feather_golden.name=Take up a feather, gild it in gold, take a great leap and believe in the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.
+description.scale_turtle.name=One of a few pieces of the Giant Tortoise's shell you managed to salvage. Its sheer strength is such that none of your tools can even chip it. Perhaps there's someone out there with stronger crafting tools than yours who you can convince to lend you a hand?
+description.horn_bull.name=This horn is tough enough that you could probably make a great weapon with it if you knew how to craft with animal horns. Maybe there's a craftsman out there who's more experiened on the subject.
+description.leather_bull.name=Very high quality leather. The right craftsman could probably use this to forge the most aerodynamic gear you've ever seen!
+description.ball_slime.name=Amazing. Slime with regeneration powers. The fact that it always returns to the same shape makes it difficult to work with, but the right craftsman could probably use this to make some gear with health-manipulating abilities, and any weapons that use slime as ammo are going to get a lot out of this stuff.
+description.bone_monking.name=Whatever primal energy made the Monking so much more powerful than his peers still clings to his bones. Perhaps the right craftsman would know how to work with such power?
+description.leather_spider.name=The Giant Spider's hide still sticks to everything it touches. It's too gross for you to touch for a long period of time, but a craftsman who's more accustomed to such work can probably fashion this into something neat.
+description.king_crown.name=Can be worn on its own, or combined with a helmet. Either way, you'll look as regal as you've always felt.
+description.bubble_pistol.name=Undertech Commercial Turbo Dampener 33.6mm nozzle bubble explusion unit. A right-mouse press will expell a quick flurry of bubbles, large enough to capture a horse and drift upward. Bubbles are non-lethal, but can't say so much for the fall. Hold down Right Mouse Button for a steady stream. 
+description.bubble_rifle.name=Undertech Prototype advanced Turbo Dampener. Not for public access. Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. Unfortunately, reloading it is far slower.
+description.path_tool.name=Sneak+Left Click an entity to apply the path to that entity.%sLeft Click an entity to copy the path of that entity.%sSneak+Right Click a block to add a new path node.%sRight Click a block to select an existing path node.%sSneak+Right Click air to clear the current path.
+description.unprotected_positions_tool.name=TODO add tooltip
 
-// Mobs
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=When checked the input does not have to be similar in terms of meta data. For example you set a diamond sword as input, it will also accept damaged diamond swords for it.
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=When checked the input does not have to be similar in terms of nbt data. For example you set a diamond sword as input, it will also accept enchanted diamond swords for it.
+description.gui_merchant_edit_trade.reputation_button.name=Reputation with the traders faction required to use this trade. Set it to "NONE" to not require any reputation.
+description.gui_merchant_edit_trade.advancement_text_field.name=Advancement required to use this trade. Specify an advancements resourcelocation (for example "minecraft:story/mine_stone) or leave it blank to not require any advancement.
+description.gui_merchant_edit_trade.stock_check_box.name=Check this to set that this trade has a stock count. This means that this trade has a limited use.
+description.gui_merchant_edit_trade.restock_text_field.name=Amount of uses it will increase when it gets restocked. Every time you buy something, it will restock a different trade that is not maxed out.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Current amount of uses the trade has.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Highest amount of uses the trade can have.
+description.gui_button_trade.unlocked.name=Trade is unlocked.
+description.gui_button_trade.locked.name=Trade is not unlocked yet!
+description.gui_button_trade.out_of_stock.name=Out of stock! If possible buy something else, then maybe the trade will be in stock again.
+
+#Enchantments
+enchantment.lightning_protection=Lightning Protection
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
+enchantment.spectral=Spectral Balsam
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
+
+#Mobs
 entity.cqr_dummy.name=Dummy(CQR)
-entity.cqr_dwarf.name=Zwerg(CQR)
+entity.cqr_boarman.name=Boarman
 entity.cqr_enderman.name=Enderman(CQR)
-entity.cqr_goblin.name=Kobold(CQR)
-entity.cqr_golem.name=Golem(CQR)
+entity.cqr_gremlin.name=Gremlin
+entity.cqr_human.name=Human
 entity.cqr_illager.name=Illager(CQR)
-entity.cqr_npc.name=NPC(CQR)
+entity.cqr_mandril.name=Mandril
 entity.cqr_minotaur.name=Minotaurus(CQR)
 entity.cqr_mummy.name=Mummie(CQR)
 entity.cqr_ogre.name=Oger(CQR)
-entity.cqr_orc.name=Ork(CQR)
-entity.cqr_pigman.name=Pigman(CQR)
 entity.cqr_pirate.name=Pirat(CQR)
 entity.cqr_skeleton.name=Skelett(CQR)
 entity.cqr_spectre.name=Spectre(CQR)
-entity.cqr_triton.name=Squidward(CQR)
 entity.cqr_walker.name=Abyss Walker
 entity.cqr_zombie.name=Zombie(CQR)
 
-// Bosses
+#Friendly Races
+entity.cqr_npc.name=NPC(CQR)
+entity.cqr_dwarf.name=Zwerg(CQR)
+entity.cqr_golem.name=Golem(CQR)
+entity.cqr_orc.name=Ork(CQR)
+entity.cqr_goblin.name=Kobold(CQR)
+entity.cqr_triton.name=Squidward(CQR)
+
+#Mounts
+entity.cqr_giant_endermite.name=Giant Endermite
+entity.cqr_giant_silverfish.name=Giant Silverfish
+entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
+entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
+
+#Bosses
 entity.cqr_nether_dragon.name=Wormy Wurm Wyrm
+entity.cqr_giant_tortoise.name=Giant Tortoise
+entity.cqr_lich.name=Lich
+entity.cqr_necromancer.name=Necromancer
+entity.cqr_boar_mage.name=Boarmage
+entity.cqr_walker_king.name=Abyss Walker King
+entity.cqr_pirate_captain.name=Pirate Captain
+entity.cqr_giant_spider.name=Shelob
+entity.cqr_ender_king.name=Ender King
+entity.cqr_ender_calamity.name=Ender Calamity
+entity.cqr_exterminator.name=Exterminator Prototype
+
+#Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=Abyss Walker King
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
+entity.cqr_pirate_parrot.name=Traitor Parrot
+entity.cqr_flying_skull.name=Flying Skull
+entity.cqr_ice_spike.name=Ice Spike 'o' Death
+entity.cqr_wasp.name=Wasp (WIP)
+entity.cqr_pollo.name=Abomination (WIP)
+
+#Advancements
+advancements.cqrepoured.root.title=Chocolate Quest Repoured
+advancements.cqrepoured.root.description=Welcome to Chocolate Quest Repoured!
+advancements.cqrepoured.ha_got_you.title=Ha! Got You!
+advancements.cqrepoured.ha_got_you.description=Get killed by a CQR mob
+advancements.cqrepoured.not_so_strong.title=Unworthy
+advancements.cqrepoured.not_so_strong.description=Lose against a CQR boss
+advancements.cqrepoured.not_so_friendly.title=Not so friendly...
+advancements.cqrepoured.not_so_friendly.description=Encounter the walkers
+advancements.cqrepoured.challenger.title=Challenger of the Chocolate
+advancements.cqrepoured.challenger.description=Defeat a CQR Boss
+advancements.cqrepoured.champion.title=Champion of the Chocolate
+advancements.cqrepoured.champion.description=Defeat every CQR Boss at least once
+advancements.cqrepoured.wear_the_turtle.title=Wear the Tortoise!
+advancements.cqrepoured.wear_the_turtle.description=Now I'm a tank! Obtain a full set of Tortoiseshell armor
+advancements.cqrepoured.kill_boar_mage.title=This girl is on fire
+advancements.cqrepoured.kill_boar_mage.description=Defeat a boarmage
+advancements.cqrepoured.kill_lich.title=What is dead may still yet die!
+advancements.cqrepoured.kill_lich.description=Defeat a lich
+advancements.cqrepoured.kill_walker_king.title=A worthy opponent
+advancements.cqrepoured.kill_walker_king.description=Defeat a walker king
+advancements.cqrepoured.kill_necromancer.title=Rise and die
+advancements.cqrepoured.kill_necromancer.description=Defeat a necromancer
+advancements.cqrepoured.kill_nether_dragon.title=It wasn't godzilla
+advancements.cqrepoured.kill_nether_dragon.description=Defeat a nether dragon
+advancements.cqrepoured.kill_giant_tortoise.title=Spun right 'round
+advancements.cqrepoured.kill_giant_tortoise.description=Defeat a giant tortoise
+advancements.cqrepoured.kill_pirate_captain.title=I'm the captain now
+advancements.cqrepoured.kill_pirate_captain.description=Defeat the Pirate Captain
+advancements.cqrepoured.new_captain.title=Reverse Piracy
+advancements.cqrepoured.new_captain.description=Acquire the Pirate Captain's weapons
+advancements.cqrepoured.kill_giant_spider.title=The only good spider...
+advancements.cqrepoured.kill_giant_spider.description=...is a dead spider! Defeat a giant spider
+advancements.cqrepoured.kill_ender_king.title=Was that everything?!
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+

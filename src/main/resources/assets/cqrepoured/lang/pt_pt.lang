@@ -1,16 +1,17 @@
-Ficheiro de linguagem português de Portugal para o mod Chocolate Quest Repoured!
-Esta tradução foi criada por todos os desenvolvedores e foi polida por ArloTheEpic
+#Ficheiro de linguagem português de Portugal para o mod Chocolate Quest Repoured!
+#Esta tradução foi criada por todos os desenvolvedores e foi polida por ArloTheEpic
 
 #DamageSources
 death.attack.ray=%1$s was fired by mah lazor!
 death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=Blocos do CQR
-itemGroup.ChocolateQuestRepouredItemsTab=Items do CQR
-itemGroup.ChocolateQuestRepouredDungeonPlacers=Geradores de Dungeons do CQR
-itemGroup.ChocolateQuestRepouredBannerTab=Banners do CQR
-itemGroup.ChocolateQuestRepouredExporterChests=CQR Exporter Chests
+itemGroup.cqrepoured_blocks=Blocos do CQR
+itemGroup.cqrepoured_items=Items do CQR
+itemGroup.cqrepoured_banners=Geradores de Dungeons do CQR
+itemGroup.cqrepoured_creative_tools=Banners do CQR
+itemGroup.cqrepoured_dungeon_placers=CQR Exporter Chests
+itemGroup.cqrepoured_exporter_chests=CQR Exporter Chests
 itemGroup.cqrepoured_spawn_eggs=Ovos do CQR
 
 #Banner Patterns
@@ -196,7 +197,6 @@ item.banner.illager_banner.name=Bandeira dos Illagers
 item.banner.walker_ordo.name=Bandeira Walker 2
 item.banner.gremlin_banner.name=Bandeira Gremlin
 
-
 #Gui
 gui.repu.name=Reputação
 gui.repu.faction=Tribo
@@ -209,8 +209,7 @@ gui.alchemy_bag.name=Saco de Alquimia
 description.gui_exporter.name=Bloco exclusivo do modo creativo para exportação de masmorras. Seleciona a área que desejas exportar e guarda-a.
 description.gui_exporter_part_mode.name=Divide a estrutura em cubos com 16x16x16 para exportação e geração mais rápida. 
 description.gui_exporter_relative_mode.name=Usa as coordenadas relativas ao bloco de exportação. 
-description.gui_exporter_ignore_entities.name=Ignora todas as entidades não listadas em cqrepoured.cfg -> advanced -> specialEntities. 
-Recomenda-se que se confirme de vez em quando.
+description.gui_exporter_ignore_entities.name=Ignora todas as entidades não listadas em cqrepoured.cfg -> advanced -> specialEntities. Recomenda-se que se confirme de vez em quando.
 
 #Other
 item.super_tool.name=Super Ferramenta (apenas para o creativo)
@@ -221,15 +220,17 @@ item.mob_to_spawner_tool.name=Mob para Spawner
 item.spawner_converter.name=Conversor para Spawner
 item.badge.name=Crachá
 item.backpack.name=Mochila
+item.spiked_glove.name=Spiked Glove
 item.alchemy_bag.name=Saco de Alquimia
 item.structure_selector.name=Ferramenta de Seleção de Á
 item.path_tool.name=Path Tool
 item.cursed_bone.name=Osso Amaldiçoado
 item.dummy_shield.name=Escudo Manequim
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
 #Axes
 item.battle_axe_bull.name=Machado de Batalha do Touro
-
 
 #Dragon Items
 item.helmet_dragon.name=Cabeça de Dragão
@@ -259,8 +260,7 @@ item.cqr_shield_r09.name=Escudo do Tritão
 
 #Walker set
 item.sword_walker.name=Lâmina do Walker
-item.shield_walker.name=Escudo do rei dos Walkers
-
+item.shield_walker_king.name=Escudo do rei dos Walkers
 
 #Shields
 item.shield_bull.name=Escudo do Touro de Geki
@@ -300,7 +300,6 @@ item.spear_diamond.name=Lança de Diamante
 item.spear_iron.name=Lança de Ferro
 attribute.name.generic.attackRange=Alcançe
 
-
 #Staves
 item.staff.name=Staff
 item.staff_fire.name=Fire Staff
@@ -337,7 +336,6 @@ item.spiderhook.name=Gancho Aracnídeo
 item.boots_cloud.name=Botas de Nuvem
 item.feather_golden.name=Pena Dourada
 
-
 #Monking Items
 item.bone_monking.name=Osso do Monking
 
@@ -350,7 +348,6 @@ item.chestplate_inquisition.name=Peitoral da Inquisição
 item.leggings_inquisition.name=Calças da Inquisição
 item.boots_inquisition.name=Botas da Inquisição
 
-
 #Bull Armor
 item.helmet_bull.name=Capacete do Touro
 item.chestplate_bull.name=Peitoral do Touro
@@ -358,7 +355,6 @@ item.leggings_bull.name=Calças do Touro
 item.boots_bull.name=Botas do Touro
 item.leather_bull.name=Couro de Touro
 item.horn_bull.name=Chifre de Touro
-
 
 #Turtle Armor
 item.helmet_turtle.name=Capacete da Tartaruga
@@ -382,7 +378,6 @@ item.boots_spider.name=Botas de Aranha
 item.leather_spider.name=Couro de Aranha
 item.giant_spider_poison.name=Veneno de Aranha Gigante
 
-
 #Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Capacete de Diamante Pesado
 item.chestplate_heavy_diamond.name=Peitoral de Diamante Pesado
@@ -402,9 +397,9 @@ item.leggings_iron_dyable.name=Calças de Ferro Coloríveis
 item.boots_iron_dyable.name=Botas de Ferro Coloríveis
 
 #Dyable Diamond Armor
-item.helmet_diamond_dyable.name==Capacete de Diamante Colorível
+item.helmet_diamond_dyable.name=Capacete de Diamante Colorível
 item.chestplate_diamond_dyable.name=Peitoral de Diamante Colorível
-item.leggings_diamond_dyable.name==Calças de Diamante Coloríveis
+item.leggings_diamond_dyable.name=Calças de Diamante Coloríveis
 item.boots_diamond_dyable.name=Botas de Diamante Coloríveis
 
 #Blocks
@@ -422,7 +417,7 @@ tile.boss_block.name=Bloco do Chefe
 tile.force_field_nexus.name=Centro de Campo de Força
 tile.map_placeholder.name=Marcador de Posição no Mapa
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
 tile.andesite_pillar.name=Pilar de Andesito
 tile.andesite_cube.name=Cubo de Andesito
@@ -431,7 +426,7 @@ tile.andesite_square.name=Quadrado de Andesito
 tile.andesite_small.name=Tijolos de Andesito Pequenos
 tile.andesite_large.name=Tijolos de Andesito Grandes
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Diorito Esculpido
 tile.diorite_pillar.name=Pilar de Diorito
 tile.diorite_cube.name=Cubo de Diorito
@@ -440,8 +435,7 @@ tile.diorite_square.name=Quadrado de Diorito
 tile.diorite_small.name=Tijolos de Diorito Pequenos
 tile.diorite_large.name=Tijolos de Diorito Grandes
 
-
-//Granite blocks
+#Granite blocks
 tile.granite_carved.name=Granito Esculpido
 tile.granite_pillar.name=Pilar de Granito
 tile.granite_cube.name=Cubo de Granito
@@ -450,7 +444,7 @@ tile.granite_square.name=Quadrado de Granito
 tile.granite_small.name=Tijolos de Granito Pequenos
 tile.granite_large.name=Tijolos de Granito Grandes
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Prismarine Esculpida
 tile.prismarine_pillar.name=Pilar de Prismarine
 tile.prismarine_cube.name=Cubo de Prismarine
@@ -458,7 +452,7 @@ tile.prismarine_square.name=Quadrado de Prismarine
 tile.prismarine_small.name=Tijolos de Prismarine Pequenos
 tile.prismarine_large.name=Tijolos de Prismarine Grandes
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Pedra do Fim Esculpida
 tile.endstone_pillar.name=Pilar de Pedra do Fim
 tile.endstone_cube.name=Cubo de Pedra do Fim
@@ -466,14 +460,14 @@ tile.endstone_scale.name=Escama de Endstone
 tile.endstone_square.name=Quadrado de Pedra do Fim
 tile.endstone_small.name=Tijolos de Pedra do Fim Pequenos
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Purpur Esculpida
 tile.purpur_cube.name=Cubo de Purpur
 tile.purpur_scale.name=Escama de Purpur
 tile.purpur_small.name=Tijolos de Purpur Pequenos
 tile.purpur_large.name=Tijolos de Purpur Grandes
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Tijolo do Nether Vermelho Esculpido
 tile.red_netherbrick_pillar.name=Pilar de Tijolo do Nether Vermelho
 tile.red_netherbrick_cube.name=Cubo de Tijolo do Nether Vermelho
@@ -527,6 +521,7 @@ description.dagger.name=Right-click enquanto to moves para saltar para a frente
 description.ninja_dagger.name=Right-click enquanto to moves para saltar para a frente. Diz a lenda que o detentor desta adaga pode, à sua vontade, desaparecer sem rasto. Talvez consigas reviver a lenda ao fazer Shift+Right-Click, mas duvido que vás longe.
 description.bull_battle_axe.name=Right-click para fazer um terramoto. Esmaga os teus inimigos.
 description.walker_set.name=Diz a lenda que aquele que dispara uma flecha ao Rei dos Walkers deparar-se-ia com uma faca nas costas. Talvez se tiveres o escudo e a espada do Rei poderás fazer o mesmo?
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
 description.gun.name=Right-click para disparar
 description.bullet_damage.name=Dano de bala
 description.bullet_fire.name=Incendiar
@@ -550,12 +545,12 @@ description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame
 description.badge.name=Apenas disponível no Creativo. Left-click num mob para abrir o inventário.
 description.backpack.name=Right-click para abrir
 description.alchemy_bag.name=Right-click para abrir. Apenas pode levar poções
-//description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
-//description.hookshot.name=Right-click para atirar gancho.Se bater num bloco, vais ser puxado para ele.
-//description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
-//description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
-//description.spidershot.name=Right-click para atirar rede.Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
-//description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
+description.hookshot.name=Right-click para atirar gancho.Se bater num bloco, vais ser puxado para ele.
+description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
+#description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.spidershot.name=Right-click para atirar rede.Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
+#description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
 description.moonlight.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz da lua"
 description.sunshine.name=A inscrição na lâmina diz :"O meu poder so pode ser acordado à luz do Sol"
 description.attack_damage_at_night.name=Dano de ataque durante a noite
@@ -565,6 +560,7 @@ description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
+description.spiked_glove.name=With the claws of a beast, and the strength of your arm, these gloves shall lead you far from harm. While wielding two, enjoy the view, for walls no longer hinder you.
 description.spear_diamond.name=Uma arma bem pensada para mais alcance do que as espadas. Botão direito para um ataque com mais alcance.
 description.cursed_bone.name=Mob a ser invocado.
 description.dummy_shield.name=Uma aproximação do que o escudo é suposto ser. Não protege de ataques. Um manequim exportado que segurar um destes escudos vai segurar o escudo normal do respetivo mob aquando da geração da sua dungeon.  
@@ -575,28 +571,31 @@ description.horn_bull.name=Este chifre provavelmente serve para fazer uma arma. 
 description.leather_bull.name=Couro de altíssima qualidade. 
 description.ball_slime.name=Slime com poder de regeneração. Existe alguém que te pode ajudar a transformar isto nalguma coisa útil.
 description.bone_monking.name=Reza a lenda que o poder dos monkings é armazenado nos ossos. Será que alguém que pode canalizar esse poder para algo útil?
-description.leather_spider.name= Que nojo, pele de aranha. Pode ser que alguém esteja mais à vontade para mexer nisso do que tu.
+description.leather_spider.name=Que nojo, pele de aranha. Pode ser que alguém esteja mais à vontade para mexer nisso do que tu.
 description.king_crown.name=Pode ser usado sozinho ou com um capacete.
 description.bubble_pistol.name=Right click para mandar bolhas. Pressionar right click para um jato constante.
 description.bubble_rifle.name=Right click para mandar bolhas. Pressionar right click para um jato constante, mas com recarga lenta.
- Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. 
 description.path_tool.name=Shift+Left Click numa entidade para aplicar o caminho para essa entidade.Left Click numa entitade para copiar o caminho dessa entidade. Shift+Right Click num bloco para adicionar um novo caminho. Right Click num bloco para selecionar um caminho existente an .Sneak+Right Click  no ar para limpar um caminho.
+description.unprotected_positions_tool.name=TODO add tooltip
 
 #Trading GUI
-description.gui_merchant_edit_trade.ignore_meta_check_box.name==O item colocado não tem de ser uniforme em termos de meta dados. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante com pouca durabilidade também funciona. to be similar in terms of meta data. 
-description.gui_merchant_edit_trade.ignore_nbt_check_box.name==O item colocado não tem de ser uniforme em termos de dados nbt. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante encantada tambem funciona. 
-description.gui_merchant_edit_trade.reputation_button.name==Reputação com a facção dos traders necessária para fazer esta troca. Coloca "NONE" para não requerir reputação.
-description.gui_merchant_edit_trade.advancement_text_field.name==Conquista relacionada com esta troca. Especifica a resourcelocation (por exemplo,  "minecraft:story/mine_stone) ou deixa em branco para não requerir nenhuma conquista.
-description.gui_merchant_edit_trade.stock_check_box.name==Esta opção serve para decidir se a troca tem limite ou não. Isto significa que a troca é limitada.
-description.gui_merchant_edit_trade.restock_text_field.name==Quantidade de usos que vai aumentar quando a troca é restaurada. Sempre que compras algo, vai restaurar uma troca diferente que não esteja na capacidade máxima.
-description.gui_merchant_edit_trade.in_stock_text_field.name==Quantidade atual de usos que esta troca tem.
-description.gui_merchant_edit_trade.max_stock_text_field.name==Quantidade mais alta que esta troca pode ter.
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=O item colocado não tem de ser uniforme em termos de meta dados. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante com pouca durabilidade também funciona. to be similar in terms of meta data. 
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=O item colocado não tem de ser uniforme em termos de dados nbt. Por exemplo, se o item selecionado for uma espada de diamante, uma espada de diamante encantada tambem funciona. 
+description.gui_merchant_edit_trade.reputation_button.name=Reputação com a facção dos traders necessária para fazer esta troca. Coloca "NONE" para não requerir reputação.
+description.gui_merchant_edit_trade.advancement_text_field.name=Conquista relacionada com esta troca. Especifica a resourcelocation (por exemplo,  "minecraft:story/mine_stone) ou deixa em branco para não requerir nenhuma conquista.
+description.gui_merchant_edit_trade.stock_check_box.name=Esta opção serve para decidir se a troca tem limite ou não. Isto significa que a troca é limitada.
+description.gui_merchant_edit_trade.restock_text_field.name=Quantidade de usos que vai aumentar quando a troca é restaurada. Sempre que compras algo, vai restaurar uma troca diferente que não esteja na capacidade máxima.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Quantidade atual de usos que esta troca tem.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Quantidade mais alta que esta troca pode ter.
+description.gui_button_trade.unlocked.name=Trade is unlocked.
 description.gui_button_trade.locked.name=Troca ainda não foi desbloqueada.
 description.gui_button_trade.out_of_stock.name=Já não há mais! Se possível compra outras coisas, talvez depois haja mais daquilo que queres.
 
 #Enchantments
 enchantment.lightning_protection=Proteção de Relâmpagos.
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
 enchantment.spectral=Bâlsamo dos espectros.
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
 
 #Mobs
 entity.cqr_dummy.name=Manequim
@@ -629,21 +628,22 @@ entity.cqr_giant_silverfish.name=Giant Silverfish
 entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
 entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
 
-
 #Bosses
-entity.nether_dragon.name=Dragão do Nether
-entity.giant_tortoise.name=Tartaruga Gigante
-entity.lich.name=Lich
-entity.necromancer.name=Mago Negro
-entity.boarmage.name=Mago Javali
+entity.cqr_nether_dragon.name=Dragão do Nether
+entity.cqr_giant_tortoise.name=Tartaruga Gigante
+entity.cqr_lich.name=Lich
+entity.cqr_necromancer.name=Mago Negro
+entity.cqr_boar_mage.name=Mago Javali
 entity.cqr_walker_king.name=Rei dos Walkers
 entity.cqr_pirate_captain.name=Capitão Pirata
 entity.cqr_giant_spider.name=Shelob
 entity.cqr_ender_king.name=Rei do Fim
 entity.cqr_ender_calamity.name=Calamidade do Fim
+entity.cqr_exterminator.name=Exterminator Prototype
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
+#This name should be the same as the walker king name
 entity.cqr_illusion_walker_king.name=Rei dos Walkers
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Tornado Walker
 entity.cqr_pirate_parrot.name=Papagaio Traidor
@@ -683,5 +683,14 @@ advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=Derrotar o Capitão Pirata
 advancements.cqrepoured.new_captain.title=Quem é que é o capitão agora, hm?
 advancements.cqrepoured.new_captain.description=Obtém as armas do Capitão Pirata
-advancements.cqrepoured.kill_giant_spider.title= Aranha boa...
+advancements.cqrepoured.kill_giant_spider.title=Aranha boa...
 advancements.cqrepoured.kill_giant_spider.description=...é aranha morta! Derrotar uma aranha gigante.
+advancements.cqrepoured.kill_ender_king.title=Was that everything?!
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+

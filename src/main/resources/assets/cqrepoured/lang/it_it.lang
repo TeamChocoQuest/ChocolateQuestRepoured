@@ -1,591 +1,695 @@
-Translated By Andrearefi59 [YT] channel link --> https:#www.youtube.com/channel/UCnue_YuPFqlgHdN116jANOg
+#Translated By Andrearefi59 [YT] channel link --> https://www.youtube.com/channel/UCnue_YuPFqlgHdN116jANOg
 
-# CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab = Blocchi ricondizionati Chocolate Quest
-itemGroup.ChocolateQuestRepouredItemsTab = Oggetti ricondizionati Chocolate Quest
-itemGroup.ChocolateQuestRepouredDungeonPlacers = CQR Piazzatore Dungeon
-itemGroup.ChocolateQuestRepouredBannerTab = Banner
-itemGroup.ChocolateQuestRepouredExporterChests = Cassapanche esportatore
+#DamageSources
+death.attack.ray=%1$s was fired by mah lazor!
+death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
-# Banner
-item.banner.cqrepoured_cq_blank.white = marcatore banner CQR Bianco
-item.banner.cqrepoured_cq_blank.orange = marcatore banner CQR Arancione
-item.banner.cqrepoured_cq_blank.magenta = marcatore banner CQR Magenta
-item.banner.cqrepoured_cq_blank.light_blue = marcatore banner CQR Blu Chiaro
-item.banner.cqrepoured_cq_blank.yellow = marcatore banner CQR Giallo
-item.banner.cqrepoured_cq_blank.lime = CQR-banner marcatore Lime
-item.banner.cqrepoured_cq_blank.pink = CQR-banner marcatore Rosa
-item.banner.cqrepoured_cq_blank.gray = marcatore banner CQR Grigio
-item.banner.cqrepoured_cq_blank.silver = CQR-banner marcatore Argento
-item.banner.cqrepoured_cq_blank.cyan = marcatore banner CQR Ciano
-item.banner.cqrepoured_cq_blank.purple = CQR-banner marcatore Viola
-item.banner.cqrepoured_cq_blank.blue = marcatore banner CQR Blu
-item.banner.cqrepoured_cq_blank.brown = marcatore banner CQR Marrone
-item.banner.cqrepoured_cq_blank.green = marcatore banner CQR Verde
-item.banner.cqrepoured_cq_blank.red = marcatore banner CQR Rosso
-item.banner.cqrepoured_cq_blank.black = CQR-banner marcatore Nero
+#CreativeTabs
+itemGroup.cqrepoured_blocks=Blocchi ricondizionati Chocolate Quest
+itemGroup.cqrepoured_items=Oggetti ricondizionati Chocolate Quest
+itemGroup.cqrepoured_banners=Banner
+itemGroup.cqrepoured_creative_tools=CQR Creative Tools
+itemGroup.cqrepoured_dungeon_placers=CQR Piazzatore Dungeon
+itemGroup.cqrepoured_exporter_chests=Cassapanche esportatore
+itemGroup.cqrepoured_spawn_eggs=CQR Spawn Eggs
 
-item.banner.cqrepoured_cq_wither_eyes.white = Occhi bianchi dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.orange = Occhi arancioni dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.magenta = Occhi magenta dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.light_blue = Occhi azzurri dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.yellow = Occhi gialli dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.lime = Occhi verde chiaro dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.pink = Occhi rosa dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.gray = Occhi grigi dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.silver = Occhi d'argento dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.cyan = Occhi ciano dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.purple = Occhi viola dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.blue = Occhi blu dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.brown = Occhi marroni dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.green = Occhi verdi dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.red = Occhi rossi dello scheletro Avvizzito
-item.banner.cqrepoured_cq_wither_eyes.black = Occhi neri dello scheletro Avvizzito
+#Banner Patterns
+item.banner.cqrepoured_cq_blank.white=marcatore banner CQR Bianco
+item.banner.cqrepoured_cq_blank.orange=marcatore banner CQR Arancione
+item.banner.cqrepoured_cq_blank.magenta=marcatore banner CQR Magenta
+item.banner.cqrepoured_cq_blank.light_blue=marcatore banner CQR Blu Chiaro
+item.banner.cqrepoured_cq_blank.yellow=marcatore banner CQR Giallo
+item.banner.cqrepoured_cq_blank.lime=CQR-banner marcatore Lime
+item.banner.cqrepoured_cq_blank.pink=CQR-banner marcatore Rosa
+item.banner.cqrepoured_cq_blank.gray=marcatore banner CQR Grigio
+item.banner.cqrepoured_cq_blank.silver=CQR-banner marcatore Argento
+item.banner.cqrepoured_cq_blank.cyan=marcatore banner CQR Ciano
+item.banner.cqrepoured_cq_blank.purple=CQR-banner marcatore Viola
+item.banner.cqrepoured_cq_blank.blue=marcatore banner CQR Blu
+item.banner.cqrepoured_cq_blank.brown=marcatore banner CQR Marrone
+item.banner.cqrepoured_cq_blank.green=marcatore banner CQR Verde
+item.banner.cqrepoured_cq_blank.red=marcatore banner CQR Rosso
+item.banner.cqrepoured_cq_blank.black=CQR-banner marcatore Nero
 
-item.banner.cqrepoured_cq_wither_skull.white = Cranio bianco Avvizzito
-item.banner.cqrepoured_cq_wither_skull.orange = Cranio Avvizzito arancione
-item.banner.cqrepoured_cq_wither_skull.magenta = Magenta wither skull
-item.banner.cqrepoured_cq_wither_skull.light_blue = Cranio wither azzurro
-item.banner.cqrepoured_cq_wither_skull.yellow = Cranio giallo Avvizzito
-item.banner.cqrepoured_cq_wither_skull.lime = Cranio wither verde chiaro
-item.banner.cqrepoured_cq_wither_skull.pink = Cranio rosa Avvizzito
-item.banner.cqrepoured_cq_wither_skull.gray = Cranio grigio Avvizzito
-item.banner.cqrepoured_cq_wither_skull.silver = Teschio d'argento Avvizzito
-item.banner.cqrepoured_cq_wither_skull.cyan = Cranio conico ciano
-item.banner.cqrepoured_cq_wither_skull.purple = Cranio Avvizzito viola
-item.banner.cqrepoured_cq_wither_skull.blue = Cranio wither blu
-item.banner.cqrepoured_cq_wither_skull.brown = Cranio wither marrone
-item.banner.cqrepoured_cq_wither_skull.green = Cranio verde Avvizzito
-item.banner.cqrepoured_cq_wither_skull.red = Cranio rosso Avvizzito
-item.banner.cqrepoured_cq_wither_skull.black = Cranio nero Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.white=Occhi bianchi dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.orange=Occhi arancioni dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.magenta=Occhi magenta dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.light_blue=Occhi azzurri dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.yellow=Occhi gialli dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.lime=Occhi verde chiaro dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.pink=Occhi rosa dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.gray=Occhi grigi dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.silver=Occhi d'argento dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.cyan=Occhi ciano dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.purple=Occhi viola dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.blue=Occhi blu dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.brown=Occhi marroni dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.green=Occhi verdi dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.red=Occhi rossi dello scheletro Avvizzito
+item.banner.cqrepoured_cq_wither_eyes.black=Occhi neri dello scheletro Avvizzito
 
-item.banner.cqrepoured_cq_fire.white = Fiamme bianche
-item.banner.cqrepoured_cq_fire.orange = Fiamme arancioni
-item.banner.cqrepoured_cq_fire.magenta = Fiamme magenta
-item.banner.cqrepoured_cq_fire.light_blue = Fiamme blu chiaro
-item.banner.cqrepoured_cq_fire.yellow = Fiamme gialle
-item.banner.cqrepoured_cq_fire.lime = Fiamme verde chiaro
-item.banner.cqrepoured_cq_fire.pink = Fiamme rosa
-item.banner.cqrepoured_cq_fire.gray = Fiamme grigie
-item.banner.cqrepoured_cq_fire.silver = Fiamme d'argento
-item.banner.cqrepoured_cq_fire.cyan = Fiamme ciano
-item.banner.cqrepoured_cq_fire.purple = Fiamme viola
-item.banner.cqrepoured_cq_fire.blue = Fiamme blu
-item.banner.cqrepoured_cq_fire.brown = Fiamme marroni
-item.banner.cqrepoured_cq_fire.green = Fiamme verdi
-item.banner.cqrepoured_cq_fire.red = Fiamme rosse
-item.banner.cqrepoured_cq_fire.black = Fiamme nere
+item.banner.cqrepoured_cq_wither_skull.white=Cranio bianco Avvizzito
+item.banner.cqrepoured_cq_wither_skull.orange=Cranio Avvizzito arancione
+item.banner.cqrepoured_cq_wither_skull.magenta=Magenta wither skull
+item.banner.cqrepoured_cq_wither_skull.light_blue=Cranio wither azzurro
+item.banner.cqrepoured_cq_wither_skull.yellow=Cranio giallo Avvizzito
+item.banner.cqrepoured_cq_wither_skull.lime=Cranio wither verde chiaro
+item.banner.cqrepoured_cq_wither_skull.pink=Cranio rosa Avvizzito
+item.banner.cqrepoured_cq_wither_skull.gray=Cranio grigio Avvizzito
+item.banner.cqrepoured_cq_wither_skull.silver=Teschio d'argento Avvizzito
+item.banner.cqrepoured_cq_wither_skull.cyan=Cranio conico ciano
+item.banner.cqrepoured_cq_wither_skull.purple=Cranio Avvizzito viola
+item.banner.cqrepoured_cq_wither_skull.blue=Cranio wither blu
+item.banner.cqrepoured_cq_wither_skull.brown=Cranio wither marrone
+item.banner.cqrepoured_cq_wither_skull.green=Cranio verde Avvizzito
+item.banner.cqrepoured_cq_wither_skull.red=Cranio rosso Avvizzito
+item.banner.cqrepoured_cq_wither_skull.black=Cranio nero Avvizzito
 
-item.banner.cqrepoured_cq_emerald.white = Gemma di smeraldo bianco
-item.banner.cqrepoured_cq_emerald.orange = Gemma di smeraldo arancione
-item.banner.cqrepoured_cq_emerald.magenta = Gemma di smeraldo magenta
-item.banner.cqrepoured_cq_emerald.light_blue = Gemma di smeraldo blu chiaro
-item.banner.cqrepoured_cq_emerald.yellow = Gemma di smeraldo giallo
-item.banner.cqrepoured_cq_emerald.lime = Gemma verde smeraldo verde chiaro
-item.banner.cqrepoured_cq_emerald.pink = Gemma di smeraldo rosa
-item.banner.cqrepoured_cq_emerald.gray = Gemma grigio smeraldo
-item.banner.cqrepoured_cq_emerald.silver = Gemma di smeraldo d'argento
-item.banner.cqrepoured_cq_emerald.cyan = gemma di smeraldo ciano
-item.banner.cqrepoured_cq_emerald.purple = Gemma di smeraldo viola
-item.banner.cqrepoured_cq_emerald.blue = Gemma di smeraldo blu
-item.banner.cqrepoured_cq_emerald.brown = Gemma marrone smeraldo
-item.banner.cqrepoured_cq_emerald.green = Gemma verde smeraldo
-item.banner.cqrepoured_cq_emerald.red = Gemma di smeraldo rosso
-item.banner.cqrepoured_cq_emerald.black = Gemma di smeraldo nero
+item.banner.cqrepoured_cq_fire.white=Fiamme bianche
+item.banner.cqrepoured_cq_fire.orange=Fiamme arancioni
+item.banner.cqrepoured_cq_fire.magenta=Fiamme magenta
+item.banner.cqrepoured_cq_fire.light_blue=Fiamme blu chiaro
+item.banner.cqrepoured_cq_fire.yellow=Fiamme gialle
+item.banner.cqrepoured_cq_fire.lime=Fiamme verde chiaro
+item.banner.cqrepoured_cq_fire.pink=Fiamme rosa
+item.banner.cqrepoured_cq_fire.gray=Fiamme grigie
+item.banner.cqrepoured_cq_fire.silver=Fiamme d'argento
+item.banner.cqrepoured_cq_fire.cyan=Fiamme ciano
+item.banner.cqrepoured_cq_fire.purple=Fiamme viola
+item.banner.cqrepoured_cq_fire.blue=Fiamme blu
+item.banner.cqrepoured_cq_fire.brown=Fiamme marroni
+item.banner.cqrepoured_cq_fire.green=Fiamme verdi
+item.banner.cqrepoured_cq_fire.red=Fiamme rosse
+item.banner.cqrepoured_cq_fire.black=Fiamme nere
 
-item.banner.cqrepoured_cq_bones.white = Ossa bianche dei morti
-item.banner.cqrepoured_cq_bones.orange = Ossa arancioni dei morti
-item.banner.cqrepoured_cq_bones.magenta = Magenta ossa dei morti
-item.banner.cqrepoured_cq_bones.light_blue = Ossa celesti dei morti
-item.banner.cqrepoured_cq_bones.yellow = Ossa gialle dei morti
-item.banner.cqrepoured_cq_bones.lime = Ossa dei morti verde chiaro
-item.banner.cqrepoured_cq_bones.pink = Ossa rosa dei morti
-item.banner.cqrepoured_cq_bones.gray = Ossa grigie dei morti
-item.banner.cqrepoured_cq_bones.silver = Ossa d'argento dei morti
-item.banner.cqrepoured_cq_bones.cyan = Ciano ossa dei morti
-item.banner.cqrepoured_cq_bones.purple = Ossa viola dei morti
-item.banner.cqrepoured_cq_bones.blue = Ossa blu dei morti
-item.banner.cqrepoured_cq_bones.brown = Ossa dei morti marroni
-item.banner.cqrepoured_cq_bones.green = Ossa verdi dei morti
-item.banner.cqrepoured_cq_bones.red = Ossa rosse dei morti
-item.banner.cqrepoured_cq_bones.black = Ossa nere dei morti
+item.banner.cqrepoured_cq_emerald.white=Gemma di smeraldo bianco
+item.banner.cqrepoured_cq_emerald.orange=Gemma di smeraldo arancione
+item.banner.cqrepoured_cq_emerald.magenta=Gemma di smeraldo magenta
+item.banner.cqrepoured_cq_emerald.light_blue=Gemma di smeraldo blu chiaro
+item.banner.cqrepoured_cq_emerald.yellow=Gemma di smeraldo giallo
+item.banner.cqrepoured_cq_emerald.lime=Gemma verde smeraldo verde chiaro
+item.banner.cqrepoured_cq_emerald.pink=Gemma di smeraldo rosa
+item.banner.cqrepoured_cq_emerald.gray=Gemma grigio smeraldo
+item.banner.cqrepoured_cq_emerald.silver=Gemma di smeraldo d'argento
+item.banner.cqrepoured_cq_emerald.cyan=gemma di smeraldo ciano
+item.banner.cqrepoured_cq_emerald.purple=Gemma di smeraldo viola
+item.banner.cqrepoured_cq_emerald.blue=Gemma di smeraldo blu
+item.banner.cqrepoured_cq_emerald.brown=Gemma marrone smeraldo
+item.banner.cqrepoured_cq_emerald.green=Gemma verde smeraldo
+item.banner.cqrepoured_cq_emerald.red=Gemma di smeraldo rosso
+item.banner.cqrepoured_cq_emerald.black=Gemma di smeraldo nero
 
-item.banner.cqrepoured_walker_black_bg.white = Tessuto bandiera bianca
-item.banner.cqrepoured_walker_black_bg.orange = Tessuto bandiera arancione
-item.banner.cqrepoured_walker_black_bg.magenta = Tessuto bandiera magenta
-item.banner.cqrepoured_walker_black_bg.light_blue = Tessuto bandiera blu chiaro
-item.banner.cqrepoured_walker_black_bg.yellow = Tessuto bandiera gialla
-item.banner.cqrepoured_walker_black_bg.lime = Tessuto bandiera Lime
-item.banner.cqrepoured_walker_black_bg.pink = Tessuto bandiera rosa
-item.banner.cqrepoured_walker_black_bg.gray = Tessuto bandiera grigio
-item.banner.cqrepoured_walker_black_bg.silver = Tessuto bandiera argento
-item.banner.cqrepoured_walker_black_bg.cyan = Tessuto bandiera ciano
-item.banner.cqrepoured_walker_black_bg.purple = Tessuto bandiera viola
-item.banner.cqrepoured_walker_black_bg.blue = Tessuto bandiera blu
-item.banner.cqrepoured_walker_black_bg.brown = Tessuto bandiera marrone
-item.banner.cqrepoured_walker_black_bg.green = Tessuto bandiera verde
-item.banner.cqrepoured_walker_black_bg.red = Tessuto bandiera rossa
-item.banner.cqrepoured_walker_black_bg.black = Tessuto bandiera nera
+item.banner.cqrepoured_cq_bones.white=Ossa bianche dei morti
+item.banner.cqrepoured_cq_bones.orange=Ossa arancioni dei morti
+item.banner.cqrepoured_cq_bones.magenta=Magenta ossa dei morti
+item.banner.cqrepoured_cq_bones.light_blue=Ossa celesti dei morti
+item.banner.cqrepoured_cq_bones.yellow=Ossa gialle dei morti
+item.banner.cqrepoured_cq_bones.lime=Ossa dei morti verde chiaro
+item.banner.cqrepoured_cq_bones.pink=Ossa rosa dei morti
+item.banner.cqrepoured_cq_bones.gray=Ossa grigie dei morti
+item.banner.cqrepoured_cq_bones.silver=Ossa d'argento dei morti
+item.banner.cqrepoured_cq_bones.cyan=Ciano ossa dei morti
+item.banner.cqrepoured_cq_bones.purple=Ossa viola dei morti
+item.banner.cqrepoured_cq_bones.blue=Ossa blu dei morti
+item.banner.cqrepoured_cq_bones.brown=Ossa dei morti marroni
+item.banner.cqrepoured_cq_bones.green=Ossa verdi dei morti
+item.banner.cqrepoured_cq_bones.red=Ossa rosse dei morti
+item.banner.cqrepoured_cq_bones.black=Ossa nere dei morti
 
+item.banner.cqrepoured_walker_black_bg.white=Tessuto bandiera bianca
+item.banner.cqrepoured_walker_black_bg.orange=Tessuto bandiera arancione
+item.banner.cqrepoured_walker_black_bg.magenta=Tessuto bandiera magenta
+item.banner.cqrepoured_walker_black_bg.light_blue=Tessuto bandiera blu chiaro
+item.banner.cqrepoured_walker_black_bg.yellow=Tessuto bandiera gialla
+item.banner.cqrepoured_walker_black_bg.lime=Tessuto bandiera Lime
+item.banner.cqrepoured_walker_black_bg.pink=Tessuto bandiera rosa
+item.banner.cqrepoured_walker_black_bg.gray=Tessuto bandiera grigio
+item.banner.cqrepoured_walker_black_bg.silver=Tessuto bandiera argento
+item.banner.cqrepoured_walker_black_bg.cyan=Tessuto bandiera ciano
+item.banner.cqrepoured_walker_black_bg.purple=Tessuto bandiera viola
+item.banner.cqrepoured_walker_black_bg.blue=Tessuto bandiera blu
+item.banner.cqrepoured_walker_black_bg.brown=Tessuto bandiera marrone
+item.banner.cqrepoured_walker_black_bg.green=Tessuto bandiera verde
+item.banner.cqrepoured_walker_black_bg.red=Tessuto bandiera rossa
+item.banner.cqrepoured_walker_black_bg.black=Tessuto bandiera nera
 
-item.banner.cqrepoured_walker_border.white = Confine Bianco
-item.banner.cqrepoured_walker_border.orange = Confine Arancione
-item.banner.cqrepoured_walker_border.magenta = Confine Magenta
-item.banner.cqrepoured_walker_border.light_blue = Confine Blu
-item.banner.cqrepoured_walker_border.yellow = Confine Giallo
-item.banner.cqrepoured_walker_border.lime = Confine Lime
-item.banner.cqrepoured_walker_border.pink = Confine Rosa
-item.banner.cqrepoured_walker_border.gray = Confine Grigio
-item.banner.cqrepoured_walker_border.silver = Confine Argento
-item.banner.cqrepoured_walker_border.cyan = Confine Ciano
-item.banner.cqrepoured_walker_border.purple = Confine viola
-item.banner.cqrepoured_walker_border.blue = Confine Blu
-item.banner.cqrepoured_walker_border.brown = Confine Marrone
-item.banner.cqrepoured_walker_border.green = Confine Verde
-item.banner.cqrepoured_walker_border.red = Confine Rosso
-item.banner.cqrepoured_walker_border.black = Confine Nero
+item.banner.cqrepoured_walker_border.white=Confine Bianco
+item.banner.cqrepoured_walker_border.orange=Confine Arancione
+item.banner.cqrepoured_walker_border.magenta=Confine Magenta
+item.banner.cqrepoured_walker_border.light_blue=Confine Blu
+item.banner.cqrepoured_walker_border.yellow=Confine Giallo
+item.banner.cqrepoured_walker_border.lime=Confine Lime
+item.banner.cqrepoured_walker_border.pink=Confine Rosa
+item.banner.cqrepoured_walker_border.gray=Confine Grigio
+item.banner.cqrepoured_walker_border.silver=Confine Argento
+item.banner.cqrepoured_walker_border.cyan=Confine Ciano
+item.banner.cqrepoured_walker_border.purple=Confine viola
+item.banner.cqrepoured_walker_border.blue=Confine Blu
+item.banner.cqrepoured_walker_border.brown=Confine Marrone
+item.banner.cqrepoured_walker_border.green=Confine Verde
+item.banner.cqrepoured_walker_border.red=Confine Rosso
+item.banner.cqrepoured_walker_border.black=Confine Nero
 
-item.banner.cqrepoured_walker_inner_border.white = Tessuto bianco sfilacciato
-item.banner.cqrepoured_walker_inner_border.orange = Tessuto arancione sfilacciato
-item.banner.cqrepoured_walker_inner_border.magenta = Tessuto sfilacciato magenta
-item.banner.cqrepoured_walker_inner_border.light_blue = Tessuto sfilacciato azzurro
-item.banner.cqrepoured_walker_inner_border.yellow = Tessuto giallo sfilacciato
-item.banner.cqrepoured_walker_inner_border.lime = Tessuto sfilacciato di calce
-item.banner.cqrepoured_walker_inner_border.pink = Tessuto rosa sfilacciato
-item.banner.cqrepoured_walker_inner_border.gray = Tessuto grigio sfilacciato
-item.banner.cqrepoured_walker_inner_border.silver = Tessuto sfilacciato argento
-item.banner.cqrepoured_walker_inner_border.cyan = Tessuto ciano sfilacciato
-item.banner.cqrepoured_walker_inner_border.purple = Tessuto viola sfilacciato
-item.banner.cqrepoured_walker_inner_border.blue = Tessuto blu sfilacciato
-item.banner.cqrepoured_walker_inner_border.brown = Tessuto marrone sfilacciato
-item.banner.cqrepoured_walker_inner_border.green = Tessuto verde sfilacciato
-item.banner.cqrepoured_walker_inner_border.red = Tessuto rosso sfilacciato
-item.banner.cqrepoured_walker_inner_border.black = Tessuto nero sfilacciato
+item.banner.cqrepoured_walker_inner_border.white=Tessuto bianco sfilacciato
+item.banner.cqrepoured_walker_inner_border.orange=Tessuto arancione sfilacciato
+item.banner.cqrepoured_walker_inner_border.magenta=Tessuto sfilacciato magenta
+item.banner.cqrepoured_walker_inner_border.light_blue=Tessuto sfilacciato azzurro
+item.banner.cqrepoured_walker_inner_border.yellow=Tessuto giallo sfilacciato
+item.banner.cqrepoured_walker_inner_border.lime=Tessuto sfilacciato di calce
+item.banner.cqrepoured_walker_inner_border.pink=Tessuto rosa sfilacciato
+item.banner.cqrepoured_walker_inner_border.gray=Tessuto grigio sfilacciato
+item.banner.cqrepoured_walker_inner_border.silver=Tessuto sfilacciato argento
+item.banner.cqrepoured_walker_inner_border.cyan=Tessuto ciano sfilacciato
+item.banner.cqrepoured_walker_inner_border.purple=Tessuto viola sfilacciato
+item.banner.cqrepoured_walker_inner_border.blue=Tessuto blu sfilacciato
+item.banner.cqrepoured_walker_inner_border.brown=Tessuto marrone sfilacciato
+item.banner.cqrepoured_walker_inner_border.green=Tessuto verde sfilacciato
+item.banner.cqrepoured_walker_inner_border.red=Tessuto rosso sfilacciato
+item.banner.cqrepoured_walker_inner_border.black=Tessuto nero sfilacciato
 
+item.banner.cqrepoured_walker_skull.white=Faccia bianca del camminatore
+item.banner.cqrepoured_walker_skull.orange=Faccia arancione del camminatore
+item.banner.cqrepoured_walker_skull.magenta=Faccia del camminatore Magenta
+item.banner.cqrepoured_walker_skull.light_blue=Faccia camminatore azzurro
+item.banner.cqrepoured_walker_skull.yellow=Faccia gialla del camminatore
+item.banner.cqrepoured_walker_skull.lime=Faccia del camminatore di calce
+item.banner.cqrepoured_walker_skull.pink=Faccia rosa del camminatore
+item.banner.cqrepoured_walker_skull.gray=Faccia grigia del camminatore
+item.banner.cqrepoured_walker_skull.silver=Faccia del camminatore d'argento
+item.banner.cqrepoured_walker_skull.cyan=Faccia del camminatore ciano
+item.banner.cqrepoured_walker_skull.purple=Faccia viola del camminatore
+item.banner.cqrepoured_walker_skull.blue=Faccia blu del camminatore
+item.banner.cqrepoured_walker_skull.brown=Faccia marrone del camminatore
+item.banner.cqrepoured_walker_skull.green=Faccia verde del camminatore
+item.banner.cqrepoured_walker_skull.red=Faccia del camminatore rossa
+item.banner.cqrepoured_walker_skull.black=Faccia nera del camminatore
 
-item.banner.cqrepoured_walker_skull.white = Faccia bianca del camminatore
-item.banner.cqrepoured_walker_skull.orange = Faccia arancione del camminatore
-item.banner.cqrepoured_walker_skull.magenta = Faccia del camminatore Magenta
-item.banner.cqrepoured_walker_skull.light_blue = Faccia camminatore azzurro
-item.banner.cqrepoured_walker_skull.yellow = Faccia gialla del camminatore
-item.banner.cqrepoured_walker_skull.lime = Faccia del camminatore di calce
-item.banner.cqrepoured_walker_skull.pink = Faccia rosa del camminatore
-item.banner.cqrepoured_walker_skull.gray = Faccia grigia del camminatore
-item.banner.cqrepoured_walker_skull.silver = Faccia del camminatore d'argento
-item.banner.cqrepoured_walker_skull.cyan = Faccia del camminatore ciano
-item.banner.cqrepoured_walker_skull.purple = Faccia viola del camminatore
-item.banner.cqrepoured_walker_skull.blue = Faccia blu del camminatore
-item.banner.cqrepoured_walker_skull.brown = Faccia marrone del camminatore
-item.banner.cqrepoured_walker_skull.green = Faccia verde del camminatore
-item.banner.cqrepoured_walker_skull.red = Faccia del camminatore rossa
-item.banner.cqrepoured_walker_skull.black = Faccia nera del camminatore
+#Banners
+item.banner.pirate_banner.name=Pirate Banner
+item.banner.walker_banner.name=Walker Banner
+item.banner.pigman_banner.name=Pigman Banner
+item.banner.enderman_banner.name=Enderman Banner
+item.banner.enderman_banner2.name=Enderman Banner 2
+item.banner.npc_banner.name=NPC Banner
+item.banner.skeleton_banner.name=Skeleton Banner
+item.banner.illager_banner.name=Illager Banner
+item.banner.walker_ordo.name=Walker Banner 2
+item.banner.gremlin_banner.name=Gremlin Banner
 
+#Gui
+gui.repu.name=reputazione
+gui.repu.faction=Fazione
+gui.repu.reputation=La tua reputazione
+gui.repu.memberskilled=Membri uccisi
+gui.repu.dungeonsconquered=Case distrutte
+gui.drops.name=Gocce
+gui.backpack.name=zaino
+gui.alchemy_bag.name=Borsa Alchemica
+description.gui_exporter.name=Blocco della sola creatività per l'esportazione di dungeon. Seleziona l'area che desideri esportare, quindi salvala.
+description.gui_exporter_part_mode.name=Suddivide la struttura in cubi 16x16x16 per un'esportazione e una generazione generalmente più veloci. Consigliato da tenere sotto controllo.
+description.gui_exporter_relative_mode.name=Usa le coordinate relative al blocco esportatore. La voce Assistente selezione si occupa di controllare o meno.
+description.gui_exporter_ignore_entities.name=Ignora tutte le entità che non sono elencate in cqrepoured.cfg -> advanced -> specialEntities. Consigliato da tenere sotto controllo.
 
-# Gui
-gui.repu.name = reputazione
-gui.repu.faction = Fazione
-gui.repu.reputation = La tua reputazione
-gui.repu.memberskilled = Membri uccisi
-gui.repu.dungeonsconquered = Case distrutte
-gui.drops.name = Gocce
-gui.backpack.name = zaino
-gui.alchemy_bag.name = Borsa Alchemica
-description.gui_exporter.name = Blocco della sola creatività per l'esportazione di dungeon. Seleziona l'area che desideri esportare, quindi salvala.
-description.gui_exporter_part_mode.name = Suddivide la struttura in cubi 16x16x16 per un'esportazione e una generazione generalmente più veloci. Consigliato da tenere sotto controllo.
-description.gui_exporter_relative_mode.name = Usa le coordinate relative al blocco esportatore. La voce Assistente selezione si occupa di controllare o meno.
-description.gui_exporter_ignore_entities.name = Ignora tutte le entità che non sono elencate in cqrepoured.cfg -> advanced -> specialEntities. Consigliato da tenere sotto controllo.
+#Other
+item.super_tool.name=Super Tool (solo creatività)
+item.potion_healing.name=Pozione curativa
+item.teleport_stone.name=Teleport Stone
+item.soul_bottle.name=Soul Bottle
+item.mob_to_spawner_tool.name=Strumento Mob to Spawner
+item.spawner_converter.name=Convertitore spawner
+item.badge.name=Badge
+item.backpack.name=zaino
+item.spiked_glove.name=Guanti Chiodati
+item.alchemy_bag.name=Borsa Alchemica
+item.structure_selector.name=Assistente selettore selezione
+item.path_tool.name=Strumento percorso
+item.cursed_bone.name=Osso maledetto
+item.dummy_shield.name=Dummy Shield
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
-#Altro
-item.super_tool.name = Super Tool (solo creatività)
-item.potion_healing.name = Pozione curativa
-item.teleport_stone.name = Teleport Stone
-item.soul_bottle.name = Soul Bottle
-item.mob_to_spawner_tool.name = Strumento Mob to Spawner
-item.spawner_converter.name = Convertitore spawner
-item.badge.name = Badge
-item.backpack.name = zaino
-item.spiked_glove.name = Guanti Chiodati
-item.alchemy_bag.name = Borsa Alchemica
-item.structure_selector.name = Assistente selettore selezione
-item.path_tool.name = Strumento percorso
-item.cursed_bone.name = Osso maledetto
+#Axes
+item.battle_axe_bull.name=Ascia da battaglia del toro
 
-# Dragon items
-item.helmet_dragon.name = elmetto drago
+#Dragon Items
+item.helmet_dragon.name=elmetto drago
 
-# Pugnali
-item.dagger_iron.name = Pugnale di ferro
-item.dagger_diamond.name = pugnaledi diamante
-item.dagger_monking.name = pugnale di scimia
-item.dagger_ninja.name = Pugnale Ninja
+#Daggers
+item.dagger_iron.name=Pugnale di ferro
+item.dagger_diamond.name=pugnaledi diamante
+item.dagger_monking.name=pugnale di scimia
+item.dagger_ninja.name=Pugnale Ninja
 
-# Swords
-item.sword_turtle.name = Spada di tartaruga
-item.sword_spider.name = Spada del ragno
-item.battle_axe_bull.name = Ascia da battaglia del toro
-item.sword_moonlight.name = Luce Lunare
-item.sword_sunshine.name = sole
+#Swords
+item.sword_turtle.name=Spada di tartaruga
+item.sword_spider.name=Spada del ragno
+item.sword_moonlight.name=Luce Lunare
+item.sword_sunshine.name=sole
 
-# Shields
-item.cqr_shield_r01.name = Scudo Pigman
-item.cqr_shield_r02.name = Scudo pirata
-item.cqr_shield_r03.name = Scudo dello spettro
-item.cqr_shield_r04.name = Scudo Goblin
-item.cqr_shield_r05.name = Scudo mummia
-item.cqr_shield_r06.name = Scudo variopinto
-item.cqr_shield_r07.name = Scudo arrugginito
-item.cqr_shield_r08.name = Scudo di tartarughe
-item.cqr_shield_r09.name = Scudo tritone
+#Shields
+item.cqr_shield_r01.name=Scudo Pigman
+item.cqr_shield_r02.name=Scudo pirata
+item.cqr_shield_r03.name=Scudo dello spettro
+item.cqr_shield_r04.name=Scudo Goblin
+item.cqr_shield_r05.name=Scudo mummia
+item.cqr_shield_r06.name=Scudo variopinto
+item.cqr_shield_r07.name=Scudo arrugginito
+item.cqr_shield_r08.name=Scudo di tartarughe
+item.cqr_shield_r09.name=Scudo tritone
 
-# Walker set
-item.sword_walker.name = Spada camminatore
-item.shield_walker_king.name = Scudo del RE camminatore
+#Walker set
+item.sword_walker.name=Spada camminatore
+item.shield_walker_king.name=Scudo del RE camminatore
 
-# Shields
-item.shield_bull.name = scudo del toro di ghiaccio
-item.shield_carl.name = Carl
-item.shield_dragonslayer.name = scudo di drago
-item.shield_fire.name = Fiery Shield
-item.shield_goblin.name = Scudo Goblin
-item.shield_monking.name = scudo scimmia
-item.shield_moon.name = scudo lunare
-item.shield_mummy.name = Scudo bendato
-item.shield_pigman.name = Scudo di Pigman
-item.shield_pirate.name = Scudo pirata
-item.shield_pirate2.name = Scudo pirata
-item.shield_rainbow.name = scudo variopinto
-item.shield_reflective.name = Shield
-item.shield_rusted.name = Scudo arrugginito
-item.shield_skeleton_friends.name = scudo scheletro
-item.shield_specter.name = Scudo dello spettro
-item.shield_spider.name = scudo ragno
-item.shield_sun.name = scudo solare
-item.shield_tomb.name = scudo tombale
-item.shield_triton.name = Scudo di Tritone
-item.shield_turtle.name = Scudo di fanteria della tartaruga
-item.shield_warped.name = Scudo deformato
-item.shield_walker.name = scudo camminatore
-item.shield_walker_normal.name = scudo camminatore
-item.shield_zombie.name = scudo zombi
+#Shields
+item.shield_bull.name=scudo del toro di ghiaccio
+item.shield_carl.name=Carl
+item.shield_dragonslayer.name=scudo di drago
+item.shield_fire.name=Fiery Shield
+item.shield_goblin.name=Scudo Goblin
+item.shield_monking.name=scudo scimmia
+item.shield_moon.name=scudo lunare
+item.shield_mummy.name=Scudo bendato
+item.shield_pigman.name=Scudo di Pigman
+item.shield_pirate.name=Scudo pirata
+item.shield_pirate2.name=Scudo pirata
+item.shield_rainbow.name=scudo variopinto
+item.shield_reflective.name=Shield
+item.shield_rusted.name=Scudo arrugginito
+item.shield_skeleton_friends.name=scudo scheletro
+item.shield_specter.name=Scudo dello spettro
+item.shield_spider.name=scudo ragno
+item.shield_sun.name=scudo solare
+item.shield_tomb.name=scudo tombale
+item.shield_triton.name=Scudo di Tritone
+item.shield_turtle.name=Scudo di fanteria della tartaruga
+item.shield_warped.name=Scudo deformato
+item.shield_walker.name=scudo camminatore
+item.shield_walker_normal.name=scudo camminatore
+item.shield_zombie.name=scudo zombi
 
-# Great Swords
-item.great_sword_monking.name = Monking Great Sword
-item.great_sword_bull.name = Spadone del toro
-item.great_sword_diamond.name = Spadone diamante
-item.great_sword_iron.name = Spadone di ferro
+#Great Swords
+item.great_sword_monking.name=Monking Great Sword
+item.great_sword_bull.name=Spadone del toro
+item.great_sword_diamond.name=Spadone diamante
+item.great_sword_iron.name=Spadone di ferro
 
-# Spears
-item.spear_diamond.name = Lancia di diamante
-item.spear_iron.name = Lancia di ferro
+#Spears
+item.spear_diamond.name=Lancia di diamante
+item.spear_iron.name=Lancia di ferro
+attribute.name.generic.attackRange=Attack Range
 
-# Doghe
-item.staff.name = Personale
-item.staff_fire.name = Bastone del fuoco
-item.staff_vampiric.name = Bastone vampirico
-item.staff_wind.name = Staff del vento
-item.staff_poison.name = Bastone veleno
-item.staff_spider.name = Ragno personale
-item.staff_gun.name = Proiettile bastone
-item.staff_healing.name = Bastone curativo
-item.staff_thunder.name = Bastone del tuono
+#Staves
+item.staff.name=Personale
+item.staff_fire.name=Bastone del fuoco
+item.staff_vampiric.name=Bastone vampirico
+item.staff_wind.name=Staff del vento
+item.staff_poison.name=Bastone veleno
+item.staff_spider.name=Ragno personale
+item.staff_gun.name=Proiettile bastone
+item.staff_healing.name=Bastone curativo
+item.staff_thunder.name=Bastone del tuono
 
-# Guns
-item.revolver.name = Revolver
-item.captain_revolver.name = Revolver Capitano
-item.musket.name = Muschetto
-item.musket_dagger_iron.name = Moschetto con pugnale di ferro
-item.musket_dagger_diamond.name = Moschetto con diamante Dagger
-item.musket_dagger_monking.name = Moschetto con pugnale monastico
-item.bullet_iron.name = Proiettili di ferro
-item.bullet_gold.name = Proiettili d'oro
-item.bullet_diamond.name = proiettili di diamante
-item.bullet_fire.name = Proiettili infuocati
-item.cannon_ball.name = Palla di cannoone
-item.flamethrower.name = Lanciafiamme
-item.bubble_pistol.name = Spara bolle
-item.bubble_rifle.name = Spara bolle Avanzata
+#Guns
+item.revolver.name=Revolver
+item.captain_revolver.name=Revolver Capitano
+item.musket.name=Muschetto
+item.musket_dagger_iron.name=Moschetto con pugnale di ferro
+item.musket_dagger_diamond.name=Moschetto con diamante Dagger
+item.musket_dagger_monking.name=Moschetto con pugnale monastico
+item.bullet_iron.name=Proiettili di ferro
+item.bullet_gold.name=Proiettili d'oro
+item.bullet_diamond.name=proiettili di diamante
+item.bullet_fire.name=Proiettili infuocati
+item.cannon_ball.name=Palla di cannoone
+item.flamethrower.name=Lanciafiamme
+item.bubble_pistol.name=Spara bolle
+item.bubble_rifle.name=Spara bolle Avanzata
 
-# Hookshots
-item.hookshot.name = Aggancio  Corto
-item.longshot.name = Tiro Lungo
+#Hookshots
+item.hookshot.name=Aggancio  Corto
+item.longshot.name=Tiro Lungo
+item.spiderhook.name=Spiderhookshot
 
-# Elementi cloud
-item.boots_cloud.name = Stivali Nuvola
-item.feather_golden.name = Piuma d'oro
+#Cloud Items
+item.boots_cloud.name=Stivali Nuvola
+item.feather_golden.name=Piuma d'oro
 
-# Articoli monking
-item.bone_monking.name = Osso Mistico
+#Monking Items
+item.bone_monking.name=Osso Mistico
 
-# Armatura dell'Inquisizione
-item.helmet_inquisition.name = elmetto Inquisitore
-item.chestplate_inquisition.name = Armatura Inquisitore
-item.leggings_inquisition.name = Gambali Inquisitore
-item.boots_inquisition.name = Stivali Inquisitore
+#King Armor
+item.king_crown.name=King Crown
 
-# Bull Armor
-item.helmet_bull.name = Toro casco
-item.chestplate_bull.name =Toro  pettorale
-item.leggings_bull.name =Toro Gambali
-item.boots_bull.name = Stivali da toro
-item.leather_bull.name = Pelle di toro
-item.horn_bull.name = Toro corna
+#Inquisition Armor
+item.helmet_inquisition.name=elmetto Inquisitore
+item.chestplate_inquisition.name=Armatura Inquisitore
+item.leggings_inquisition.name=Gambali Inquisitore
+item.boots_inquisition.name=Stivali Inquisitore
 
-# Armatura di tartaruga
-item.helmet_turtle.name =  casco tartaruga
-item.chestplate_turtle.name = Pettorale per tartarughe
-item.leggings_turtle.name = Gambali di tartaruga
-item.boots_turtle.name = Stivali da tartaruga
-item.scale_turtle.name = Scala della tartaruga
+#Bull Armor
+item.helmet_bull.name=Toro casco
+item.chestplate_bull.name=Toro  pettorale
+item.leggings_bull.name=Toro Gambali
+item.boots_bull.name=Stivali da toro
+item.leather_bull.name=Pelle di toro
+item.horn_bull.name=Toro corna
 
-# Armatura di melma
-item.helmet_slime.name = Casco melma
-item.chestplate_slime.name = Cassapanca di melma
-item.leggings_slime.name = Gambali melma
-item.boots_slime.name = Stivali di melma
-item.ball_slime.name = Rigenerante melma palla
+#Turtle Armor
+item.helmet_turtle.name=casco tartaruga
+item.chestplate_turtle.name=Pettorale per tartarughe
+item.leggings_turtle.name=Gambali di tartaruga
+item.boots_turtle.name=Stivali da tartaruga
+item.scale_turtle.name=Scala della tartaruga
 
-# Armatura di ragno
-item.helmet_spider.name = Spider casco
-item.chestplate_spider.name = Corazza del ragno
-item.leggings_spider.name = Spider Gambali
-item.boots_spider.name = Stivali ragno
-item.leather_spider.name = Pelle di ragno
-item.giant_spider_poison.name = ragno gigante velenoso
+#Slime Armor
+item.helmet_slime.name=Casco melma
+item.chestplate_slime.name=Cassapanca di melma
+item.leggings_slime.name=Gambali melma
+item.boots_slime.name=Stivali di melma
+item.ball_slime.name=Rigenerante melma palla
 
-# Heavy Diamond Armor
-item.helmet_heavy_diamond.name = Pesante Diamond Helmet
-item.chestplate_heavy_diamond.name = Corazza pesante con diamante
-item.leggings_heavy_diamond.name = Pesante Diamond Gambali
-item.boots_heavy_diamond.name = Pesante Diamond stivali
+#Spider Armor
+item.helmet_spider.name=Spider casco
+item.chestplate_spider.name=Corazza del ragno
+item.leggings_spider.name=Spider Gambali
+item.boots_spider.name=Stivali ragno
+item.leather_spider.name=Pelle di ragno
+item.giant_spider_poison.name=ragno gigante velenoso
 
-# Armatura di ferro pesante
-item.helmet_heavy_iron.name = Elmo di ferro pesante
-item.chestplate_heavy_iron.name = Corazza di ferro pesante
-item.leggings_heavy_iron.name = Gambali di ferro pesante
-item.boots_heavy_iron.name = Stivali di ferro pesante
+#Heavy Diamond Armor
+item.helmet_heavy_diamond.name=Pesante Diamond Helmet
+item.chestplate_heavy_diamond.name=Corazza pesante con diamante
+item.leggings_heavy_diamond.name=Pesante Diamond Gambali
+item.boots_heavy_diamond.name=Pesante Diamond stivali
 
-# Armatura di ferro colorabile
-item.helmet_iron_dyable.name = Elmetto di ferro colorabile
-item.chestplate_iron_dyable.name = Corazza in ferro colorabile
-item.leggings_iron_dyable.name = Ghette in ferro colorabili
-item.boots_iron_dyable.name = Stivali di ferro colorabili
+#Heavy Iron Armor
+item.helmet_heavy_iron.name=Elmo di ferro pesante
+item.chestplate_heavy_iron.name=Corazza di ferro pesante
+item.leggings_heavy_iron.name=Gambali di ferro pesante
+item.boots_heavy_iron.name=Stivali di ferro pesante
 
-# Armatura diamantata colorabile
-item.helmet_diamond_dyable.name = Casco Diamond colorabile
-item.chestplate_diamond_dyable.name = Corazza diamantata colorabile
-item.leggings_diamond_dyable.name = Gambali diamantati colorabili
-item.boots_diamond_dyable.name = Stivali diamantati colorabili
+#Dyable Iron Armor
+item.helmet_iron_dyable.name=Elmetto di ferro colorabile
+item.chestplate_iron_dyable.name=Corazza in ferro colorabile
+item.leggings_iron_dyable.name=Ghette in ferro colorabili
+item.boots_iron_dyable.name=Stivali di ferro colorabili
 
-# Blocks
-tile.exporter.name = Blocco esportatore
-tile.spawner.name = Spawner
-tile.null_block.name = Blocco nullo
-tile.unlit_torch.name = Torcia non illuminata
-tile.table_oak.name = Tavolo in rovere
-tile.table_spruce.name = Tabella abete
-tile.table_birch.name = Tavolo di betulla
-tile.table_jungle.name = Tavolo giungla
-tile.table_acacia.name = Tavolo in acacia
-tile.table_dark.name = Tavolo rovere moro
-tile.boss_block.name = Blocco Boss
-tile.force_field_nexus.name = Force Field Nexus (NYI)
+#Dyable Diamond Armor
+item.helmet_diamond_dyable.name=Casco Diamond colorabile
+item.chestplate_diamond_dyable.name=Corazza diamantata colorabile
+item.leggings_diamond_dyable.name=Gambali diamantati colorabili
+item.boots_diamond_dyable.name=Stivali diamantati colorabili
 
-# Blocchi Andesite
-tile.andesite_carved.name = Andesite intagliato
-tile.andesite_pillar.name = Andesite Pillar
-tile.andesite_cube.name = Cubo di Andesite
-tile.andesite_scale.name = Scala andesite
-tile.andesite_square.name = Andesite Squadrata
-tile.andesite_small.name = Piccoli mattoni di andesite
-tile.andesite_large.name = Grandi mattoni di andesite
+#Blocks
+tile.exporter.name=Blocco esportatore
+tile.spawner.name=Spawner
+tile.null_block.name=Blocco nullo
+tile.unlit_torch.name=Torcia non illuminata
+tile.table_oak.name=Tavolo in rovere
+tile.table_spruce.name=Tabella abete
+tile.table_birch.name=Tavolo di betulla
+tile.table_jungle.name=Tavolo giungla
+tile.table_acacia.name=Tavolo in acacia
+tile.table_dark.name=Tavolo rovere moro
+tile.boss_block.name=Blocco Boss
+tile.force_field_nexus.name=Force Field Nexus (NYI)
+tile.map_placeholder.name=Map Placeholder
 
-# Blocchi Diorite
-tile.diorite_carved.name = Diorite intagliato
-tile.diorite_pillar.name = Colonna Diorite
-tile.diorite_cube.name = Cubo Diorite
-tile.diorite_scale.name = Scala Diorite
-tile.diorite_square.name = Diorite Squadrata
-tile.diorite_small.name = Piccoli mattoncini Diorite
-tile.diorite_large.name = Grandi mattoni Diorite
+#Andesite blocks
+tile.andesite_carved.name=Andesite intagliato
+tile.andesite_pillar.name=Andesite Pillar
+tile.andesite_cube.name=Cubo di Andesite
+tile.andesite_scale.name=Scala andesite
+tile.andesite_square.name=Andesite Squadrata
+tile.andesite_small.name=Piccoli mattoni di andesite
+tile.andesite_large.name=Grandi mattoni di andesite
 
-# Blocchi Diorite
-tile.granite_carved.name = Granito intagliato
-tile.granite_pillar.name = Colonna di granito
-tile.granite_cube.name = Cubo di granito
-tile.granite_scale.name = Scala di granito
-tile.granite_square.name = Granite Squadrata
-tile.granite_small.name = Piccoli mattoni di granito
-tile.granite_large.name = Grandi mattoni di granito
+#Diorite blocks
+tile.diorite_carved.name=Diorite intagliato
+tile.diorite_pillar.name=Colonna Diorite
+tile.diorite_cube.name=Cubo Diorite
+tile.diorite_scale.name=Scala Diorite
+tile.diorite_square.name=Diorite Squadrata
+tile.diorite_small.name=Piccoli mattoncini Diorite
+tile.diorite_large.name=Grandi mattoni Diorite
 
-# Blocchi prismarine
-tile.prismarine_carved.name = Prismarine intagliato
-tile.prismarine_pillar.name = Prismarine Pillar
-tile.prismarine_cube.name = Prismarine Cube
-tile.prismarine_square.name = Prismarine Squadrata
-tile.prismarine_small.name = Piccoli mattoncini prismarine
-tile.prismarine_large.name = Grandi mattoni prismarine
+#Granite blocks
+tile.granite_carved.name=Granito intagliato
+tile.granite_pillar.name=Colonna di granito
+tile.granite_cube.name=Cubo di granito
+tile.granite_scale.name=Scala di granito
+tile.granite_square.name=Granite Squadrata
+tile.granite_small.name=Piccoli mattoni di granito
+tile.granite_large.name=Grandi mattoni di granito
 
-# Blocchi Endstone
-tile.endstone_carved.name = Endstone intagliato
-tile.endstone_pillar.name = Endstone Pillar
-tile.endstone_cube.name = Endstone Cube
-tile.endstone_scale.name = Scala endstone
-tile.endstone_square.name = Endstone Squadrata
-tile.endstone_small.name = Mattoncini Endstone piccoli
+#Prismarine blocks
+tile.prismarine_carved.name=Prismarine intagliato
+tile.prismarine_pillar.name=Prismarine Pillar
+tile.prismarine_cube.name=Prismarine Cube
+tile.prismarine_square.name=Prismarine Squadrata
+tile.prismarine_small.name=Piccoli mattoncini prismarine
+tile.prismarine_large.name=Grandi mattoni prismarine
 
-# Blocchi Purpur
-tile.purpur_carved.name = Purpur intagliato
-tile.purpur_cube.name = Purpur Cubo
-tile.purpur_scale.name = Scala Purpur
-tile.purpur_small.name = Piccoli mattoncini Purpur
-tile.purpur_large.name = Grandi mattoni Purpur
+#Endstone blocks
+tile.endstone_carved.name=Endstone intagliato
+tile.endstone_pillar.name=Endstone Pillar
+tile.endstone_cube.name=Endstone Cube
+tile.endstone_scale.name=Scala endstone
+tile.endstone_square.name=Endstone Squadrata
+tile.endstone_small.name=Mattoncini Endstone piccoli
 
-# Blocchi di Netherbrick rossi
-tile.red_netherbrick_carved.name = Netherbrick rosso intagliato
-tile.red_netherbrick_pillar.name = Red Netherbrick Pillar
-tile.red_netherbrick_cube.name = Cubo rosso di Netherbrick
-tile.red_netherbrick_scale.name = Scala Netherbrick rossa
-tile.red_netherbrick_square.name = Red Netherbrick Squadrata
-tile.red_netherbrick_large.name = Grandi mattoncini rossi
+#Purpur blocks
+tile.purpur_carved.name=Purpur intagliato
+tile.purpur_cube.name=Purpur Cubo
+tile.purpur_scale.name=Scala Purpur
+tile.purpur_small.name=Piccoli mattoncini Purpur
+tile.purpur_large.name=Grandi mattoni Purpur
 
-# Blocchi di pietra
-tile.stone_pillar.name = Stone Pillar
-tile.stone_cube.name = Stone Cube
-tile.stone_scale.name = Scala di pietra
-tile.stone_square.name = Stone Squadrata
-tile.stone_small.name = Piccoli mattoncini di pietra
+#Red Netherbrick blocks
+tile.red_netherbrick_carved.name=Netherbrick rosso intagliato
+tile.red_netherbrick_pillar.name=Red Netherbrick Pillar
+tile.red_netherbrick_cube.name=Cubo rosso di Netherbrick
+tile.red_netherbrick_scale.name=Scala Netherbrick rossa
+tile.red_netherbrick_square.name=Red Netherbrick Squadrata
+tile.red_netherbrick_large.name=Grandi mattoncini rossi
 
-# Casse degli esportatori
-tile.exporter_chest_valuable.name =Borsa Cassa Esportatrice
-tile.exporter_chest_food.name = Exportatore cassa cibo
-tile.exporter_chest_equipment.name = Attrezzature per baule esportatore
-tile.exporter_chest_utility.name = Utilità di cassa per esportatore
-tile.exporter_chest_vanilla_blacksmith.name = Cassa dell'esportatore - Fabbro del villaggio
-tile.exporter_chest_vanilla_bonus.name = Cassa dell'esportatore - Cassa bonus
-tile.exporter_chest_vanilla_dungeon.name = Cassa dell'esportatore - Sotterraneo
-tile.exporter_chest_vanilla_end_city.name = Cassa dell'esportatore - Fine città
-tile.exporter_chest_vanilla_igloo.name = Cassa dell'esportatore - Igloo
-tile.exporter_chest_vanilla_jungle.name = Cassa dell'esportatore - Cassa della giungla
-tile.exporter_chest_vanilla_jungle_dispenser.name = Cassa dell'esportatore - Jungle Dispenser
-tile.exporter_chest_vanilla_mansion.name = Cassa degli esportatori - Woodland Mansion
-tile.exporter_chest_vanilla_mineshaft.name = Cassa dell'esportatore - Miniera
-tile.exporter_chest_vanilla_nether.name = Cassa dell'esportatore - Fortezza del Nether
-tile.exporter_chest_vanilla_pyramid.name = Cassa dell'esportatore - Piramide
-tile.exporter_chest_vanilla_stronghold.name = Cassa degli esportatori - Corridoio della fortezza
-tile.exporter_chest_vanilla_stronghold_library.name = Cassa dell'esportatore - Biblioteca della fortezza
-tile.exporter_chest_vanilla_stronghold_storeroom.name = Cassa dell'esportatore - Miniera della fortezza
-tile.exporter_chest_custom_1.name = Cassa dell'esportatore - Personalizzata 1
-tile.exporter_chest_custom_2.name = Cassa dell'esportatore - Personalizzata 2
-tile.exporter_chest_custom_3.name = Cassa dell'esportatore - Personalizzata 3
-tile.exporter_chest_custom_4.name = Cassa dell'esportatore - Personalizzata 4
-tile.exporter_chest_custom_5.name = Cassa dell'esportatore - Personalizzata 5
-tile.exporter_chest_custom_6.name = Cassa dell'esportatore - Personalizzata 6
-tile.exporter_chest_custom_7.name = Cassa dell'esportatore - Personalizzata 7
-tile.exporter_chest_custom_8.name = Cassa dell'esportatore - Personalizzata 8
-tile.exporter_chest_custom_9.name = Cassa dell'esportatore - Personalizzata 9
-tile.exporter_chest_custom_10.name = Cassa dell'esportatore - Personalizzata 10
-tile.exporter_chest_custom_11.name = Cassa dell'esportatore - Personalizzata 11
-tile.exporter_chest_custom_12.name = Cassa dell'esportatore - Personalizzata 12
-tile.exporter_chest_custom_13.name = Cassa dell'esportatore - Personalizzata 13
-tile.exporter_chest_custom_14.name = Cassa dell'esportatore - Personalizzata 14
+#Stone blocks
+tile.stone_pillar.name=Stone Pillar
+tile.stone_cube.name=Stone Cube
+tile.stone_scale.name=Scala di pietra
+tile.stone_square.name=Stone Squadrata
+tile.stone_small.name=Piccoli mattoncini di pietra
 
-#tecnico
-tile.phylactery.name = Lich Phylactery
+#Exporter chests
+tile.exporter_chest_valuable.name=Borsa Cassa Esportatrice
+tile.exporter_chest_food.name=Exportatore cassa cibo
+tile.exporter_chest_equipment.name=Attrezzature per baule esportatore
+tile.exporter_chest_utility.name=Utilità di cassa per esportatore
+tile.exporter_chest_clutter.name=Exporter Chest Clutter
+tile.exporter_chest_vanilla_blacksmith.name=Cassa dell'esportatore - Fabbro del villaggio
+tile.exporter_chest_vanilla_bonus.name=Cassa dell'esportatore - Cassa bonus
+tile.exporter_chest_vanilla_dungeon.name=Cassa dell'esportatore - Sotterraneo
+tile.exporter_chest_vanilla_end_city.name=Cassa dell'esportatore - Fine città
+tile.exporter_chest_vanilla_igloo.name=Cassa dell'esportatore - Igloo
+tile.exporter_chest_vanilla_jungle.name=Cassa dell'esportatore - Cassa della giungla
+tile.exporter_chest_vanilla_jungle_dispenser.name=Cassa dell'esportatore - Jungle Dispenser
+tile.exporter_chest_vanilla_mansion.name=Cassa degli esportatori - Woodland Mansion
+tile.exporter_chest_vanilla_mineshaft.name=Cassa dell'esportatore - Miniera
+tile.exporter_chest_vanilla_nether.name=Cassa dell'esportatore - Fortezza del Nether
+tile.exporter_chest_vanilla_pyramid.name=Cassa dell'esportatore - Piramide
+tile.exporter_chest_vanilla_stronghold.name=Cassa degli esportatori - Corridoio della fortezza
+tile.exporter_chest_vanilla_stronghold_library.name=Cassa dell'esportatore - Biblioteca della fortezza
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Cassa dell'esportatore - Miniera della fortezza
+tile.exporter_chest_custom.name=Cassa dell'esportatore - Personalizzata
 
-# Descrizioni
-description.spider_armor.name = Indossa il ragno per diventare il ragno. Un set completo ti consente di arrampicarti sui muri e saltare molto più in alto.
-description.spider_sword.name = Scendendo dalle zanne che hanno reso questa semplice spada una lama di eroe, il veleno di Shelob non può essere fermato una volta che il tuo nemico è bloccato con questa lama.
-description.bull_armor.name = Indossa il toro per diventare il toro. Un set completo ti consente di caricare in avanti a grande velocità e distruggere qualsiasi cosa sul tuo percorso.
-description.great_sword.name = Tieni premuto il tasto destro per colpire una vasta area.
-description.turtle_armor.name = Il potere della tartaruga, se dovessi modellare un set completo dal suo guscio, ti permetterà di ritrovare la salute molto più velocemente. Il guscio previene anche la maggior parte dei danni dalla parte posteriore.
-description.slime_armor.name = Con un set completo di sostanza rigenerante che tocca la tua pelle, puoi sentire la tua massima salute traboccare e, ogni volta che sei danneggiato, può apparire una piccola melma che può ripristinare la tua salute, se riesci a raggiungerla.
-description.cloud_boots.name = Coloro che seguono il canto degli angeli, dicono i profeti, non possono sbagliare. Un singolo salto diventa un limite, una camminata veloce rompe la velocità del suono, nessuna caduta può fermare i pochi eletti, e con questi stivali, che include te.
+#technical
+tile.phylactery.name=Lich Phylactery
+tile.temporary_web.name=Decaying Web
+
+#Descriptions
+description.spider_armor.name=Indossa il ragno per diventare il ragno. Un set completo ti consente di arrampicarti sui muri e saltare molto più in alto.
+description.spider_sword.name=Scendendo dalle zanne che hanno reso questa semplice spada una lama di eroe, il veleno di Shelob non può essere fermato una volta che il tuo nemico è bloccato con questa lama.
+description.bull_armor.name=Indossa il toro per diventare il toro. Un set completo ti consente di caricare in avanti a grande velocità e distruggere qualsiasi cosa sul tuo percorso.
+description.great_sword.name=Tieni premuto il tasto destro per colpire una vasta area.
+description.turtle_armor.name=Il potere della tartaruga, se dovessi modellare un set completo dal suo guscio, ti permetterà di ritrovare la salute molto più velocemente. Il guscio previene anche la maggior parte dei danni dalla parte posteriore.
+description.slime_armor.name=Con un set completo di sostanza rigenerante che tocca la tua pelle, puoi sentire la tua massima salute traboccare e, ogni volta che sei danneggiato, può apparire una piccola melma che può ripristinare la tua salute, se riesci a raggiungerla.
+description.cloud_boots.name=Coloro che seguono il canto degli angeli, dicono i profeti, non possono sbagliare. Un singolo salto diventa un limite, una camminata veloce rompe la velocità del suono, nessuna caduta può fermare i pochi eletti, e con questi stivali, che include te.
 #description.dragon_helmet.name=Si può sentire il potere del drago che scorre nelle vene. Gli attacchi che una volta erano una minaccia per te sembrano privi di significato ora, ma i tuoi colpi sono due volte più forti!
-description.dagger.name = Fai clic con il pulsante destro del mouse per spostarti in avanti
-description.ninja_dagger.name = Fai clic con il pulsante destro del mouse per spostarti in avanti. Dicono che il possessore di questo pugnale potesse, a volontà, svanire senza lasciare traccia. Probabilmente puoi imitare questo comportamento con un clic destro, ma mentre svanisci dalla vista, non andrai lontano.
-description.bull_battle_axe.name = Grux tasto destro del mouse sul terreno. Fai un terremoto. Viaggia in avanti. Distruggi i nemici davvero bene. Grux piace.
-description.walker_set.name = La leggenda narra che chiunque avesse sparato una freccia sul re del camminatore avrebbe trovato una spada nella loro schiena e il re dietro di loro. Forse raccogliere sia la sua spada che il suo scudo ti permetterebbe la stessa abilità?
-description.gun.name = Fai clic con il pulsante destro del mouse per sparare, richiede proiettili.
-description.bullet_damage.name = Danno alla pallottola
-description.bullet_fire.name = Accendi al colpo
-description.fire_rate.name = Fire Rate
-description.accuracy.name = Precisione
-description.click_shift.name = Tieni premuto MAIUSC per visualizzare la descrizione
-description.rear_damage.name = Danno posteriore
-description.charging.name = ricarica ...
-description.turtle_armor_charging.name = Abilità al tempo di recupero, Tempo rimanente:
-description.healing_potion.name = Bevi per ripristinare 2 cuori.
-description.teleport_stone.name = Un oggetto mistico creato da un'antica razza. Tieni premuto il tasto destro per impostare una posizione, quindi fallo di nuovo per teletrasportarti lì. Scivola tenendo premuto il tasto destro del mouse per rimuovere la posizione salvata.
-description.teleport_stone_position.name = Posizione attuale:
-description.staff_fire.name = Le fiamme consumano coloro che attraversano il tuo percorso, un semplice clic del tasto destro e sentiranno la tua ira. Accende anche le torce.
-description.staff_spider.name = Fai clic con il pulsante destro del mouse per sparare alla mia sostanza, amico mio.
-description.staff_gun.name = È una pistola su un bastone. Amico, quei nani sono dei geni.
-description.staff_healing.name = Un clic con il tasto sinistro ripristina la salute di cui hai bisogno, in realtà non ricordo cosa fa questo, ma ho dovuto fare delle descrizioni per tutto ciò per avidità.
-description.contains.name = Contiene:
-description.empty.name = Vuoto
-description.soul_bottle.name = Fai clic con il pulsante sinistro del mouse su un mob per salvarlo, fai clic con il pulsante destro del mouse per evocare quel mob. Può essere trasformato in spawner anche per quel mob.
-description.flamethrower.name = Undertech Prototype Fyrebird mk7 22mm ugello espulsione fiamma unità. Una pressione del mouse destro dovrebbe espellere il fuoco direttamente in avanti. Le cartucce di gel interne dovrebbero essere in grado di estrarre la melma da qualsiasi punto dell'inventario. Il modello attuale richiede un ricaricamento regolare, poiché non è stata scoperta alcuna fonte rigenerante di melma.
-description.badge.name = Articolo solo creativo. Fai clic con il pulsante destro del mouse per aprire una GUI, gli elementi inseriti in questa GUI sono accessibili successivamente facendo clic con il pulsante sinistro del mouse su qualsiasi mob con questo badge e verranno rilasciati quando il mob attaccato viene ucciso.
-description.backpack.name = Fai clic con il pulsante destro del mouse per aprire.
-description.alchemy_bag.name = Fai clic con il pulsante destro del mouse per aprire. Memorizza solo pozioni.
+description.dagger.name=Fai clic con il pulsante destro del mouse per spostarti in avanti
+description.ninja_dagger.name=Fai clic con il pulsante destro del mouse per spostarti in avanti. Dicono che il possessore di questo pugnale potesse, a volontà, svanire senza lasciare traccia. Probabilmente puoi imitare questo comportamento con un clic destro, ma mentre svanisci dalla vista, non andrai lontano.
+description.bull_battle_axe.name=Grux tasto destro del mouse sul terreno. Fai un terremoto. Viaggia in avanti. Distruggi i nemici davvero bene. Grux piace.
+description.walker_set.name=La leggenda narra che chiunque avesse sparato una freccia sul re del camminatore avrebbe trovato una spada nella loro schiena e il re dietro di loro. Forse raccogliere sia la sua spada che il suo scudo ti permetterebbe la stessa abilità?
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
+description.gun.name=Fai clic con il pulsante destro del mouse per sparare, richiede proiettili.
+description.bullet_damage.name=Danno alla pallottola
+description.bullet_fire.name=Accendi al colpo
+description.fire_rate.name=Fire Rate
+description.accuracy.name=Precisione
+description.click_shift.name=Tieni premuto MAIUSC per visualizzare la descrizione
+description.rear_damage.name=Danno posteriore
+description.charging.name=ricarica ...
+description.turtle_armor_charging.name=Abilità al tempo di recupero, Tempo rimanente:
+description.healing_potion.name=Bevi per ripristinare 2 cuori.
+description.teleport_stone.name=Un oggetto mistico creato da un'antica razza. Tieni premuto il tasto destro per impostare una posizione, quindi fallo di nuovo per teletrasportarti lì. Scivola tenendo premuto il tasto destro del mouse per rimuovere la posizione salvata.
+description.teleport_stone_position.name=Posizione attuale:
+description.staff_fire.name=Le fiamme consumano coloro che attraversano il tuo percorso, un semplice clic del tasto destro e sentiranno la tua ira. Accende anche le torce.
+description.staff_spider.name=Fai clic con il pulsante destro del mouse per sparare alla mia sostanza, amico mio.
+description.staff_gun.name=È una pistola su un bastone. Amico, quei nani sono dei geni.
+description.staff_healing.name=Un clic con il tasto sinistro ripristina la salute di cui hai bisogno, in realtà non ricordo cosa fa questo, ma ho dovuto fare delle descrizioni per tutto ciò per avidità.
+description.contains.name=Contiene:
+description.empty.name=Vuoto
+description.soul_bottle.name=Fai clic con il pulsante sinistro del mouse su un mob per salvarlo, fai clic con il pulsante destro del mouse per evocare quel mob. Può essere trasformato in spawner anche per quel mob.
+description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm ugello espulsione fiamma unità. Una pressione del mouse destro dovrebbe espellere il fuoco direttamente in avanti. Le cartucce di gel interne dovrebbero essere in grado di estrarre la melma da qualsiasi punto dell'inventario. Il modello attuale richiede un ricaricamento regolare, poiché non è stata scoperta alcuna fonte rigenerante di melma.
+description.badge.name=Articolo solo creativo. Fai clic con il pulsante destro del mouse per aprire una GUI, gli elementi inseriti in questa GUI sono accessibili successivamente facendo clic con il pulsante sinistro del mouse su qualsiasi mob con questo badge e verranno rilasciati quando il mob attaccato viene ucciso.
+description.backpack.name=Fai clic con il pulsante destro del mouse per aprire.
+description.alchemy_bag.name=Fai clic con il pulsante destro del mouse per aprire. Memorizza solo pozioni.
 #description.woodshot.name=Fai clic con il pulsante destro del mouse per sparare. Una volta che il gancio colpisce un blocco di legno, verrai tirato su di esso.
-#description.hookshot.name=Right-click per sparare gancio. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
-#description.longshot.name=Fai clic con il pulsante destro del mouse per sparare. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
+description.hookshot.name=Right-click per sparare gancio. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
+description.longshot.name=Fai clic con il pulsante destro del mouse per sparare. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
 #description.manualhook.name=Fai clic con il pulsante destro del mouse per sparare. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.
 #description.spidershot.name=Fai clic con il pulsante destro del mouse per girare il Web. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.
 #description.hooksword.name=Right-click per scattare hook. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.
-description.moonlight.name = L'iscrizione sulla lama dice "Il mio potere può essere risvegliato solo alla luce della luna"
-description.sunshine.name = L'iscrizione sulla lama dice "Il mio potere può essere risvegliato solo alla luce del sole"
-description.attack_damage_at_night.name = Danno d'attacco durante la notte
-description.attack_damage_at_day.name = Danno d'attacco durante il giorno
-description.staff_vampiric.name = Questa asta irradia energia oscura, mentre la tieni in mano. Se lo sposti vicino all'orecchio, sentirai la sua richiesta. La sua chiamata è semplice: "Fai clic con il tasto destro del mouse su di me" e quando lo fai vedrai, emetterà un proiettile. Sebbene il danno sia lieve, se lo atterri bene, ti guarirà quando colpisce.
-description.staff_wind.name = Qualunque cosa questo dovrebbe fare, non funziona ancora. #FARE
-description.staff_poison.name = Qualunque cosa questo dovrebbe fare, non funziona ancora. #FARE
-description.staff.name = Manca #TODO
-description.staff_thunder.name = Missing #TODO
-description.spear_diamond.name = Un'arma ben fatta con una portata maggiore delle spade. Fare clic con il tasto destro del mouse per caricare una spinta estesa.
-description.cursed_bone.name = Mob da convocare:
+description.moonlight.name=L'iscrizione sulla lama dice "Il mio potere può essere risvegliato solo alla luce della luna"
+description.sunshine.name=L'iscrizione sulla lama dice "Il mio potere può essere risvegliato solo alla luce del sole"
+description.attack_damage_at_night.name=Danno d'attacco durante la notte
+description.attack_damage_at_day.name=Danno d'attacco durante il giorno
+description.staff_vampiric.name=Questa asta irradia energia oscura, mentre la tieni in mano. Se lo sposti vicino all'orecchio, sentirai la sua richiesta. La sua chiamata è semplice: "Fai clic con il tasto destro del mouse su di me" e quando lo fai vedrai, emetterà un proiettile. Sebbene il danno sia lieve, se lo atterri bene, ti guarirà quando colpisce.
+description.staff_wind.name=Qualunque cosa questo dovrebbe fare, non funziona ancora. #FARE
+description.staff_poison.name=Qualunque cosa questo dovrebbe fare, non funziona ancora. #FARE
+description.staff.name=Manca #TODO
+description.staff_thunder.name=Missing #TODO
+description.spiked_glove.name=With the claws of a beast, and the strength of your arm, these gloves shall lead you far from harm. While wielding two, enjoy the view, for walls no longer hinder you.
+description.spear_diamond.name=Un'arma ben fatta con una portata maggiore delle spade. Fare clic con il tasto destro del mouse per caricare una spinta estesa.
+description.cursed_bone.name=Mob da convocare:
+description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
+description.giant_spider_poison.name=This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.
+description.feather_golden.name=Take up a feather, gild it in gold, take a great leap and believe in the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.
+description.scale_turtle.name=One of a few pieces of the Giant Tortoise's shell you managed to salvage. Its sheer strength is such that none of your tools can even chip it. Perhaps there's someone out there with stronger crafting tools than yours who you can convince to lend you a hand?
+description.horn_bull.name=This horn is tough enough that you could probably make a great weapon with it if you knew how to craft with animal horns. Maybe there's a craftsman out there who's more experiened on the subject.
+description.leather_bull.name=Very high quality leather. The right craftsman could probably use this to forge the most aerodynamic gear you've ever seen!
+description.ball_slime.name=Amazing. Slime with regeneration powers. The fact that it always returns to the same shape makes it difficult to work with, but the right craftsman could probably use this to make some gear with health-manipulating abilities, and any weapons that use slime as ammo are going to get a lot out of this stuff.
+description.bone_monking.name=Whatever primal energy made the Monking so much more powerful than his peers still clings to his bones. Perhaps the right craftsman would know how to work with such power?
+description.leather_spider.name=The Giant Spider's hide still sticks to everything it touches. It's too gross for you to touch for a long period of time, but a craftsman who's more accustomed to such work can probably fashion this into something neat.
+description.king_crown.name=Can be worn on its own, or combined with a helmet. Either way, you'll look as regal as you've always felt.
+description.bubble_pistol.name=Undertech Commercial Turbo Dampener 33.6mm nozzle bubble explusion unit. A right-mouse press will expell a quick flurry of bubbles, large enough to capture a horse and drift upward. Bubbles are non-lethal, but can't say so much for the fall. Hold down Right Mouse Button for a steady stream. 
+description.bubble_rifle.name=Undertech Prototype advanced Turbo Dampener. Not for public access. Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. Unfortunately, reloading it is far slower.
+description.path_tool.name=Sneak+Left Click an entity to apply the path to that entity.%sLeft Click an entity to copy the path of that entity.%sSneak+Right Click a block to add a new path node.%sRight Click a block to select an existing path node.%sSneak+Right Click air to clear the current path.
+description.unprotected_positions_tool.name=TODO add tooltip
 
-# Incantesimi
-enchantment.lightning_protection = Protezione contro i fulmini
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=When checked the input does not have to be similar in terms of meta data. For example you set a diamond sword as input, it will also accept damaged diamond swords for it.
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=When checked the input does not have to be similar in terms of nbt data. For example you set a diamond sword as input, it will also accept enchanted diamond swords for it.
+description.gui_merchant_edit_trade.reputation_button.name=Reputation with the traders faction required to use this trade. Set it to "NONE" to not require any reputation.
+description.gui_merchant_edit_trade.advancement_text_field.name=Advancement required to use this trade. Specify an advancements resourcelocation (for example "minecraft:story/mine_stone) or leave it blank to not require any advancement.
+description.gui_merchant_edit_trade.stock_check_box.name=Check this to set that this trade has a stock count. This means that this trade has a limited use.
+description.gui_merchant_edit_trade.restock_text_field.name=Amount of uses it will increase when it gets restocked. Every time you buy something, it will restock a different trade that is not maxed out.
+description.gui_merchant_edit_trade.in_stock_text_field.name=Current amount of uses the trade has.
+description.gui_merchant_edit_trade.max_stock_text_field.name=Highest amount of uses the trade can have.
+description.gui_button_trade.unlocked.name=Trade is unlocked.
+description.gui_button_trade.locked.name=Trade is not unlocked yet!
+description.gui_button_trade.out_of_stock.name=Out of stock! If possible buy something else, then maybe the trade will be in stock again.
 
-# Mobs
-entity.boarman.name = Boarman
-entity.dummy.name = Manichino
-entity.dwarf.name = Nano
-entity.enderman.name = Enderman
-entity.goblin.name = Goblin
-entity.golem.name = Golem
+#Enchantments
+enchantment.lightning_protection=Protezione contro i fulmini
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
+enchantment.spectral=Spectral Balsam
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
+
+#Mobs
+entity.cqr_dummy.name=Manichino
+entity.cqr_boarman.name=Boarman
+entity.cqr_enderman.name=Enderman
 entity.cqr_gremlin.name=Gremlin
-entity.illager.name = VIllager
-entity.npc.name = NPC
-entity.mandril.name = Mandrillo
-entity.minotaur.name = Minotauro
-entity.mummy.name = Mummia
-entity.ogre.name = Ogre
-entity.orc.name = Orco
-entity.pirate.name = pirata
-entity.skeleton.name = scheletro
-entity.spectre.name = Spettro
-entity.triton.name = Tritone
-entity.walker.name = Camminatore Abissale
-entity.zombie.name = Zombie
+entity.cqr_human.name=Human
+entity.cqr_illager.name=VIllager
+entity.cqr_mandril.name=Mandrillo
+entity.cqr_minotaur.name=Minotauro
+entity.cqr_mummy.name=Mummia
+entity.cqr_ogre.name=Ogre
+entity.cqr_pirate.name=pirata
+entity.cqr_skeleton.name=scheletro
+entity.cqr_spectre.name=Spettro
+entity.cqr_walker.name=Camminatore Abissale
+entity.cqr_zombie.name=Zombie
 
-# Montature
-entity.giant_endermite.name = Endermite Gigante
-entity.giant_silverfish.name = Silverfish Giante
-entity.giant_silverfish1.name = Silverfish Gigante Lavico
-entity.giant_silverfish2.name = Pesciolini d'argento della palude gigante
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=Nano
+entity.cqr_golem.name=Golem
+entity.cqr_orc.name=Orco
+entity.cqr_goblin.name=Goblin
+entity.cqr_triton.name=Tritone
 
-# Capi
-entity.nether_dragon.name = Drago del Nether
-entity.giant_tortoise.name = Tartaruga gigante
-entity.lich.name = Lich
-entity.necromancer.name = Necromante
-entity.boarmage.name = Boarmage
+#Mounts
+entity.cqr_giant_endermite.name=Endermite Gigante
+entity.cqr_giant_silverfish.name=Silverfish Giante
+entity.cqr_giant_silverfish1.name=Silverfish Gigante Lavico
+entity.cqr_giant_silverfish2.name=Pesciolini d'argento della palude gigante
+
+#Bosses
+entity.cqr_nether_dragon.name=Drago del Nether
+entity.cqr_giant_tortoise.name=Tartaruga gigante
+entity.cqr_lich.name=Lich
+entity.cqr_necromancer.name=Necromante
+entity.cqr_boar_mage.name=Boarmage
 entity.cqr_walker_king.name=RE Camminatore
+entity.cqr_pirate_captain.name=Pirate Captain
+entity.cqr_giant_spider.name=Shelob
+entity.cqr_ender_king.name=Ender King
+entity.cqr_ender_calamity.name=Ender Calamity
+entity.cqr_exterminator.name=Exterminator Prototype
 
-# Varie entità
-entity.cqr_summoning_circle.name = <TECHNICAL_ENTITY> pentagramma di evocazione
-entity.cqr_illusion_walker_king.name = RE Camminatore
-entity.cqr_walker_tornado.name = <TECHNICAL_ENTITY> Camminatore Tornado
+#Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY> pentagramma di evocazione
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=RE Camminatore
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY> Camminatore Tornado
+entity.cqr_pirate_parrot.name=Traitor Parrot
+entity.cqr_flying_skull.name=Flying Skull
+entity.cqr_ice_spike.name=Ice Spike 'o' Death
+entity.cqr_wasp.name=Wasp (WIP)
+entity.cqr_pollo.name=Abomination (WIP)
+
+#Advancements
+advancements.cqrepoured.root.title=Chocolate Quest Repoured
+advancements.cqrepoured.root.description=Welcome to Chocolate Quest Repoured!
+advancements.cqrepoured.ha_got_you.title=Ha! Got You!
+advancements.cqrepoured.ha_got_you.description=Get killed by a CQR mob
+advancements.cqrepoured.not_so_strong.title=Unworthy
+advancements.cqrepoured.not_so_strong.description=Lose against a CQR boss
+advancements.cqrepoured.not_so_friendly.title=Not so friendly...
+advancements.cqrepoured.not_so_friendly.description=Encounter the walkers
+advancements.cqrepoured.challenger.title=Challenger of the Chocolate
+advancements.cqrepoured.challenger.description=Defeat a CQR Boss
+advancements.cqrepoured.champion.title=Champion of the Chocolate
+advancements.cqrepoured.champion.description=Defeat every CQR Boss at least once
+advancements.cqrepoured.wear_the_turtle.title=Wear the Tortoise!
+advancements.cqrepoured.wear_the_turtle.description=Now I'm a tank! Obtain a full set of Tortoiseshell armor
+advancements.cqrepoured.kill_boar_mage.title=This girl is on fire
+advancements.cqrepoured.kill_boar_mage.description=Defeat a boarmage
+advancements.cqrepoured.kill_lich.title=What is dead may still yet die!
+advancements.cqrepoured.kill_lich.description=Defeat a lich
+advancements.cqrepoured.kill_walker_king.title=A worthy opponent
+advancements.cqrepoured.kill_walker_king.description=Defeat a walker king
+advancements.cqrepoured.kill_necromancer.title=Rise and die
+advancements.cqrepoured.kill_necromancer.description=Defeat a necromancer
+advancements.cqrepoured.kill_nether_dragon.title=It wasn't godzilla
+advancements.cqrepoured.kill_nether_dragon.description=Defeat a nether dragon
+advancements.cqrepoured.kill_giant_tortoise.title=Spun right 'round
+advancements.cqrepoured.kill_giant_tortoise.description=Defeat a giant tortoise
+advancements.cqrepoured.kill_pirate_captain.title=I'm the captain now
+advancements.cqrepoured.kill_pirate_captain.description=Defeat the Pirate Captain
+advancements.cqrepoured.new_captain.title=Reverse Piracy
+advancements.cqrepoured.new_captain.description=Acquire the Pirate Captain's weapons
+advancements.cqrepoured.kill_giant_spider.title=The only good spider...
+advancements.cqrepoured.kill_giant_spider.description=...is a dead spider! Defeat a giant spider
+advancements.cqrepoured.kill_ender_king.title=Was that everything?!
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+

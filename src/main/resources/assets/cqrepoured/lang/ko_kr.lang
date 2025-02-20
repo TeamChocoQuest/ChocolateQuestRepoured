@@ -1,15 +1,20 @@
 #이것은 CQR모드의 한국어 파일(Ko.kr) 입니다.
 #이 번역은 기본적으로 모든 개발자에 의해 작성되었으며 oplayero에 의해 한국어화 되었습니다.
 
+#DamageSources
+death.attack.ray=%1$s was fired by mah lazor!
+death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
 #CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=CQR 블록
-itemGroup.ChocolateQuestRepouredItemsTab=CQR 아이템
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR 던전 생성기
-itemGroup.ChocolateQuestRepouredBannerTab=CQR 현수막
-itemGroup.ChocolateQuestRepouredExporterChests=CQR 상자
-itemGroup.CQR Spawn Eggs=CQR 스폰알
-#Banners
+itemGroup.cqrepoured_blocks=CQR 블록
+itemGroup.cqrepoured_items=CQR 아이템
+itemGroup.cqrepoured_banners=CQR 현수막
+itemGroup.cqrepoured_creative_tools=CQR Creative Tools
+itemGroup.cqrepoured_dungeon_placers=CQR 던전 생성기
+itemGroup.cqrepoured_exporter_chests=CQR 상자
+itemGroup.cqrepoured_spawn_eggs=CQR 스폰알
+
+#Banner Patterns
 item.banner.cqrepoured_cq_blank.white=CQR-배너 마커
 item.banner.cqrepoured_cq_blank.orange=CQR-배너 마커
 item.banner.cqrepoured_cq_blank.magenta=CQR-배너 마커
@@ -221,6 +226,8 @@ item.structure_selector.name=선발 선택 도우미
 item.path_tool.name=경로 도구
 item.cursed_bone.name=저주받은 뼈
 item.dummy_shield.name=더미 쉴드
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
 #Axes
 item.battle_axe_bull.name=황소 전쟁 도끼
@@ -408,6 +415,7 @@ tile.table_acacia.name=아카시아나무 테이블
 tile.table_dark.name=짙은참나무 테이블
 tile.boss_block.name=보스 블럭
 tile.force_field_nexus.name=포스 필드 넥서스
+tile.map_placeholder.name=Map Placeholder
 
 #Andesite blocks
 tile.andesite_carved.name=조각 된 안산암
@@ -427,7 +435,7 @@ tile.diorite_square.name=섬록암 정사각형
 tile.diorite_small.name=작은 섬록암 벽돌
 tile.diorite_large.name=큰 섬록암 벽돌
 
-#Diorite blocks
+#Granite blocks
 tile.granite_carved.name=조각 된 화강암
 tile.granite_pillar.name=화강암 기둥
 tile.granite_cube.name=화강암 큐브
@@ -452,7 +460,7 @@ tile.endstone_scale.name=엔드스톤 스케일
 tile.endstone_square.name=엔드스톤 정사각형
 tile.endstone_small.name=작은 엔드스톤 벽돌
 
-#urpur blocks
+#Purpur blocks
 tile.purpur_carved.name=조각 된 퍼퍼블록
 tile.purpur_cube.name=퍼퍼블록 큐브
 tile.purpur_scale.name=퍼퍼블록 스케일
@@ -494,20 +502,7 @@ tile.exporter_chest_vanilla_pyramid.name=출력상자 - 피라미드
 tile.exporter_chest_vanilla_stronghold.name=출력상자 - 엔더 유적 복도
 tile.exporter_chest_vanilla_stronghold_library.name=출력상자 - 엔더 유적 서재
 tile.exporter_chest_vanilla_stronghold_storeroom.name=출력상자 - 엔더 유적 광산
-tile.exporter_chest_custom_1.name=출력상자 - 커스텀 1
-tile.exporter_chest_custom_2.name=출력상자 - 커스텀 2
-tile.exporter_chest_custom_3.name=출력상자 - 커스텀 3
-tile.exporter_chest_custom_4.name=출력상자 - 커스텀 4
-tile.exporter_chest_custom_5.name=출력상자 - 커스텀 5
-tile.exporter_chest_custom_6.name=출력상자 - 커스텀 6
-tile.exporter_chest_custom_7.name=출력상자 - 커스텀 7
-tile.exporter_chest_custom_8.name=출력상자 - 커스텀 8
-tile.exporter_chest_custom_9.name=출력상자 - 커스텀 9
-tile.exporter_chest_custom_10.name=출력상자 - 커스텀 10
-tile.exporter_chest_custom_11.name=출력상자 - 커스텀 11
-tile.exporter_chest_custom_12.name=출력상자 - 커스텀 12
-tile.exporter_chest_custom_13.name=출력상자 - 커스텀 13
-tile.exporter_chest_custom_14.name=출력상자 - 커스텀 14
+tile.exporter_chest_custom.name=출력상자 - 커스텀
 
 #technical
 tile.phylactery.name=Lich Phylactery
@@ -526,6 +521,7 @@ description.dagger.name=앞으로 이동중 우클릭을 누르면 앞으로 점
 description.ninja_dagger.name=이동중 우클릭을 누르면 앞으로 점프하고 뒤로 이동중 우클릭을 누르면 뒤로 점프한다. 웅크리기+우클릭으로 앞으로 살짝 텔레포트하고 모습을 숨길 수 있다. 하지만 그리 오래 가지는 않는다.
 description.bull_battle_axe.name=땅에 대고 우클릭을 하면 지진을 일으킬수 있다.
 description.walker_set.name=전설에 따르면 워커킹에게 화살을 쏜 사람 등 뒤에서 칼을 든 워커킹이 나타났다고 한다. 그의 검과 방패를 모두 모으면 같은 능력을 가질 수 있을까?
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
 description.gun.name=우클릭으로 발사한다.발사 하려면 총알이 필요하다. 
 description.bullet_damage.name=총알 데미지
 description.bullet_fire.name=총알을 맞으면 불이 붙는다.
@@ -568,6 +564,19 @@ description.spiked_glove.name=이 장갑을 양손에 끼면 벽을 타고 이�
 description.spear_diamond.name=칼보다 먼 거리를 가진 무기. 우클릭을 눌러서 데미지를 충전 할 수 있다.
 description.cursed_bone.name=소환될 몹:
 description.dummy_shield.name=공격으로부터 당신을 보호하지 않는다. 이것을 가지고있는 더미는 던전이 생성 될 때 해당 몹 종족에 알맞은 방패를 들고있을 것 이다.
+description.giant_spider_poison.name=This stuff is crazy corrosive! Definitely far too dangerous for you to work with, but maybe there's a toxin expert you can talk to about crafting with it.
+description.feather_golden.name=Take up a feather, gild it in gold, take a great leap and believe in the powers of old. You won't be harmed, provided you're armed, with the feather of Gold. But use sparingly, my falling friend, if the feather breaks, your life may end.
+description.scale_turtle.name=One of a few pieces of the Giant Tortoise's shell you managed to salvage. Its sheer strength is such that none of your tools can even chip it. Perhaps there's someone out there with stronger crafting tools than yours who you can convince to lend you a hand?
+description.horn_bull.name=This horn is tough enough that you could probably make a great weapon with it if you knew how to craft with animal horns. Maybe there's a craftsman out there who's more experiened on the subject.
+description.leather_bull.name=Very high quality leather. The right craftsman could probably use this to forge the most aerodynamic gear you've ever seen!
+description.ball_slime.name=Amazing. Slime with regeneration powers. The fact that it always returns to the same shape makes it difficult to work with, but the right craftsman could probably use this to make some gear with health-manipulating abilities, and any weapons that use slime as ammo are going to get a lot out of this stuff.
+description.bone_monking.name=Whatever primal energy made the Monking so much more powerful than his peers still clings to his bones. Perhaps the right craftsman would know how to work with such power?
+description.leather_spider.name=The Giant Spider's hide still sticks to everything it touches. It's too gross for you to touch for a long period of time, but a craftsman who's more accustomed to such work can probably fashion this into something neat.
+description.king_crown.name=Can be worn on its own, or combined with a helmet. Either way, you'll look as regal as you've always felt.
+description.bubble_pistol.name=Undertech Commercial Turbo Dampener 33.6mm nozzle bubble explusion unit. A right-mouse press will expell a quick flurry of bubbles, large enough to capture a horse and drift upward. Bubbles are non-lethal, but can't say so much for the fall. Hold down Right Mouse Button for a steady stream. 
+description.bubble_rifle.name=Undertech Prototype advanced Turbo Dampener. Not for public access. Expells liquid faster and further than a traditional bubble gun, and holding the Right Mouse button lasts for longer. Unfortunately, reloading it is far slower.
+description.path_tool.name=Sneak+Left Click an entity to apply the path to that entity.%sLeft Click an entity to copy the path of that entity.%sSneak+Right Click a block to add a new path node.%sRight Click a block to select an existing path node.%sSneak+Right Click air to clear the current path.
+description.unprotected_positions_tool.name=TODO add tooltip
 
 #Trading GUI
 description.gui_merchant_edit_trade.ignore_meta_check_box.name=선택하면 메타 데이터가 같지 않아도 거래가 가능하다. 예들 들어 다이아몬드 검을 입력으로 설정하면 내구도가 닳은(손상 된) 다이아몬드 검도 허용된다
@@ -578,12 +587,15 @@ description.gui_merchant_edit_trade.stock_check_box.name=이 거래에 물건의
 description.gui_merchant_edit_trade.restock_text_field.name=재입고 될 때마다 사용량이 늘어난다. 물품을 구입하면 꽉 차지 않은 다른 물품으로 재입고된다
 description.gui_merchant_edit_trade.in_stock_text_field.name=거래의 현재 사용량.
 description.gui_merchant_edit_trade.max_stock_text_field.name=거래가 가질 수있는 최대 사용량.
+description.gui_button_trade.unlocked.name=Trade is unlocked.
 description.gui_button_trade.locked.name=거래가 아직 해금 되지 않았다!
 description.gui_button_trade.out_of_stock.name=품절! 가능하다면 다른 것을 사서 거래의 물건이 다시 재입고 되게 하십시오.
 
 #Enchantments
 enchantment.lightning_protection=번개 보호
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
 enchantment.spectral=Spectral Balsam
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
 
 #Mobs
 entity.cqr_dummy.name=더미
@@ -625,6 +637,9 @@ entity.cqr_boar_mage.name=보어메이지
 entity.cqr_walker_king.name=어비스 워커킹
 entity.cqr_pirate_captain.name=해적 선장
 entity.cqr_giant_spider.name=셸롭
+entity.cqr_ender_king.name=Ender King
+entity.cqr_ender_calamity.name=Ender Calamity
+entity.cqr_exterminator.name=Exterminator Prototype
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>소환진
@@ -670,3 +685,12 @@ advancements.cqrepoured.new_captain.title=이제 누가 선장이지?
 advancements.cqrepoured.new_captain.description=해적 선장의 무기를 모두 획득하라.
 advancements.cqrepoured.kill_giant_spider.title=유일하게 좋은 거미였어 ...
 advancements.cqrepoured.kill_giant_spider.description=... 죽은 거미! 거대 거미를처치하라
+advancements.cqrepoured.kill_ender_king.title=Was that everything?!
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+

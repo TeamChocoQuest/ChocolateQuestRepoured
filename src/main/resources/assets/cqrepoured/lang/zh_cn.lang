@@ -226,8 +226,8 @@ item.structure_selector.name=选择器助手
 item.path_tool.name=路径工具
 item.cursed_bone.name=诅咒之骨
 item.dummy_shield.name=假人盾
-item.unprotected_positions_tool.name=非保护区选择器
-item.magic_bell.name=魔法之铃
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
 #Axes
 item.battle_axe_bull.name=公牛战斧
@@ -435,7 +435,7 @@ tile.diorite_square.name=闪长岩花纹转
 tile.diorite_small.name=小型闪长岩石砖
 tile.diorite_large.name=大型闪长岩石砖
 
-#Diorite blocks
+#Granite blocks
 tile.granite_carved.name=雕刻的花岗岩
 tile.granite_pillar.name=竖纹花岗岩
 tile.granite_cube.name=花岗岩立方体
@@ -502,7 +502,7 @@ tile.exporter_chest_vanilla_pyramid.name=输出箱 - 神殿
 tile.exporter_chest_vanilla_stronghold.name=输出箱 - 要塞走廊
 tile.exporter_chest_vanilla_stronghold_library.name=输出箱 - 要塞图书馆
 tile.exporter_chest_vanilla_stronghold_storeroom.name=输出箱 - 要塞矿井
-tile.exporter_chest_custom.name=输出箱 - 自定义
+tile.exporter_chest_custom.name=Exporter Chest - Custom
 
 #technical
 tile.phylactery.name=巫妖的命匣
@@ -521,7 +521,7 @@ description.dagger.name=移动时按下鼠标右键以向前跳跃。
 description.ninja_dagger.name=移动时按下鼠标右键以向前跳跃。 据说使用这把匕首的人可以来无影去无踪。 你也许可以用潜行以及鼠标右键来模仿这种行为，但是注意，当你消失在别人的视野中时，你并没有移动多远。
 description.bull_battle_axe.name=右击地面制造地震
 description.walker_set.name=传说任何向深渊漫步者之王射箭的人都会突然发现在他们背后多了一把剑，而王就在他们背后。也许得到他的剑和他的盾可以让你拥有同样的能力？
-description.magic_bell.name=响一下铃铛，你就会看到通往巫妖命匣的路。打破铃铛告诉你的阻碍，地牢的墙就会屈服于你。
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
 description.gun.name=右键发射，需要子弹。
 description.bullet_damage.name=子弹伤害
 description.bullet_fire.name=击中后点燃目标
@@ -556,10 +556,10 @@ description.sunshine.name=刀刃上的铭文写着“我的力量只能在阳光
 description.attack_damage_at_night.name=夜间攻击伤害
 description.attack_damage_at_day.name=白天攻击伤害
 description.staff_vampiric.name=当你握着这根棍子时，它会散发出暗能量。如果你把它移近耳朵，你就会听到它的要求。它的叫法很简单：“右击我”，当你这样做的时候，你会看到，它确实发射了一个抛射物。虽然伤害很小，但如果你把它放在正确的地方，它会在你被击中时治愈你。
-description.staff_wind.name=无论它曾经拥有多么不可思议的魔力，它现在完全处于休眠状态。（不管这应该做什么，它都还不起作用。） #TODO
-description.staff_poison.name=毒液在顶端起泡，小心不要滴落，它会腐蚀皮肤、肉和骨头最好那些不是你的。使用它要承担风险，还有当心不是所有人都认为这是次公平正义的杀戮。。。
-description.staff.name=一根结实的长棍。可能有人知道如何给他施加魔法。
-description.staff_thunder.name=这根棍子上的宝石带着电荷发出劈啪声和火花。用鼠标右键点击，点击你的目标，你可以简单地重定向电弧。
+description.staff_wind.name=不管这是做什么的，现在还不起作用。 #TODO
+description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
+description.staff.name=丢失 #TODO
+description.staff_thunder.name=丢失 #TODO
 description.spiked_glove.name=利用熊的爪子和你手臂的力量,这个拳套应能让你远离伤害. 双拳在手， 遇墙拆墙，尽情享受。
 description.spear_diamond.name=做工很好的武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
 description.cursed_bone.name=召唤的暴徒:
@@ -576,6 +576,7 @@ description.king_crown.name=可以单独佩戴，也可以与头盔结合使用�
 description.bubble_pistol.name=Undertech商用涡轮阻尼器33.6mm喷嘴气泡喷射装置。用鼠标右键按一下，就会喷出一连串的气泡，大到足以抓住一匹马并向上漂移。泡沫是非致命的，但间接伤害是可能的。按住鼠标右键可持续输出。
 description.bubble_rifle.name=Undertech原型先进涡轮阻尼器。非法流出的款式。比传统的气泡枪更快速、更远地排出液体，按住鼠标右键持续时间更长。不幸的是，重新加载要慢得多。
 description.path_tool.name=潜行+左键单击一个实体以将路径应用于该实体。%s左键单击一个实体以复制该实体的路径。%s潜行+右键单击一个方块以添加新的路径节点。%s右键单击一个方块以选择现有的路径节点。%s潜行+右键对空单击以清除当前路径。
+description.unprotected_positions_tool.name=TODO add tooltip
 
 #Trading GUI
 description.gui_merchant_edit_trade.ignore_meta_check_box.name=选中后，输入数据在元数据方面不必相似。例如，您将钻石剑设置为输入，它也将接受损坏的钻石剑。
@@ -592,9 +593,9 @@ description.gui_button_trade.out_of_stock.name=缺货！如果可能的话，再
 
 #Enchantments
 enchantment.lightning_protection=雷击保护
-enchantment.cqrepoured.lightning_protection.desc=当应用于头盔时，可保护您免受闪电伤害
-enchantment.spectral=幽冥香脂
-enchantment.cqrepoured.spectral.desc=增加对末影人和深渊漫游者的伤害。强烈推荐在与深渊王战斗时使用。
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
+enchantment.spectral=幽灵香脂
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
 
 #Mobs
 entity.cqr_dummy.name=木头人
@@ -637,8 +638,8 @@ entity.cqr_walker_king.name=深渊王
 entity.cqr_pirate_captain.name=海盗船长
 entity.cqr_giant_spider.name=巨蛛尸罗
 entity.cqr_ender_king.name=末影王
-entity.cqr_ender_calamity.name=末影之灾
-entity.cqr_exterminator.name=灭绝者原型体
+entity.cqr_ender_calamity.name=ยง4末影之灾
+entity.cqr_exterminator.name=Exterminator Prototype
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>五角星召唤物
@@ -646,31 +647,31 @@ entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>五角星召唤物
 entity.cqr_illusion_walker_king.name=深渊王
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>深渊旋风
 entity.cqr_pirate_parrot.name=叛贼鹦鹉
-entity.cqr_flying_skull.name=飞行头骨
+entity.cqr_flying_skull.name=飞行的头骨
 entity.cqr_ice_spike.name=冰刺
-entity.cqr_wasp.name=黄蜂 (WIP)
-entity.cqr_pollo.name=憎恶 (WIP)
+entity.cqr_wasp.name=Wasp (WIP)
+entity.cqr_pollo.name=Abomination (WIP)
 
 #Advancements
 advancements.cqrepoured.root.title=寻找巧克力重铸版
 advancements.cqrepoured.root.description=欢迎来到重铸版的寻找巧克力！
 advancements.cqrepoured.ha_got_you.title=哈！抓住你了！
 advancements.cqrepoured.ha_got_you.description=被本模组的怪物杀死
-advancements.cqrepoured.not_so_strong.title=不屑
+advancements.cqrepoured.not_so_strong.title=屑对手
 advancements.cqrepoured.not_so_strong.description=挑战BOSS失败
-advancements.cqrepoured.not_so_friendly.title=不太友善。。。
+advancements.cqrepoured.not_so_friendly.title=不太友好。。。
 advancements.cqrepoured.not_so_friendly.description=遭遇深渊漫步者
 advancements.cqrepoured.challenger.title=挑战者
 advancements.cqrepoured.challenger.description=打败模组里的一个BOSS
 advancements.cqrepoured.champion.title=地牢之王
 advancements.cqrepoured.champion.description=击败每一个BOSS至少一次
-advancements.cqrepoured.wear_the_turtle.title=人形铁王八
+advancements.cqrepoured.wear_the_turtle.title=双足铁王八
 advancements.cqrepoured.wear_the_turtle.description=现在我是坦克了！获得全套巨龟盔甲
 advancements.cqrepoured.kill_boar_mage.title=这个女孩着火了
 advancements.cqrepoured.kill_boar_mage.description=打败一只野猪法师
-advancements.cqrepoured.kill_lich.title=死了的东西可能还会死！
+advancements.cqrepoured.kill_lich.title=已经死了的可能再死！
 advancements.cqrepoured.kill_lich.description=打败一位巫妖
-advancements.cqrepoured.kill_walker_king.title=可敬的对手
+advancements.cqrepoured.kill_walker_king.title=好对手
 advancements.cqrepoured.kill_walker_king.description=打败深渊王
 advancements.cqrepoured.kill_necromancer.title=起死回生
 advancements.cqrepoured.kill_necromancer.description=打败亡灵巫师
@@ -678,18 +679,18 @@ advancements.cqrepoured.kill_nether_dragon.title=这不是哥斯拉
 advancements.cqrepoured.kill_nether_dragon.description=打败一只下界妖龙
 advancements.cqrepoured.kill_giant_tortoise.title=旋转跳跃
 advancements.cqrepoured.kill_giant_tortoise.description=打败一只巨龟
-advancements.cqrepoured.kill_pirate_captain.title=现在我是船长了!
+advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=打败海盗船长
-advancements.cqrepoured.new_captain.title=黑吃黑
+advancements.cqrepoured.new_captain.title=现在谁是船长？
 advancements.cqrepoured.new_captain.description=获取海盗船长的武器
 advancements.cqrepoured.kill_giant_spider.title=唯一的好蜘蛛。。。
 advancements.cqrepoured.kill_giant_spider.description=。。。 死蜘蛛！打倒一只巨蛛
 advancements.cqrepoured.kill_ender_king.title=Was that everything?!
-advancements.cqrepoured.kill_ender_king.description=杀死可怕的末影人首领，伟大的末影王！
-advancements.cqrepoured.kill_ender_calamity.title=是的，这就是一切！
-advancements.cqrepoured.kill_ender_calamity.description=赢得一场英勇的死亡排球比赛，对抗邪恶的召唤。
-advancements.cqrepoured.kill_exterminator.title=电气专家
-advancements.cqrepoured.kill_exterminator.description=击败灾厄村民的科技怪物
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
 
-effect.cqrepoured.twohanded=双手武器
+effect.cqrepoured.twohanded=Twohanded
 

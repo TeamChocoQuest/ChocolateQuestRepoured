@@ -1,6 +1,9 @@
-The Portuguese Brazil language file for Chocolate Quest Repoured Mod!
-This translation was made possible by Atum262, Luker, Guilherme and sallomma
+#The Portuguese Brazil language file for Chocolate Quest Repoured Mod!
+#This translation was made possible by Atum262, Luker, Guilherme and sallomma
 
+#DamageSources
+death.attack.ray=%1$s was fired by mah lazor!
+death.attack.ray.player=%1$s was fired by %2$s's lazor!
 
 #CreativeTabs
 itemGroup.cqrepoured_blocks=CQR Blocos
@@ -223,6 +226,8 @@ item.structure_selector.name=Auxiliar do Seletor de Seleção
 item.path_tool.name=Ferramenta de Caminho
 item.cursed_bone.name=Osso Amaldiçoado
 item.dummy_shield.name=Escudo do Manequim
+item.unprotected_positions_tool.name=Unprotected Position Selector Helper
+item.magic_bell.name=Magic Bell
 
 #Axes
 item.battle_axe_bull.name=Machado de Batalha de Touro
@@ -430,7 +435,7 @@ tile.diorite_square.name=Quadrado de Diorito
 tile.diorite_small.name=Tijolo Pequeno de Diorito
 tile.diorite_large.name=Tijolo Grande de Diorito
 
-#Diorite blocks
+#Granite blocks
 tile.granite_carved.name=Granito Esculpido
 tile.granite_pillar.name=Pilar de Granito
 tile.granite_cube.name=Cubo de Granito
@@ -516,6 +521,7 @@ description.dagger.name=Clique com o botão direito enquanto anda para saltar pa
 description.ninja_dagger.name=Clique com o botão direito enquanto anda para saltar para frente. Dizem que o portador desta adaga pode, quando desejar, sumir sem deixar rastros. Você pode imitar este comportamento com um clique direito enquanto se agacha, mas quando você sumir de vista, não irá longe.
 description.bull_battle_axe.name=Grux clique direito no chão. Faz terremoto. Vai para frente. Esmaga inimigos legal. Grux gosta.
 description.walker_set.name=Reza a lenda que aquele que atirar uma flecha no Andarilho Rei encontrará uma lâmina em suas costas e o Rei atrás dela. Talvez coletando sua espada e seu escudo permitirá que você utilize de uma habilidade semelhante?
+description.magic_bell.name=Ring the bell and you will see the path to the Lich's Phylactery. Break the blocks the bell shows you and the dungeon's walls will yield to you.
 description.gun.name=Clique com o botão direito para atirar.
 description.bullet_damage.name=Dano da Bala
 description.bullet_fire.name=Incendeia ao atingir
@@ -534,7 +540,7 @@ description.staff_gun.name=É uma arma. Num bastão. Cara, esses anões são gen
 description.staff_healing.name=Um implemento mágico usado para aplicar efeitos de poção tocando sua ponta em um alvo. Embora historicamente geralmente seja usado para efeitos de cura, alguns generais fizeram grande uso de outras poções também. Como o efeito da poção do cajado é alterado é um segredo bem guardado.
 description.contains.name=Contém:
 description.empty.name=Vazio
-description.soul_bottle.name= Clique com o botão esquerdo em uma criatura para armazená-la, clique com o botão direito para invocar essa criatura. Agache e clique com o botão direito para invocar a criatura e esvaziar a garrafa. Coloque um ovo invocador de criatura para definir a criatura que o gerador irá invocar.
+description.soul_bottle.name=Clique com o botão esquerdo em uma criatura para armazená-la, clique com o botão direito para invocar essa criatura. Agache e clique com o botão direito para invocar a criatura e esvaziar a garrafa. Coloque um ovo invocador de criatura para definir a criatura que o gerador irá invocar.
 description.flamethrower.name=Protótipo Rústico Fyrebird mk7 22mm com unidade de explosão bocal. Pressionar o botão direito deverá expelir fogo diretamente para frente. Cartuchos Internos de Gel devem ser capaz de extrair slime de qualquer lugar do inventário. O modelo atual requer um recarregamento padrão, como nenhuma fonte regeneradora de slime foi descoberta.
 description.badge.name=Item somente criativo. Clique direito com ele para abrir a GUI(menu). Clique com o botão esquerdo em uma criatura para associar a ela. Os itens colocados dentro serão dropados quando a criatura associada morrer.
 description.backpack.name=Clique direito para abrir.
@@ -569,6 +575,8 @@ description.leather_spider.name=O couro de Aranha Gigante ainda gruda em tudo qu
 description.king_crown.name=Pode ser usado por si só, ou combinado com um capacete. Seja como for, terá um aspecto de realeza tão quanto sempre teve.
 description.bubble_pistol.name=Humidificador Turbo da Undertech Commercial, com uma unidade de explosão de bolha de 33,6mm. Um clique com o botão direito do mouse expelirá uma rajada rápida de bolhas, grande o suficiente para capturar um cavalo e fazê-lo flutuar. As bolhas não são letais, mas o mesmo não pode ser dito da queda. Mantenha pressionado o botão direito do mouse para um fluxo contínuo.
 description.bubble_rifle.name=Protótipo de Humidificador Turbo da Undertech. Não é para acesso público. Expele o líquido mais rápido e mais longe do que uma arma de bolhas tradicional, e segurar o botão direito do mouse dura mais tempo. Infelizmente, recarregá-lo é muito mais lento.
+description.path_tool.name=Sneak+Left Click an entity to apply the path to that entity.%sLeft Click an entity to copy the path of that entity.%sSneak+Right Click a block to add a new path node.%sRight Click a block to select an existing path node.%sSneak+Right Click air to clear the current path.
+description.unprotected_positions_tool.name=TODO add tooltip
 
 #Trading GUI
 description.gui_merchant_edit_trade.ignore_meta_check_box.name=Quando marcado, a entrada não precisa ser semelhante em termos de metadados. Por exemplo, se você definir uma espada de diamante como entrada, também aceitará espadas de diamante danificadas.
@@ -585,7 +593,9 @@ description.gui_button_trade.out_of_stock.name=Fora de estoque! Se possível com
 
 #Enchantments
 enchantment.lightning_protection=Proteção Contra Raios
+enchantment.cqrepoured.lightning_protection.desc=Protects you from lightning when applied to a helmet. Each level nullifies 10% of the lightning damage taken.
 enchantment.spectral=Bálsamo Espectral
+enchantment.cqrepoured.spectral.desc=Increased damage towards endermen and abyss walkers. Highly recommended when fighting the walker king.
 
 #Mobs
 entity.cqr_dummy.name=Manequim
@@ -627,6 +637,9 @@ entity.cqr_boar_mage.name=Javamago
 entity.cqr_walker_king.name=Andarilho do Abismo Rei
 entity.cqr_pirate_captain.name=Capitão Pirata
 entity.cqr_giant_spider.name=Shelob
+entity.cqr_ender_king.name=Ender King
+entity.cqr_ender_calamity.name=Ender Calamity
+entity.cqr_exterminator.name=Exterminator Prototype
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>invocando pentagrama
@@ -672,3 +685,12 @@ advancements.cqrepoured.new_captain.title=Pirataria Reversa
 advancements.cqrepoured.new_captain.description=Adquira as armas do Capitão Pirata
 advancements.cqrepoured.kill_giant_spider.title=Aranha boa...
 advancements.cqrepoured.kill_giant_spider.description=...é aranha morta! Derrote uma aranha gigante
+advancements.cqrepoured.kill_ender_king.title=Was that everything?!
+advancements.cqrepoured.kill_ender_king.description=Kill the feared leader of the endermen, the great ender king!
+advancements.cqrepoured.kill_ender_calamity.title=Yes, that was everything!
+advancements.cqrepoured.kill_ender_calamity.description=Win a heroic volleyball match of death against the conjured evil.
+advancements.cqrepoured.kill_exterminator.title=Electrician
+advancements.cqrepoured.kill_exterminator.description=Defeat the Illager's technological abomination
+
+effect.cqrepoured.twohanded=Twohanded
+
