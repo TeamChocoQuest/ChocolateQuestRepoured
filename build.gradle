@@ -42,7 +42,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    includedDependencies 'meldexun:ASMUtil:2.1.0@jar'
+    includedDependencies 'meldexun:ASMUtil:2.7.3@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')

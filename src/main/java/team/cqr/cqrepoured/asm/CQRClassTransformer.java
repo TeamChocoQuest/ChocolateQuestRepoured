@@ -24,7 +24,7 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	@Override
 	protected void registerTransformers(IClassTransformerRegistry registry) {
 		// @formatter:off
-		registry.add("net.minecraft.entity.projectile.EntityPotion", "isWaterSensitiveEntity", "func_190544_c", "(Lnet/minecraft/entity/EntityLivingBase;)Z", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+		registry.addObf("net.minecraft.entity.projectile.EntityPotion", "isWaterSensitiveEntity", "func_190544_c", "(Lnet/minecraft/entity/EntityLivingBase;)Z", ClassWriter.COMPUTE_FRAMES, methodNode -> {
 			AbstractInsnNode popNode1 = new LabelNode();
 
 			methodNode.instructions.insert(ASMUtil.listOf(
@@ -38,7 +38,7 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 			));
 		});
 
-		registry.add("net.minecraft.pathfinding.Path", "getVectorFromIndex", "func_75881_a", "(Lnet/minecraft/entity/Entity;I)Lnet/minecraft/util/math/Vec3d;", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+		registry.addObf("net.minecraft.pathfinding.Path", "getVectorFromIndex", "func_75881_a", "(Lnet/minecraft/entity/Entity;I)Lnet/minecraft/util/math/Vec3d;", ClassWriter.COMPUTE_FRAMES, methodNode -> {
 			methodNode.instructions.insert(ASMUtil.listOf(
 					// PathPoint point = this.points[index];
 					new VarInsnNode(Opcodes.ALOAD, 0),
