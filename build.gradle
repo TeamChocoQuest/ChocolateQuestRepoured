@@ -46,7 +46,7 @@ dependencies {
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
 
     atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')
-    atDependencies fg.deobf('curse.maven:reach-fix-556777:5543551')
+    atDependencies fg.deobf('curse.maven:reach-fix-556777:6218135')
     atDependencies fg.deobf('curse.maven:jei-238222:5101347')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
