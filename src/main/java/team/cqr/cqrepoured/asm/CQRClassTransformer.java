@@ -31,10 +31,12 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	private static final ClassUtil REMAPPING_CLASS_UTIL;
 	static {
 		try {
-			Field _classNameBiMap = FMLDeobfuscatingRemapper.class.getDeclaredField("classNameBiMap");
+			Class<?> FMLDeobfuscatingRemapper = Class.forName("net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper", true, Launch.classLoader);
+			Field _INSTANCE = FMLDeobfuscatingRemapper.getField("INSTANCE");
+			Field _classNameBiMap = FMLDeobfuscatingRemapper.getDeclaredField("classNameBiMap");
 			_classNameBiMap.setAccessible(true);
 			@SuppressWarnings("unchecked")
-			BiMap<String, String> deobfuscationMap = (BiMap<String, String>) _classNameBiMap.get(FMLDeobfuscatingRemapper.INSTANCE);
+			BiMap<String, String> deobfuscationMap = (BiMap<String, String>) _classNameBiMap.get(_INSTANCE.get(null));
 			REMAPPING_CLASS_UTIL = ClassUtil.getInstance(new ClassUtil.Configuration(Launch.classLoader, deobfuscationMap.inverse(), deobfuscationMap));
 		} catch (ReflectiveOperationException e) {
 			throw new UnsupportedOperationException(e);
