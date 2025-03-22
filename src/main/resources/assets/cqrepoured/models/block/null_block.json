@@ -1,6 +1,7 @@
 {
    "parent": "block/cube_all",
    "textures": {
-       "all": "cqrepoured:blocks/null_block"
+       "all": "cqrepoured:blocks/null_block",
+       "particle": "cqrepoured:blocks/null_block"
    }
 }
