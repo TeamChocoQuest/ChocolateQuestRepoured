@@ -3,6 +3,7 @@
     "textures": {
         "bottom": "cqrepoured:blocks/tnt_bottom",
         "top": "cqrepoured:blocks/tnt_top",
-        "side": "cqrepoured:blocks/tnt_side"
+        "side": "cqrepoured:blocks/tnt_side",
+        "particle": "cqrepoured:blocks/tnt_side"
     }
 }
