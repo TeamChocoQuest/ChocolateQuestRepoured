@@ -1,6 +1,7 @@
 {
    "parent": "block/cross",
    "textures": {
-       "cross": "cqrepoured:blocks/temporary_web/web_poison_03"
+       "cross": "cqrepoured:blocks/temporary_web/web_poison_03",
+       "particle": "cqrepoured:blocks/temporary_web/web_poison_03"
    }
 }
