@@ -1,6 +1,6 @@
 package team.cqr.cqrepoured.event.world.structure.generation;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,8 +26,8 @@ import team.cqr.cqrepoured.CQRMain;
 @EventBusSubscriber(modid = CQRMain.MODID)
 public class DungeonGenerationHelper {
 
-	private static final Map<Integer, Set<EntityPlayer>> TRAVELING_PLAYERS = new HashMap<>();
-	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new HashMap<>();
+	private static final Map<Integer, Set<EntityPlayer>> TRAVELING_PLAYERS = new ConcurrentHashMap<>();
+	private static final Map<World, Set<ChunkPos>> DELAYED_CHUNKS = new ConcurrentHashMap<>();
 	private static boolean isGeneratingDelayedChunks = false;
 
 	public static void onWorldUnloadEvent(World world) {
