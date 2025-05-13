@@ -97,6 +97,7 @@ public class CQRMain {
 	public static boolean isEntityCullingInstalled;
 	public static boolean isCubicChunksInstalled;
 	public static boolean isAW2Installed;
+	public static boolean isEBWizardryInstalled;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs(CQRMain.MODID + "_items") {
 		@Override
@@ -250,6 +251,7 @@ public class CQRMain {
 		isEntityCullingInstalled = Loader.isModLoaded("entityculling");
 		isCubicChunksInstalled = Loader.isModLoaded("cubicchunks");
 		isAW2Installed = Loader.isModLoaded("ancientwarfare");
+		isEBWizardryInstalled = Loader.isModLoaded("ebwizardry");
 
 		DungeonRegistry.getInstance().loadDungeonFiles();
 		CQStructure.checkAndUpdateStructureFiles();

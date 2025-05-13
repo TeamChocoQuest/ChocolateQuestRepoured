@@ -32,6 +32,7 @@ public class CQRConfig {
 	public static Wall wall = new Wall();
 	public static Materials materials = new Materials();
 	public static BaseHealths baseHealths = new BaseHealths();
+	public static WizardryConfig wizardry = new WizardryConfig();
 
 	public static class Advanced {
 

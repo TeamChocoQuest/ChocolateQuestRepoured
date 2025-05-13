@@ -52,6 +52,7 @@ dependencies {
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
     buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
     buildDependencies 'curse.maven:CubicChunks-292243:3186888'
+    buildDependencies 'curse.maven:ElectroblobsWizardry-265642:5354477'
 }
 
 minecraft {

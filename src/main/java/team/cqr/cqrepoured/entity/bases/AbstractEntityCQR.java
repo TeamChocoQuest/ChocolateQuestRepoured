@@ -1,12 +1,17 @@
 package team.cqr.cqrepoured.entity.bases;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import electroblob.wizardry.entity.living.ISpellCaster;
+import electroblob.wizardry.spell.Spell;
+import electroblob.wizardry.util.SpellModifiers;
+import electroblob.wizardry.util.WandHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -62,6 +67,8 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.fml.common.Optional.Interface;
+import net.minecraftforge.fml.common.Optional.Method;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,6 +121,8 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
+import team.cqr.cqrepoured.integration.ebwizardry.EBWizardry;
+import team.cqr.cqrepoured.integration.ebwizardry.EntityAICastSpell;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 import team.cqr.cqrepoured.item.ItemBadge;
@@ -131,7 +140,8 @@ import team.cqr.cqrepoured.util.ItemUtil;
 import team.cqr.cqrepoured.util.SpawnerFactory;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime {
+@Interface(iface = "electroblob.wizardry.entity.living.ISpellCaster", modid = "ebwizardry")
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData, ISizable, IHasTextureOverride, ITextureVariants, ITradeRestockOverTime, ISpellCaster {
 
 	private static final UUID BASE_ATTACK_SPEED_ID = UUID.fromString("be37de40-8857-48b1-aa99-49dd243fc22c");
 	private static final UUID HEALTH_SCALE_SLIDER_ID = UUID.fromString("4b654c1d-fb8f-42b9-a278-0d49dab6d176");
@@ -447,6 +457,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		this.tasks.addTask(9, new EntityAIHealingPotion(this));
 		this.tasks.addTask(11, this.spellHandler);
+		if (CQRMain.isEBWizardryInstalled) {
+			this.tasks.addTask(11, new EntityAICastSpell(this));
+		}
 		this.tasks.addTask(12, new EntityAIAttackSpecial(this));
 		this.tasks.addTask(13, new EntityAIAttackRanged<>(this));
 		this.tasks.addTask(14, new EntityAIPotionThrower(this));
@@ -832,6 +845,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.updateInvisibility();
 		this.updateLeader();
 		this.updateTradeRestockTimer();
+
+		if (CQRMain.isEBWizardryInstalled && !this.world.isRemote) {
+			int[] cooldowns = WandHelper.getCooldowns(this.getHeldItemMainhand());
+			for (int i = 0; i < cooldowns.length; i++) {
+				if (cooldowns[i] > 0) {
+					cooldowns[i]--;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -1747,4 +1769,56 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setLastTimedRestockTime(long newValue) {
 		this.lastTimedTradeRestock = newValue;
 	}
+
+	// ---------- Electroblobs Wizardry ---------- //
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public List<Spell> getSpells() {
+		return Collections.emptyList();
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public SpellModifiers getModifiers() {
+		return new SpellModifiers();
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public void setContinuousSpell(Spell spell) {
+		this.dataManager.set(EBWizardry.CONTINUOUS_SPELL, spell.getRegistryName().toString());
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public Spell getContinuousSpell() {
+		return Spell.get(this.dataManager.get(EBWizardry.CONTINUOUS_SPELL));
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public void setSpellCounter(int count) {
+		this.dataManager.set(EBWizardry.SPELL_COUNTER, count);
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public int getSpellCounter() {
+		return this.dataManager.get(EBWizardry.SPELL_COUNTER);
+	}
+
+	@Method(modid = "ebwizardry")
+	@Override
+	public int getAimingError(EnumDifficulty difficulty) {
+		switch (difficulty) {
+		case NORMAL:
+			return CQRConfig.wizardry.aimingErrorNormal;
+		case HARD:
+			return CQRConfig.wizardry.aimingErrorHard;
+		default:
+			return CQRConfig.wizardry.aimingErrorEasy;
+		}
+	}
+
 }
