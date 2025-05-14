@@ -138,6 +138,17 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 		}
 	}
 
+	protected float getStrafingSpeed() {
+		return (float) (this.entity.isNonBoss() ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
+	}
+
+	protected boolean canStrafe() {
+		if (!this.entity.canStrafe()) {
+			return false;
+		}
+		return this.entity.isNonBoss() ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
+	}
+
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		ItemStack stack = this.entity.getHeldItemMainhand();
 
