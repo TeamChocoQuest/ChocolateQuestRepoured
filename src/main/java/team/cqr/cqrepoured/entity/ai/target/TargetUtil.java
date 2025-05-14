@@ -232,14 +232,8 @@ public class TargetUtil {
 	}
 
 	public static boolean isAllyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
-		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof EntityPlayer) {
-			entity = leader;
-		}
-		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof EntityPlayer) {
-			target = targetLeader;
-		}
+		entity = getLeaderOrOwnerRecursive(entity);
+		target = getLeaderOrOwnerRecursive(target);
 
 		if (entity == target) {
 			return true;
@@ -265,14 +259,8 @@ public class TargetUtil {
 	}
 
 	public static boolean isEnemyCheckingLeaders(EntityLivingBase entity, EntityLivingBase target) {
-		EntityLivingBase leader = getLeaderOrOwnerRecursive(entity);
-		if (leader instanceof EntityPlayer) {
-			entity = leader;
-		}
-		EntityLivingBase targetLeader = getLeaderOrOwnerRecursive(target);
-		if (targetLeader instanceof EntityPlayer) {
-			target = targetLeader;
-		}
+		entity = getLeaderOrOwnerRecursive(entity);
+		target = getLeaderOrOwnerRecursive(target);
 
 		if (entity == target) {
 			return false;
