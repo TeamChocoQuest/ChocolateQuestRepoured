@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import electroblob.wizardry.entity.living.ISpellCaster;
+import electroblob.wizardry.registry.Spells;
 import electroblob.wizardry.spell.Spell;
 import electroblob.wizardry.util.SpellModifiers;
 import electroblob.wizardry.util.WandHelper;
@@ -121,7 +122,6 @@ import team.cqr.cqrepoured.faction.Faction;
 import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
-import team.cqr.cqrepoured.integration.ebwizardry.EBWizardry;
 import team.cqr.cqrepoured.integration.ebwizardry.EntityAICastSpell;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
@@ -159,6 +159,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<String> FACTION_OVERRIDE_SYNC = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 	protected static final DataParameter<String> TEXTURE_OVERRIDE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
+	protected static final DataParameter<String> CONTINUOUS_SPELL = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.STRING);
+	protected static final DataParameter<Integer> SPELL_COUNTER = EntityDataManager.createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
@@ -1787,25 +1789,25 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Method(modid = "ebwizardry")
 	@Override
 	public void setContinuousSpell(Spell spell) {
-		this.dataManager.set(EBWizardry.CONTINUOUS_SPELL, spell.getRegistryName().toString());
+		this.dataManager.set(CONTINUOUS_SPELL, spell.getRegistryName().toString());
 	}
 
 	@Method(modid = "ebwizardry")
 	@Override
 	public Spell getContinuousSpell() {
-		return Spell.get(this.dataManager.get(EBWizardry.CONTINUOUS_SPELL));
+		return Spell.get(this.dataManager.get(CONTINUOUS_SPELL));
 	}
 
 	@Method(modid = "ebwizardry")
 	@Override
 	public void setSpellCounter(int count) {
-		this.dataManager.set(EBWizardry.SPELL_COUNTER, count);
+		this.dataManager.set(SPELL_COUNTER, count);
 	}
 
 	@Method(modid = "ebwizardry")
 	@Override
 	public int getSpellCounter() {
-		return this.dataManager.get(EBWizardry.SPELL_COUNTER);
+		return this.dataManager.get(SPELL_COUNTER);
 	}
 
 	@Method(modid = "ebwizardry")
