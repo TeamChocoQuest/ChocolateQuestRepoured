@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.integration.ebwizardry;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import electroblob.wizardry.constants.Constants;
@@ -78,20 +77,19 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void resetTask() {
-		if (this.useTick >= 0) {
+		if (this.isCasting()) {
 			ItemStack stack = this.entity.getHeldItemMainhand();
 			Spell spell = WandHelper.getCurrentSpell(stack);
 			int chargeup = (int) (spell.getChargeup() * this.modifiers.get("chargeup"));
 			int castingTick = this.useTick - chargeup;
-			if (spell.isContinuous && this.useTick >= chargeup) {
+			if (spell.isContinuous && castingTick >= 0) {
 				MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, this.modifiers, castingTick));
 				IMessage msg = new PacketNPCCastSpell.Message(this.entity.getEntityId(), -1, EnumHand.MAIN_HAND, Spells.none, new SpellModifiers());
 				WizardryPacketHandler.net.sendToAllTracking(msg, this.entity);
-				// TODO set cooldown
+				setCooldown(stack, spell, this.entity, this.modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
 			}
+			this.stopCasting();
 		}
-		this.useTick = -1;
-		this.entity.stopActiveHand();
 		this.entity.getNavigator().clearPath();
 	}
 
@@ -177,26 +175,26 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 		}
 		if (this.isCasting()) {
 			Spell spell = WandHelper.getCurrentSpell(stack);
-			int chargeup = (int) (spell.getChargeup() * modifiers.get("chargeup"));
+			int chargeup = (int) (spell.getChargeup() * this.modifiers.get("chargeup"));
 			if (this.useTick >= chargeup) {
 				if (!spell.isContinuous) {
-					cast(stack, spell, this.entity, EnumHand.MAIN_HAND, 0, attackTarget, modifiers);
-					setCooldown(stack, spell, this.entity, modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
+					cast(stack, spell, this.entity, EnumHand.MAIN_HAND, 0, attackTarget, this.modifiers);
+					setCooldown(stack, spell, this.entity, this.modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
 					this.stopCasting();
 				} else {
 					int castingTick = this.useTick - chargeup;
 					if (castingTick == 0) {
-						cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, modifiers);
+						cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, this.modifiers);
 					} else {
 						boolean canContinue;
-						if (canContinue = !MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Tick(Source.NPC, spell, this.entity, modifiers, castingTick))) {
-							cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, modifiers);
+						if (canContinue = !MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Tick(Source.NPC, spell, this.entity, this.modifiers, castingTick))) {
+							cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, this.modifiers);
 						}
 						if (!canContinue || castingTick >= CQRConfig.wizardry.continuousDuration - 1) {
-							MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, modifiers, castingTick));
+							MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, this.modifiers, castingTick));
 							IMessage msg = new PacketNPCCastSpell.Message(this.entity.getEntityId(), -1, EnumHand.MAIN_HAND, Spells.none, new SpellModifiers());
 							WizardryPacketHandler.net.sendToAllTracking(msg, this.entity);
-							setCooldown(stack, spell, this.entity, modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
+							setCooldown(stack, spell, this.entity, this.modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
 							this.stopCasting();
 						}
 					}
@@ -247,7 +245,6 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 		for (int i = 0; i < cooldowns.length; i++) {
 			cooldowns[i] = Math.max(cooldowns[i], minCooldown);
 		}
-		WandHelper.selectSpell(stack, caster.getRNG().nextInt(WandHelper.getSpells(stack).length));
 	}
 
 	/**
