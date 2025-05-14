@@ -160,7 +160,7 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 				if (spell == null) continue;
 				if (spell == Spells.none) continue;
 				if (spell.getTier().level > ((ItemWand) stack.getItem()).tier.level) continue;
-				if (cooldowns[i] > 0) continue;
+				if (i < cooldowns.length && cooldowns[i] > 0) continue;
 				SpellModifiers modifiers = calculateModifiers(stack, this.entity, spell);
 				if (MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Pre(Source.NPC, spell, this.entity, modifiers))) continue;
 
