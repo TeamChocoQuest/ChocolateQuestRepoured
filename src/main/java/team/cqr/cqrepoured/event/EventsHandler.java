@@ -64,16 +64,15 @@ public class EventsHandler {
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onLootTableLoadPre(LootTableLoadEvent event) {
 		if (event.getName().getNamespace().equals(CQRMain.MODID) && !CQRConfig.general.preventOtherModLoot) {
-			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
+			LootTableLoader.loadLootTableFromConfig(event);
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onLootTableLoadPost(LootTableLoadEvent event) {
 		if (event.getName().getNamespace().equals(CQRMain.MODID) && CQRConfig.general.preventOtherModLoot) {
-			event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
+			LootTableLoader.loadLootTableFromConfig(event);
 		}
-		LootTableLoader.freezeLootTable();
 	}
 
 	@SubscribeEvent
