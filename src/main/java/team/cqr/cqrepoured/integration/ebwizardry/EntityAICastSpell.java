@@ -188,11 +188,9 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 					if (castingTick == 0) {
 						cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, this.modifiers);
 					} else {
-						boolean canContinue;
-						if (canContinue = !MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Tick(Source.NPC, spell, this.entity, this.modifiers, castingTick))) {
-							cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, this.modifiers);
-						}
-						if (!canContinue || castingTick >= CQRConfig.wizardry.continuousDuration - 1) {
+						if (MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Tick(Source.NPC, spell, this.entity, this.modifiers, castingTick))
+								|| !cast(stack, spell, this.entity, EnumHand.MAIN_HAND, castingTick, attackTarget, this.modifiers)
+								|| castingTick >= CQRConfig.wizardry.continuousDuration - 1) {
 							MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, this.modifiers, castingTick));
 							spell.finishCasting(this.world, this.entity, Double.NaN, Double.NaN, Double.NaN, null, castingTick, this.modifiers);
 							this.entity.setContinuousSpell(Spells.none);
