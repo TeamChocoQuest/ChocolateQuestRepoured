@@ -50,6 +50,7 @@ public class LootTableLoader {
 	private static final ReflectionField<Boolean> LootPool_isFrozen = new ReflectionField<>(LootPool.class, "isFrozen", null);
 	// ATs don't work in dev for some reason
 	private static final ReflectionField<List<LootPool>> LootTable_pools = new ReflectionField<>(LootTable.class, "field_186466_c", "pools");
+	private static final ReflectionField<List<LootEntry>> LootPool_lootEntries = new ReflectionField<>(LootPool.class, "field_186453_a", "lootEntries");
 
 	public static void loadLootTableFromConfig(LootTableLoadEvent event) {
 		LootTable lootTable = loadJsonLootTable(event.getName(), event.getLootTableManager());
@@ -58,6 +59,12 @@ public class LootTableLoader {
 		}
 
 		if (lootTable != null) {
+			// remove invalid entries and empty pools
+			LootTable_pools.get(lootTable).removeIf(pool -> {
+				LootPool_lootEntries.get(pool).removeIf(entry -> entry instanceof LootEntryItem && ((LootEntryItem) entry).item == null);
+				return LootPool_lootEntries.get(pool).isEmpty();
+			});
+
 			event.setTable(lootTable);
 		}
 	}
