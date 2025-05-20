@@ -84,6 +84,8 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 			int castingTick = this.useTick - chargeup;
 			if (spell.isContinuous && castingTick >= 0) {
 				MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, this.modifiers, castingTick));
+				spell.finishCasting(this.world, this.entity, Double.NaN, Double.NaN, Double.NaN, null, castingTick, this.modifiers);
+				this.entity.setContinuousSpell(Spells.none);
 				IMessage msg = new PacketNPCCastSpell.Message(this.entity.getEntityId(), -1, EnumHand.MAIN_HAND, Spells.none, new SpellModifiers());
 				WizardryPacketHandler.net.sendToAllTracking(msg, this.entity);
 				setCooldown(stack, spell, this.entity, this.modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
@@ -192,6 +194,8 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 						}
 						if (!canContinue || castingTick >= CQRConfig.wizardry.continuousDuration - 1) {
 							MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Finish(Source.NPC, spell, this.entity, this.modifiers, castingTick));
+							spell.finishCasting(this.world, this.entity, Double.NaN, Double.NaN, Double.NaN, null, castingTick, this.modifiers);
+							this.entity.setContinuousSpell(Spells.none);
 							IMessage msg = new PacketNPCCastSpell.Message(this.entity.getEntityId(), -1, EnumHand.MAIN_HAND, Spells.none, new SpellModifiers());
 							WizardryPacketHandler.net.sendToAllTracking(msg, this.entity);
 							setCooldown(stack, spell, this.entity, this.modifiers, CQRConfig.wizardry.minCooldown, CQRConfig.wizardry.maxCooldown);
@@ -230,6 +234,9 @@ public class EntityAICastSpell extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if (castingTick == 0) {
 			MinecraftForge.EVENT_BUS.post(new SpellCastEvent.Post(Source.NPC, spell, caster, modifiers));
 
+			if (spell.isContinuous) {
+				caster.setContinuousSpell(spell);
+			}
 			if (spell.isContinuous || spell.requiresPacket()) {
 				IMessage msg = new PacketNPCCastSpell.Message(caster.getEntityId(), target.getEntityId(), hand, spell, modifiers);
 				WizardryPacketHandler.net.sendToAllTracking(msg, caster);
