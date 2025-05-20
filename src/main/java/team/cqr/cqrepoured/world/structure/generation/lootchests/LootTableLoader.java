@@ -138,7 +138,7 @@ public class LootTableLoader {
 			functionsBuilder.add(new SetCount(new LootCondition[0], new RandomValueRange(countMin, countMax)));
 		}
 		if (enchant && enchantChance > 0) {
-			functionsBuilder.add(new EnchantWithLevels(enchantChance < 100 ? new LootCondition[] { new RandomChance(enchantChance / 100.0F) } : new LootCondition[0], new RandomValueRange(enchantMin * (enchantTreasure ? 2 : 1), enchantMax * (enchantTreasure ? 2 : 1)), enchantTreasure));
+			functionsBuilder.add(new EnchantWithLevels(enchantChance < 100 ? new LootCondition[] { new RandomChance(enchantChance / 100.0F) } : new LootCondition[0], new RandomValueRange(enchantMin, enchantMax), enchantTreasure));
 		}
 		if (meta != 0) {
 			functionsBuilder.add(new SetMetadata(new LootCondition[0], new RandomValueRange(meta)));
