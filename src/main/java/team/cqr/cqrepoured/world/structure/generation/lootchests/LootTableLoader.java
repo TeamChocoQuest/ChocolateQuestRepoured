@@ -126,7 +126,7 @@ public class LootTableLoader {
 		int meta = parseInt(tokenizer, 0);
 		int countMin = parseInt(tokenizer, 1);
 		int countMax = parseInt(tokenizer, 1);
-		int chance = parseInt(tokenizer, 100);
+		int weight = parseInt(tokenizer, 100);
 		boolean enchant = parseBoolean(tokenizer, false);
 		int enchantMin = parseInt(tokenizer, 1);
 		int enchantMax = parseInt(tokenizer, 30);
@@ -144,9 +144,8 @@ public class LootTableLoader {
 			functionsBuilder.add(new SetMetadata(new LootCondition[0], new RandomValueRange(meta)));
 		}
 		LootFunction[] functions = functionsBuilder.toArray(new LootFunction[functionsBuilder.size()]);
-		LootCondition[] conditions = chance < 100 ? new LootCondition[] { new RandomChance(chance / 100.0F) } : new LootCondition[0];
 
-		return new LootEntryItem(item, chance, 0, functions, conditions, name);
+		return new LootEntryItem(item, weight, 0, functions, new LootCondition[0], name);
 	}
 
 	private static boolean parseBoolean(StringTokenizer tokenizer, boolean defaultValue) {
