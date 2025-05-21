@@ -1,39 +1,42 @@
 package team.cqr.cqrepoured.world.structure.generation.lootchests;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Deque;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
 
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Queues;
-import com.google.common.io.Files;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParseException;
 
-import meldexun.reflectionutil.ReflectionConstructor;
 import meldexun.reflectionutil.ReflectionField;
+import net.minecraft.item.Item;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.RandomChance;
+import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraft.world.storage.loot.functions.SetMetadata;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.LootTableLoadEvent;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.init.CQRLoottables;
@@ -43,177 +46,127 @@ import team.cqr.cqrepoured.init.CQRLoottables;
  */
 public class LootTableLoader {
 
-	private static final ReflectionField<ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
-	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class, Boolean.TYPE);
-	private static final ReflectionField<Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
-	private static final ReflectionField<LoadingCache<ResourceLocation, LootTable>> FIELD_REGISTERED_LOOT_TABLES = new ReflectionField<>(LootTableManager.class, "field_186527_c", "registeredLootTables");
+	private static final ReflectionField<Boolean> LootTable_isFrozen = new ReflectionField<>(LootTable.class, "isFrozen", null);
+	private static final ReflectionField<Boolean> LootPool_isFrozen = new ReflectionField<>(LootPool.class, "isFrozen", null);
+	// ATs don't work in dev for some reason
+	private static final ReflectionField<List<LootPool>> LootTable_pools = new ReflectionField<>(LootTable.class, "field_186466_c", "pools");
+	private static final ReflectionField<List<LootEntry>> LootPool_lootEntries = new ReflectionField<>(LootPool.class, "field_186453_a", "lootEntries");
 
-	private static LootTable loadingLootTable;
-
-	private static List<WeightedItemStack> getItemList(Properties propFile) {
-		List<WeightedItemStack> items = new ArrayList<>();
-		Enumeration<Object> fileEntries = propFile.elements();
-		while (fileEntries.hasMoreElements()) {
-			String entry = (String) fileEntries.nextElement();
-			if (!entry.startsWith("#")) {
-				WeightedItemStack stack = createWeightedItemStack(entry);
-				if (stack != null) {
-					items.add(stack);
-				}
-			}
+	public static void loadLootTableFromConfig(LootTableLoadEvent event) {
+		LootTable lootTable = loadJsonLootTable(event.getName(), event.getLootTableManager());
+		if (lootTable == null) {
+			lootTable = loadPropertiesLootTable(event.getName());
 		}
-		return items;
+
+		if (lootTable != null) {
+			// remove invalid entries and empty pools
+			LootTable_pools.get(lootTable).removeIf(pool -> {
+				LootPool_lootEntries.get(pool).removeIf(entry -> entry instanceof LootEntryItem && ((LootEntryItem) entry).item == null);
+				return LootPool_lootEntries.get(pool).isEmpty();
+			});
+
+			event.setTable(lootTable);
+		}
 	}
 
-	private static WeightedItemStack createWeightedItemStack(String entry) {
-		// String format: ID = ITEM, DAMAGE, MIN_COUNT, MAX_COUNT, CHANCE, ENCHANT, MIN_LVL, MAX_LVL, TREASURE
-		StringTokenizer tokenizer = new StringTokenizer(entry, ",");
-		int tokenCount = tokenizer.countTokens();
-		if (tokenCount >= 5) {
-			String item;
-			int damage;
-			int minCount;
-			int maxCount;
-			int chance;
-			boolean enchant = false;
-			int minLvl = 1;
-			int maxLvl = 10;
-			boolean treasure = false;
-			int enchChance = 0;
+	private static LootTable loadJsonLootTable(ResourceLocation name, LootTableManager lootTableManager) {
+		Path jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".json").toPath();
+		if (!Files.exists(jsonFile)) {
+			return null;
+		}
 
-			item = ((String) tokenizer.nextElement()).trim();
-			if (item.isEmpty()) {
-				CQRMain.logger.error("Can't parse argument 1 (item) of:\n{}", entry);
-				return null;
-			}
-			try {
-				damage = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			} catch (NumberFormatException e) {
-				CQRMain.logger.error("Can't parse argument 2 (item damage) of:\n{}", entry);
-				return null;
-			}
-			try {
-				minCount = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			} catch (NumberFormatException e) {
-				CQRMain.logger.error("Can't parse argument 3 (min item count) of:\n{}", entry);
-				return null;
-			}
-			try {
-				maxCount = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			} catch (NumberFormatException e) {
-				CQRMain.logger.error("Can't parse argument 4 (max item count) of:\n{}", entry);
-				return null;
-			}
-			try {
-				chance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-			} catch (NumberFormatException e) {
-				CQRMain.logger.error("Can't parse argument 5 (item chance) of:\n{}", entry);
-				return null;
+		try {
+			String data = new String(Files.readAllBytes(jsonFile), StandardCharsets.UTF_8);
+			LootTable lootTable = ForgeHooks.loadLootTable(LootTableManager.GSON_INSTANCE, name, data, true, lootTableManager);
+
+			// unfreeze to fix crash when another mod wants to modify the loot table
+			if (lootTable != null) {
+				LootTable_isFrozen.setBoolean(lootTable, false);
+				LootTable_pools.get(lootTable).forEach(pool -> LootPool_isFrozen.setBoolean(pool, false));
 			}
 
-			if (tokenCount >= 6) {
-				enchant = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
-				try {
-					minLvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-				} catch (NumberFormatException e) {
-					CQRMain.logger.error("Can't parse argument 7 (min enchant level) of:\n{}", entry);
-					return null;
-				}
-				try {
-					maxLvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-				} catch (NumberFormatException e) {
-					CQRMain.logger.error("Can't parse argument 8 (max enchant level) of:\n{}", entry);
-					return null;
-				}
-				if (tokenCount >= 9) {
-					treasure = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
-					if (tokenCount >= 10) {
-						try {
-							enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
-						} catch (NumberFormatException e) {
-							CQRMain.logger.error("Can't parse argument 10 (enchanting chance) of:\n{}", entry);
-							return null;
-						}
-					}
-				}
-			}
-
-			return new WeightedItemStack(item, damage, minCount, maxCount, chance, enchant, minLvl, maxLvl, treasure, enchChance);
-		} else {
-			CQRMain.logger.error("Config string {} is invalid! Not enough arguments!", entry);
+			return lootTable;
+		} catch (IOException | JsonParseException e) {
+			CQRMain.logger.error("Failed to read json loot table {}", Launch.minecraftHome.toPath().relativize(jsonFile), e);
 			return null;
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static LootTable fillLootTable(ResourceLocation name, LootTable defaultLootTable) {
-		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".json");
-		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".properties");
-
-		if (jsonFile.exists()) {
-			// Load json loot table
-			try (InputStream inputStream = new FileInputStream(jsonFile)) {
-				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
-
-				ThreadLocal<Deque<?>> lootContext = LOOT_CONTEXT.get(null);
-				Deque que = lootContext.get();
-				if (que == null) {
-					que = Queues.newArrayDeque();
-					lootContext.set(que);
-				}
-
-				que.push(LOOT_TABLE_CONTEXT.newInstance(name, true));
-				LootTable newLootTable;
-				try {
-					newLootTable = GSON_INSTANCE.get(null).fromJson(s, LootTable.class);
-				} finally {
-					que.pop();
-				}
-
-				if (newLootTable != null) {
-					loadingLootTable = newLootTable;
-				}
-				return newLootTable;
-			} catch (IOException | JsonSyntaxException e) {
-				CQRMain.logger.error("Failed to read json loot table {}", jsonFile.getName(), e);
-			}
-		} else if (propFile.exists()) {
-			// Load prop file and fill loot table
-			try (InputStream inputStream = new FileInputStream(propFile)) {
-				Properties properties = new Properties();
-				properties.load(inputStream);
-
-				List<WeightedItemStack> items = getItemList(properties);
-				LootTable newLootTable = new LootTable(new LootPool[0]);
-
-				if (CQRConfig.general.singleLootPoolPerLootTable) {
-					LootEntry[] entries = new LootEntry[items.size()];
-					for (int i = 0; i < items.size(); i++) {
-						entries[i] = items.get(i).getAsLootEntry(i);
-					}
-
-					return new LootTable(new LootPool[] {
-							new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())),
-									new RandomValueRange(0), name.getPath() + "_pool") });
-				} else {
-					for (int i = 0; i < items.size(); i++) {
-						newLootTable.addPool(items.get(i).getAsSingleLootPool(i));
-					}
-				}
-
-				return newLootTable;
-			} catch (IOException e) {
-				CQRMain.logger.error("Failed to read prop loot table {}", propFile.getName(), e);
-			}
+	private static LootTable loadPropertiesLootTable(ResourceLocation name) {
+		Path propertiesFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".properties").toPath();
+		if (!Files.exists(propertiesFile)) {
+			return null;
 		}
 
-		return defaultLootTable;
+		try {
+			LootPool[] pools;
+			if (CQRConfig.general.singleLootPoolPerLootTable) {
+				pools = new LootPool[] { new LootPool(LootTableLoader.parseLootEntries(propertiesFile).toArray(LootEntry[]::new), new LootCondition[0], new RandomValueRange(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), new RandomValueRange(0), name.getPath()) };
+			} else {
+				pools = LootTableLoader.parseLootEntries(propertiesFile).map(entry -> new LootPool(new LootEntry[] { entry }, new LootCondition[0], new RandomValueRange(1), new RandomValueRange(0), entry.getEntryName())).toArray(LootPool[]::new);
+			}
+			return new LootTable(pools);
+		} catch (IOException e) {
+			CQRMain.logger.error("Failed to read prop loot table {}", Launch.minecraftHome.toPath().relativize(propertiesFile), e);
+			return null;
+		}
 	}
 
-	public static void freezeLootTable() {
-		if (loadingLootTable != null) {
-			loadingLootTable.freeze();
-			loadingLootTable = null;
+	private static Stream<LootEntry> parseLootEntries(Path file) throws IOException {
+		return Files.lines(file).map(LootTableLoader::parseLootEntry).filter(Objects::nonNull);
+	}
+
+	private static LootEntry parseLootEntry(String s) {
+		if (s.startsWith("#")) {
+			return null;
+		}
+
+		int i = s.indexOf('=');
+		if (i < 0) {
+			return null;
+		}
+
+		// Format: name = item, meta, countMin, countMax, chance, enchant, enchantMin, enchantMax, enchantTreasure, enchantChance
+		String name = s.substring(0, i).trim();
+		StringTokenizer tokenizer = new StringTokenizer(s.substring(i + 1), ",");
+		Item item = Item.getByNameOrId(tokenizer.nextToken().trim());
+		int meta = parseInt(tokenizer, 0);
+		int countMin = parseInt(tokenizer, 1);
+		int countMax = parseInt(tokenizer, 1);
+		int weight = parseInt(tokenizer, 100);
+		boolean enchant = parseBoolean(tokenizer, false);
+		int enchantMin = parseInt(tokenizer, 1);
+		int enchantMax = parseInt(tokenizer, 30);
+		boolean enchantTreasure = parseBoolean(tokenizer, false);
+		int enchantChance = parseInt(tokenizer, 100);
+
+		List<LootFunction> functionsBuilder = new ArrayList<>();
+		if (countMin != 1 || countMax != 1) {
+			functionsBuilder.add(new SetCount(new LootCondition[0], new RandomValueRange(countMin, countMax)));
+		}
+		if (enchant && enchantChance > 0) {
+			functionsBuilder.add(new EnchantWithLevels(enchantChance < 100 ? new LootCondition[] { new RandomChance(enchantChance / 100.0F) } : new LootCondition[0], new RandomValueRange(enchantMin, enchantMax), enchantTreasure));
+		}
+		if (meta != 0) {
+			functionsBuilder.add(new SetMetadata(new LootCondition[0], new RandomValueRange(meta)));
+		}
+		LootFunction[] functions = functionsBuilder.toArray(new LootFunction[functionsBuilder.size()]);
+
+		return new LootEntryItem(item, weight, 0, functions, new LootCondition[0], name);
+	}
+
+	private static boolean parseBoolean(StringTokenizer tokenizer, boolean defaultValue) {
+		return tokenizer.hasMoreTokens() ? Boolean.parseBoolean(tokenizer.nextToken().trim()) : defaultValue;
+	}
+
+	private static int parseInt(StringTokenizer tokenizer, int defaultValue) {
+		if (!tokenizer.hasMoreTokens()) {
+			return defaultValue;
+		}
+		try {
+			return Integer.parseInt(tokenizer.nextToken().trim());
+		} catch (NumberFormatException e) {
+			return defaultValue;
 		}
 	}
 
@@ -221,7 +174,6 @@ public class LootTableLoader {
 		Collection<File> files = FileUtils.listFiles(new File(CQRMain.CQ_CHEST_FOLDER, "chests"), new String[] { "json", "properties" }, false);
 		Set<ResourceLocation> cqrChestLootTables = CQRLoottables.getChestLootTables();
 		LootTableManager lootTableManager = worldServer.getLootTableManager();
-		LoadingCache<ResourceLocation, LootTable> registeredLootTables = FIELD_REGISTERED_LOOT_TABLES.get(lootTableManager);
 
 		for (File file : files) {
 			String s = file.getName();
@@ -233,7 +185,7 @@ public class LootTableLoader {
 
 			LootTable table = new LootTable(new LootPool[0]);
 			table = ForgeEventFactory.loadLootTable(name, table, lootTableManager);
-			registeredLootTables.put(name, table);
+			lootTableManager.registeredLootTables.put(name, table);
 		}
 	}
 

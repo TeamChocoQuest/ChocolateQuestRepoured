@@ -48,11 +48,11 @@ dependencies {
     atDependencies fg.deobf('curse.maven:geckolib-388172:4020277')
     atDependencies fg.deobf('curse.maven:reach-fix-556777:6325073')
     atDependencies fg.deobf('curse.maven:jei-238222:5101347')
+    implementation fg.deobf('curse.maven:ebwizardry-265642:5354477')
 
     buildDependencies 'curse.maven:AncientWarfare2-224602:3293318'
     buildDependencies 'curse.maven:CodeChickenLib-242818:2779848'
     buildDependencies 'curse.maven:CubicChunks-292243:3186888'
-    buildDependencies 'curse.maven:ElectroblobsWizardry-265642:5354477'
 }
 
 minecraft {
