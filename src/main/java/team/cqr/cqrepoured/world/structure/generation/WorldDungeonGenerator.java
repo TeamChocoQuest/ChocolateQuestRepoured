@@ -35,8 +35,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			return;
 		}
 
-		// setup(CQRConfig.general.dungeonSeparation, CQRConfig.general.dungeonSpread, CQRConfig.general.dungeonRarityFactor,
-		// true);
 		DungeonBase dungeon = getDungeonAt(world, chunkX, chunkZ);
 		if (dungeon == null) {
 			return;
