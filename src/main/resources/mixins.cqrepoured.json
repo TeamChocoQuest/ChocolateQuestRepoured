@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "team.cqr.cqrepoured.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.cqrepoured.refmap.json",
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
