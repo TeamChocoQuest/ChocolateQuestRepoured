@@ -6,6 +6,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.util.Constants.BlockFlags;
+import team.cqr.cqrepoured.integration.fluidloggedapi.FluidloggedAPI;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
@@ -24,7 +26,7 @@ public class GeneratableBossInfo extends GeneratablePosInfo {
 
 	@Override
 	protected boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16, dungeon);
+		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG, dungeon);
 		world.spawnEntity(this.entity);
 		return flag;
 	}
