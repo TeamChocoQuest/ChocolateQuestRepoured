@@ -54,6 +54,11 @@ public class CQRPlugin implements IFMLLoadingPlugin {
 		if (Boolean.FALSE.equals(data.get("runtimeDeobfuscationEnabled"))) {
 			MixinBootstrap.init();
 			MixinEnvironment.getDefaultEnvironment().setObfuscationContext("searge");
+			CoreModManager.getIgnoredMods().add("mixin-0.8.5.jar");
+			CoreModManager.getIgnoredMods().add("asm-util-6.2.jar");
+			CoreModManager.getIgnoredMods().add("asm-analysis-6.2.jar");
+			CoreModManager.getIgnoredMods().add("asm-tree-6.2.jar");
+			CoreModManager.getIgnoredMods().add("asm-6.2.jar");
 		}
 	}
 
