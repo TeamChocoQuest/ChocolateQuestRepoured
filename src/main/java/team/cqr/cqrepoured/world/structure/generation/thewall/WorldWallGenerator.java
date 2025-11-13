@@ -12,9 +12,9 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.event.world.structure.generation.DungeonGenerationHelper;
 import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
+import team.cqr.cqrepoured.world.structure.generation.generation.SpawnpointGenerationHandler;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.thewall.wallparts.IWallPart;
@@ -34,7 +34,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (DungeonGenerationHelper.shouldDelayDungeonGeneration(world)) {
+		if (((SpawnpointGenerationHandler) world).isDungeonGenerationDelayed(chunkX, chunkZ)) {
 			return;
 		}
 
@@ -71,7 +71,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
 			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
 
-			if (DungeonGenerationHelper.shouldGenerateDungeonImmediately(world)) {
+			if (DungeonGenerationManager.shouldGenerateDungeonImmediately(world)) {
 				DungeonGenerationManager.generateNow(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
 			} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
 				DungeonGenerationManager.generate(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);

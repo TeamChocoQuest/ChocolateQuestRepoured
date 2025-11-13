@@ -24,7 +24,6 @@ public class DungeonGenerationEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onWorldUnloadEvent(WorldEvent.Unload event) {
-		DungeonGenerationHelper.onWorldUnloadEvent(event.getWorld());
 		DungeonPreparationExecutor.onWorldUnloadEvent(event.getWorld());
 		DungeonGenerationManager.handleWorldUnload(event.getWorld());
 	}

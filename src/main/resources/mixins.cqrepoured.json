@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "mixins.cqrepoured.refmap.json",
   "mixins": [
+    "PlayerListMixin",
+    "WorldServerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

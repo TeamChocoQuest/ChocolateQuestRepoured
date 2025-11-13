@@ -69,4 +69,14 @@ public final class DungeonGenerationManager {
 		}
 	}
 
+	public static boolean shouldGenerateDungeonImmediately(World world) {
+		if (((DelayedGenerationAccessor) world).isGeneratingDelayedChunks()) {
+			return true;
+		}
+		if (((CleanDimensionSwitchAccessor) world).isGeneratingDestinationChunks()) {
+			return true;
+		}
+		return world.playerEntities.isEmpty();
+	}
+
 }
