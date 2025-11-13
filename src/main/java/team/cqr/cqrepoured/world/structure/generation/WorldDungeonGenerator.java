@@ -17,7 +17,6 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.dungeons.DungeonBase;
-import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
 import team.cqr.cqrepoured.world.structure.generation.generation.SpawnpointGenerationHandler;
 import team.cqr.cqrepoured.world.structure.generation.grid.DungeonGrid;
 import team.cqr.cqrepoured.world.structure.generation.grid.GridRegistry;
@@ -42,7 +41,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		int x = (chunkX << 4) + 8;
 		int z = (chunkZ << 4) + 8;
-		dungeon.generate(world, x, z, getRandomForCoords(world, x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION, DungeonGenerationManager.shouldGenerateDungeonImmediately(world));
+		dungeon.generate(world, x, z, getRandomForCoords(world, x, z), DungeonDataManager.DungeonSpawnType.DUNGEON_GENERATION);
 	}
 
 	/**

@@ -54,7 +54,6 @@ import team.cqr.cqrepoured.item.crafting.RecipeArmorDyableRainbow;
 import team.cqr.cqrepoured.item.crafting.RecipeCrownAttach;
 import team.cqr.cqrepoured.item.crafting.RecipeCrownDetach;
 import team.cqr.cqrepoured.item.crafting.RecipesArmorDyes;
-import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.lootchests.LootTableLoader;
 import team.cqr.cqrepoured.world.structure.protection.ProtectedRegionHelper;
 
@@ -165,21 +164,13 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e) {
-		DungeonDataManager.handleWorldLoad(e.getWorld());
-
 		if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == 0) {
 			LootTableLoader.registerCustomLootTables((WorldServer) e.getWorld());
 		}
 	}
 
 	@SubscribeEvent
-	public static void onWorldCreateSpawnpoint(WorldEvent.CreateSpawnPosition e) {
-		DungeonDataManager.handleWorldLoad(e.getWorld());
-	}
-
-	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
-		DungeonDataManager.handleWorldSave(e.getWorld());
 		FactionRegistry.instance(e.getWorld()).saveAllReputationData(false);
 	}
 
@@ -191,13 +182,6 @@ public class EventsHandler {
 		event.getRegistry().register(new RecipeCrownAttach());
 		event.getRegistry().register(new RecipeCrownDetach());
 		// event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
-	}
-
-	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload e) {
-		if (!e.getWorld().isRemote) {
-			DungeonDataManager.handleWorldUnload(e.getWorld());
-		}
 	}
 
 	@SubscribeEvent

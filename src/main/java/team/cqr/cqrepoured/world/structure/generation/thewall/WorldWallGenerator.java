@@ -1,7 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.thewall;
 
 import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -12,7 +11,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.generation.SpawnpointGenerationHandler;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
@@ -71,14 +69,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
 			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonBuilder);
 
-			if (DungeonGenerationManager.shouldGenerateDungeonImmediately(world)) {
-				DungeonGenerationManager.generateNow(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
-			} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
-				DungeonGenerationManager.generate(world, dungeonBuilder.build(world), null, DungeonSpawnType.DUNGEON_GENERATION);
-			} else {
-				CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, dungeonBuilder::build);
-				DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, null, DungeonSpawnType.DUNGEON_GENERATION));
-			}
+			DungeonGenerationManager.generate(world, dungeonBuilder, null, DungeonSpawnType.DUNGEON_GENERATION);
 		}
 	}
 

@@ -25,7 +25,6 @@ import team.cqr.cqrepoured.init.CQRBlocks;
 import team.cqr.cqrepoured.tileentity.TileEntityExporter;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager.DungeonSpawnType;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon.Builder;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.CQStructure;
@@ -81,8 +80,7 @@ public class CommandImport extends CommandBase {
 					BlockPos pos1 = pos.add(x, 0, z);
 					Builder builder = new Builder(world, pos1.add(2, 0, 2), "Import-" + f.getName(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName());
 					structure.addAll(builder, pos1.add(2, 0, 2), Offset.NORTH_EAST);
-					GeneratableDungeon dungeon = builder.build(world);
-					DungeonGenerationManager.generateNow(world, dungeon, null, DungeonSpawnType.DUNGEON_PLACER_ITEM);
+					DungeonGenerationManager.generate(world, builder, null, DungeonSpawnType.DUNGEON_PLACER_ITEM);
 
 					// place exporter
 					world.setBlockState(pos1, CQRBlocks.EXPORTER.getDefaultState());
