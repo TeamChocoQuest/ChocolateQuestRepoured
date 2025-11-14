@@ -30,7 +30,7 @@ public abstract class WorldServerMixin implements SpawnpointGenerationHandler, P
 	@Unique
 	private boolean isGeneratingDestinationChunks;
 
-	@Inject(method = "createSpawnPosition", at = @At(value = "FIELD", target = "findingSpawnPoint", ordinal = 1, shift = Shift.AFTER))
+	@Inject(method = "createSpawnPosition", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;findingSpawnPoint:Z", ordinal = 1, shift = Shift.AFTER))
 	private void createSpawnPosition(WorldSettings settings, CallbackInfo info) {
 		long worldSeed = ((WorldServer) (Object) this).getSeed();
 		Random fmlRandom = new Random(worldSeed);
