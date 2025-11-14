@@ -17,7 +17,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.PortalGeneratio
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
 
-	@Inject(method = "transferEntityToWorld(Lnet/minecraft/entity/Entity;ILnet/minecraft/world/WorldServer;Lnet/minecraft/world/WorldServer;Lnet/minecraftforge/common/util/ITeleporter;)V", remap = false, at = @At(value = "INVOKE", target = "setLocationAndAngles(DDDFF)V", ordinal = 1, shift = Shift.AFTER))
+	@Inject(method = "transferEntityToWorld(Lnet/minecraft/entity/Entity;ILnet/minecraft/world/WorldServer;Lnet/minecraft/world/WorldServer;Lnet/minecraftforge/common/util/ITeleporter;)V", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;setLocationAndAngles(DDDFF)V", remap = true, ordinal = 1, shift = Shift.AFTER))
 	private void transferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, ITeleporter teleporter, CallbackInfo info) {
 		if (entityIn instanceof EntityPlayer) {
 			int chunkX = MathHelper.floor(entityIn.posX) >> 4;
