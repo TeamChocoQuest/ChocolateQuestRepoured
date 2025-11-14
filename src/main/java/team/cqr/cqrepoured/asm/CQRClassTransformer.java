@@ -93,6 +93,33 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 					new InsnNode(Opcodes.ARETURN)
 			));
 		});
+
+
+		registry.addObf("net.minecraft.block.BlockFire", "updateTick", "func_180650_b", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+			LabelNode push = ASMUtil.first(methodNode).methodInsn("tryCatchFire").findThenPrev().type(LabelNode.class).find();
+			LabelNode pop = ASMUtil.next(methodNode, push).type(JumpInsnNode.class).find().label;
+
+			methodNode.instructions.insert(push, ASMUtil.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 1),
+					new VarInsnNode(Opcodes.ALOAD, 2),
+					new InsnNode(Opcodes.ACONST_NULL),
+					new InsnNode(Opcodes.ICONST_0),
+					new MethodInsnNode(Opcodes.INVOKESTATIC, "team/cqr/cqrepoured/world/structure/protection/ProtectedRegionHelper", "isFireSpreadingPrevented", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Z)Z", false),
+					new JumpInsnNode(Opcodes.IFNE, pop)
+			));
+		});
+		registry.add("net.minecraft.block.BlockFire", "tryCatchFire", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+			methodNode.instructions.insert(ASMUtil.listWithLabel(label -> ASMUtil.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 1),
+					new VarInsnNode(Opcodes.ALOAD, 2),
+					new InsnNode(Opcodes.ACONST_NULL),
+					new InsnNode(Opcodes.ICONST_0),
+					new MethodInsnNode(Opcodes.INVOKESTATIC, "team/cqr/cqrepoured/world/structure/protection/ProtectedRegionHelper", "isFireSpreadingPrevented", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Z)Z", false),
+					new JumpInsnNode(Opcodes.IFEQ, label),
+					new InsnNode(Opcodes.RETURN),
+					label
+			)));
+		});
 		// @formatter:on
 
 		this.changeCreatureAttributeOfEntity(registry, "net.minecraft.entity.boss.EntityDragon", "VOID");

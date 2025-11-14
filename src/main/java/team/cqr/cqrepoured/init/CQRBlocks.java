@@ -27,7 +27,6 @@ import team.cqr.cqrepoured.block.BlockExporter;
 import team.cqr.cqrepoured.block.BlockExporterChest;
 import team.cqr.cqrepoured.block.BlockExporterChestCQR;
 import team.cqr.cqrepoured.block.BlockExporterChestCustom;
-import team.cqr.cqrepoured.block.BlockFireCQR;
 import team.cqr.cqrepoured.block.BlockForceFieldNexus;
 import team.cqr.cqrepoured.block.BlockMapPlaceholder;
 import team.cqr.cqrepoured.block.BlockNull;
@@ -280,8 +279,6 @@ public class CQRBlocks {
 				registry.register(block);
 				BLOCKS.add(block);
 			}
-
-			registry.register(new BlockFireCQR());
 
 			registerTileEntities();
 		}
