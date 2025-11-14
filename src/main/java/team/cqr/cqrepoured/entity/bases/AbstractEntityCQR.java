@@ -123,6 +123,7 @@ import team.cqr.cqrepoured.faction.FactionRegistry;
 import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.init.CQRSounds;
 import team.cqr.cqrepoured.integration.ebwizardry.EntityAICastSpell;
+import team.cqr.cqrepoured.integration.rustic.Rustic;
 import team.cqr.cqrepoured.item.IFakeWeapon;
 import team.cqr.cqrepoured.item.ISupportWeapon;
 import team.cqr.cqrepoured.item.ItemBadge;
@@ -994,6 +995,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 
 			this.applyEnchantments(this, entityIn);
+
+			if (entityIn instanceof EntityLivingBase) {
+				Rustic.onMeleeAttack(this, EnumHand.MAIN_HAND, (EntityLivingBase) entityIn);
+			}
 		}
 
 		return flag;
