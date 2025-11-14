@@ -8,6 +8,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.util.Constants.BlockFlags;
+import team.cqr.cqrepoured.integration.fluidloggedapi.FluidloggedAPI;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.IntUtil;
 import team.cqr.cqrepoured.world.structure.generation.generation.ChunkInfo;
@@ -38,7 +40,7 @@ public class BlockAddedUtil {
 					IBlockState stateDown = y == 0 ? get(blockStorageDown, x, 15, z) : get(blockStorage, x, y - 1, z);
 					if (stateDown.getBlock() == Blocks.GRASS && state.getLightOpacity(world, MUTABLE) >= 12) {
 						MUTABLE.setY(MUTABLE.getY() - 1);
-						BlockPlacingHelper.setBlockState(world, chunk, y == 0 ? blockStorageDown : blockStorage, MUTABLE, Blocks.DIRT.getDefaultState(), null, 2);
+						BlockPlacingHelper.setBlockState(world, chunk, y == 0 ? blockStorageDown : blockStorage, MUTABLE, Blocks.DIRT.getDefaultState(), null, BlockFlags.SEND_TO_CLIENTS | BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG);
 					}
 				}
 			});

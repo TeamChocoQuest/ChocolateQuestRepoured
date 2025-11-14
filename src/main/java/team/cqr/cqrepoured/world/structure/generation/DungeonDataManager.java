@@ -1,13 +1,13 @@
 package team.cqr.cqrepoured.world.structure.generation;
 
 import java.io.File;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,9 +55,9 @@ public class DungeonDataManager {
 		DUNGEON_GENERATION, LOCKED_COORDINATE, DUNGEON_PLACER_ITEM;
 	}
 
-	private static final Map<World, DungeonDataManager> INSTANCES = Collections.synchronizedMap(new HashMap<>());
+	private static final Map<World, DungeonDataManager> INSTANCES = new HashMap<>();
 
-	private final Map<String, Set<DungeonInfo>> dungeonData = Collections.synchronizedMap(new HashMap<>());
+	private final SetMultimap<String, DungeonInfo> dungeonData = HashMultimap.create();
 	private final File file;
 	private boolean modifiedSinceLastSave = false;
 
@@ -70,66 +70,44 @@ public class DungeonDataManager {
 		}
 	}
 
-	@Nullable
-	public static DungeonDataManager getInstance(World world) {
-		if (!world.isRemote) {
-			return INSTANCES.get(world);
-		}
-		return null;
+	public static void onWorldLoad(World world) {
+		INSTANCES.computeIfAbsent(world, k -> {
+			DungeonDataManager v = new DungeonDataManager(k);
+			v.readData();
+			return v;
+		});
 	}
 
-	public static void handleWorldLoad(World world) {
-		if (!world.isRemote && !INSTANCES.containsKey(world)) {
-			INSTANCES.put(world, new DungeonDataManager(world));
-			INSTANCES.get(world).readData();
-		}
+	public static void onWorldSave(World world) {
+		INSTANCES.get(world).saveData();
 	}
 
-	public static void handleWorldSave(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
-		}
-	}
-
-	public static void handleWorldUnload(World world) {
-		if (!world.isRemote && INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).saveData();
-			INSTANCES.remove(world);
-		}
+	public static void onWorldUnload(World world) {
+		INSTANCES.get(world).saveData();
+		INSTANCES.remove(world);
 	}
 
 	public static void addDungeonEntry(World world, DungeonBase dungeon, BlockPos position, DungeonSpawnType spawnType) {
-		if (INSTANCES.containsKey(world)) {
-			INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
-		}
+		INSTANCES.get(world).addDungeonEntry(dungeon, position, spawnType);
 	}
 
 	public static Set<String> getSpawnedDungeonNames(World world) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).getSpawnedDungeonNames();
-		}
-		return Collections.emptySet();
+		return INSTANCES.get(world).getSpawnedDungeonNames();
 	}
 
 	public static Set<DungeonInfo> getLocationsOfDungeon(World world, DungeonBase dungeon) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
-		}
-		return Collections.emptySet();
+		return INSTANCES.get(world).getLocationsOfDungeon(dungeon);
 	}
 
 	public static boolean isDungeonSpawnLimitMet(World world, DungeonBase dungeon) {
-		if (INSTANCES.containsKey(world)) {
-			return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
-		}
-		return false;
+		return INSTANCES.get(world).isDungeonSpawnLimitMet(dungeon);
 	}
 
 	public void saveData() {
 		if (this.modifiedSinceLastSave) {
 			NBTTagCompound root = new NBTTagCompound();
-			for (Map.Entry<String, Set<DungeonInfo>> data : this.dungeonData.entrySet()) {
-				Set<DungeonInfo> dungeonInfos = data.getValue();
+			for (Map.Entry<String, Collection<DungeonInfo>> data : this.dungeonData.asMap().entrySet()) {
+				Collection<DungeonInfo> dungeonInfos = data.getValue();
 				if (!dungeonInfos.isEmpty()) {
 					NBTTagList nbtTagList = new NBTTagList();
 					for (DungeonInfo dungeonInfo : dungeonInfos) {
@@ -154,19 +132,14 @@ public class DungeonDataManager {
 		NBTTagCompound root = FileIOUtil.readNBTFromFile(this.file);
 
 		for (String key : root.getKeySet()) {
-			Set<DungeonInfo> dungeonInfos = new HashSet<>();
 			for (NBTBase nbt : root.getTagList(key, Constants.NBT.TAG_COMPOUND)) {
-				dungeonInfos.add(new DungeonInfo((NBTTagCompound) nbt));
-			}
-			if (!dungeonInfos.isEmpty()) {
-				this.dungeonData.put(key, dungeonInfos);
+				this.dungeonData.put(key, new DungeonInfo((NBTTagCompound) nbt));
 			}
 		}
 	}
 
 	private void addDungeonEntry(DungeonBase dungeon, BlockPos location, DungeonSpawnType spawnType) {
-		Set<DungeonInfo> spawnedLocs = this.dungeonData.computeIfAbsent(dungeon.getDungeonName(), key -> Collections.synchronizedSet(new HashSet<>()));
-		if (spawnedLocs.add(new DungeonInfo(location, spawnType))) {
+		if (this.dungeonData.put(dungeon.getDungeonName(), new DungeonInfo(location, spawnType))) {
 			this.modifiedSinceLastSave = true;
 		}
 	}
@@ -176,7 +149,7 @@ public class DungeonDataManager {
 	}
 
 	private Set<DungeonInfo> getLocationsOfDungeon(DungeonBase dungeon) {
-		return this.dungeonData.getOrDefault(dungeon.getDungeonName(), Collections.emptySet());
+		return this.dungeonData.get(dungeon.getDungeonName());
 	}
 
 	private boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {

@@ -23,7 +23,7 @@ public class EntityDungeonPart implements IDungeonPart {
 	@Override
 	public void generate(World world, GeneratableDungeon dungeon) {
 		for (GeneratableEntityInfo entity : this.entities) {
-			entity.generate(world, dungeon);
+			entity.spawn(world, dungeon);
 		}
 	}
 

@@ -8,6 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.util.Constants.BlockFlags;
+import team.cqr.cqrepoured.integration.fluidloggedapi.FluidloggedAPI;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
@@ -29,7 +31,7 @@ public class GeneratableBlockInfo extends GeneratablePosInfo {
 
 	@Override
 	protected boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		return BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, 16, dungeon);
+		return BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, this.state, this.tileEntity, BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG, dungeon);
 	}
 
 	public IBlockState getState() {

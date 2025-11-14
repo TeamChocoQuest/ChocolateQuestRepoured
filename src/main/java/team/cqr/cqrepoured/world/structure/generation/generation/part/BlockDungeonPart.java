@@ -14,7 +14,6 @@ import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
-import team.cqr.cqrepoured.world.structure.generation.generation.generatable.IGeneratable;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 
 public class BlockDungeonPart implements IDungeonPart, IProtectable {
@@ -66,7 +65,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 		return new BlockPos(maxX, maxY, maxZ);
 	}
 
-	public static class GeneratableChunkInfo implements IGeneratable {
+	private static class GeneratableChunkInfo {
 
 		private final int chunkX;
 		private final int chunkY;
@@ -80,7 +79,6 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			this.blocks = new ArrayList<>(blocks);
 		}
 
-		@Override
 		public void generate(World world, GeneratableDungeon dungeon) {
 			BlockPlacingHelper.setBlockStates(world, this.chunkX, this.chunkY, this.chunkZ, dungeon, (world1, chunk, blockStorage, dungeon1) -> {
 				boolean flag = false;
@@ -93,22 +91,6 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 				return flag;
 			});
 			this.blocks.clear();
-		}
-
-		public int getChunkX() {
-			return this.chunkX;
-		}
-
-		public int getChunkY() {
-			return this.chunkY;
-		}
-
-		public int getChunkZ() {
-			return this.chunkZ;
-		}
-
-		public Collection<GeneratablePosInfo> getBlocks() {
-			return Collections.unmodifiableCollection(this.blocks);
 		}
 
 	}

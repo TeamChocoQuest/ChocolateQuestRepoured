@@ -1,6 +1,7 @@
 plugins {
     id 'eclipse'
     id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
+    id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
 }
 
 version = "${mc_version}-${mod_version}"
@@ -41,6 +42,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    implementation "org.spongepowered:mixin:${mixin_version}"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     includedDependencies 'meldexun:ASMUtil:2.8.0@jar'
     includedDependencies 'meldexun:ReflectionUtil:1.0.0@jar'
@@ -86,6 +89,11 @@ minecraft {
     }
 }
 
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+}
+
 processResources {
     inputs.property('version', "${mod_version}")
 
@@ -103,6 +111,10 @@ jar {
         attributes 'FMLAT': 'accesstransformer.cfg'
         attributes 'FMLCorePlugin': "${mod_plugin_class}"
         attributes 'FMLCorePluginContainsFMLMod': 'true'
+        attributes 'ForceLoadAsMod': 'true'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': '0'
+        attributes 'MixinConfigs': "mixins.${mod_id}.json"
     }
 }
 

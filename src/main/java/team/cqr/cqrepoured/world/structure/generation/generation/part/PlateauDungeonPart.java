@@ -13,6 +13,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants.BlockFlags;
+import team.cqr.cqrepoured.integration.fluidloggedapi.FluidloggedAPI;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
@@ -69,12 +71,12 @@ public class PlateauDungeonPart implements IDungeonPart {
 
 				MUTABLE.setY(y);
 				while (MUTABLE.getY() < end - 1) {
-					BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, 16, dungeon);
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state1, null, BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG, dungeon);
 					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 					MUTABLE.setY(MUTABLE.getY() + 1);
 				}
 				if (MUTABLE.getY() < end) {
-					BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, 16, dungeon);
+					BlockPlacingHelper.setBlockState(world, MUTABLE, state2, null, BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG, dungeon);
 					dungeon.mark(MUTABLE.getX() >> 4, MUTABLE.getY() >> 4, MUTABLE.getZ() >> 4);
 				}
 			}

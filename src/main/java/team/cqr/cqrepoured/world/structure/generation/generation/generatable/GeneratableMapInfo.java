@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.storage.MapData;
+import net.minecraftforge.common.util.Constants.BlockFlags;
+import team.cqr.cqrepoured.integration.fluidloggedapi.FluidloggedAPI;
 import team.cqr.cqrepoured.util.BlockPlacingHelper;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
@@ -52,7 +54,7 @@ public class GeneratableMapInfo extends GeneratablePosInfo {
 
 	@Override
 	public boolean place(World world, Chunk chunk, ExtendedBlockStorage blockStorage, BlockPos pos, GeneratableDungeon dungeon) {
-		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, 16, dungeon);
+		boolean flag = BlockPlacingHelper.setBlockState(world, chunk, blockStorage, pos, Blocks.AIR.getDefaultState(), null, BlockFlags.NO_OBSERVERS | FluidloggedAPI.REPLACE_FLUID_FLAG, dungeon);
 		ItemStack stack = ItemMap.setupNewMap(world, this.mapX, this.mapZ, this.scale, true, true);
 		if (this.fillMap) {
 			updateMapData(world, this.mapOriginX, this.mapOriginZ, this.fillRadius, ((ItemMap) stack.getItem()).getMapData(stack, world));

@@ -6,7 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
-public class GeneratableEntityInfo implements IGeneratable {
+public class GeneratableEntityInfo {
 
 	private final Entity entity;
 
@@ -18,8 +18,7 @@ public class GeneratableEntityInfo implements IGeneratable {
 		this.entity = EntityList.createEntityFromNBT(compound, world);
 	}
 
-	@Override
-	public void generate(World world, GeneratableDungeon dungeon) {
+	public void spawn(World world, GeneratableDungeon dungeon) {
 		world.spawnEntity(this.entity);
 	}
 

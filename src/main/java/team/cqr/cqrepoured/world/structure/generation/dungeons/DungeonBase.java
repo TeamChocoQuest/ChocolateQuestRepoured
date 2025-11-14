@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
@@ -23,14 +22,12 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.event.world.structure.generation.DungeonPreparationExecutor;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 import team.cqr.cqrepoured.util.PropertyFileHelper;
 import team.cqr.cqrepoured.util.StructureHelper;
 import team.cqr.cqrepoured.world.structure.generation.DungeonDataManager;
 import team.cqr.cqrepoured.world.structure.generation.DungeonSpawnPos;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonGenerationManager;
-import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generators.AbstractDungeonGenerator;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitantManager;
 
@@ -142,8 +139,8 @@ public abstract class DungeonBase {
 
 	public abstract AbstractDungeonGenerator<?> createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType);
 
-	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType, generateImmediately);
+	public void generate(World world, int x, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		this.generate(world, x, this.getYForPos(world, x, z, rand), z, rand, spawnType);
 	}
 
 	public int getYForPos(World world, int x, int z, Random rand) {
@@ -168,25 +165,16 @@ public abstract class DungeonBase {
 		return y;
 	}
 
-	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
-		AbstractDungeonGenerator<?> generator = this.createDungeonGenerator(world, x, y, z, rand, spawnType);
-
-		if (generateImmediately) {
-			DungeonGenerationManager.generateNow(world, generator.get(), this, spawnType);
-		} else if (!CQRConfig.advanced.multithreadedDungeonPreparation) {
-			DungeonGenerationManager.generate(world, generator.get(), this, spawnType);
-		} else {
-			CompletableFuture<GeneratableDungeon> future = DungeonPreparationExecutor.supplyAsync(world, generator);
-			DungeonPreparationExecutor.thenAcceptAsync(world, future, generatable -> DungeonGenerationManager.generate(world, generatable, this, spawnType));
-		}
+	public void generate(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
+		DungeonGenerationManager.generate(world, this.createDungeonGenerator(world, x, y, z, rand, spawnType), this, spawnType);
 	}
 
-	public void generateWithOffsets(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType, boolean generateImmediately) {
+	public void generateWithOffsets(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		if (!this.fixedY) {
 			y += DungeonGenUtils.randomBetween(this.yOffsetMin, this.yOffsetMax, rand);
 		}
 		y -= this.getUnderGroundOffset();
-		this.generate(world, x, y, z, rand, spawnType, generateImmediately);
+		this.generate(world, x, y, z, rand, spawnType);
 	}
 
 	@Nullable

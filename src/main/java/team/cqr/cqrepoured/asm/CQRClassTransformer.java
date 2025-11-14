@@ -24,7 +24,7 @@ import meldexun.asmutil2.NonLoadingClassWriter;
 import meldexun.asmutil2.reader.ClassUtil;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import team.cqr.cqrepoured.asm.util.DeobfuscationUtil;
 
 public class CQRClassTransformer extends HashMapClassNodeClassTransformer implements IClassTransformer {
 
@@ -64,7 +64,7 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 			methodNode.instructions.insert(ASMUtil.listOf(
 					// PathPoint point = this.points[index];
 					new VarInsnNode(Opcodes.ALOAD, 0),
-					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/Path", "field_75884_a", "[Lnet/minecraft/pathfinding/PathPoint;"), // points
+					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/Path", "field_75884_a", "[Lnet/minecraft/pathfinding/PathPoint;"), // points
 					new VarInsnNode(Opcodes.ILOAD, 2),
 					new InsnNode(Opcodes.AALOAD),
 					new VarInsnNode(Opcodes.ASTORE, 3),
@@ -74,17 +74,17 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 					new InsnNode(Opcodes.DUP),
 					
 					new VarInsnNode(Opcodes.ALOAD, 3),
-					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75839_a", "I"), // x
+					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75839_a", "I"), // x
 					new InsnNode(Opcodes.I2D),
 					new LdcInsnNode(0.5D),
 					new InsnNode(Opcodes.DADD),
 					
 					new VarInsnNode(Opcodes.ALOAD, 3),
-					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75837_b", "I"), // y
+					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75837_b", "I"), // y
 					new InsnNode(Opcodes.I2D),
 					
 					new VarInsnNode(Opcodes.ALOAD, 3),
-					CQRClassTransformer.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75838_c", "I"), // z
+					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75838_c", "I"), // z
 					new InsnNode(Opcodes.I2D),
 					new LdcInsnNode(0.5D),
 					new InsnNode(Opcodes.DADD),
@@ -92,6 +92,33 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 					new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/util/math/Vec3d", "<init>", "(DDD)V", false),
 					new InsnNode(Opcodes.ARETURN)
 			));
+		});
+
+
+		registry.addObf("net.minecraft.block.BlockFire", "updateTick", "func_180650_b", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+			LabelNode push = ASMUtil.first(methodNode).methodInsn("tryCatchFire").findThenPrev().type(LabelNode.class).find();
+			LabelNode pop = ASMUtil.next(methodNode, push).type(JumpInsnNode.class).find().label;
+
+			methodNode.instructions.insert(push, ASMUtil.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 1),
+					new VarInsnNode(Opcodes.ALOAD, 2),
+					new InsnNode(Opcodes.ACONST_NULL),
+					new InsnNode(Opcodes.ICONST_0),
+					new MethodInsnNode(Opcodes.INVOKESTATIC, "team/cqr/cqrepoured/world/structure/protection/ProtectedRegionHelper", "isFireSpreadingPrevented", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Z)Z", false),
+					new JumpInsnNode(Opcodes.IFNE, pop)
+			));
+		});
+		registry.add("net.minecraft.block.BlockFire", "tryCatchFire", ClassWriter.COMPUTE_FRAMES, methodNode -> {
+			methodNode.instructions.insert(ASMUtil.listWithLabel(label -> ASMUtil.listOf(
+					new VarInsnNode(Opcodes.ALOAD, 1),
+					new VarInsnNode(Opcodes.ALOAD, 2),
+					new InsnNode(Opcodes.ACONST_NULL),
+					new InsnNode(Opcodes.ICONST_0),
+					new MethodInsnNode(Opcodes.INVOKESTATIC, "team/cqr/cqrepoured/world/structure/protection/ProtectedRegionHelper", "isFireSpreadingPrevented", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Z)Z", false),
+					new JumpInsnNode(Opcodes.IFEQ, label),
+					new InsnNode(Opcodes.RETURN),
+					label
+			)));
 		});
 		// @formatter:on
 
@@ -103,7 +130,7 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	protected void changeCreatureAttributeOfEntity(IClassTransformerRegistry registry, String className, String creatureAttributeName) {
 		// @formatter:off
 		registry.add(className, ClassWriter.COMPUTE_FRAMES, classNode -> {
-			MethodNode m_getCreatureAttribute = CQRClassTransformer.createObfMethod(classNode.name, Opcodes.ACC_PUBLIC, "func_70668_bt", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null); // getCreatureAttribute
+			MethodNode m_getCreatureAttribute = DeobfuscationUtil.createObfMethod(classNode.name, Opcodes.ACC_PUBLIC, "func_70668_bt", "()Lnet/minecraft/entity/EnumCreatureAttribute;", null, null); // getCreatureAttribute
 			m_getCreatureAttribute.instructions.insert(ASMUtil.listOf(
 					new FieldInsnNode(Opcodes.GETSTATIC, "team/cqr/cqrepoured/init/CQRCreatureAttributes", creatureAttributeName, "Lnet/minecraft/entity/EnumCreatureAttribute;"),
 					new InsnNode(Opcodes.ARETURN)
@@ -111,14 +138,6 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 			classNode.methods.add(m_getCreatureAttribute);
 		});
 		// @formatter:on
-	}
-
-	private static MethodNode createObfMethod(String owner, int access, String name, String desc, String signature, String[] exceptions) {
-		return new MethodNode(access, FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(owner, name, desc), desc, signature, exceptions);
-	}
-
-	public static FieldInsnNode createObfFieldInsn(int opcode, String owner, String name, String desc) {
-		return new FieldInsnNode(opcode, owner, FMLDeobfuscatingRemapper.INSTANCE.mapFieldName(owner, name, desc), desc);
 	}
 
 	@Override
