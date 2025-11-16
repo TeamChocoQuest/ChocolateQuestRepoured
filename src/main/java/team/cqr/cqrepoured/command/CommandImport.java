@@ -1,16 +1,14 @@
 package team.cqr.cqrepoured.command;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -44,65 +42,68 @@ public class CommandImport extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		boolean importMode = CQRConfig.advanced.structureImportMode;
-		CQRConfig.advanced.structureImportMode = true;
 		try {
-			List<File> allFiles = new ArrayList<>();
-			Map<File, List<File>> dir2file = new HashMap<>();
-			try (Stream<Path> stream = Files.list(CQRMain.CQ_STRUCTURE_FILES_FOLDER.toPath())) {
-				stream.map(Path::toFile).filter(File::isDirectory).forEach(dir -> {
-					for (File f : FileUtils.listFiles(dir, new String[] { "nbt" }, true)) {
-						if (allFiles.stream().anyMatch(f1 -> f1.getName().equals(f.getName()) && f1.length() == f.length())) {
-							CQRMain.logger.info("Duplicate: {}", f);
-							continue;
-						}
-						allFiles.add(f);
-						dir2file.computeIfAbsent(dir, k -> new ArrayList<>()).add(f);
-					}
-				});
-			}
-
 			World world = sender.getEntityWorld();
-			BlockPos pos = sender.getPosition();
-			int z = 0;
-			for (Entry<File, List<File>> e : dir2file.entrySet()) {
-				int maxSizeZ = 0;
-				int x = 0;
-				for (File f : e.getValue()) {
-					if (x >= 1024) {
-						z += maxSizeZ + 10;
-						maxSizeZ = 0;
-						x = 0;
+			BlockPos pos = sender.getPosition().add(2, 0, 2);
+
+			Map<Path, List<Path>> fileMap = Files.find(CQRMain.CQ_STRUCTURE_FILES_FOLDER.toPath(), Integer.MAX_VALUE, (p, a) -> a.isRegularFile() && p.getFileName().toString().endsWith(".nbt"))
+					.collect(Collectors.groupingBy(Path::getParent, LinkedHashMap::new, Collectors.toList()));
+
+			boolean importMode = CQRConfig.advanced.structureImportMode;
+			AtomicInteger importModeModifications = new AtomicInteger();
+			AtomicInteger z = new AtomicInteger();
+			fileMap.values().forEach(files -> {
+				AtomicInteger maxSizeZ = new AtomicInteger();
+				AtomicInteger x = new AtomicInteger();
+
+				files.forEach(file -> {
+					CQStructure structure = CQStructure.createFromFile(file.toFile());
+					if (x.get() != 0 && x.get() + structure.getSize().getX() > 1024) {
+						z.getAndAdd(maxSizeZ.get() + 10);
+						maxSizeZ.set(0);
+						x.set(0);
 					}
-					CQStructure structure = CQStructure.createFromFile(f);
+					BlockPos structurePos = pos.add(x.get(), 0, z.get());
 
 					// place structure
-					BlockPos pos1 = pos.add(x, 0, z);
-					Builder builder = new Builder(world, pos1.add(2, 0, 2), "Import-" + f.getName(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName());
-					structure.addAll(builder, pos1.add(2, 0, 2), Offset.NORTH_EAST);
-					DungeonGenerationManager.generate(world, builder, null, DungeonSpawnType.DUNGEON_PLACER_ITEM);
+					DungeonGenerationManager.generate(world, () -> {
+						synchronized (importModeModifications) {
+							importModeModifications.getAndIncrement();
+							CQRConfig.advanced.structureImportMode = true;
+						}
+						try {
+							Builder builder = new Builder(world, structurePos.add(2, 0, 2), "Import-" + file.getFileName().toString(), DungeonInhabitantManager.DEFAULT_DUNGEON_INHABITANT.getName());
+							structure.addAll(builder, structurePos.add(2, 0, 2), Offset.NORTH_EAST);
+							return builder.build(world);
+						} finally {
+							synchronized (importModeModifications) {
+								if (importModeModifications.decrementAndGet() == 0) {
+									CQRConfig.advanced.structureImportMode = importMode;
+								}
+							}
+						}
+					}, null, DungeonSpawnType.DUNGEON_PLACER_ITEM);
 
 					// place exporter
-					world.setBlockState(pos1, CQRBlocks.EXPORTER.getDefaultState());
-					TileEntityExporter exporter = (TileEntityExporter) world.getTileEntity(pos1);
-					String s1 = CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath();
-					String s2 = f.getAbsolutePath();
-					String s3 = s2.substring(s1.length() + 1, s2.lastIndexOf('.'));
-					BlockPos[] unprot = structure.getUnprotectedBlockList().toArray(new BlockPos[0]);
-					exporter.setValues(s3, new BlockPos(2, 0, 2), new BlockPos(1, -1, 1).add(structure.getSize()), true, true, unprot);
+					world.setBlockState(structurePos, CQRBlocks.EXPORTER.getDefaultState());
+					TileEntityExporter exporter = (TileEntityExporter) world.getTileEntity(structurePos);
+					String structureName = StringUtils.removeEnd(CQRMain.CQ_STRUCTURE_FILES_FOLDER.toPath().relativize(file).toString(), ".nbt");
+					BlockPos[] unprotectedBlocks = structure.getUnprotectedBlockList().toArray(new BlockPos[0]);
+					exporter.setValues(structureName, new BlockPos(2, 0, 2), new BlockPos(1, -1, 1).add(structure.getSize()), true, true, unprotectedBlocks);
 
-					maxSizeZ = Math.max(structure.getSize().getZ(), maxSizeZ);
-					x += structure.getSize().getX() + 10;
-				}
-				z += maxSizeZ + 30;
-			}
+					if (structure.getSize().getZ() > maxSizeZ.get()) {
+						maxSizeZ.set(structure.getSize().getZ());
+					}
+					x.getAndAdd(structure.getSize().getX() + 10);
+				});
 
-			sender.sendMessage(new TextComponentString("Imported " + allFiles.size() + " structures successfully"));
+				z.getAndAdd(maxSizeZ.get() + 30);
+			});
+
+			sender.sendMessage(new TextComponentString("Imported " + fileMap.values().stream().flatMap(List::stream).count() + " structures successfully"));
 		} catch (Exception e) {
 			CQRMain.logger.error("Failed importing structures!", e);
 			throw new CommandException("Failed importing structures: %s", e);
-		} finally {
-			CQRConfig.advanced.structureImportMode = importMode;
 		}
 	}
 
