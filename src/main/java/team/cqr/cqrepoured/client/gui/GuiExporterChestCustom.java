@@ -20,6 +20,7 @@ public class GuiExporterChestCustom extends GuiScreen {
 	@Override
 	public void initGui() {
 		this.lootTableTextField = new GuiTextField(0, this.fontRenderer, this.width / 2 - 70, this.height / 2 - 70, 140, 20);
+		this.lootTableTextField.setMaxStringLength(256);
 		this.lootTableTextField.setText(this.tileEntity.getLootTable().toString());
 	}
 
