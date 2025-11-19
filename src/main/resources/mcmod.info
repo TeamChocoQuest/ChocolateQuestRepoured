@@ -8,7 +8,7 @@
     "url": "https://cq-repoured.net/",
     "authorList": [
       "ArloTheEpic (Project Manager)",
-      "DerToaster (Lead Coder)",
+      "DerToaster (Former lead developer)",
       "Meldexun (Lead Coder)",
       "KalgogSmash (Coder - Randomized Castles)",
       "jdawg3636 (Coder)",
@@ -17,7 +17,7 @@
       "Sir Squidly (Artist - Models, Textures)",
       "Silentine (Artist - Models, Textures)",
       "Pion Steam (Artist - Sounds)",
-      "FPiece (Builder - Renovated versions of some old structures)"
+      "FPiece (Builder - Renovated versions of the old structures)"
     ],
     "credits": "Everyone who made dungeons, videos, or other content using CQR. Also, huge thanks to McHorse, who helped a lot in getting GeckoLib and other rendering-related stuff to work.",
     "logoFile": "assets/cqrepoured/logo.png",
