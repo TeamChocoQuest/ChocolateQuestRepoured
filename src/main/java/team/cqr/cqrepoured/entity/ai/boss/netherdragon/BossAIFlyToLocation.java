@@ -1,5 +1,6 @@
 package team.cqr.cqrepoured.entity.ai.boss.netherdragon;
 
+import javax.annotation.Nullable;
 import net.minecraft.util.math.Vec3d;
 import team.cqr.cqrepoured.entity.ai.AbstractCQREntityAI;
 import team.cqr.cqrepoured.entity.boss.netherdragon.EntityCQRNetherDragon;
@@ -22,9 +23,10 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && this.entity.getPositionVector().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
+		return super.shouldContinueExecuting() && this.getTargetLocation() != null && this.entity.getPositionVector().distanceTo(this.getTargetLocation()) > MIN_DISTANCE_TO_REACH;
 	}
 
+	@Nullable
 	protected Vec3d getTargetLocation() {
 		return this.entity.getTargetLocation();
 	}
@@ -32,6 +34,9 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 	@Override
 	public void updateTask() {
 		super.updateTask();
+		if (this.getTargetLocation() == null) {
+			return;
+		}
 		if (this.cooldown <= 0) {
 			this.cooldown = 10;
 			this.entity.getNavigator().tryMoveToXYZ(this.getTargetLocation().x, this.getTargetLocation().y, this.getTargetLocation().z, this.getMovementSpeed());
