@@ -49,7 +49,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		}
 		// Phylactery
 		if (this.currentPhylacteryPosition != null) {
-			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == CQRBlocks.PHYLACTERY) {
+			if (this.hasPhylactery()) {
 				this.setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
