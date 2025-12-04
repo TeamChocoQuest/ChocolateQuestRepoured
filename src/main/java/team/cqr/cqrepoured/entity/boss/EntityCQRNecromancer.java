@@ -107,9 +107,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (!this.world.isRemote && this.getHealth() <= this.getMaxHealth() / 2) {
 			if (source.isProjectile() || source.getImmediateSource() instanceof EntityArrow || source.getImmediateSource() instanceof IProjectile) {
-				// Toaster: Change shield to instead of being 100% blocking, to still allow a little damage
-				amount *= 0.75;
-				//return false;
+				amount = 0;
+				return false;
 			}
 		}
 		return super.attackEntityFrom(source, amount);
