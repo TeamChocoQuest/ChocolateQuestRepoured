@@ -46,41 +46,6 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	@Override
 	protected void registerTransformers(IClassTransformerRegistry registry) {
 		// @formatter:off
-		registry.addObf("net.minecraft.pathfinding.Path", "getVectorFromIndex", "func_75881_a", "(Lnet/minecraft/entity/Entity;I)Lnet/minecraft/util/math/Vec3d;", ClassWriter.COMPUTE_FRAMES, methodNode -> {
-			methodNode.instructions.insert(ASMUtil.listOf(
-					// PathPoint point = this.points[index];
-					new VarInsnNode(Opcodes.ALOAD, 0),
-					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/Path", "field_75884_a", "[Lnet/minecraft/pathfinding/PathPoint;"), // points
-					new VarInsnNode(Opcodes.ILOAD, 2),
-					new InsnNode(Opcodes.AALOAD),
-					new VarInsnNode(Opcodes.ASTORE, 3),
-					
-					// return new Vec3d(point.x + 0.5, point.y, point.z + 0.5);
-					new TypeInsnNode(Opcodes.NEW, "net/minecraft/util/math/Vec3d"),
-					new InsnNode(Opcodes.DUP),
-					
-					new VarInsnNode(Opcodes.ALOAD, 3),
-					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75839_a", "I"), // x
-					new InsnNode(Opcodes.I2D),
-					new LdcInsnNode(0.5D),
-					new InsnNode(Opcodes.DADD),
-					
-					new VarInsnNode(Opcodes.ALOAD, 3),
-					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75837_b", "I"), // y
-					new InsnNode(Opcodes.I2D),
-					
-					new VarInsnNode(Opcodes.ALOAD, 3),
-					DeobfuscationUtil.createObfFieldInsn(Opcodes.GETFIELD, "net/minecraft/pathfinding/PathPoint", "field_75838_c", "I"), // z
-					new InsnNode(Opcodes.I2D),
-					new LdcInsnNode(0.5D),
-					new InsnNode(Opcodes.DADD),
-					
-					new MethodInsnNode(Opcodes.INVOKESPECIAL, "net/minecraft/util/math/Vec3d", "<init>", "(DDD)V", false),
-					new InsnNode(Opcodes.ARETURN)
-			));
-		});
-
-
 		registry.addObf("net.minecraft.block.BlockFire", "updateTick", "func_180650_b", ClassWriter.COMPUTE_FRAMES, methodNode -> {
 			LabelNode push = ASMUtil.first(methodNode).methodInsn("tryCatchFire").findThenPrev().type(LabelNode.class).find();
 			LabelNode pop = ASMUtil.next(methodNode, push).type(JumpInsnNode.class).find().label;

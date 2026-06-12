@@ -6,6 +6,7 @@
   "refmap": "mixins.cqrepoured.refmap.json",
   "mixins": [
     "EntityPotionMixin",
+    "PathMixin",
     "PlayerListMixin",
     "WorldServerMixin"
   ],
