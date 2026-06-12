@@ -46,20 +46,6 @@ public class CQRClassTransformer extends HashMapClassNodeClassTransformer implem
 	@Override
 	protected void registerTransformers(IClassTransformerRegistry registry) {
 		// @formatter:off
-		registry.addObf("net.minecraft.entity.projectile.EntityPotion", "isWaterSensitiveEntity", "func_190544_c", "(Lnet/minecraft/entity/EntityLivingBase;)Z", ClassWriter.COMPUTE_FRAMES, methodNode -> {
-			AbstractInsnNode popNode1 = new LabelNode();
-
-			methodNode.instructions.insert(ASMUtil.listOf(
-					// if (entity instanceof IMechanical) return true;
-					new VarInsnNode(Opcodes.ALOAD, 0),
-					new TypeInsnNode(Opcodes.INSTANCEOF, "team/cqr/cqrepoured/entity/IMechanical"),
-					new JumpInsnNode(Opcodes.IFEQ, (LabelNode) popNode1),
-					new InsnNode(Opcodes.ICONST_1),
-					new InsnNode(Opcodes.IRETURN),
-					popNode1
-			));
-		});
-
 		registry.addObf("net.minecraft.pathfinding.Path", "getVectorFromIndex", "func_75881_a", "(Lnet/minecraft/entity/Entity;I)Lnet/minecraft/util/math/Vec3d;", ClassWriter.COMPUTE_FRAMES, methodNode -> {
 			methodNode.instructions.insert(ASMUtil.listOf(
 					// PathPoint point = this.points[index];

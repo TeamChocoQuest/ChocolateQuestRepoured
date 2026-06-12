@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "mixins.cqrepoured.refmap.json",
   "mixins": [
+    "EntityPotionMixin",
     "PlayerListMixin",
     "WorldServerMixin"
   ],
