@@ -67,14 +67,13 @@ public class StructureUpper {
 		BlockPos size = structure.getSize();
 		PreparablePosInfo[][][] blocks = structure.getBlocks();
 		MutableBlockPos pos = new MutableBlockPos();
-		PreparablePosInfo emptyInfo = PreparableEmptyInfo.INSTANCE;
-		for (int x = 0; x < size.getX(); x++) {
+        for (int x = 0; x < size.getX(); x++) {
 			for (int y = 0; y < size.getY(); y++) {
 				for (int z = 0; z < size.getZ(); z++) {
 					pos.setPos(x, y, z);
 					PreparablePosInfo block = blocks != null ? blocks[x][y][z] : null;
 					if (block == null) {
-						block = emptyInfo;
+						block = PreparableEmptyInfo.INSTANCE;
 					}
 					Class<? extends PreparablePosInfo> blockClass = block.getClass();
 					if (blockClass == PreparableEmptyInfo.class) {

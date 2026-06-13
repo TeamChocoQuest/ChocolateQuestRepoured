@@ -417,10 +417,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			PreparablePosInfo info = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
-			if (!(info instanceof PreparableEmptyInfo)) {
-				this.blocks[x][y][z] = info;
-			}
+            this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
 			if (x < this.size.getX() - 1) {
 				x++;
 			} else if (y < this.size.getY() - 1) {
@@ -438,10 +435,10 @@ public class CQStructure {
 			NBTTagCompound tag = (NBTTagCompound) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
 				NBTTagList pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				PreparablePosInfo info = PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
-				if (!(info instanceof PreparableEmptyInfo)) {
-					this.blocks[pos.getIntAt(0)][pos.getIntAt(1)][pos.getIntAt(2)] = info;
-				}
+				x = pos.getIntAt(0);
+				y = pos.getIntAt(1);
+				z = pos.getIntAt(2);
+                this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
 			}
 		}
 
