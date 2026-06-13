@@ -19,8 +19,9 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
+	public static final PreparableForceFieldNexusInfo INSTANCE = new PreparableForceFieldNexusInfo();
 
-	public PreparableForceFieldNexusInfo() {
+	protected PreparableForceFieldNexusInfo() {
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
-			return new PreparableForceFieldNexusInfo();
+			return INSTANCE;
 		}
 
 	}
@@ -56,13 +57,13 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableForceFieldNexusInfo();
+			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
 		public PreparableForceFieldNexusInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableForceFieldNexusInfo();
+			return INSTANCE;
 		}
 
 	}

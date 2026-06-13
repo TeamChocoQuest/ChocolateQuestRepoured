@@ -1,10 +1,13 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -121,6 +124,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	}
 
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
+		/**
+		 * Cache {@link PreparableBlockInfo} with {@link Block#getDefaultState()} and null {@code tileEntityData}
+		 */
+		private final Map<Block, PreparableBlockInfo> simpleBlockCache = new ConcurrentHashMap<>();
 
 		@Override
 		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
@@ -139,6 +146,9 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			NBTTagCompound tileEntityData = null;
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
+			}
+			if (tileEntityData == null && state != null && state.equals(state.getBlock().getDefaultState())) {
+				return simpleBlockCache.computeIfAbsent(state.getBlock(), b -> new PreparableBlockInfo(b.getDefaultState(), null));
 			}
 			return new PreparableBlockInfo(state, tileEntityData);
 		}

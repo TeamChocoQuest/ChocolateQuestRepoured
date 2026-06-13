@@ -19,6 +19,10 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableTNTCQRInfo extends PreparablePosInfo {
+	public static final PreparableTNTCQRInfo INSTANCE = new PreparableTNTCQRInfo();
+
+	protected PreparableTNTCQRInfo() {
+	}
 
 	@Override
 	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
@@ -34,7 +38,7 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableTNTCQRInfo();
+			return INSTANCE;
 		}
 
 	}
@@ -48,13 +52,13 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparableTNTCQRInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableTNTCQRInfo();
+			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
 		public PreparableTNTCQRInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableTNTCQRInfo();
+			return INSTANCE;
 		}
 
 	}
