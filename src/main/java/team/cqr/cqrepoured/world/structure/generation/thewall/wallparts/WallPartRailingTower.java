@@ -31,6 +31,9 @@ public class WallPartRailingTower implements IWallPart {
 		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 		IBlockState stateAir = Blocks.AIR.getDefaultState();
 
+		PreparableBlockInfo stairBlock = new PreparableBlockInfo(stateBlock, null);
+		PreparableBlockInfo airBlock = new PreparableBlockInfo(stateAir, null);
+
 		int[] xValues = new int[] { 0, 1, 6, 7 };
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 		for (int y = 0; y < 8; y++) {
@@ -38,12 +41,12 @@ public class WallPartRailingTower implements IWallPart {
 				for (int x : xValues) {
 					if (this.isBiggerPart(x)) {
 						if (y >= 3 || z == 3 || z == 12) {
-							partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
-							partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2, y, z), stairBlock);
+							partBuilder.add(new BlockPos(x * 2 + 1, y, z), stairBlock);
 						}
 					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
-						partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
-						partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2, y, z), stairBlock);
+						partBuilder.add(new BlockPos(x * 2 + 1, y, z), stairBlock);
 					}
 				}
 			}
@@ -54,7 +57,7 @@ public class WallPartRailingTower implements IWallPart {
 			for (int z = 6; z <= 9; z++) {
 				for (int x = 4; x <= 11; x++) {
 					if (y < 9 || z == 7 || z == 8) {
-						partBuilder.add(new BlockPos(x, y, z), new PreparableBlockInfo(stateAir, null));
+						partBuilder.add(new BlockPos(x, y, z), airBlock);
 					}
 				}
 			}

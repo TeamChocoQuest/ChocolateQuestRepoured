@@ -46,18 +46,20 @@ public class WallPartRailingWall implements IWallPart {
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 
+		PreparableBlockInfo stoneSlabBlock = new PreparableBlockInfo(stateBlock, null);
+
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 		for (int y = 0; y < 8; y++) {
 			for (int z : zValues) {
 				for (int x = 0; x < 8; x++) {
 					if (this.isBiggerPart(x)) {
 						if (y >= 3 || z == 3 || z == 12) {
-							partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
-							partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2, y, z), stoneSlabBlock);
+							partBuilder.add(new BlockPos(x * 2 + 1, y, z), stoneSlabBlock);
 						}
 					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
-						partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
-						partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2, y, z), stoneSlabBlock);
+						partBuilder.add(new BlockPos(x * 2 + 1, y, z), stoneSlabBlock);
 					}
 				}
 			}
