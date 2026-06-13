@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -151,10 +152,6 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 
 		private final List<InfoPosEntry> blocks = new ArrayList<>();
 
-		public Builder add(PreparablePosInfo block) {
-			throw new UnsupportedOperationException("Use add(int,int,int,PreparablePosInfo) instead");
-		}
-
 		public Builder add(BlockPos pos, PreparablePosInfo block) {
 			return add(pos.getX(), pos.getY(), pos.getZ(), block);
 		}
@@ -164,8 +161,9 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			return this;
 		}
 
-		public Builder addAll(Collection<? extends PreparablePosInfo> blocks) {
-			throw new UnsupportedOperationException("Use add(int,int,int,PreparablePosInfo) for each block instead");
+		public Builder addAll(Map<? extends BlockPos, ? extends PreparablePosInfo> blocks) {
+			blocks.forEach(this::add);
+			return this;
 		}
 
 		public Builder addAll(PreparablePosInfo[][][] blocks, BlockPos size) {
