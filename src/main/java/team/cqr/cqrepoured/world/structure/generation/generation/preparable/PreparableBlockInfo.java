@@ -29,18 +29,13 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	@Nullable
 	private final NBTTagCompound tileEntityData;
 
-	public PreparableBlockInfo(BlockPos pos, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		this(pos.getX(), pos.getY(), pos.getZ(), state, tileEntityData);
-	}
-
-	public PreparableBlockInfo(int x, int y, int z, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		super(x, y, z);
+	public PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		this.state = state;
 		this.tileEntityData = tileEntityData;
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = null;
 
@@ -120,7 +115,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+			return new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
 	}
@@ -145,7 +140,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			}
-			return new PreparableBlockInfo(x, y, z, state, tileEntityData);
+			return new PreparableBlockInfo(state, tileEntityData);
 		}
 
 		@Override
@@ -157,7 +152,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if (intArray.length > 2) {
 				tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			}
-			return new PreparableBlockInfo(x, y, z, state, tileEntityData);
+			return new PreparableBlockInfo(state, tileEntityData);
 		}
 
 	}

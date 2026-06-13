@@ -76,7 +76,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	@Override
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonRandomizedCastle dungeon, ResourceLocation bossResourceLocation, List<String> bossUuids) {
 		BlockPos pos = this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
-		genArray.addInternal(BlockStateGenArray.GenerationPhase.POST, new PreparableBossInfo(pos, (NBTTagCompound) null), BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addInternal(BlockStateGenArray.GenerationPhase.POST, pos, new PreparableBossInfo((NBTTagCompound) null), BlockStateGenArray.EnumPriority.MEDIUM);
 	}
 
 	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {

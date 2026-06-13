@@ -44,29 +44,16 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 
 	private final NBTTagCompound tileEntityData;
 
-	public PreparableSpawnerInfo(BlockPos pos, NBTTagCompound tileEntityData) {
-		this(pos.getX(), pos.getY(), pos.getZ(), tileEntityData);
-	}
-
-	public PreparableSpawnerInfo(int x, int y, int z, NBTTagCompound tileEntityData) {
-		super(x, y, z);
+	public PreparableSpawnerInfo(NBTTagCompound tileEntityData) {
 		this.tileEntityData = tileEntityData;
 	}
 
-	public PreparableSpawnerInfo(BlockPos pos, Collection<Entity> entities) {
-		this(pos.getX(), pos.getY(), pos.getZ(), getNBTTagCompoundFromEntityList(entities.toArray(new Entity[0])));
+	public PreparableSpawnerInfo(Collection<Entity> entities) {
+		this(getNBTTagCompoundFromEntityList(entities.toArray(new Entity[0])));
 	}
 
-	public PreparableSpawnerInfo(int x, int y, int z, Collection<Entity> entities) {
-		this(x, y, z, getNBTTagCompoundFromEntityList(entities.toArray(new Entity[0])));
-	}
-
-	public PreparableSpawnerInfo(BlockPos pos, Entity... entities) {
-		this(pos.getX(), pos.getY(), pos.getZ(), getNBTTagCompoundFromEntityList(entities));
-	}
-
-	public PreparableSpawnerInfo(int x, int y, int z, Entity... entities) {
-		this(x, y, z, getNBTTagCompoundFromEntityList(entities));
+	public PreparableSpawnerInfo(Entity... entities) {
+		this(getNBTTagCompoundFromEntityList(entities));
 	}
 
 	private static NBTTagCompound getNBTTagCompoundFromEntityList(Entity... entities) {
@@ -80,7 +67,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState state;
 		TileEntity tileEntity;
 		BlockPos p = pos.toImmutable();
@@ -265,7 +252,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntitySpawner> tileEntitySupplier) {
 			TileEntitySpawner tileEntity = tileEntitySupplier.get();
-			return new PreparableSpawnerInfo(x, y, z, getNBTFromTileEntity(world, tileEntity.getPos(), tileEntity));
+			return new PreparableSpawnerInfo(getNBTFromTileEntity(world, tileEntity.getPos(), tileEntity));
 		}
 
 		private static NBTTagCompound getNBTFromTileEntity(World world, BlockPos pos, TileEntitySpawner tileEntity) {
@@ -317,7 +304,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		@Override
 		public PreparableSpawnerInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
-			return new PreparableSpawnerInfo(x, y, z, tileEntityData);
+			return new PreparableSpawnerInfo(tileEntityData);
 		}
 
 		@Override
@@ -325,7 +312,7 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		public PreparableSpawnerInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
-			return new PreparableSpawnerInfo(x, y, z, tileEntityData);
+			return new PreparableSpawnerInfo(tileEntityData);
 		}
 
 	}

@@ -36,9 +36,9 @@ public class WallPartWall implements IWallPart {
 			// Calculates all the block positions
 			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 4, 15, height, 11)) {
 				if (pos.getY() < height && pos.getZ() >= 6 && pos.getZ() <= 9) {
-					partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+					partBuilder.add(pos, new PreparableBlockInfo(stateObsidian, null));
 				} else {
-					partBuilder.add(new PreparableBlockInfo(pos, stateBrick, null));
+					partBuilder.add(pos, new PreparableBlockInfo(stateBrick, null));
 				}
 			}
 

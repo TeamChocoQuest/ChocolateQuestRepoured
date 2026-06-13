@@ -197,7 +197,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 		}
 
 		public void markGround(CQStructure structure, BlockPos pos, Mirror mirror, Rotation rotation) {
-			List<PreparablePosInfo> blocks = structure.getBlockInfoList();
+			PreparablePosInfo[][][] blocks = structure.getBlocks();
 			BlockPos size = structure.getSize();
 			BlockPos offset = Offset.NORTH_EAST.apply(BlockPos.ORIGIN, structure, mirror, rotation);
 			int offsetX = offset.getX() == 0 ? 0 : offset.getX() - 1;
@@ -214,7 +214,7 @@ public class PlateauDungeonPart implements IDungeonPart {
 						continue;
 					}
 					int y = Math.min(this.endY + 1 - pos.getY(), size.getY() - 1);
-					while (y >= 0 && blocks.get((x * size.getY() + y) * size.getZ() + z) instanceof PreparableEmptyInfo) {
+					while (y >= 0 && blocks != null && blocks[x][y][z] == null) {
 						y--;
 					}
 					if (y < 0) {

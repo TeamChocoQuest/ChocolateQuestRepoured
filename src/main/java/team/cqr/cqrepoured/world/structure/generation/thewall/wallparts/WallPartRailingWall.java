@@ -52,12 +52,12 @@ public class WallPartRailingWall implements IWallPart {
 				for (int x = 0; x < 8; x++) {
 					if (this.isBiggerPart(x)) {
 						if (y >= 3 || z == 3 || z == 12) {
-							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
 						}
 					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
-						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
 					}
 				}
 			}
@@ -89,7 +89,7 @@ public class WallPartRailingWall implements IWallPart {
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) CQRBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			partBuilder.add(new PreparableSpawnerInfo(spawnerPos, tileSpawner.writeToNBT(new NBTTagCompound())));
+			partBuilder.add(spawnerPos, new PreparableSpawnerInfo(tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}
 

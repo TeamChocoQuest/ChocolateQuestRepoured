@@ -37,20 +37,11 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	private final boolean fillMap;
 	private final int fillRadius;
 
-	public PreparableMapInfo(BlockPos pos, EnumFacing facing, TileEntityMap tileEntityMap) {
-		this(pos.getX(), pos.getY(), pos.getZ(), facing, tileEntityMap);
+	public PreparableMapInfo(EnumFacing facing, TileEntityMap tileEntityMap) {
+		this(facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(), tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
 	}
 
-	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, TileEntityMap tileEntityMap) {
-		this(x, y, z, facing, (byte) tileEntityMap.getScale(), tileEntityMap.getOrientation(), tileEntityMap.lockOrientation(), tileEntityMap.getOriginX(), tileEntityMap.getOriginZ(), tileEntityMap.getOffsetX(), tileEntityMap.getOffsetZ(), tileEntityMap.fillMap(), tileEntityMap.getFillRadius());
-	}
-
-	public PreparableMapInfo(BlockPos pos, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
-		this(pos.getX(), pos.getY(), pos.getZ(), facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
-	}
-
-	public PreparableMapInfo(int x, int y, int z, EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
-		super(x, y, z);
+	public PreparableMapInfo(EnumFacing facing, byte scale, EnumFacing orientation, boolean lockOrientation, int originX, int originZ, int offsetX, int offsetZ, boolean fillMap, int fillRadius) {
 		this.facing = facing;
 		this.scale = scale;
 		this.orientation = orientation;
@@ -64,7 +55,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		EnumFacing transformedFacing = placement.getRotation().rotate(placement.getMirror().mirror(this.facing));
 		EntityItemFrame entity = new EntityItemFrame(world, pos.toImmutable(), transformedFacing);
 		switch (this.orientation) {
@@ -215,7 +206,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityMap> tileEntitySupplier) {
-			return new PreparableMapInfo(x, y, z, state.getValue(BlockHorizontal.FACING), tileEntitySupplier.get());
+			return new PreparableMapInfo(state.getValue(BlockHorizontal.FACING), tileEntitySupplier.get());
 		}
 
 	}
@@ -252,7 +243,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			byte offsetZ = compound.getByte("offsetZ");
 			boolean fillMap = compound.getBoolean("fillMap");
 			short fillRadius = compound.getShort("fillRadius");
-			return new PreparableMapInfo(x, y, z, facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+			return new PreparableMapInfo(facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		}
 
 		@Override
@@ -270,7 +261,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 			byte offsetZ = compound.getByte("offsetZ");
 			boolean fillMap = compound.getBoolean("fillMap");
 			short fillRadius = compound.getShort("fillRadius");
-			return new PreparableMapInfo(x, y, z, facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
+			return new PreparableMapInfo(facing, scale, orientation, lockOrientation, originX, originZ, offsetX, offsetZ, fillMap, fillRadius);
 		}
 
 	}

@@ -113,25 +113,25 @@ public class BlockStateGenArray {
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, null), priority);
+		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, null), priority);
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, nbt), priority);
 	}
 
 	public boolean addSpawner(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, new PreparableBlockInfo(pos, blockState, nbt), priority);
+		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, nbt), priority);
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
 		return this.addInternal(new PreparableEntityInfo(structurePos, entity));
 	}
 
-	public boolean addInternal(GenerationPhase phase, PreparablePosInfo blockInfo, EnumPriority priority) {
+	public boolean addInternal(GenerationPhase phase, BlockPos pos, PreparablePosInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
-		BlockPos p = new BlockPos(blockInfo.getX(), blockInfo.getY(), blockInfo.getZ());
+		BlockPos p = new BlockPos(pos);
 		PriorityBlockInfo old = mapToAdd.get(p);
 
 		if (old == null || (priority.getValue() > old.getPriority().getValue())) {

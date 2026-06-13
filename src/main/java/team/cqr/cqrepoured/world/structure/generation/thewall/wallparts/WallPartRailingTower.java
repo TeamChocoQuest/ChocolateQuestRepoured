@@ -38,12 +38,12 @@ public class WallPartRailingTower implements IWallPart {
 				for (int x : xValues) {
 					if (this.isBiggerPart(x)) {
 						if (y >= 3 || z == 3 || z == 12) {
-							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-							partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
+							partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
 						}
 					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
-						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
-						partBuilder.add(new PreparableBlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2, y, z), new PreparableBlockInfo(stateBlock, null));
+						partBuilder.add(new BlockPos(x * 2 + 1, y, z), new PreparableBlockInfo(stateBlock, null));
 					}
 				}
 			}
@@ -54,7 +54,7 @@ public class WallPartRailingTower implements IWallPart {
 			for (int z = 6; z <= 9; z++) {
 				for (int x = 4; x <= 11; x++) {
 					if (y < 9 || z == 7 || z == 8) {
-						partBuilder.add(new PreparableBlockInfo(new BlockPos(x, y, z), stateAir, null));
+						partBuilder.add(new BlockPos(x, y, z), new PreparableBlockInfo(stateAir, null));
 					}
 				}
 			}

@@ -43,9 +43,9 @@ public class WallPartTower implements IWallPart {
 				if ((z >= 4 && z < 12) && (x <= 4 || x >= 12)) {
 					if (y <= height - 7) {
 						if ((z >= 6 && z <= 9) && y < (height - 7)) {
-							partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+							partBuilder.add(pos, new PreparableBlockInfo(stateObsidian, null));
 						} else {
-							partBuilder.add(new PreparableBlockInfo(pos, stateBrick, null));
+							partBuilder.add(pos, new PreparableBlockInfo(stateBrick, null));
 						}
 					}
 				}
@@ -53,11 +53,11 @@ public class WallPartTower implements IWallPart {
 				// Tower itself
 				// Obsidian core
 				if (((z >= 6 && z <= 9) && (y <= height - 8)) || (((x >= 6 && x <= 9) && (z >= 2 && z <= 13)) && y < height - 7)) {
-					partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+					partBuilder.add(pos, new PreparableBlockInfo(stateObsidian, null));
 				} else {
 					// Wall outer blocks
 					if ((x >= 4 && x <= 11)) {
-						partBuilder.add(new PreparableBlockInfo(pos, stateAndesite, null));
+						partBuilder.add(pos, new PreparableBlockInfo(stateAndesite, null));
 					}
 				}
 			}
