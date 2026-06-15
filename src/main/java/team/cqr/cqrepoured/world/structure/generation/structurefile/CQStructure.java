@@ -244,6 +244,8 @@ public class CQStructure {
 		this.unprotectedBlockList.clear();
 		int[] intArray = compound.getIntArray("unprotectedBlockList");
 		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2])).forEach(this.unprotectedBlockList::add);
+
+		trimIfPossible(this.blockInfoList);
 	}
 
 	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
@@ -289,6 +291,8 @@ public class CQStructure {
 			int z = pos.getZ() - minPos.getZ();
 			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, x, y, z, state));
 		}
+
+		trimIfPossible(this.blockInfoList);
 	}
 
 	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
@@ -435,6 +439,13 @@ public class CQStructure {
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
 		}
+
+		trimIfPossible(this.blockInfoList);
 	}
 
+	private static void trimIfPossible(List<?> list) {
+		if (list instanceof ArrayList) {
+			((ArrayList<?>) list).trimToSize();
+		}
+	}
 }
