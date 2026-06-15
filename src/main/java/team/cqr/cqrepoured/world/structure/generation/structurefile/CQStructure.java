@@ -61,7 +61,7 @@ public class CQStructure {
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
 	public static final String CQR_FILE_VERSION = "1.2.0";
 	private static final Set<ResourceLocation> SPECIAL_ENTITIES = new HashSet<>();
-	private final List<PreparablePosInfo> blockInfoList = new ArrayList<>();
+	private List<PreparablePosInfo> blockInfoList = new ArrayList<>();
 	private final List<PreparableEntityInfo> entityInfoList = new ArrayList<>();
 	private final List<BlockPos> unprotectedBlockList = new ArrayList<>();
 	private BlockPos size = BlockPos.ORIGIN;
@@ -199,7 +199,7 @@ public class CQStructure {
 		this.author = compound.getString("author");
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 
-		this.blockInfoList.clear();
+		this.blockInfoList = new ArrayList<>(size.getX() * size.getY() * size.getZ());
 		this.entityInfoList.clear();
 
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
@@ -244,8 +244,6 @@ public class CQStructure {
 		this.unprotectedBlockList.clear();
 		int[] intArray = compound.getIntArray("unprotectedBlockList");
 		IntStream.range(0, intArray.length / 3).mapToObj(i -> new BlockPos(intArray[i * 3], intArray[i * 3 + 1], intArray[i * 3 + 2])).forEach(this.unprotectedBlockList::add);
-
-		trimIfPossible(this.blockInfoList);
 	}
 
 	private void takeBlocksAndEntitiesFromWorld(World world, BlockPos startPos, BlockPos endPos, boolean ignoreBasicEntities, Collection<BlockPos> unprotectedBlocks) {
@@ -270,7 +268,7 @@ public class CQStructure {
 	}
 
 	private void takeBlocksFromWorld(World world, BlockPos minPos, BlockPos maxPos) {
-		this.blockInfoList.clear();
+		this.blockInfoList = new ArrayList<>(size.getX() * size.getY() * size.getZ());
 
 		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
 			IBlockState state = world.getBlockState(pos);
@@ -291,8 +289,6 @@ public class CQStructure {
 			int z = pos.getZ() - minPos.getZ();
 			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, x, y, z, state));
 		}
-
-		trimIfPossible(this.blockInfoList);
 	}
 
 	private void takeEntitiesFromWorld(World world, BlockPos minPos, BlockPos maxPos, boolean ignoreBasicEntities) {
@@ -394,7 +390,7 @@ public class CQStructure {
 		this.author = compound.getString("author");
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 
-		this.blockInfoList.clear();
+		this.blockInfoList = new ArrayList<>(size.getX() * size.getY() * size.getZ());
 		this.entityInfoList.clear();
 
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
@@ -439,13 +435,6 @@ public class CQStructure {
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {
 			this.entityInfoList.add(new PreparableEntityInfo((NBTTagCompound) nbt));
 		}
-
-		trimIfPossible(this.blockInfoList);
 	}
 
-	private static void trimIfPossible(List<?> list) {
-		if (list instanceof ArrayList) {
-			((ArrayList<?>) list).trimToSize();
-		}
-	}
 }
