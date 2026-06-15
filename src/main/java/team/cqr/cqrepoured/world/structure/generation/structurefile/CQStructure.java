@@ -169,7 +169,7 @@ public class CQStructure {
 		// Save normal blocks
 		int blockCount = this.size.getX() * this.size.getY() * this.size.getZ();
 		ByteBuf buf = Unpooled.buffer(blockCount * 2);
-        for (int x = 0; x < this.size.getX(); x++) {
+		for (int x = 0; x < this.size.getX(); x++) {
 			for (int y = 0; y < this.size.getY(); y++) {
 				for (int z = 0; z < this.size.getZ(); z++) {
 					PreparablePosInfo info = this.blocks != null ? this.blocks[x][y][z] : null;
@@ -417,7 +417,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-            this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
+			this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
 			if (x < this.size.getX() - 1) {
 				x++;
 			} else if (y < this.size.getY() - 1) {
@@ -438,7 +438,7 @@ public class CQStructure {
 				x = pos.getIntAt(0);
 				y = pos.getIntAt(1);
 				z = pos.getIntAt(2);
-                this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
+				this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
 			}
 		}
 

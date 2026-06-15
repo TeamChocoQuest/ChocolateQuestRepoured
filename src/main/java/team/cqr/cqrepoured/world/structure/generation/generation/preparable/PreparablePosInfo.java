@@ -36,6 +36,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 public abstract class PreparablePosInfo {
 
 	protected PreparablePosInfo() {
+
 	}
 
 	public final GeneratablePosInfo prepare(World world, DungeonPlacement placement, int x, int y, int z) {

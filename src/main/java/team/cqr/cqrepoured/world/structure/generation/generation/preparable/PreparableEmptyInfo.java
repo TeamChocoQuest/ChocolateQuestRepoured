@@ -18,9 +18,11 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableEmptyInfo extends PreparablePosInfo {
+
 	public static final PreparableEmptyInfo INSTANCE = new PreparableEmptyInfo();
 
 	protected PreparableEmptyInfo() {
+
 	}
 
 	@Override

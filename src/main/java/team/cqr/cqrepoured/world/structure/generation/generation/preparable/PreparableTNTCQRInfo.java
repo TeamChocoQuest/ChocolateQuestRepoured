@@ -19,9 +19,11 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableTNTCQRInfo extends PreparablePosInfo {
+
 	public static final PreparableTNTCQRInfo INSTANCE = new PreparableTNTCQRInfo();
 
 	protected PreparableTNTCQRInfo() {
+
 	}
 
 	@Override

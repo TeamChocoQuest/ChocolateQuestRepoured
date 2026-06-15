@@ -101,13 +101,13 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			private final int x, y, z;
 			private final PreparablePosInfo info;
 
-            private InfoPosEntry(int x, int y, int z, PreparablePosInfo info) {
-                this.x = x;
-                this.y = y;
-                this.z = z;
-                this.info = info;
-            }
-        }
+			private InfoPosEntry(int x, int y, int z, PreparablePosInfo info) {
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				this.info = info;
+			}
+		}
 
 		private static final Comparator<GeneratablePosInfo> CQR_COMPARATOR = (g1, g2) -> {
 			if (g1.getChunkY() < g2.getChunkY()) {
@@ -157,7 +157,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 		}
 
 		public Builder add(int x, int y, int z, PreparablePosInfo block) {
-			this.blocks.add(new InfoPosEntry(x, y ,z, block));
+			this.blocks.add(new InfoPosEntry(x, y, z, block));
 			return this;
 		}
 

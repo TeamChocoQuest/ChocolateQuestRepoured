@@ -19,9 +19,11 @@ import team.cqr.cqrepoured.world.structure.generation.generation.preparable.Prep
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
+
 	public static final PreparableForceFieldNexusInfo INSTANCE = new PreparableForceFieldNexusInfo();
 
 	protected PreparableForceFieldNexusInfo() {
+
 	}
 
 	@Override
