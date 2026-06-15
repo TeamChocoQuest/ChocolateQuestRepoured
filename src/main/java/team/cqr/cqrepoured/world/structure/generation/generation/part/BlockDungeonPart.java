@@ -166,14 +166,11 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			return this;
 		}
 
-		public Builder addAll(PreparablePosInfo[][][] blocks, BlockPos size) {
+		public Builder addAll(List<PreparablePosInfo> blocks, BlockPos size) {
 			for (int x = 0; x < size.getX(); x++) {
 				for (int y = 0; y < size.getY(); y++) {
 					for (int z = 0; z < size.getZ(); z++) {
-						PreparablePosInfo info = blocks[x][y][z];
-						if (info != null) {
-							this.blocks.add(new InfoPosEntry(x, y, z, info));
-						}
+                        this.blocks.add(new InfoPosEntry(x, y, z, blocks.get((x * size.getY() + y) * size.getZ() + z)));
 					}
 				}
 			}

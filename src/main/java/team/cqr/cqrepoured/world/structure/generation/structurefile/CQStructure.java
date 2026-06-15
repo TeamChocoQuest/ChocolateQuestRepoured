@@ -52,7 +52,6 @@ import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacemen
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.BlockDungeonPart;
 import team.cqr.cqrepoured.world.structure.generation.generation.part.EntityDungeonPart;
-import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEmptyInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparableEntityInfo;
 import team.cqr.cqrepoured.world.structure.generation.generation.preparable.PreparablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.inhabitants.DungeonInhabitant;
@@ -62,7 +61,7 @@ public class CQStructure {
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
 	public static final String CQR_FILE_VERSION = "1.2.0";
 	private static final Set<ResourceLocation> SPECIAL_ENTITIES = new HashSet<>();
-	private PreparablePosInfo[][][] blocks;
+	private final List<PreparablePosInfo> blockInfoList = new ArrayList<>();
 	private final List<PreparableEntityInfo> entityInfoList = new ArrayList<>();
 	private final List<BlockPos> unprotectedBlockList = new ArrayList<>();
 	private BlockPos size = BlockPos.ORIGIN;
@@ -122,7 +121,7 @@ public class CQStructure {
 	}
 
 	public boolean isEmpty() {
-		return this.blocks == null && this.entityInfoList.isEmpty();
+		return this.blockInfoList.isEmpty() && this.entityInfoList.isEmpty();
 	}
 
 	public boolean writeToFile(File file) {
@@ -167,16 +166,8 @@ public class CQStructure {
 		NBTTagList compoundList = new NBTTagList();
 
 		// Save normal blocks
-		int blockCount = this.size.getX() * this.size.getY() * this.size.getZ();
-		ByteBuf buf = Unpooled.buffer(blockCount * 2);
-		for (int x = 0; x < this.size.getX(); x++) {
-			for (int y = 0; y < this.size.getY(); y++) {
-				for (int z = 0; z < this.size.getZ(); z++) {
-					PreparablePosInfo info = this.blocks != null ? this.blocks[x][y][z] : null;
-					PreparablePosInfo.Registry.write(info != null ? info : PreparableEmptyInfo.INSTANCE, buf, palette, compoundList);
-				}
-			}
-		}
+		ByteBuf buf = Unpooled.buffer(this.blockInfoList.size() * 2);
+		this.blockInfoList.forEach(preparable -> PreparablePosInfo.Registry.write(preparable, buf, palette, compoundList));
 		compound.setByteArray("blockInfoList", Arrays.copyOf(buf.array(), buf.writerIndex()));
 
 		// Save entities
@@ -208,7 +199,7 @@ public class CQStructure {
 		this.author = compound.getString("author");
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 
-		this.blocks = new PreparablePosInfo[this.size.getX()][this.size.getY()][this.size.getZ()];
+		this.blockInfoList.clear();
 		this.entityInfoList.clear();
 
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
@@ -227,7 +218,7 @@ public class CQStructure {
 		for (int x = 0; x < this.size.getX(); x++) {
 			for (int y = 0; y < this.size.getY(); y++) {
 				for (int z = 0; z < this.size.getZ(); z++) {
-					this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList);
+					this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
 				}
 			}
 		}
@@ -240,7 +231,8 @@ public class CQStructure {
 				int x = buf.readShort();
 				int y = buf.readShort();
 				int z = buf.readShort();
-				this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList);
+				int index = ((x * this.size.getY()) + y) * this.size.getZ() + z;
+				this.blockInfoList.set(index, PreparablePosInfo.Registry.read(x, y, z, buf, blockStatePalette, compoundTagList));
 			}
 		}
 
@@ -276,7 +268,7 @@ public class CQStructure {
 	}
 
 	private void takeBlocksFromWorld(World world, BlockPos minPos, BlockPos maxPos) {
-		this.blocks = new PreparablePosInfo[this.size.getX()][this.size.getY()][this.size.getZ()];
+		this.blockInfoList.clear();
 
 		for (MutableBlockPos pos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
 			IBlockState state = world.getBlockState(pos);
@@ -295,7 +287,7 @@ public class CQStructure {
 			int x = pos.getX() - minPos.getX();
 			int y = pos.getY() - minPos.getY();
 			int z = pos.getZ() - minPos.getZ();
-			this.blocks[x][y][z] = PreparablePosInfo.Registry.create(world, pos, x, y, z, state);
+			this.blockInfoList.add(PreparablePosInfo.Registry.create(world, pos, x, y, z, state));
 		}
 	}
 
@@ -313,8 +305,8 @@ public class CQStructure {
 		}
 	}
 
-	public PreparablePosInfo[][][] getBlocks() {
-		return this.blocks;
+	public List<PreparablePosInfo> getBlockInfoList() {
+		return Collections.unmodifiableList(this.blockInfoList);
 	}
 
 	public List<PreparableEntityInfo> getEntityInfoList() {
@@ -350,7 +342,7 @@ public class CQStructure {
 	}
 
 	public void addAll(GeneratableDungeon.Builder builder, DungeonPlacement placement) {
-		builder.add(new BlockDungeonPart.Builder().addAll(this.blocks, this.size), placement);
+		builder.add(new BlockDungeonPart.Builder().addAll(this.blockInfoList, this.size), placement);
 		builder.add(new EntityDungeonPart.Builder().addAll(this.entityInfoList), placement);
 	}
 
@@ -398,7 +390,7 @@ public class CQStructure {
 		this.author = compound.getString("author");
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 
-		this.blocks = new PreparablePosInfo[this.size.getX()][this.size.getY()][this.size.getZ()];
+		this.blockInfoList.clear();
 		this.entityInfoList.clear();
 
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
@@ -417,7 +409,7 @@ public class CQStructure {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
+			this.blockInfoList.add(PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) nbt, blockStatePalette, compoundTagList));
 			if (x < this.size.getX() - 1) {
 				x++;
 			} else if (y < this.size.getY() - 1) {
@@ -435,10 +427,7 @@ public class CQStructure {
 			NBTTagCompound tag = (NBTTagCompound) nbt;
 			if (tag.hasKey("blockInfo", Constants.NBT.TAG_INT_ARRAY)) {
 				NBTTagList pos = tag.getTagList("pos", Constants.NBT.TAG_INT);
-				x = pos.getIntAt(0);
-				y = pos.getIntAt(1);
-				z = pos.getIntAt(2);
-				this.blocks[x][y][z] = PreparablePosInfo.Registry.read(x, y, z, (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList);
+				this.blockInfoList.add(PreparablePosInfo.Registry.read(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), (NBTTagIntArray) tag.getTag("blockInfo"), blockStatePalette, compoundTagList));
 			}
 		}
 
