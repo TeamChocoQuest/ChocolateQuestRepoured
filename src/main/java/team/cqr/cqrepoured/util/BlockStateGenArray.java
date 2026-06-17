@@ -131,7 +131,7 @@ public class BlockStateGenArray {
 	public boolean addInternal(GenerationPhase phase, BlockPos pos, PreparablePosInfo blockInfo, EnumPriority priority) {
 		boolean added = false;
 		Map<BlockPos, PriorityBlockInfo> mapToAdd = this.getMapFromPhase(phase);
-		BlockPos p = new BlockPos(pos);
+		BlockPos p = pos.toImmutable();
 		PriorityBlockInfo old = mapToAdd.get(p);
 
 		if (old == null || (priority.getValue() > old.getPriority().getValue())) {
