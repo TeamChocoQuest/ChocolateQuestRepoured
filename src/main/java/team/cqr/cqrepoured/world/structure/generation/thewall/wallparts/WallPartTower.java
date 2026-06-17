@@ -33,9 +33,9 @@ public class WallPartTower implements IWallPart {
 			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
 			IBlockState stateAndesite = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
 
-			PreparableBlockInfo brickBlock = new PreparableBlockInfo(stateBrick, null);
-			PreparableBlockInfo obsidianBlock = new PreparableBlockInfo(stateObsidian, null);
-			PreparableBlockInfo andesiteBlock = new PreparableBlockInfo(stateAndesite, null);
+			PreparableBlockInfo brickBlock = PreparableBlockInfo.of(stateBrick, null);
+			PreparableBlockInfo obsidianBlock = PreparableBlockInfo.of(stateObsidian, null);
+			PreparableBlockInfo andesiteBlock = PreparableBlockInfo.of(stateAndesite, null);
 
 			int height = this.getTopY() - startY;
 			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 0, 15, height, 15)) {

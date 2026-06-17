@@ -309,7 +309,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						partBuilder.add(i, j, k, new PreparableBlockInfo(blocks[i][j][k], null));
+						partBuilder.add(i, j, k, PreparableBlockInfo.of(blocks[i][j][k], null));
 					}
 				}
 			}

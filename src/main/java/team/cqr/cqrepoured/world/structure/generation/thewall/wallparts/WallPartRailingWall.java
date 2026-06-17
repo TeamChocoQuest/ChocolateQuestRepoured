@@ -46,7 +46,7 @@ public class WallPartRailingWall implements IWallPart {
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 
-		PreparableBlockInfo stoneSlabBlock = new PreparableBlockInfo(stateBlock, null);
+		PreparableBlockInfo stoneSlabBlock = PreparableBlockInfo.of(stateBlock, null);
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 		for (int y = 0; y < 8; y++) {

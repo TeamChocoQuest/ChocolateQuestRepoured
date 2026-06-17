@@ -45,7 +45,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 			if (BannerHelper.isCQBanner(tileEntity)) {
 				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(tileEntity));
 			}
-			return new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+			return PreparableBlockInfo.of(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
 	}

@@ -31,8 +31,8 @@ public class WallPartRailingTower implements IWallPart {
 		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 		IBlockState stateAir = Blocks.AIR.getDefaultState();
 
-		PreparableBlockInfo stairBlock = new PreparableBlockInfo(stateBlock, null);
-		PreparableBlockInfo airBlock = new PreparableBlockInfo(stateAir, null);
+		PreparableBlockInfo stairBlock = PreparableBlockInfo.of(stateBlock, null);
+		PreparableBlockInfo airBlock = PreparableBlockInfo.of(stateAir, null);
 
 		int[] xValues = new int[] { 0, 1, 6, 7 };
 		int[] zValues = new int[] { 2, 3, 12, 13 };

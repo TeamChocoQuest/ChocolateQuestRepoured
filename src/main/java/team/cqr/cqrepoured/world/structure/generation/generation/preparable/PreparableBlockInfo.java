@@ -1,13 +1,12 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockSkull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,11 +27,20 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
+	private static final Map<IBlockState, PreparableBlockInfo> CACHE = new WeakHashMap<>();
+
+	public static PreparableBlockInfo of(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+		if (tileEntityData == null) {
+			return CACHE.computeIfAbsent(state, s -> new PreparableBlockInfo(s, null));
+		}
+		return new PreparableBlockInfo(state, tileEntityData);
+	}
+
 	private final IBlockState state;
 	@Nullable
 	private final NBTTagCompound tileEntityData;
 
-	public PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+	protected PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		this.state = state;
 		this.tileEntityData = tileEntityData;
 	}
@@ -118,16 +126,12 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableBlockInfo(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+			return of(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
 	}
 
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
-		/**
-		 * Cache {@link PreparableBlockInfo} with {@link Block#getDefaultState()} and null {@code tileEntityData}
-		 */
-		private final Map<Block, PreparableBlockInfo> simpleBlockCache = new ConcurrentHashMap<>();
 
 		@Override
 		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
@@ -147,10 +151,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			}
-			if (tileEntityData == null && state != null && state.equals(state.getBlock().getDefaultState())) {
-				return simpleBlockCache.computeIfAbsent(state.getBlock(), b -> new PreparableBlockInfo(b.getDefaultState(), null));
-			}
-			return new PreparableBlockInfo(state, tileEntityData);
+			return of(state, tileEntityData);
 		}
 
 		@Override
@@ -162,7 +163,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if (intArray.length > 2) {
 				tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			}
-			return new PreparableBlockInfo(state, tileEntityData);
+			return of(state, tileEntityData);
 		}
 
 	}

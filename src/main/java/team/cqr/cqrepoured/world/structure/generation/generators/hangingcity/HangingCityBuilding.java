@@ -164,7 +164,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(entry.getKey().subtract(center), new PreparableBlockInfo(entry.getValue(), null));
+			partBuilder.add(entry.getKey().subtract(center), PreparableBlockInfo.of(entry.getValue(), null));
 		}
 		dungeonBuilder.add(partBuilder, center);
 	}
@@ -219,7 +219,7 @@ public class HangingCityBuilding extends AbstractDungeonGenerationComponent<Gene
 
 				BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 				for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-					partBuilder.add(entry.getKey().subtract(this.generator.getPos()), new PreparableBlockInfo(entry.getValue(), null));
+					partBuilder.add(entry.getKey().subtract(this.generator.getPos()), PreparableBlockInfo.of(entry.getValue(), null));
 				}
 				dungeonBuilder.add(partBuilder, this.generator.getPos());
 			}

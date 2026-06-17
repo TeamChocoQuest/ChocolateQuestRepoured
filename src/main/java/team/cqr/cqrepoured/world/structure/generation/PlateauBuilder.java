@@ -44,7 +44,7 @@ public class PlateauBuilder {
 						}
 					}
 
-					partBuilder.add(iX, iY, iZ, new PreparableBlockInfo(fillBlock.getDefaultState(), null));
+					partBuilder.add(iX, iY, iZ, PreparableBlockInfo.of(fillBlock.getDefaultState(), null));
 				}
 			}
 		}
@@ -84,7 +84,7 @@ public class PlateauBuilder {
 						}
 					}
 
-					partBuilder.add(iX, iY, iZ, new PreparableBlockInfo(fillBlock.getDefaultState(), null));
+					partBuilder.add(iX, iY, iZ, PreparableBlockInfo.of(fillBlock.getDefaultState(), null));
 				}
 			}
 		}

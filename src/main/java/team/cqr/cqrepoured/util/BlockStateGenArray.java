@@ -113,15 +113,15 @@ public class BlockStateGenArray {
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, null), priority);
+		return this.addInternal(phase, pos, PreparableBlockInfo.of(blockState, null), priority);
 	}
 
 	public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, nbt), priority);
+		return this.addInternal(phase, pos, PreparableBlockInfo.of(blockState, nbt), priority);
 	}
 
 	public boolean addSpawner(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase, EnumPriority priority) {
-		return this.addInternal(phase, pos, new PreparableBlockInfo(blockState, nbt), priority);
+		return this.addInternal(phase, pos, PreparableBlockInfo.of(blockState, nbt), priority);
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
