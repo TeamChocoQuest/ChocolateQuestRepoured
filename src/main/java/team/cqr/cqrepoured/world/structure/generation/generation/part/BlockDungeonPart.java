@@ -97,6 +97,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 	}
 
 	public static class Builder implements IDungeonPartBuilder {
+
 		private static final class InfoPosEntry {
 			private final int x, y, z;
 			private final PreparablePosInfo info;
@@ -153,7 +154,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 		private final List<InfoPosEntry> blocks = new ArrayList<>();
 
 		public Builder add(BlockPos pos, PreparablePosInfo block) {
-			return add(pos.getX(), pos.getY(), pos.getZ(), block);
+			return this.add(pos.getX(), pos.getY(), pos.getZ(), block);
 		}
 
 		public Builder add(int x, int y, int z, PreparablePosInfo block) {
@@ -170,7 +171,7 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			for (int x = 0; x < size.getX(); x++) {
 				for (int y = 0; y < size.getY(); y++) {
 					for (int z = 0; z < size.getZ(); z++) {
-                        this.blocks.add(new InfoPosEntry(x, y, z, blocks.get((x * size.getY() + y) * size.getZ() + z)));
+						this.blocks.add(new InfoPosEntry(x, y, z, blocks.get((x * size.getY() + y) * size.getZ() + z)));
 					}
 				}
 			}
@@ -180,10 +181,10 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 		@Override
 		public BlockDungeonPart build(World world, DungeonPlacement placement) {
 			List<GeneratablePosInfo> list = this.blocks.stream()
-				.map(entry -> entry.info.prepare(world, placement, entry.x, entry.y, entry.z))
-				.filter(Objects::nonNull)
-				.sorted(CQR_COMPARATOR)
-				.collect(Collectors.toList());
+					.map(entry -> entry.info.prepare(world, placement, entry.x, entry.y, entry.z))
+					.filter(Objects::nonNull)
+					.sorted(CQR_COMPARATOR)
+					.collect(Collectors.toList());
 			List<GeneratableChunkInfo> list1 = new ArrayList<>();
 
 			for (int i = 0; i < list.size(); i++) {

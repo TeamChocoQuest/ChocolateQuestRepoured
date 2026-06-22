@@ -28,10 +28,10 @@ import team.cqr.cqrepoured.block.BlockMapPlaceholder;
 import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.config.CQRConfig;
-import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
 public abstract class PreparablePosInfo {
 
