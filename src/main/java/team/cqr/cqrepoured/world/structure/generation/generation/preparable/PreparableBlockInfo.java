@@ -1,7 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -27,7 +27,7 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
-	private static final Map<IBlockState, PreparableBlockInfo> CACHE = new WeakHashMap<>();
+	private static final Map<IBlockState, PreparableBlockInfo> CACHE = new ConcurrentHashMap<>();
 
 	public static PreparableBlockInfo of(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		if (tileEntityData == null) {
