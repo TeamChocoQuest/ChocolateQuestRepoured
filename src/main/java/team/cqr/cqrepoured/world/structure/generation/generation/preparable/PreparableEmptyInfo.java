@@ -19,16 +19,14 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableEmptyInfo extends PreparablePosInfo {
 
-	public PreparableEmptyInfo(BlockPos pos) {
-		this(pos.getX(), pos.getY(), pos.getZ());
-	}
+	public static final PreparableEmptyInfo INSTANCE = new PreparableEmptyInfo();
 
-	public PreparableEmptyInfo(int x, int y, int z) {
-		super(x, y, z);
+	protected PreparableEmptyInfo() {
+
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		return null;
 	}
 
@@ -41,7 +39,7 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableEmptyInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}
@@ -55,13 +53,13 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparableEmptyInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableEmptyInfo(x, y, z);
+			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
 		public PreparableEmptyInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableEmptyInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}

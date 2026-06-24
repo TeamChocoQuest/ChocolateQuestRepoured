@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -97,6 +98,18 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 
 	public static class Builder implements IDungeonPartBuilder {
 
+		private static final class InfoPosEntry {
+			private final int x, y, z;
+			private final PreparablePosInfo info;
+
+			private InfoPosEntry(int x, int y, int z, PreparablePosInfo info) {
+				this.x = x;
+				this.y = y;
+				this.z = z;
+				this.info = info;
+			}
+		}
+
 		private static final Comparator<GeneratablePosInfo> CQR_COMPARATOR = (g1, g2) -> {
 			if (g1.getChunkY() < g2.getChunkY()) {
 				return -1;
@@ -138,22 +151,40 @@ public class BlockDungeonPart implements IDungeonPart, IProtectable {
 			return 0;
 		};
 
-		private final List<PreparablePosInfo> blocks = new ArrayList<>();
+		private final List<InfoPosEntry> blocks = new ArrayList<>();
 
-		public Builder add(PreparablePosInfo block) {
-			this.blocks.add(block);
+		public Builder add(BlockPos pos, PreparablePosInfo block) {
+			return this.add(pos.getX(), pos.getY(), pos.getZ(), block);
+		}
+
+		public Builder add(int x, int y, int z, PreparablePosInfo block) {
+			this.blocks.add(new InfoPosEntry(x, y, z, block));
 			return this;
 		}
 
-		public Builder addAll(Collection<? extends PreparablePosInfo> blocks) {
-			this.blocks.addAll(blocks);
+		public Builder addAll(Map<? extends BlockPos, ? extends PreparablePosInfo> blocks) {
+			blocks.forEach(this::add);
+			return this;
+		}
+
+		public Builder addAll(List<PreparablePosInfo> blocks, BlockPos size) {
+			for (int x = 0; x < size.getX(); x++) {
+				for (int y = 0; y < size.getY(); y++) {
+					for (int z = 0; z < size.getZ(); z++) {
+						this.blocks.add(new InfoPosEntry(x, y, z, blocks.get((x * size.getY() + y) * size.getZ() + z)));
+					}
+				}
+			}
 			return this;
 		}
 
 		@Override
 		public BlockDungeonPart build(World world, DungeonPlacement placement) {
-			List<GeneratablePosInfo> list = this.blocks.stream().map(preparable -> preparable.prepare(world, placement)).filter(Objects::nonNull).collect(Collectors.toList());
-			list.sort(CQR_COMPARATOR);
+			List<GeneratablePosInfo> list = this.blocks.stream()
+					.map(entry -> entry.info.prepare(world, placement, entry.x, entry.y, entry.z))
+					.filter(Objects::nonNull)
+					.sorted(CQR_COMPARATOR)
+					.collect(Collectors.toList());
 			List<GeneratableChunkInfo> list1 = new ArrayList<>();
 
 			for (int i = 0; i < list.size(); i++) {

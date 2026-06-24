@@ -101,7 +101,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		// Build
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : this.blocks.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			partBuilder.add(entry.getKey().subtract(this.pos), PreparableBlockInfo.of(entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);
 	}
@@ -170,7 +170,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 		}
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			partBuilder.add(entry.getKey().subtract(this.pos), PreparableBlockInfo.of(entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);
 
@@ -198,7 +198,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			}
 
 			NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
-			partBuilder.add(new PreparableBlockInfo(chestpos.subtract(this.pos), state, nbt));
+			partBuilder.add(chestpos.subtract(this.pos), PreparableBlockInfo.of(state, nbt));
 		}
 		this.dungeonBuilder.add(partBuilder);
 	}
@@ -217,7 +217,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 				int floor = this.random.nextInt(FLOORS);
 				entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
 			}
-			partBuilder.add(new PreparableSpawnerInfo(spawnerpos.subtract(this.pos), entityList));
+			partBuilder.add(spawnerpos.subtract(this.pos), new PreparableSpawnerInfo(entityList));
 		}
 		this.dungeonBuilder.add(partBuilder);
 	}

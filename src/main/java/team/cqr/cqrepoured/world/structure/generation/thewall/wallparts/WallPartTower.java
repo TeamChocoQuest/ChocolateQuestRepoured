@@ -33,6 +33,10 @@ public class WallPartTower implements IWallPart {
 			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
 			IBlockState stateAndesite = Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
 
+			PreparableBlockInfo brickBlock = PreparableBlockInfo.of(stateBrick, null);
+			PreparableBlockInfo obsidianBlock = PreparableBlockInfo.of(stateObsidian, null);
+			PreparableBlockInfo andesiteBlock = PreparableBlockInfo.of(stateAndesite, null);
+
 			int height = this.getTopY() - startY;
 			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 0, 15, height, 15)) {
 				int x = pos.getX();
@@ -43,9 +47,9 @@ public class WallPartTower implements IWallPart {
 				if ((z >= 4 && z < 12) && (x <= 4 || x >= 12)) {
 					if (y <= height - 7) {
 						if ((z >= 6 && z <= 9) && y < (height - 7)) {
-							partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+							partBuilder.add(pos, obsidianBlock);
 						} else {
-							partBuilder.add(new PreparableBlockInfo(pos, stateBrick, null));
+							partBuilder.add(pos, brickBlock);
 						}
 					}
 				}
@@ -53,11 +57,11 @@ public class WallPartTower implements IWallPart {
 				// Tower itself
 				// Obsidian core
 				if (((z >= 6 && z <= 9) && (y <= height - 8)) || (((x >= 6 && x <= 9) && (z >= 2 && z <= 13)) && y < height - 7)) {
-					partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+					partBuilder.add(pos, obsidianBlock);
 				} else {
 					// Wall outer blocks
 					if ((x >= 4 && x <= 11)) {
-						partBuilder.add(new PreparableBlockInfo(pos, stateAndesite, null));
+						partBuilder.add(pos, andesiteBlock);
 					}
 				}
 			}

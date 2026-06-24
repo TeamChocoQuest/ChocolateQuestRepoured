@@ -28,67 +28,28 @@ import team.cqr.cqrepoured.block.BlockMapPlaceholder;
 import team.cqr.cqrepoured.block.BlockNull;
 import team.cqr.cqrepoured.block.BlockSpawner;
 import team.cqr.cqrepoured.block.BlockTNTCQR;
+import team.cqr.cqrepoured.config.CQRConfig;
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratablePosInfo;
 import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePalette;
 
-public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInfo> {
+public abstract class PreparablePosInfo {
 
-	private final int x;
-	private final int y;
-	private final int z;
+	protected PreparablePosInfo() {
 
-	protected PreparablePosInfo(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
 	}
 
-	@Override
-	public GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement) {
-		BlockPos pos = placement.transform(this.x, this.y, this.z);
+	public final GeneratablePosInfo prepare(World world, DungeonPlacement placement, int x, int y, int z) {
+		BlockPos pos = placement.transform(x, y, z);
 		if (world.isOutsideBuildHeight(pos)) {
 			return null;
 		}
-		return this.prepare(world, placement, pos);
+		return CQRConfig.advanced.structureImportMode ? this.prepareDebug(world, placement, pos) : this.prepareNormal(world, placement, pos);
 	}
 
-	@Override
-	public GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement) {
-		BlockPos pos = placement.transform(this.x, this.y, this.z);
-		if (world.isOutsideBuildHeight(pos)) {
-			return null;
-		}
-		return this.prepareDebug(world, placement, pos);
-	}
-
-	protected abstract GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos);
+	protected abstract GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos);
 
 	protected abstract GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos);
-
-	public int getX() {
-		return this.x;
-	}
-
-	public int getY() {
-		return this.y;
-	}
-
-	public int getZ() {
-		return this.z;
-	}
-
-	public int getChunkX() {
-		return this.x >> 4;
-	}
-
-	public int getChunkY() {
-		return this.y >> 4;
-	}
-
-	public int getChunkZ() {
-		return this.z >> 4;
-	}
 
 	public static class Registry {
 
@@ -212,7 +173,7 @@ public abstract class PreparablePosInfo implements IPreparable<GeneratablePosInf
 		public static PreparablePosInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList compoundList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			if (intArray.length == 0) {
-				return new PreparableEmptyInfo(x, y, z);
+				return PreparableEmptyInfo.INSTANCE;
 			}
 			byte id = (byte) (intArray[0] + 1);
 			if (!ID_2_SERIALIZER.containsKey(id)) {

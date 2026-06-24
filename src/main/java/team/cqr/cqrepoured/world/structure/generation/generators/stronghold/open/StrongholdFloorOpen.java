@@ -194,7 +194,7 @@ public class StrongholdFloorOpen extends AbstractDungeonGenerationComponent<Gene
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.generator.getPos()), entry.getValue(), null));
+			partBuilder.add(entry.getKey().subtract(this.generator.getPos()), PreparableBlockInfo.of(entry.getValue(), null));
 		}
 		dungeonBuilder.add(partBuilder);
 	}

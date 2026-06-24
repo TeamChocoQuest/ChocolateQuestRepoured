@@ -309,7 +309,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						partBuilder.add(new PreparableBlockInfo(i, j, k, blocks[i][j][k], null));
+						partBuilder.add(i, j, k, PreparableBlockInfo.of(blocks[i][j][k], null));
 					}
 				}
 			}
@@ -387,7 +387,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 			for (BlockPos pos : spawnerAndChestList) {
 				if (this.random.nextBoolean()) {
-					partBuilder.add(new PreparableLootChestInfo(pos.getX(), pos.getY(), pos.getZ(), lootTables[this.random.nextInt(lootTables.length)], EnumFacing.NORTH));
+					partBuilder.add(pos.getX(), pos.getY(), pos.getZ(), new PreparableLootChestInfo(lootTables[this.random.nextInt(lootTables.length)], EnumFacing.NORTH));
 				}
 
 				int entityCount = 2 + this.random.nextInt(3);
@@ -395,7 +395,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				for (int i = 0; i < entityCount; i++) {
 					entityList.add(mobFactory.getGearedEntityByFloor(floor, this.world));
 				}
-				partBuilder.add(new PreparableSpawnerInfo(pos.getX(), pos.getY() + 1, pos.getZ(), entityList));
+				partBuilder.add(pos.getX(), pos.getY() + 1, pos.getZ(), new PreparableSpawnerInfo(entityList));
 				floor--;
 			}
 			this.dungeonBuilder.add(partBuilder);

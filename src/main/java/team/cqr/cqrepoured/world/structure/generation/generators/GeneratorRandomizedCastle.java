@@ -66,8 +66,8 @@ public class GeneratorRandomizedCastle extends AbstractDungeonGenerator<DungeonR
 		DungeonInhabitant mobType = DungeonInhabitantManager.instance().getInhabitantByDistanceIfDefault(this.dungeon.getDungeonMob(), this.world, this.pos.getX(), this.pos.getZ());
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 
-		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getMainMap().values()), this.structurePos);
-		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getPostMap().values()), this.structurePos);
+		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getMainMap()), this.structurePos);
+		this.dungeonBuilder.add(new BlockDungeonPart.Builder().addAll(genArray.getPostMap()), this.structurePos);
 		this.dungeonBuilder.add(new EntityDungeonPart.Builder().addAll(genArray.getEntityMap()), this.structurePos);
 	}
 

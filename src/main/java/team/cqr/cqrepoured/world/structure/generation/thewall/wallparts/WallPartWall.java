@@ -32,13 +32,16 @@ public class WallPartWall implements IWallPart {
 			IBlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
 			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
 
+			PreparableBlockInfo brickBlock = PreparableBlockInfo.of(stateBrick, null);
+			PreparableBlockInfo obsidianBlock = PreparableBlockInfo.of(stateObsidian, null);
+
 			int height = this.getTopY() - startY;
 			// Calculates all the block positions
 			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 4, 15, height, 11)) {
 				if (pos.getY() < height && pos.getZ() >= 6 && pos.getZ() <= 9) {
-					partBuilder.add(new PreparableBlockInfo(pos, stateObsidian, null));
+					partBuilder.add(pos, obsidianBlock);
 				} else {
-					partBuilder.add(new PreparableBlockInfo(pos, stateBrick, null));
+					partBuilder.add(pos, brickBlock);
 				}
 			}
 

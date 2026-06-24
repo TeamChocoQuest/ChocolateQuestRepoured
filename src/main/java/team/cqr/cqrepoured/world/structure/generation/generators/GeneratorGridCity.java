@@ -197,7 +197,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonGridCity>
 
 		BlockDungeonPart.Builder partBuilder = new BlockDungeonPart.Builder();
 		for (Map.Entry<BlockPos, IBlockState> entry : this.blockMap.entrySet()) {
-			partBuilder.add(new PreparableBlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
+			partBuilder.add(entry.getKey().subtract(this.pos), PreparableBlockInfo.of(entry.getValue(), null));
 		}
 		this.dungeonBuilder.add(partBuilder);
 

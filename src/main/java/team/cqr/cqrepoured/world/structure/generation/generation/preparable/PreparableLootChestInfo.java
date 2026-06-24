@@ -37,18 +37,13 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	private final ResourceLocation lootTable;
 	private final EnumFacing facing;
 
-	public PreparableLootChestInfo(BlockPos pos, ResourceLocation lootTable, EnumFacing facing) {
-		this(pos.getX(), pos.getY(), pos.getZ(), lootTable, facing);
-	}
-
-	public PreparableLootChestInfo(int x, int y, int z, ResourceLocation lootTable, EnumFacing facing) {
-		super(x, y, z);
+	public PreparableLootChestInfo(ResourceLocation lootTable, EnumFacing facing) {
 		this.lootTable = lootTable;
 		this.facing = facing;
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, this.facing);
 		state = state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = state.getBlock().createTileEntity(world, state);
@@ -88,7 +83,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityExporterChest> tileEntitySupplier) {
-			return new PreparableLootChestInfo(x, y, z, tileEntitySupplier.get().getLootTable(), state.getValue(BlockHorizontal.FACING));
+			return new PreparableLootChestInfo(tileEntitySupplier.get().getLootTable(), state.getValue(BlockHorizontal.FACING));
 		}
 
 	}
@@ -105,7 +100,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 		public PreparableLootChestInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			ResourceLocation lootTable = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(buf.readByte());
-			return new PreparableLootChestInfo(x, y, z, lootTable, facing);
+			return new PreparableLootChestInfo(lootTable, facing);
 		}
 
 		@Override
@@ -114,7 +109,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 			int[] intArray = nbtIntArray.getIntArray();
 			ResourceLocation lootTable = getLootTableFromId(intArray[1]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(intArray[2]);
-			return new PreparableLootChestInfo(x, y, z, lootTable, facing);
+			return new PreparableLootChestInfo(lootTable, facing);
 		}
 
 		@Deprecated

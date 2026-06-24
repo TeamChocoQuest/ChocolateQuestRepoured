@@ -24,12 +24,8 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBannerInfo extends PreparableBlockInfo {
 
-	public PreparableBannerInfo(BlockPos pos, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		this(pos.getX(), pos.getY(), pos.getZ(), state, tileEntityData);
-	}
-
-	public PreparableBannerInfo(int x, int y, int z, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		super(x, y, z, state, tileEntityData);
+	public PreparableBannerInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+		super(state, tileEntityData);
 	}
 
 	@Override
@@ -47,9 +43,9 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityBanner> tileEntitySupplier) {
 			TileEntityBanner tileEntity = tileEntitySupplier.get();
 			if (BannerHelper.isCQBanner(tileEntity)) {
-				return new PreparableBannerInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntity));
+				return new PreparableBannerInfo(state, IFactory.writeTileEntityToNBT(tileEntity));
 			}
-			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+			return PreparableBlockInfo.of(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
 	}
@@ -74,7 +70,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			}
-			return new PreparableBannerInfo(x, y, z, state, tileEntityData);
+			return new PreparableBannerInfo(state, tileEntityData);
 		}
 
 		@Override
@@ -86,7 +82,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 			if (intArray.length > 2) {
 				tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			}
-			return new PreparableBannerInfo(x, y, z, state, tileEntityData);
+			return new PreparableBannerInfo(state, tileEntityData);
 		}
 
 	}

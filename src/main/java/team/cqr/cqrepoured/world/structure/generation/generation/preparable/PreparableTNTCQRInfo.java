@@ -20,12 +20,14 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
-	public PreparableTNTCQRInfo(int x, int y, int z) {
-		super(x, y, z);
+	public static final PreparableTNTCQRInfo INSTANCE = new PreparableTNTCQRInfo();
+
+	protected PreparableTNTCQRInfo() {
+
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		return new GeneratableBlockInfo(pos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.HIDDEN, true), null);
 	}
 
@@ -38,7 +40,7 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableTNTCQRInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}
@@ -52,13 +54,13 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparableTNTCQRInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableTNTCQRInfo(x, y, z);
+			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
 		public PreparableTNTCQRInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableTNTCQRInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}

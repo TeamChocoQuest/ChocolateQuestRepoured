@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -25,22 +27,26 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableBlockInfo extends PreparablePosInfo {
 
+	private static final Map<IBlockState, PreparableBlockInfo> CACHE = new ConcurrentHashMap<>();
+
+	public static PreparableBlockInfo of(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
+		if (tileEntityData == null) {
+			return CACHE.computeIfAbsent(state, s -> new PreparableBlockInfo(s, null));
+		}
+		return new PreparableBlockInfo(state, tileEntityData);
+	}
+
 	private final IBlockState state;
 	@Nullable
 	private final NBTTagCompound tileEntityData;
 
-	public PreparableBlockInfo(BlockPos pos, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		this(pos.getX(), pos.getY(), pos.getZ(), state, tileEntityData);
-	}
-
-	public PreparableBlockInfo(int x, int y, int z, IBlockState state, @Nullable NBTTagCompound tileEntityData) {
-		super(x, y, z);
+	protected PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		this.state = state;
 		this.tileEntityData = tileEntityData;
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		IBlockState transformedState = this.state.withMirror(placement.getMirror()).withRotation(placement.getRotation());
 		TileEntity tileEntity = null;
 
@@ -120,7 +126,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntity> tileEntitySupplier) {
-			return new PreparableBlockInfo(x, y, z, state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
+			return of(state, IFactory.writeTileEntityToNBT(tileEntitySupplier.get()));
 		}
 
 	}
@@ -145,7 +151,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if ((data & 1) == 1) {
 				tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			}
-			return new PreparableBlockInfo(x, y, z, state, tileEntityData);
+			return of(state, tileEntityData);
 		}
 
 		@Override
@@ -157,7 +163,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 			if (intArray.length > 2) {
 				tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			}
-			return new PreparableBlockInfo(x, y, z, state, tileEntityData);
+			return of(state, tileEntityData);
 		}
 
 	}

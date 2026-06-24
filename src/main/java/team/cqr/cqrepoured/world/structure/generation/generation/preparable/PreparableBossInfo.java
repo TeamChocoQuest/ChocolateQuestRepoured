@@ -40,20 +40,11 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	@Nullable
 	private final NBTTagCompound bossTag;
 
-	public PreparableBossInfo(BlockPos pos, TileEntityBoss tileEntityBoss) {
-		this(pos.getX(), pos.getY(), pos.getZ(), tileEntityBoss);
+	public PreparableBossInfo(TileEntityBoss tileEntityBoss) {
+		this(getBossTag(tileEntityBoss));
 	}
 
-	public PreparableBossInfo(int x, int y, int z, TileEntityBoss tileEntityBoss) {
-		this(x, y, z, getBossTag(tileEntityBoss));
-	}
-
-	public PreparableBossInfo(BlockPos pos, @Nullable NBTTagCompound bossTag) {
-		this(pos.getX(), pos.getY(), pos.getZ(), bossTag);
-	}
-
-	public PreparableBossInfo(int x, int y, int z, @Nullable NBTTagCompound bossTag) {
-		super(x, y, z);
+	public PreparableBossInfo(@Nullable NBTTagCompound bossTag) {
 		this.bossTag = bossTag;
 	}
 
@@ -70,7 +61,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		Entity entity;
 
 		if (this.bossTag != null) {
@@ -168,7 +159,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityBoss> tileEntitySupplier) {
-			return new PreparableBossInfo(x, y, z, tileEntitySupplier.get());
+			return new PreparableBossInfo(tileEntitySupplier.get());
 		}
 
 	}
@@ -190,13 +181,13 @@ public class PreparableBossInfo extends PreparablePosInfo {
 			if ((data & 1) == 1) {
 				bossTag = nbtList.getCompoundTagAt(data >>> 1);
 			}
-			return new PreparableBossInfo(x, y, z, bossTag);
+			return new PreparableBossInfo(bossTag);
 		}
 
 		@Override
 		@Deprecated
 		public PreparableBossInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableBossInfo(x, y, z, (NBTTagCompound) null);
+			return new PreparableBossInfo((NBTTagCompound) null);
 		}
 
 	}

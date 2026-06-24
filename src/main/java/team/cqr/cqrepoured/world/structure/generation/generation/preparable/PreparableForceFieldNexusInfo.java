@@ -20,16 +20,14 @@ import team.cqr.cqrepoured.world.structure.generation.structurefile.BlockStatePa
 
 public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
-	public PreparableForceFieldNexusInfo(BlockPos pos) {
-		this(pos.getX(), pos.getY(), pos.getZ());
-	}
+	public static final PreparableForceFieldNexusInfo INSTANCE = new PreparableForceFieldNexusInfo();
 
-	public PreparableForceFieldNexusInfo(int x, int y, int z) {
-		super(x, y, z);
+	protected PreparableForceFieldNexusInfo() {
+
 	}
 
 	@Override
-	protected GeneratablePosInfo prepare(World world, DungeonPlacement placement, BlockPos pos) {
+	protected GeneratablePosInfo prepareNormal(World world, DungeonPlacement placement, BlockPos pos) {
 		if (placement.getProtectedRegionBuilder() == null) {
 			return new GeneratableBlockInfo(pos, Blocks.AIR.getDefaultState(), null);
 		}
@@ -47,7 +45,7 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparablePosInfo create(World world, int x, int y, int z, IBlockState state, Supplier<TileEntityForceFieldNexus> tileEntitySupplier) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}
@@ -61,13 +59,13 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 
 		@Override
 		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
+			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
 		public PreparableForceFieldNexusInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
-			return new PreparableForceFieldNexusInfo(x, y, z);
+			return INSTANCE;
 		}
 
 	}
