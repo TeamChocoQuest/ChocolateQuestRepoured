@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 1.12.2
+  schedule:
+    - cron: '0 2 1 * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v7
+
+    - name: setup-java
+      uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: setup-gradle
+      uses: gradle/actions/setup-gradle@v6
+
+    - name: build
+      run: ./gradlew build
+
+    - name: upload
+      uses: actions/upload-artifact@v7
+      with:
+        path: 'build/libs/*.jar'
+        archive: false
