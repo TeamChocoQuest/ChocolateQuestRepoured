@@ -119,6 +119,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			double height = this.getHeightScale(entityIn);
 			GlStateManager.scale(width, height, width);
 			GlStateManager.scale(1.3F, 1.3F, 1.3F);
+			GlStateManager.rotate((float) Math.toDegrees(Math.atan2(x, z)), 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate((entityIn.ticksExisted + partialTicks) * 4.0F, 1.0F, 1.0F, 0.0F);
 
 			SPHERE_VBO.bindBuffer();
