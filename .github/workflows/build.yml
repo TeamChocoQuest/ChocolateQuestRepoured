@@ -23,6 +23,9 @@ jobs:
     - name: setup-gradle
       uses: gradle/actions/setup-gradle@v6
 
+    - name: executable
+      run: chmod +x gradlew
+
     - name: build
       run: ./gradlew build
 
