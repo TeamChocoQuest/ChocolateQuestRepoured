@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -100,10 +101,17 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			float blue = 1.0F;
 			float alpha = 0.7F + 0.2F * MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F);
 
+			GlStateManager.disableAlpha();
+			GlStateManager.disableLighting();
+			GlStateManager.disableLight(0);
+			GlStateManager.disableLight(1);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GlStateManager.depthMask(false);
 			GlStateManager.disableTexture2D();
+			OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+			GlStateManager.disableTexture2D();
+			OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y + entityIn.height * 0.5D, z);
@@ -130,9 +138,16 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 			GlStateManager.popMatrix();
 
+			GlStateManager.enableAlpha();
+			GlStateManager.enableLighting();
+			GlStateManager.enableLight(0);
+			GlStateManager.enableLight(1);
 			GlStateManager.disableBlend();
 			GlStateManager.depthMask(true);
 			GlStateManager.enableTexture2D();
+			OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+			GlStateManager.enableTexture2D();
+			OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 		}
 	}
 
