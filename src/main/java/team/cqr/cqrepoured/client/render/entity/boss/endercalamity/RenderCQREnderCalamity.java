@@ -95,10 +95,10 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 		// since the sphere is transparent it needs to render in the "transparent entity" render-pass
 		if (entityIn.isShieldActive()) {
-			float red = 0.6F;
-			float green = 0.2F;
-			float blue = 0.7F;
-			float alpha = 0.7F + 0.15F * MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F);
+			float red = 0.85F;
+			float green = 0.3F;
+			float blue = 1.0F;
+			float alpha = 0.7F + 0.2F * MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F);
 
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -121,7 +121,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
 
 			GlStateManager.cullFace(CullFace.FRONT);
-			GlStateManager.color(red, green, blue, alpha * 0.35F);
+			GlStateManager.color(red, green, blue, alpha * 0.3F);
 			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
 			GlStateManager.cullFace(CullFace.BACK);
 
