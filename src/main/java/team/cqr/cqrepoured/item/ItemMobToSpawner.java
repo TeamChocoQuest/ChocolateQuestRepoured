@@ -35,7 +35,7 @@ public class ItemMobToSpawner extends Item {
 			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
 				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
 				entity.setDead();
-				for (Entity passenger : entity.getPassengers()) {
+				for (Entity passenger : entity.getRecursivePassengers()) {
 					passenger.setDead();
 				}
 				this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
