@@ -33,19 +33,29 @@ public class PreparableEntityInfo {
 		if (!entity.writeToNBTOptional(entityData)) {
 			return Optional.empty();
 		}
-		entityData.removeTag("UUIDMost");
-		entityData.removeTag("UUIDLeast");
-		NBTTagList nbtTagList = entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+		cleanEntityTag(structurePos, entity, entityData);
+		return Optional.of(new PreparableEntityInfo(entityData));
+	}
+
+	private static void cleanEntityTag(BlockPos structurePos, Entity entity, NBTTagCompound entityTag) {
+		entityTag.removeTag("UUIDMost");
+		entityTag.removeTag("UUIDLeast");
+
+		NBTTagList nbtTagList = entityTag.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 		nbtTagList.set(0, new NBTTagDouble(entity.posX - structurePos.getX()));
 		nbtTagList.set(1, new NBTTagDouble(entity.posY - structurePos.getY()));
 		nbtTagList.set(2, new NBTTagDouble(entity.posZ - structurePos.getZ()));
 		if (entity instanceof EntityHanging) {
 			BlockPos blockpos = ((EntityHanging) entity).getHangingPosition();
-			entityData.setInteger("TileX", blockpos.getX() - structurePos.getX());
-			entityData.setInteger("TileY", blockpos.getY() - structurePos.getY());
-			entityData.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
+			entityTag.setInteger("TileX", blockpos.getX() - structurePos.getX());
+			entityTag.setInteger("TileY", blockpos.getY() - structurePos.getY());
+			entityTag.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
 		}
-		return Optional.of(new PreparableEntityInfo(entityData));
+
+		NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+		for (NBTBase passengerTag : passengers) {
+			cleanEntityTag(structurePos, entity, (NBTTagCompound) passengerTag);
+		}
 	}
 
 	@Nullable
@@ -108,6 +118,14 @@ public class PreparableEntityInfo {
 		entity.setLocationAndAngles(x, y, z, transformedYaw, entity.rotationPitch);
 		entity.setRenderYawOffset(transformedYaw);
 		entity.setRotationYawHead(transformedYaw);
+
+		NBTTagList passengers = entityTag.getTagList("Passengers", Constants.NBT.TAG_COMPOUND);
+		for (NBTBase passengerNBT : passengers) {
+			Entity passenger = prepareEntity(world, placement, (NBTTagCompound) passengerNBT);
+			if (passenger != null) {
+				passenger.startRiding(entity);
+			}
+		}
 
 		return entity;
 	}

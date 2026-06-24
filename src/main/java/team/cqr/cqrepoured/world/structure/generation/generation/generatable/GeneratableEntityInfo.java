@@ -14,6 +14,7 @@ public class GeneratableEntityInfo {
 
 	public void spawn(World world, GeneratableDungeon dungeon) {
 		world.spawnEntity(this.entity);
+		this.entity.getRecursivePassengers().forEach(world::spawnEntity);
 	}
 
 	public Entity getEntity() {
