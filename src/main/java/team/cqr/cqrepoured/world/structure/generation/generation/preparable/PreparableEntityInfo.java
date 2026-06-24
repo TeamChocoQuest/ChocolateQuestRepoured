@@ -1,5 +1,7 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
+import java.util.Optional;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
@@ -19,25 +21,28 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 
 	private final NBTTagCompound entityData;
 
-	public PreparableEntityInfo(BlockPos structurePos, Entity entity) {
-		this.entityData = new NBTTagCompound();
-		entity.writeToNBTOptional(this.entityData);
-		this.entityData.removeTag("UUIDMost");
-		this.entityData.removeTag("UUIDLeast");
-		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+	public PreparableEntityInfo(NBTTagCompound entityData) {
+		this.entityData = entityData;
+	}
+
+	public static Optional<PreparableEntityInfo> create(BlockPos structurePos, Entity entity) {
+		NBTTagCompound entityData = new NBTTagCompound();
+		if (!entity.writeToNBTOptional(entityData)) {
+			return Optional.empty();
+		}
+		entityData.removeTag("UUIDMost");
+		entityData.removeTag("UUIDLeast");
+		NBTTagList nbtTagList = entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 		nbtTagList.set(0, new NBTTagDouble(entity.posX - structurePos.getX()));
 		nbtTagList.set(1, new NBTTagDouble(entity.posY - structurePos.getY()));
 		nbtTagList.set(2, new NBTTagDouble(entity.posZ - structurePos.getZ()));
 		if (entity instanceof EntityHanging) {
 			BlockPos blockpos = ((EntityHanging) entity).getHangingPosition();
-			this.entityData.setInteger("TileX", blockpos.getX() - structurePos.getX());
-			this.entityData.setInteger("TileY", blockpos.getY() - structurePos.getY());
-			this.entityData.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
+			entityData.setInteger("TileX", blockpos.getX() - structurePos.getX());
+			entityData.setInteger("TileY", blockpos.getY() - structurePos.getY());
+			entityData.setInteger("TileZ", blockpos.getZ() - structurePos.getZ());
 		}
-	}
-
-	public PreparableEntityInfo(NBTTagCompound entityData) {
-		this.entityData = entityData;
+		return Optional.of(new PreparableEntityInfo(entityData));
 	}
 
 	@Override

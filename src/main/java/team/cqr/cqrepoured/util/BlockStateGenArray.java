@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -125,7 +126,11 @@ public class BlockStateGenArray {
 	}
 
 	public boolean addEntity(BlockPos structurePos, Entity entity) {
-		return this.addInternal(new PreparableEntityInfo(structurePos, entity));
+		Optional<PreparableEntityInfo> entityInfo = PreparableEntityInfo.create(structurePos, entity);
+		if (!entityInfo.isPresent()) {
+			return false;
+		}
+		return this.addInternal(entityInfo.get());
 	}
 
 	public boolean addInternal(GenerationPhase phase, BlockPos pos, PreparablePosInfo blockInfo, EnumPriority priority) {

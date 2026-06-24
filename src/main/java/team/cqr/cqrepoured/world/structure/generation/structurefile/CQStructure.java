@@ -301,7 +301,7 @@ public class CQStructure {
 				continue;
 			}
 
-			this.entityInfoList.add(new PreparableEntityInfo(minPos, entity));
+			PreparableEntityInfo.create(minPos, entity).ifPresent(this.entityInfoList::add);
 		}
 	}
 
