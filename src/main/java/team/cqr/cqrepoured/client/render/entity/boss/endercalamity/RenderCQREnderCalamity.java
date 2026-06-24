@@ -95,7 +95,11 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 		// since the sphere is transparent it needs to render in the "transparent entity" render-pass
 		if (entityIn.isShieldActive()) {
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 0.6F + 0.25F * MathHelper.cos(0.1F * (entityIn.ticksExisted + partialTicks)));
+			float red = 0.6F;
+			float green = 0.2F;
+			float blue = 0.7F;
+			float alpha = 0.7F + 0.15F * MathHelper.sin((entityIn.ticksExisted + partialTicks) * 0.1F);
+
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GlStateManager.depthMask(false);
@@ -106,19 +110,18 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			double width = this.getWidthScale(entityIn);
 			double height = this.getHeightScale(entityIn);
 			GlStateManager.scale(width, height, width);
-			GlStateManager.scale(1.25D, 1.25D, 1.25D);
+			GlStateManager.scale(1.25F, 1.25F, 1.25F);
 			GlStateManager.rotate((entityIn.ticksExisted + partialTicks) * 4.0F, 1.0F, 1.0F, 0.0F);
 
 			SPHERE_VBO.bindBuffer();
 			GlStateManager.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 			GlStateManager.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
 
-			float f = 0.7F + 0.15F * (float) Math.sin(entityIn.ticksExisted * 0.1D);
-			GlStateManager.color(0.6F, 0.2F, 0.7F, f);
+			GlStateManager.color(red, green, blue, alpha);
 			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
 
 			GlStateManager.cullFace(CullFace.FRONT);
-			GlStateManager.color(0.6F, 0.2F, 0.7F, f * 0.35F);
+			GlStateManager.color(red, green, blue, alpha * 0.35F);
 			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
 			GlStateManager.cullFace(CullFace.BACK);
 
@@ -127,9 +130,9 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 
 			GlStateManager.popMatrix();
 
-			GlStateManager.enableTexture2D();
-			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableTexture2D();
 		}
 	}
 

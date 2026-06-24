@@ -15,17 +15,22 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GL43;
+import org.lwjgl.opengl.KHRDebugCallback;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.ResourceLocation;
 import team.cqr.cqrepoured.CQRMain;
 import team.cqr.cqrepoured.client.render.shader.ResourceSupplier;
+import team.cqr.cqrepoured.client.render.shader.ShaderException;
 import team.cqr.cqrepoured.client.render.shader.ShaderProgram;
 import team.cqr.cqrepoured.client.render.texture.CubemapTexture;
 
@@ -137,7 +142,17 @@ public class SphereRenderer {
 
 	public static void init() {
 		delete();
-		shader = new ShaderProgram.Builder().addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl"))).addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl"))).build();
+		try {
+			shader = new ShaderProgram.Builder()
+					.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl")))
+					.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl")))
+					.build();
+		} catch (ShaderException e) {
+			shader = new ShaderProgram.Builder()
+					.addShader(GL20.GL_VERTEX_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/vertex.glsl")))
+					.addShader(GL20.GL_FRAGMENT_SHADER, new ResourceSupplier(new ResourceLocation(CQRMain.MODID, "shaders/sphere/fragment.glsl")))
+					.build();
+		}
 		GL20.glUseProgram(shader.getShaderProgram());
 		uniformColor = GL20.glGetUniformLocation(shader.getShaderProgram(), "color");
 		uniformTexture = GL20.glGetUniformLocation(shader.getShaderProgram(), "useTexture");
@@ -243,14 +258,31 @@ public class SphereRenderer {
 	}
 
 	public static void renderSphere(VertexBuffer buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
+		if (!GL11.glGetBoolean(GL43.GL_DEBUG_OUTPUT)) {
+			GL11.glEnable(GL43.GL_DEBUG_OUTPUT);
+			GL11.glEnable(GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS);
+			GL43.glDebugMessageCallback(new KHRDebugCallback());
+		}
+		GL43.glDebugMessageControl(GL11.GL_DONT_CARE, GL11.GL_DONT_CARE, GL11.GL_DONT_CARE, null, false);
+		GL43.glDebugMessageControl(GL11.GL_DONT_CARE, GL43.GL_DEBUG_TYPE_ERROR, GL11.GL_DONT_CARE, null, true);
+
 		if (!drawFront && !drawBack) {
 			return;
 		}
-		preDraw(textureLocation);
 
+		GlStateManager.disableTexture2D();
 		buffer.bindBuffer();
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-		GL20.glEnableVertexAttribArray(0);
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, 0L);
+		if (textureLocation != null) {
+			Minecraft mc = Minecraft.getMinecraft();
+			TextureManager textureManager = mc.getTextureManager();
+			ITextureObject texture = textureManager.getTexture(CubemapTexture.get(textureLocation));
+			GL11.glEnable(GL13.GL_TEXTURE_CUBE_MAP);
+			GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture.getGlTextureId());
+			GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+			GL11.glTexCoordPointer(3, GL11.GL_FLOAT, 0, 0L);
+		}
 
 		if (drawBack) {
 			GL11.glCullFace(GL11.GL_FRONT);
@@ -261,20 +293,32 @@ public class SphereRenderer {
 			buffer.drawArrays(mode);
 		}
 
-		GL20.glDisableVertexAttribArray(0);
+		GlStateManager.enableTexture2D();
 		buffer.unbindBuffer();
-
-		postDraw();
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		if (textureLocation != null) {
+			GL11.glDisable(GL13.GL_TEXTURE_CUBE_MAP);
+			GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		}
 	}
 
 	public static void renderSphere(BufferBuilder buffer, int mode, @Nullable ResourceLocation textureLocation, boolean drawFront, boolean drawBack) {
 		if (!drawFront && !drawBack) {
 			return;
 		}
-		preDraw(textureLocation);
 
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, buffer.getByteBuffer());
-		GL20.glEnableVertexAttribArray(0);
+		GlStateManager.disableTexture2D();
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, 0, buffer.getByteBuffer());
+		if (textureLocation != null) {
+			Minecraft mc = Minecraft.getMinecraft();
+			TextureManager textureManager = mc.getTextureManager();
+			ITextureObject texture = textureManager.getTexture(CubemapTexture.get(textureLocation));
+			GL11.glEnable(GL13.GL_TEXTURE_CUBE_MAP);
+			GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture.getGlTextureId());
+			GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+			GL11.glTexCoordPointer(3, GL11.GL_FLOAT, 0, buffer.getByteBuffer());
+		}
 
 		if (drawBack) {
 			GL11.glCullFace(GL11.GL_FRONT);
@@ -285,9 +329,12 @@ public class SphereRenderer {
 			GL11.glDrawArrays(mode, 0, buffer.getVertexCount());
 		}
 
-		GL20.glDisableVertexAttribArray(0);
-
-		postDraw();
+		GlStateManager.enableTexture2D();
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		if (textureLocation != null) {
+			GL11.glDisable(GL13.GL_TEXTURE_CUBE_MAP);
+			GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		}
 	}
 
 	private static void preDraw(@Nullable ResourceLocation textureLocation) {
@@ -304,7 +351,7 @@ public class SphereRenderer {
 			ITextureObject texture = textureManager.getTexture(CubemapTexture.get(textureLocation));
 			GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, texture.getGlTextureId());
 		} else {
-			GL20.glUniform1i(uniformTexture, 0);
+			
 		}
 	}
 
