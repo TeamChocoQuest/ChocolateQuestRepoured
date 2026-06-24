@@ -11,6 +11,7 @@ import com.google.common.base.Optional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -98,6 +99,7 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GlStateManager.depthMask(false);
+			GlStateManager.disableTexture2D();
 
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y + entityIn.height * 0.5D, z);
@@ -106,13 +108,26 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 			GlStateManager.scale(width, height, width);
 			GlStateManager.scale(1.25D, 1.25D, 1.25D);
 			GlStateManager.rotate((entityIn.ticksExisted + partialTicks) * 4.0F, 1.0F, 1.0F, 0.0F);
+
+			SPHERE_VBO.bindBuffer();
+			GlStateManager.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+			GlStateManager.glVertexPointer(3, GL11.GL_FLOAT, 0, 0);
+
 			float f = 0.7F + 0.15F * (float) Math.sin(entityIn.ticksExisted * 0.1D);
 			GlStateManager.color(0.6F, 0.2F, 0.7F, f);
-			SphereRenderer.renderSphere(SPHERE_VBO, GL11.GL_TRIANGLES, null, true, false);
+			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
+
+			GlStateManager.cullFace(CullFace.FRONT);
 			GlStateManager.color(0.6F, 0.2F, 0.7F, f * 0.35F);
-			SphereRenderer.renderSphere(SPHERE_VBO, GL11.GL_TRIANGLES, null, false, true);
+			SPHERE_VBO.drawArrays(GL11.GL_TRIANGLES);
+			GlStateManager.cullFace(CullFace.BACK);
+
+			SPHERE_VBO.unbindBuffer();
+			GlStateManager.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+
 			GlStateManager.popMatrix();
 
+			GlStateManager.enableTexture2D();
 			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
 		}
