@@ -1,8 +1,6 @@
 package team.cqr.cqrepoured.world.structure.generation.generation.generatable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import team.cqr.cqrepoured.world.structure.generation.generation.GeneratableDungeon;
 
@@ -14,22 +12,12 @@ public class GeneratableEntityInfo {
 		this.entity = entity;
 	}
 
-	public GeneratableEntityInfo(World world, NBTTagCompound compound) {
-		this.entity = EntityList.createEntityFromNBT(compound, world);
-	}
-
 	public void spawn(World world, GeneratableDungeon dungeon) {
 		world.spawnEntity(this.entity);
 	}
 
 	public Entity getEntity() {
 		return this.entity;
-	}
-
-	public NBTTagCompound writeToNBT() {
-		NBTTagCompound compound = new NBTTagCompound();
-		this.entity.writeToNBTAtomically(compound);
-		return compound;
 	}
 
 }
