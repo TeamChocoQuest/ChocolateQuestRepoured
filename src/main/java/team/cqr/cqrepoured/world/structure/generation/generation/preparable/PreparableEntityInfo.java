@@ -2,10 +2,13 @@ package team.cqr.cqrepoured.world.structure.generation.generation.preparable;
 
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
@@ -17,7 +20,7 @@ import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacemen
 import team.cqr.cqrepoured.world.structure.generation.generation.DungeonPlacement.MutableVec3d;
 import team.cqr.cqrepoured.world.structure.generation.generation.generatable.GeneratableEntityInfo;
 
-public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> {
+public class PreparableEntityInfo {
 
 	private final NBTTagCompound entityData;
 
@@ -45,17 +48,31 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 		return Optional.of(new PreparableEntityInfo(entityData));
 	}
 
-	@Override
-	public GeneratableEntityInfo prepareNormal(World world, DungeonPlacement placement) {
-		Entity entity = EntityList.createEntityFromNBT(this.entityData, world);
+	@Nullable
+	public GeneratableEntityInfo prepare(World world, DungeonPlacement placement) {
+		Entity entity = prepareEntity(world, placement, this.entityData);
+		if (entity == null) {
+			return null;
+		}
+		return new GeneratableEntityInfo(entity);
+	}
+
+	@Nullable
+	private static Entity prepareEntity(World world, DungeonPlacement placement, NBTTagCompound entityTag) {
+		Entity entity = EntityList.createEntityFromNBT(entityTag, world);
+
+		if (entity == null) {
+			return null;
+		}
+
 		double x;
 		double y;
 		double z;
 
 		if (entity instanceof EntityHanging) {
-			x = this.entityData.getInteger("TileX");
-			y = this.entityData.getInteger("TileY");
-			z = this.entityData.getInteger("TileZ");
+			x = entityTag.getInteger("TileX");
+			y = entityTag.getInteger("TileY");
+			z = entityTag.getInteger("TileZ");
 			if (entity instanceof EntityPainting && placement.getMirror() != Mirror.NONE) {
 				int n = ((((EntityPainting) entity).art.sizeX >> 4) + 1) & 1;
 				switch (((EntityPainting) entity).facingDirection.rotateYCCW()) {
@@ -80,7 +97,7 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 			y = pos.getY();
 			z = pos.getZ();
 		} else {
-			NBTTagList tagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
+			NBTTagList tagList = entityTag.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 			MutableVec3d vec = placement.transform(tagList.getDoubleAt(0), tagList.getDoubleAt(1), tagList.getDoubleAt(2));
 			x = vec.x;
 			y = vec.y;
@@ -91,12 +108,8 @@ public class PreparableEntityInfo implements IPreparable<GeneratableEntityInfo> 
 		entity.setLocationAndAngles(x, y, z, transformedYaw, entity.rotationPitch);
 		entity.setRenderYawOffset(transformedYaw);
 		entity.setRotationYawHead(transformedYaw);
-		return new GeneratableEntityInfo(entity);
-	}
 
-	@Override
-	public GeneratableEntityInfo prepareDebug(World world, DungeonPlacement placement) {
-		return this.prepareNormal(world, placement);
+		return entity;
 	}
 
 	public NBTTagCompound getEntityData() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import net.minecraft.world.World;
@@ -47,7 +48,10 @@ public class EntityDungeonPart implements IDungeonPart {
 
 		@Override
 		public EntityDungeonPart build(World world, DungeonPlacement placement) {
-			return new EntityDungeonPart(this.entities.stream().map(preparable -> preparable.prepare(world, placement)).collect(Collectors.toList()));
+			return new EntityDungeonPart(this.entities.stream()
+					.map(preparable -> preparable.prepare(world, placement))
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList()));
 		}
 
 	}
