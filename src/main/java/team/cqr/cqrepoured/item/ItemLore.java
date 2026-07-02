@@ -20,7 +20,7 @@ public class ItemLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(this.hasLore(stack)) {
+		if (this.hasLore(stack)) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 				tooltip.add(TextFormatting.BLUE + I18n.format("description." + this.getRegistryName().getPath() + ".name", '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n'));
 			} else {
@@ -30,7 +30,7 @@ public class ItemLore extends Item {
 			super.addInformation(stack, worldIn, tooltip, flagIn);
 		}
 	}
-	
+
 	public boolean hasLore(ItemStack stack) {
 		return true;
 	}

@@ -83,7 +83,7 @@ public class ElectricFieldRenderUtil {
 
 	public static void renderElectricField(double fieldRadius, double fieldHeight, double x, double y, double z, int bolts, long seed) {
 		RANDOM.setSeed(seed);
-		
+
 		EmissiveUtil.preEmissiveTextureRendering();
 
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
@@ -128,7 +128,7 @@ public class ElectricFieldRenderUtil {
 		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-		
+
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
 
@@ -141,7 +141,7 @@ public class ElectricFieldRenderUtil {
 		RANDOM.setSeed(seed);
 
 		EmissiveUtil.preEmissiveTextureRendering();
-		
+
 		// First disable tex2d and lighting, we do not use a texture and don't want to be affected by lighting
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -182,7 +182,7 @@ public class ElectricFieldRenderUtil {
 		GlStateManager.disableBlend();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-		
+
 		EmissiveUtil.postEmissiveTextureRendering();
 	}
 

@@ -12,7 +12,7 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import team.cqr.cqrepoured.client.render.entity.RenderCQREntityGeo;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
-public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> extends AbstractCQRLayerGeo<T>{
+public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
 	public LayerMagicArmorGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
@@ -20,10 +20,10 @@ public class LayerMagicArmorGeo<T extends AbstractEntityCQR & IAnimatable> exten
 
 	@Override
 	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
-		if(entity.isMagicArmorActive()) {
-			//TODO: Fix weird bug where the entity inflates when it is being looked at and the game gets paused!
+		if (entity.isMagicArmorActive()) {
+			// TODO: Fix weird bug where the entity inflates when it is being looked at and the game gets paused!
 			this.geoRendererInstance.bindTexture(RenderCQREntityGeo.TEXTURES_ARMOR);
-			
+
 			GlStateManager.pushMatrix();
 
 			GlStateManager.depthMask(!entity.isInvisible());

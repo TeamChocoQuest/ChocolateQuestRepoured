@@ -742,7 +742,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public void tick() {
-		
+
 	}
 
 	@Override

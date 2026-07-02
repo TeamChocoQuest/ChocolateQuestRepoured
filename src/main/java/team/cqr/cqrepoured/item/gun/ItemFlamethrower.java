@@ -46,8 +46,8 @@ public class ItemFlamethrower extends ItemMagazineBased {
 		World world = entity.world;
 		float rotationYaw = MathHelper.wrapDegrees(entity.rotationYawHead);
 		double armDist = 1.0D;
-		if(entity instanceof ISizable) {
-			armDist *= ((ISizable)entity).getSizeVariation();
+		if (entity instanceof ISizable) {
+			armDist *= ((ISizable) entity).getSizeVariation();
 		}
 		double offY = entity.height * 0.75D;
 		double posX = entity.posX - Math.sin(Math.toRadians(rotationYaw)) * armDist;

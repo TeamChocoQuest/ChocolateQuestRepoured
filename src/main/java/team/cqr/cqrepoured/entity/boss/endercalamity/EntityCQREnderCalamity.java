@@ -623,7 +623,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 		if (source.canHarmInCreative()) {
 			return super.attackEntityFrom(source, amount);
 		}
-		//amount /= 2;
+		// amount /= 2;
 		// Projectile attack
 		if (source.getImmediateSource() instanceof ProjectileEnergyOrb) {
 			// TODO: Hit by energy ball
@@ -810,7 +810,7 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 				if (this.currentPhase != EEnderCalamityPhase.PHASE_ENERGY_TENNIS) {
 					this.tennisAI.calculateRemainingAttempts();
 					this.noTennisCounter++;
-					//TODO: Move to config?
+					// TODO: Move to config?
 					if (this.noTennisCounter > 5) {
 						this.switchToPhase(EEnderCalamityPhase.PHASE_ENERGY_TENNIS.getPhaseObject());
 						this.noTennisCounter = 0;
@@ -1183,14 +1183,14 @@ public class EntityCQREnderCalamity extends AbstractEntityCQRBoss implements IAn
 	@Override
 	public void tick() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public int tickTimer() {
 		return this.ticksExisted;
 	}
-	
+
 	private static ResourceLocation LOOT_DROP_LOOTTABLE = CQRLoottables.CHESTS_TREASURE;
 
 	public static void reloadLootDropLoottable() {
