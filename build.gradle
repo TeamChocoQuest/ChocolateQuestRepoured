@@ -2,6 +2,8 @@ plugins {
     id 'eclipse'
     id 'net.minecraftforge.gradle' version "${forge_gradle_version}"
     id 'org.spongepowered.mixin' version "${mixin_gradle_version}"
+    // starting from 8.1.0, spotless requires Gradle 8.1+
+    id("com.diffplug.spotless") version "8.0.0"
 }
 
 version = "${mc_version}-${mod_version}"
@@ -99,6 +101,12 @@ processResources {
 
     filesMatching('mcmod.info') {
         expand version: inputs.properties.get('version')
+    }
+}
+
+spotless {
+    java {
+        eclipse().configFile('./eclipse code style/CQR_formatter.xml')
     }
 }
 
