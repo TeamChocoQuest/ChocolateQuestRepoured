@@ -1,0 +1,14 @@
+{
+  "type": "cqrepoured:volcano",
+  "start_pool": "cqrepoured:volcano/start",
+  "size": 7,
+  "max_distance_from_center": 116,
+  "biomes": "#cqrepoured:all_land",
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin",
+  "start_height": {
+    "absolute": 30
+  },
+  "use_expansion_hack": false,
+  "spawn_overrides": {}
+}

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "cqrepoured:procedural_castle",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "exclusion_zone": {
+      "other_set": "cqrepoured:cqr_castles_flat",
+      "chunk_count": 6
+    },
+    "spacing": 24,
+    "separation": 12,
+    "salt": 100006
+  }
+}

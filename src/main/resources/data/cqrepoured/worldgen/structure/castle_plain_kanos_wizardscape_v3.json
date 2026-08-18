@@ -1,0 +1,18 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/castles/normal/kanos_wizardscape-v3.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_zombie",
+    "cqrepoured:cq_skeleton",
+    "cqrepoured:cq_gremlin",
+    "cqrepoured:cq_illager"
+  ],
+  "y_offset": -15,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:plains_forest",
+  "spawn_overrides": {},
+  "size_x": 50,
+  "size_y": 50,
+  "size_z": 50
+}

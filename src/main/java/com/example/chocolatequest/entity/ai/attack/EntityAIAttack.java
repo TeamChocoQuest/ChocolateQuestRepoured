@@ -1,0 +1,106 @@
+package com.example.chocolatequest.entity.ai.attack;
+
+import java.util.EnumSet;
+
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
+import com.example.chocolatequest.entity.ai.AbstractCQREntityAI;
+import com.example.chocolatequest.entity.bases.AbstractEntityCQR;
+
+public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
+
+    protected int attackTick;
+    private float attackCooldownOverhead;
+    private int pathUpdateTimer;
+
+    public EntityAIAttack(AbstractEntityCQR entity) {
+        super(entity);
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+    }
+
+    @Override
+    public boolean canUse() {
+        LivingEntity attackTarget = this.entity.getTarget();
+        return attackTarget != null && this.entity.getSensing().hasLineOfSight(attackTarget);
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        LivingEntity attackTarget = this.entity.getTarget();
+        return attackTarget != null && this.entity.getSensing().hasLineOfSight(attackTarget);
+    }
+
+    @Override
+    public void start() {
+        LivingEntity attackTarget = this.entity.getTarget();
+        this.updatePath(attackTarget);
+        this.checkAndPerformBlock();
+        this.entity.setAggressive(true);
+    }
+
+    public void tick() {
+        LivingEntity attackTarget = this.entity.getTarget();
+
+        if (attackTarget != null) {
+            this.entity.getLookControl().setLookAt(attackTarget, 12.0F, 12.0F);
+            this.updatePath(attackTarget);
+            this.checkAndPerformAttack(this.entity.getTarget());
+            this.checkAndPerformBlock();
+        }
+    }
+
+    @Override
+    public void stop() {
+        this.entity.setAggressive(false);
+        this.entity.getNavigation().stop();
+        this.entity.stopUsingItem();
+    }
+
+    protected void updatePath(LivingEntity target) {
+        if (--this.pathUpdateTimer <= 0) {
+            this.entity.getNavigation().moveTo(target, 1.0D);
+            this.pathUpdateTimer = 10;
+        }
+    }
+
+    protected void checkAndPerformBlock() {
+        if (this.entity.getLastTimeHitByAxeWhileBlocking() + 80 > this.entity.tickCount) {
+            if (this.entity.isBlocking()) {
+                this.entity.stopUsingItem();
+            }
+        } else if (this.attackTick + this.getBlockCooldownPeriod() <= this.entity.tickCount && !this.entity.isBlocking()) {
+            ItemStack offhand = this.entity.getOffhandItem();
+            if (offhand.getItem() instanceof ShieldItem) {
+                this.entity.startUsingItem(InteractionHand.OFF_HAND);
+            }
+        }
+    }
+
+    protected void checkAndPerformAttack(LivingEntity attackTarget) {
+        if (this.attackTick + (int) this.getAttackCooldownPeriod() <= this.entity.tickCount && this.entity.isWithinMeleeAttackRange(attackTarget)) {
+            if (this.entity.isBlocking()) {
+                this.entity.stopUsingItem();
+            }
+            if (this.attackTick + this.getAttackCooldownPeriod() > this.entity.tickCount) {
+                this.attackCooldownOverhead = this.getAttackCooldownPeriod() % 1.0F;
+            } else {
+                this.attackCooldownOverhead = 0.0F;
+            }
+            this.attackTick = this.entity.tickCount;
+            this.entity.swing(InteractionHand.MAIN_HAND, true);
+            this.entity.doHurtTarget(attackTarget);
+        }
+    }
+
+    public float getAttackCooldownPeriod() {
+        return (float) (1.0D / this.entity.getAttribute(Attributes.ATTACK_SPEED).getValue() * 20.0D) + this.attackCooldownOverhead;
+    }
+
+    public int getBlockCooldownPeriod() {
+        return 30;
+    }
+
+}

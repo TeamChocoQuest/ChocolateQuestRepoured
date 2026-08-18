@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "M M",
+    "M M"
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:scale_turtle"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:turtle_leggings",
+    "count": 1
+  }
+}

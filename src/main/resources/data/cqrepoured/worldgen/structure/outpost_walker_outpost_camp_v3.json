@@ -1,0 +1,17 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/outposts/snow/walker_outpost_camp_v3.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_walker",
+    "cqrepoured:cq_goblin",
+    "cqrepoured:cq_pirate"
+  ],
+  "y_offset": -2,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:snow",
+  "spawn_overrides": {},
+  "size_x": 21,
+  "size_y": 14,
+  "size_z": 25
+}

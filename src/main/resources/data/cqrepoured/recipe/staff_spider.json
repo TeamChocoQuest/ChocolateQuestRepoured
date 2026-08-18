@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "cqrepoured:staff"
+    },
+    {
+      "item": "cqrepoured:leather_spider"
+    }
+  ],
+  "result": {
+    "id": "cqrepoured:staff_spider",
+    "count": 1
+  }
+}

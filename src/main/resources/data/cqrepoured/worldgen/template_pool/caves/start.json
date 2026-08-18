@@ -1,0 +1,76 @@
+{
+  "name": "cqrepoured:caves/start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/swamp/swamp_cave_core_1",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 15,
+        "size_y": 22,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/swamp/swamp_cave_core_2",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 15,
+        "size_y": 22,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/swamp/swamp_cave_core_3",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 15,
+        "size_y": 22,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/swamp/swamp_cave_core_4",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 15,
+        "size_y": 22,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/swamp/swampcaveroofthing",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

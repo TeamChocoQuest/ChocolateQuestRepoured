@@ -1,0 +1,12 @@
+{
+	"credit": "Made by Silentine, with Blockbench",
+	"parent": "cqrepoured:item/hookshot_long",
+	"overrides": [
+        {
+            "predicate": {
+                "hook_out": 1
+            },
+            "model": "cqrepoured:item/hookshot_long_empty"
+        }
+    ]
+}

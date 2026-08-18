@@ -1,0 +1,201 @@
+{
+  "name": "cqrepoured:floatingcity/maze",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherbighouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 13,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherbowl",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/nethercitydiamondpyramid",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 8,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherfarm",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 3,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherfarmenchanter",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 15,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherfarmhouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 6,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherfourhouses",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 5,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherghasttower",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/nethermultilevelhouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherobsidiantree",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherprisonfarm",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 12,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherrabbitroast",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherrailwaystation",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 19,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/nethertemple",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/floatingcity/islands/netherwartplanterhouses_b",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:floatingcity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

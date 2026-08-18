@@ -1,0 +1,8 @@
+{
+  "type": "cqrepoured:boss_grotto",
+  "grotto": "ice_bull",
+  "biomes": "#cqrepoured:snow",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {}
+}

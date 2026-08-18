@@ -1,0 +1,48 @@
+{
+  "name": "cqrepoured:caves/maze",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/normal/birdcave",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 23,
+        "size_y": 20,
+        "size_z": 22,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/normal/portalcave",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 12,
+        "size_y": 10,
+        "size_z": 17,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/caves/normal/pumpkincave",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:caves/maze",
+        "entity_replacement": "cqrepoured:cq_gremlin",
+        "size_x": 9,
+        "size_y": 8,
+        "size_z": 9,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

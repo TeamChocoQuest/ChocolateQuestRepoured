@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "cqrepoured:item/projectile_heart"
+                 },
+    "parent":  "minecraft:item/generated"
+}

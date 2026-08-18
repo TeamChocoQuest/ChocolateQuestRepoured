@@ -1,0 +1,36 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.biped.sit": {
+			"loop": true,
+			"bones": {
+				"root": {
+					"position": {
+						"vector": [0, -7, 0]
+					}
+				},
+				"bipedLegs": {
+					"rotation": {
+						"vector": [-80, 0, 0]
+					}
+				},
+				"bipedLegLeft": {
+					"rotation": {
+						"vector": [0, 0, -12.5]
+					}
+				},
+				"bipedLegRight": {
+					"rotation": {
+						"vector": [0, 0, 12.5]
+					}
+				},
+				"bipedArms": {
+					"rotation": {
+						"vector": [-45, 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

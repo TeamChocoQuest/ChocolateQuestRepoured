@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBB",
+    "R  "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "R": {
+      "item": "cqrepoured:revolver"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:musket",
+    "count": 1
+  }
+}

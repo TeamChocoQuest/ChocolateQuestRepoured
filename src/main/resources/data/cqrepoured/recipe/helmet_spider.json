@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "M M",
+    "   "
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:leather_spider"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:helmet_spider",
+    "count": 1
+  }
+}

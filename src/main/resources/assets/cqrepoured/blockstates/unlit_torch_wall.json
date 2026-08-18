@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cqrepoured:block/unlit_torch_wall"
+    },
+    "facing=north": {
+      "model": "cqrepoured:block/unlit_torch_wall",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "cqrepoured:block/unlit_torch_wall",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "cqrepoured:block/unlit_torch_wall",
+      "y": 180
+    }
+  }
+}

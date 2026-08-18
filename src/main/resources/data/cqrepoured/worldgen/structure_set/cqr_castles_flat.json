@@ -1,0 +1,8 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:castle_plain_castle_giant_tree", "weight": 1 },
+    { "structure": "cqrepoured:castle_plain_castle_neaekkleasia_v2", "weight": 1 },
+    { "structure": "cqrepoured:castle_plain_redstone_castle_v2", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 48, "separation": 24, "salt": 100014 }
+}

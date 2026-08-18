@@ -1,0 +1,16 @@
+{
+  "type": "cqrepoured:lava_lake_jigsaw",
+  "start_pool": "cqrepoured:nethercity/start",
+  "size": 2,
+  "max_distance_from_center": 48,
+  "biomes": "#minecraft:is_nether",
+  "step": "underground_decoration",
+  "terrain_adaptation": "none",
+  "start_height": {
+    "absolute": 32
+  },
+  "height_above_lava": 1,
+  "lake_sample_radius": 24,
+  "use_expansion_hack": false,
+  "spawn_overrides": {}
+}

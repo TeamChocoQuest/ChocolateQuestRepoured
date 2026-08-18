@@ -1,0 +1,9 @@
+{
+  "structures": [{"structure": "cqrepoured:bull_grotto", "weight": 1}],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 32,
+    "salt": 100007
+  }
+}

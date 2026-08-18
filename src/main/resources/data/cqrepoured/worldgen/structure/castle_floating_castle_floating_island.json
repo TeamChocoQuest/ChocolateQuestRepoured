@@ -1,0 +1,15 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/castles/floating/castle_floating_island.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_zombie"
+  ],
+  "y_offset": 60,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:all_land",
+  "spawn_overrides": {},
+  "size_x": 73,
+  "size_y": 70,
+  "size_z": 46
+}

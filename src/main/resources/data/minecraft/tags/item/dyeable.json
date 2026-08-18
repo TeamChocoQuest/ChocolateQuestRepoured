@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        "cqrepoured:helmet_iron_dyable",
+        "cqrepoured:chestplate_iron_dyable",
+        "cqrepoured:leggings_iron_dyable",
+        "cqrepoured:boots_iron_dyable",
+        "cqrepoured:helmet_diamond_dyable",
+        "cqrepoured:chestplate_diamond_dyable",
+        "cqrepoured:leggings_diamond_dyable",
+        "cqrepoured:boots_diamond_dyable"
+    ]
+}

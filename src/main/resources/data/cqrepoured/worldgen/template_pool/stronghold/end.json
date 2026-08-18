@@ -1,0 +1,32 @@
+{
+  "name": "cqrepoured:stronghold/end",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/stronghold/normal/boss/stronghold_boss_room_desert",
+        "doorways": "east,west,north,south",
+        "target_pool": "minecraft:empty",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/stronghold/normal/boss/stronghold_boss_room_taiga",
+        "doorways": "east,west,north,south",
+        "target_pool": "minecraft:empty",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

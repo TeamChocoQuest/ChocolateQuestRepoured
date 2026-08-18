@@ -1,0 +1,15 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/taverns/campsite-v4.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_human"
+  ],
+  "y_offset": -11,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:flat_plains",
+  "spawn_overrides": {},
+  "size_x": 47,
+  "size_y": 25,
+  "size_z": 48
+}

@@ -1,0 +1,15 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/taverns/medium-tavern-2-v6.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_human"
+  ],
+  "y_offset": -12,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:flat_plains",
+  "spawn_overrides": {},
+  "size_x": 55,
+  "size_y": 28,
+  "size_z": 55
+}

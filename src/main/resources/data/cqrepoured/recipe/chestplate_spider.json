@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "M M",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:leather_spider"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:chestplate_spider",
+    "count": 1
+  }
+}

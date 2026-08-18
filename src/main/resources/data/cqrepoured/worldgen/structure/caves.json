@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "cqrepoured:caves/start",
+  "size": 7,
+  "max_distance_from_center": 116,
+  "biomes": "#minecraft:is_overworld",
+  "step": "underground_structures",
+  "terrain_adaptation": "none",
+  "start_height": {
+    "absolute": -10
+  },
+  "use_expansion_hack": false,
+  "spawn_overrides": {}
+}

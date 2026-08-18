@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "cqrepoured:heavy_iron_helmet",
+    "cqrepoured:heavy_diamond_helmet",
+    "cqrepoured:bull_helmet",
+    "cqrepoured:turtle_helmet",
+    "cqrepoured:inquisition_helmet",
+    "cqrepoured:slime_helmet",
+    "cqrepoured:helmet_spider",
+    "cqrepoured:scouter_helmet"
+  ]
+}

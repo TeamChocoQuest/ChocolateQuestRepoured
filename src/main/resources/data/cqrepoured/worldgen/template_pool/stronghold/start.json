@@ -1,0 +1,19 @@
+{
+  "name": "cqrepoured:stronghold/start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/stronghold/normal/hallway/ns/stronghold_north_south_1",
+        "doorways": "south",
+        "target_pool": "cqrepoured:stronghold/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

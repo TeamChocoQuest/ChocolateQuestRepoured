@@ -1,0 +1,30 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "cqrepoured:item/big_handheld",
+    "textures": {
+      "layer0": "cqrepoured:item/spear_diamond"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/spear_diamond"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/spear_diamond"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/spear_diamond"
+      }
+    }
+  },
+  "gui_light": "front"
+}

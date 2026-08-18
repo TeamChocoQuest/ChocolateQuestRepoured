@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "cqrepoured:caves",
+      "weight": 1
+    },
+    {
+      "structure": "cqrepoured:vegetated_cave",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 80,
+    "separation": 40,
+    "salt": 100005
+  }
+}

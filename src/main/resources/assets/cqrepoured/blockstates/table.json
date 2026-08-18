@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "top=false,waterlogged=false": {
+      "model": "cqrepoured:block/table"
+    },
+    "top=true,waterlogged=false": {
+      "model": "cqrepoured:block/table_top"
+    },
+    "top=false,waterlogged=true": {
+      "model": "cqrepoured:block/table"
+    },
+    "top=true,waterlogged=true": {
+      "model": "cqrepoured:block/table_top"
+    }
+  }
+}

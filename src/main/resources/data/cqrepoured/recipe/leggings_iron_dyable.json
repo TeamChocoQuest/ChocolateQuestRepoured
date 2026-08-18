@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_leggings"
+    },
+    {
+      "item": "minecraft:leather_leggings"
+    }
+  ],
+  "result": {
+    "id": "cqrepoured:leggings_iron_dyable",
+    "count": 1
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "cqrepoured:volcano/start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/boss/stronghold_boss_room_desert",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

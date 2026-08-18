@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "cqrepoured:staff"
+    },
+    {
+      "item": "minecraft:breeze_rod"
+    }
+  ],
+  "result": {
+    "id": "cqrepoured:wind_staff",
+    "count": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "AEA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "E": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:electric_arrow",
+    "count": 8
+  }
+}

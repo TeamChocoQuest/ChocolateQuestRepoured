@@ -1,0 +1,18 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/castles/normal/castle_giant_tree.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_zombie",
+    "cqrepoured:cq_skeleton",
+    "cqrepoured:cq_gremlin",
+    "cqrepoured:cq_illager"
+  ],
+  "y_offset": -10,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:flat_plains",
+  "spawn_overrides": {},
+  "size_x": 50,
+  "size_y": 52,
+  "size_z": 50
+}

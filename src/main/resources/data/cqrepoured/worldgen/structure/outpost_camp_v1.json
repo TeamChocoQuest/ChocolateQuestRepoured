@@ -1,0 +1,17 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/outposts/plains/camp-v1.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_goblin",
+    "cqrepoured:cq_walker",
+    "cqrepoured:cq_pirate"
+  ],
+  "y_offset": -2,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:plains_forest",
+  "spawn_overrides": {},
+  "size_x": 22,
+  "size_y": 9,
+  "size_z": 19
+}

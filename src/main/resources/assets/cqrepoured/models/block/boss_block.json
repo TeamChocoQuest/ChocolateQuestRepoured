@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cqrepoured:block/boss_block"
+  },
+  "render_type": "minecraft:cutout"
+}

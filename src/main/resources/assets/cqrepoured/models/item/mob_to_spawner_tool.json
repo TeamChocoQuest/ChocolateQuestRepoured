@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": { "layer0": "cqrepoured:item/mob_to_spawner" }
+}

@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "cqrepoured:volcano",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 80,
+    "separation": 40,
+    "salt": 100001
+  }
+}

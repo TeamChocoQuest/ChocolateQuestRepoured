@@ -1,0 +1,13 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:castle_snow_castle_snow_cathedral", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_castle_snow_cube_b", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_castle_snow_mountain_v2", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_castle_snow_redstone", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_castle_snow_spire_v2", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_mountain_village_v1", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_unnamedsnowcastle", "weight": 1 },
+    { "structure": "cqrepoured:castle_snow_walker_citadel_v10", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 48, "separation": 24, "salt": 100009 }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "cqrepoured:shulker_golem_dungeon",
+  "biomes": "#cqrepoured:outer_end_islands",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {}
+}

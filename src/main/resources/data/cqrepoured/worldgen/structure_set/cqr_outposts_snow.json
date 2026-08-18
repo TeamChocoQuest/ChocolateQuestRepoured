@@ -1,0 +1,6 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:outpost_walker_outpost_camp_v3", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 48, "separation": 24, "salt": 100015 }
+}

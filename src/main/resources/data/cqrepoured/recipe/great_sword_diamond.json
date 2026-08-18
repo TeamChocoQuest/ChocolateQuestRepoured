@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  M",
+    " M ",
+    "H  "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:diamond"
+    },
+    "H": {
+      "item": "cqrepoured:sword_handle"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:great_sword_diamond",
+    "count": 1
+  }
+}

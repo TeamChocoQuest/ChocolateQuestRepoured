@@ -1,0 +1,14 @@
+{
+  "type": "cqrepoured:hanging_city",
+  "start_pool": "cqrepoured:floatingcity/start",
+  "size": 1,
+  "max_distance_from_center": 32,
+  "biomes": "#minecraft:is_nether",
+  "step": "underground_decoration",
+  "terrain_adaptation": "none",
+  "start_height": {
+    "absolute": 55
+  },
+  "use_expansion_hack": false,
+  "spawn_overrides": {}
+}

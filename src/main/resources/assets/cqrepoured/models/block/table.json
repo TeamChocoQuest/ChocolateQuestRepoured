@@ -1,0 +1,6 @@
+{
+  "parent": "cqrepoured:block/template_table",
+  "textures": {
+    "wood": "minecraft:block/oak_planks"
+  }
+}

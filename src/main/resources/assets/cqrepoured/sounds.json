@@ -1,0 +1,354 @@
+{
+  "revolver_shoot": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.revolver_shoot",
+    "sounds": [
+      {
+        "name": "cqrepoured:item/firearm/revolver_shoot",
+        "stream": false
+      }
+    ]
+  },
+  "musket_shoot": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.musket_shoot",
+    "sounds": [
+      {
+        "name": "cqrepoured:item/firearm/musket_shoot",
+        "stream": false
+      }
+    ]
+  },
+  "goblin_ambient": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.goblin_ambient",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/goblin/ambient_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/ambient_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/ambient_3",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/ambient_4",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/ambient_5",
+        "stream": false
+      }
+    ]
+  },
+  "goblin_death": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.goblin_death",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/goblin/death",
+        "stream": false
+      }
+    ]
+  },
+  "goblin_hurt": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.goblin_hurt",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/goblin/hurt_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/hurt_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/hurt_3",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/goblin/hurt_4",
+        "stream": false
+      }
+    ]
+  },
+  "gremlin_laughtsmallmonster": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.gremlin_laughtsmallmonster",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/gremlin/laughtsmallmonster",
+        "stream": false
+      }
+    ]
+  },
+  "gremlin_smallmonsterdead": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.gremlin_smallmonsterdead",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/gremlin/smallmonsterdead",
+        "stream": false
+      }
+    ]
+  },
+  "gremlin_smallmonsterhurt": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.gremlin_smallmonsterhurt",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/gremlin/smallmonsterhurt",
+        "stream": false
+      }
+    ]
+  },
+  "gremlin_smallmonsterlaught": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.gremlin_smallmonsterlaught",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/gremlin/smallmonsterlaught",
+        "stream": false
+      }
+    ]
+  },
+  "gremlin_smallmonsterspeak": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.gremlin_smallmonsterspeak",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/gremlin/smallmonsterspeak",
+        "stream": false
+      }
+    ]
+  },
+  "ogre_ambient": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.ogre_ambient",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/ogre/ambient_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/ambient_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/ambient_3",
+        "stream": false
+      }
+    ]
+  },
+  "ogre_death": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.ogre_death",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/ogre/death_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/death_2",
+        "stream": false
+      }
+    ]
+  },
+  "ogre_hurt": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.ogre_hurt",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/ogre/hurt_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/hurt_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/hurt_3",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/ogre/hurt_4",
+        "stream": false
+      }
+    ]
+  },
+  "pirate_ambient": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.pirate_ambient",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/pirate/ambient_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/pirate/ambient_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/pirate/ambient_3",
+        "stream": false
+      }
+    ]
+  },
+  "pirate_death": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.pirate_death",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/pirate/death_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/pirate/death_2",
+        "stream": false
+      }
+    ]
+  },
+  "pirate_hurt": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.pirate_hurt",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/pirate/hurt_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/pirate/hurt_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/pirate/hurt_3",
+        "stream": false
+      }
+    ]
+  },
+  "pirate_piratecaptain": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.pirate_piratecaptain",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/pirate/piratecaptain",
+        "stream": false
+      }
+    ]
+  },
+  "walker_ambient": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.walker_ambient",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/walker/ambient_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/ambient_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/ambient_3",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/ambient_4",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/ambient_5",
+        "stream": false
+      }
+    ]
+  },
+  "walker_death": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.walker_death",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/walker/death_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/death_2",
+        "stream": false
+      }
+    ]
+  },
+  "walker_hurt": {
+    "category": "hostile",
+    "subtitle": "subtitles.cqrepoured.walker_hurt",
+    "sounds": [
+      {
+        "name": "cqrepoured:entity/walker/hurt_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/hurt_2",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/hurt_3",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/hurt_4",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:entity/walker/hurt_5",
+        "stream": false
+      }
+    ]
+  },
+  "magic": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.magic",
+    "sounds": [
+      {
+        "name": "cqrepoured:item/magic",
+        "stream": false
+      }
+    ]
+  },
+    "gunshoot": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.gunshoot",
+    "sounds": [
+      {
+        "name": "cqrepoured:item/gunshoot",
+        "stream": false
+      }
+    ]
+  },
+  "wind": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.wind",
+    "sounds": [
+      {
+        "name": "cqrepoured:wind",
+        "stream": false
+      }
+    ]
+  },
+  "bell_use": {
+    "category": "player",
+    "subtitle": "subtitles.cqrepoured.bell_use",
+    "sounds": [
+      {
+        "name": "cqrepoured:item/magic_bell/magic_bell_1",
+        "stream": false
+      },
+      {
+        "name": "cqrepoured:item/magic_bell/magic_bell_2",
+        "stream": false
+      }
+    ]
+  }
+}

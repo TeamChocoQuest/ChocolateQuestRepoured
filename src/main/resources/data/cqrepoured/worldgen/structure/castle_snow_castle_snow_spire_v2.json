@@ -1,0 +1,15 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/castles/snow/castle_snow_spire_v2.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_walker"
+  ],
+  "y_offset": -15,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:snow",
+  "spawn_overrides": {},
+  "size_x": 70,
+  "size_y": 63,
+  "size_z": 70
+}

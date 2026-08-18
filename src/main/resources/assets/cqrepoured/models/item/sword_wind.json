@@ -1,0 +1,30 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "gui_light": "front",
+  "base": {
+    "parent": "cqrepoured:item/big_handheld",
+    "textures": {
+      "layer0": "cqrepoured:item/wind_sword"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/wind_sword_16"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/wind_sword_16"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/wind_sword_16"
+      }
+    }
+  }
+}

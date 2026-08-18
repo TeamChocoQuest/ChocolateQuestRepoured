@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "cqrepoured:village_arena",
+    "cqrepoured:village_inn",
+    "cqrepoured:village_inquisition",
+    "cqrepoured:village_market",
+    "cqrepoured:village_orcs",
+    "cqrepoured:village_witch"
+  ]
+}

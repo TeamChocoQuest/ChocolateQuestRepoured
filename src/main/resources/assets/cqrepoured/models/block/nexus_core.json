@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "cqrepoured:block/nexus_core"
+  }
+}

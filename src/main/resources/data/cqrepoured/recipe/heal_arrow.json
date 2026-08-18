@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "AEA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:arrow"
+    },
+    "E": {
+      "item": "minecraft:glistering_melon_slice"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:heal_arrow",
+    "count": 8
+  }
+}

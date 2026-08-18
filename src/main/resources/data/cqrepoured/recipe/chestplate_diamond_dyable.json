@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:diamond_chestplate"
+    },
+    {
+      "item": "minecraft:leather_chestplate"
+    }
+  ],
+  "result": {
+    "id": "cqrepoured:chestplate_diamond_dyable",
+    "count": 1
+  }
+}

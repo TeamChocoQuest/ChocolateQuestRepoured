@@ -1,0 +1,15 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/ships/ships_small/creeper_ship.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_pirate"
+  ],
+  "y_offset": -5,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:ocean",
+  "spawn_overrides": {},
+  "size_x": 15,
+  "size_y": 20,
+  "size_z": 15
+}

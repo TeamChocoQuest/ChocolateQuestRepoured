@@ -1,0 +1,20 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.boss.idle": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.boss.walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {}
+    },
+    "animation.boss.smash": {
+      "loop": false,
+      "animation_length": 2.0,
+      "bones": {}
+    }
+  }
+}

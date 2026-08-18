@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "cqrepoured:item/projectile_dark"
+                 },
+    "parent":  "minecraft:item/generated"
+}

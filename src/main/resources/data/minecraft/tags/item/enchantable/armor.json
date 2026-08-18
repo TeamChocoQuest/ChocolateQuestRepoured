@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:enchantable/foot_armor",
+    "#minecraft:enchantable/leg_armor",
+    "#minecraft:enchantable/chest_armor",
+    "#minecraft:enchantable/head_armor"
+  ]
+}

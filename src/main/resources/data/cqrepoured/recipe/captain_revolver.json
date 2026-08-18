@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " G ",
+    " R ",
+    " D "
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "R": {
+      "item": "cqrepoured:revolver"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:captain_revolver",
+    "count": 1
+  }
+}

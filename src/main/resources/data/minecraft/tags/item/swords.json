@@ -1,0 +1,28 @@
+{
+  "replace": false,
+  "values": [
+    "cqrepoured:great_sword_iron",
+    "cqrepoured:great_sword_diamond",
+    "cqrepoured:great_sword_bull",
+    "cqrepoured:great_sword_monking",
+    "cqrepoured:sword_moonlight",
+    "cqrepoured:earth_sword",
+    "cqrepoured:sword_sunshine",
+    "cqrepoured:sword_spider",
+    "cqrepoured:sword_turtle",
+    "cqrepoured:sword_walker",
+    "cqrepoured:sword_wind",
+    "cqrepoured:dagger_diamond",
+    "cqrepoured:dagger_iron",
+    "cqrepoured:dagger_monking",
+    "cqrepoured:dagger_pirate",
+    "cqrepoured:dagger_shadow",
+    "cqrepoured:spear_iron",
+    "cqrepoured:spear_diamond",
+    "cqrepoured:musket_dagger_iron",
+    "cqrepoured:musket_dagger_diamond",
+    "cqrepoured:musket_dagger_pirate",
+    "cqrepoured:musket_dagger_shadow",
+    "cqrepoured:musket_dagger_monking"
+  ]
+}

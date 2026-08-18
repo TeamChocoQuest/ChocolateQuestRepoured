@@ -1,0 +1,9 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:castle_plain_castle_arena_v2", "weight": 1 },
+    { "structure": "cqrepoured:castle_plain_castle_lake_alpha", "weight": 1 },
+    { "structure": "cqrepoured:castle_plain_kanos_wizardscape_v3", "weight": 1 },
+    { "structure": "cqrepoured:castle_plain_riverland_castle_v2", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 44, "separation": 22, "salt": 99999 }
+}

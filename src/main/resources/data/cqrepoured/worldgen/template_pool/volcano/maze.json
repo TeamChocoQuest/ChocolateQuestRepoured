@@ -1,0 +1,747 @@
+{
+  "name": "cqrepoured:volcano/maze",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/boss/stronghold_boss_room_desert",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/boss/stronghold_boss_room_taiga",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/en/stronghold_east_north_1",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/en/stronghold_east_north_2",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/en/stronghold_east_north_3",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/en/stronghold_east_north_4",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/es/stronghold_east_south_1",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/es/stronghold_east_south_2",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/es/stronghold_east_south_3",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/es/stronghold_east_south_4",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ne/stronghold_north_east_1",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ne/stronghold_north_east_2",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ne/stronghold_north_east_3",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ne/stronghold_north_east_4",
+        "doorways": "east,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/nw/stronghold_north_west_1",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/nw/stronghold_north_west_2",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/nw/stronghold_north_west_3",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/nw/stronghold_north_west_4",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/nw/stronghold_north_west_5",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/se/stronghold_south_east_1",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/se/stronghold_south_east_2",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/se/stronghold_south_east_3",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/se/stronghold_south_east_4",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/se/stronghold_south_east_5",
+        "doorways": "east,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/sw/stronghold_south_west_1",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/sw/stronghold_south_west_2",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/sw/stronghold_south_west_3",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/sw/stronghold_south_west_4",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/wn/stronghold_west_north_1",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/wn/stronghold_west_north_2",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/wn/stronghold_west_north_3",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/wn/stronghold_west_north_4",
+        "doorways": "west,north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ws/stronghold_west_south_1",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ws/stronghold_west_south_2",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ws/stronghold_west_south_3",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/curves/ws/stronghold_west_south_4",
+        "doorways": "west,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ew/stronghold_east_west_1",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ew/stronghold_east_west_2",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ew/stronghold_east_west_3",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ew/stronghold_east_west_4",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ew/stronghold_east_west_5",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ns/stronghold_north_south_1",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ns/stronghold_north_south_2",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ns/stronghold_north_south_3",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/ns/stronghold_north_south_4",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/sn/stronghold_south_north_1",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/sn/stronghold_south_north_2",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/sn/stronghold_south_north_3",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/sn/stronghold_south_north_4",
+        "doorways": "north,south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/we/stronghold_west_east_1",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/we/stronghold_west_east_2",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/we/stronghold_west_east_3",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/hallway/we/stronghold_west_east_4",
+        "doorways": "east,west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/stairs/e/stronghold_stairs_east",
+        "doorways": "east",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/stairs/n/stronghold_stairs_north",
+        "doorways": "north",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/stairs/s/stronghold_stairs_south",
+        "doorways": "south",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/volcano/rooms/stairs/w/stronghold_stairs_west",
+        "doorways": "west",
+        "target_pool": "cqrepoured:volcano/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

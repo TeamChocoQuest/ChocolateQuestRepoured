@@ -1,0 +1,101 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.heavy_armor",
+				"texture_width": 128,
+				"texture_height": 128,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "armorHead",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4.5, 24.5, -4.5], "size": [9, 9, 9], "inflate": 0.49, "uv": [0, 64]}
+					]
+				},
+				{
+					"name": "armorBody",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4.5, 11.5, -2.5], "size": [9, 13, 5], "inflate": 0.6, "uv": [24, 96]}
+					]
+				},
+				{
+					"name": "armorRightArm",
+					"pivot": [-5, 22, 0]
+				},
+				{
+					"name": "pauldronR1",
+					"parent": "armorRightArm",
+					"pivot": [-5, 22, 0],
+					"rotation": [0, 0, -5],
+					"cubes": [
+						{"origin": [-8, 20, -2.5], "size": [5, 5, 5], "inflate": 0.75, "uv": [0, 96]}
+					]
+				},
+				{
+					"name": "pauldronR2",
+					"parent": "pauldronR1",
+					"pivot": [-5, 22, 0],
+					"rotation": [0, 0, -10],
+					"cubes": [
+						{"origin": [-10, 19.25, -3], "size": [6, 6, 6], "inflate": 0.75, "uv": [0, 106]}
+					]
+				},
+				{
+					"name": "armorLeftArm",
+					"pivot": [5, 22, 0]
+				},
+				{
+					"name": "pauldronL1",
+					"parent": "armorLeftArm",
+					"pivot": [5, 22, 0],
+					"rotation": [0, 0, 5],
+					"cubes": [
+						{"origin": [3, 20, -2.5], "size": [5, 5, 5], "inflate": 0.75, "uv": [0, 96], "mirror": true}
+					]
+				},
+				{
+					"name": "pauldronL2",
+					"parent": "pauldronL1",
+					"pivot": [5, 22, 0],
+					"rotation": [0, 0, 10],
+					"cubes": [
+						{"origin": [4, 19.25, -3], "size": [6, 6, 6], "inflate": 0.75, "uv": [0, 106], "mirror": true}
+					]
+				},
+				{
+					"name": "armorRightLeg",
+					"pivot": [-1.9, 12, 0]
+				},
+				{
+					"name": "skirtR",
+					"parent": "armorRightLeg",
+					"pivot": [-1.9, 12, 0],
+					"rotation": [0, 0, -15],
+					"cubes": [
+						{"origin": [-6.5, 9, -3], "size": [6, 6, 6], "inflate": -0.25, "uv": [64, 64]}
+					]
+				},
+				{
+					"name": "armorLeftLeg",
+					"pivot": [1.9, 12, 0]
+				},
+				{
+					"name": "skirtL",
+					"parent": "armorLeftLeg",
+					"pivot": [1.9, 12, 0],
+					"rotation": [0, 0, 15],
+					"cubes": [
+						{"origin": [0.5, 9, -3], "size": [6, 6, 6], "inflate": -0.25, "uv": [64, 64], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}

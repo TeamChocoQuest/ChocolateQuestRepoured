@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "M M",
+    "M M"
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:scale_turtle"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:turtle_boots",
+    "count": 1
+  }
+}

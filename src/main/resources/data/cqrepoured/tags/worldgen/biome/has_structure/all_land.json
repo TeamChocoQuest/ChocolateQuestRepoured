@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:plains",
+    "#minecraft:is_forest",
+    "minecraft:meadow",
+    "minecraft:cherry_grove",
+    "#minecraft:is_jungle",
+    "#minecraft:is_forest",
+    "minecraft:desert",
+    "#minecraft:is_badlands",
+    "#minecraft:is_hill",
+    "#minecraft:is_mountain",
+    "minecraft:stony_peaks",
+    "#minecraft:has_structure/igloo",
+    "minecraft:snowy_plains",
+    "minecraft:snowy_slopes",
+    "minecraft:frozen_peaks"
+  ]
+}

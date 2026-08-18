@@ -1,0 +1,18 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/castles/normal/castle_ravine_v2.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_zombie",
+    "cqrepoured:cq_skeleton",
+    "cqrepoured:cq_gremlin",
+    "cqrepoured:cq_illager"
+  ],
+  "y_offset": -20,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:ravine_castle_land",
+  "spawn_overrides": {},
+  "size_x": 50,
+  "size_y": 50,
+  "size_z": 50
+}

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "cqrepoured:vegetated_cave",
+    "cqrepoured:bull_grotto",
+    "cqrepoured:ice_bull_grotto",
+    "cqrepoured:caves",
+    "cqrepoured:stronghold",
+    "cqrepoured:volcano",
+    "cqrepoured:floatingcity",
+    "cqrepoured:nethercity",
+    "cqrepoured:shulker_golem_dungeon"
+  ]
+}

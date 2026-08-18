@@ -1,0 +1,9 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:ship_galleon", "weight": 1 },
+    { "structure": "cqrepoured:ship_creeper_ship", "weight": 2 },
+    { "structure": "cqrepoured:ship_enchanted_ship", "weight": 2 },
+    { "structure": "cqrepoured:ship_skeleton_ship", "weight": 2 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 42, "separation": 21, "salt": 100012 }
+}

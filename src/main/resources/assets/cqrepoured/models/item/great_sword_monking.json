@@ -1,0 +1,30 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "cqrepoured:item/big_handheld",
+    "textures": {
+      "layer0": "cqrepoured:item/great_sword_monking"
+    }
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/great_monking_sword_16"
+      }
+    },
+    "fixed": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/great_monking_sword_16"
+      }
+    },
+    "ground": {
+      "parent": "minecraft:item/handheld",
+      "textures": {
+        "layer0": "cqrepoured:item/great_monking_sword_16"
+      }
+    }
+  },
+  "gui_light": "front"
+}

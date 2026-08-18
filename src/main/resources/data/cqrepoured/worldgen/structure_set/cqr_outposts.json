@@ -1,0 +1,9 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:outpost_camp_v1", "weight": 2 },
+    { "structure": "cqrepoured:outpost_outpost_tower_v2", "weight": 1 },
+    { "structure": "cqrepoured:outpost_ruined_tower_v5", "weight": 1 },
+    { "structure": "cqrepoured:illager_tower_illager_tower_v3", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 36, "separation": 18, "salt": 100011 }
+}

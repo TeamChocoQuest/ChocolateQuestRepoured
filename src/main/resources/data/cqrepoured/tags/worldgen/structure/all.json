@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "#cqrepoured:castles",
+    "#cqrepoured:boss_lairs",
+    "cqrepoured:outpost_camp_v1",
+    "cqrepoured:outpost_outpost_tower_v2",
+    "cqrepoured:outpost_ruined_tower_v5",
+    "cqrepoured:outpost_walker_outpost_camp_v3",
+    "cqrepoured:illager_tower_illager_tower_v3",
+    "cqrepoured:ship_galleon",
+    "cqrepoured:ship_creeper_ship",
+    "cqrepoured:ship_enchanted_ship",
+    "cqrepoured:ship_skeleton_ship",
+    "cqrepoured:tavern_campsite_v4",
+    "cqrepoured:tavern_medium_tavern_2_v6",
+    "cqrepoured:tavern_tavern_small_1_v7"
+  ]
+}

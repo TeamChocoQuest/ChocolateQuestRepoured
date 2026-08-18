@@ -1,0 +1,17 @@
+{
+  "type": "cqrepoured:cqr_template",
+  "template": "cqrepoured:structure/stronghold/entrances/snow/stronghold_entry_keep.nbt",
+  "entity_replacements": [
+    "cqrepoured:cq_zombie",
+    "cqrepoured:cq_skeleton",
+    "cqrepoured:cq_specter"
+  ],
+  "y_offset": -14,
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#cqrepoured:snow",
+  "spawn_overrides": {},
+  "size_x": 15,
+  "size_y": 20,
+  "size_z": 15
+}

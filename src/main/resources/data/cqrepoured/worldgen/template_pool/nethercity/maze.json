@@ -1,0 +1,448 @@
+{
+  "name": "cqrepoured:nethercity/maze",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netheralchemicalmuseum",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherbarracks",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherbellybutton",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherbighouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 13,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherbilevelapartment",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 11,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherblacksmith",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherbowl",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethercitydiamondpyramid",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 8,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethercityportalroom",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherfarm",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 3,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherfarmenchanter",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 15,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherfarmhouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 6,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherfourhouses",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 5,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethergazebo",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherghasttower",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 20,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherguardpost",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 11,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherhotel",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 15,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherhousewithtumor",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 8,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherlounge",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 11,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethermultilevelhouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethermuseum",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherobsidiantree",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherprisonfarm",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherprisontower",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 14,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherquaintfarmhouse",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 6,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherrabbitroast",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherrailwaystation",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 19,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherredstonecathedral",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 11,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethertemple",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 10,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherthreehouses",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 5,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethertrainingroom",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 9,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/nethertreasuretemple",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 11,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherwartplanterhouses_b",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 7,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "cqrepoured:cqr_pool_element",
+        "template": "cqrepoured:structure/nethercity/buildings/netherwithertemple",
+        "doorways": "east,west,north,south",
+        "target_pool": "cqrepoured:nethercity/maze",
+        "size_x": 15,
+        "size_y": 13,
+        "size_z": 15,
+        "doorway_y": 1
+      }
+    }
+  ]
+}

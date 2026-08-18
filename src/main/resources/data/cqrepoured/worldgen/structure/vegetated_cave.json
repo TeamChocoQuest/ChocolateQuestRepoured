@@ -1,0 +1,8 @@
+{
+  "type": "cqrepoured:cqr_structure",
+  "template": "cqrepoured:vegetated_cave",
+  "biomes": "#cqrepoured:plains_forest",
+  "step": "underground_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {}
+}

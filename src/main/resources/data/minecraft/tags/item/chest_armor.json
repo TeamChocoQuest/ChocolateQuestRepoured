@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "cqrepoured:heavy_iron_chestplate",
+    "cqrepoured:heavy_diamond_chestplate",
+    "cqrepoured:bull_chestplate",
+    "cqrepoured:turtle_chestplate",
+    "cqrepoured:inquisition_chestplate",
+    "cqrepoured:slime_chestplate",
+    "cqrepoured:chestplate_spider"
+  ]
+}

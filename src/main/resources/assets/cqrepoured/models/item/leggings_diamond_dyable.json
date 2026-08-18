@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "cqrepoured:item/leggings_diamond_dyable",
+        "layer1": "cqrepoured:item/leggings_diamond_dyable_overlay"
+    }
+}

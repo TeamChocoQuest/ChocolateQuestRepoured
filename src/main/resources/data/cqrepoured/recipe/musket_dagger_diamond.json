@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MS"
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:musket"
+    },
+    "S": {
+      "item": "cqrepoured:dagger_diamond"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:musket_dagger_diamond",
+    "count": 1
+  }
+}

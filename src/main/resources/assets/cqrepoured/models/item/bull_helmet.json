@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "cqrepoured:item/bull_helmet"
+                 },
+    "parent":  "minecraft:item/generated"
+}

@@ -1,0 +1,6 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:castle_floating_castle_floating_island", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 96, "separation": 48, "salt": 100016 }
+}

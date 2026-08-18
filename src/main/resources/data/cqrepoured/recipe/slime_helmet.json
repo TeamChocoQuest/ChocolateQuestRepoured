@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "M M",
+    "   "
+  ],
+  "key": {
+    "M": {
+      "item": "cqrepoured:ball_slime"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:slime_helmet",
+    "count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "cqrepoured:procedural_castle",
+  "biomes": "#cqrepoured:castle_land",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {}
+}

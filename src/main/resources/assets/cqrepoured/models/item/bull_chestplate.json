@@ -1,0 +1,6 @@
+{
+    "textures":  {
+                     "layer0":  "cqrepoured:item/bull_chestplate"
+                 },
+    "parent":  "minecraft:item/generated"
+}

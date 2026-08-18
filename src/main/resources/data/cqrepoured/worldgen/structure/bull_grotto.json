@@ -1,0 +1,8 @@
+{
+  "type": "cqrepoured:boss_grotto",
+  "grotto": "bull",
+  "biomes": "#cqrepoured:bull_fields",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {}
+}

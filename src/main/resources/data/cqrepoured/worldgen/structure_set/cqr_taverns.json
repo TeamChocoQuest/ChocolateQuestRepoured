@@ -1,0 +1,8 @@
+{
+  "structures": [
+    { "structure": "cqrepoured:tavern_campsite_v4", "weight": 1 },
+    { "structure": "cqrepoured:tavern_medium_tavern_2_v6", "weight": 1 },
+    { "structure": "cqrepoured:tavern_tavern_small_1_v7", "weight": 1 }
+  ],
+  "placement": { "type": "minecraft:random_spread", "spacing": 40, "separation": 20, "salt": 100013 }
+}

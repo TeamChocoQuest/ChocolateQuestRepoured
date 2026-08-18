@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "F F",
+    "F F"
+  ],
+  "key": {
+    "F": {
+      "item": "cqrepoured:golden_feather"
+    }
+  },
+  "result": {
+    "id": "cqrepoured:cloud_boots",
+    "count": 1
+  }
+}
