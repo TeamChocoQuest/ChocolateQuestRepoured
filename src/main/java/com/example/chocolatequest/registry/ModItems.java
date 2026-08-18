@@ -395,22 +395,6 @@ public class ModItems {
                     net.minecraft.core.Direction.DOWN
             ));
 
-    // Banners
-    public static final DeferredItem<Item> BANNER_STAND = ITEMS.register("banner_stand", () -> new net.minecraft.world.item.BlockItem(ModBlocks.BANNER_STAND.get(), new Item.Properties()));
-    public static final DeferredItem<Item> BANNER_END = ITEMS.register("banner_end", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_PIGMEN = ITEMS.register("banner_pigmen", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_DWARF = ITEMS.register("banner_dwarf", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_ZOMBIE = ITEMS.register("banner_zombie", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_SKELETON = ITEMS.register("banner_skeleton", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_PIRATE = ITEMS.register("banner_pirate", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_SHADOWS = ITEMS.register("banner_shadows", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_GOBLIN = ITEMS.register("banner_goblin", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_SPECTER = ITEMS.register("banner_specter", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_COLORFUL = ITEMS.register("banner_colorful", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_SQUID = ITEMS.register("banner_squid", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_MINOTAUR = ITEMS.register("banner_minotaur", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-    public static final DeferredItem<Item> BANNER_BULL = ITEMS.register("banner_bull", () -> new com.example.chocolatequest.item.CQBannerItem(new Item.Properties().stacksTo(1)));
-
     public static final net.neoforged.neoforge.registries.DeferredItem<net.minecraft.world.item.Item> MONKING_SPAWN_EGG = ITEMS.register("monking_spawn_egg",
             () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(ModEntities.MONKING, 0x4B3D34, 0x91796A, new net.minecraft.world.item.Item.Properties()));
     public static final net.neoforged.neoforge.registries.DeferredItem<net.minecraft.world.item.Item> WALKER_KING_SPAWN_EGG = ITEMS.register("walker_king_spawn_egg",

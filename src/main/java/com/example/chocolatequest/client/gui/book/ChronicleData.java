@@ -246,14 +246,14 @@ public class ChronicleData {
                 .addLine("")
                 .addLine("• §lPirates§r: Swashbucklers with flintlock pistols and cutlasses.");
 
-        PageContent ch3Right = new PageContent(PageContent.PageType.ITEM_GRID, "REPUTATION", "Allegiances & Banners")
+        PageContent ch3Right = new PageContent(PageContent.PageType.ITEM_GRID, "REPUTATION", "Allegiances & Capes")
                 .addLine("§lReputation§r")
                 .addLine("• Helping and trading with NPCs earns faction reputation.")
                 .addLine("• Attacking them turns the whole faction hostile on sight!")
                 .addLine("• Walkers and Undead are always hostile.")
-                .addItem(new ItemStack(ModItems.BANNER_GOBLIN.get()), "Goblin Banner", "Emblem of forest clans")
-                .addItem(new ItemStack(ModItems.BANNER_DWARF.get()), "Dwarf Banner", "Crest of mountain halls")
-                .addItem(new ItemStack(ModItems.BANNER_PIRATE.get()), "Pirate Jolly Roger", "Mark of pirate fleets");
+                .addItem(new ItemStack(ModItems.CAPE_GOBLINSHAMAN.get()), "Goblin Shaman Cape", "Emblem of forest clans")
+                .addItem(new ItemStack(ModItems.CAPE_WALKER.get()), "Walker Cape", "Crest of mountain halls")
+                .addItem(new ItemStack(ModItems.CAPE_PIRATE.get()), "Pirate Cloak", "Mark of pirate fleets");
 
         chapters.add(new Chapter("Factions & Bastions", Category.FACTIONS, ch3Left, ch3Right));
 
@@ -512,7 +512,7 @@ public class ChronicleData {
         // -------------------------------------------------------------
         List<ShowcaseItem> pirateDrops = List.of(
                 new ShowcaseItem(new ItemStack(ModItems.CAPTAIN_REVOLVER.get()), "Captain Revolver", "Custom flintlock firearm"),
-                new ShowcaseItem(new ItemStack(ModItems.BANNER_PIRATE.get()), "Pirate Jolly Roger", "Faction flag"),
+                new ShowcaseItem(new ItemStack(ModItems.CAPE_PIRATE.get()), "Pirate Cloak", "Captain's black cape"),
                 new ShowcaseItem(new ItemStack(ModItems.PIRATE_DAGGER.get()), "Pirate Cutlass", "Boarding blade")
         );
         BossEntry pirateBoss = new BossEntry(

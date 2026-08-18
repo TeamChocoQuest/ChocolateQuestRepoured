@@ -221,7 +221,6 @@ public class ModClientEvents {
         event.registerEntityRenderer(ModEntities.GIANT_SILVERFISH_GREEN.get(), com.example.chocolatequest.client.render.entity.mounts.RenderGiantSilverfishGreen::new);
 
         event.registerEntityRenderer(ModEntities.BUBBLE_PROJECTILE.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.BANNER_STAND.get(), com.example.chocolatequest.client.renderer.blockentity.BannerStandBlockEntityRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.EXPORTER_CHEST_FIXED.get(), TileEntityExporterChestRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.EXPORTER_CHEST_CUSTOM.get(), TileEntityExporterChestRenderer::new);
     }

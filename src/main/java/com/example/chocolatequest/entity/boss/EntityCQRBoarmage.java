@@ -118,9 +118,6 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements GeoE
         this.spawnAtLocation(ModItems.FIRE_STAFF.get());
 
         if (this.random.nextFloat() < 0.5F) {
-            this.spawnAtLocation(ModItems.BANNER_PIGMEN.get());
-        }
-        if (this.random.nextFloat() < 0.5F) {
             this.spawnAtLocation(ModItems.MAGIC_BELL.get());
         }
 

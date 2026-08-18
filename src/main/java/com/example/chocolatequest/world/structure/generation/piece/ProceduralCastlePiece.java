@@ -1,8 +1,9 @@
 package com.example.chocolatequest.world.structure.generation.piece;
 
 import com.example.chocolatequest.block.entity.SpawnerBlockEntity;
-import com.example.chocolatequest.block.entity.BannerStandBlockEntity;
 import com.example.chocolatequest.block.BlockTable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import com.example.chocolatequest.registry.ModBlocks;
 import com.example.chocolatequest.registry.ModItems;
 import com.example.chocolatequest.registry.ModStructures;
@@ -59,37 +60,37 @@ public class ProceduralCastlePiece extends StructurePiece {
                         "cqrepoured:cq_mummy", "cqrepoured:cq_specter"},
                 new String[]{"cqrepoured:lich", "cqrepoured:necromancer",
                         "cqrepoured:specter_lord", "cqrepoured:boarmage"},
-                "cqrepoured:banner_zombie"),
+                Blocks.BLACK_BANNER),
         PIRATES(
                 new String[]{"cqrepoured:cq_pirate"},
                 new String[]{"cqrepoured:cq_pirate_captain"},
-                "cqrepoured:banner_pirate"),
+                Blocks.GRAY_BANNER),
         WALKERS(
                 new String[]{"cqrepoured:cq_walker"},
                 new String[]{"cqrepoured:walker_king"},
-                "cqrepoured:banner_colorful"),
+                Blocks.LIGHT_BLUE_BANNER),
         BEASTS(
                 new String[]{"cqrepoured:cq_boarman", "cqrepoured:cq_mandril",
                         "cqrepoured:cq_minotaur"},
                 new String[]{"cqrepoured:monking"},
-                "cqrepoured:banner_bull"),
+                Blocks.RED_BANNER),
         GREMLINS(
                 new String[]{"cqrepoured:cq_gremlin"},
                 new String[]{"cqrepoured:cq_gremlin_shaman"},
-                "cqrepoured:banner_goblin"),
+                Blocks.LIME_BANNER),
         ILLAGERS(
                 new String[]{"cqrepoured:cq_illager"},
                 new String[]{"cqrepoured:exterminator"},
-                "cqrepoured:banner_shadows");
+                Blocks.PURPLE_BANNER);
 
         final String[] mobs;
         final String[] bosses;
-        final String bannerItem;
+        final Block bannerBlock;
 
-        CastleTheme(String[] mobs, String[] bosses, String bannerItem) {
+        CastleTheme(String[] mobs, String[] bosses, Block bannerBlock) {
             this.mobs = mobs;
             this.bosses = bosses;
-            this.bannerItem = bannerItem;
+            this.bannerBlock = bannerBlock;
         }
     }
 
@@ -1087,13 +1088,7 @@ public class ProceduralCastlePiece extends StructurePiece {
     private void placeBanner(WorldGenLevel level, BoundingBox box, BlockPos pos,
                              CastleTheme theme, int rotation) {
         if (!box.isInside(pos)) return;
-        level.setBlock(pos, ModBlocks.BANNER_STAND.get().defaultBlockState(), 2);
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof BannerStandBlockEntity bannerStand) {
-            net.minecraft.world.item.Item banner = BuiltInRegistries.ITEM.get(ResourceLocation.parse(theme.bannerItem));
-            bannerStand.setBanner(new ItemStack(banner));
-            bannerStand.setRotation(rotation);
-        }
+        level.setBlock(pos, theme.bannerBlock.defaultBlockState(), 2);
     }
 
     private BlockState buildingState(Building b, int x, int y, int z) {

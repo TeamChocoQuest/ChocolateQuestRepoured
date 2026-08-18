@@ -372,7 +372,6 @@ public class EntityCQREndermenace extends Monster implements GeoEntity {
         super.dropCustomDeathLoot(serverLevel, damageSource, recentlyHit);
         this.spawnAtLocation(ModItems.TELEPORT_STONE.get());
         this.spawnAtLocation(ModItems.CAPE_ENDERMAN.get());
-        this.spawnAtLocation(ModItems.BANNER_END.get());
         this.spawnAtLocation(new ItemStack(Items.ECHO_SHARD, 2 + this.random.nextInt(3)));
 
         if (this.random.nextFloat() < 0.5F) {

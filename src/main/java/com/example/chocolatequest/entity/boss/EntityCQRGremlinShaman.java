@@ -110,9 +110,6 @@ public class EntityCQRGremlinShaman extends CQGremlinEntity {
             this.spawnAtLocation(ModItems.CAPE_GOBLINSHAMAN.get());
         }
         if (this.random.nextFloat() < 0.5F) {
-            this.spawnAtLocation(ModItems.BANNER_GOBLIN.get());
-        }
-        if (this.random.nextFloat() < 0.5F) {
             this.spawnAtLocation(ModItems.SHIELD_GOBLIN.get());
         }
         if (this.random.nextFloat() < 0.5F) {

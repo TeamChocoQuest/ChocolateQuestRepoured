@@ -88,8 +88,6 @@ public class ModBlocks {
     public static final DeferredBlock<Block> STONE_SQUARE = BLOCKS.register("stone_square", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
     public static final DeferredBlock<Block> STONE_SMALL = BLOCKS.register("stone_small", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)));
 
-    public static final DeferredBlock<Block> BANNER_STAND = BLOCKS.register("banner_stand", () -> new com.example.chocolatequest.block.BannerStandBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BUTTON).noOcclusion()));
-
     public static void register(IEventBus eventBus) {
         BLOCKS.register(eventBus);
     }

@@ -39,7 +39,4 @@ public class ModBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.example.chocolatequest.block.entity.TileEntityTable>> TABLE = BLOCK_ENTITIES.register("table",
             () -> BlockEntityType.Builder.of(com.example.chocolatequest.block.entity.TileEntityTable::new, ModBlocks.TABLE.get()).build(null));
-
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.example.chocolatequest.block.entity.BannerStandBlockEntity>> BANNER_STAND = BLOCK_ENTITIES.register("banner_stand",
-            () -> BlockEntityType.Builder.of(com.example.chocolatequest.block.entity.BannerStandBlockEntity::new, ModBlocks.BANNER_STAND.get()).build(null));
 }

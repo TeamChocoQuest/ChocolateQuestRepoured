@@ -192,7 +192,6 @@ public class CQBullEntity extends AbstractEntityCQR {
         super.dropCustomDeathLoot(serverLevel, damageSource, recentlyHit);
         this.spawnAtLocation(new ItemStack(ModItems.BULL_HORN.get(), 2));
         this.spawnAtLocation(new ItemStack(ModItems.BULL_LEATHER.get(), 3 + this.random.nextInt(4)));
-        this.spawnAtLocation(ModItems.BANNER_BULL.get());
 
         float weaponRoll = this.random.nextFloat();
         if (weaponRoll < 0.4F) {

@@ -310,7 +310,6 @@ public class PirateCaptainEntity extends AbstractEntityCQR {
         this.spawnAtLocation(ModItems.CAPTAIN_REVOLVER.get());
         this.spawnAtLocation(ModItems.SHADOW_DAGGER.get());
         this.spawnAtLocation(ModItems.HOOKSHOT.get());
-        this.spawnAtLocation(ModItems.BANNER_PIRATE.get());
 
         if (this.random.nextFloat() < 0.5F) {
             this.spawnAtLocation(Items.SPYGLASS);

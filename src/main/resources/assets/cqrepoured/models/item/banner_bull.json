@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "cqrepoured:item/banner_holder",
-    "layer1": "cqrepoured:item/banner_bull"
-  }
-}
