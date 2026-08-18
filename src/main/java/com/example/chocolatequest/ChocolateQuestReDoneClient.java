@@ -75,7 +75,6 @@ public class ChocolateQuestReDoneClient {
 
         event.registerEntityRenderer(com.example.chocolatequest.registry.ModEntities.PROJECTILE_HOOKSHOT.get(), com.example.chocolatequest.client.render.entity.projectile.RenderHookShotHook::new);
         event.registerEntityRenderer(com.example.chocolatequest.registry.ModEntities.PROJECTILE_SPIDER_HOOK.get(), com.example.chocolatequest.client.render.entity.projectile.RenderSpiderHook::new);
-        event.registerEntityRenderer(com.example.chocolatequest.registry.ModEntities.CQR_ARROW.get(), com.example.chocolatequest.client.renderer.CQRArrowRenderer::new);
         event.registerEntityRenderer(com.example.chocolatequest.registry.ModEntities.CQR_POTION.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new);
 
         event.registerEntityRenderer(com.example.chocolatequest.registry.ModEntities.PROJECTILE_BULLET.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);

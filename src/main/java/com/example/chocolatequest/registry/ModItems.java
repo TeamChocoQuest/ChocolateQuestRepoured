@@ -77,16 +77,6 @@ public class ModItems {
     public static final DeferredItem<Item> WIND_POTION = ITEMS.register("wind_potion", () -> new com.example.chocolatequest.item.CQRPotionItem("wind", new Item.Properties()));
     public static final DeferredItem<Item> HEAL_POTION = ITEMS.register("heal_potion", () -> new com.example.chocolatequest.item.CQRPotionItem("heal", new Item.Properties()));
 
-    // Custom Arrows
-    public static final DeferredItem<Item> WATER_ARROW = ITEMS.register("water_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("water", new Item.Properties()));
-    public static final DeferredItem<Item> POISON_ARROW = ITEMS.register("poison_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("poison", new Item.Properties()));
-    public static final DeferredItem<Item> ICE_ARROW = ITEMS.register("ice_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("ice", new Item.Properties()));
-    public static final DeferredItem<Item> FIRE_ARROW = ITEMS.register("fire_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("fire", new Item.Properties()));
-    public static final DeferredItem<Item> DARK_ARROW = ITEMS.register("dark_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("dark", new Item.Properties()));
-    public static final DeferredItem<Item> ELECTRIC_ARROW = ITEMS.register("electric_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("electric", new Item.Properties()));
-    public static final DeferredItem<Item> WIND_ARROW = ITEMS.register("wind_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("wind", new Item.Properties()));
-    public static final DeferredItem<Item> HEAL_ARROW = ITEMS.register("heal_arrow", () -> new com.example.chocolatequest.item.CQRArrowItem("heal", new Item.Properties()));
-
     public static final DeferredItem<Item> CQ_ZOMBIE_SPAWN_EGG = ITEMS.register("cq_zombie_spawn_egg",
             () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(ModEntities.CQ_ZOMBIE, 0x00AFAF, 0x799C65, new Item.Properties()));
 

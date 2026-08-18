@@ -53,7 +53,7 @@ public class CQIceBullEntity extends CQBullEntity {
         }
 
         this.spawnAtLocation(new ItemStack(ModItems.ICE_POTION.get(), 2 + this.random.nextInt(3)));
-        this.spawnAtLocation(new ItemStack(ModItems.ICE_ARROW.get(), 8 + this.random.nextInt(9)));
+        this.spawnAtLocation(new ItemStack(Items.ARROW, 8 + this.random.nextInt(9)));
         this.spawnAtLocation(new ItemStack(Items.PACKED_ICE, 4 + this.random.nextInt(5)));
         this.spawnAtLocation(new ItemStack(Items.DIAMOND, 2 + this.random.nextInt(3)));
     }

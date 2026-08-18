@@ -170,7 +170,7 @@ public final class ModCreativeTabs {
                     .build());
 
     private static boolean isMagicOrConsumable(String id) {
-        return id.endsWith("_potion") || id.endsWith("_arrow") ||
+        return id.endsWith("_potion") ||
                 id.endsWith("_staff") || id.equals("staff") || id.equals("staff_spider") ||
                 id.equals("alchemy_bag") || id.equals("magic_bell") ||
                 id.equals("cursed_bone") || id.equals("scroll_of_escape") ||

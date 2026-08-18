@@ -260,7 +260,7 @@ public class EntityCQRWalkerKing extends CQWalkerEntity {
         this.spawnAtLocation(ModItems.SHIELD_WALKER_KING.get());
         this.spawnAtLocation(ModItems.CAPE_WALKER.get());
         this.spawnAtLocation(new ItemStack(Items.BLUE_ICE, 4 + this.random.nextInt(5)));
-        this.spawnAtLocation(new ItemStack(ModItems.WIND_ARROW.get(), 12 + this.random.nextInt(13)));
+        this.spawnAtLocation(new ItemStack(Items.ARROW, 12 + this.random.nextInt(13)));
 
         if (this.random.nextFloat() < 0.5F) {
             int purple = 8991416;

@@ -379,7 +379,7 @@ public class EntityCQREndermenace extends Monster implements GeoEntity {
             this.spawnAtLocation(ModItems.DARK_STAFF.get());
         }
 
-        this.spawnAtLocation(new ItemStack(ModItems.DARK_ARROW.get(), 8 + this.random.nextInt(9)));
+        this.spawnAtLocation(new ItemStack(Items.ARROW, 8 + this.random.nextInt(9)));
         this.spawnAtLocation(new ItemStack(ModItems.DARK_POTION.get(), 2 + this.random.nextInt(3)));
         this.spawnAtLocation(new ItemStack(Items.ENDER_PEARL, 6 + this.random.nextInt(7)));
         this.spawnAtLocation(new ItemStack(Items.ENDER_EYE, 2 + this.random.nextInt(3)));

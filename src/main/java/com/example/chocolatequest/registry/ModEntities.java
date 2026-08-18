@@ -15,14 +15,6 @@ public class ModEntities {
             ENTITIES.register("specter_lord", () -> EntityType.Builder.of(com.example.chocolatequest.entity.boss.EntityCQRSpecterLord::new, net.minecraft.world.entity.MobCategory.MONSTER)
                     .sized(0.6f, 1.95f)
                     .build("specter_lord"));
-
-    public static final DeferredHolder<EntityType<?>, EntityType<com.example.chocolatequest.entity.projectile.CQRArrowEntity>> CQR_ARROW = ENTITIES.register("cqr_arrow",
-            () -> EntityType.Builder.<com.example.chocolatequest.entity.projectile.CQRArrowEntity>of(com.example.chocolatequest.entity.projectile.CQRArrowEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f)
-                    .clientTrackingRange(4)
-                    .updateInterval(20)
-                    .build("cqr_arrow"));
-
     public static final DeferredHolder<EntityType<?>, EntityType<com.example.chocolatequest.entity.projectile.CQRPotionEntity>> CQR_POTION = ENTITIES.register("cqr_potion",
             () -> EntityType.Builder.<com.example.chocolatequest.entity.projectile.CQRPotionEntity>of(com.example.chocolatequest.entity.projectile.CQRPotionEntity::new, MobCategory.MISC)
                     .sized(0.25f, 0.25f)

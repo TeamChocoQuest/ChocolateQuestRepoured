@@ -126,7 +126,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements GeoE
 
         this.spawnAtLocation(new ItemStack(Items.MAGMA_CREAM, 3 + this.random.nextInt(4)));
         this.spawnAtLocation(new ItemStack(ModItems.FIRE_POTION.get(), 2 + this.random.nextInt(3)));
-        this.spawnAtLocation(new ItemStack(ModItems.FIRE_ARROW.get(), 8 + this.random.nextInt(9)));
+        this.spawnAtLocation(new ItemStack(Items.ARROW, 8 + this.random.nextInt(9)));
         this.spawnAtLocation(new ItemStack(Items.BLAZE_POWDER, 4 + this.random.nextInt(5)));
         this.spawnAtLocation(new ItemStack(Items.BLAZE_ROD, 2 + this.random.nextInt(3)));
         this.spawnAtLocation(new ItemStack(Items.COOKED_PORKCHOP, 4 + this.random.nextInt(5)));
