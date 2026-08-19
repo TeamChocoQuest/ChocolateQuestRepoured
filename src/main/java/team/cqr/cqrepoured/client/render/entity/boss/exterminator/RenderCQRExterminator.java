@@ -21,7 +21,7 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 
 	public RenderCQRExterminator(RenderManager renderManager) {
 		super(renderManager, new ModelExterminator(MODEL_RESLOC, TEXTURE, "boss/exterminator"));
-		
+
 		this.addLayer(new LayerGlowingAreasGeo<EntityCQRExterminator>(this, this.TEXTURE_GETTER, this.MODEL_ID_GETTER));
 	}
 
@@ -48,19 +48,19 @@ public class RenderCQRExterminator extends RenderCQREntityGeo<EntityCQRExtermina
 	@Override
 	protected void preRenderItem(ItemStack item, String boneName, EntityCQRExterminator currentEntity) {
 		if (boneName.equalsIgnoreCase(HAND_IDENT_LEFT)) {
-			//move left or right (from the entity's POV, positive: Right), move up or down the arm, move above (negative) or under the arm (positive)
+			// move left or right (from the entity's POV, positive: Right), move up or down the arm, move above (negative) or under the arm (positive)
 			GlStateManager.translate(0.0, 0.0, -0.25);
-			//Since the golem is massive we need to scale it up a bit
-			
-			//Standard code from LayerHeldItem
+			// Since the golem is massive we need to scale it up a bit
+
+			// Standard code from LayerHeldItem
 			GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-			if(!(item.getItem() instanceof ItemFlamethrower)) {
+			if (!(item.getItem() instanceof ItemFlamethrower)) {
 				GlStateManager.rotate(100, 1, 0, 0);
 				GlStateManager.translate(0, -0.3, -0.2);
 				GlStateManager.scale(1.25, 1.25, 1.25);
 			} else {
-				//Different scale cause flamethrower is very small
+				// Different scale cause flamethrower is very small
 				GlStateManager.scale(1.5, 1.5, 1.5);
 			}
 		}

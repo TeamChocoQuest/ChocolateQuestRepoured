@@ -178,12 +178,12 @@ public class ServerProtectedRegionManager implements IProtectedRegionManager {
 		return regionsTmp;
 		/*return () -> new Iterator<ProtectedRegion>() {
 			private final Iterator<ProtectedRegionContainer> iterator = Collections.unmodifiableCollection(ServerProtectedRegionManager.this.protectedRegions.values()).iterator();
-
+		
 			@Override
 			public boolean hasNext() {
 				return this.iterator.hasNext();
 			}
-
+		
 			@Override
 			public ProtectedRegion next() {
 				return this.iterator.next().protectedRegion;

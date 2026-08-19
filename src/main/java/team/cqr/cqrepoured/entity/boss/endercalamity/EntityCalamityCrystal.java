@@ -120,7 +120,7 @@ public class EntityCalamityCrystal extends Entity {
 						this.absorbedHealth += 2F;
 					}
 
-					if (this.absorbedHealth >= CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * MathHelper.clamp(this.world.getDifficulty().getId() + 1, 1, EnumDifficulty.values().length -1 /* Ignore peaceful*/)) {
+					if (this.absorbedHealth >= CQRConfig.bosses.enderCalamityHealingCrystalAbsorbAmount * MathHelper.clamp(this.world.getDifficulty().getId() + 1, 1, EnumDifficulty.values().length - 1 /* Ignore peaceful*/)) {
 						this.setAbsorbing(false);
 						this.currentTarget = this.owningEntity;
 						if (this.owningEntity == null) {

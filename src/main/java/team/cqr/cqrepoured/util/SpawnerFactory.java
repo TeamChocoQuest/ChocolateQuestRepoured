@@ -40,11 +40,11 @@ public final class SpawnerFactory {
 	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically
 	 * based upon the requested capabilities.
 	 * 
-	 * @param entities                 Entities for spawner to spawn
-	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
+	 * @param entities Entities for spawner to spawn
+	 * @param multiUseSpawner Determines spawner type. Vanilla = true; CQR = false.
 	 * @param spawnerSettingsOverrides Settings to be applied if generating vanilla spawner (can be null if CQR spawner)
-	 * @param world                    World in which to place spawner
-	 * @param pos                      Position at which to place spawner
+	 * @param world World in which to place spawner
+	 * @param pos Position at which to place spawner
 	 */
 	public static void placeSpawner(Entity[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
 		NBTTagCompound[] entCompounds = new NBTTagCompound[entities.length];
@@ -62,11 +62,11 @@ public final class SpawnerFactory {
 	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically
 	 * based upon the requested capabilities.
 	 * 
-	 * @param entities                 Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
-	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
+	 * @param entities Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
+	 * @param multiUseSpawner Determines spawner type. Vanilla = true; CQR = false.
 	 * @param spawnerSettingsOverrides Settings to be applied if generating vanilla spawner (can be null if CQR spawner)
-	 * @param world                    World in which to place spawner
-	 * @param pos                      Position at which to place spawner
+	 * @param world World in which to place spawner
+	 * @param pos Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
 		world.setBlockState(pos, multiUseSpawner ? Blocks.MOB_SPAWNER.getDefaultState() : CQRBlocks.SPAWNER.getDefaultState());

@@ -23,7 +23,7 @@ import team.cqr.cqrepoured.init.CQRCreatureAttributes;
 import team.cqr.cqrepoured.init.CQRLoottables;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
-	
+
 	protected boolean mayTeleport = true;
 
 	public EntityCQREnderman(World worldIn) {
@@ -39,11 +39,11 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		this.tasks.addTask(3, new EntityAITeleportToTargetWhenStuck<EntityCQREnderman>(this) {
 			@Override
 			public boolean shouldExecute() {
-				return EntityCQREnderman.this.mayTeleport && super.shouldExecute(); 
+				return EntityCQREnderman.this.mayTeleport && super.shouldExecute();
 			}
 		});
 	}
-	
+
 	public void setMayTeleport(boolean value) {
 		this.mayTeleport = value;
 	}
@@ -173,18 +173,18 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return CQRCreatureAttributes.VOID;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("mayTeleport", mayTeleport);
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.mayTeleport = true;
-		if(compound.hasKey("mayTeleport")) {
+		if (compound.hasKey("mayTeleport")) {
 			this.mayTeleport = compound.getBoolean("mayTeleport");
 		}
 	}

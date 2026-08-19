@@ -106,12 +106,12 @@ public class ProtectedRegionEventHandler {
 		}
 		syncProtectedRegions(protectedRegionManager, (EntityPlayerMP) event.player);
 	}
-	
+
 	@SubscribeEvent
 	public static void onMobGriefing(EntityMobGriefingEvent event) {
 		Entity griefingFuck = event.getEntity();
-		//TODO: Move the instanceof check to a config based check (whitelist)
-		if(griefingFuck == null || griefingFuck instanceof AbstractEntityCQR) {
+		// TODO: Move the instanceof check to a config based check (whitelist)
+		if (griefingFuck == null || griefingFuck instanceof AbstractEntityCQR) {
 			return;
 		}
 		World world = griefingFuck.world;

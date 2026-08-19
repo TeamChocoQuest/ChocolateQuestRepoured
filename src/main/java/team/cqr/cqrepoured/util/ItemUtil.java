@@ -97,20 +97,20 @@ public class ItemUtil {
 	 * @param stack
 	 * @param player
 	 * @param targetEntity
-	 * @param fakeCrit                     If set to true and no real crit occurred it will spawn spell crit particles
-	 *                                     (vanilla: false)
-	 * @param damageBonus                  A flat damage bonus which affects the main attack and enchantments like sweeping
-	 *                                     edge (vanilla: 0.0F)
-	 * @param damageMultiplier             A damage multiplier which affects the main attack and enchantments like sweeping
-	 *                                     edge (vanilla: 1.0F)
-	 * @param sweepingEnabled              If set to false the player won't be able to make a sweeping attack with this item
-	 *                                     (vanilla: true)
-	 * @param sweepingDamage               The base amount of damage which the sweeping attack deals (vanilla: 1.0F)
+	 * @param fakeCrit If set to true and no real crit occurred it will spawn spell crit particles
+	 * (vanilla: false)
+	 * @param damageBonus A flat damage bonus which affects the main attack and enchantments like sweeping
+	 * edge (vanilla: 0.0F)
+	 * @param damageMultiplier A damage multiplier which affects the main attack and enchantments like sweeping
+	 * edge (vanilla: 1.0F)
+	 * @param sweepingEnabled If set to false the player won't be able to make a sweeping attack with this item
+	 * (vanilla: true)
+	 * @param sweepingDamage The base amount of damage which the sweeping attack deals (vanilla: 1.0F)
 	 * @param sweepingDamageMultiplicative A damage bonus for sweeping attacks based on the main attack damage (vanilla:
-	 *                                     0.0F)
-	 * @param sweepingRangeHorizontal      (vanilla: 1.0D)
-	 * @param sweepingRangeVertical        (vanilla: 0.25D)
-	 * @param sweepingKnockback            (vanilla: 0.4F)
+	 * 0.0F)
+	 * @param sweepingRangeHorizontal (vanilla: 1.0D)
+	 * @param sweepingRangeVertical (vanilla: 0.25D)
+	 * @param sweepingKnockback (vanilla: 0.4F)
 	 */
 	public static void attackTarget(ItemStack stack, EntityPlayer player, Entity targetEntity, boolean fakeCrit, float damageBonus, float damageMultiplier, boolean sweepingEnabled, float sweepingDamage, float sweepingDamageMultiplicative, double sweepingRangeHorizontal, double sweepingRangeVertical,
 			float sweepingKnockback) {

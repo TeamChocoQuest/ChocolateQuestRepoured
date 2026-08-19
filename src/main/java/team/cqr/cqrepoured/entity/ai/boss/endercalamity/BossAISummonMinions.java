@@ -16,8 +16,8 @@ import team.cqr.cqrepoured.init.CQRItems;
 import team.cqr.cqrepoured.util.DungeonGenUtils;
 
 public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
-	
-	//TODO: Change it to the following
+
+	// TODO: Change it to the following
 	// - minions spawn in multiple waves, waves begin once the previous one has been cleared
 	// - wave count = 3 + 3 * (1- boss HP percent)
 	// - entity count per wave = difficultyID * nearbyPlayers * wave
@@ -67,7 +67,7 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 		if (this.entity.getSummonedEntities().size() >= this.getMaxMinionsPerTime()) {
 			this.borderMinion = 100;
 			// Check list
-			//Returns true if there were (dead) entities removed from the list
+			// Returns true if there were (dead) entities removed from the list
 			if (this.entity.filterSummonLists()) {
 				this.borderMinion = 50;
 			}
@@ -82,14 +82,14 @@ public class BossAISummonMinions extends AbstractBossAIEnderCalamity {
 			pos = pos.add(-2 + this.entity.getRNG().nextInt(3), 0, -2 + this.entity.getRNG().nextInt(3));
 			minion.setPosition(pos.getX(), pos.getY(), pos.getZ());
 			this.entity.setSummonedEntityFaction(minion);
-			
+
 			if (DungeonGenUtils.percentageRandom(0.33, world.rand)) {
 				minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, this.generateBadgeWithPotion());
 			}
 			minion.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ItemStack.EMPTY);
-			
-			if(minion instanceof EntityCQREnderman) {
-				((EntityCQREnderman)minion).setMayTeleport(false);
+
+			if (minion instanceof EntityCQREnderman) {
+				((EntityCQREnderman) minion).setMayTeleport(false);
 			}
 			this.entity.addSummonedEntityToList(minion);
 			this.entity.tryEquipSummon(minion, this.world.rand);

@@ -68,7 +68,7 @@ public class ItemSpikedGlove extends Item {
 							}
 
 							entity.motionY = vY;
-							
+
 							this.createClimbingParticles(entity, worldIn);
 						} else if (entity.isSneaking()) {
 							entity.motionY = 0.0D;

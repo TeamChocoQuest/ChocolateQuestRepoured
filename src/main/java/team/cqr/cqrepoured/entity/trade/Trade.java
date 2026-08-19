@@ -441,7 +441,7 @@ public class Trade {
 	public int getMaxStock() {
 		return this.maxStock;
 	}
-	
+
 	public boolean canRestock() {
 		return this.hasLimitedStock && this.restockRate > 0 && this.inStock < this.maxStock;
 	}

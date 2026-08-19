@@ -31,7 +31,7 @@ public interface IProxy {
 	void updateGui();
 
 	boolean isOwnerOfIntegratedServer(EntityPlayer player);
-	
+
 	boolean isPlayerCurrentClientPlayer(EntityPlayer player);
 
 	void openGui(int id, EntityPlayer player, World world, int... args);

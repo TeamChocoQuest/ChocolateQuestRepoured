@@ -202,12 +202,12 @@ public class RenderCQREnderCalamity extends RenderCQREntityGeo<EntityCQREnderCal
 	protected TransformType getCameraTransformForItemAtBone(ItemStack boneItem, String boneName) {
 		return TransformType.NONE;
 	}
-	
+
 	@Override
 	protected double getWidthScale(EntityCQREnderCalamity entity) {
 		return super.getWidthScale(entity) * 2.0D;
 	}
-	
+
 	@Override
 	protected double getHeightScale(EntityCQREnderCalamity entity) {
 		return super.getHeightScale(entity) * 2.0D;

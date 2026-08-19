@@ -8,11 +8,11 @@ import net.minecraft.world.chunk.Chunk;
 public class ChunkCacheCQR extends ChunkCache {
 
 	/**
-	 * @param worldIn    The world from which the chunks will get taken.
-	 * @param pos1       The start position from which to cache chunks.
-	 * @param pos2       The end position to which to cache chunks.
-	 * @param pos3       The chunk that gets loaded despite having loadChunks=false. pos1 is clamped to be at most pos3.
-	 *                   pos2 is clamped to be at least pos3.
+	 * @param worldIn The world from which the chunks will get taken.
+	 * @param pos1 The start position from which to cache chunks.
+	 * @param pos2 The end position to which to cache chunks.
+	 * @param pos3 The chunk that gets loaded despite having loadChunks=false. pos1 is clamped to be at most pos3.
+	 * pos2 is clamped to be at least pos3.
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
 	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, boolean loadChunks) {
@@ -39,12 +39,12 @@ public class ChunkCacheCQR extends ChunkCache {
 	}
 
 	/**
-	 * @param worldIn    The world from which the chunks will get taken.
-	 * @param pos1       The start position from which to cache chunks.
-	 * @param pos2       The end position to which to cache chunks.
-	 * @param pos3       The chunk that gets loaded despite having loadChunks=false.
+	 * @param worldIn The world from which the chunks will get taken.
+	 * @param pos1 The start position from which to cache chunks.
+	 * @param pos2 The end position to which to cache chunks.
+	 * @param pos3 The chunk that gets loaded despite having loadChunks=false.
 	 * @param blockRange If a chunk corner is less than this value away from the line between pos1 and pos2 this chunk will
-	 *                   get cached.
+	 * get cached.
 	 * @param loadChunks Whether chunks should be loaded or not.
 	 */
 	public ChunkCacheCQR(World worldIn, BlockPos pos1, BlockPos pos2, BlockPos pos3, int blockRange, boolean loadChunks) {
