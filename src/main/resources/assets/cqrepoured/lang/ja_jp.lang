@@ -1,0 +1,695 @@
+#The English US language file for Chocolate Quest Repoured Mod!
+#This translation was created by basically every dev and polished out by ArloTheEpic
+
+#DamageSources
+death.attack.ray=%1$sは俺のレーザーで撃たれた！
+death.attack.ray.player=%1$sは%2$sのレーザーで撃ち抜かれた！
+
+#CreativeTabs
+itemGroup.cqrepoured_blocks=CQR ブロック
+itemGroup.cqrepoured_items=CQR アイテム
+itemGroup.cqrepoured_banners=CQR 旗
+itemGroup.cqrepoured_creative_tools=CQR クリエイティブツール
+itemGroup.cqrepoured_dungeon_placers=CQR ダンジョンジェネレーター
+itemGroup.cqrepoured_exporter_chests=CQR エクスポーターチェスト
+itemGroup.cqrepoured_spawn_eggs=CQR スポーンエッグ
+
+#Banner Patterns
+item.banner.cqrepoured_cq_blank.white=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.orange=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.magenta=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.light_blue=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.yellow=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.lime=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.pink=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.gray=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.silver=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.cyan=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.purple=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.blue=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.brown=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.green=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.red=CQRバナーマーカー
+item.banner.cqrepoured_cq_blank.black=CQRバナーマーカー
+
+item.banner.cqrepoured_cq_wither_eyes.white=ウィザースカルの白色の目
+item.banner.cqrepoured_cq_wither_eyes.orange=ウィザースカルの橙色の目
+item.banner.cqrepoured_cq_wither_eyes.magenta=ウィザースカルの赤紫色の目
+item.banner.cqrepoured_cq_wither_eyes.light_blue=ウィザースカルの空色の目
+item.banner.cqrepoured_cq_wither_eyes.yellow=ウィザースカルの黄色の目
+item.banner.cqrepoured_cq_wither_eyes.lime=ウィザースカルの黄緑色の目
+item.banner.cqrepoured_cq_wither_eyes.pink=ウィザースカルの桃色の目
+item.banner.cqrepoured_cq_wither_eyes.gray=ウィザースカルの灰色の目
+item.banner.cqrepoured_cq_wither_eyes.silver=ウィザースカルの薄灰色の目
+item.banner.cqrepoured_cq_wither_eyes.cyan=ウィザースカルの青緑色の目
+item.banner.cqrepoured_cq_wither_eyes.purple=ウィザースカルの紫色の目
+item.banner.cqrepoured_cq_wither_eyes.blue=ウィザースカルの青色の目
+item.banner.cqrepoured_cq_wither_eyes.brown=ウィザースカルの茶色の目
+item.banner.cqrepoured_cq_wither_eyes.green=ウィザースカルの緑色の目
+item.banner.cqrepoured_cq_wither_eyes.red=ウィザースカルの赤色の目
+item.banner.cqrepoured_cq_wither_eyes.black=ウィザースカルの黒色の目
+
+item.banner.cqrepoured_cq_wither_skull.white=白色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.orange=橙色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.magenta=赤紫色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.light_blue=空色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.yellow=黄色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.lime=黄緑色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.pink=桃色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.gray=灰色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.silver=薄灰色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.cyan=青緑色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.purple=紫色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.blue=青色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.brown=茶色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.green=緑色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.red=赤色のウィザースカル
+item.banner.cqrepoured_cq_wither_skull.black=黒色のウィザースカル
+
+item.banner.cqrepoured_cq_fire.white=白色の炎
+item.banner.cqrepoured_cq_fire.orange=橙色の炎
+item.banner.cqrepoured_cq_fire.magenta=赤紫色の炎
+item.banner.cqrepoured_cq_fire.light_blue=空色の炎
+item.banner.cqrepoured_cq_fire.yellow=黄色の炎
+item.banner.cqrepoured_cq_fire.lime=黄緑色の炎
+item.banner.cqrepoured_cq_fire.pink=桃色の炎
+item.banner.cqrepoured_cq_fire.gray=灰色の炎
+item.banner.cqrepoured_cq_fire.silver=薄灰色の炎
+item.banner.cqrepoured_cq_fire.cyan=青緑色の炎
+item.banner.cqrepoured_cq_fire.purple=紫色の炎
+item.banner.cqrepoured_cq_fire.blue=青色の炎
+item.banner.cqrepoured_cq_fire.brown=茶色の炎
+item.banner.cqrepoured_cq_fire.green=緑色の炎
+item.banner.cqrepoured_cq_fire.red=赤色の炎
+item.banner.cqrepoured_cq_fire.black=黒色の炎
+
+item.banner.cqrepoured_cq_emerald.white=白色のエメラルド
+item.banner.cqrepoured_cq_emerald.orange=橙色のエメラルド
+item.banner.cqrepoured_cq_emerald.magenta=赤紫色のエメラルド
+item.banner.cqrepoured_cq_emerald.light_blue=空色のエメラルド
+item.banner.cqrepoured_cq_emerald.yellow=黄色のエメラルド
+item.banner.cqrepoured_cq_emerald.lime=黄緑色のエメラルド
+item.banner.cqrepoured_cq_emerald.pink=桃色のエメラルド
+item.banner.cqrepoured_cq_emerald.gray=灰色のエメラルド
+item.banner.cqrepoured_cq_emerald.silver=薄灰色のエメラルド
+item.banner.cqrepoured_cq_emerald.cyan=青緑色のエメラルド
+item.banner.cqrepoured_cq_emerald.purple=紫色のエメラルド
+item.banner.cqrepoured_cq_emerald.blue=青色のエメラルド
+item.banner.cqrepoured_cq_emerald.brown=茶色のエメラルド
+item.banner.cqrepoured_cq_emerald.green=緑色のエメラルド
+item.banner.cqrepoured_cq_emerald.red=赤色のエメラルド
+item.banner.cqrepoured_cq_emerald.black=黒色のエメラルド
+
+item.banner.cqrepoured_cq_bones.white=死者の白色の骨
+item.banner.cqrepoured_cq_bones.orange=死者の橙色の骨
+item.banner.cqrepoured_cq_bones.magenta=死者の赤紫色の骨
+item.banner.cqrepoured_cq_bones.light_blue=死者の空色の骨
+item.banner.cqrepoured_cq_bones.yellow=死者の黄色の骨
+item.banner.cqrepoured_cq_bones.lime=死者の黄緑色の骨
+item.banner.cqrepoured_cq_bones.pink=死者の桃色の骨
+item.banner.cqrepoured_cq_bones.gray=死者の灰色の骨
+item.banner.cqrepoured_cq_bones.silver=死者の薄灰色の骨
+item.banner.cqrepoured_cq_bones.cyan=死者の青緑色の骨
+item.banner.cqrepoured_cq_bones.purple=死者の紫色の骨
+item.banner.cqrepoured_cq_bones.blue=死者の青色の骨
+item.banner.cqrepoured_cq_bones.brown=死者の茶色の骨
+item.banner.cqrepoured_cq_bones.green=死者の緑色の骨
+item.banner.cqrepoured_cq_bones.red=死者の赤色の骨
+item.banner.cqrepoured_cq_bones.black=死者の黒色の骨
+
+item.banner.cqrepoured_walker_black_bg.white=白色の旗の生地
+item.banner.cqrepoured_walker_black_bg.orange=橙色の旗の生地
+item.banner.cqrepoured_walker_black_bg.magenta=赤紫色の旗の生地
+item.banner.cqrepoured_walker_black_bg.light_blue=空色の旗の生地
+item.banner.cqrepoured_walker_black_bg.yellow=黄色の旗の生地
+item.banner.cqrepoured_walker_black_bg.lime=黄緑色の旗の生地
+item.banner.cqrepoured_walker_black_bg.pink=桃色の旗の生地
+item.banner.cqrepoured_walker_black_bg.gray=灰色の旗の生地
+item.banner.cqrepoured_walker_black_bg.silver=薄灰色の旗の生地
+item.banner.cqrepoured_walker_black_bg.cyan=青緑色の旗の生地
+item.banner.cqrepoured_walker_black_bg.purple=紫色の旗の生地
+item.banner.cqrepoured_walker_black_bg.blue=青色の旗の生地
+item.banner.cqrepoured_walker_black_bg.brown=茶色の旗の生地
+item.banner.cqrepoured_walker_black_bg.green=緑色の旗の生地
+item.banner.cqrepoured_walker_black_bg.red=赤色の旗の生地
+item.banner.cqrepoured_walker_black_bg.black=黒色の旗の生地
+
+item.banner.cqrepoured_walker_border.white=白色の縁取り
+item.banner.cqrepoured_walker_border.orange=橙色の縁取り
+item.banner.cqrepoured_walker_border.magenta=赤紫色の縁取り
+item.banner.cqrepoured_walker_border.light_blue=空色の縁取り
+item.banner.cqrepoured_walker_border.yellow=黄色の縁取り
+item.banner.cqrepoured_walker_border.lime=黄緑色の縁取り
+item.banner.cqrepoured_walker_border.pink=桃色の縁取り
+item.banner.cqrepoured_walker_border.gray=灰色の縁取り
+item.banner.cqrepoured_walker_border.silver=薄灰色の縁取り
+item.banner.cqrepoured_walker_border.cyan=青緑色の縁取り
+item.banner.cqrepoured_walker_border.purple=紫色の縁取り
+item.banner.cqrepoured_walker_border.blue=青色の縁取り
+item.banner.cqrepoured_walker_border.brown=茶色の縁取り
+item.banner.cqrepoured_walker_border.green=緑色の縁取り
+item.banner.cqrepoured_walker_border.red=赤色の縁取り
+item.banner.cqrepoured_walker_border.black=黒色の縁取り
+
+item.banner.cqrepoured_walker_inner_border.white=白色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.orange=橙色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.magenta=赤紫色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.light_blue=空色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.yellow=黄色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.lime=黄緑色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.pink=桃色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.gray=灰色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.silver=薄灰色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.cyan=青緑色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.purple=紫色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.blue=青色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.brown=茶色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.green=緑色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.red=赤色のぼろぼろの生地
+item.banner.cqrepoured_walker_inner_border.black=黒色のぼろぼろの生地
+
+item.banner.cqrepoured_walker_skull.white=白色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.orange=橙色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.magenta=赤紫色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.light_blue=空色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.yellow=黄色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.lime=黄緑色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.pink=桃色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.gray=灰色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.silver=薄灰色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.cyan=青緑色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.purple=紫色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.blue=青色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.brown=茶色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.green=緑色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.red=赤色のウォーカーの顔
+item.banner.cqrepoured_walker_skull.black=黒色のウォーカーの顔
+
+#Banners
+item.banner.pirate_banner.name=海賊の旗
+item.banner.walker_banner.name=ウォーカーの旗
+item.banner.pigman_banner.name=ピッグマンの旗
+item.banner.enderman_banner.name=エンダーマンの旗
+item.banner.enderman_banner2.name=エンダーマンの旗 2
+item.banner.npc_banner.name=NPCの旗
+item.banner.skeleton_banner.name=スケルトンの旗
+item.banner.illager_banner.name=邪悪な村人の旗
+item.banner.walker_ordo.name=ウォーカーの旗 2
+item.banner.gremlin_banner.name=グレムリンの旗
+
+#Gui
+gui.repu.name=評判
+gui.repu.faction=派閥
+gui.repu.reputation=あなたの評判
+gui.repu.memberskilled=殺害したメンバー
+gui.repu.dungeonsconquered=破壊した住処
+gui.drops.name=ドロップ
+gui.backpack.name=バックパック
+gui.alchemy_bag.name=錬金術の鞄
+description.gui_exporter.name=ダンジョンをエクスポートするためのクリエイティブ専用ブロック。エクスポートしたい領域を選択し、保存する。
+description.gui_exporter_part_mode.name=構造物を16x16x16のキューブに分割し、通常のエクスポートと生成を高速化する。チェックを入れたままにすることを推奨。
+description.gui_exporter_relative_mode.name=エクスポーターブロックに対する相対座標を使用する。選択ヘルパーを使用すれば、このチェックの有無は自動的に処理される。
+description.gui_exporter_ignore_entities.name=cqrepoured.cfg -> advanced -> specialEntities に記載されていないすべてのエンティティを無視する。チェックを入れたままにすることを推奨。
+
+#Other
+item.super_tool.name=スーパーツール（クリエイティブ専用）
+item.potion_healing.name=治癒のポーション
+item.teleport_stone.name=テレポートストーン
+item.soul_bottle.name=ソウルボトル
+item.mob_to_spawner_tool.name=Mob to Spawner ツール
+item.spawner_converter.name=スポーナーコンバーター
+item.badge.name=バッジ
+item.backpack.name=バックパック
+item.spiked_glove.name=スパイクグローブ
+item.alchemy_bag.name=錬金術の鞄
+item.structure_selector.name=選択ヘルパー
+item.path_tool.name=パスツール
+item.cursed_bone.name=呪われた骨
+item.dummy_shield.name=ダミーの盾
+item.unprotected_positions_tool.name=非保護位置選択ヘルパー
+item.magic_bell.name=魔法のベル
+
+#Axes
+item.battle_axe_bull.name=ブルのバトルアックス
+
+#Dragon Items
+item.helmet_dragon.name=ドラゴンヘルメット
+
+#Daggers
+item.dagger_iron.name=鉄のダガー
+item.dagger_diamond.name=ダイヤモンドのダガー
+item.dagger_monking.name=モンキングのダガー
+item.dagger_ninja.name=忍者のダガー
+
+#Swords
+item.sword_turtle.name=タートルソード
+item.sword_spider.name=スパイダーソード
+item.sword_moonlight.name=ムーンライト
+item.sword_sunshine.name=サンシャイン
+
+#Shields
+item.cqr_shield_r01.name=ピッグマンの盾
+item.cqr_shield_r02.name=海賊の盾
+item.cqr_shield_r03.name=スペクターの盾
+item.cqr_shield_r04.name=ゴブリンの盾
+item.cqr_shield_r05.name=ミイラの盾
+item.cqr_shield_r06.name=虹の盾
+item.cqr_shield_r07.name=錆びた盾
+item.cqr_shield_r08.name=タートルの盾
+item.cqr_shield_r09.name=トリトンの盾
+
+#Walker set
+item.sword_walker.name=ウォーカーソード
+item.shield_walker_king.name=ウォーカーキングの盾
+
+#Shields
+item.shield_bull.name=アイスブルの盾
+item.shield_carl.name=カール
+item.shield_dragonslayer.name=ドラゴンの盾
+item.shield_fire.name=炎の盾
+item.shield_goblin.name=ゴブリンの盾
+item.shield_monking.name=モンキングの盾
+item.shield_moon.name=月の盾
+item.shield_mummy.name=ミイラの盾
+item.shield_pigman.name=ピッグマンの盾
+item.shield_pirate.name=海賊の盾
+item.shield_pirate2.name=海賊の盾
+item.shield_rainbow.name=虹の盾
+item.shield_reflective.name=鏡の盾
+item.shield_rusted.name=錆びた盾
+item.shield_skeleton_friends.name=スケルトンの盾
+item.shield_specter.name=スペクターの盾
+item.shield_spider.name=スパイダーの盾
+item.shield_sun.name=太陽の盾
+item.shield_tomb.name=墓の盾
+item.shield_triton.name=トリトンの盾
+item.shield_turtle.name=タートル歩兵の盾
+item.shield_warped.name=歪んだ盾
+item.shield_walker.name=ウォーカーの盾
+item.shield_walker_normal.name=ウォーカーの盾
+item.shield_zombie.name=ゾンビの盾
+
+#Great Swords
+item.great_sword_monking.name=モンキングの大剣
+item.great_sword_bull.name=ブルの大剣
+item.great_sword_diamond.name=ダイヤモンドの大剣
+item.great_sword_iron.name=鉄の大剣
+
+#Spears
+item.spear_diamond.name=ダイヤモンドの槍
+item.spear_iron.name=鉄の槍
+attribute.name.generic.attackRange=攻撃範囲
+
+#Staves
+item.staff.name=杖
+item.staff_fire.name=炎の杖
+item.staff_vampiric.name=吸血の杖
+item.staff_wind.name=風の杖
+item.staff_poison.name=毒の杖
+item.staff_spider.name=蜘蛛の杖
+item.staff_gun.name=銃の杖
+item.staff_healing.name=治癒の杖
+item.staff_thunder.name=雷の杖
+
+#Guns
+item.revolver.name=リボルバー
+item.captain_revolver.name=キャプテンのリボルバー
+item.musket.name=マスケット銃
+item.musket_dagger_iron.name=鉄のダガー付きマスケット銃
+item.musket_dagger_diamond.name=ダイヤモンドのダガー付きマスケット銃
+item.musket_dagger_monking.name=モンキングのダガー付きマスケット銃
+item.bullet_iron.name=鉄の弾丸
+item.bullet_gold.name=金の弾丸
+item.bullet_diamond.name=ダイヤモンドの弾丸
+item.bullet_fire.name=炎の弾丸
+item.cannon_ball.name=キャノンボール
+item.flamethrower.name=火炎放射器
+item.bubble_pistol.name=バブルガン
+item.bubble_rifle.name=バブルランチャー
+
+#Hookshots
+item.hookshot.name=フックショット
+item.longshot.name=ロングショット
+item.spiderhook.name=スパイダーフックショット
+
+#Cloud Items
+item.boots_cloud.name=クラウドブーツ
+item.feather_golden.name=金の羽根
+
+#Monking Items
+item.bone_monking.name=モンキングの骨
+
+#King Armor
+item.king_crown.name=王の冠
+
+#Inquisition Armor
+item.helmet_inquisition.name=異端審問官のヘルメット
+item.chestplate_inquisition.name=異端審問官のチェストプレート
+item.leggings_inquisition.name=異端審問官のレギンス
+item.boots_inquisition.name=異端審問官のブーツ
+
+#Bull Armor
+item.helmet_bull.name=ブルヘルメット
+item.chestplate_bull.name=ブルチェストプレート
+item.leggings_bull.name=ブルレギンス
+item.boots_bull.name=ブルブーツ
+item.leather_bull.name=ブルの革
+item.horn_bull.name=ブルの角
+
+#Turtle Armor
+item.helmet_turtle.name=タートルヘルメット
+item.chestplate_turtle.name=タートルチェストプレート
+item.leggings_turtle.name=タートルレギンス
+item.boots_turtle.name=タートルブーツ
+item.scale_turtle.name=ジャイアントタートルの鱗
+
+#Slime Armor
+item.helmet_slime.name=スライムヘルメット
+item.chestplate_slime.name=スライムチェストプレート
+item.leggings_slime.name=スライムレギンス
+item.boots_slime.name=スライムブーツ
+item.ball_slime.name=再生するスライムボール
+
+#Spider Armor
+item.helmet_spider.name=スパイダーヘルメット
+item.chestplate_spider.name=スパイダーチェストプレート
+item.leggings_spider.name=スパイダーレギンス
+item.boots_spider.name=スパイダーブーツ
+item.leather_spider.name=スパイダーレザー
+item.giant_spider_poison.name=ジャイアントスパイダーの毒
+
+#Heavy Diamond Armor
+item.helmet_heavy_diamond.name=重厚なダイヤモンドのヘルメット
+item.chestplate_heavy_diamond.name=重厚なダイヤモンドのチェストプレート
+item.leggings_heavy_diamond.name=重厚なダイヤモンドのレギンス
+item.boots_heavy_diamond.name=重厚なダイヤモンドのブーツ
+
+#Heavy Iron Armor
+item.helmet_heavy_iron.name=重厚な鉄のヘルメット
+item.chestplate_heavy_iron.name=重厚な鉄のチェストプレート
+item.leggings_heavy_iron.name=重厚な鉄のレギンス
+item.boots_heavy_iron.name=重厚な鉄のブーツ
+
+#Dyable Iron Armor
+item.helmet_iron_dyable.name=染色可能な鉄のヘルメット
+item.chestplate_iron_dyable.name=染色可能な鉄のチェストプレート
+item.leggings_iron_dyable.name=染色可能な鉄のレギンス
+item.boots_iron_dyable.name=染色可能な鉄のブーツ
+
+#Dyable Diamond Armor
+item.helmet_diamond_dyable.name=染色可能なダイヤモンドのヘルメット
+item.chestplate_diamond_dyable.name=染色可能なダイヤモンドのチェストプレート
+item.leggings_diamond_dyable.name=染色可能なダイヤモンドのレギンス
+item.boots_diamond_dyable.name=染色可能なダイヤモンドのブーツ
+
+#Blocks
+tile.exporter.name=エクスポーターブロック
+tile.spawner.name=スポーナー
+tile.null_block.name=ヌルブロック
+tile.unlit_torch.name=火のついていない松明
+tile.table_oak.name=オークの机
+tile.table_spruce.name=トウヒの机
+tile.table_birch.name=シラカバの机
+tile.table_jungle.name=ジャングルの木の机
+tile.table_acacia.name=アカシアの机
+tile.table_dark.name=ダークオークの机
+tile.boss_block.name=ボスブロック
+tile.force_field_nexus.name=フォースフィールドネクサス
+tile.map_placeholder.name=マッププレースホルダー
+
+#Andesite blocks
+tile.andesite_carved.name=模様入りの安山岩
+tile.andesite_pillar.name=安山岩の柱
+tile.andesite_cube.name=安山岩のキューブ
+tile.andesite_scale.name=鱗状の安山岩
+tile.andesite_square.name=正方形の安山岩
+tile.andesite_small.name=小さな安山岩レンガ
+tile.andesite_large.name=大きな安山岩レンガ
+
+#Diorite blocks
+tile.diorite_carved.name=模様入りの閃緑岩
+tile.diorite_pillar.name=閃緑岩の柱
+tile.diorite_cube.name=閃緑岩のキューブ
+tile.diorite_scale.name=鱗状の閃緑岩
+tile.diorite_square.name=正方形の閃緑岩
+tile.diorite_small.name=小さな閃緑岩レンガ
+tile.diorite_large.name=大きな閃緑岩レンガ
+
+#Granite blocks
+tile.granite_carved.name=模様入りの花崗岩
+tile.granite_pillar.name=花崗岩の柱
+tile.granite_cube.name=花崗岩のキューブ
+tile.granite_scale.name=鱗状の花崗岩
+tile.granite_square.name=正方形の花崗岩
+tile.granite_small.name=小さな花崗岩レンガ
+tile.granite_large.name=大きな花崗岩レンガ
+
+#Prismarine blocks
+tile.prismarine_carved.name=模様入りのプリズマリン
+tile.prismarine_pillar.name=プリズマリンの柱
+tile.prismarine_cube.name=プリズマリンのキューブ
+tile.prismarine_square.name=正方形のプリズマリン
+tile.prismarine_small.name=小さなプリズマリンレンガ
+tile.prismarine_large.name=大きなプリズマリンレンガ
+
+#Endstone blocks
+tile.endstone_carved.name=模様入りのエンドストーン
+tile.endstone_pillar.name=エンドストーンの柱
+tile.endstone_cube.name=エンドストーンのキューブ
+tile.endstone_scale.name=鱗状のエンドストーン
+tile.endstone_square.name=正方形のエンドストーン
+tile.endstone_small.name=小さなエンドストーンレンガ
+
+#Purpur blocks
+tile.purpur_carved.name=模様入りのプルプァ
+tile.purpur_cube.name=プルプァのキューブ
+tile.purpur_scale.name=鱗状のプルプァ
+tile.purpur_small.name=小さなプルプァレンガ
+tile.purpur_large.name=大きなプルプァレンガ
+
+#Red Netherbrick blocks
+tile.red_netherbrick_carved.name=模様入りの赤いネザーレンガ
+tile.red_netherbrick_pillar.name=赤いネザーレンガの柱
+tile.red_netherbrick_cube.name=赤いネザーレンガのキューブ
+tile.red_netherbrick_scale.name=鱗状の赤いネザーレンガ
+tile.red_netherbrick_square.name=正方形の赤いネザーレンガ
+tile.red_netherbrick_large.name=大きな赤いネザーレンガ
+
+#Stone blocks
+tile.stone_pillar.name=石の柱
+tile.stone_cube.name=石のキューブ
+tile.stone_scale.name=鱗状の石
+tile.stone_square.name=正方形の石
+tile.stone_small.name=小さな石レンガ
+
+#Exporter chests
+tile.exporter_chest_valuable.name=エクスポーターチェスト - 宝物
+tile.exporter_chest_food.name=エクスポーターチェスト - 食料
+tile.exporter_chest_equipment.name=エクスポーターチェスト - 装備
+tile.exporter_chest_utility.name=エクスポーターチェスト - ユーティリティ
+tile.exporter_chest_clutter.name=エクスポーターチェスト - 雑貨
+tile.exporter_chest_vanilla_blacksmith.name=エクスポーターチェスト - 村の鍛冶屋
+tile.exporter_chest_vanilla_bonus.name=エクスポーターチェスト - ボーナスチェスト
+tile.exporter_chest_vanilla_dungeon.name=エクスポーターチェスト - ダンジョン
+tile.exporter_chest_vanilla_end_city.name=エクスポーターチェスト - エンドシティ
+tile.exporter_chest_vanilla_igloo.name=エクスポーターチェスト - イグルー
+tile.exporter_chest_vanilla_jungle.name=エクスポーターチェスト - ジャングルチェスト
+tile.exporter_chest_vanilla_jungle_dispenser.name=エクスポーターチェスト - ジャングルの寺院のディスペンサー
+tile.exporter_chest_vanilla_mansion.name=エクスポーターチェスト - 森の洋館
+tile.exporter_chest_vanilla_mineshaft.name=エクスポーターチェスト - 廃坑
+tile.exporter_chest_vanilla_nether.name=エクスポーターチェスト - ネザー要塞
+tile.exporter_chest_vanilla_pyramid.name=エクスポーターチェスト - ピラミッド
+tile.exporter_chest_vanilla_stronghold.name=エクスポーターチェスト - 要塞の廊下
+tile.exporter_chest_vanilla_stronghold_library.name=エクスポーターチェスト - 要塞の図書館
+tile.exporter_chest_vanilla_stronghold_storeroom.name=エクスポーターチェスト - 要塞の保管庫
+tile.exporter_chest_custom.name=エクスポーターチェスト - カスタム
+
+#technical
+tile.phylactery.name=リッチの聖句箱
+tile.temporary_web.name=腐りゆくクモの巣
+
+#Descriptions
+description.spider_armor.name=スパイダーアーマーを着てクモになれ。フルセットを装備すると、壁を登ったり、通常より高くジャンプしたりできるようになる。
+description.spider_sword.name=この飾り気のない剣を毒の刃に変えた牙から溢れ出すシェロブの毒。一度この刃で敵を刺せば、もはや止めることはできない。
+description.bull_armor.name=ブルアーマーを着てブルになれ。フルセットを装備すると、猛スピードで前方に突進し、進路上のすべてを破壊できるようになる。
+description.great_sword.name=右クリック長押しで広範囲を攻撃する。
+description.turtle_armor.name=甲羅からフルセットを作り上げれば、ジャイアントタートルの力によって体力をより早く回復できるようになる。また、甲羅は背後からのほとんどのダメージを防ぐ。
+description.slime_armor.name=再生するスライムのフルセットが肌に触れることで、最大体力が溢れ出すのを感じるだろう。ダメージを受けた際、それに触れることができれば体力を回復してくれる小さなスライムが現れることがある。
+description.cloud_boots.name=天使の歌に合わせて歩む者は、預言者によれば何事も間違えることはない。ひとたびの跳躍は大いなる跳ねとなり、早歩きは音速を破る。いかなる落下も選ばれし者を止めることはできず、そしてこのブーツがあれば、それはあなたにも当てはまる！
+#description.dragon_helmet.name=あなたの血管を流れるドラゴンの力を感じることができる。かつてあなたにとって脅威だった攻撃は今や無意味なものに思え、さらにあなた自身の攻撃は2倍の強さになる！
+description.dagger.name=移動中に右クリックで前方に跳躍する。
+description.ninja_dagger.name=移動中に右クリックで前方に跳躍する。このダガーの使い手は、意のままに跡形もなく消え去ることができたと言われている。スニークしながら右クリックすることでこの行動を真似ることができるだろう。ただし、視界からは消えるが、遠くまで行くことはできない。
+description.bull_battle_axe.name=グラックス、右クリックで地面たたく。地震おきる。前にすすむ。敵をめちゃくちゃにぶっつぶす。グラックス、すき。
+description.walker_set.name=ウォーカーキングに矢を放った者は皆、背中に刃を突き立てられ、背後にウォーカーキングの姿を見たという伝説がある。おそらく、彼の剣と盾の両方を集めれば、あなたも似たような能力を利用できるようになるのではないだろうか？
+description.magic_bell.name=ベルを鳴らせば、リッチの聖句箱への道が見えるだろう。ベルが示すブロックを壊せば、ダンジョンの壁はあなたに屈するはずだ。
+description.gun.name=右クリックで弾丸を発射する。
+description.bullet_damage.name=弾丸ダメージ
+description.bullet_fire.name=命中時に着火
+description.fire_rate.name=発射速度
+description.accuracy.name=精度
+description.click_shift.name=Shiftキー長押しで説明を表示
+description.rear_damage.name=背後ダメージ
+description.charging.name=チャージ中...
+description.turtle_armor_charging.name=アビリティはクールダウン中、残り時間：
+description.healing_potion.name=飲むと体力をハート2つ分回復する。
+description.teleport_stone.name=古代の種族によって作られた神秘的な物体。右クリック長押しで位置を設定し、もう一度同じ操作をしてそこへテレポートする。スニークしながら右クリック長押しで保存された場所を削除する。
+description.teleport_stone_position.name=現在の位置：
+description.staff_fire.name=進路を遮る者を炎が飲み込む。右クリックするだけで、彼らはあなたの怒りを感じるだろう。松明に火をつけることもできる。
+description.staff_spider.name=右クリックで粘液を撃ち出せ、友よ。
+description.staff_gun.name=銃だ。棒の先に付いた。いやはや、ドワーフたちは天才だ。
+description.staff_healing.name=先端を対象に触れることでポーション効果を付与するために使われる魔法の道具。歴史的には主に治癒効果のために使われてきたが、一部の将軍たちは他のポーションを大いに活用してきた。この杖のポーション効果をどう変更するかは、厳重に守られた秘密だ。
+description.contains.name=中身：
+description.empty.name=空
+description.soul_bottle.name=Mobを左クリックして保存し、右クリックでそのMobを召喚する。スニークしながら右クリックでMobを召喚し、ボトルを空にする。使い捨てスポーナーの中に置くことで、そのスポーナーがスポーンさせるMobを設定できる。
+description.flamethrower.name=アンダーテック プロトタイプ ファイアバード mk7 22mmノズル 火炎放射ユニット。右クリックで前方に炎を放出する。内部のジェルカートリッジはインベントリのどこからでもスライムを抽出できるはずだ。再生可能なスライムの発生源が発見されていないため、現在のモデルは定期的なリロードが必要となる。
+description.badge.name=クリエイティブ専用アイテム。右クリックでGUIを開く。Mobを左クリックしてこのバッジをそのMobに結び付ける。中に入れられたアイテムは、結び付けられたMobが死んだときにドロップされる。
+description.backpack.name=右クリックで開く。
+description.alchemy_bag.name=Shift＋右クリックで開く。ポーションのみを収納する。右クリックすると、鞄の中にある最初のポーションを投げる。
+#description.woodshot.name=右クリックでフックを撃つ。フックが木のブロックに当たると、そこに引き寄せられる。
+description.hookshot.name=右クリックでフックを撃つ。フックがブロックに当たると、そこに引き寄せられる。
+description.longshot.name=右クリックでフックを撃つ。フックがブロックに当たると、そこに引き寄せられる。
+#description.manualhook.name=右クリックでフックを撃つ。フックがブロックに当たると、右クリック長押しで対象に近づき、スニークしながらそうすることで対象から遠ざかることができる。
+#description.spidershot.name=右クリックでクモの巣を撃つ。フックがブロックに当たると、右クリック長押しで対象に近づき、スニークしながらそうすることで対象から遠ざかることができる。
+#description.hooksword.name=右クリックでフックを撃つ。フックがブロックに当たると、右クリック長押しで対象に近づき、スニークしながらそうすることで対象から遠ざかることができる。
+description.moonlight.name=刃の刻印にはこう書かれている：「我が力は月の光の中でのみ目覚める」
+description.sunshine.name=刃の刻印にはこう書かれている：「我が力は太陽の光の中でのみ目覚める」
+description.attack_damage_at_night.name=夜間の攻撃力
+description.attack_damage_at_day.name=昼間の攻撃力
+description.staff_vampiric.name=この杖は手に持つと闇のエネルギーを放つ。耳に近づけると、その要求が聞こえるだろう。その呼びかけは単純だ。「私で右クリックしろ」。そうすれば、飛び道具が放たれるのがわかるはずだ。ダメージはわずかだが、正確に当てることができれば、命中したときにあなたを回復してくれる。
+description.staff_wind.name=かつてどのような驚異的な魔力を持っていたにせよ、現在は完全に休眠状態だ。（これが何をするにせよ、まだ機能していない。 #TODO）
+description.staff_poison.name=先端で毒液が泡立っている。滴り落ちないよう注意しろ。それは皮膚や肉、そして骨をも食い破る。それが自分のものではないように細心の注意を払うのが最善だ。危険を承知で撃ち放て。しかし、誰もがそれをフェアな殺しと呼ぶわけではないことに注意しろ...
+description.staff.name=長くて丈夫な棒。これに魔法を付与する方法を知っている者がどこかにいるはずだ。
+description.staff_thunder.name=この杖の先端にある宝石は、電荷を帯びて火花を散らしている。右クリックで標的を狙えば、その雷光の向きを変えることができるだろう。
+description.spiked_glove.name=獣の爪とあなたの腕の力があれば、このグローブはあなたを危険から遠ざけてくれるだろう。2つ装備している間は、景色を楽しめ。もはや壁はあなたの障害にはならない。
+description.spear_diamond.name=剣よりも長いリーチを持つ、よくできた武器。右クリックで長距離の突きをチャージする。
+description.cursed_bone.name=召喚されるMob：
+description.dummy_shield.name=盾があるべき姿の荒削りな近似値。攻撃からあなたを守ることはない。これを持っているエクスポートされたダミーは、ダンジョンが生成される際、代わりにそのMobタイプに応じた通常の盾を持つことになる。
+description.giant_spider_poison.name=これはとてつもない腐食性だ！あなたが扱うには間違いなく危険すぎるが、もしかしたらこれを使ったクラフトについて相談できる毒物の専門家がいるかもしれない。
+description.feather_golden.name=羽根を手に取り、金で覆い、大いなる跳躍をして古の力を信じよ。金の羽根を装備している限り、あなたは傷つくことはない。しかし、落ちゆく友よ、控えめに使え。もし羽根が壊れれば、あなたの命も終わるかもしれないのだから。
+description.scale_turtle.name=あなたがなんとか回収した、ジャイアントタートルの甲羅の数少ない破片の1つ。その強靭さは、あなたのどんな道具でも欠片すら落とせないほどだ。おそらく、あなたよりも強力なクラフトツールを持つ誰かがいて、力を貸してくれるように説得できるのではないだろうか？
+description.horn_bull.name=この角はとても頑丈で、動物の角を使ったクラフトの方法を知っていれば、素晴らしい武器を作ることができるだろう。おそらく、その分野でもっと経験豊富な職人がどこかにいるはずだ。
+description.leather_bull.name=非常に高品質な革。適切な職人なら、これを使ってあなたが今まで見た中で最も空気力学的な装備を鍛え上げることができるだろう！
+description.ball_slime.name=驚くべきことだ。再生力を持つスライム。常に同じ形に戻るという性質のため扱いが難しいが、適切な職人ならこれを使って体力を操作する能力を持つ装備を作ることができるだろうし、スライムを弾薬として使う武器はこれの恩恵を大いに受けるだろう。
+description.bone_monking.name=モンキングを同族よりもはるかに強力にした原始的なエネルギーが何であれ、それはまだ彼の骨にまとわりついている。おそらく、適切な職人ならこのような力を持つ素材の扱い方を知っているのではないだろうか？
+description.leather_spider.name=ジャイアントスパイダーの皮は、触れるものすべてにまだくっつく。長時間触れるにはあまりにも気持ち悪いが、そのような作業に慣れている職人なら、おそらくこれを何か気の利いたものに作り変えることができるだろう。
+description.king_crown.name=単独でかぶることも、ヘルメットと組み合わせることもできる。どちらにせよ、あなたがいつも感じていた通り、王者のように見えるだろう。
+description.bubble_pistol.name=アンダーテック コマーシャル ターボダンパー 33.6mmノズル 泡放出ユニット。右クリックで、馬を捕らえて上空に漂わせるほど大きな泡を素早く放出する。泡は非致死性だが、落下についてはそうとも言い切れない。右クリック長押しで、絶え間なく放出する。
+description.bubble_rifle.name=アンダーテック プロトタイプ アドバンスドターボダンパー。一般公開用ではない。従来のバブルガンよりも速く、遠くまで液体を放出し、右クリックを長押ししたときの持続時間が長くなる。残念ながら、リロードははるかに遅い。
+description.path_tool.name=スニーク＋エンティティを左クリックで、そのエンティティにパスを適用する。%sエンティティを左クリックで、そのエンティティのパスをコピーする。%sスニーク＋ブロックを右クリックで、新しいパスノードを追加する。%sブロックを右クリックで、既存のパスノードを選択する。%sスニーク＋空気を右クリックで、現在のパスをクリアする。
+description.unprotected_positions_tool.name=TODO ツールチップを追加
+
+#Trading GUI
+description.gui_merchant_edit_trade.ignore_meta_check_box.name=チェックを入れると、入力アイテムのメタデータが一致している必要がなくなる。例えばダイヤモンドの剣を入力として設定した場合、ダメージを受けたダイヤモンドの剣も受け入れられるようになる。
+description.gui_merchant_edit_trade.ignore_nbt_check_box.name=チェックを入れると、入力アイテムのNBTデータが一致している必要がなくなる。例えばダイヤモンドの剣を入力として設定した場合、エンチャントされたダイヤモンドの剣も受け入れられるようになる。
+description.gui_merchant_edit_trade.reputation_button.name=この取引を行うために必要な、商人の派閥における評判。評判を必要としない場合は「NONE」に設定する。
+description.gui_merchant_edit_trade.advancement_text_field.name=この取引を行うために必要な進捗。進捗のリソースロケーション（例："minecraft:story/mine_stone"）を指定するか、空白のままにして進捗を必要としないようにする。
+description.gui_merchant_edit_trade.stock_check_box.name=この取引に在庫数を設定するには、ここをチェックする。これは、この取引の利用回数が制限されることを意味する。
+description.gui_merchant_edit_trade.restock_text_field.name=再入荷時に増加する利用回数。何かを購入するたびに、最大に達していない別の取引が再入荷される。
+description.gui_merchant_edit_trade.in_stock_text_field.name=取引の現在の利用可能回数。
+description.gui_merchant_edit_trade.max_stock_text_field.name=取引が持つことができる最大利用回数。
+description.gui_button_trade.unlocked.name=取引がアンロックされている。
+description.gui_button_trade.locked.name=取引はまだアンロックされていない！
+description.gui_button_trade.out_of_stock.name=在庫切れ！可能であれば別のものを購入せよ。そうすればおそらく取引が再び入荷されるだろう。
+
+#Enchantments
+enchantment.lightning_protection=雷撃耐性
+enchantment.cqrepoured.lightning_protection.desc=ヘルメットに付与すると雷から保護する。レベルごとに、受ける雷のダメージを10%無効化する。
+enchantment.spectral=スペクトラルバルサム
+enchantment.cqrepoured.spectral.desc=エンダーマンとアビスウォーカーに対するダメージが増加する。ウォーカーキングと戦う際に強く推奨される。
+
+#Mobs
+entity.cqr_dummy.name=ダミー
+entity.cqr_boarman.name=ボアマン
+entity.cqr_enderman.name=エンダーマン
+entity.cqr_gremlin.name=グレムリン
+entity.cqr_human.name=人間
+entity.cqr_illager.name=邪悪な村人
+entity.cqr_mandril.name=マンドリル
+entity.cqr_minotaur.name=ミノタウロス
+entity.cqr_mummy.name=ミイラ
+entity.cqr_ogre.name=オーガ
+entity.cqr_pirate.name=海賊
+entity.cqr_skeleton.name=スケルトン
+entity.cqr_spectre.name=スペクター
+entity.cqr_walker.name=アビスウォーカー
+entity.cqr_zombie.name=ゾンビ
+
+#Friendly Races
+entity.cqr_npc.name=NPC
+entity.cqr_dwarf.name=ドワーフ
+entity.cqr_golem.name=ゴーレム
+entity.cqr_orc.name=オーク
+entity.cqr_goblin.name=ゴブリン
+entity.cqr_triton.name=トリトン
+
+#Mounts
+entity.cqr_giant_endermite.name=ジャイアントエンダーマイト
+entity.cqr_giant_silverfish.name=ジャイアントシルバーフィッシュ
+entity.cqr_giant_silverfish1.name=ジャイアントマグマシルバーフィッシュ
+entity.cqr_giant_silverfish2.name=ジャイアントスワンプシルバーフィッシュ
+
+#Bosses
+entity.cqr_nether_dragon.name=ネザードラゴン
+entity.cqr_giant_tortoise.name=ジャイアントタートル
+entity.cqr_lich.name=リッチ
+entity.cqr_necromancer.name=ネクロマンサー
+entity.cqr_boar_mage.name=ボアメイジ
+entity.cqr_walker_king.name=アビスウォーカーキング
+entity.cqr_pirate_captain.name=海賊のキャプテン
+entity.cqr_giant_spider.name=シェロブ
+entity.cqr_ender_king.name=エンダーキング
+entity.cqr_ender_calamity.name=エンダーカラミティ
+entity.cqr_exterminator.name=エクスターミネーター・プロトタイプ
+
+#Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>召喚の五芒星
+#This name should be the same as the walker king name
+entity.cqr_illusion_walker_king.name=アビスウォーカーキング
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>ウォーカートルネード
+entity.cqr_pirate_parrot.name=裏切り者のオウム
+entity.cqr_flying_skull.name=空飛ぶ頭蓋骨
+entity.cqr_ice_spike.name=死の氷の棘
+entity.cqr_wasp.name=ワスプ (WIP)
+entity.cqr_pollo.name=アボミネーション (WIP)
+
+#Advancements
+advancements.cqrepoured.root.title=Chocolate Quest Repoured
+advancements.cqrepoured.root.description=Chocolate Quest Repouredへようこそ！
+advancements.cqrepoured.ha_got_you.title=ハッ！捕まえた！
+advancements.cqrepoured.ha_got_you.description=CQRのMobに殺される
+advancements.cqrepoured.not_so_strong.title=価値なき者
+advancements.cqrepoured.not_so_strong.description=CQRのボスに敗北する
+advancements.cqrepoured.not_so_friendly.title=あまり友好的ではない...
+advancements.cqrepoured.not_so_friendly.description=ウォーカーに遭遇する
+advancements.cqrepoured.challenger.title=チョコレートの挑戦者
+advancements.cqrepoured.challenger.description=CQRのボスを討伐する
+advancements.cqrepoured.champion.title=チョコレートのチャンピオン
+advancements.cqrepoured.champion.description=すべてのCQRのボスを少なくとも1回討伐する
+advancements.cqrepoured.wear_the_turtle.title=タートルを着ろ！
+advancements.cqrepoured.wear_the_turtle.description=これで俺は戦車だ！タートルアーマーをフルセットで入手する
+advancements.cqrepoured.kill_boar_mage.title=炎に包まれた少女
+advancements.cqrepoured.kill_boar_mage.description=ボアメイジを討伐する
+advancements.cqrepoured.kill_lich.title=死せし者もまた死すべし！
+advancements.cqrepoured.kill_lich.description=リッチを討伐する
+advancements.cqrepoured.kill_walker_king.title=好敵手
+advancements.cqrepoured.kill_walker_king.description=ウォーカーキングを討伐する
+advancements.cqrepoured.kill_necromancer.title=起き上がって、そして死ね
+advancements.cqrepoured.kill_necromancer.description=ネクロマンサーを討伐する
+advancements.cqrepoured.kill_nether_dragon.title=ゴジラではなかった
+advancements.cqrepoured.kill_nether_dragon.description=ネザードラゴンを討伐する
+advancements.cqrepoured.kill_giant_tortoise.title=ぐるぐる回る
+advancements.cqrepoured.kill_giant_tortoise.description=ジャイアントタートルを討伐する
+advancements.cqrepoured.kill_pirate_captain.title=今から俺がキャプテンだ！
+advancements.cqrepoured.kill_pirate_captain.description=海賊のキャプテンを討伐する
+advancements.cqrepoured.new_captain.title=逆海賊行為
+advancements.cqrepoured.new_captain.description=海賊のキャプテンの武器を入手する
+advancements.cqrepoured.kill_giant_spider.title=良いクモとは...
+advancements.cqrepoured.kill_giant_spider.description=...死んだクモだけだ！ジャイアントスパイダーを討伐する
+advancements.cqrepoured.kill_ender_king.title=これで全部か！？
+advancements.cqrepoured.kill_ender_king.description=恐れられるエンダーマンのリーダー、偉大なるエンダーキングを殺す！
+advancements.cqrepoured.kill_ender_calamity.title=ああ、それがすべてだ！
+advancements.cqrepoured.kill_ender_calamity.description=召喚された悪との壮絶な死のバレーボールマッチに勝利する。
+advancements.cqrepoured.kill_exterminator.title=電気技師
+advancements.cqrepoured.kill_exterminator.description=邪悪な村人の技術的嫌悪物を討伐する
+
+effect.cqrepoured.twohanded=両手持ち
