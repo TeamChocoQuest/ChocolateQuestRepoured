@@ -20,7 +20,7 @@ public class RenderCQRGiantSpider extends RenderLiving<EntityCQRGiantSpider> {
 		super(rendermanagerIn, new ModelGiantSpider(), 0.0F);
 		this.addLayer(new LayerGlowingAreas<>(this, this::getEntityTexture));
 	}
-	
+
 	protected double getWidthScale(EntityCQRGiantSpider entity) {
 		return entity.getSizeVariation();
 	}

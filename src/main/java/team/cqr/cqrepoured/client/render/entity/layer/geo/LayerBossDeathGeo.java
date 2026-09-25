@@ -12,17 +12,17 @@ import team.cqr.cqrepoured.entity.bases.AbstractEntityCQRBoss;
 public class LayerBossDeathGeo<T extends AbstractEntityCQRBoss & IAnimatable> extends AbstractCQRLayerGeo<T> {
 
 	protected final BossDeathRayHelper rayHelper;
-	
+
 	public LayerBossDeathGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel, int red, int green, int blue) {
 		this(renderer, funcGetCurrentTexture, funcGetCurrentModel, red, green, blue, 20F);
 	}
-	
+
 	public LayerBossDeathGeo(GeoEntityRenderer<T> renderer, Function<T, ResourceLocation> funcGetCurrentTexture, Function<T, ResourceLocation> funcGetCurrentModel, int red, int green, int blue, float raySize) {
 		super(renderer, funcGetCurrentTexture, funcGetCurrentModel);
-		
+
 		this.rayHelper = new BossDeathRayHelper(red, green, blue, raySize);
 	}
-	
+
 	protected int getAnimationTick(T entity) {
 		return entity.deathTime;
 	}
@@ -30,7 +30,7 @@ public class LayerBossDeathGeo<T extends AbstractEntityCQRBoss & IAnimatable> ex
 	@Override
 	public void render(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, Color renderColor) {
 		int ticks = this.getAnimationTick(entitylivingbaseIn);
-		if(ticks > 0) {
+		if (ticks > 0) {
 			this.rayHelper.renderRays(ticks, partialTicks);
 		}
 	}

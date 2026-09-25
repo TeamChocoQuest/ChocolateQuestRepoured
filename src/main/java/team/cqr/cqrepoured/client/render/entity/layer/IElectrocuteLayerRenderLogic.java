@@ -10,7 +10,7 @@ import team.cqr.cqrepoured.client.util.ElectricFieldRenderUtil;
 import team.cqr.cqrepoured.entity.bases.AbstractEntityCQR;
 
 public interface IElectrocuteLayerRenderLogic<T extends EntityLivingBase> {
-	
+
 	public default void renderLayerLogic(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity instanceof AbstractEntityCQR && ((AbstractEntityCQR) entity).canPlayDeathAnimation()) {
 			return;
@@ -40,7 +40,6 @@ public interface IElectrocuteLayerRenderLogic<T extends EntityLivingBase> {
 
 				GlStateManager.pushMatrix();
 
-
 				this.performPreLineRenderPreparation();
 				GlStateManager.rotate(yaw - 180, 0, 1, 0);
 
@@ -50,7 +49,7 @@ public interface IElectrocuteLayerRenderLogic<T extends EntityLivingBase> {
 			}
 		}
 	}
-	
+
 	public default void performPreLineRenderPreparation() {
 		GlStateManager.translate(0, 1.501, 0);
 		GlStateManager.scale(-1, -1, 1);

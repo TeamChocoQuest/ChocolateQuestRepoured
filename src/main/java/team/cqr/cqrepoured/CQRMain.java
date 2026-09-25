@@ -216,7 +216,7 @@ public class CQRMain {
 		ConfigBackupHandler.registerConfig(CQ_INHABITANT_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_ITEM_FOLDER.getName(), "1.0.0");
 		ConfigBackupHandler.registerConfig(CQ_CUSTOM_TEXTURES_FOLDER_ROOT.getName(), "1.1.0");
-		
+
 		CQ_MIGRATED_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "_migrated_structures");
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {

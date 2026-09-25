@@ -121,7 +121,7 @@ public class ItemSoulBottle extends Item {
 				}
 			}
 			Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
-			if(entity == null) {
+			if (entity == null) {
 				return null;
 			}
 			entity.setPosition(x, y, z);

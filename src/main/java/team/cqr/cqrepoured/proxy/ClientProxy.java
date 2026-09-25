@@ -64,8 +64,7 @@ public class ClientProxy implements IProxy {
 		Minecraft.getMinecraft().getRenderManager().getSkinMap().values().forEach(t -> {
 			t.addLayer(new LayerElectrocute());
 			t.addLayer(new LayerCrownRenderer(t));
-			}
-		);
+		});
 	}
 
 	@Override
@@ -132,8 +131,8 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public boolean isPlayerCurrentClientPlayer(EntityPlayer player) {
-		if(player != null) {
-			return ((EntityPlayer)Minecraft.getMinecraft().player).equals(player);
+		if (player != null) {
+			return ((EntityPlayer) Minecraft.getMinecraft().player).equals(player);
 		}
 		return false;
 	}

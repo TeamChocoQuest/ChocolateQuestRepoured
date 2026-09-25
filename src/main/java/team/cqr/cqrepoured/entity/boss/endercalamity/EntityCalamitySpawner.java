@@ -19,7 +19,7 @@ import team.cqr.cqrepoured.util.VectorUtil;
 public class EntityCalamitySpawner extends Entity {
 
 	private int timer;
-	
+
 	private String faction;
 	private float sizeScaling;
 	private double healthScaling;

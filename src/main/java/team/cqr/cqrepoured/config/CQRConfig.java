@@ -228,10 +228,10 @@ public class CQRConfig {
 				Blocks.DOUBLE_PLANT.getRegistryName().toString(),
 				Blocks.MOB_SPAWNER.getRegistryName().toString(),
 				Blocks.TORCH.getRegistryName().toString(),
-				"cqrepoured:unlit_torch", 
-				"cqrepoured:phylactery", 
-				"cqrepoured:force_field_nexus", 
-				"gravestone:gravestone", 
+				"cqrepoured:unlit_torch",
+				"cqrepoured:phylactery",
+				"cqrepoured:force_field_nexus",
+				"gravestone:gravestone",
 				"openblocks:grave",
 				Blocks.WHITE_SHULKER_BOX.getRegistryName().toString(),
 				Blocks.ORANGE_SHULKER_BOX.getRegistryName().toString(),
@@ -249,7 +249,7 @@ public class CQRConfig {
 				Blocks.GREEN_SHULKER_BOX.getRegistryName().toString(),
 				Blocks.RED_SHULKER_BOX.getRegistryName().toString(),
 				Blocks.BLACK_SHULKER_BOX.getRegistryName().toString(),
-			};
+		};
 
 		@Config.Comment("Blocks with a whitelisted material will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableMaterialWhitelist = { "WATER", "LAVA", "PLANTS", "VINE", "FIRE", "CACTUS", "CAKE", "WEB" };
@@ -359,7 +359,7 @@ public class CQRConfig {
 		public float maxUncappedDamageForNonBossMobs = 50F;
 		public float maxUncappedDamageInMaxHPPercent = 1F;
 		public boolean disableFirePanicAI = false;
-		
+
 		public boolean enableTradeRestockOverTime = true;
 		@Config.Comment("Measured in ticks)")
 		public int tradeRestockTime = 72000; // One hour

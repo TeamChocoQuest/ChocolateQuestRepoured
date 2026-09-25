@@ -50,6 +50,7 @@ public class StructureUpper {
 			protected boolean isChunkLoaded(int x, int z, boolean allowEmpty) {
 				return false;
 			}
+
 			@Override
 			protected IChunkProvider createChunkProvider() {
 				return null;
@@ -145,7 +146,7 @@ public class StructureUpper {
 
 	private static void setBlock(World world, Map<ChunkPos, ChunkTileEntityContainer> chunks, BlockPos pos, IBlockState state, @Nullable NBTTagCompound tileEntity) {
 		ChunkTileEntityContainer chunk = getChunk(world, chunks, pos);
-		
+
 		ExtendedBlockStorage[] sections = chunk.chunk.getBlockStorageArray();
 		ExtendedBlockStorage section = sections[pos.getY() >> 4];
 		if (section == null) {
@@ -176,7 +177,7 @@ public class StructureUpper {
 	}
 
 	private static class ChunkTileEntityContainer {
-		
+
 		private static final AnvilChunkLoader CHUNK_SERIALIZER = new AnvilChunkLoader(null, null);
 		private static final ReflectionMethod<Void> M_WRITE_CHUNK_TO_NBT = new ReflectionMethod<>(AnvilChunkLoader.class, "writeChunkToNBT", "TODO", Chunk.class, World.class, NBTTagCompound.class);
 		private final Chunk chunk;
@@ -188,7 +189,7 @@ public class StructureUpper {
 		}
 
 		public NBTTagCompound save(NBTTagCompound nbt) {
-            NBTTagCompound nbt1 = new NBTTagCompound();
+			NBTTagCompound nbt1 = new NBTTagCompound();
 			M_WRITE_CHUNK_TO_NBT.invoke(CHUNK_SERIALIZER, chunk, chunk.getWorld(), nbt1);
 			nbt1.setTag("TileEntities", tileEntities);
 			nbt1.setTag("Entities", entities);
@@ -198,5 +199,5 @@ public class StructureUpper {
 		}
 
 	}
-	
+
 }

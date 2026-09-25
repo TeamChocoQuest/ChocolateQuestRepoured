@@ -277,11 +277,11 @@ public class FactionRegistry {
 
 	@SuppressWarnings("unchecked")
 	private Faction getFactionOf(Class<? extends Entity> entityClass) {
-		if(entityClass == null) {
+		if (entityClass == null) {
 			CQRMain.logger.error("Class of entity is null! This should never happen!");
 			return null;
 		}
-		
+
 		Faction faction = this.entityFactionMap.get(entityClass);
 		if (faction == null && entityClass != Entity.class) {
 			faction = this.getFactionOf((Class<? extends Entity>) entityClass.getSuperclass());
@@ -416,11 +416,11 @@ public class FactionRegistry {
 		for (UUID playerID : this.playerFactionRepuMap.keySet()) {
 			this.savePlayerReputation(playerID);
 		}
-		if(removeMapsFromMemory) {
+		if (removeMapsFromMemory) {
 			this.playerFactionRepuMap.clear();
 		}
 	}
-	
+
 	public void savePlayerReputation(final UUID playerID) {
 		this.savePlayerReputation(playerID, false);
 	}

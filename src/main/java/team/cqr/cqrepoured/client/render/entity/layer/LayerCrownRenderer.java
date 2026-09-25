@@ -33,7 +33,7 @@ public class LayerCrownRenderer extends LayerBipedArmor {
 		if (ItemCrown.hasCrown(entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.HEAD))) {
 			super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 		}
-		//Crown is not attached => you don't need to do anything!
+		// Crown is not attached => you don't need to do anything!
 	}
 
 	@Override
