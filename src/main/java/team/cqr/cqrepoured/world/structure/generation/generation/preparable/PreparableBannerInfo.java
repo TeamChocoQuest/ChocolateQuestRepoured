@@ -53,7 +53,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 	public static class Serializer implements ISerializer<PreparableBannerInfo> {
 
 		@Override
-		public void write(PreparableBannerInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableBannerInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			int data = (palette.idFor(preparable.getState()) << 1) | (preparable.getTileEntityData() != null ? 1 : 0);
 			ByteBufUtils.writeVarInt(buf, data, 5);
 			if (preparable.getTileEntityData() != null) {
@@ -63,7 +63,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		}
 
 		@Override
-		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
 			IBlockState state = palette.stateFor(data >>> 1);
 			NBTTagCompound tileEntityData = null;
@@ -75,7 +75,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBannerInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBannerInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			IBlockState state = palette.stateFor(intArray[1]);
 			NBTTagCompound tileEntityData = null;

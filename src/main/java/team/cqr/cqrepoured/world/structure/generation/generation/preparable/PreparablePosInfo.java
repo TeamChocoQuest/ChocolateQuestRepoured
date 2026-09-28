@@ -77,12 +77,12 @@ public abstract class PreparablePosInfo {
 
 		public interface ISerializer<T extends PreparablePosInfo> {
 
-			void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
+			void write(T preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList);
 
-			T read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
+			T read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList);
 
 			@Deprecated
-			T read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList);
+			T read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList);
 
 		}
 
@@ -150,7 +150,7 @@ public abstract class PreparablePosInfo {
 		}
 
 		@SuppressWarnings("unchecked")
-		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
+		public static <T extends PreparablePosInfo> void write(T preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList compoundList) {
 			if (!CLASS_2_ID.containsKey(preparable.getClass())) {
 				throw new IllegalArgumentException("Class not registered: " + preparable.getClass().getSimpleName());
 			}
@@ -160,7 +160,7 @@ public abstract class PreparablePosInfo {
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
@@ -170,7 +170,7 @@ public abstract class PreparablePosInfo {
 		}
 
 		@Deprecated
-		public static PreparablePosInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList compoundList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			if (intArray.length == 0) {
 				return PreparableEmptyInfo.INSTANCE;

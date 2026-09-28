@@ -47,18 +47,18 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableEmptyInfo> {
 
 		@Override
-		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableEmptyInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 

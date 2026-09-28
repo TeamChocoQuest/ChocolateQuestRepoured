@@ -214,7 +214,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableMapInfo> {
 
 		@Override
-		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setByte("facing", (byte) preparable.facing.getHorizontalIndex());
 			compound.setByte("scale", preparable.scale);
@@ -231,7 +231,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));
 			byte scale = compound.getByte("scale");
@@ -248,7 +248,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableMapInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			NBTTagCompound compound = nbtList.getCompoundTagAt(intArray[0]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));

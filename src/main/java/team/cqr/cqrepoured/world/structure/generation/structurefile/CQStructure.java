@@ -162,7 +162,7 @@ public class CQStructure {
 		compound.setString("author", this.author);
 		compound.setTag("size", NBTUtil.createPosTag(this.size));
 
-		BlockStatePalette palette = new BlockStatePalette();
+		BlockStatePalette.Write palette = new BlockStatePalette.Write();
 		NBTTagList compoundList = new NBTTagList();
 
 		// Save normal blocks
@@ -202,16 +202,11 @@ public class CQStructure {
 		this.blockInfoList = Arrays.asList(new PreparablePosInfo[this.size.getX() * this.size.getY() * this.size.getZ()]);
 		this.entityInfoList.clear();
 
-		BlockStatePalette blockStatePalette = new BlockStatePalette();
-
 		// Load compound tags
 		NBTTagList compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
-		int blockStateIndex = 0;
-		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((NBTTagCompound) nbt), blockStateIndex++);
-		}
+		BlockStatePalette.Read blockStatePalette = new BlockStatePalette.Read(compound.getTagList("palette", Constants.NBT.TAG_COMPOUND));
 
 		// Load normal blocks
 		ByteBuf buf = Unpooled.wrappedBuffer(compound.getByteArray("blockInfoList"));
@@ -393,16 +388,11 @@ public class CQStructure {
 		this.blockInfoList = Arrays.asList(new PreparablePosInfo[this.size.getX() * this.size.getY() * this.size.getZ()]);
 		this.entityInfoList.clear();
 
-		BlockStatePalette blockStatePalette = new BlockStatePalette();
-
 		// Load compound tags
 		NBTTagList compoundTagList = compound.getTagList("compoundTagList", Constants.NBT.TAG_COMPOUND);
 
 		// Load block states
-		int blockStateIndex = 0;
-		for (NBTBase nbt : compound.getTagList("palette", Constants.NBT.TAG_COMPOUND)) {
-			blockStatePalette.addMapping(NBTUtil.readBlockState((NBTTagCompound) nbt), blockStateIndex++);
-		}
+		BlockStatePalette.Read blockStatePalette = new BlockStatePalette.Read(compound.getTagList("palette", Constants.NBT.TAG_COMPOUND));
 
 		// Load normal blocks
 		int x = 0;

@@ -53,18 +53,18 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {
 
 		@Override
-		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableForceFieldNexusInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
