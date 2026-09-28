@@ -52,13 +52,13 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableEmptyInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableEmptyInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 

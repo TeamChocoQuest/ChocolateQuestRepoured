@@ -175,7 +175,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBossInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBossInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
 			NBTTagCompound bossTag = null;
 			if ((data & 1) == 1) {
@@ -186,7 +186,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBossInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBossInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			return new PreparableBossInfo((NBTTagCompound) null);
 		}
 

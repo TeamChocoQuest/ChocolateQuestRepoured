@@ -97,7 +97,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableLootChestInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableLootChestInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			ResourceLocation lootTable = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(buf.readByte());
 			return new PreparableLootChestInfo(lootTable, facing);
@@ -105,7 +105,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableLootChestInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableLootChestInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			ResourceLocation lootTable = getLootTableFromId(intArray[1]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(intArray[2]);

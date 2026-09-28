@@ -63,7 +63,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 		}
 
 		@Override
-		public PreparableBannerInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBannerInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
 			IBlockState state = palette.stateFor(data >>> 1);
 			NBTTagCompound tileEntityData = null;
@@ -75,7 +75,7 @@ public class PreparableBannerInfo extends PreparableBlockInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBannerInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBannerInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			IBlockState state = palette.stateFor(intArray[1]);
 			NBTTagCompound tileEntityData = null;

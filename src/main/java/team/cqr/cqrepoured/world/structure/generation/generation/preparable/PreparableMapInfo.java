@@ -231,7 +231,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableMapInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));
 			byte scale = compound.getByte("scale");
@@ -248,7 +248,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableMapInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			NBTTagCompound compound = nbtList.getCompoundTagAt(intArray[0]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));

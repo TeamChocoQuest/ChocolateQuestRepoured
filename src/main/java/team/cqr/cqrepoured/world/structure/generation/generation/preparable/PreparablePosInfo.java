@@ -79,10 +79,10 @@ public abstract class PreparablePosInfo {
 
 			void write(T preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
 
-			T read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
+			T read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList);
 
 			@Deprecated
-			T read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList);
+			T read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList);
 
 		}
 
@@ -160,17 +160,17 @@ public abstract class PreparablePosInfo {
 			serializer.write(preparable, buf, palette, compoundList);
 		}
 
-		public static PreparablePosInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList compoundList) {
 			byte id = buf.readByte();
 			if (!ID_2_SERIALIZER.containsKey(id)) {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
 			}
 			ISerializer<?> serializer = ID_2_SERIALIZER.get(id);
-			return serializer.read(x, y, z, buf, palette, compoundList);
+			return serializer.read(buf, palette, compoundList);
 		}
 
 		@Deprecated
-		public static PreparablePosInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList compoundList) {
+		public static PreparablePosInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList compoundList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			if (intArray.length == 0) {
 				return PreparableEmptyInfo.INSTANCE;
@@ -180,7 +180,7 @@ public abstract class PreparablePosInfo {
 				throw new IllegalArgumentException("No serializer registered for id: " + id);
 			}
 			ISerializer<?> serializer = ID_2_SERIALIZER.get(id);
-			return serializer.read(x, y, z, nbtIntArray, palette, compoundList);
+			return serializer.read(nbtIntArray, palette, compoundList);
 		}
 
 	}

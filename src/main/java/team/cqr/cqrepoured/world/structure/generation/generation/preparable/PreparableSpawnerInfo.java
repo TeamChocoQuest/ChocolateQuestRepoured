@@ -302,14 +302,14 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableSpawnerInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableSpawnerInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			return new PreparableSpawnerInfo(tileEntityData);
 		}
 
 		@Override
 		@Deprecated
-		public PreparableSpawnerInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableSpawnerInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			NBTTagCompound tileEntityData = nbtList.getCompoundTagAt(intArray[2]);
 			return new PreparableSpawnerInfo(tileEntityData);

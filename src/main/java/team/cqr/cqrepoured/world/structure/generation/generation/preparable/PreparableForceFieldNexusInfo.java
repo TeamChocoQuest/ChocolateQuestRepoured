@@ -58,13 +58,13 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 

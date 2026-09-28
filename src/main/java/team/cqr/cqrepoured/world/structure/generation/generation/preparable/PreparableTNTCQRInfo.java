@@ -53,13 +53,13 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableTNTCQRInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableTNTCQRInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableTNTCQRInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
