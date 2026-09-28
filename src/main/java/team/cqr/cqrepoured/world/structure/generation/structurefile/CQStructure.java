@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.IntStream;
 
 import org.apache.commons.io.FileUtils;
@@ -428,6 +429,12 @@ public class CQStructure {
 
 	private int flattenIndex(int x, int y, int z) {
 		return (x * this.size.getY() + y) * this.size.getZ() + z;
+	}
+
+	public void forEachBlock(BiConsumer<PreparablePosInfo, BlockPos> action) {
+		for (MutableBlockPos pos : MutableBlockPos.getAllInBoxMutable(BlockPos.ORIGIN, this.size.add(-1, -1, -1))) {
+			action.accept(this.blockInfoList.get(this.flattenIndex(pos.getX(), pos.getY(), pos.getZ())), pos);
+		}
 	}
 
 }

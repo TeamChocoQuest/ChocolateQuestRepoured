@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
@@ -160,6 +161,11 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		// TODO tile entity data does not get rotated/mirrored
 		tileEntity.set(this.scale, this.orientation, this.lockOrientation, this.originX, this.originZ, this.offsetX, this.offsetZ, this.fillMap, this.fillRadius);
 		return new GeneratableBlockInfo(pos, state, tileEntity);
+	}
+
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.AIR.getDefaultState();
 	}
 
 	public EnumFacing getFacing() {

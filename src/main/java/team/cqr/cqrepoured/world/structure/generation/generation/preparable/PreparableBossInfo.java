@@ -89,6 +89,11 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.BOSS_BLOCK.getDefaultState(), tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.BOSS_BLOCK.getDefaultState();
+	}
+
 	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos) {
 		Entity entity = PreparableSpawnerInfo.createEntityFromTag(world, placement, pos, bossTag);
 		if (entity instanceof AbstractEntityCQR) {

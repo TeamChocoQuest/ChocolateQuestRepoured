@@ -41,6 +41,11 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState();
+	}
+
 	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
 
 		@Override

@@ -113,6 +113,11 @@ public class PreparableSpawnerInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, transformedState, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.SPAWNER.getDefaultState();
+	}
+
 	private void vanillaSpawnerReadFromNBT(World world, DungeonPlacement placement, BlockPos pos, TileEntityMobSpawner tileEntity) {
 		MobSpawnerBaseLogic spawnerBaseLogic = tileEntity.getSpawnerBaseLogic();
 		NBTTagCompound compound = new NBTTagCompound();

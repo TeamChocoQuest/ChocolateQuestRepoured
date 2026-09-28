@@ -71,6 +71,11 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.CHEST.getDefaultState();
+	}
+
 	public ResourceLocation getLootTable() {
 		return this.lootTable;
 	}

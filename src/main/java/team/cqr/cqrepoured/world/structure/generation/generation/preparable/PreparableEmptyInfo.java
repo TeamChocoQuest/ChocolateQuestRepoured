@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -33,6 +34,11 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 	@Override
 	protected GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos) {
 		return new GeneratableBlockInfo(pos, CQRBlocks.NULL_BLOCK.getDefaultState(), null);
+	}
+
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.AIR.getDefaultState();
 	}
 
 	public static class Factory implements IFactory<TileEntity> {

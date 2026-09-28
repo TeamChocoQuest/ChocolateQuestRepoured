@@ -51,6 +51,8 @@ public abstract class PreparablePosInfo {
 
 	protected abstract GeneratablePosInfo prepareDebug(World world, DungeonPlacement placement, BlockPos pos);
 
+	public abstract IBlockState getRenderState();
+
 	public static class Registry {
 
 		public interface IFactory<T extends TileEntity> {

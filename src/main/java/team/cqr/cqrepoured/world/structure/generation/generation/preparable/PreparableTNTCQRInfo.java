@@ -36,6 +36,11 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.HIDDEN, false), null);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.TNT.getDefaultState();
+	}
+
 	public static class Factory implements IFactory<TileEntity> {
 
 		@Override

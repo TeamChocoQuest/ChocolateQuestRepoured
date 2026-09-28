@@ -117,6 +117,11 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return this.state;
+	}
+
 	public IBlockState getState() {
 		return this.state;
 	}
