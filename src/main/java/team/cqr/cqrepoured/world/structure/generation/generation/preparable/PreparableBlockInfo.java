@@ -31,7 +31,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	public static PreparableBlockInfo of(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		if (tileEntityData == null) {
-			return CACHE.computeIfAbsent(state, s -> new PreparableBlockInfo(s, null));
+			return CACHE.computeIfAbsent(state, PreparableBlockInfo::new);
 		}
 		return new PreparableBlockInfo(state, tileEntityData);
 	}
@@ -39,6 +39,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	private final IBlockState state;
 	@Nullable
 	private final NBTTagCompound tileEntityData;
+
+	protected PreparableBlockInfo(IBlockState state) {
+		this(state, null);
+	}
 
 	protected PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		this.state = state;
