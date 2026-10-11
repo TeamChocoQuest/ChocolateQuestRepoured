@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
@@ -162,6 +163,11 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.AIR.getDefaultState();
+	}
+
 	public EnumFacing getFacing() {
 		return this.facing;
 	}
@@ -214,7 +220,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableMapInfo> {
 
 		@Override
-		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableMapInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			NBTTagCompound compound = new NBTTagCompound();
 			compound.setByte("facing", (byte) preparable.facing.getHorizontalIndex());
 			compound.setByte("scale", preparable.scale);
@@ -231,7 +237,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableMapInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			NBTTagCompound compound = nbtList.getCompoundTagAt(ByteBufUtils.readVarInt(buf, 5));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));
 			byte scale = compound.getByte("scale");
@@ -248,7 +254,7 @@ public class PreparableMapInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableMapInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableMapInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			NBTTagCompound compound = nbtList.getCompoundTagAt(intArray[0]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(compound.getInteger("facing"));

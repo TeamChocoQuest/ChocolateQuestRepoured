@@ -41,6 +41,11 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState(), null);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.FORCE_FIELD_NEXUS.getDefaultState();
+	}
+
 	public static class Factory implements IFactory<TileEntityForceFieldNexus> {
 
 		@Override
@@ -53,18 +58,18 @@ public class PreparableForceFieldNexusInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableForceFieldNexusInfo> {
 
 		@Override
-		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableForceFieldNexusInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableForceFieldNexusInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableForceFieldNexusInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 

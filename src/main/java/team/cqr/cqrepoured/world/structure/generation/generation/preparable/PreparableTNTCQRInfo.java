@@ -36,6 +36,11 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.TNT.getDefaultState().withProperty(BlockTNTCQR.HIDDEN, false), null);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.TNT.getDefaultState();
+	}
+
 	public static class Factory implements IFactory<TileEntity> {
 
 		@Override
@@ -48,18 +53,18 @@ public class PreparableTNTCQRInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableTNTCQRInfo> {
 
 		@Override
-		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableTNTCQRInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableTNTCQRInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableTNTCQRInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableTNTCQRInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableTNTCQRInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 

@@ -59,7 +59,7 @@ public class StructureUpper {
 		ChunkTileEntityContainer entityChunk = new ChunkTileEntityContainer(new Chunk(world, 0, 0));
 		ByteBuf blockBuf = Unpooled.buffer();
 		ByteBuf entityBuf = Unpooled.buffer();
-		BlockStatePalette palette = new BlockStatePalette();
+		BlockStatePalette.Write palette = new BlockStatePalette.Write();
 		NBTTagList compoundList = new NBTTagList();
 
 		entityBuf.writeInt(structure.getEntityInfoList().size());

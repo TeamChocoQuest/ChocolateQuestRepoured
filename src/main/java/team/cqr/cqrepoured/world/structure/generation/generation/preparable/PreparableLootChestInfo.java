@@ -71,6 +71,11 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.CHEST.getDefaultState();
+	}
+
 	public ResourceLocation getLootTable() {
 		return this.lootTable;
 	}
@@ -91,13 +96,13 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableLootChestInfo> {
 
 		@Override
-		public void write(PreparableLootChestInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableLootChestInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			ByteBufUtils.writeUTF8String(buf, preparable.lootTable.toString());
 			buf.writeByte(preparable.facing.getHorizontalIndex());
 		}
 
 		@Override
-		public PreparableLootChestInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableLootChestInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			ResourceLocation lootTable = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
 			EnumFacing facing = EnumFacing.byHorizontalIndex(buf.readByte());
 			return new PreparableLootChestInfo(lootTable, facing);
@@ -105,7 +110,7 @@ public class PreparableLootChestInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableLootChestInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableLootChestInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			ResourceLocation lootTable = getLootTableFromId(intArray[1]);
 			EnumFacing facing = EnumFacing.byHorizontalIndex(intArray[2]);

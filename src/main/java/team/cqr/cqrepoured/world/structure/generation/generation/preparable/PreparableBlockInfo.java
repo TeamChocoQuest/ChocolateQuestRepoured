@@ -31,7 +31,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 	public static PreparableBlockInfo of(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		if (tileEntityData == null) {
-			return CACHE.computeIfAbsent(state, s -> new PreparableBlockInfo(s, null));
+			return CACHE.computeIfAbsent(state, PreparableBlockInfo::new);
 		}
 		return new PreparableBlockInfo(state, tileEntityData);
 	}
@@ -39,6 +39,10 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	private final IBlockState state;
 	@Nullable
 	private final NBTTagCompound tileEntityData;
+
+	protected PreparableBlockInfo(IBlockState state) {
+		this(state, null);
+	}
 
 	protected PreparableBlockInfo(IBlockState state, @Nullable NBTTagCompound tileEntityData) {
 		this.state = state;
@@ -113,6 +117,11 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, state, tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return this.state;
+	}
+
 	public IBlockState getState() {
 		return this.state;
 	}
@@ -134,7 +143,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBlockInfo> {
 
 		@Override
-		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableBlockInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			int data = (palette.idFor(preparable.state) << 1) | (preparable.tileEntityData != null ? 1 : 0);
 			ByteBufUtils.writeVarInt(buf, data, 5);
 			if (preparable.tileEntityData != null) {
@@ -144,7 +153,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBlockInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBlockInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
 			IBlockState state = palette.stateFor(data >>> 1);
 			NBTTagCompound tileEntityData = null;
@@ -156,7 +165,7 @@ public class PreparableBlockInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBlockInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBlockInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int[] intArray = nbtIntArray.getIntArray();
 			IBlockState state = palette.stateFor(intArray[1]);
 			NBTTagCompound tileEntityData = null;

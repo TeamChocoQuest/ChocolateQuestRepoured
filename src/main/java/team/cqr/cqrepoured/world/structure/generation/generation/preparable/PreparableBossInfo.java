@@ -89,6 +89,11 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.BOSS_BLOCK.getDefaultState(), tileEntity);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return CQRBlocks.BOSS_BLOCK.getDefaultState();
+	}
+
 	private Entity createEntityFromTag(World world, DungeonPlacement placement, BlockPos pos) {
 		Entity entity = PreparableSpawnerInfo.createEntityFromTag(world, placement, pos, bossTag);
 		if (entity instanceof AbstractEntityCQR) {
@@ -167,7 +172,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableBossInfo> {
 
 		@Override
-		public void write(PreparableBossInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableBossInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			ByteBufUtils.writeVarInt(buf, preparable.bossTag != null ? (nbtList.tagCount() << 1) | 1 : 0, 5);
 			if (preparable.bossTag != null) {
 				nbtList.appendTag(preparable.bossTag);
@@ -175,7 +180,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 		}
 
 		@Override
-		public PreparableBossInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBossInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			int data = ByteBufUtils.readVarInt(buf, 5);
 			NBTTagCompound bossTag = null;
 			if ((data & 1) == 1) {
@@ -186,7 +191,7 @@ public class PreparableBossInfo extends PreparablePosInfo {
 
 		@Override
 		@Deprecated
-		public PreparableBossInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableBossInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return new PreparableBossInfo((NBTTagCompound) null);
 		}
 

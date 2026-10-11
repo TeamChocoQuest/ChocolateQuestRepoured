@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
@@ -35,6 +36,11 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 		return new GeneratableBlockInfo(pos, CQRBlocks.NULL_BLOCK.getDefaultState(), null);
 	}
 
+	@Override
+	public IBlockState getRenderState() {
+		return Blocks.AIR.getDefaultState();
+	}
+
 	public static class Factory implements IFactory<TileEntity> {
 
 		@Override
@@ -47,18 +53,18 @@ public class PreparableEmptyInfo extends PreparablePosInfo {
 	public static class Serializer implements ISerializer<PreparableEmptyInfo> {
 
 		@Override
-		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public void write(PreparableEmptyInfo preparable, ByteBuf buf, BlockStatePalette.Write palette, NBTTagList nbtList) {
 			// nothing to write
 		}
 
 		@Override
-		public PreparableEmptyInfo read(int x, int y, int z, ByteBuf buf, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(ByteBuf buf, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
 		@Override
 		@Deprecated
-		public PreparableEmptyInfo read(int x, int y, int z, NBTTagIntArray nbtIntArray, BlockStatePalette palette, NBTTagList nbtList) {
+		public PreparableEmptyInfo read(NBTTagIntArray nbtIntArray, BlockStatePalette.Read palette, NBTTagList nbtList) {
 			return INSTANCE;
 		}
 
