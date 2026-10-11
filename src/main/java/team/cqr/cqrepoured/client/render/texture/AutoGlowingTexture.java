@@ -3,6 +3,7 @@ package team.cqr.cqrepoured.client.render.texture;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,6 +36,9 @@ public class AutoGlowingTexture extends AbstractTexture {
 		int i = path.lastIndexOf('.');
 		ResourceLocation glowingTexture = new ResourceLocation(originalTexture.getNamespace(), path.substring(0, i) + "_glowing" + path.substring(i));
 		RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+		if (renderManager.renderEngine.getTexture(originalTexture) == null) {
+			renderManager.renderEngine.loadTexture(originalTexture, new SimpleTexture(originalTexture));
+		}
 		if (renderManager.renderEngine.getTexture(glowingTexture) == null) {
 			renderManager.renderEngine.loadTexture(glowingTexture, new AutoGlowingTexture(originalTexture, glowingTexture));
 		}
@@ -64,7 +68,7 @@ public class AutoGlowingTexture extends AbstractTexture {
 						flag1 = texturemetadatasection.getTextureClamp();
 					}
 
-					GlowingMetadataSection glowInformation = (GlowingMetadataSection) iresource.getMetadata("glowsections");
+					GlowingMetadataSection glowInformation = (GlowingMetadataSection) iresource.getMetadata("cqrepoured:glowsections");
 					if (glowInformation != null) {
 						for (Tuple<Tuple<Integer, Integer>, Tuple<Integer, Integer>> area : glowInformation.getGlowingSections()) {
 							for (int ix = area.getFirst().getFirst(); ix < area.getSecond().getFirst(); ix++) {

@@ -19,7 +19,7 @@ public class GlowingMetadataSectionSerializer extends BaseMetadataSectionSeriali
 
 	@Override
 	public String getSectionName() {
-		return "glowsections";
+		return "cqrepoured:glowsections";
 	}
 
 	@Override
