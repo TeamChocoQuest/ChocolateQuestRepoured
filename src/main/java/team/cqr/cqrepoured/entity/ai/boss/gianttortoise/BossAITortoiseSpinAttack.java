@@ -130,7 +130,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 				this.getBoss().resetCurrentAnimationTickTime();
 				this.getBoss().setSpinning(false);
 				this.getBoss().resetSpinsBlocked();
-				//Reset the velocity
+				// Reset the velocity
 				this.movementVector = null;
 			}
 			if ((this.ignoreWallTicks <= 0 && this.getBoss().collidedHorizontally) || this.previousBlocks != this.getBoss().getSpinsBlocked()) {
@@ -161,7 +161,7 @@ public class BossAITortoiseSpinAttack extends AbstractCQREntityAI<EntityCQRGiant
 			this.getBoss().setSpinning(true);
 			this.getBoss().setCanBeStunned(false);
 			this.getBoss().setInShell(true);
-			if(this.movementVector != null) {
+			if (this.movementVector != null) {
 				this.getBoss().motionX = this.movementVector.x;
 				this.getBoss().motionZ = this.movementVector.z;
 				this.getBoss().motionY = this.entity.collidedHorizontally ? this.movementVector.y : 0.5 * this.movementVector.y;

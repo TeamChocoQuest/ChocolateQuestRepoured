@@ -29,8 +29,8 @@ public abstract class ProjectileBase extends EntityThrowable {
 	public boolean hasNoGravity() {
 		return true;
 	}
-	
-	//Dumb name, actually used to determine if a mob can travel through a portal or not
+
+	// Dumb name, actually used to determine if a mob can travel through a portal or not
 	@Override
 	public boolean isNonBoss() {
 		return false;
@@ -60,10 +60,10 @@ public abstract class ProjectileBase extends EntityThrowable {
 	protected void onUpdateInAir() {
 
 	}
-	
+
 	@Override
 	public void setPortal(BlockPos pos) {
-		//NOPE
+		// NOPE
 	}
 
 }

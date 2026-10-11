@@ -595,7 +595,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		compound.setTag("trades", this.trades.writeToNBT(new NBTTagCompound()));
 		compound.setLong("lastTimedRestockTime", this.getLastTimedRestockTime());
-		
+
 		if (this.hasTextureOverride()) {
 			compound.setString("textureOverride", this.getTextureOverride().toString());
 		}
@@ -660,7 +660,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		this.trades.readFromNBT(compound.getCompoundTag("trades"));
-		if(compound.hasKey("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
+		if (compound.hasKey("lastTimedRestockTime", Constants.NBT.TAG_LONG)) {
 			this.lastTimedTradeRestock = compound.getLong("lastTimedRestockTime");
 		}
 
@@ -1223,7 +1223,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setFaction(String newFac) {
 		this.setFaction(newFac, false);
 	}
-	
+
 	public void setFaction(String newFac, boolean ignoreCTS) {
 		// TODO: Update faction on client too!!
 		if (!this.world.isRemote) {
@@ -1303,9 +1303,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setHealth(this.getMaxHealth());
 		this.setBaseHealthDependingOnPos(placement.getPos());
 
-		//Reset lastTimedRestockTick
+		// Reset lastTimedRestockTick
 		this.setLastTimedRestockTime(this.world.getTotalWorldTime());
-		
+
 		// Recalculate path points
 		for (Path.PathNode node : this.path.getNodes()) {
 			node.setPos(DungeonPlacement.transform(node.getPos().getX(), node.getPos().getY(), node.getPos().getZ(), BlockPos.ORIGIN, placement.getMirror(), placement.getRotation()));
@@ -1770,12 +1770,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.dead || this.getHealth() < 0.01 || this.isDead || !this.isEntityAlive();
 	}
 
-	//ITradeRestockOverTime data accessors
+	// ITradeRestockOverTime data accessors
 	@Override
 	public long getLastTimedRestockTime() {
 		return this.lastTimedTradeRestock;
 	}
-	
+
 	@Override
 	public void setLastTimedRestockTime(long newValue) {
 		this.lastTimedTradeRestock = newValue;

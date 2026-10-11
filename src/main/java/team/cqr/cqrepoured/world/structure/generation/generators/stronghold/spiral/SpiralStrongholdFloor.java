@@ -255,7 +255,7 @@ public class SpiralStrongholdFloor {
 							}
 							File file = dungeon.getRoomNBTFileForType(type, this.random);
 							if (file.equals(previous) && dungeon.getRoomNBTCountForType(prevType) > 1) {
-								int counter = 0; 
+								int counter = 0;
 								while (file.equals(previous) && counter < 8) {
 									counter++;
 									file = dungeon.getRoomNBTFileForType(type, this.random);

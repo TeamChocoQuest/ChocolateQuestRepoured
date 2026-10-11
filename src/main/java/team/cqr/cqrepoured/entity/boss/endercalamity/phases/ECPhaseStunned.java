@@ -32,7 +32,7 @@ public class ECPhaseStunned implements IEnderCalamityPhase {
 
 	@Override
 	public IEnderCalamityPhase[] getPossibleSuccessors() {
-		//return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject(), EEnderCalamityPhase.PHASE_IDLE.getPhaseObject()/* , EEnderCalamityPhase.PHASE_LASERING.getPhaseObject() */ };
+		// return new IEnderCalamityPhase[] { EEnderCalamityPhase.PHASE_TELEPORT_LASER.getPhaseObject(), EEnderCalamityPhase.PHASE_IDLE.getPhaseObject()/* , EEnderCalamityPhase.PHASE_LASERING.getPhaseObject() */ };
 		return EEnderCalamityPhase.PHASE_IDLE.getPhaseObject().getPossibleSuccessors();
 	}
 
@@ -40,9 +40,9 @@ public class ECPhaseStunned implements IEnderCalamityPhase {
 	public boolean isPhaseTimed() {
 		return true;
 	}
-	
-	private static final int MIN_EXECUTION_TIME = 100; //5s
-	private static final int MAX_EXECUTION_TIME = 300; //15s
+
+	private static final int MIN_EXECUTION_TIME = 100; // 5s
+	private static final int MAX_EXECUTION_TIME = 300; // 15s
 
 	@Override
 	public Optional<Integer> getRandomExecutionTime() {

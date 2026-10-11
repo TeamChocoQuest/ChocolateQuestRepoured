@@ -72,7 +72,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		double x2 = x1;
 		double y2 = y1;
 		double z2 = z1;
-		if(entity.getThrower() != null) {
+		if (entity.getThrower() != null) {
 			x2 = entity.getThrower().lastTickPosX + (entity.getThrower().posX - entity.getThrower().lastTickPosX) * partialTicks;
 			y2 = entity.getThrower().lastTickPosY + (entity.getThrower().posY - entity.getThrower().lastTickPosY) * partialTicks;
 			y2 += entity.getThrower().height * 0.65D;

@@ -71,7 +71,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 	/**
 	 * @return true when structure genration is enabled for this world and either the world is no flat world or dungeons can
-	 *         generate in flat worlds
+	 * generate in flat worlds
 	 */
 	public static boolean canSpawnDungeonsInWorld(World world) {
 		// Check if structures are enabled for this world

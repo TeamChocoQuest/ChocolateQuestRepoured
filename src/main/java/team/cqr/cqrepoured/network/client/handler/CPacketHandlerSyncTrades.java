@@ -28,7 +28,8 @@ public class CPacketHandlerSyncTrades implements IMessageHandler<SPacketSyncTrad
 
 					trades.readFromNBT(message.getTrades());
 					if (player.openContainer instanceof ContainerMerchant) {
-						((ContainerMerchant) player.openContainer).onTradesUpdated();;
+						((ContainerMerchant) player.openContainer).onTradesUpdated();
+						;
 					}
 					CQRMain.proxy.updateGui();
 				}

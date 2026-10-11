@@ -17,10 +17,10 @@ public class IntUtil {
 	}
 
 	/**
-	 * @param minX     inclusive
-	 * @param maxX     exclusive
-	 * @param minY     inclusive
-	 * @param maxY     exclusive
+	 * @param minX inclusive
+	 * @param maxX exclusive
+	 * @param minY inclusive
+	 * @param maxY exclusive
 	 * @param consumer
 	 */
 	public static void forEachXY(int minX, int maxX, int minY, int maxY, BiIntConsumer consumer) {
@@ -59,12 +59,12 @@ public class IntUtil {
 	}
 
 	/**
-	 * @param minX     inclusive
-	 * @param maxX     exclusive
-	 * @param minY     inclusive
-	 * @param maxY     exclusive
-	 * @param minZ     inclusive
-	 * @param maxZ     exclusive
+	 * @param minX inclusive
+	 * @param maxX exclusive
+	 * @param minY inclusive
+	 * @param maxY exclusive
+	 * @param minZ inclusive
+	 * @param maxZ exclusive
 	 * @param consumer
 	 */
 	public static void forEachXYZ(int minX, int maxX, int minY, int maxY, int minZ, int maxZ, TriIntConsumer consumer) {

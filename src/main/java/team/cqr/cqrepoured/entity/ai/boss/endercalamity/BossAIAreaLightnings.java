@@ -86,7 +86,7 @@ public class BossAIAreaLightnings extends AbstractBossAIEnderCalamity {
 			y += dirVec.y;
 			z += dirVec.z;
 		}
-		
+
 		EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(this.world, x, y, z, true, false, 0.8F, 0.01F, 0.98F, 0.4F);
 		this.world.spawnEntity(entitybolt);
 	}

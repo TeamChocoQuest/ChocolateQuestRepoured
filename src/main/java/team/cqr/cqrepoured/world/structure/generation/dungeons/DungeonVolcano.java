@@ -133,7 +133,7 @@ public class DungeonVolcano extends DungeonBase {
 	public GeneratorVolcano createDungeonGenerator(World world, int x, int y, int z, Random rand, DungeonDataManager.DungeonSpawnType spawnType) {
 		return new GeneratorVolcano(world, new BlockPos(x, y, z), this, rand);
 	}
-	
+
 	private File getDirForRoomType(EStrongholdRoomType type) {
 		File dir = null;
 		switch (type) {
@@ -201,11 +201,11 @@ public class DungeonVolcano extends DungeonBase {
 		}
 		return null;
 	}
-	
+
 	public int getRoomNBTCountForType(EStrongholdRoomType type) {
 		File dir = this.getDirForRoomType(type);
 		if (dir != null) {
-			return FileUtils.listFiles(dir, new String[] { "nbt"}, true).size();
+			return FileUtils.listFiles(dir, new String[] { "nbt" }, true).size();
 		} else {
 			return 0;
 		}

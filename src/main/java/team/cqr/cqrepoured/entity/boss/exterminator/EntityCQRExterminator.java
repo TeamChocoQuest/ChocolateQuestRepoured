@@ -229,7 +229,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 			public boolean shouldExecute() {
 				return super.shouldExecute() && !EntityCQRExterminator.this.isStunned();
 			}
-			
+
 			@Override
 			public boolean shouldContinueExecuting() {
 				return super.shouldContinueExecuting() && !EntityCQRExterminator.this.isStunned();
@@ -698,7 +698,7 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 	// Kick handling
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if(this.isStunned()) {
+		if (this.isStunned()) {
 			return false;
 		}
 		boolean result = super.attackEntityAsMob(entityIn);
@@ -1062,12 +1062,12 @@ public class EntityCQRExterminator extends AbstractEntityCQRBoss implements IDon
 
 	@Override
 	public void tick() {
-		
+
 	}
 
 	@Override
 	public int tickTimer() {
 		return this.ticksExisted;
 	}
-	
+
 }
